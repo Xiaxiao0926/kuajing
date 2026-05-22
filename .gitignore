@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.pyc
+__pycache__/
+.env
+.DS_Store
+*.log
+市场分析/uploads/
+市场分析/persisted-data.json
+jd-union-service/data/
+jd-union-service/images/
+ozon_hair_dryer_analysis/__pycache__/
+nitrile_analysis.json
+nitrile_gloves.json
+extracted_words.json

@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --morandi-bg: #F6F6F6;
+  --morandi-card: #FFFFFF;
+  --morandi-primary: #8B9DC3;
+  --morandi-secondary: #B8A9C9;
+  --morandi-accent: #D4B8A0;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  background-color: var(--morandi-bg);
+  color: #4A4A4A;
+}
+
+@layer components {
+  .kpi-card {
+    @apply bg-white rounded-2xl p-6 shadow-card transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+  
+  .section-title {
+    @apply text-xl font-semibold text-morandi-text mb-4 pb-2 border-b-2 border-morandi-accent;
+  }
+  
+  .insight-card {
+    @apply bg-white rounded-xl p-5 shadow-card border-l-4 border-morandi-primary;
+  }
+}
