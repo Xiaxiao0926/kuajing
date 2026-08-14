@@ -1,10 +1,16 @@
 import assert from 'node:assert/strict'
 
-globalThis.window = {
-  KUAJING_CONFIG: {
-    apiBase: 'https://example.test/wp-json/kuajing/v1',
-    authorized: false,
-    sessionRequired: true,
+globalThis.window = {}
+globalThis.document = {
+  getElementById(id) {
+    if (id !== 'fyzsxnb-kuajing-config') return null
+    return {
+      textContent: JSON.stringify({
+        apiBase: 'https://example.test/wp-json/kuajing/v1',
+        authorized: false,
+        sessionRequired: true,
+      }),
+    }
   },
 }
 
@@ -24,6 +30,8 @@ const runtime = await import('../ozon-react/src/utils/runtime.js')
 const initial = await access.checkAccessSession()
 assert.equal(initial.authorized, false)
 assert.equal(runtime.canUseServerPersistence(), false)
+assert.match(requests[0].url, /^https:\/\/example\.test\/wp-json\/kuajing\/v1\/session\?_=[0-9]+$/)
+assert.equal(requests[0].options.method, undefined)
 
 const unlocked = await access.unlockAccess('test-password')
 assert.equal(unlocked.authorized, true)

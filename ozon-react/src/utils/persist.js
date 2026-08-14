@@ -27,7 +27,11 @@ async function serverRequest(options = {}) {
   const headers = new Headers(options.headers || {})
   headers.set('Content-Type', 'application/json')
   if (getNonce()) headers.set('X-WP-Nonce', getNonce())
-  const response = await fetch(`${getApiBase()}/state`, {
+  const method = options.method || 'GET'
+  const url = method === 'GET'
+    ? `${getApiBase()}/state?_=${Date.now()}`
+    : `${getApiBase()}/state`
+  const response = await fetch(url, {
     credentials: 'same-origin',
     ...options,
     headers,

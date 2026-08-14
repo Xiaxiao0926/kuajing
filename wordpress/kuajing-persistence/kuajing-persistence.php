@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.2.0
+ * Version: 0.2.2
  * Author: FYZSXNB
  */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.2.0';
+    private const VERSION = '0.2.2';
     private const TABLE_SUFFIX = 'kuajing_state';
     private const VERSION_OPTION = 'fyzsxnb_kuajing_version';
     private const SECRET_OPTION = 'fyzsxnb_kuajing_access_secret';
@@ -25,6 +25,7 @@ final class FYZSXNB_Kuajing_Dashboard {
         add_action('init', array(__CLASS__, 'maybe_upgrade'));
         add_shortcode('kuajing_dashboard', array(__CLASS__, 'render_dashboard'));
         add_action('rest_api_init', array(__CLASS__, 'register_routes'));
+        add_filter('rest_post_dispatch', array(__CLASS__, 'prevent_rest_cache'), 10, 3);
         add_filter('script_loader_tag', array(__CLASS__, 'module_script_tag'), 10, 3);
         add_action('template_redirect', array(__CLASS__, 'serve_private_file'));
     }
@@ -61,6 +62,10 @@ final class FYZSXNB_Kuajing_Dashboard {
         self::migrate_shared_state();
         self::migrate_shared_files();
         update_option(self::VERSION_OPTION, self::VERSION, false);
+        do_action('litespeed_purge_url', rest_url('kuajing/v1/session'));
+        do_action('litespeed_purge_url', rest_url('kuajing/v1/state'));
+        do_action('litespeed_purge_all');
+        wp_cache_flush();
     }
 
     private static function table_name() {
@@ -227,14 +232,40 @@ final class FYZSXNB_Kuajing_Dashboard {
     }
 
     public static function can_access() {
+        self::send_private_cache_headers();
         return current_user_can('manage_options') || self::has_valid_access_cookie();
     }
 
+    private static function send_private_cache_headers() {
+        if (!defined('DONOTCACHEPAGE')) {
+            define('DONOTCACHEPAGE', true);
+        }
+        do_action('litespeed_control_set_nocache', 'Kuajing private REST response');
+        nocache_headers();
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0, private', true);
+        header('X-LiteSpeed-Cache-Control: no-cache', true);
+        header('Vary: Cookie', false);
+    }
+
+    public static function prevent_rest_cache($response, $server, $request) {
+        if (0 !== strpos($request->get_route(), '/kuajing/v1/')) {
+            return $response;
+        }
+        $response = rest_ensure_response($response);
+        $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0, private');
+        $response->header('X-LiteSpeed-Cache-Control', 'no-cache');
+        $response->header('Pragma', 'no-cache');
+        $response->header('Vary', 'Cookie');
+        return $response;
+    }
+
     public static function get_session() {
+        self::send_private_cache_headers();
         return rest_ensure_response(array('authorized' => self::can_access()));
     }
 
     public static function create_session(WP_REST_Request $request) {
+        self::send_private_cache_headers();
         $rate_key = self::rate_limit_key();
         $attempts = (int) get_transient($rate_key);
         if ($attempts >= 10) {
@@ -258,6 +289,7 @@ final class FYZSXNB_Kuajing_Dashboard {
     }
 
     public static function delete_session() {
+        self::send_private_cache_headers();
         setcookie(self::ACCESS_COOKIE, '', self::cookie_options(time() - HOUR_IN_SECONDS));
         return rest_ensure_response(array('authorized' => false));
     }
@@ -298,20 +330,17 @@ final class FYZSXNB_Kuajing_Dashboard {
             self::VERSION,
             true
         );
-        wp_add_inline_script(
-            $handle,
-            'window.KUAJING_CONFIG=' . wp_json_encode(array(
-                'apiBase' => esc_url_raw(rest_url('kuajing/v1')),
-                'assetBase' => esc_url_raw(plugins_url('dist/', __FILE__)),
-                'dataBase' => 'https://raw.githubusercontent.com/Xiaxiao0926/kuajing/main/ozon-react/public/data/',
-                'authorized' => $authorized,
-                'sessionRequired' => true,
-                'nonce' => $authorized ? wp_create_nonce('wp_rest') : '',
-            )) . ';',
-            'before'
-        );
+        $config = wp_json_encode(array(
+            'apiBase' => esc_url_raw(rest_url('kuajing/v1')),
+            'assetBase' => esc_url_raw(plugins_url('dist/', __FILE__)),
+            'dataBase' => 'https://raw.githubusercontent.com/Xiaxiao0926/kuajing/main/ozon-react/public/data/',
+            'authorized' => $authorized,
+            'sessionRequired' => true,
+            'nonce' => $authorized ? wp_create_nonce('wp_rest') : '',
+        ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
-        return '<div id="root" class="fyzsxnb-kuajing-root"></div>';
+        return '<script type="application/json" id="fyzsxnb-kuajing-config">' . $config . '</script>'
+            . '<div id="root" class="fyzsxnb-kuajing-root"></div>';
     }
 
     public static function module_script_tag($tag, $handle, $src) {

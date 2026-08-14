@@ -61,6 +61,7 @@ jobs:
           printf '%s\n' "${GITHUB_SHA}" > deploy/kuajing-persistence/DEPLOYED_COMMIT
 
       - name: Deploy plugin to Hostinger
+        timeout-minutes: 5
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
@@ -71,4 +72,4 @@ jobs:
           test -n "$FTP_USERNAME"
           test -n "$FTP_PASSWORD"
           test -n "$FTP_TARGET_DIR"
-          lftp -c "set cmd:fail-exit true; set ssl:verify-certificate no; open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\"; mirror --reverse --delete --verbose=1 deploy/kuajing-persistence \"$FTP_TARGET_DIR\""
+          lftp -c "set cmd:fail-exit true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set net:reconnect-interval-base 5; open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\"; mirror --reverse --delete --parallel=4 --verbose=1 deploy/kuajing-persistence \"$FTP_TARGET_DIR\""
