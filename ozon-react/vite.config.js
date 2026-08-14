@@ -4,10 +4,11 @@ import fs from 'fs'
 import path from 'path'
 import { execFileSync } from 'child_process'
 
-const OZON_DATA_DIR = path.resolve('D:/ozon/市场分析')
-const OZON_UPLOADS_DIR = path.resolve('D:/ozon/市场分析/uploads')
+const REPO_ROOT = path.resolve(__dirname, '..')
+const OZON_DATA_DIR = path.resolve(process.env.OZON_DATA_DIR || path.join(REPO_ROOT, '市场分析'))
+const OZON_UPLOADS_DIR = path.resolve(process.env.OZON_UPLOADS_DIR || path.join(OZON_DATA_DIR, 'uploads'))
 const PUBLIC_DATA_DIR = path.resolve('public/data')
-const PERSIST_FILE = path.resolve('D:/ozon/市场分析/persisted-data.json')
+const PERSIST_FILE = path.resolve(process.env.PERSIST_FILE || path.join(OZON_DATA_DIR, 'persisted-data.json'))
 
 const DATA_EXTENSIONS = ['.xlsx', '.xls', '.html', '.htm']
 
@@ -201,6 +202,7 @@ function ozonDataSyncPlugin() {
 }
 
 export default defineConfig({
+  base: process.env.KUAJING_BASE_PATH || './',
   plugins: [
     react(),
     {
@@ -247,5 +249,8 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  build: {
+    manifest: true,
   },
 })

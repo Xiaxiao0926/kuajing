@@ -5,10 +5,13 @@ import Dashboard from './Dashboard'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from '../utils/dataProcessor'
 import { persistGet, persistSet, persistRemove } from '../utils/persist'
+import { getDataUrl } from '../utils/runtime.js'
+import { deleteServerFile, listServerFiles, uploadServerFile } from '../utils/serverFiles.js'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
-const DATA_DIR = '/data'
+const DATA_DIR = getDataUrl().replace(/\/$/, '')
+const FILE_NAMESPACE = 'market-research'
 const DB_NAME = 'ozon-market-research'
 const DB_VERSION = 1
 const STORE_NAME = 'files'
@@ -108,11 +111,15 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
       try {
         setLoadingFiles(true)
         const resp = await fetch(`${DATA_DIR}/manifest.json?t=${Date.now()}`)
+        let publicFiles = []
         if (resp.ok) {
           const manifest = await resp.json()
-          const files = (manifest.files || []).filter(f => !f.name.includes('供应链') && !f.name.includes('工厂目录') && !f.name.includes('价格清单') && f.name.includes('热销'))
-          setAvailableFiles(files)
+          publicFiles = (manifest.files || []).filter(f => !f.name.includes('供应链') && !f.name.includes('工厂目录') && !f.name.includes('价格清单') && f.name.includes('热销'))
         }
+        const serverFiles = await listServerFiles(FILE_NAMESPACE)
+        const merged = new Map(publicFiles.map(file => [file.name, file]))
+        serverFiles.forEach(file => merged.set(file.name, { ...file, source: 'server' }))
+        setAvailableFiles([...merged.values()].sort((a, b) => String(b.date || '').localeCompare(String(a.date || ''))))
       } catch { setAvailableFiles([]) }
       finally { setLoadingFiles(false) }
     }
@@ -178,12 +185,12 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
   const handleLoadFile = async (file) => {
     try {
       setLoadingFiles(true)
-      const resp = await fetch(`${DATA_DIR}/${file.name}`)
+      const resp = await fetch(file.downloadUrl || `${DATA_DIR}/${file.name}`)
       if (!resp.ok) throw new Error('下载失败')
       const arrayBuffer = await resp.arrayBuffer()
       const parsedData = parseXlsxArrayBuffer(arrayBuffer)
       if (parsedData.length === 0) return
-      await processAndSave(parsedData, file.name, file.date, false)
+      await processAndSave(parsedData, file.name, file.date, file.source === 'server')
     } catch (err) { console.error('Load file error:', err) }
     finally { setLoadingFiles(false) }
   }
@@ -204,6 +211,7 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
   const handleDeleteSaved = async (name) => {
     try {
       await dbDelete(name)
+      await deleteServerFile(FILE_NAMESPACE, name)
       const files = await dbGetAll()
       setSavedFiles(files.sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0)))
       if (activeFile === name) {
@@ -217,13 +225,13 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
 
   const uploadToServer = async (file) => {
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-      const resp = await fetch('/api/upload', { method: 'POST', body: formData })
-      if (!resp.ok) console.warn('Server upload failed:', resp.status)
-      else {
-        const result = await resp.json()
-        if (result.success) console.log('File saved to server:', result.file?.name)
+      const result = await uploadServerFile(FILE_NAMESPACE, file)
+      if (result?.file) {
+        setAvailableFiles(prev => {
+          const merged = new Map(prev.map(item => [item.name, item]))
+          merged.set(result.file.name, { ...result.file, source: 'server' })
+          return [...merged.values()]
+        })
       }
     } catch (err) {
       console.warn('Server upload skipped:', err.message)
@@ -268,7 +276,7 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
         }
         if (parsedData.length === 0) return
         await processAndSave(parsedData, file.name, undefined, true)
-        uploadToServer(file)
+        await uploadToServer(file)
       } catch (err) {
         console.error('Upload parse error:', err)
         onFileUpload(file)

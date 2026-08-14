@@ -11,7 +11,10 @@ import ProgressOverview from './components/ProgressOverview'
 import ProjectFlow from './components/ProjectFlow'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
-import { syncFromServer, persistGet, persistSet } from './utils/persist'
+import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
+import { getDataUrl, requiresAccessSession } from './utils/runtime.js'
+import { checkAccessSession, unlockAccess } from './utils/access.js'
+import { ROADMAP_PHASES } from './data/roadmap'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
@@ -24,9 +27,9 @@ const LazyFallback = () => (
   <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
 )
 
-const DATA_DIR = '/data'
+const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
-function App() {
+function DashboardApp() {
   const [data, setData] = useState(null)
   const [kpis, setKpis] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -50,6 +53,17 @@ function App() {
       if (saved && Object.keys(saved).length > 0) setNodeStatuses(saved)
       setServerSynced(true)
     }).catch(() => setServerSynced(true))
+  }, [])
+
+  useEffect(() => {
+    const flushWhenHidden = () => {
+      if (document.visibilityState === 'hidden') flushPersistence()
+    }
+    document.addEventListener('visibilitychange', flushWhenHidden)
+    return () => {
+      document.removeEventListener('visibilitychange', flushWhenHidden)
+      flushPersistence()
+    }
   }, [])
 
   useEffect(() => {
@@ -250,7 +264,7 @@ function App() {
   }
 
   return (
-    <div className="flex min-h-screen bg-morandi-bg">
+    <div className="min-h-screen bg-morandi-bg lg:flex">
       <Sidebar
         onFileUpload={handleFileUpload}
         loading={loading}
@@ -260,11 +274,127 @@ function App() {
         onNodeSelect={handleNodeSelect}
         nodeStatuses={nodeStatuses}
       />
-      <main ref={mainRef} className="flex-1 ml-64 p-6">
+      <div className="sticky top-0 z-20 border-b border-gray-100 bg-white p-3 lg:hidden">
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-bold text-morandi-text">坪山综合保跨境项目</p>
+            <p className="text-[10px] text-morandi-text-light">从选品到放量的全流程导航</p>
+          </div>
+          <label className="flex-shrink-0 cursor-pointer rounded-md border border-morandi-primary px-2.5 py-1.5 text-xs font-medium text-morandi-primary">
+            上传数据
+            <input
+              type="file"
+              accept="*"
+              className="hidden"
+              disabled={loading}
+              onChange={(event) => event.target.files?.[0] && handleFileUpload(event.target.files[0])}
+            />
+          </label>
+        </div>
+        <label className="block text-[10px] font-medium text-morandi-text-light" htmlFor="mobile-node-select">
+          当前步骤
+        </label>
+        <select
+          id="mobile-node-select"
+          value={activeNode}
+          onChange={(event) => handleNodeSelect(event.target.value)}
+          className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-morandi-text"
+        >
+          <option value="__project_flow__">项目流程总览</option>
+          {ROADMAP_PHASES.map((phase) => (
+            <optgroup key={phase.id} label={phase.title}>
+              {phase.nodes.map((node) => (
+                <option key={node.id} value={node.id}>{node.title}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+      <main ref={mainRef} className="min-w-0 flex-1 p-3 sm:p-4 lg:p-6">
         {renderContent()}
       </main>
     </div>
   )
+}
+
+function AccessGate() {
+  const [checking, setChecking] = useState(true)
+  const [authorized, setAuthorized] = useState(false)
+  const [password, setPassword] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let active = true
+    checkAccessSession().then((result) => {
+      if (active) setAuthorized(Boolean(result.authorized))
+    }).finally(() => {
+      if (active) setChecking(false)
+    })
+    return () => { active = false }
+  }, [])
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (!password || submitting) return
+    setSubmitting(true)
+    setError('')
+    try {
+      const result = await unlockAccess(password)
+      setAuthorized(Boolean(result.authorized))
+      setPassword('')
+    } catch (requestError) {
+      setError(requestError.status === 429 ? '尝试次数过多，请稍后再试。' : '密码不正确，请重新输入。')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-morandi-bg px-5">
+        <p className="text-sm text-morandi-text-light">正在验证访问权限…</p>
+      </div>
+    )
+  }
+
+  if (authorized) return <DashboardApp />
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-morandi-bg px-5 py-12">
+      <main className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+        <p className="text-xs font-semibold uppercase text-morandi-primary">FYZSXNB Workspace</p>
+        <h1 className="mt-2 text-2xl font-bold text-morandi-text">跨境运营工具</h1>
+        <p className="mt-2 text-sm leading-6 text-morandi-text-light">输入访问密码后继续，无需 WordPress 账号。</p>
+        <form className="mt-7" onSubmit={handleSubmit}>
+          <label className="block text-sm font-medium text-morandi-text" htmlFor="kuajing-access-password">
+            访问密码
+          </label>
+          <input
+            id="kuajing-access-password"
+            type="password"
+            autoComplete="current-password"
+            autoFocus
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="mt-2 w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base text-morandi-text outline-none transition focus:border-morandi-primary focus:ring-2 focus:ring-morandi-primary/20"
+          />
+          {error && <p className="mt-2 text-sm text-red-700" role="alert">{error}</p>}
+          <button
+            type="submit"
+            disabled={!password || submitting}
+            className="mt-5 w-full rounded-md bg-morandi-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {submitting ? '正在验证…' : '进入工具'}
+          </button>
+        </form>
+      </main>
+    </div>
+  )
+}
+
+function App() {
+  return requiresAccessSession() ? <AccessGate /> : <DashboardApp />
 }
 
 export default App

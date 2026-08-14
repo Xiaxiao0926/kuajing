@@ -5,8 +5,9 @@ import {
   Pencil, Plus, Trash2, X, Save, RotateCcw, Scale, Tag, FileText
 } from 'lucide-react'
 import { persistGet, persistSet, persistRemove } from '../utils/persist'
+import { getDataUrl } from '../utils/runtime.js'
 
-const PRICE_FILE = '/data/各供应商起订量及价格清单表.xlsx'
+const PRICE_FILE = getDataUrl('各供应商起订量及价格清单表.xlsx')
 const STORAGE_KEY = 'cost-quote-data'
 
 const CATEGORY_COLORS = {

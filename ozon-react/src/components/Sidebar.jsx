@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from 'react'
 import { Upload, FileSpreadsheet, Loader2, RefreshCw, FolderOpen, ChevronDown, ChevronRight, CheckCircle2, Zap, Bell, Info, GitBranch } from 'lucide-react'
 import { ROADMAP_PHASES } from '../data/roadmap'
 import { persistGet, persistSet } from '../utils/persist'
+import { getDataUrl } from '../utils/runtime.js'
+
+const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
 export default function Sidebar({ onFileUpload, loading, data, error, activeNode, onNodeSelect, nodeStatuses }) {
   const fileInputRef = useRef(null)
@@ -14,7 +17,7 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
     const fetchManifest = async () => {
       try {
         setLoadingFiles(true)
-        const resp = await fetch(`/data/manifest.json?t=${Date.now()}`)
+        const resp = await fetch(`${DATA_DIR}/manifest.json?t=${Date.now()}`)
         if (resp.ok) {
           const manifest = await resp.json()
           setAvailableFiles(manifest.files || [])
@@ -43,7 +46,7 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
   const handleLoadRemote = async (fileName) => {
     try {
       setLoadingFiles(true)
-      const resp = await fetch(`/data/${fileName}`)
+      const resp = await fetch(`${DATA_DIR}/${fileName}`)
       if (!resp.ok) throw new Error('下载失败')
       const blob = await resp.blob()
       const file = new File([blob], fileName, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
@@ -84,7 +87,7 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
   }
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-100 flex flex-col">
+    <aside className="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
       <div className="p-4 border-b border-gray-100">
         <h1 className="text-lg font-bold text-morandi-text flex items-center gap-2">
           <span className="text-xl">🗺️</span>
