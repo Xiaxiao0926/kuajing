@@ -14,6 +14,13 @@ export function getAssetUrl(pathname = '') {
   return new URL(pathname.replace(/^\//, ''), new URL(normalizedBase, window.location.origin)).toString()
 }
 
+export function getDataUrl(pathname = '') {
+  const configured = getRuntimeConfig().dataBase
+  if (!configured) return getAssetUrl(`data/${pathname.replace(/^\//, '')}`)
+  const normalizedBase = configured.endsWith('/') ? configured : `${configured}/`
+  return new URL(pathname.replace(/^\//, ''), normalizedBase).toString()
+}
+
 export function canUseServerPersistence() {
   const config = getRuntimeConfig()
   return Boolean(config.authorized && config.nonce && getApiBase())

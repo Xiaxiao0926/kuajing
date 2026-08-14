@@ -12,7 +12,7 @@ import ProjectFlow from './components/ProjectFlow'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
 import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
-import { getAssetUrl } from './utils/runtime.js'
+import { getDataUrl } from './utils/runtime.js'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
@@ -25,7 +25,7 @@ const LazyFallback = () => (
   <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
 )
 
-const DATA_DIR = getAssetUrl('data').replace(/\/$/, '')
+const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
 function App() {
   const [data, setData] = useState(null)

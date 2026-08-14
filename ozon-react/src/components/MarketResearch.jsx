@@ -5,12 +5,12 @@ import Dashboard from './Dashboard'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from '../utils/dataProcessor'
 import { persistGet, persistSet, persistRemove } from '../utils/persist'
-import { getAssetUrl } from '../utils/runtime.js'
+import { getDataUrl } from '../utils/runtime.js'
 import { deleteServerFile, listServerFiles, uploadServerFile } from '../utils/serverFiles.js'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
-const DATA_DIR = getAssetUrl('data').replace(/\/$/, '')
+const DATA_DIR = getDataUrl().replace(/\/$/, '')
 const FILE_NAMESPACE = 'market-research'
 const DB_NAME = 'ozon-market-research'
 const DB_VERSION = 1

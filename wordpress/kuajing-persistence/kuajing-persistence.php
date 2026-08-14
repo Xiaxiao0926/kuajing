@@ -139,6 +139,7 @@ final class FYZSXNB_Kuajing_Dashboard {
             'window.KUAJING_CONFIG=' . wp_json_encode(array(
                 'apiBase' => esc_url_raw(rest_url('kuajing/v1')),
                 'assetBase' => esc_url_raw(plugins_url('dist/', __FILE__)),
+                'dataBase' => 'https://raw.githubusercontent.com/Xiaxiao0926/kuajing/main/ozon-react/public/data/',
                 'authorized' => $authorized,
                 'nonce' => $authorized ? wp_create_nonce('wp_rest') : '',
             )) . ';',

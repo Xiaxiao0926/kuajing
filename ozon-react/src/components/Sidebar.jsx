@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from 'react'
 import { Upload, FileSpreadsheet, Loader2, RefreshCw, FolderOpen, ChevronDown, ChevronRight, CheckCircle2, Zap, Bell, Info, GitBranch } from 'lucide-react'
 import { ROADMAP_PHASES } from '../data/roadmap'
 import { persistGet, persistSet } from '../utils/persist'
-import { getAssetUrl } from '../utils/runtime.js'
+import { getDataUrl } from '../utils/runtime.js'
 
-const DATA_DIR = getAssetUrl('data').replace(/\/$/, '')
+const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
 export default function Sidebar({ onFileUpload, loading, data, error, activeNode, onNodeSelect, nodeStatuses }) {
   const fileInputRef = useRef(null)

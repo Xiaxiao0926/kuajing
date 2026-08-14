@@ -53,6 +53,7 @@ jobs:
 
       - name: Stage WordPress plugin
         run: |
+          rm -rf ozon-react/dist/data
           mkdir -p deploy/kuajing-persistence
           cp wordpress/kuajing-persistence/kuajing-persistence.php deploy/kuajing-persistence/
           cp wordpress/kuajing-persistence/README.md deploy/kuajing-persistence/
