@@ -110,7 +110,8 @@
   font-size: 80%;
 }
 
-:root {
+.fyzsxnb-kuajing-root {
+  /* 设计 token 全部挂在 React root 作用域内（T5-2 hardening：禁止全局 :root 定义） */
   --morandi-bg: #F6F6F6;
   --morandi-card: #FFFFFF;
   --morandi-primary: #8B9DC3;
@@ -129,7 +130,7 @@
 }
 
 /* Workspace 内层容器：全出血 root 内居中，桌面 max 1760px */
-.fyzsxnb-workspace-inner {
+.fyzsxnb-kuajing-root .fyzsxnb-workspace-inner {
   max-width: 1760px;
   margin-left: auto;
   margin-right: auto;
@@ -138,22 +139,22 @@
 }
 
 @media (max-width: 767px) {
-  .fyzsxnb-workspace-inner {
+  .fyzsxnb-kuajing-root .fyzsxnb-workspace-inner {
     padding-left: 12px;
     padding-right: 12px;
   }
 }
 
 @layer components {
-  .kpi-card {
+  .fyzsxnb-kuajing-root .kpi-card {
     @apply bg-white rounded-2xl p-6 shadow-card transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5;
   }
 
-  .section-title {
+  .fyzsxnb-kuajing-root .section-title {
     @apply text-xl font-semibold text-morandi-text mb-4 pb-2 border-b-2 border-morandi-accent;
   }
 
-  .insight-card {
+  .fyzsxnb-kuajing-root .insight-card {
     @apply bg-white rounded-xl p-5 shadow-card border-l-4 border-morandi-primary;
   }
 }
