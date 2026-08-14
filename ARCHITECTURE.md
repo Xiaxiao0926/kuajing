@@ -119,23 +119,25 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
 
 | 文件 | 作用 | 改动敏感度 |
 |---|---|---|
-| `ozon-react/src/App.jsx` | 路由编排（roadmap 节点→组件映射） | 中 |
-| `ozon-react/src/components/WBCalc.jsx` | WB 核算 UI（1692 行） | 高（只拆不改逻辑） |
+| `ozon-react/src/App.jsx` | 路由编排 + 五个页面 React.lazy（T3-4） | 中 |
+| `ozon-react/src/components/NewDashboard.jsx` | 市场调研编排层（T3-1 拆分后 115 行） | 中 |
+| `ozon-react/src/components/dashboard/` | 词库 dictionary.js / 计算 hook useDashboardStats.js / Cards / 5 展示区段 | 计算 hook 禁改逻辑；区段只改展示 |
+| `ozon-react/src/components/WBCalc.jsx` | WB 核算编排层（T3-2 拆分后 109 行） | 中 |
+| `ozon-react/src/components/wbcalc/` | 6 Tab + 5 共享组件 + format.js | 高（只拆不改逻辑） |
+| `ozon-react/src/components/fragrancePricing/` | data.js（常量+利润计算）/ InputField / PlanPanel（T3-3） | data.js 禁改计算 |
 | `ozon-react/src/components/OzonCalc.jsx` | Ozon 核算 UI | 高 |
-| `ozon-react/src/components/NewDashboard.jsx` | 市场调研看板（459KB 巨型） | 高（T3 拆分） |
 | `ozon-react/src/utils/wbEngine.js` | WB 计算引擎（纯函数） | **极高（禁改公式）** |
-| `ozon-react/src/utils/ozonEngine.js` | Ozon CEL 渠道+佣金+利润 | **极高（禁改公式）** |
-| `ozon-react/src/utils/wbConfig.js` | WB 配置 adapter（读 generated，禁改映射语义） | **极高** |
 | `ozon-react/src/utils/ozonEngine.js` | Ozon 引擎 + 渠道 adapter（费率数值在 config/） | **极高（禁改公式）** |
+| `ozon-react/src/utils/wbConfig.js` | WB 配置 adapter（读 generated，禁改映射语义） | **极高** |
 | `ozon-react/src/generated/*.js` | 自动生成物（勿手改，改 config 后重跑 sync） | 只读 |
 | `ozon-react/src/utils/dataProcessor.js` | 市场数据清洗 | 中 |
-| `ozon-react/vite.config.js` | 数据同步插件 + /api/persist + /api/upload | 高 |
+| `ozon-react/vite.config.js` | 数据同步插件 + config-sync（fail-close + dev watch） | 高 |
 | `server.js` | 价格分析 API（497 行自包含路由） | 中 |
 | `config.js` | Node 端路径配置 | 低（改环境变量即可） |
 | `market_data_processor.js` | 市场价清洗（848 行） | 中 |
 | `analyze_with_cleaned_data.js` | 报价匹配分析（2353 行） | 中 |
 | `ozon-product-analyzer/wb_calc.py` | WB 计算引擎（Decimal） | **极高（禁改公式）** |
-| `ozon-product-analyzer/wb_data.py` | Python 端数据存储+默认费率 | **极高（禁改数值）** |
+| `ozon-product-analyzer/wb_data.py` | Python 端配置 fail-fast 加载 + 原子写 | **极高（禁改校验逻辑）** |
 | `ozon-product-analyzer/wb_panel.py` | WB Streamlit 面板 | 高 |
 | `ozon-product-analyzer/app.py` | 选品评分面板 | 中 |
 | `scripts/run-wb-py-test.js` | 跨平台 Python 测试启动器 | 低 |

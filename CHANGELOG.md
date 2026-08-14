@@ -7,7 +7,16 @@
 
 ## 2026-08-14（整改阶段 V3）
 
-### feat — T2 配置唯一事实源（分支 `feat/v3-t2-config-source`，待验收合并）
+### refactor — T3 前端工程结构治理（分支 `refactor/v3-t3-react-structure`，待验收合并）
+- **T3-0**：UI/Bundle 行为冻结快照（`T3-0-行为冻结快照.md`）。
+- **T3-1**：NewDashboard 6609 行拆为编排层 + `dashboard/dictionary.js`(2141) + `useDashboardStats.js`(1524) + `Cards.jsx` + 5 展示区段；脚本锚点校验 + 逐行比对**零差异**。
+- **T3-2**：WBCalc 1692 行拆为编排层 + `wbcalc/tabs/`6 Tab + 5 共享组件；11 个函数体共 1531 行**逐字一致**。
+- **T3-3**：FragrancePricing 拆为 `fragrancePricing/data.js`（常量+利润计算+报告生成）/InputField/PlanPanel。
+- **T3-4**：App.jsx 五个页面组件 React.lazy + Suspense；主 chunk **2743KB→1122KB（gzip 780→336KB，-59%）**；WBCalc/OzonCalc/FragrancePricing/ListingContent/MarketResearch 独立 chunk。
+- 铁律执行：引擎与 config **零改动**；TD-14 双口径保持原样；计算逻辑留在 engine 层；拆分脚本保留在 `scripts/split-*.js` 供审计。
+- 验证：npm test 65+31 / golden 76 / sync 零差异 / build / dev server 全绿。
+
+### feat — T2 配置唯一事实源（分支 `feat/v3-t2-config-source`，已合并 main，tag `v3-t2-config-source`）
 - **Gate 0**：核验 CEL V5.23 原表，TD-15 定性（HK = 96元/kg + 百克进位，代码数值正确仅标签错），核验报告 `T2-Gate0-CEL-HK核验报告.md`。
 - **config 层**：`config/wb_tariffs.json`（10 条费率）、`config/settings.json`（汇率 12 等）、`config/ozon_channels.json`（17 渠道，HK 语义已修正）、`config/schema/`（tariff/channel JSON Schema）。
 - **React adapter**：`wbConfig.js`/`ozonEngine.js` 改为从 `src/generated/*.js` 读配置（snake→camel 映射），对外 API 与数值逐位不变；`scripts/sync-config.js` 同步+结构校验；vite buildStart 与 npm test 自动同步。

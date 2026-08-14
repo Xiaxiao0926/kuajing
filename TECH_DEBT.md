@@ -12,9 +12,9 @@
 | TD-1 | ✅ 已解决（T2）：配置单源化后不再存在运行态副本——Python 读写均指向 `config/settings.json`（原 `wb_data/settings.json` 已删除），React 经 generated 读同一文件。历史 11.5 观察无法复现，判定为已消失的旧运行态残留 | — | — | 关闭 |
 | TD-2 | ✅ 已解决（T2）：WB 双引擎同读 `config/wb_tariffs.json`，对拍脚本 `npm run test:sync` 16 边界+2 版本零差异 | — | — | 关闭 |
 | TD-3 | Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称 | `wb_calc.py` | 中：Python 面板算不出拒收/清关赔偿 | T2 或独立任务补齐并加测试 |
-| TD-4 | `NewDashboard.jsx` 459KB 巨型组件 | `ozon-react/src/components/NewDashboard.jsx` | 中：任何改动易牵一发动全身 | T3-1 按职责拆分 |
-| TD-5 | `WBCalc.jsx` 1692 行、`FragrancePricing.jsx` 42KB 同样偏大 | `ozon-react/src/components/` | 中 | T3-1 |
-| TD-6 | 生产构建无代码分割，主 chunk 2.7MB | `ozon-react/vite.config.js` | 低：首屏慢 | T3-2 React.lazy |
+| TD-4 | ✅ 已解决（T3-1）：NewDashboard 6609 行拆为编排层 + dictionary.js(2141) + useDashboardStats.js(1524) + Cards + 5 展示区段，脚本锚点校验 + 逐行比对零差异 | — | — | 关闭 |
+| TD-5 | ✅ 已解决（T3-2/T3-3）：WBCalc 拆为编排层+6 Tab+5 共享组件（1531 行函数体逐字一致）；FragrancePricing 拆为 data.js/InputField/PlanPanel | — | — | 关闭 |
+| TD-6 | ✅ 已解决（T3-4）：React.lazy 页面级分割，主 chunk 2743KB→1122KB（gzip 780→336KB，-59%） | — | — | 关闭 |
 | TD-7 | ✅ 已解决（T2）：`app.py` DATA_DIR→`OZON_DATA_DIR` 环境变量+相对路径回退；`wb_panel.py` COMMISSION_FILE→`WB_COMMISSION_FILE`；`wb_data.py` 配置目录→`CONFIG_DIR` | — | — | 关闭 |
 | TD-8 | `manifest.json` 的 `updatedAt` 每次启动被 vite 插件重写，产生无关 git dirty | `ozon-react/vite.config.js` | 低：噪声 | 待定：gitignore 该字段或改为构建期生成 |
 | TD-9 | 业务数据重复存储：根目录 xlsx 与 `ozon-react/public/data/` 各一份（约 11MB） | `public/data/` | 低：仓库体积 | 待定：仅保留同步产物或改软链接 |
