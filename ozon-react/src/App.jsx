@@ -333,7 +333,10 @@ function DashboardApp() {
             </select>
           </div>
           <main ref={mainRef} className="p-3 sm:p-4 lg:p-6">
-            <WorkspacePageErrorBoundary pageLabel={pageLabelForNode(activeNode)}>
+            <WorkspacePageErrorBoundary
+              key={activeNode}
+              pageLabel={pageLabelForNode(activeNode)}
+            >
               {renderContent()}
             </WorkspacePageErrorBoundary>
           </main>
