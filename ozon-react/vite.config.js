@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
+import { execFileSync } from 'child_process'
 
 const OZON_DATA_DIR = path.resolve('D:/ozon/市场分析')
 const OZON_UPLOADS_DIR = path.resolve('D:/ozon/市场分析/uploads')
@@ -200,7 +201,43 @@ function ozonDataSyncPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), ozonDataSyncPlugin()],
+  plugins: [
+    react(),
+    {
+      // 构建前把 config/*.json 同步为 src/generated/*.js（唯一事实源，fail-close）
+      // 同步/校验失败必须 throw：禁止拿着 stale generated 配置继续出包。
+      name: 'config-sync',
+      buildStart() {
+        execFileSync('node', [path.resolve(__dirname, '../scripts/sync-config.js')], { stdio: 'inherit' })
+      },
+      // dev 运行态传播：watch config/*.json → 变化即同步 generated → full-reload。
+      // 保证 Python 面板保存 config 后，正在运行的 React dev 立即看到新数值。
+      configureServer(server) {
+        const configDir = path.resolve(__dirname, '../config')
+        let debounceTimer = null
+        const syncAndReload = () => {
+          try {
+            execFileSync('node', [path.resolve(__dirname, '../scripts/sync-config.js')], { stdio: 'inherit' })
+            server.ws.send({ type: 'full-reload' })
+          } catch (e) {
+            // 同步失败：不 reload，config 保持旧值；错误已在 sync-config stderr 输出
+            console.error('[config-sync] dev 同步失败，前端继续使用旧 generated:', e.message)
+          }
+        }
+        try {
+          execFileSync('node', [path.resolve(__dirname, '../scripts/sync-config.js')], { stdio: 'inherit' })
+        } catch (e) {
+          console.error('[config-sync] dev 启动同步失败:', e.message)
+        }
+        fs.watch(configDir, (eventType, filename) => {
+          if (!filename || !filename.endsWith('.json')) return
+          if (debounceTimer) clearTimeout(debounceTimer)
+          debounceTimer = setTimeout(syncAndReload, 200)
+        })
+      },
+    },
+    ozonDataSyncPlugin(),
+  ],
   server: {
     port: 5173,
     host: true,

@@ -234,7 +234,7 @@ function SingleTab() {
                             {isBest && <span className="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700 border border-green-200 flex-shrink-0">最优</span>}
                           </div>
                           <div className="text-xs text-morandi-text-light mt-1">
-                            {ch.rateUnit === 'per100g' ? `${ch.rate / 10}元/KG(${ch.rate}元/100g)` : `${ch.rate}元/KG`} + {ch.base}元/票
+                            {ch.rateUnit === 'per100g' ? `${ch.rate}元/KG · 100g进位` : `${ch.rate}元/KG`} + {ch.base}元/票
                             {ch.volumetric === true && <span className="ml-1 text-amber-600">· 计抛(÷{ch.volDiv})</span>}
                             {ch.volumetric === 'conditional' && <span className="ml-1 text-amber-600">· 三边和&gt;{ch.volThreshold}cm计抛(÷{ch.volDiv})</span>}
                           </div>

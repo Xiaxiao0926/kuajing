@@ -1,77 +1,53 @@
 /**
  * Ozon rFBS 跨境核算 - 共享计算引擎
  * 抽自 ShippingCalc.jsx 与 PricingCalc.jsx，避免两份重复代码
- * 依据《CEL产品资费表 V5.23》
+ * 依据《CEL产品资费表 V5.23》（已按 T2-Gate0-CEL-HK核验报告.md 核验）
+ *
+ * 渠道配置唯一事实源: D:/ozon/config/ozon_channels.json
+ * （经 scripts/sync-config.js 生成为 src/generated/ozon_channels.js）
+ * 本文件只做 snake_case → 引擎内部结构映射；费率数值禁止在本文件修改。
  */
 
-// 汇率：1₽ = 0.09¥（与原组件保持一致）
-export const R = 0.09
+import channelsData from '../generated/ozon_channels.js'
+import settingsData from '../generated/settings.js'
+
+// 汇率：1₽ = ¥0.09（唯一事实源 config/settings.json ozon_rub_to_cny）
+export const R = settingsData.ozon_rub_to_cny
 
 /**
  * CEL 物流渠道分组（按类目组织）
- * 用于"利润测算"Tab：展示全部渠道对比
+ * 数据来源：config/ozon_channels.json（唯一事实源）
+ * 映射规则：kg_rate_cny → rate，fixed_fee_cny → base；
+ * weight_rounding_g 存在 → rateUnit='per100g'（百克进位语义）
  */
-export const CHANNEL_GROUPS = [
-  {
-    category: 'Extra Small',
-    categoryZh: '超级轻小件',
-    channels: [
-      { id: 'express_xs', name: 'Express Extra Small', speed: '5-10天', rate: 46.8, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'standard_xs', name: 'Standard Extra Small', speed: '10-15天', rate: 36.4, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'economy_xs', name: 'Economy Extra Small', speed: '15-25天', rate: 26, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
-    ],
-  },
-  {
-    category: 'Budget',
-    categoryZh: '低客单价标准件',
-    channels: [
-      { id: 'express_budget', name: 'Express Budget', speed: '5-10天', rate: 34.32, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'standard_budget', name: 'Standard Budget', speed: '10-15天', rate: 26, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'economy_budget', name: 'Economy Budget', speed: '15-25天', rate: 17.68, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
-    ],
-  },
-  {
-    category: 'Small',
-    categoryZh: '小件',
-    channels: [
-      { id: 'express_small', name: 'Express Small', speed: '5-10天', rate: 46.8, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
-      { id: 'standard_small', name: 'Standard Small', speed: '10-15天', rate: 36.4, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
-      { id: 'economy_small', name: 'Economy Small', speed: '15-25天', rate: 26, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
-    ],
-  },
-  {
-    category: 'Big',
-    categoryZh: '大件',
-    channels: [
-      { id: 'standard_big', name: 'Standard Big', speed: '10-15天', rate: 26, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
-      { id: 'economy_big', name: 'Economy Big', speed: '15-25天', rate: 17.68, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
-    ],
-  },
-  {
-    category: 'Premium Small',
-    categoryZh: '高客单价小件',
-    channels: [
-      { id: 'express_psmall', name: 'Express Premium Small', speed: '5-10天', rate: 46.8, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
-      { id: 'standard_psmall', name: 'Standard Premium Small', speed: '10-15天', rate: 36.4, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
-      { id: 'economy_psmall', name: 'Economy Premium Small', speed: '15-25天', rate: 26, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
-    ],
-  },
-  {
-    category: 'Premium Big',
-    categoryZh: '高客单价大件',
-    channels: [
-      { id: 'standard_pbig', name: 'Standard Premium Big', speed: '10-15天', rate: 29.12, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
-      { id: 'economy_pbig', name: 'Economy Premium Big', speed: '15-25天', rate: 23.92, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
-    ],
-  },
-  {
-    category: 'HK',
-    categoryZh: '中国香港',
-    channels: [
-      { id: 'express_hk', name: 'Express HK 香港空运', speed: '7-12天', rate: 96, base: 19, rateUnit: 'per100g', weightMax: 25, sumMax: 310, sideMax: 150, priceMin: 1, priceMax: 500000, volumetric: 'conditional', volDiv: 6000, volThreshold: 60 },
-    ],
-  },
-]
+export const CHANNEL_GROUPS = channelsData.groups.map((g) => ({
+  category: g.group_name,
+  categoryZh: g.group_name_zh,
+  channels: g.channels.map((ch) => {
+    const c = {
+      id: ch.id,
+      name: ch.name,
+      speed: ch.speed,
+      rate: ch.kg_rate_cny,
+      base: ch.fixed_fee_cny,
+      weightMax: ch.weight_max_kg,
+      sumMax: ch.sum_max_cm,
+      sideMax: ch.side_max_cm,
+      priceMin: ch.price_min_rub,
+      priceMax: ch.price_max_rub,
+      volumetric: ch.volumetric,
+    }
+    if (ch.weight_min_kg !== undefined && ch.weight_min_kg !== null) c.weightMin = ch.weight_min_kg
+    // 内部映射：weight_rounding_g=100 → rateUnit='per100g'。
+    // 语义 = "每 kg 费率 + 计费重量按 100g 进位"（Gate0 核验结论），
+    // rateUnit 仅为 calcShipping 的分支标志（引擎内部字段，非展示文案）。
+    if (ch.weight_rounding_g !== undefined && ch.weight_rounding_g !== null) c.rateUnit = 'per100g'
+    if (ch.vol_div !== undefined && ch.vol_div !== null) c.volDiv = ch.vol_div
+    if (ch.vol_threshold_sum_cm !== undefined && ch.vol_threshold_sum_cm !== null) c.volThreshold = ch.vol_threshold_sum_cm
+    if (ch.charge_weight_max_kg !== undefined && ch.charge_weight_max_kg !== null) c.chargeWeightMax = ch.charge_weight_max_kg
+    return c
+  }),
+}))
 
 /**
  * 扁平化全部渠道（用于"多规格对比"Tab：自动找最低运费）

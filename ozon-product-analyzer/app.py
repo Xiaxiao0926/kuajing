@@ -22,7 +22,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-DATA_DIR = r"d:\ozon\选品"
+# 选品数据目录：环境变量 OZON_DATA_DIR 优先，回退到仓库内 选品/ 目录
+import os
+DATA_DIR = os.environ.get('OZON_DATA_DIR') or os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '选品')
+)
 
 # 高风险关键词（合规风险分用）
 HIGH_RISK_KEYWORDS = {

@@ -154,7 +154,7 @@ total_logistics_cost_cny = forward_logistics_used_cny
 | Big 大件 | Standard / Economy | 26 / 17.68 元/kg + 37.44 元 | 2–30kg；三边和≤310cm；单边≤150cm；体积重÷12000 |
 | Premium Small | 三档 | 46.8 / 36.4 / 26 元/kg + 22.88 元 | ≤5kg；三边和≤250cm；价7001–250000₽ |
 | Premium Big | Standard / Economy | 29.12 / 23.92 元/kg + 64.48 元 | 5–30kg；体积重÷12000 |
-| HK 香港空运 | 7-12天 | **待 CEL 原始表人工复核**（配置为 rate=96/100g 粒度取整 + 19 元固定费；代码实际按 `ceil(kg×10)/10 × 96 + 19` 计算；UI 曾显示"9.6元/KG (96元/100g)"互相矛盾） | ≤25kg；三边和>60cm 时按÷6000 条件体积重 |
+| HK 香港空运 | 7-12天 | **96 元/kg（=9.6元/100克）+ 19元/票；百克进位**（已按 CEL 原表核验，见 `T2-Gate0-CEL-HK核验报告.md`） | ≤25kg；三边和>60cm 时体积重÷6000 与实重取最大值；三边和≤310cm、单边≤150cm；价1–500000₽ |
 
 - 体积重渠道（Big/Premium Big/HK）：`charge_weight = max(实际重量, 体积重)`。
 
@@ -191,7 +191,9 @@ total_logistics_cost_cny = forward_logistics_used_cny
 
 **历史运行态观察（非仓库事实）**：
 - 2026-08-14 整改过程中，曾在本机 Python 运行态观察到 `settings.json` 值为 11.5（生效 2026-02-09）；当前 Git 仓库各分支均无法复现该状态。
-- 因此**不得将 11.5 视为仓库事实**；T2 建立 config 唯一事实源时，仍需验证运行时是否存在外部/持久化配置覆盖造成漂移的风险（见 TECH_DEBT TD-1）。
+- 因此**不得将 11.5 视为仓库事实**。
+
+**T2 已解决（2026-08-14）**：配置单源化后，Python 读写均指向 `config/settings.json`（原 `wb_data/settings.json` 运行态副本已删除），React 经 generated 读同一文件——运行时副本覆盖风险在结构上消除（TECH_DEBT TD-1 关闭）。
 
 ## 11. 修改公式的流程（强制）
 

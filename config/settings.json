@@ -7,7 +7,9 @@
   "default_route_id": "DPX-SZ-382822",
   "default_commission_rate": null,
   "default_reverse_included": true,
+  "buyer_to_ru_warehouse_reverse_included": true,
   "timezone": "Asia/Shanghai",
   "profit_margin_threshold": 10,
-  "logistics_ratio_threshold": 30
+  "logistics_ratio_threshold": 30,
+  "ozon_rub_to_cny": 0.09
 }

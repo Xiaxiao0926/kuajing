@@ -80,25 +80,38 @@ analyze_with_cleaned_data.js             # 匹配 → 价格优势分析结果_v
 
 ### 2.3 Python 面板数据流
 
-- `wb_panel.py`：读取 `wb_data/settings.json`、`tariffs.json`、`skus.json`、`orders.json`，调用 `wb_calc.py` 纯函数计算。
-- `app.py`：扫描 `DATA_DIR`（当前硬编码 `d:\ozon\选品`，T2 将改为环境变量）下的 xlsx/csv 评分。
+- `wb_panel.py`：设置与费率**读 `config/settings.json`、`config/wb_tariffs.json`（唯一事实源，经 `CONFIG_DIR` 环境变量）**；运行时数据（skus/orders）在 `wb_data/`。
+- `app.py`：扫描 `OZON_DATA_DIR`（环境变量，回退 `../选品/`）下的 xlsx/csv 评分。
 - `utils/ai_service.py`：可选 AI 增强（配置 `ai_config.json`，gitignored）。
+
+### 2.4 配置唯一事实源（T2 起）
+
+```
+config/*.json（唯一事实源，snake_case）
+  ├─ wb_tariffs.json      ← 脚本 scripts/sync-config.js 生成 ozon-react/src/generated/wb_tariffs.js
+  ├─ settings.json        ← 生成 src/generated/settings.js
+  ├─ ozon_channels.json   ← 生成 src/generated/ozon_channels.js
+  └─ schema/*.json        （JSON Schema，费率/渠道结构约束）
+
+React 侧：wbConfig.js / ozonEngine.js 是 adapter（snake→camel 映射），对外 API 不变。
+Python 侧：wb_data.py 直接读 config/*.json（CONFIG_DIR），DEFAULT_* 仅作文件缺失兜底。
+同步时机：npm test 前置、vite buildStart；手动 node scripts/sync-config.js。
+```
 
 ---
 
-## 3. 双引擎现状（重要：规则漂移风险区）
+## 3. 双引擎现状（T2 后：同源 + 对拍）
 
-WB 核算有 **两套独立实现**，功能平行、数值应一致（当前有已知漂移，见 §5 与 BUSINESS_RULES.md §10）：
+WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对拍（16 边界重量 + 2 版本边界）零差异：
 
 | | React 引擎 | Python 引擎 |
 |---|---|---|
 | 引擎文件 | `ozon-react/src/utils/wbEngine.js` | `ozon-product-analyzer/wb_calc.py` |
-| 配置 | `ozon-react/src/utils/wbConfig.js`（内嵌 camelCase 常量） | `ozon-product-analyzer/wb_data/tariffs.json`（snake_case） |
+| 配置 | **同读 `config/wb_tariffs.json`**（React 经 adapter+generated） | **同读 `config/wb_tariffs.json`**（CONFIG_DIR） |
 | 数值类型 | JS number + round2 | Decimal + ROUND_HALF_UP |
 | 测试 | `wbEngine.test.mjs` 65 项 | `wb_test.py` 31 项 |
-| 反向赔偿(V2) | ✅ 已实现 13.1.14 全套 | ❌ 未实现（仅有旧版 calculate_return_loss） |
-
-**T2 目标**：以 `config/*.json` 为唯一事实源，双端消费同一份数据（详见 整改任务书V3.md T2）。
+| 对拍 | `npm run test:sync` 零差异（16 边界重量 + 2 版本边界） | 同左 |
+| 反向赔偿(V2) | ✅ 已实现 13.1.14 全套 | ❌ 未实现（TD-3 待补） |
 
 ---
 
@@ -112,7 +125,9 @@ WB 核算有 **两套独立实现**，功能平行、数值应一致（当前有
 | `ozon-react/src/components/NewDashboard.jsx` | 市场调研看板（459KB 巨型） | 高（T3 拆分） |
 | `ozon-react/src/utils/wbEngine.js` | WB 计算引擎（纯函数） | **极高（禁改公式）** |
 | `ozon-react/src/utils/ozonEngine.js` | Ozon CEL 渠道+佣金+利润 | **极高（禁改公式）** |
-| `ozon-react/src/utils/wbConfig.js` | WB 费率/赔偿默认配置 | **极高（禁改数值）** |
+| `ozon-react/src/utils/wbConfig.js` | WB 配置 adapter（读 generated，禁改映射语义） | **极高** |
+| `ozon-react/src/utils/ozonEngine.js` | Ozon 引擎 + 渠道 adapter（费率数值在 config/） | **极高（禁改公式）** |
+| `ozon-react/src/generated/*.js` | 自动生成物（勿手改，改 config 后重跑 sync） | 只读 |
 | `ozon-react/src/utils/dataProcessor.js` | 市场数据清洗 | 中 |
 | `ozon-react/vite.config.js` | 数据同步插件 + /api/persist + /api/upload | 高 |
 | `server.js` | 价格分析 API（497 行自包含路由） | 中 |
@@ -124,16 +139,19 @@ WB 核算有 **两套独立实现**，功能平行、数值应一致（当前有
 | `ozon-product-analyzer/wb_panel.py` | WB Streamlit 面板 | 高 |
 | `ozon-product-analyzer/app.py` | 选品评分面板 | 中 |
 | `scripts/run-wb-py-test.js` | 跨平台 Python 测试启动器 | 低 |
-| `scripts/run-golden-tests.js` | 黄金案例（T2 实现，当前占位） | 低 |
-| `scripts/verify_sync.js` | 双端对拍（T2 实现，当前占位） | 低 |
+| `scripts/run-golden-tests.js` | 黄金案例护栏（75 断言，provenance 分级） | 低 |
+| `scripts/verify_sync.js` | 双端对拍（16 边界+2 版本） | 低 |
+| `scripts/sync-config.js` | config→generated 同步+结构校验 | 低 |
+| `config/*.json` | **唯一事实源：费率/设置/渠道** | **极高（改动须全测试+对拍）** |
+| `tests/golden/*.json` | 黄金业务案例（provenance 分级） | **极高（改动须需求方确认）** |
 
 ---
 
 ## 5. 已知风险与限制（与 TECH_DEBT.md 联动）
 
-1. **汇率运行时覆盖风险**：仓库内三处基线一致（React `DEFAULT_SETTINGS` 12 / Python `DEFAULT_SETTINGS` 12 / tracked `settings.json` 12）；但 2026-08-14 曾观察到本机 Python 运行态 `settings.json` 为 11.5（当前仓库无法复现）。运行时存在外部/持久化配置覆盖代码默认值的可能，T2 统一 config 时需验证（TD-1）。
-2. Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称。
-3. `app.py` `DATA_DIR` 与 `wb_panel.py` `COMMISSION_FILE` 仍硬编码本机路径（T2 修复）。
-4. Ozon 单规格（售价直算）与多规格（上架价×0.6）价格语义不一致（TD-14）；HK 渠道费率单位待 CEL 原始表复核（TD-15）。
+1. ~~汇率运行时覆盖风险~~ ✅ T2 已解决：单源 config/settings.json，运行态副本已删（TD-1 关闭）。
+2. Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称（TD-3）。
+3. ~~硬编码路径~~ ✅ T2 已解决：OZON_DATA_DIR / WB_COMMISSION_FILE / CONFIG_DIR 环境变量（TD-7 关闭）。
+4. Ozon 单规格（售价直算）与多规格（上架价×0.6）价格语义不一致（TD-14）；Big/Budget 0.001kg 边界表述差异（TD-17）。
 5. `ozon-react/public/data/` 与根目录存在重复 xlsx（数据同步插件拷贝产物，约 11MB）。
 6. 生产构建无代码分割，主 chunk 2.7MB。

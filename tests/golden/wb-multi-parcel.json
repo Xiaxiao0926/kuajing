@@ -1,0 +1,24 @@
+{
+  "id": "wb-multi-parcel",
+  "name": "WB 多包裹订单独立计费（2×270g 分别发货）",
+  "provenance": {
+    "source_type": "spec_derived",
+    "verified_by_human": false,
+    "source": "需求规格说明书 §5 示例 + wbEngine.test.mjs 测试10"
+  },
+  "engine": "react_wb",
+  "tariff_id": "DPX-SZ-382822-20260722",
+  "case_type": "order_logistics",
+  "cases": [
+    {
+      "input": {
+        "parcels": [{ "actualWeightG": 270 }, { "actualWeightG": 270 }]
+      },
+      "expected": {
+        "parcelCount": 2,
+        "perParcelFeeCny": [19.40, 19.40],
+        "totalFeeCny": 38.80
+      }
+    }
+  ]
+}
