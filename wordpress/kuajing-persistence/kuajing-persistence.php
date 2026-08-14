@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.2.3
+ * Version: 0.2.4
  * Author: FYZSXNB
  */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.2.3';
+    private const VERSION = '0.2.4';
     private const TABLE_SUFFIX = 'kuajing_state';
     private const VERSION_OPTION = 'fyzsxnb_kuajing_version';
     private const SECRET_OPTION = 'fyzsxnb_kuajing_access_secret';
@@ -352,6 +352,16 @@ final class FYZSXNB_Kuajing_Dashboard {
             // T5-1：全出血 Workspace（scope 到 /kuajing/ 页 body class，禁止全局选择器）
             . 'body.fyzsxnb-kuajing-page{overflow-x:clip;}'
             . 'body.fyzsxnb-kuajing-page .fyzsxnb-kuajing-root{width:100vw;margin-left:calc(50% - 50vw);}'
+            // T5-3：压缩 WordPress 页面标题的 Hero 感（仅 kuajing 页；标题 28-32px，区域约 64-80px）
+            . 'body.fyzsxnb-kuajing-page .entry-title,'
+            . 'body.fyzsxnb-kuajing-page .page-title,'
+            . 'body.fyzsxnb-kuajing-page article h1,'
+            . 'body.fyzsxnb-kuajing-page .entry-content>h1,'
+            . 'body.fyzsxnb-kuajing-page h1.entry-title{font-size:28px!important;font-weight:650!important;line-height:1.25!important;margin:0 0 4px!important;padding:0!important;letter-spacing:-0.01em!important;}'
+            . 'body.fyzsxnb-kuajing-page .entry-content,'
+            . 'body.fyzsxnb-kuajing-page article .entry-content{padding-top:12px!important;}'
+            // T5-3：Workspace 主区域 min-height，避免 1080p 下 WP Footer 紧贴工作台
+            . 'body.fyzsxnb-kuajing-page .fyzsxnb-workspace{min-height:calc(100vh - 240px);}'
             . '</style>'
             . '<script type="application/json" id="fyzsxnb-kuajing-config">' . $config . '</script>'
             . '<div id="root" class="fyzsxnb-kuajing-root"></div>';
