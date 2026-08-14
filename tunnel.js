@@ -1,4 +1,11 @@
-const localtunnel = require('D:/tunnel/node_modules/localtunnel');
+// 优先从项目内 node_modules 加载 localtunnel，回退到全局安装
+let localtunnel;
+try {
+    localtunnel = require('localtunnel');
+} catch (e) {
+    console.error('未找到 localtunnel 模块。请执行: npm install localtunnel');
+    process.exit(1);
+}
 
 (async () => {
     try {

@@ -1,7 +1,11 @@
 {
+  "name": "ozon-kuajing",
+  "version": "1.0.0",
+  "description": "Ozon/WB 跨境电商运营工作区",
   "scripts": {
     "start": "node server.js",
-    "dev": "node node_modules/nodemon/bin/nodemon.js server.js --watch server.js --watch analyze_with_cleaned_data.js --watch config.js --watch market_data_processor.js"
+    "dev": "node node_modules/nodemon/bin/nodemon.js server.js --watch server.js --watch analyze_with_cleaned_data.js --watch config.js --watch market_data_processor.js",
+    "test": "node --experimental-vm-modules ozon-react/src/utils/wbEngine.test.mjs && cd ozon-product-analyzer && python wb_test.py"
   },
   "dependencies": {
     "csv-parser": "^3.2.1",
