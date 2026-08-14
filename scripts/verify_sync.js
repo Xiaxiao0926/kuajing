@@ -130,7 +130,19 @@ print(json.dumps(out))
     console.log(`\n[test:sync] 对拍失败: ${diffCount} 处差异`);
     process.exit(1);
   }
-  console.log(`\n[test:sync] 双端对拍零差异 (${WEIGHTS.length} 个重量边界 + 2 个版本边界)`);
+
+  // ---- T4-4B：scoring_rules 生成物与唯一规则源一致性（fail-close） ----
+  const rulesSrc = JSON.parse(fs.readFileSync(path.join(CONFIG_DIR, 'scoring_rules.json'), 'utf-8'));
+  const { default: generatedRules } = await import(pathToFileURL(path.join(ROOT, 'ozon-react', 'src', 'generated', 'scoring_rules.js')).href);
+  const srcStr = JSON.stringify(rulesSrc);
+  const genStr = JSON.stringify(generatedRules);
+  if (srcStr !== genStr) {
+    console.log('\n[test:sync] ❌ scoring_rules.js 与 config/scoring_rules.json 不一致（请重新运行 sync-config）');
+    process.exit(1);
+  }
+  console.log('[test:sync] scoring_rules.js 与 config/scoring_rules.json 一致');
+
+  console.log(`\n[test:sync] 双端对拍零差异 (${WEIGHTS.length} 个重量边界 + 2 个版本边界 + scoring_rules 一致性)`);
   process.exit(0);
 }
 

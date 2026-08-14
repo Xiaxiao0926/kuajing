@@ -134,3 +134,20 @@ feature branch（fix/ feat/ docs/ refactor/ 前缀）
 | Design / UI | 多模态模型（按需选择） |
 
 > 说明：`deepseek-chat` / `deepseek-reasoner` 旧模型名已于 2026-07-24 停用；接 Agent 工具链时使用新模型名。AGENTS.md 不绑定任何型号。
+
+---
+
+## 9. 选品评分（T4）数据更新与重建
+
+- **更新候选数据**：替换 `选品/跨境项目产品线扩展计划.xlsx` 后运行
+  `node scripts/build-scoring-input.js` → 重新生成 `ozon-react/public/data/scoring_candidates.json`；
+  随后必跑 `npm run test:scoring`（适配层回归锁定分布，期望值需随新数据复核）+ `node scripts/t4-score-audit.js`。
+- **重建 BSR 基准**：更新 `市场分析/市场bsr/*.xlsx` 后运行 `node scripts/build-bsr-benchmark.js`
+  （浏览器运行资产仅消费聚合后的 `bsr_market_benchmarks.json`，不把 19,000 行明细复制进运行时 JSON；
+  原始 BSR xlsx 当前仍保留在 Git 仓库中，数据公开风险见 TD-19）；
+  同样重跑审计确认映射覆盖率与维度验证矩阵。
+- **评分规则**：只改 `config/scoring_rules.json`（唯一事实源）；`npm run test:sync` 校验生成物一致性；
+  λ 越界（>1）或六维权重和≠100 会被 sync-config fail-close 拒绝。
+- **测试入口**：`npm test`（scoring 81+20+13+导出+golden 56+python 31）；`npm run test:scoring`；`npm run test:scoring-golden`。
+- **审计/实验**：`node scripts/t4-score-audit.js`；λ 校准实验用 `T4_SCALE_WEIGHT` 环境变量（PowerShell：`$env:T4_SCALE_WEIGHT=0.4`），生产值以 config 为准。
+- **UI↔审计同源**：两者共用 `scoringDataAdapter.js`；验收对拍 `node _audit/tmp/verify-ui-audit-identity.js`（5 SKU 逐位一致）。

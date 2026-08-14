@@ -147,6 +147,13 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
 | `config/*.json` | **唯一事实源：费率/设置/渠道** | **极高（改动须全测试+对拍）** |
 | `tests/golden/*.json` | 黄金业务案例（provenance 分级） | **极高（改动须需求方确认）** |
 
+#### 选品评分系统（T4）
+- `ozon-react/src/utils/scoring/`：`normalization.js`（百分位/winsorize/证据感知/shrinkage）、`scoringEngine.js`（scoreProduct 纯函数 + fail-close）、`explanations.js`（两段式契约第二段）、`scoringDataAdapter.js`（数据适配管线，UI 与审计同源）、`scoringExport.js`（XLSX/CSV 导出）+ 4 个测试文件
+- `config/scoring_rules.json` → `ozon-react/src/generated/scoring_rules.js`（sync-config 生成，deepFreeze 只读，唯一规则源）
+- `scripts/`：`build-bsr-benchmark.js`（BSR 聚合基准）、`scoring-xlsx.js`（候选解析唯一实现）、`build-scoring-input.js`（xlsx→`public/data/scoring_candidates.json`）、`t4-score-audit.js`（1000 SKU 审计+维度验证矩阵）、`run-scoring-golden.js`
+- `tests/scoring-golden/*.json`：10 固件 56 断言
+- 面板：`ozon-react/src/components/dashboard/sections/ProductScoringSection.jsx`（在 MarketResearch 的 dashboardRef 之外挂载，独立于市场分析数据与 PDF 导出）
+
 ---
 
 ## 5. 已知风险与限制（与 TECH_DEBT.md 联动）
@@ -157,3 +164,29 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
 4. Ozon 单规格（售价直算）与多规格（上架价×0.6）价格语义不一致（TD-14）；Big/Budget 0.001kg 边界表述差异（TD-17）。
 5. `ozon-react/public/data/` 与根目录存在重复 xlsx（数据同步插件拷贝产物，约 11MB）。
 6. ~~无代码分割~~ ✅ T3-4 已解决：React.lazy 页面级分割，主 chunk 2743KB→1122KB（gzip 780→336KB）。
+
+## 6. 选品评分系统（T4）数据流
+
+```text
+选品/跨境项目产品线扩展计划.xlsx（1000 行 × 63 字段，业务源）
+  → scripts/scoring-xlsx.js（唯一解析实现 → canonical candidates，T4-1B §1.1 契约）
+  → scripts/build-scoring-input.js → ozon-react/public/data/scoring_candidates.json
+
+市场分析/市场bsr/*.xlsx（19 域 ~19000 行明细；原始 xlsx 当前仍保留在 Git 仓库中，数据公开风险见 TD-19）
+  → scripts/build-bsr-benchmark.js（聚合统计：类型/域 P10-P90。浏览器运行资产仅消费聚合后的
+    bsr_market_benchmarks.json，不把 19,000 行明细复制进运行时 JSON）
+  → ozon-react/public/data/bsr_market_benchmarks.json（855 类型 / 19 域）
+
+config/scoring_rules.json（唯一规则源：λ=0.5、六维权重 25/15/10/20/15/15、评级线、Gate、SupplyGap、Decision）
+  → scripts/sync-config.js（结构校验 fail-close）→ src/generated/scoring_rules.js（deepFreeze 只读）
+
+浏览器（ProductScoringSection，useMemo 只算一次）：
+  fetch 两个 JSON + import 生成规则/设置
+  → scoringDataAdapter.js（buildBsrIndex / 精确>包含匹配 / shrinkage / 候选池+市场规模池 / CEL 探测）
+  → scoringEngine.js scoreProduct()（fail-close：HIGH/MEDIUM 无 marketScalePool 即抛 SCORING_CONFIG_FAIL）
+  → explanations.js buildExplanations()（三档口径：同类市场 / 对应 BSR 市场域 / 候选池表现）
+  → ScoredProduct[] → 总览/排名/筛选/详情 + scoringExport.js 导出当前筛选
+
+审计（Node）：scripts/t4-score-audit.js 与 UI 共用同一 scoringDataAdapter（同源保证逐位一致），
+输出 A/B/C/D/不可评级分布 + 维度验证矩阵；对拍脚本 _audit/tmp/verify-ui-audit-identity.js（5 SKU 逐位一致）。
+```

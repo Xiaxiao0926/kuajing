@@ -202,3 +202,24 @@ total_logistics_cost_cny = forward_logistics_used_cny
 3. 更新引擎（React + Python 双端，若涉及 WB）。
 4. `npm test` 全绿；新增/更新测试用例覆盖新值；黄金案例（T2 后）全绿。
 5. 记录费率版本（`effective_from`/`source_name`），旧版本保留用于历史订单。
+
+## 12. 选品评分决策模型（T4 V1，冻结；λ=0.5 经 T4-4A 校准）
+
+**六维权重（%）**：需求 25 / 竞争 15 / 价格空间 10 / 利润可行性 20 / 物流适配 15 / 运营稳健 15（和=100，sync-config 校验）。
+
+**Demand（T4-4A 两层）**：`DemandScore = 0.5×MarketScale + 0.5×CandidateStrength`
+- MarketScale = 60%×市场 sales_28d.p50 全局类型百分位 + 40%×units_28d.p50（仅 HIGH/MEDIUM；LOW/LMC → N/A，回退候选强度，771 个 LMC SKU 路径不变）
+- CandidateStrength = 候选对自身市场分位（sales 35 / units 25 / conv 15 / cart_add 10 / exposure 5 / visits 5 / reviews 5）
+- 全局类型池只做市场规模排名，**禁止冒充对应市场基准**；`bsr_leader_share` 不入公式（仅观察标签）。
+
+**评级**：A≥80 / B≥65 / C≥50 / D<50；可用维度权重<50% → NEEDS_DATA → **不可评级**（totalScore 仅诊断值保留）。
+
+**Gate/Flag**：BLOCKED_LOGISTICS（无 CEL 渠道，logistics=0）、MARGIN_RISK（毛利<0，利润维度封顶 20）、REVIEW_REQUIRED（合规词表）、LOW_MARKET_CONTEXT（无 BSR 匹配，评级暂定）、NEEDS_DATA（证据<50%）。
+
+**Decision 层（与 grade 分离）**：BLOCKED→DO_NOT_SAMPLE → HOLD→VERIFY_COST → REVIEW→COMPLIANCE_REVIEW → RESEARCH→COLLECT_MARKET_DATA → ELIGIBLE（A→SAMPLE_VALIDATION、B→PILOT_TEST、C→WATCH、D→DEPRIORITIZE）。
+
+**Supply Gap（独立解释信号，不进总分）**：Gap = (0.45×需求秩 + 0.55×缺货秩) × (0.80 + 0.20×开放度/100)；HIGH_GAP ≥70/≥60/≥65，MEDIUM_GAP ≥55/≥50/≥55；无市场基准或可比类型<5 → N/A。
+
+**证据感知**：子指标覆盖<50% → 维度 N/A；维度层按可用权重重归一；缺失子项按剩余权重重归一，禁止用 0/50 补值。
+
+**修改纪律**：任何权重/公式变更 = 需求方书面确认 + 更新本节与 `T4-1B-评分模型设计冻结.md` + 重跑 scoring golden/monotonicity/审计三件套 + 重跑 λ 校准验证（若涉及 demand）。

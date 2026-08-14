@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Upload, FileSpreadsheet, Loader2, FolderOpen, CheckCircle2, FileDown, Camera, HardDrive, Trash2 } from 'lucide-react'
 import NewDashboard from './NewDashboard'
 import Dashboard from './Dashboard'
+import ProductScoringSection from './dashboard/sections/ProductScoringSection'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from '../utils/dataProcessor'
 import { persistGet, persistSet, persistRemove } from '../utils/persist'
@@ -430,20 +431,24 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
         )}
       </div>
 
-      <div ref={dashboardRef} className="flex-1 min-w-0">
-        {hasData ? (
-          displayFormat === 'new' ? (
-            <NewDashboard data={displayData} kpis={displayKpis} screenshotMode={screenshotMode} />
+      <div className="flex-1 min-w-0 space-y-6">
+        <div ref={dashboardRef}>
+          {hasData ? (
+            displayFormat === 'new' ? (
+              <NewDashboard data={displayData} kpis={displayKpis} screenshotMode={screenshotMode} />
+            ) : (
+              <Dashboard data={displayData} kpis={displayKpis} screenshotMode={screenshotMode} />
+            )
           ) : (
-            <Dashboard data={displayData} kpis={displayKpis} screenshotMode={screenshotMode} />
-          )
-        ) : (
-          <div className="bg-white rounded-xl p-12 shadow-sm text-center">
-            <FolderOpen className="w-10 h-10 text-gray-200 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-morandi-text mb-2">请选择或上传数据文件</h3>
-            <p className="text-sm text-morandi-text-light">从左侧选择报告文件，或上传 .xlsx / .xls / .html 文件开始分析</p>
-          </div>
-        )}
+            <div className="bg-white rounded-xl p-12 shadow-sm text-center">
+              <FolderOpen className="w-10 h-10 text-gray-200 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-morandi-text mb-2">请选择或上传数据文件</h3>
+              <p className="text-sm text-morandi-text-light">从左侧选择报告文件，或上传 .xlsx / .xls / .html 文件开始分析</p>
+            </div>
+          )}
+        </div>
+        {/* 选品评分面板：独立于市场分析数据挂载（不进入 dashboardRef，市场分析 PDF 不含评分面板） */}
+        <ProductScoringSection />
       </div>
     </div>
   )

@@ -1,0 +1,293 @@
+// 自动生成 - 勿手改。来源: config/scoring_rules.json（唯一事实源）。
+// 重新生成: node scripts/sync-config.js
+const scoringRules = {
+  "version": "1.0",
+  "source_doc": "T4-1B-评分模型设计冻结.md",
+  "dimensions": {
+    "demand": {
+      "weight": 25,
+      "label": "市场需求",
+      "scale_weight": 0.5,
+      "scale_sales_weight": 0.6,
+      "scale_units_weight": 0.4,
+      "subs": {
+        "sales_rub_28d": {
+          "weight": 35,
+          "pool": "market_then_candidate",
+          "label": "28天销售额"
+        },
+        "units_28d": {
+          "weight": 25,
+          "pool": "market_then_candidate",
+          "label": "28天销量"
+        },
+        "conv_rate": {
+          "weight": 15,
+          "pool": "market_then_candidate",
+          "label": "订单转化率"
+        },
+        "cart_add_rate": {
+          "weight": 10,
+          "pool": "market_then_candidate",
+          "label": "商品卡加购率"
+        },
+        "exposure": {
+          "weight": 5,
+          "pool": "candidate_only",
+          "label": "曝光量"
+        },
+        "card_visits": {
+          "weight": 5,
+          "pool": "candidate_only",
+          "label": "浏览量"
+        },
+        "reviews": {
+          "weight": 5,
+          "pool": "candidate_only",
+          "label": "评论沉淀"
+        }
+      }
+    },
+    "competition": {
+      "weight": 15,
+      "label": "竞争机会",
+      "requiresMarket": true,
+      "subs": {
+        "seller_concentration": {
+          "weight": 30,
+          "label": "卖家集中度"
+        },
+        "brand_concentration": {
+          "weight": 25,
+          "label": "品牌集中度"
+        },
+        "head_share_pressure": {
+          "weight": 15,
+          "label": "头部份额压力"
+        },
+        "promo_dependency": {
+          "weight": 15,
+          "label": "促销依赖"
+        },
+        "ad_opportunity": {
+          "weight": 15,
+          "label": "广告机会"
+        }
+      }
+    },
+    "price_opportunity": {
+      "weight": 10,
+      "label": "价格空间",
+      "requiresMarket": true,
+      "subs": {
+        "price_band_match": {
+          "weight": 50,
+          "label": "价格带匹配"
+        },
+        "price_floor_pressure": {
+          "weight": 25,
+          "label": "价格下限压力"
+        },
+        "discount_stability": {
+          "weight": 25,
+          "label": "折扣稳定性"
+        }
+      }
+    },
+    "profitability": {
+      "weight": 20,
+      "label": "利润可行性",
+      "subs": {
+        "gross_margin": {
+          "weight": 60,
+          "label": "预估毛利率"
+        },
+        "commission_burden": {
+          "weight": 20,
+          "label": "佣金负担"
+        },
+        "ad_burden": {
+          "weight": 20,
+          "label": "广告负担"
+        }
+      }
+    },
+    "logistics": {
+      "weight": 15,
+      "label": "物流适配",
+      "subs": {
+        "channel_availability": {
+          "weight": 40,
+          "label": "可发渠道"
+        },
+        "shipping_ratio": {
+          "weight": 35,
+          "label": "运费占成交价"
+        },
+        "billable_weight": {
+          "weight": 15,
+          "label": "计费重量"
+        },
+        "volumetric_penalty": {
+          "weight": 10,
+          "label": "体积重惩罚"
+        }
+      }
+    },
+    "operations": {
+      "weight": 15,
+      "label": "运营稳健",
+      "subs": {
+        "sign_rate": {
+          "weight": 35,
+          "label": "签收率"
+        },
+        "oos_days_share": {
+          "weight": 25,
+          "label": "缺货表现"
+        },
+        "stock_availability": {
+          "weight": 15,
+          "label": "库存可用性"
+        },
+        "turnover_stability": {
+          "weight": 15,
+          "label": "周转稳定性"
+        },
+        "revenue_loss_rate": {
+          "weight": 10,
+          "label": "收入损失率"
+        }
+      }
+    }
+  },
+  "dimension_min_coverage": 0.5,
+  "subs_min_coverage": 0.5,
+  "grades": [
+    {
+      "grade": "A",
+      "min": 80
+    },
+    {
+      "grade": "B",
+      "min": 65
+    },
+    {
+      "grade": "C",
+      "min": 50
+    },
+    {
+      "grade": "D",
+      "min": 0
+    }
+  ],
+  "shrinkage": {
+    "k": 5,
+    "formula": "alpha = n / (n + k)"
+  },
+  "margin_risk_cap": 20,
+  "supply_gap": {
+    "shortage_w_oos": 0.4,
+    "shortage_w_missed": 0.6,
+    "pressure_w_demand": 0.45,
+    "pressure_w_shortage": 0.55,
+    "openness_w": 0.2,
+    "min_comparable_types": 5,
+    "thresholds": {
+      "HIGH_GAP": {
+        "gap": 70,
+        "demand": 60,
+        "shortage": 65
+      },
+      "MEDIUM_GAP": {
+        "gap": 55,
+        "demand": 50,
+        "shortage": 55
+      }
+    }
+  },
+  "decision": {
+    "BLOCKED_LOGISTICS": {
+      "status": "BLOCKED",
+      "action": "DO_NOT_SAMPLE"
+    },
+    "MARGIN_RISK": {
+      "status": "HOLD",
+      "action": "VERIFY_COST"
+    },
+    "REVIEW_REQUIRED": {
+      "status": "REVIEW",
+      "action": "COMPLIANCE_REVIEW"
+    },
+    "LOW_MARKET_CONTEXT": {
+      "status": "RESEARCH",
+      "action": "COLLECT_MARKET_DATA"
+    },
+    "ELIGIBLE": {
+      "A": "SAMPLE_VALIDATION",
+      "B": "PILOT_TEST",
+      "C": "WATCH",
+      "D": "DEPRIORITIZE"
+    }
+  },
+  "compliance_high_risk_keywords": {
+    "化妆品": [
+      "маска",
+      "шампунь",
+      "масло для волос",
+      "крем",
+      "косметика",
+      "масло",
+      "бальзам для губ",
+      "тоник",
+      "скраб",
+      "пенка"
+    ],
+    "电器": [
+      "фен",
+      "электрический",
+      "аккумулятор",
+      "battery",
+      "зарядное",
+      "утюг",
+      "бритва"
+    ],
+    "儿童用品": [
+      "детский",
+      "ребенок",
+      "baby",
+      "для детей",
+      "детские",
+      "игрушка"
+    ],
+    "食品": [
+      "food",
+      "чай",
+      "кофе",
+      "напиток",
+      "конфета",
+      "шоколад"
+    ],
+    "医疗": [
+      "медицинский",
+      "ортопедический",
+      "лечебный",
+      "терапевтический"
+    ],
+    "电池": [
+      "battery",
+      "аккумулятор",
+      "батарейка"
+    ],
+    "液体/喷雾": [
+      "liquid",
+      "spray",
+      "oil",
+      "аэрозоль",
+      "спрей",
+      "жидкость"
+    ]
+  }
+};
+const deepFreeze = (o) => { if (o && typeof o === 'object' && !Object.isFrozen(o)) { Object.freeze(o); for (const v of Object.values(o)) deepFreeze(v); } return o; };
+export default deepFreeze(scoringRules);

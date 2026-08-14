@@ -7,6 +7,15 @@
 
 ## 2026-08-14（整改阶段 V3）
 
+### feat — T4 选品评分与决策解释系统（分支 `feat/v3-t4-product-scoring`，待验收合并）
+- **T4-0**：1000×63 选品数据审计（`T4-0-选品数据审计报告.md`）；**T4-1A**：BSR 市场基准层（855 类型/19 域聚合，`T4-1A-BSR市场基准层审计报告.md`）；**T4-1B**：机器可执行规格（`T4-1B-评分模型设计冻结.md`）。
+- **T4-2**：纯评分引擎（六维 25/15/10/20/15/15 + Gate/Decision 分离 + Supply Gap + 证据感知重归一），41 单测；hardening（NEEDS_DATA→不可评级、coverage 两位精度、缺失子项重归一、两价格公式冻结、物流池排除无效尺寸、merge main）。
+- **T4-3**：黄金固件 10×56 断言 + 单调性 7 组×20 + 维度验证矩阵；识别 demand 语义问题（候选强度≠市场规模），`T4-3-黄金案例与模型验证报告.md`。
+- **T4-4A**：demand 两层化（λ×市场规模+(1-λ)×候选强度），λ 校准 30/40/50 → **冻结 λ=0.5**（Demand Top20 市场 sales/units 双转正；LMC 771 行逐位不变），`T4-4A-Demand语义校准报告.md`。
+- **T4-4B**：评分面板接入（Gate0 fail-close、scoring_rules 进 sync-config/verify_sync 链路、scoringDataAdapter 同源管线、ProductScoringSection 总览/排名/筛选/详情、1953ms→150ms 零行为变化优化、挂载解耦 fix `b731131`），`T4-4B-评分面板接入报告.md`。
+- **T4-5**：XLSX/CSV 导出（当前筛选结果，回读验证）、列表简版原因、文档（ARCHITECTURE §6 数据流 / BUSINESS_RULES §12 / RUNBOOK §9）、final hardening（λ≤1、六维权重和=100 校验）。
+- 全程未改 WB/CEL 费率与既有引擎；TD-3/8/9/10/11/12/14/16/17/18 未触碰。
+
 ### refactor — T3 前端工程结构治理（分支 `refactor/v3-t3-react-structure`，待验收合并）
 - **T3-0**：UI/Bundle 行为冻结快照（`T3-0-行为冻结快照.md`）。
 - **T3-1**：NewDashboard 6609 行拆为编排层 + `dashboard/dictionary.js`(2141) + `useDashboardStats.js`(1524) + `Cards.jsx` + 5 展示区段；脚本锚点校验 + 逐行比对**零差异**。

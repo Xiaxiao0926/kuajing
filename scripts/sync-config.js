@@ -23,6 +23,7 @@ const SOURCES = [
   { file: 'wb_tariffs.json', out: 'wb_tariffs.js' },
   { file: 'settings.json', out: 'settings.js' },
   { file: 'ozon_channels.json', out: 'ozon_channels.js' },
+  { file: 'scoring_rules.json', out: 'scoring_rules.js', frozen: true },
 ];
 
 function fail(msg) {
@@ -74,13 +75,34 @@ function validateChannels(data) {
   }
 }
 
+// T4-4B Gate 0 / T4-5 final hardening：评分规则必须自洽（缺 λ/子权重/权重越界直接 fail-close，禁止静默回退）
+function validateScoringRules(data) {
+  const d = data.dimensions?.demand;
+  if (!d) fail('scoring_rules.json 缺少 dimensions.demand');
+  for (const k of ['scale_weight', 'scale_sales_weight', 'scale_units_weight']) {
+    if (typeof d[k] !== 'number' || d[k] <= 0) fail(`scoring_rules.json demand.${k} 必须为正数`);
+  }
+  if (d.scale_weight > 1) fail('scoring_rules.json demand.scale_weight 必须 <= 1（λ∈(0,1]，禁止 >1）');
+  if (Math.abs(d.scale_sales_weight + d.scale_units_weight - 1) > 1e-9) {
+    fail('scoring_rules.json demand.scale_sales_weight + scale_units_weight 必须等于 1');
+  }
+  if (!Array.isArray(data.grades) || data.grades.length === 0) fail('scoring_rules.json grades 必须为非空数组');
+  let weightSum = 0;
+  for (const key of ['demand', 'competition', 'price_opportunity', 'profitability', 'logistics', 'operations']) {
+    const dim = data.dimensions?.[key];
+    if (!dim || typeof dim.weight !== 'number') fail(`scoring_rules.json 维度 ${key} 缺少权重`);
+    weightSum += dim.weight;
+  }
+  if (Math.abs(weightSum - 100) > 1e-9) fail(`scoring_rules.json 六维权重之和必须 = 100（实际 ${weightSum}）`);
+}
+
 function main() {
   if (!fs.existsSync(CONFIG_DIR)) fail(`config 目录不存在: ${CONFIG_DIR}`);
   fs.mkdirSync(GENERATED_DIR, { recursive: true });
 
   // 先全部加载+校验，任一失败即退出（不产生部分写入）
   const payloads = [];
-  for (const { file, out } of SOURCES) {
+  for (const { file, out, frozen } of SOURCES) {
     const src = path.join(CONFIG_DIR, file);
     if (!fs.existsSync(src)) fail(`缺少配置文件 ${file}`);
     let data;
@@ -92,13 +114,16 @@ function main() {
     if (file === 'wb_tariffs.json') validateTariffs(data);
     if (file === 'settings.json') validateSettings(data);
     if (file === 'ozon_channels.json') validateChannels(data);
-    payloads.push({ out, data });
+    if (file === 'scoring_rules.json') validateScoringRules(data);
+    payloads.push({ out, data, frozen });
   }
 
   // 校验全过后统一写入
-  for (const { out, data } of payloads) {
+  for (const { out, data, frozen } of payloads) {
     const header = `// 自动生成 - 勿手改。来源: config/${out.replace('.js', '.json')}（唯一事实源）。\n// 重新生成: node scripts/sync-config.js\n`;
-    const body = `export default ${JSON.stringify(data, null, 2)}\n`;
+    const body = frozen
+      ? `const scoringRules = ${JSON.stringify(data, null, 2)};\nconst deepFreeze = (o) => { if (o && typeof o === 'object' && !Object.isFrozen(o)) { Object.freeze(o); for (const v of Object.values(o)) deepFreeze(v); } return o; };\nexport default deepFreeze(scoringRules);\n`
+      : `export default ${JSON.stringify(data, null, 2)}\n`;
     fs.writeFileSync(path.join(GENERATED_DIR, out), header + body, 'utf-8');
     console.log(`[sync-config] config/${out.replace('.js', '.json')} → src/generated/${out}`);
   }
