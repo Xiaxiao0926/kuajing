@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react'
 import Sidebar from './components/Sidebar'
 import WorkspaceTopbar from './components/workspace/WorkspaceTopbar'
+import WorkspacePageErrorBoundary from './components/workspace/WorkspacePageErrorBoundary'
 import NodePage from './components/NodePage'
 import ProjectSetup from './components/ProjectSetup'
 import SupplyChain from './components/SupplyChain'
@@ -15,7 +16,13 @@ import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcesso
 import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
 import { getDataUrl, requiresAccessSession } from './utils/runtime.js'
 import { checkAccessSession, unlockAccess } from './utils/access.js'
-import { ROADMAP_PHASES } from './data/roadmap'
+import { ROADMAP_PHASES, ALL_NODES } from './data/roadmap'
+// P0 hotfix：选品评分页采用静态 import（可靠性优先）。
+// T5-2 的 lazy 化在生产 WordPress 环境出现评分页白屏
+// （懒加载 chunk 反向依赖入口 chunk 的动态加载链在 WP/LiteSpeed 下不稳定），
+// 且 App 本身已静态 import xlsx，lazy 收益不足以承担线上白屏风险。
+// 后续如需代码分割优化，单独立项，不在 P0 中处理。
+import ProductScoringSection from './components/dashboard/sections/ProductScoringSection'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
@@ -23,14 +30,22 @@ const OzonCalc = lazy(() => import('./components/OzonCalc'))
 const FragrancePricing = lazy(() => import('./components/FragrancePricing'))
 const ListingContent = lazy(() => import('./components/ListingContent'))
 const WBCalc = lazy(() => import('./components/WBCalc'))
-// T5-2：选品评分升级为一级页面（懒加载，含 xlsx 导出依赖）
-const ProductScoringSection = lazy(() => import('./components/dashboard/sections/ProductScoringSection'))
 
 const LazyFallback = () => (
   <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
 )
 
 const DATA_DIR = getDataUrl().replace(/\/$/, '')
+
+// 页面错误边界的标题映射（仅展示用）
+function pageLabelForNode(nodeId) {
+  if (nodeId === '__scoring__') return '选品评分'
+  if (nodeId === '__project_flow__') return '项目流程总览'
+  if (nodeId === '__node_overview__') return '数据与设置'
+  if (nodeId === '__progress_overview__') return '工作台'
+  const node = ALL_NODES.find((n) => n.id === nodeId)
+  return node ? node.title : '页面'
+}
 
 function DashboardApp() {
   const [data, setData] = useState(null)
@@ -184,11 +199,7 @@ function DashboardApp() {
       return <ProgressOverview nodeStatuses={nodeStatuses} onNodeSelect={handleNodeSelect} />
     }
     if (activeNode === '__scoring__') {
-      return (
-        <Suspense fallback={<LazyFallback />}>
-          <ProductScoringSection />
-        </Suspense>
-      )
+      return <ProductScoringSection />
     }
     if (activeNode === 'n1') {
       return (
@@ -322,7 +333,12 @@ function DashboardApp() {
             </select>
           </div>
           <main ref={mainRef} className="p-3 sm:p-4 lg:p-6">
-            {renderContent()}
+            <WorkspacePageErrorBoundary
+              key={activeNode}
+              pageLabel={pageLabelForNode(activeNode)}
+            >
+              {renderContent()}
+            </WorkspacePageErrorBoundary>
           </main>
         </div>
       </div>

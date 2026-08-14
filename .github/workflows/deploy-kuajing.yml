@@ -51,6 +51,9 @@ jobs:
           KUAJING_BASE_PATH: ./
         run: npm --prefix ozon-react run build
 
+      - name: Verify scoring production assets (P0 guard)
+        run: node scripts/verify-scoring-build.js
+
       - name: Stage WordPress plugin
         run: |
           rm -rf ozon-react/dist/data
