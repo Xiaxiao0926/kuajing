@@ -20,11 +20,17 @@
 
 .fyzsxnb-kuajing-root {
   font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
-  background-color: #F6F7F9;
-  color: #4A4A4A;
+  background-color: #F7F8FA;
+  color: #17202A;
+  font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
+}
+
+/* 数字统一等宽（KPI/表格用） */
+.fyzsxnb-kuajing-root .tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
 .fyzsxnb-kuajing-root h1,
@@ -111,22 +117,22 @@
 }
 
 .fyzsxnb-kuajing-root {
-  /* 设计 token 全部挂在 React root 作用域内（T5-2 hardening：禁止全局 :root 定义） */
-  --morandi-bg: #F6F6F6;
+  /* 设计 token 全部挂在 React root 作用域内（T5-2 hardening：禁止全局 :root 定义）
+     T5-3 设计 token V2：Enterprise Neutral + Blue Accent（废止旧 Morandi 主视觉） */
+  --morandi-bg: #F7F8FA;
   --morandi-card: #FFFFFF;
-  --morandi-primary: #8B9DC3;
-  --morandi-secondary: #B8A9C9;
-  --morandi-accent: #D4B8A0;
-  /* T5 Workspace tokens（T5-3 视觉系统将统一迁移） */
-  --workspace-bg: #F6F7F9;
+  --morandi-primary: #315EFB;
+  --morandi-secondary: #667085;
+  --morandi-accent: #D7DBE2;
+  --workspace-bg: #F7F8FA;
   --workspace-surface: #FFFFFF;
   --workspace-border: #E5E7EB;
-  --workspace-text: #18202B;
+  --workspace-text: #17202A;
   --workspace-text-secondary: #667085;
   --workspace-primary: #315EFB;
-  --workspace-success: #16A34A;
-  --workspace-warning: #D97706;
-  --workspace-danger: #DC2626;
+  --workspace-success: #138A5B;
+  --workspace-warning: #B7791F;
+  --workspace-danger: #D92D20;
 }
 
 /* Workspace 内层容器：全出血 root 内居中，桌面 max 1760px */

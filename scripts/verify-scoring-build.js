@@ -67,6 +67,22 @@ function main() {
   if (!appSrc.includes('WorkspacePageErrorBoundary')) fail('App.jsx 缺少 WorkspacePageErrorBoundary 包裹（永不白屏契约）');
   console.log('[verify-scoring-build] ✅ App 路由契约（__scoring__ 静态 import + ErrorBoundary）');
 
+  // T5-4 UI 契约（源码级，轻量，不做 brittle snapshot）
+  const scoringDir = path.join(ROOT, 'ozon-react', 'src', 'components', 'scoring');
+  const readScoring = (f) => (fs.existsSync(path.join(scoringDir, f)) ? fs.readFileSync(path.join(scoringDir, f), 'utf-8') : '');
+  const pageSrc = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'components', 'dashboard', 'sections', 'ProductScoringSection.jsx'), 'utf-8');
+  if (!pageSrc.includes('SearchInput') && !readScoring('ScoringToolbar.jsx').includes('SearchInput')) fail('评分工作台缺少 SearchInput（搜索为第一筛选入口）');
+  const tableSrc = readScoring('ScoringTable.jsx');
+  if (!tableSrc.includes('DecisionBadge')) fail('评分表格缺少 DecisionBadge（Decision 列）');
+  const drawerSrc = readScoring('ScoringDetailDrawer.jsx');
+  if (!drawerSrc.includes('row.strengths') || !drawerSrc.includes('row.risks')) fail('Drawer 未消费 buildExplanations 的 strengths/risks 输出');
+  // 子组件禁止手工计算：scoring/* 不得 import scoringEngine 或 scoring_rules；
+  // 编排层 ProductScoringSection 允许 import scoringRules，但只能作为参数传给 scoreAllCandidates（唯一合法路径）。
+  const subSources = [tableSrc, drawerSrc, readScoring('ScoringOverview.jsx'), readScoring('ScoringToolbar.jsx'), readScoring('ScoringPageHeader.jsx'), readScoring('ScoreCell.jsx'), readScoring('DecisionBadge.jsx'), readScoring('ContextBadge.jsx'), readScoring('RiskIndicators.jsx')].join('\n');
+  if (/from\s+['"].*scoringEngine/.test(subSources) || /generated\/scoring_rules/.test(subSources)) fail('评分展示子组件禁止直接 import scoringEngine 或 scoring_rules（业务计算只允许在 Adapter）');
+  if (!pageSrc.includes('scoreAllCandidates')) fail('编排层必须经由 scoringDataAdapter.scoreAllCandidates 计算（禁止绕过）');
+  console.log('[verify-scoring-build] ✅ T5-4 UI 契约（SearchInput/DecisionBadge/Drawer 解释输出/无手工计算）');
+
   console.log('[verify-scoring-build] ✅ 全部通过');
 }
 

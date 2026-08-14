@@ -32,54 +32,54 @@ export default function WorkspaceTopbar({
   }
 
   return (
-    <div className="flex h-16 lg:h-[68px] items-center gap-3 border-b border-workspace-border bg-white px-3 lg:px-5">
+    <div className="flex h-[60px] items-center gap-3 border-b border-workspace-border bg-workspace-surface px-3 lg:px-5">
       <button
         onClick={onToggleCollapse}
         title={collapsed ? '展开侧栏' : '收起侧栏'}
-        className="hidden lg:flex h-8 w-8 items-center justify-center rounded-md text-[#667085] hover:bg-gray-100"
+        className="hidden h-8 w-8 items-center justify-center rounded-md text-workspace-text-secondary hover:bg-workspace-surface-subtle lg:flex"
       >
         {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
       </button>
 
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <span className="truncate text-sm font-semibold text-[#18202B]">坪山综合保税项目</span>
-          <span className="hidden sm:inline rounded bg-gray-100 px-1.5 py-0.5 text-xs text-[#667085]">俄罗斯 · Ozon / Wildberries</span>
+          <span className="truncate text-[13px] font-semibold text-workspace-text">坪山综合保税项目</span>
+          <span className="hidden rounded bg-workspace-surface-subtle px-1.5 py-0.5 text-xs text-workspace-text-secondary sm:inline">俄罗斯 · Ozon / Wildberries</span>
         </div>
-        <div className="text-xs text-[#667085]">Workspace</div>
+        <div className="text-xs text-workspace-text-tertiary">Workspace</div>
       </div>
 
-      <div className="mx-1 hidden h-8 w-px bg-gray-200 md:block" />
+      <div className="mx-1 hidden h-6 w-px bg-workspace-border md:block" />
 
-      <div className="hidden md:flex items-center gap-5">
+      <div className="hidden items-center gap-6 md:flex">
         <div className="flex flex-col">
-          <span className="text-[11px] text-[#667085]">当前阶段</span>
-          <span className="text-sm font-medium text-[#18202B]">{currentPhase ? stripEmoji(currentPhase.title) : '—'}</span>
+          <span className="text-xs text-workspace-text-tertiary">当前阶段</span>
+          <span className="text-[13px] font-medium text-workspace-text">{currentPhase ? stripEmoji(currentPhase.title) : '—'}</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-[11px] text-[#667085]">进度</span>
+          <span className="text-xs text-workspace-text-tertiary">进度</span>
           <div className="flex items-center gap-2">
-            <div className="h-1.5 w-24 rounded-full bg-gray-100">
-              <div className="h-full rounded-full bg-[#315EFB]" style={{ width: `${pct}%` }} />
+            <div className="h-1.5 w-24 rounded-full bg-workspace-surface-subtle">
+              <div className="h-full rounded-full bg-workspace-primary" style={{ width: `${pct}%` }} />
             </div>
-            <span className="text-sm font-medium text-[#18202B]">{done} / {total}</span>
+            <span className="tabular-nums text-[13px] font-medium text-workspace-text">{done} / {total}</span>
           </div>
         </div>
         <div className="flex flex-col">
-          <span className="text-[11px] text-[#667085]">最近更新</span>
-          <span className="text-sm font-medium text-[#18202B]">{lastUpdatedAt || '—'}</span>
+          <span className="text-xs text-workspace-text-tertiary">最近更新</span>
+          <span className="tabular-nums text-[13px] font-medium text-workspace-text">{lastUpdatedAt || '—'}</span>
         </div>
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <label className="flex cursor-pointer items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-[#18202B] hover:bg-gray-50">
+        <label className="flex h-8 cursor-pointer items-center gap-1.5 rounded-md border border-workspace-border-strong bg-workspace-surface px-3 text-[13px] font-medium text-workspace-text hover:bg-workspace-surface-subtle">
           <Upload className="h-3.5 w-3.5" />
           {loading ? '解析中…' : '更新数据'}
           <input ref={fileInputRef} type="file" accept="*" className="hidden" disabled={loading} onChange={handleFileChange} />
         </label>
         <button
           onClick={onOpenProgress}
-          className="flex items-center gap-1.5 rounded-md bg-[#315EFB] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#2a50d6]"
+          className="flex h-8 items-center gap-1.5 rounded-md bg-workspace-primary px-3 text-[13px] font-medium text-white hover:bg-[#2a50d6]"
         >
           <GitBranch className="h-3.5 w-3.5" />
           项目进度
