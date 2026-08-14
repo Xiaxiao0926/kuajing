@@ -26,8 +26,12 @@ async function serverRequest(options = {}) {
   if (!canUseServerPersistence()) return null
   const headers = new Headers(options.headers || {})
   headers.set('Content-Type', 'application/json')
-  headers.set('X-WP-Nonce', getNonce())
-  const response = await fetch(`${getApiBase()}/state`, { ...options, headers })
+  if (getNonce()) headers.set('X-WP-Nonce', getNonce())
+  const response = await fetch(`${getApiBase()}/state`, {
+    credentials: 'same-origin',
+    ...options,
+    headers,
+  })
   if (!response.ok) throw new Error(`Server persistence failed: ${response.status}`)
   return response
 }

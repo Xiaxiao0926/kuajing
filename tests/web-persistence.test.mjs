@@ -53,6 +53,7 @@ const write = requests.find(request => {
 })
 assert.ok(write, 'expected a server persistence POST')
 assert.equal(write.options.headers.get('X-WP-Nonce'), 'test-nonce')
+assert.equal(write.options.credentials, 'same-origin')
 const payload = JSON.parse(write.options.body)
 assert.deepEqual(payload.entries.orders.value, [{ id: 1 }])
 

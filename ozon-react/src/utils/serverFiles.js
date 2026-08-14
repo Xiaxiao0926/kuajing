@@ -4,8 +4,12 @@ async function request(path, options = {}) {
   if (!canUseServerPersistence()) return null
 
   const headers = new Headers(options.headers || {})
-  headers.set('X-WP-Nonce', getNonce())
-  const response = await fetch(`${getApiBase()}${path}`, { ...options, headers })
+  if (getNonce()) headers.set('X-WP-Nonce', getNonce())
+  const response = await fetch(`${getApiBase()}${path}`, {
+    credentials: 'same-origin',
+    ...options,
+    headers,
+  })
   if (!response.ok) throw new Error(`Server request failed: ${response.status}`)
   return response
 }

@@ -10,7 +10,7 @@
     "test:python": "node scripts/run-wb-py-test.js",
     "test:golden": "node scripts/sync-config.js && node scripts/run-golden-tests.js",
     "test:sync": "node scripts/sync-config.js && node scripts/verify_sync.js",
-    "test:web-persistence": "node tests/web-persistence.test.mjs"
+    "test:web-persistence": "node tests/web-persistence.test.mjs && node tests/access-session.test.mjs"
   },
   "dependencies": {
     "csv-parser": "^3.2.1",

@@ -2,6 +2,8 @@ export function getRuntimeConfig() {
   return globalThis.window?.KUAJING_CONFIG || {}
 }
 
+let sessionAuthorized = Boolean(getRuntimeConfig().authorized)
+
 export function getApiBase() {
   const configured = getRuntimeConfig().apiBase
   return configured ? configured.replace(/\/$/, '') : ''
@@ -22,8 +24,15 @@ export function getDataUrl(pathname = '') {
 }
 
 export function canUseServerPersistence() {
-  const config = getRuntimeConfig()
-  return Boolean(config.authorized && config.nonce && getApiBase())
+  return Boolean(sessionAuthorized && getApiBase())
+}
+
+export function setSessionAuthorized(authorized) {
+  sessionAuthorized = Boolean(authorized)
+}
+
+export function requiresAccessSession() {
+  return Boolean(getRuntimeConfig().sessionRequired)
 }
 
 export function getNonce() {

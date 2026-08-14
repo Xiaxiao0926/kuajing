@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
- * Description: Serves the Kuajing React dashboard and stores authenticated dashboard data on the WordPress server.
- * Version: 0.1.0
+ * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
+ * Version: 0.2.0
  * Author: FYZSXNB
  */
 
@@ -11,12 +11,18 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.1.0';
+    private const VERSION = '0.2.0';
     private const TABLE_SUFFIX = 'kuajing_state';
+    private const VERSION_OPTION = 'fyzsxnb_kuajing_version';
+    private const SECRET_OPTION = 'fyzsxnb_kuajing_access_secret';
+    private const ACCESS_COOKIE = 'fyzsxnb_kuajing_access';
+    private const ACCESS_PASSWORD_HASH = 'b0646924cb4681e592a0e05068dfaeb40d0807466087c6c1ad5a1ac52d439e54';
+    private const SESSION_TTL = 604800;
     private const MAX_FILE_SIZE = 52428800;
     private const ALLOWED_EXTENSIONS = array('xlsx', 'xls', 'csv', 'json', 'html', 'htm', 'doc', 'docx');
 
     public static function init() {
+        add_action('init', array(__CLASS__, 'maybe_upgrade'));
         add_shortcode('kuajing_dashboard', array(__CLASS__, 'render_dashboard'));
         add_action('rest_api_init', array(__CLASS__, 'register_routes'));
         add_filter('script_loader_tag', array(__CLASS__, 'module_script_tag'), 10, 3);
@@ -24,6 +30,16 @@ final class FYZSXNB_Kuajing_Dashboard {
     }
 
     public static function activate() {
+        self::install_or_upgrade();
+    }
+
+    public static function maybe_upgrade() {
+        if (get_option(self::VERSION_OPTION) !== self::VERSION) {
+            self::install_or_upgrade();
+        }
+    }
+
+    private static function install_or_upgrade() {
         global $wpdb;
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -39,13 +55,29 @@ final class FYZSXNB_Kuajing_Dashboard {
         ) {$charset_collate};";
         dbDelta($sql);
 
+        self::ensure_access_secret();
         self::ensure_private_root();
         self::ensure_dashboard_page();
+        self::migrate_shared_state();
+        self::migrate_shared_files();
+        update_option(self::VERSION_OPTION, self::VERSION, false);
     }
 
     private static function table_name() {
         global $wpdb;
         return $wpdb->prefix . self::TABLE_SUFFIX;
+    }
+
+    private static function ensure_access_secret() {
+        $secret = get_option(self::SECRET_OPTION);
+        if (!is_string($secret) || strlen($secret) < 32) {
+            update_option(self::SECRET_OPTION, wp_generate_password(64, true, true), false);
+        }
+    }
+
+    private static function access_secret() {
+        self::ensure_access_secret();
+        return (string) get_option(self::SECRET_OPTION);
     }
 
     private static function ensure_dashboard_page() {
@@ -86,19 +118,155 @@ final class FYZSXNB_Kuajing_Dashboard {
         return $root;
     }
 
-    private static function user_namespace_dir($namespace) {
+    private static function shared_namespace_dir($namespace) {
         $namespace = sanitize_key($namespace);
         if (!$namespace) {
             return new WP_Error('invalid_namespace', 'Invalid file namespace.', array('status' => 400));
         }
-        $directory = trailingslashit(self::ensure_private_root()) . get_current_user_id() . '/' . $namespace;
+        $directory = trailingslashit(self::ensure_private_root()) . 'shared/' . $namespace;
         if (!wp_mkdir_p($directory)) {
             return new WP_Error('storage_unavailable', 'Unable to create private storage.', array('status' => 500));
         }
         return $directory;
     }
 
+    private static function migrate_shared_state() {
+        global $wpdb;
+        $rows = $wpdb->get_results(
+            'SELECT state_key, state_value, updated_at_ms, updated_at FROM ' . self::table_name() . ' WHERE user_id <> 0 ORDER BY updated_at_ms ASC',
+            ARRAY_A
+        );
+        foreach ((array) $rows as $row) {
+            $existing = $wpdb->get_var($wpdb->prepare(
+                'SELECT updated_at_ms FROM ' . self::table_name() . ' WHERE user_id = 0 AND state_key = %s',
+                $row['state_key']
+            ));
+            if (null !== $existing && (int) $existing > (int) $row['updated_at_ms']) {
+                continue;
+            }
+            $wpdb->replace(
+                self::table_name(),
+                array(
+                    'user_id' => 0,
+                    'state_key' => $row['state_key'],
+                    'state_value' => $row['state_value'],
+                    'updated_at_ms' => (int) $row['updated_at_ms'],
+                    'updated_at' => $row['updated_at'],
+                ),
+                array('%d', '%s', '%s', '%d', '%s')
+            );
+        }
+    }
+
+    private static function migrate_shared_files() {
+        $root = self::ensure_private_root();
+        $shared = trailingslashit($root) . 'shared';
+        wp_mkdir_p($shared);
+        foreach ((array) glob(trailingslashit($root) . '*', GLOB_ONLYDIR) as $user_dir) {
+            if (!ctype_digit(basename($user_dir))) {
+                continue;
+            }
+            self::copy_directory($user_dir, $shared);
+        }
+    }
+
+    private static function copy_directory($source, $destination) {
+        foreach ((array) scandir($source) as $entry) {
+            if ('.' === $entry || '..' === $entry) {
+                continue;
+            }
+            $source_path = trailingslashit($source) . $entry;
+            $destination_path = trailingslashit($destination) . $entry;
+            if (is_dir($source_path)) {
+                wp_mkdir_p($destination_path);
+                self::copy_directory($source_path, $destination_path);
+                continue;
+            }
+            if (!is_file($source_path)) {
+                continue;
+            }
+            if (!file_exists($destination_path) || filemtime($source_path) > filemtime($destination_path)) {
+                copy($source_path, $destination_path);
+                @chmod($destination_path, 0640);
+            }
+        }
+    }
+
+    private static function cookie_options($expires) {
+        return array(
+            'expires' => $expires,
+            'path' => '/',
+            'domain' => defined('COOKIE_DOMAIN') && COOKIE_DOMAIN ? COOKIE_DOMAIN : '',
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        );
+    }
+
+    private static function create_access_token($expires) {
+        $signature = hash_hmac('sha256', (string) $expires, self::access_secret());
+        return $expires . '.' . $signature;
+    }
+
+    private static function has_valid_access_cookie() {
+        $token = isset($_COOKIE[self::ACCESS_COOKIE]) ? wp_unslash($_COOKIE[self::ACCESS_COOKIE]) : '';
+        if (!is_string($token) || !preg_match('/^(\d+)\.([a-f0-9]{64})$/', $token, $matches)) {
+            return false;
+        }
+        $expires = (int) $matches[1];
+        if ($expires <= time()) {
+            return false;
+        }
+        $expected = hash_hmac('sha256', (string) $expires, self::access_secret());
+        return hash_equals($expected, $matches[2]);
+    }
+
+    private static function rate_limit_key() {
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? (string) $_SERVER['REMOTE_ADDR'] : 'unknown';
+        return 'fyzsxnb_kuajing_login_' . md5($ip);
+    }
+
+    public static function can_access() {
+        return current_user_can('manage_options') || self::has_valid_access_cookie();
+    }
+
+    public static function get_session() {
+        return rest_ensure_response(array('authorized' => self::can_access()));
+    }
+
+    public static function create_session(WP_REST_Request $request) {
+        $rate_key = self::rate_limit_key();
+        $attempts = (int) get_transient($rate_key);
+        if ($attempts >= 10) {
+            return new WP_Error('too_many_attempts', 'Too many failed attempts. Try again later.', array('status' => 429));
+        }
+
+        $body = $request->get_json_params();
+        $password = isset($body['password']) ? (string) $body['password'] : '';
+        if (!hash_equals(self::ACCESS_PASSWORD_HASH, hash('sha256', $password))) {
+            set_transient($rate_key, $attempts + 1, 10 * MINUTE_IN_SECONDS);
+            return new WP_Error('invalid_password', 'Invalid access password.', array('status' => 401));
+        }
+
+        delete_transient($rate_key);
+        $expires = time() + self::SESSION_TTL;
+        setcookie(self::ACCESS_COOKIE, self::create_access_token($expires), self::cookie_options($expires));
+        return rest_ensure_response(array(
+            'authorized' => true,
+            'expiresAt' => gmdate('c', $expires),
+        ));
+    }
+
+    public static function delete_session() {
+        setcookie(self::ACCESS_COOKIE, '', self::cookie_options(time() - HOUR_IN_SECONDS));
+        return rest_ensure_response(array('authorized' => false));
+    }
+
     public static function render_dashboard() {
+        if (!defined('DONOTCACHEPAGE')) {
+            define('DONOTCACHEPAGE', true);
+        }
+
         $manifest_path = plugin_dir_path(__FILE__) . 'dist/.vite/manifest.json';
         if (!file_exists($manifest_path)) {
             return '<p>Kuajing dashboard assets are not deployed.</p>';
@@ -113,10 +281,6 @@ final class FYZSXNB_Kuajing_Dashboard {
         }
 
         $authorized = current_user_can('manage_options');
-        if ($authorized && !defined('DONOTCACHEPAGE')) {
-            define('DONOTCACHEPAGE', true);
-        }
-
         $handle = 'fyzsxnb-kuajing-app';
         foreach ((array) ($entry['css'] ?? array()) as $index => $css_file) {
             wp_enqueue_style(
@@ -141,6 +305,7 @@ final class FYZSXNB_Kuajing_Dashboard {
                 'assetBase' => esc_url_raw(plugins_url('dist/', __FILE__)),
                 'dataBase' => 'https://raw.githubusercontent.com/Xiaxiao0926/kuajing/main/ozon-react/public/data/',
                 'authorized' => $authorized,
+                'sessionRequired' => true,
                 'nonce' => $authorized ? wp_create_nonce('wp_rest') : '',
             )) . ';',
             'before'
@@ -157,16 +322,34 @@ final class FYZSXNB_Kuajing_Dashboard {
     }
 
     public static function register_routes() {
+        register_rest_route('kuajing/v1', '/session', array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(__CLASS__, 'get_session'),
+                'permission_callback' => '__return_true',
+            ),
+            array(
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => array(__CLASS__, 'create_session'),
+                'permission_callback' => '__return_true',
+            ),
+            array(
+                'methods' => WP_REST_Server::DELETABLE,
+                'callback' => array(__CLASS__, 'delete_session'),
+                'permission_callback' => '__return_true',
+            ),
+        ));
+
         register_rest_route('kuajing/v1', '/state', array(
             array(
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => array(__CLASS__, 'get_state'),
-                'permission_callback' => array(__CLASS__, 'can_manage'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
             ),
             array(
                 'methods' => WP_REST_Server::CREATABLE,
                 'callback' => array(__CLASS__, 'save_state'),
-                'permission_callback' => array(__CLASS__, 'can_manage'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
             ),
         ));
 
@@ -174,23 +357,19 @@ final class FYZSXNB_Kuajing_Dashboard {
             array(
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => array(__CLASS__, 'list_files'),
-                'permission_callback' => array(__CLASS__, 'can_manage'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
             ),
             array(
                 'methods' => WP_REST_Server::CREATABLE,
                 'callback' => array(__CLASS__, 'upload_file'),
-                'permission_callback' => array(__CLASS__, 'can_manage'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
             ),
             array(
                 'methods' => WP_REST_Server::DELETABLE,
                 'callback' => array(__CLASS__, 'delete_file'),
-                'permission_callback' => array(__CLASS__, 'can_manage'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
             ),
         ));
-    }
-
-    public static function can_manage() {
-        return current_user_can('manage_options');
     }
 
     public static function get_state() {
@@ -198,7 +377,7 @@ final class FYZSXNB_Kuajing_Dashboard {
         $rows = $wpdb->get_results(
             $wpdb->prepare(
                 'SELECT state_key, state_value, updated_at_ms FROM ' . self::table_name() . ' WHERE user_id = %d',
-                get_current_user_id()
+                0
             ),
             ARRAY_A
         );
@@ -230,7 +409,7 @@ final class FYZSXNB_Kuajing_Dashboard {
             $wpdb->replace(
                 self::table_name(),
                 array(
-                    'user_id' => get_current_user_id(),
+                    'user_id' => 0,
                     'state_key' => $key,
                     'state_value' => wp_json_encode($value),
                     'updated_at_ms' => $updated_at_ms,
@@ -252,29 +431,25 @@ final class FYZSXNB_Kuajing_Dashboard {
             'type' => wp_check_filetype($name)['type'] ?: 'application/octet-stream',
             'date' => gmdate('Y-m-d', filemtime($path)),
             'updatedAt' => filemtime($path) * 1000,
-            'downloadUrl' => wp_nonce_url(
-                add_query_arg(array(
-                    'kuajing_file' => 1,
-                    'namespace' => $namespace,
-                    'name' => $name,
-                ), home_url('/')),
-                'kuajing_file'
-            ),
+            'downloadUrl' => add_query_arg(array(
+                'kuajing_file' => 1,
+                'namespace' => $namespace,
+                'name' => $name,
+            ), home_url('/')),
         );
     }
 
     public static function list_files(WP_REST_Request $request) {
         $namespace = sanitize_key($request['namespace']);
-        $directory = self::user_namespace_dir($namespace);
+        $directory = self::shared_namespace_dir($namespace);
         if (is_wp_error($directory)) {
             return $directory;
         }
         $files = array();
         foreach ((array) glob(trailingslashit($directory) . '*') as $path) {
-            if (!is_file($path)) {
-                continue;
+            if (is_file($path)) {
+                $files[] = self::file_response($namespace, $path);
             }
-            $files[] = self::file_response($namespace, $path);
         }
         usort($files, static function($a, $b) {
             return $b['updatedAt'] <=> $a['updatedAt'];
@@ -298,7 +473,7 @@ final class FYZSXNB_Kuajing_Dashboard {
         }
 
         $namespace = sanitize_key($request['namespace']);
-        $directory = self::user_namespace_dir($namespace);
+        $directory = self::shared_namespace_dir($namespace);
         if (is_wp_error($directory)) {
             return $directory;
         }
@@ -314,7 +489,7 @@ final class FYZSXNB_Kuajing_Dashboard {
     public static function delete_file(WP_REST_Request $request) {
         $namespace = sanitize_key($request['namespace']);
         $name = sanitize_file_name((string) $request->get_param('name'));
-        $directory = self::user_namespace_dir($namespace);
+        $directory = self::shared_namespace_dir($namespace);
         if (is_wp_error($directory)) {
             return $directory;
         }
@@ -329,14 +504,14 @@ final class FYZSXNB_Kuajing_Dashboard {
         if (empty($_GET['kuajing_file'])) {
             return;
         }
-        if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['_wpnonce'] ?? '', 'kuajing_file')) {
+        if (!self::can_access()) {
             status_header(403);
             exit;
         }
 
         $namespace = sanitize_key(wp_unslash($_GET['namespace'] ?? ''));
         $name = sanitize_file_name(wp_unslash($_GET['name'] ?? ''));
-        $directory = self::user_namespace_dir($namespace);
+        $directory = self::shared_namespace_dir($namespace);
         if (is_wp_error($directory)) {
             status_header(400);
             exit;

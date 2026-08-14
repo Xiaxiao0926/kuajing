@@ -12,7 +12,8 @@ import ProjectFlow from './components/ProjectFlow'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
 import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
-import { getDataUrl } from './utils/runtime.js'
+import { getDataUrl, requiresAccessSession } from './utils/runtime.js'
+import { checkAccessSession, unlockAccess } from './utils/access.js'
 import { ROADMAP_PHASES } from './data/roadmap'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
@@ -28,7 +29,7 @@ const LazyFallback = () => (
 
 const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
-function App() {
+function DashboardApp() {
   const [data, setData] = useState(null)
   const [kpis, setKpis] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -314,6 +315,86 @@ function App() {
       </main>
     </div>
   )
+}
+
+function AccessGate() {
+  const [checking, setChecking] = useState(true)
+  const [authorized, setAuthorized] = useState(false)
+  const [password, setPassword] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let active = true
+    checkAccessSession().then((result) => {
+      if (active) setAuthorized(Boolean(result.authorized))
+    }).finally(() => {
+      if (active) setChecking(false)
+    })
+    return () => { active = false }
+  }, [])
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (!password || submitting) return
+    setSubmitting(true)
+    setError('')
+    try {
+      const result = await unlockAccess(password)
+      setAuthorized(Boolean(result.authorized))
+      setPassword('')
+    } catch (requestError) {
+      setError(requestError.status === 429 ? '尝试次数过多，请稍后再试。' : '密码不正确，请重新输入。')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-morandi-bg px-5">
+        <p className="text-sm text-morandi-text-light">正在验证访问权限…</p>
+      </div>
+    )
+  }
+
+  if (authorized) return <DashboardApp />
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-morandi-bg px-5 py-12">
+      <main className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+        <p className="text-xs font-semibold uppercase text-morandi-primary">FYZSXNB Workspace</p>
+        <h1 className="mt-2 text-2xl font-bold text-morandi-text">跨境运营工具</h1>
+        <p className="mt-2 text-sm leading-6 text-morandi-text-light">输入访问密码后继续，无需 WordPress 账号。</p>
+        <form className="mt-7" onSubmit={handleSubmit}>
+          <label className="block text-sm font-medium text-morandi-text" htmlFor="kuajing-access-password">
+            访问密码
+          </label>
+          <input
+            id="kuajing-access-password"
+            type="password"
+            autoComplete="current-password"
+            autoFocus
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="mt-2 w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base text-morandi-text outline-none transition focus:border-morandi-primary focus:ring-2 focus:ring-morandi-primary/20"
+          />
+          {error && <p className="mt-2 text-sm text-red-700" role="alert">{error}</p>}
+          <button
+            type="submit"
+            disabled={!password || submitting}
+            className="mt-5 w-full rounded-md bg-morandi-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {submitting ? '正在验证…' : '进入工具'}
+          </button>
+        </form>
+      </main>
+    </div>
+  )
+}
+
+function App() {
+  return requiresAccessSession() ? <AccessGate /> : <DashboardApp />
 }
 
 export default App
