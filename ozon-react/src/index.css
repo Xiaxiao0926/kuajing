@@ -2,30 +2,159 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/*
+ * T5-1 Workspace 样式层
+ * 原则：全部样式 scope 到 .fyzsxnb-kuajing-root，禁止全局选择器（避免污染 FYZSXNB 主题）。
+ * preflight 已在 tailwind.config 关闭，这里提供等价的作用域 reset（盒模型/边距/列表/标题/表单/媒体/表格）。
+ */
+
+.fyzsxnb-kuajing-root,
+.fyzsxnb-kuajing-root *,
+.fyzsxnb-kuajing-root *::before,
+.fyzsxnb-kuajing-root *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #E5E7EB;
+}
+
+.fyzsxnb-kuajing-root {
+  font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  background-color: #F6F7F9;
+  color: #4A4A4A;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+.fyzsxnb-kuajing-root h1,
+.fyzsxnb-kuajing-root h2,
+.fyzsxnb-kuajing-root h3,
+.fyzsxnb-kuajing-root h4,
+.fyzsxnb-kuajing-root h5,
+.fyzsxnb-kuajing-root h6,
+.fyzsxnb-kuajing-root p,
+.fyzsxnb-kuajing-root figure,
+.fyzsxnb-kuajing-root blockquote,
+.fyzsxnb-kuajing-root dl,
+.fyzsxnb-kuajing-root dd,
+.fyzsxnb-kuajing-root ul,
+.fyzsxnb-kuajing-root ol {
+  margin: 0;
+}
+
+.fyzsxnb-kuajing-root h1,
+.fyzsxnb-kuajing-root h2,
+.fyzsxnb-kuajing-root h3,
+.fyzsxnb-kuajing-root h4,
+.fyzsxnb-kuajing-root h5,
+.fyzsxnb-kuajing-root h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.fyzsxnb-kuajing-root ul,
+.fyzsxnb-kuajing-root ol {
+  list-style: none;
+  padding: 0;
+}
+
+.fyzsxnb-kuajing-root img,
+.fyzsxnb-kuajing-root svg,
+.fyzsxnb-kuajing-root video,
+.fyzsxnb-kuajing-root canvas {
+  display: block;
+  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+}
+
+.fyzsxnb-kuajing-root button,
+.fyzsxnb-kuajing-root input,
+.fyzsxnb-kuajing-root optgroup,
+.fyzsxnb-kuajing-root select,
+.fyzsxnb-kuajing-root textarea {
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.fyzsxnb-kuajing-root button,
+.fyzsxnb-kuajing-root select {
+  text-transform: none;
+  cursor: pointer;
+}
+
+.fyzsxnb-kuajing-root table {
+  text-indent: 0;
+  border-collapse: collapse;
+  border-color: inherit;
+}
+
+.fyzsxnb-kuajing-root a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.fyzsxnb-kuajing-root b,
+.fyzsxnb-kuajing-root strong {
+  font-weight: bolder;
+}
+
+.fyzsxnb-kuajing-root small {
+  font-size: 80%;
+}
+
+.fyzsxnb-kuajing-root {
+  /* 设计 token 全部挂在 React root 作用域内（T5-2 hardening：禁止全局 :root 定义） */
   --morandi-bg: #F6F6F6;
   --morandi-card: #FFFFFF;
   --morandi-primary: #8B9DC3;
   --morandi-secondary: #B8A9C9;
   --morandi-accent: #D4B8A0;
+  /* T5 Workspace tokens（T5-3 视觉系统将统一迁移） */
+  --workspace-bg: #F6F7F9;
+  --workspace-surface: #FFFFFF;
+  --workspace-border: #E5E7EB;
+  --workspace-text: #18202B;
+  --workspace-text-secondary: #667085;
+  --workspace-primary: #315EFB;
+  --workspace-success: #16A34A;
+  --workspace-warning: #D97706;
+  --workspace-danger: #DC2626;
 }
 
-.fyzsxnb-kuajing-root {
-  font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
-  background-color: var(--morandi-bg);
-  color: #4A4A4A;
+/* Workspace 内层容器：全出血 root 内居中，桌面 max 1760px */
+.fyzsxnb-kuajing-root .fyzsxnb-workspace-inner {
+  max-width: 1760px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (max-width: 767px) {
+  .fyzsxnb-kuajing-root .fyzsxnb-workspace-inner {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 @layer components {
-  .kpi-card {
+  .fyzsxnb-kuajing-root .kpi-card {
     @apply bg-white rounded-2xl p-6 shadow-card transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5;
   }
-  
-  .section-title {
+
+  .fyzsxnb-kuajing-root .section-title {
     @apply text-xl font-semibold text-morandi-text mb-4 pb-2 border-b-2 border-morandi-accent;
   }
-  
-  .insight-card {
+
+  .fyzsxnb-kuajing-root .insight-card {
     @apply bg-white rounded-xl p-5 shadow-card border-l-4 border-morandi-primary;
   }
 }
