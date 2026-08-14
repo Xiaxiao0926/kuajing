@@ -3,8 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const SRC = 'D:/ozon/ozon-react/src/components/WBCalc.jsx';
-const ROOT = 'D:/ozon/ozon-react/src/components/wbcalc';
+const REPO_ROOT = path.resolve(__dirname, '..');
+
+const SRC = `${REPO_ROOT}/ozon-react/src/components/WBCalc.jsx`;
+const ROOT = `${REPO_ROOT}/ozon-react/src/components/wbcalc`;
 fs.mkdirSync(path.join(ROOT, 'tabs'), { recursive: true });
 
 const ori = fs.readFileSync(SRC, 'utf-8').split(/\r?\n/);

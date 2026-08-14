@@ -21,7 +21,7 @@
 | TD-10 | `ozon_hair_dryer_analysis/` 遗留应用（吹风机分析，已被 React 取代） | 根目录 | 低：误导新人 | 待定：保留只读（当前决策）或归档 |
 | TD-11 | `server.js` 用自包含 http 路由（497 行无框架分层），扩展性有限 | `server.js` | 低 | 待定：有真实扩展需求再改 Express 分层 |
 | TD-12 | `market_data_processor.js`(848行)/`analyze_with_cleaned_data.js`(2353行) 大文件无单测 | 根目录 | 中：清洗/匹配逻辑改动无护栏 | 待定：核心清洗函数补单测 |
-| TD-13 | ✅ 已解决（T2）：`run-golden-tests.js` 真实现（75 断言，含 provenance 分级）；`verify_sync.js` 真实现（双端对拍零差异） | — | — | 关闭 |
+| TD-13 | ✅ 已解决（T2）：`run-golden-tests.js` 真实现（76 断言，含 provenance 分级）；`verify_sync.js` 真实现（双端对拍零差异） | — | — | 关闭 |
 | TD-14 | Ozon 两个 Tab 价格语义不一致：SingleTab 输入"售价"直接计算（不乘 0.6），MultiTab 输入"上架价"×0.6 得折后价 | `ozon-react/src/components/OzonCalc.jsx` / `ozonEngine.js` calcRow/calcChannelProfit | 中：同一产品两口径得出不同利润 | 需求方确认是否统一口径后再立项 |
 | TD-16 | Ozon 渠道表 3 份重复定义已收敛为 1 份（`config/ozon_channels.json` → `ozonEngine.js` adapter）；但 `PricingCalc.jsx`、`ShippingCalc.jsx` 两个旧组件仍内嵌自己的渠道数组且未被 App.jsx 引用（死代码） | `ozon-react/src/components/PricingCalc.jsx` / `ShippingCalc.jsx` | 低：死代码不参与计算，但误导 | T3 拆分时删除或改为消费引擎导出 |
 | TD-17 | Big 渠道重量下限代码为 2kg、原表为 2.001kg；Budget 下限代码 0.5kg、原表 0.501kg——边界表述差异，T2 按"行为冻结"原则保留代码现值 | `config/ozon_channels.json` | 低：0.001kg 边界无实际影响 | 需求方确认后统一（改 config 一处即可） |

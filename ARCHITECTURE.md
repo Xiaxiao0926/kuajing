@@ -94,7 +94,7 @@ config/*.json（唯一事实源，snake_case）
   └─ schema/*.json        （JSON Schema，费率/渠道结构约束）
 
 React 侧：wbConfig.js / ozonEngine.js 是 adapter（snake→camel 映射），对外 API 不变。
-Python 侧：wb_data.py 直接读 config/*.json（CONFIG_DIR），DEFAULT_* 仅作文件缺失兜底。
+Python 侧：wb_data.py 严格读 config/*.json（CONFIG_DIR），fail-fast——文件缺失/损坏/结构非法即抛 ConfigError，不存在第二套兜底数字；写入经 `_save_config_atomic`（校验→.tmp→os.replace）。
 同步时机：npm test 前置、vite buildStart；手动 node scripts/sync-config.js。
 ```
 
@@ -141,7 +141,7 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
 | `ozon-product-analyzer/wb_panel.py` | WB Streamlit 面板 | 高 |
 | `ozon-product-analyzer/app.py` | 选品评分面板 | 中 |
 | `scripts/run-wb-py-test.js` | 跨平台 Python 测试启动器 | 低 |
-| `scripts/run-golden-tests.js` | 黄金案例护栏（75 断言，provenance 分级） | 低 |
+| `scripts/run-golden-tests.js` | 黄金案例护栏（76 断言，provenance 分级，5 核心案例 ID 锁定） | 低 |
 | `scripts/verify_sync.js` | 双端对拍（16 边界+2 版本） | 低 |
 | `scripts/sync-config.js` | config→generated 同步+结构校验 | 低 |
 | `config/*.json` | **唯一事实源：费率/设置/渠道** | **极高（改动须全测试+对拍）** |
@@ -153,7 +153,7 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
 
 1. ~~汇率运行时覆盖风险~~ ✅ T2 已解决：单源 config/settings.json，运行态副本已删（TD-1 关闭）。
 2. Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称（TD-3）。
-3. ~~硬编码路径~~ ✅ T2 已解决：OZON_DATA_DIR / WB_COMMISSION_FILE / CONFIG_DIR 环境变量（TD-7 关闭）。
+3. 业务路径硬编码**大部分**已解决（T2：OZON_DATA_DIR / WB_COMMISSION_FILE / CONFIG_DIR）；残留 TD-18：`vite.config.js` 数据同步层仍写死 `D:/ozon/市场分析` 绝对路径。
 4. Ozon 单规格（售价直算）与多规格（上架价×0.6）价格语义不一致（TD-14）；Big/Budget 0.001kg 边界表述差异（TD-17）。
 5. `ozon-react/public/data/` 与根目录存在重复 xlsx（数据同步插件拷贝产物，约 11MB）。
-6. 生产构建无代码分割，主 chunk 2.7MB。
+6. ~~无代码分割~~ ✅ T3-4 已解决：React.lazy 页面级分割，主 chunk 2743KB→1122KB（gzip 780→336KB）。

@@ -4,8 +4,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const SRC = 'D:/ozon/ozon-react/src/components/NewDashboard.jsx';
-const DASH = 'D:/ozon/ozon-react/src/components/dashboard';
+const REPO_ROOT = path.resolve(__dirname, '..');
+
+const SRC = `${REPO_ROOT}/ozon-react/src/components/NewDashboard.jsx`;
+const DASH = `${REPO_ROOT}/ozon-react/src/components/dashboard`;
 const DIR = path.join(DASH, 'sections');
 fs.mkdirSync(DIR, { recursive: true });
 
