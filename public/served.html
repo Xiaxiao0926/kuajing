@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坪山优选价格分析面板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 20px; }
+        .header h1 { font-size: 1.6rem; margin-bottom: 8px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .header p { font-size: 0.95rem; opacity: 0.9; }
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .tab { background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s; }
+        .tab:hover { background: rgba(255,255,255,0.3); }
+        .tab.active { background: white; color: #667eea; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .content { display: none; }
+        .content.active { display: block; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        .stat-card { background: white; border-radius: 12px; padding: 14px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .stat-card .number { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+        .stat-card.total .number { color: #667eea; }
+        .stat-card.matched .number { color: #10b981; }
+        .stat-card.unmatched .number { color: #ef4444; }
+        .stat-card.review .number { color: #f59e0b; }
+        .stat-card.advantage .number { color: #059669; }
+        .stat-card.noadvantage .number { color: #dc2626; }
+        .stat-card .label { font-size: 0.75rem; color: #6b7280; font-weight: 500; }
+        .section { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+        .section-title { font-size: 1.1rem; font-weight: 600; color: #1f2937; }
+        .update-time { font-size: 0.75rem; color: #9ca3af; }
+        .actions { display: flex; gap: 8px; align-items: center; }
+        .action-btn { padding: 6px 14px; border-radius: 6px; border: none; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .refresh-btn { background: #667eea; color: white; }
+        .refresh-btn:hover { background: #5a67d8; }
+        .export-btn { background: #10b981; color: white; }
+        .export-btn:hover { background: #059669; }
+        .filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .filter-tab { background: #f3f4f6; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+        .filter-tab.active { background: #667eea; color: white; }
+        .filter-tab:hover:not(.active) { background: #e5e7eb; }
+        .count-badge { background: rgba(255,255,255,0.3); padding: 1px 6px; border-radius: 10px; font-size: 0.7rem; }
+        .filter-tab.active .count-badge { background: rgba(255,255,255,0.2); }
+        .filter-group { flex: 1; min-width: 200px; margin-bottom: 8px; }
+        .filter-group label { display: block; font-size: 0.8rem; color: #6b7280; margin-bottom: 4px; }
+        .filter-group input, .filter-group select { width: 100%; padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.85rem; }
+        .result-card { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+        .result-header { display: grid; grid-template-columns: 70px 220px 100px 140px 80px 120px 60px; gap: 10px; padding: 10px 12px; background: #f9fafb; align-items: center; font-size: 0.85rem; }
+        @media (max-width: 1200px) {
+            .result-header { grid-template-columns: 70px 200px 90px 120px 70px 100px 60px; }
+        }
+        @media (max-width: 900px) {
+            .result-header { display: block; }
+            .result-header > div { margin-bottom: 6px; }
+        }
+        .status-badge { padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-align: center; }
+        .status-matched { background: #dcfce7; color: #16a34a; }
+        .status-unmatched { background: #fee2e2; color: #dc2626; }
+        .status-review { background: #fef3c7; color: #d97706; }
+        .query-name { font-weight: 600; color: #1f2937; font-size: 0.8rem; }
+        .price-info { font-size: 0.8rem; }
+        .price-value { font-weight: 600; color: #1f2937; }
+        .price-type { font-size: 0.65rem; color: #6b7280; }
+        .advantage-badge { padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .advantage-positive { background: #dcfce7; color: #16a34a; }
+        .advantage-negative { background: #fee2e2; color: #dc2626; }
+        .market-count, .min-price-box { font-size: 0.8rem; color: #6b7280; }
+        .min-price-value { font-weight: 700; color: #ef4444; font-size: 0.9rem; }
+        .min-price-detail { padding: 8px 12px; background: #fffbeb; border-top: 1px solid #fef3c7; }
+        .min-price-detail-title { font-size: 0.75rem; font-weight: 600; color: #92400e; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+        .candidates-section { padding: 10px 12px; background: #fff; }
+        .candidates-header { font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 8px; }
+        .candidates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+        .candidate-card { border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px; background: #fafafa; font-size: 0.75rem; }
+        .candidate-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .candidate-title { font-weight: 500; color: #1f2937; line-height: 1.3; margin-bottom: 4px; }
+        .candidate-price { font-weight: 700; color: #ef4444; }
+        .candidate-shop { font-size: 0.7rem; color: #9ca3af; }
+        .similarity-tag { display: inline-block; background: #667eea; color: white; padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; margin-top: 4px; }
+        .warning-tag { background: #f59e0b; margin-left: 4px; }
+        .loading { text-align: center; padding: 30px; color: #9ca3af; font-size: 0.9rem; }
+        .pagination { display: flex; justify-content: center; gap: 4px; margin-top: 12px; }
+        .page-btn { background: white; border: 1px solid #d1d5db; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .page-btn.active { background: #667eea; color: white; border-color: #667eea; }
+        .page-btn:hover:not(.active) { background: #f3f4f6; }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: #f9fafb; padding: 10px 8px; text-align: left; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; position: sticky; top: 0; }
+        td { padding: 10px 8px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+        tr:hover { background: #f9fafb; }
+        .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 500; }
+        .badge-brand { background: #dbeafe; color: #1d4ed8; }
+        .badge-type { background: #dcfce7; color: #166534; }
+        .badge-series { background: #fef3c7; color: #92400e; }
+        .title-cell { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .shop-cell { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .stats-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .stats-section { background: #f9fafb; border-radius: 6px; padding: 12px; }
+        .stats-section h4 { font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 8px; }
+        .stats-list { max-height: 200px; overflow-y: auto; }
+        .stats-item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.8rem; border-bottom: 1px solid #e5e7eb; }
+        .stats-item:last-child { border-bottom: none; }
+        .stats-item .name { color: #4b5563; }
+        .stats-item .count { font-weight: 600; color: #667eea; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 坪山优选价格分析</h1>
+            <p>供应商报价与市场价智能匹配分析</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('analysis')">价格分析</button>
+            <button class="tab" onclick="switchTab('market')">清洗数据</button>
+        </div>
+
+        <div id="analysis-panel" class="content active">
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="number" id="total-count">--</div>
+                    <div class="label">总产品数</div>
+                </div>
+                <div class="stat-card matched">
+                    <div class="number" id="matched-count">--</div>
+                    <div class="label">已匹配</div>
+                </div>
+                <div class="stat-card unmatched">
+                    <div class="number" id="unmatched-count">--</div>
+                    <div class="label">未匹配</div>
+                </div>
+                <div class="stat-card review">
+                    <div class="number" id="review-count">--</div>
+                    <div class="label">需复核</div>
+                </div>
+                <div class="stat-card advantage">
+                    <div class="number" id="advantage-count">--</div>
+                    <div class="label">有价格优势</div>
+                </div>
+                <div class="stat-card noadvantage">
+                    <div class="number" id="noadvantage-count">--</div>
+                    <div class="label">无价格优势</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">🔍 价格分析结果</div>
+                        <div class="update-time" id="update-time"></div>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn refresh-btn" onclick="loadAnalysisData()">🔄 刷新</button>
+                        <button class="action-btn export-btn" onclick="exportData()">📥 导出Excel</button>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterResults('all')">全部 <span class="count-badge" id="all-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('matched')">已匹配 <span class="count-badge" id="matched-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('unmatched')">未匹配 <span class="count-badge" id="unmatched-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('review')">需复核 <span class="count-badge" id="review-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('advantage')">有优势 <span class="count-badge" id="advantage-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('noadvantage')">无优势 <span class="count-badge" id="noadvantage-tab-count">--</span></button>
+                </div>
+
+                <div id="results-container">
+                    <div class="loading">加载中...</div>
+                </div>
+
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </div>
+
+        <div id="market-panel" class="content">
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="number" id="market-total">--</div>
+                    <div class="label">总记录数</div>
+                </div>
+                <div class="stat-card matched">
+                    <div class="number" id="market-brands">--</div>
+                    <div class="label">品牌数</div>
+                </div>
+                <div class="stat-card unmatched">
+                    <div class="number" id="market-types">--</div>
+                    <div class="label">产品类型</div>
+                </div>
+                <div class="stat-card review">
+                    <div class="number" id="market-files">--</div>
+                    <div class="label">来源文件</div>
+                </div>
+            </div>
+
+            <div class="stats-details" id="market-stats-details"></div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">📋 清洗数据列表 <span id="market-count-label"></span></div>
+                    <div class="update-time" id="market-update-time"></div>
+                    <div class="actions">
+                        <button class="action-btn refresh-btn" onclick="loadMarketData()">🔄 刷新</button>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <div class="filter-group">
+                        <label>品牌筛选</label>
+                        <select id="brand-filter" onchange="applyMarketFilters()">
+                            <option value="">全部品牌</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>产品类型</label>
+                        <select id="type-filter" onchange="applyMarketFilters()">
+                            <option value="">全部类型</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>系列筛选</label>
+                        <select id="series-filter" onchange="applyMarketFilters()">
+                            <option value="">全部系列</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>关键词搜索</label>
+                        <input type="text" id="search-filter" placeholder="搜索标题..." onkeyup="applyMarketFilters()">
+                    </div>
+                    <div class="filter-group">
+                        <label>价格区间</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="number" id="min-price-filter" placeholder="最低价" onchange="applyMarketFilters()" style="width: 50%;">
+                            <input type="number" id="max-price-filter" placeholder="最高价" onchange="applyMarketFilters()" style="width: 50%;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>品牌</th>
+                                <th>原始标题</th>
+                                <th>价格</th>
+                                <th>容量</th>
+                                <th>产品类型</th>
+                                <th>系列</th>
+                                <th>店铺</th>
+                                <th>链接</th>
+                                <th>来源</th>
+                            </tr>
+                        </thead>
+                        <tbody id="market-data-body">
+                            <tr><td colspan="10" class="loading">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="market-pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allResults = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const pageSize = 15;
+
+        let allMarketData = [];
+        let filteredMarketData = [];
+        let currentMarketPage = 1;
+        const marketPageSize = 50;
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'analysis') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('analysis-panel').classList.add('active');
+                loadAnalysisData();
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('market-panel').classList.add('active');
+                loadMarketData();
+            }
+        }
+
+        async function loadAnalysisData() {
+            try {
+                const summaryRes = await fetch('/api/summary');
+                const summary = await summaryRes.json();
+                updateSummary(summary);
+                
+                const resultsRes = await fetch('/api/results');
+                allResults = await resultsRes.json();
+                updateAdvantageCounts();
+                renderResults();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+            }
+        }
+
+        function updateSummary(summary) {
+            document.getElementById('total-count').textContent = summary.total;
+            document.getElementById('matched-count').textContent = summary.matchedCount;
+            document.getElementById('unmatched-count').textContent = summary.unmatchedCount;
+            document.getElementById('review-count').textContent = summary.reviewCount || 0;
+            document.getElementById('update-time').textContent = '更新时间: ' + summary.updateTime;
+            
+            document.getElementById('all-count').textContent = summary.total;
+            document.getElementById('matched-tab-count').textContent = summary.matchedCount;
+            document.getElementById('unmatched-tab-count').textContent = summary.unmatchedCount;
+            document.getElementById('review-tab-count').textContent = summary.reviewCount || 0;
+        }
+
+        function updateAdvantageCounts() {
+            const advantageCount = allResults.filter(r => r.hasAdvantage).length;
+            const noAdvantageCount = allResults.filter(r => r.status === '已匹配' && !r.hasAdvantage).length;
+            document.getElementById('advantage-count').textContent = advantageCount;
+            document.getElementById('noadvantage-count').textContent = noAdvantageCount;
+            document.getElementById('advantage-tab-count').textContent = advantageCount;
+            document.getElementById('noadvantage-tab-count').textContent = noAdvantageCount;
+        }
+
+        function filterResults(filter) {
+            currentFilter = filter;
+            currentPage = 1;
+            
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            const filterMap = { 'all': 0, 'matched': 1, 'unmatched': 2, 'review': 3, 'advantage': 4, 'noadvantage': 5 };
+            document.querySelectorAll('.filter-tab')[filterMap[filter]].classList.add('active');
+            
+            renderResults();
+        }
+
+        function getFilteredResults() {
+            switch (currentFilter) {
+                case 'all': return allResults;
+                case 'matched': return allResults.filter(r => r.status === '已匹配');
+                case 'unmatched': return allResults.filter(r => r.status === '未匹配');
+                case 'review': return allResults.filter(r => r.status === '需要人工复核');
+                case 'advantage': return allResults.filter(r => r.hasAdvantage);
+                case 'noadvantage': return allResults.filter(r => r.status === '已匹配' && !r.hasAdvantage);
+                default: return allResults;
+            }
+        }
+
+        function renderResults() {
+            const filtered = getFilteredResults();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            const start = (currentPage - 1) * pageSize;
+            const pageData = filtered.slice(start, start + pageSize);
+
+            const container = document.getElementById('results-container');
+            
+            if (pageData.length === 0) {
+                container.innerHTML = '<div class="loading">暂无数据</div>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = pageData.map((result, resultIndex) => {
+                const globalIdx = (currentPage - 1) * pageSize + resultIndex;
+                return `
+                <div class="result-card" data-result-idx="${globalIdx}">
+                    <div class="result-header">
+                        <div>
+                            <span class="status-badge ${
+                                result.status === '已匹配' ? 'status-matched' : 
+                                result.status === '需要人工复核' ? 'status-review' : 'status-unmatched'
+                            }">${result.status}</span>
+                        </div>
+                        <div class="query-name">${result.queryName}</div>
+                        <div class="price-info">
+                            <div class="price-value">¥${result.supplierPrice || '--'}</div>
+                            <div class="price-type">${result.priceType}</div>
+                        </div>
+                        <div>
+                            <span class="advantage-badge ${result.hasAdvantage ? 'advantage-positive' : 'advantage-negative'}">
+                                ${result.priceAdvantage || '--'}
+                            </span>
+                        </div>
+                        <div class="market-count">${result.marketCount}个报价</div>
+                        <div class="min-price-box">
+                            <div>最低 <span class="min-price-value">¥${result.minPrice || '--'}</span></div>
+                        </div>
+                        <div style="font-size: 0.7rem; color: #9ca3af;">${result.category || '--'}</div>
+                    </div>
+                    ${result.minPriceItem && result.minPriceItem.title ? `
+                        <div class="min-price-detail">
+                            <div class="min-price-detail-title">⭐ 最低价详情</div>
+                            <div style="font-size: 0.75rem; line-height: 1.4;">
+                                <div style="font-weight: 500;">${result.minPriceItem.original_title || result.minPriceItem.title}</div>
+                                <div>店铺: ${result.minPriceItem.shop || '--'}</div>
+                                ${result.minPriceItem.link ? `<div>链接: <a href="${result.minPriceItem.link}" target="_blank" style="color:#667eea;">🔗 点击查看</a></div>` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${result.candidates && result.candidates.filter(c=>c).length > 0 ? `
+                        <div class="candidates-section" id="candidates-section-${globalIdx}">
+                            <div class="candidates-header">📦 候选报价 <span id="candidates-count-${globalIdx}">${result.candidates.filter(c=>c).length}</span>个</div>
+                            <div class="candidates-grid" id="candidates-grid-${globalIdx}">
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            renderPagination(totalPages);
+
+            // 渲染所有候选卡片
+            pageData.forEach((result, idx) => {
+                const globalIdx = (currentPage - 1) * pageSize + idx;
+                renderCandidates(result, globalIdx);
+            });
+        }
+
+        function renderPagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+            let html = `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>`;
+            const maxVisible = 5;
+            let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let end = Math.min(totalPages, start + maxVisible - 1);
+            for (let i = start; i <= end; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>`;
+            pagination.innerHTML = html;
+        }
+
+        const DISPLAY_COUNT = 4; // 前端展示的候选数量
+        // 存储每个结果的候选状态：{ globalIdx: { visible: [候选索引], rejected: [候选索引] } }
+        const candidateStates = {};
+
+        function renderCandidates(result, globalIdx) {
+            const grid = document.getElementById(`candidates-grid-${globalIdx}`);
+            if (!grid || !result.candidates) return;
+
+            // 初始化状态
+            if (!candidateStates[globalIdx]) {
+                candidateStates[globalIdx] = {
+                    visible: result.candidates.map((c, i) => c ? i : -1).filter(i => i >= 0),
+                    rejected: []
+                };
+            }
+
+            const state = candidateStates[globalIdx];
+            const visibleCandidates = state.visible.filter(i => !state.rejected.includes(i));
+            const displayCandidates = visibleCandidates.slice(0, DISPLAY_COUNT);
+
+            // 更新计数
+            const countEl = document.getElementById(`candidates-count-${globalIdx}`);
+            if (countEl) countEl.textContent = visibleCandidates.length;
+
+            grid.innerHTML = displayCandidates.map((candIdx, displayIdx) => {
+                const candidate = result.candidates[candIdx];
+                if (!candidate) return '';
+                return `
+                    <div class="candidate-card" data-cand-idx="${candIdx}">
+                        <div class="candidate-header">
+                            <span style="font-size: 0.65rem; color: #667eea; font-weight: 600;">候选${displayIdx + 1}</span>
+                            <span class="similarity-tag">${candidate.similarity}</span>
+                            ${candidate.needsReview ? '<span class="similarity-tag warning-tag">需复核</span>' : ''}
+                        </div>
+                        <div class="candidate-title">${candidate.original_title || candidate.title}</div>
+                        <div style="font-weight: 600; color: #ef4444;">¥${candidate.price} ${candidate.spec ? '<span style="font-weight:400;color:#6b7280;font-size:0.7rem;">' + candidate.spec + '</span>' : ''}</div>
+                        <div class="candidate-shop">店铺: ${candidate.shop || '--'}</div>
+                        ${candidate.link ? `<div style="margin-top:2px;"><a href="${candidate.link}" target="_blank" style="color:#667eea;font-size:0.7rem;text-decoration:none;">🔗 查看链接</a></div>` : ''}
+                        <div style="margin-top:4px; display:flex; gap:4px;">
+                            <button onclick="tagCandidate(this, '符合', ${globalIdx}, ${candIdx})" style="padding:1px 8px; border-radius:3px; border:1px solid #10b981; background:#f0fdf4; color:#10b981; font-size:0.65rem; cursor:pointer;">符合</button>
+                            <button onclick="rejectCandidate(${globalIdx}, ${candIdx})" style="padding:1px 8px; border-radius:3px; border:1px solid #ef4444; background:#fef2f2; color:#ef4444; font-size:0.65rem; cursor:pointer;">不符合</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function tagCandidate(btn, tag, globalIdx, candIdx) {
+            const card = btn.closest('.candidate-card');
+            const buttons = card.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.style.fontWeight = '400';
+                b.style.opacity = '0.6';
+            });
+            btn.style.fontWeight = '700';
+            btn.style.opacity = '1';
+            let tagEl = card.querySelector('.tag-result');
+            if (!tagEl) {
+                tagEl = document.createElement('span');
+                tagEl.className = 'tag-result';
+                tagEl.style.cssText = 'display:inline-block;margin-left:6px;padding:1px 6px;border-radius:3px;font-size:0.65rem;font-weight:600;';
+                card.querySelector('.candidate-header').appendChild(tagEl);
+            }
+            if (tag === '符合') {
+                tagEl.textContent = '✓ 符合';
+                tagEl.style.background = '#dcfce7';
+                tagEl.style.color = '#16a34a';
+            }
+        }
+
+        function rejectCandidate(globalIdx, candIdx) {
+            if (!candidateStates[globalIdx]) return;
+            candidateStates[globalIdx].rejected.push(candIdx);
+            // 重新渲染该结果的候选
+            const filtered = getFilteredResults();
+            const start = (currentPage - 1) * pageSize;
+            const localIdx = globalIdx - start;
+            if (localIdx >= 0 && localIdx < filtered.length) {
+                renderCandidates(filtered[localIdx], globalIdx);
+                // 更新最低价和最低价详情
+                updateMinPrice(filtered[localIdx], globalIdx);
+            }
+        }
+
+        function updateMinPrice(result, globalIdx) {
+            if (!candidateStates[globalIdx] || !result.candidates) return;
+            const state = candidateStates[globalIdx];
+            const visibleCandidates = state.visible.filter(i => !state.rejected.includes(i));
+            // 从未被拒绝的候选中找最低价
+            let newMinCandidate = null;
+            for (const idx of visibleCandidates) {
+                const c = result.candidates[idx];
+                if (c && c.price && (!newMinCandidate || c.price < newMinCandidate.price)) {
+                    newMinCandidate = c;
+                }
+            }
+            const card = document.querySelector(`.result-card[data-result-idx="${globalIdx}"]`);
+            if (!card) return;
+
+            // 更新最低价数字
+            const minPriceEl = card.querySelector('.min-price-value');
+            if (minPriceEl) {
+                minPriceEl.textContent = newMinCandidate ? `¥${newMinCandidate.price}` : '--';
+            }
+
+            // 更新最低价详情
+            const detailEl = card.querySelector('.min-price-detail');
+            if (newMinCandidate) {
+                const detailHtml = `
+                    <div class="min-price-detail-title">⭐ 最低价详情</div>
+                    <div style="font-size: 0.75rem; line-height: 1.4;">
+                        <div style="font-weight: 500;">${newMinCandidate.original_title || newMinCandidate.title}</div>
+                        <div>店铺: ${newMinCandidate.shop || '--'}</div>
+                        ${newMinCandidate.link ? `<div>链接: <a href="${newMinCandidate.link}" target="_blank" style="color:#667eea;">🔗 点击查看</a></div>` : ''}
+                    </div>
+                `;
+                if (detailEl) {
+                    detailEl.innerHTML = detailHtml;
+                } else {
+                    const newDetail = document.createElement('div');
+                    newDetail.className = 'min-price-detail';
+                    newDetail.innerHTML = detailHtml;
+                    const header = card.querySelector('.result-header');
+                    if (header && header.nextSibling) {
+                        header.parentNode.insertBefore(newDetail, header.nextSibling);
+                    }
+                }
+            } else if (detailEl) {
+                detailEl.remove();
+            }
+
+            // 更新价格优势
+            if (newMinCandidate && result.supplierPrice) {
+                const diff = result.supplierPrice - newMinCandidate.price;
+                const pct = ((diff / newMinCandidate.price) * 100).toFixed(1);
+                const advantageEl = card.querySelector('.advantage-badge');
+                if (advantageEl) {
+                    if (diff <= 0) {
+                        advantageEl.textContent = `低于市场${Math.abs(pct)}%`;
+                        advantageEl.className = 'advantage-badge advantage-positive';
+                    } else {
+                        advantageEl.textContent = `高于市场${pct}%`;
+                        advantageEl.className = 'advantage-badge advantage-negative';
+                    }
+                }
+            }
+        }
+
+        function goToPage(page) {
+            if (page < 1 || page > Math.ceil(getFilteredResults().length / pageSize)) return;
+            currentPage = page;
+            renderResults();
+        }
+
+        async function exportData() {
+            try {
+                const response = await fetch('/api/export');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '价格优势分析结果.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('导出失败:', error);
+                alert('导出失败，请重试');
+            }
+        }
+
+        async function loadMarketData() {
+            try {
+                const summaryRes = await fetch('/api/cleaned-summary');
+                const summary = await summaryRes.json();
+                updateMarketSummary(summary);
+                
+                const dataRes = await fetch('/api/cleaned');
+                const dataJson = await dataRes.json();
+                allMarketData = dataJson.data || [];
+                if (allMarketData.length === 0) {
+                    const allDataRes = await fetch('/api/cleaned?pageSize=99999');
+                    const allDataJson = await allDataRes.json();
+                    allMarketData = allDataJson.data || [];
+                }
+                
+                populateMarketFilters(summary);
+                filteredMarketData = [...allMarketData];
+                renderMarketData();
+            } catch (error) {
+                console.error('加载市场数据失败:', error);
+            }
+        }
+
+        function updateMarketSummary(summary) {
+            document.getElementById('market-total').textContent = summary.total;
+            document.getElementById('market-brands').textContent = Object.keys(summary.brandCount || {}).length;
+            document.getElementById('market-types').textContent = Object.keys(summary.typeCount || {}).length;
+            document.getElementById('market-files').textContent = Object.keys(summary.fileCount || {}).length;
+            document.getElementById('market-update-time').textContent = '更新时间: ' + summary.updateTime;
+            
+            const statsHTML = `
+                <div class="stats-section">
+                    <h4>🔥 热门品牌</h4>
+                    <div class="stats-list">
+                        ${Object.entries(summary.brandCount || {})
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 15)
+                            .map(([brand, count]) => `
+                                <div class="stats-item">
+                                    <span class="name">${brand || '未知'}</span>
+                                    <span class="count">${count}</span>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+                <div class="stats-section">
+                    <h4>📦 产品类型分布</h4>
+                    <div class="stats-list">
+                        ${Object.entries(summary.typeCount || {})
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 15)
+                            .map(([type, count]) => `
+                                <div class="stats-item">
+                                    <span class="name">${type}</span>
+                                    <span class="count">${count}</span>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+                <div class="stats-section">
+                    <h4>🏷️ 系列分布</h4>
+                    <div class="stats-list">
+                        ${Object.entries(summary.seriesCount || {})
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 15)
+                            .map(([series, count]) => `
+                                <div class="stats-item">
+                                    <span class="name">${series}</span>
+                                    <span class="count">${count}</span>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('market-stats-details').innerHTML = statsHTML;
+        }
+
+        function populateMarketFilters(summary) {
+            const brands = new Set();
+            const types = new Set();
+            const seriesList = new Set();
+            
+            allMarketData.forEach(item => {
+                if (item.brand) brands.add(item.brand);
+                if (item.product_type) {
+                    item.product_type.split('|').forEach(t => { if (t) types.add(t); });
+                }
+                if (item.series) seriesList.add(item.series);
+            });
+
+            if (summary) {
+                Object.keys(summary.brandCount || {}).forEach(b => brands.add(b));
+                Object.keys(summary.typeCount || {}).forEach(t => types.add(t));
+                Object.keys(summary.seriesCount || {}).forEach(s => seriesList.add(s));
+            }
+            
+            const brandSelect = document.getElementById('brand-filter');
+            const typeSelect = document.getElementById('type-filter');
+            const seriesSelect = document.getElementById('series-filter');
+            brandSelect.innerHTML = '<option value="">全部品牌</option>';
+            typeSelect.innerHTML = '<option value="">全部类型</option>';
+            seriesSelect.innerHTML = '<option value="">全部系列</option>';
+            
+            [...brands].sort().forEach(brand => {
+                brandSelect.innerHTML += `<option value="${brand}">${brand}</option>`;
+            });
+            [...types].sort().forEach(type => {
+                typeSelect.innerHTML += `<option value="${type}">${type}</option>`;
+            });
+            [...seriesList].sort().forEach(s => {
+                seriesSelect.innerHTML += `<option value="${s}">${s}</option>`;
+            });
+        }
+
+        function applyMarketFilters() {
+            const brandFilter = document.getElementById('brand-filter').value;
+            const typeFilter = document.getElementById('type-filter').value;
+            const seriesFilter = document.getElementById('series-filter').value;
+            const search = document.getElementById('search-filter').value.toLowerCase();
+            const minPrice = parseFloat(document.getElementById('min-price-filter').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('max-price-filter').value) || Infinity;
+            
+            filteredMarketData = allMarketData.filter(item => {
+                if (brandFilter && item.brand !== brandFilter) return false;
+                if (typeFilter && !(item.product_type || '').includes(typeFilter)) return false;
+                if (seriesFilter && item.series !== seriesFilter) return false;
+                if (search && !item.title.toLowerCase().includes(search) && !((item.original_title || '').toLowerCase().includes(search))) return false;
+                if (item.price < minPrice || item.price > maxPrice) return false;
+                return true;
+            });
+            
+            currentMarketPage = 1;
+            renderMarketData();
+        }
+
+        function renderMarketData() {
+            const totalPages = Math.ceil(filteredMarketData.length / marketPageSize);
+            const start = (currentMarketPage - 1) * marketPageSize;
+            const pageData = filteredMarketData.slice(start, start + marketPageSize);
+
+            document.getElementById('market-count-label').textContent = `(${filteredMarketData.length} 条)`;
+
+            const tbody = document.getElementById('market-data-body');
+            
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="loading">暂无数据</td></tr>';
+                document.getElementById('market-pagination').innerHTML = '';
+                return;
+            }
+
+            tbody.innerHTML = pageData.map((item, index) => `
+                <tr>
+                    <td>${start + index + 1}</td>
+                    <td>${item.brand ? `<span class="badge badge-brand">${item.brand}</span>` : '-'}</td>
+                    <td class="title-cell" title="${item.original_title || item.title}">${item.original_title || item.title}</td>
+                    <td style="font-weight: 600; color: #ef4444;">¥${item.price}</td>
+                    <td>${item.capacity || item.spec || '-'}</td>
+                    <td>${item.product_type ? item.product_type.split('|').map(t => `<span class="badge badge-type">${t}</span>`).join(' ') : '-'}</td>
+                    <td>${item.series ? `<span class="badge badge-series">${item.series}</span>` : '-'}</td>
+                    <td class="shop-cell" title="${item.shop}">${item.shop || '-'}</td>
+                    <td style="font-size: 0.75rem;">${item.link ? `<a href="${item.link}" target="_blank" style="color:#667eea;">🔗</a>` : '-'}</td>
+                    <td style="font-size: 0.75rem; color: #6b7280;">${(item.source_file || '').slice(0, 20)}</td>
+                </tr>
+            `).join('');
+
+            renderMarketPagination(totalPages);
+        }
+
+        function renderMarketPagination(totalPages) {
+            const pagination = document.getElementById('market-pagination');
+            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+            let html = `<button class="page-btn" onclick="goToMarketPage(${currentMarketPage - 1})" ${currentMarketPage === 1 ? 'disabled' : ''}>上一页</button>`;
+            const maxVisible = 7;
+            let start = Math.max(1, currentMarketPage - Math.floor(maxVisible / 2));
+            let end = Math.min(totalPages, start + maxVisible - 1);
+            for (let i = start; i <= end; i++) {
+                html += `<button class="page-btn ${i === currentMarketPage ? 'active' : ''}" onclick="goToMarketPage(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn" onclick="goToMarketPage(${currentMarketPage + 1})" ${currentMarketPage === totalPages ? 'disabled' : ''}>下一页</button>`;
+            pagination.innerHTML = html;
+        }
+
+        function goToMarketPage(page) {
+            if (page < 1 || page > Math.ceil(filteredMarketData.length / marketPageSize)) return;
+            currentMarketPage = page;
+            renderMarketData();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAnalysisData);
+    </script>
+</body>
+</html>

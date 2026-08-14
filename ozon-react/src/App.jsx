@@ -10,10 +10,10 @@ import ComplianceAssessment from './components/ComplianceAssessment'
 import NodeOverview from './components/NodeOverview'
 import ProgressOverview from './components/ProgressOverview'
 import ProjectFlow from './components/ProjectFlow'
-import ShippingCalc from './components/ShippingCalc'
-import PricingCalc from './components/PricingCalc'
-import JdProductFetch from './components/JdProductFetch'
+import OzonCalc from './components/OzonCalc'
 import FragrancePricing from './components/FragrancePricing'
+import ListingContent from './components/ListingContent'
+import WBCalc from './components/WBCalc'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
 import { syncFromServer, persistGet, persistSet } from './utils/persist'
@@ -164,22 +164,8 @@ function App() {
     }
     if (activeNode === 'n4') {
       return (
-        <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange}>
-          <ShippingCalc />
-        </NodePage>
-      )
-    }
-    if (activeNode === 'n38') {
-      return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
-          <PricingCalc />
-        </NodePage>
-      )
-    }
-    if (activeNode === 'n39') {
-      return (
-        <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange}>
-          <JdProductFetch />
+          <OzonCalc />
         </NodePage>
       )
     }
@@ -231,6 +217,20 @@ function App() {
       return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange}>
           <ComplianceAssessment />
+        </NodePage>
+      )
+    }
+    if (activeNode === 'n14') {
+      return (
+        <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
+          <ListingContent />
+        </NodePage>
+      )
+    }
+    if (activeNode === 'n39') {
+      return (
+        <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
+          <WBCalc />
         </NodePage>
       )
     }

@@ -11,52 +11,52 @@ const CHANNELS = [
     category: 'Extra Small',
     categoryZh: '超级轻小件',
     channels: [
-      { id: 'express_xs', name: 'Express Extra Small', speed: '5-10天', rate: 45, base: 3, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'standard_xs', name: 'Standard Extra Small', speed: '10-15天', rate: 35, base: 3, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'economy_xs', name: 'Economy Extra Small', speed: '15-25天', rate: 25, base: 3, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
+      { id: 'express_xs', name: 'Express Extra Small', speed: '5-10天', rate: 46.8, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
+      { id: 'standard_xs', name: 'Standard Extra Small', speed: '10-15天', rate: 36.4, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
+      { id: 'economy_xs', name: 'Economy Extra Small', speed: '15-25天', rate: 26, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500, volumetric: false },
     ]
   },
   {
     category: 'Budget',
     categoryZh: '低客单价标准件',
     channels: [
-      { id: 'express_budget', name: 'Express Budget', speed: '5-10天', rate: 33, base: 23, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'standard_budget', name: 'Standard Budget', speed: '10-15天', rate: 25, base: 23, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
-      { id: 'economy_budget', name: 'Economy Budget', speed: '15-25天', rate: 17, base: 23, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
+      { id: 'express_budget', name: 'Express Budget', speed: '5-10天', rate: 34.32, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
+      { id: 'standard_budget', name: 'Standard Budget', speed: '10-15天', rate: 26, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
+      { id: 'economy_budget', name: 'Economy Budget', speed: '15-25天', rate: 17.68, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500, volumetric: false },
     ]
   },
   {
     category: 'Small',
     categoryZh: '小件',
     channels: [
-      { id: 'express_small', name: 'Express Small', speed: '5-10天', rate: 45, base: 16, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
-      { id: 'standard_small', name: 'Standard Small', speed: '10-15天', rate: 35, base: 16, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
-      { id: 'economy_small', name: 'Economy Small', speed: '15-25天', rate: 25, base: 16, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
+      { id: 'express_small', name: 'Express Small', speed: '5-10天', rate: 46.8, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
+      { id: 'standard_small', name: 'Standard Small', speed: '10-15天', rate: 36.4, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
+      { id: 'economy_small', name: 'Economy Small', speed: '15-25天', rate: 26, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000, volumetric: false },
     ]
   },
   {
     category: 'Big',
     categoryZh: '大件',
     channels: [
-      { id: 'standard_big', name: 'Standard Big', speed: '10-15天', rate: 25, base: 36, weightMin: 2, weightMax: 30, sumMax: 250, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
-      { id: 'economy_big', name: 'Economy Big', speed: '15-25天', rate: 17, base: 36, weightMin: 2, weightMax: 30, sumMax: 250, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
+      { id: 'standard_big', name: 'Standard Big', speed: '10-15天', rate: 26, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
+      { id: 'economy_big', name: 'Economy Big', speed: '15-25天', rate: 17.68, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
     ]
   },
   {
     category: 'Premium Small',
     categoryZh: '高客单价小件',
     channels: [
-      { id: 'express_psmall', name: 'Express Premium Small', speed: '5-10天', rate: 45, base: 22, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
-      { id: 'standard_psmall', name: 'Standard Premium Small', speed: '10-15天', rate: 35, base: 22, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
-      { id: 'economy_psmall', name: 'Economy Premium Small', speed: '15-25天', rate: 25, base: 22, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
+      { id: 'express_psmall', name: 'Express Premium Small', speed: '5-10天', rate: 46.8, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
+      { id: 'standard_psmall', name: 'Standard Premium Small', speed: '10-15天', rate: 36.4, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
+      { id: 'economy_psmall', name: 'Economy Premium Small', speed: '15-25天', rate: 26, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: false },
     ]
   },
   {
     category: 'Premium Big',
     categoryZh: '高客单价大件',
     channels: [
-      { id: 'standard_pbig', name: 'Standard Premium Big', speed: '10-15天', rate: 28, base: 62, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
-      { id: 'economy_pbig', name: 'Economy Premium Big', speed: '15-25天', rate: 23, base: 62, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
+      { id: 'standard_pbig', name: 'Standard Premium Big', speed: '10-15天', rate: 29.12, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
+      { id: 'economy_pbig', name: 'Economy Premium Big', speed: '15-25天', rate: 23.92, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
     ]
   },
   {
@@ -159,7 +159,8 @@ export default function ShippingCalc() {
       let profitRate = null
       let costBreakdown = null
       if (res) {
-        const agencyAmt = priceRMB * agencyFee / 100
+        const agencyAmtRub = Math.min(200, Math.max(15, price * agencyFee / 100))
+        const agencyAmt = Math.round(agencyAmtRub * R * 100) / 100
         const crossBorderCost = res.cost + agencyAmt
         const platformAmt = priceRMB * platformCostRate / 100
         const returnAmt = priceRMB * returnLoss / 100
@@ -210,7 +211,7 @@ export default function ShippingCalc() {
           <h3 className="text-base font-bold text-blue-700">运费利润计算</h3>
           <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-600 border border-blue-200">OZON rFBS 自发货</span>
         </div>
-        <span className="text-xs text-blue-500">CEL产品资费表 V3.31</span>
+        <span className="text-xs text-blue-500">CEL产品资费表 V5.23</span>
       </div>
 
       <div className="p-5">

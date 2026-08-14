@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坪山优选价格分析面板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 20px; }
+        .header h1 { font-size: 1.6rem; margin-bottom: 8px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .header p { font-size: 0.95rem; opacity: 0.9; }
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .tab { background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s; }
+        .tab:hover { background: rgba(255,255,255,0.3); }
+        .tab.active { background: white; color: #667eea; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .content { display: none; }
+        .content.active { display: block; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        .stat-card { background: white; border-radius: 12px; padding: 14px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .stat-card .number { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+        .stat-card.total .number { color: #667eea; }
+        .stat-card.matched .number { color: #10b981; }
+        .stat-card.unmatched .number { color: #ef4444; }
+        .stat-card.review .number { color: #f59e0b; }
+        .stat-card.advantage .number { color: #059669; }
+        .stat-card.noadvantage .number { color: #dc2626; }
+        .stat-card .label { font-size: 0.75rem; color: #6b7280; font-weight: 500; }
+        .section { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+        .section-title { font-size: 1.1rem; font-weight: 600; color: #1f2937; }
+        .update-time { font-size: 0.75rem; color: #9ca3af; }
+        .actions { display: flex; gap: 8px; align-items: center; }
+        .action-btn { padding: 6px 14px; border-radius: 6px; border: none; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .refresh-btn { background: #667eea; color: white; }
+        .refresh-btn:hover { background: #5a67d8; }
+        .export-btn { background: #10b981; color: white; }
+        .export-btn:hover { background: #059669; }
+        .filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .filter-tab { background: #f3f4f6; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+        .filter-tab.active { background: #667eea; color: white; }
+        .filter-tab:hover:not(.active) { background: #e5e7eb; }
+        .count-badge { background: rgba(255,255,255,0.3); padding: 1px 6px; border-radius: 10px; font-size: 0.7rem; }
+        .filter-tab.active .count-badge { background: rgba(255,255,255,0.2); }
+        .filter-group { flex: 1; min-width: 200px; margin-bottom: 8px; }
+        .filter-group label { display: block; font-size: 0.8rem; color: #6b7280; margin-bottom: 4px; }
+        .filter-group input, .filter-group select { width: 100%; padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.85rem; }
+        .result-card { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+        .result-header { display: grid; grid-template-columns: 70px 220px 100px 140px 80px 120px 60px; gap: 10px; padding: 10px 12px; background: #f9fafb; align-items: center; font-size: 0.85rem; }
+        @media (max-width: 1200px) {
+            .result-header { grid-template-columns: 70px 200px 90px 120px 70px 100px 60px; }
+        }
+        @media (max-width: 900px) {
+            .result-header { display: block; }
+            .result-header > div { margin-bottom: 6px; }
+        }
+        .status-badge { padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-align: center; }
+        .status-matched { background: #dcfce7; color: #16a34a; }
+        .status-unmatched { background: #fee2e2; color: #dc2626; }
+        .status-review { background: #fef3c7; color: #d97706; }
+        .query-name { font-weight: 600; color: #1f2937; font-size: 0.8rem; }
+        .price-info { font-size: 0.8rem; }
+        .price-value { font-weight: 600; color: #1f2937; }
+        .price-type { font-size: 0.65rem; color: #6b7280; }
+        .advantage-badge { padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .advantage-positive { background: #dcfce7; color: #16a34a; }
+        .advantage-negative { background: #fee2e2; color: #dc2626; }
+        .market-count, .min-price-box { font-size: 0.8rem; color: #6b7280; }
+        .min-price-value { font-weight: 700; color: #ef4444; font-size: 0.9rem; }
+        .min-price-detail { padding: 8px 12px; background: #fffbeb; border-top: 1px solid #fef3c7; }
+        .min-price-detail-title { font-size: 0.75rem; font-weight: 600; color: #92400e; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+        .candidates-section { padding: 10px 12px; background: #fff; }
+        .candidates-header { font-size: 0.8rem; font-weight: 600; color: #6b7280; margin-bottom: 8px; }
+        .candidates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+        .candidate-card { border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px; background: #fafafa; font-size: 0.75rem; }
+        .candidate-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .candidate-title { font-weight: 500; color: #1f2937; line-height: 1.3; margin-bottom: 4px; }
+        .candidate-price { font-weight: 700; color: #ef4444; }
+        .candidate-shop { font-size: 0.7rem; color: #9ca3af; }
+        .similarity-tag { display: inline-block; background: #667eea; color: white; padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; margin-top: 4px; }
+        .warning-tag { background: #f59e0b; margin-left: 4px; }
+        .loading { text-align: center; padding: 30px; color: #9ca3af; font-size: 0.9rem; }
+        .pagination { display: flex; justify-content: center; gap: 4px; margin-top: 12px; }
+        .page-btn { background: white; border: 1px solid #d1d5db; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .page-btn.active { background: #667eea; color: white; border-color: #667eea; }
+        .page-btn:hover:not(.active) { background: #f3f4f6; }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: #f9fafb; padding: 10px 8px; text-align: left; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; position: sticky; top: 0; }
+        td { padding: 10px 8px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+        tr:hover { background: #f9fafb; }
+        .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 500; }
+        .badge-brand { background: #dbeafe; color: #1d4ed8; }
+        .badge-type { background: #dcfce7; color: #166534; }
+        .badge-series { background: #fef3c7; color: #92400e; }
+        .title-cell { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .shop-cell { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .stats-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .stats-section { background: #f9fafb; border-radius: 6px; padding: 12px; }
+        .stats-section h4 { font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 8px; }
+        .stats-list { max-height: 200px; overflow-y: auto; }
+        .stats-item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.8rem; border-bottom: 1px solid #e5e7eb; }
+        .stats-item:last-child { border-bottom: none; }
+        .stats-item .name { color: #4b5563; }
+        .stats-item .count { font-weight: 600; color: #667eea; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 坪山优选价格分析</h1>
+            <p>供应商报价与市场价智能匹配分析</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('analysis')">价格分析</button>
+            <button class="tab" onclick="switchTab('market')">清洗数据</button>
+        </div>
+
+        <div id="analysis-panel" class="content active">
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="number" id="total-count">--</div>
+                    <div class="label">总产品数</div>
+                </div>
+                <div class="stat-card matched">
+                    <div class="number" id="matched-count">--</div>
+                    <div class="label">已匹配</div>
+                </div>
+                <div class="stat-card unmatched">
+                    <div class="number" id="unmatched-count">--</div>
+                    <div class="label">未匹配</div>
+                </div>
+                <div class="stat-card review">
+                    <div class="number" id="review-count">--</div>
+                    <div class="label">需复核</div>
+                </div>
+                <div class="stat-card advantage">
+                    <div class="number" id="advantage-count">--</div>
+                    <div class="label">有价格优势</div>
+                </div>
+                <div class="stat-card noadvantage">
+                    <div class="number" id="noadvantage-count">--</div>
+                    <div class="label">无价格优势</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">🔍 价格分析结果</div>
+                        <div class="update-time" id="update-time"></div>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn refresh-btn" onclick="loadAnalysisData()">🔄 刷新</button>
+                        <button class="action-btn export-btn" onclick="exportData()">📥 导出Excel</button>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterResults('all')">全部 <span class="count-badge" id="all-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('matched')">已匹配 <span class="count-badge" id="matched-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('unmatched')">未匹配 <span class="count-badge" id="unmatched-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('review')">需复核 <span class="count-badge" id="review-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('advantage')">有优势 <span class="count-badge" id="advantage-tab-count">--</span></button>
+                    <button class="filter-tab" onclick="filterResults('noadvantage')">无优势 <span class="count-badge" id="noadvantage-tab-count">--</span></button>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center;">
+                    <div style="position: relative; min-width: 150px; max-width: 280px;">
+                        <div id="brand-dropdown-btn" onclick="toggleBrandDropdown()" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.85rem; cursor: pointer; background: white; display: flex; justify-content: space-between; align-items: center; min-height: 32px;">
+                            <span id="brand-dropdown-label" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">全部品牌</span>
+                            <span style="font-size: 0.7rem; color: #9ca3af; margin-left: 4px;">▼</span>
+                        </div>
+                        <div id="brand-dropdown-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background: white; border: 1px solid #d1d5db; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 300px; overflow-y: auto; margin-top: 2px;">
+                            <div style="padding: 6px 10px; border-bottom: 1px solid #e5e7eb; display: flex; gap: 8px;">
+                                <a href="javascript:void(0)" onclick="brandSelectAll()" style="font-size: 0.75rem; color: #667eea; text-decoration: none;">全选</a>
+                                <a href="javascript:void(0)" onclick="brandDeselectAll()" style="font-size: 0.75rem; color: #ef4444; text-decoration: none;">清空</a>
+                            </div>
+                            <div id="brand-checkbox-list"></div>
+                        </div>
+                    </div>
+                    <div style="position: relative; min-width: 150px; max-width: 280px;">
+                        <div id="supplier-dropdown-btn" onclick="toggleSupplierDropdown()" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.85rem; cursor: pointer; background: white; display: flex; justify-content: space-between; align-items: center; min-height: 32px;">
+                            <span id="supplier-dropdown-label" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">全部供应商</span>
+                            <span style="font-size: 0.7rem; color: #9ca3af; margin-left: 4px;">▼</span>
+                        </div>
+                        <div id="supplier-dropdown-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background: white; border: 1px solid #d1d5db; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 300px; overflow-y: auto; margin-top: 2px;">
+                            <div style="padding: 6px 10px; border-bottom: 1px solid #e5e7eb; display: flex; gap: 8px;">
+                                <a href="javascript:void(0)" onclick="supplierSelectAll()" style="font-size: 0.75rem; color: #667eea; text-decoration: none;">全选</a>
+                                <a href="javascript:void(0)" onclick="supplierDeselectAll()" style="font-size: 0.75rem; color: #ef4444; text-decoration: none;">清空</a>
+                            </div>
+                            <div id="supplier-checkbox-list"></div>
+                        </div>
+                    </div>
+                    <div class="filter-group" style="flex: 1; min-width: 200px; max-width: 400px; margin-bottom: 0;">
+                        <input type="text" id="search-input" placeholder="搜索产品名称..." oninput="applyAnalysisFilters()" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.85rem; width: 100%;">
+                    </div>
+                    <button class="action-btn" onclick="clearAnalysisFilters()" style="background: #f3f4f6; color: #6b7280; padding: 6px 12px; border-radius: 6px; border: none; font-size: 0.85rem; cursor: pointer;">清除筛选</button>
+                </div>
+
+                <div id="results-container">
+                    <div class="loading">加载中...</div>
+                </div>
+
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </div>
+
+        <div id="market-panel" class="content">
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="number" id="market-total">--</div>
+                    <div class="label">总记录数</div>
+                </div>
+                <div class="stat-card matched">
+                    <div class="number" id="market-brands">--</div>
+                    <div class="label">品牌数</div>
+                </div>
+                <div class="stat-card unmatched">
+                    <div class="number" id="market-types">--</div>
+                    <div class="label">产品类型</div>
+                </div>
+                <div class="stat-card review">
+                    <div class="number" id="market-files">--</div>
+                    <div class="label">来源文件</div>
+                </div>
+            </div>
+
+            <div class="stats-details" id="market-stats-details"></div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">📋 清洗数据列表 <span id="market-count-label"></span></div>
+                    <div class="update-time" id="market-update-time"></div>
+                    <div class="actions">
+                        <button class="action-btn refresh-btn" onclick="loadMarketData()">🔄 刷新</button>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <div class="filter-group">
+                        <label>品牌筛选</label>
+                        <select id="brand-filter" onchange="applyMarketFilters()">
+                            <option value="">全部品牌</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>产品类型</label>
+                        <select id="type-filter" onchange="applyMarketFilters()">
+                            <option value="">全部类型</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>系列筛选</label>
+                        <select id="series-filter" onchange="applyMarketFilters()">
+                            <option value="">全部系列</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>关键词搜索</label>
+                        <input type="text" id="search-filter" placeholder="搜索标题..." onkeyup="applyMarketFilters()">
+                    </div>
+                    <div class="filter-group">
+                        <label>价格区间</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="number" id="min-price-filter" placeholder="最低价" onchange="applyMarketFilters()" style="width: 50%;">
+                            <input type="number" id="max-price-filter" placeholder="最高价" onchange="applyMarketFilters()" style="width: 50%;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>品牌</th>
+                                <th>原始标题</th>
+                                <th>价格</th>
+                                <th>容量</th>
+                                <th>产品类型</th>
+                                <th>系列</th>
+                                <th>店铺</th>
+                                <th>链接</th>
+                                <th>来源</th>
+                            </tr>
+                        </thead>
+                        <tbody id="market-data-body">
+                            <tr><td colspan="10" class="loading">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="market-pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allResults = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const pageSize = 15;
+        let selectedBrands = new Set();
+        let selectedSuppliers = new Set();
+        let analysisSearchText = '';
+        let brandDropdownOpen = false;
+        let supplierDropdownOpen = false;
+        let rejectionsMap = {}; // { queryName: [{title, price, shop}, ...] }
+
+        let allMarketData = [];
+        let filteredMarketData = [];
+        let currentMarketPage = 1;
+        const marketPageSize = 50;
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'analysis') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('analysis-panel').classList.add('active');
+                loadAnalysisData();
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('market-panel').classList.add('active');
+                loadMarketData();
+            }
+        }
+
+        async function loadAnalysisData(keepPage) {
+            try {
+                const savedPage = keepPage ? currentPage : 1;
+                const summaryRes = await fetch('/api/summary');
+                const summary = await summaryRes.json();
+                updateSummary(summary);
+
+                const resultsRes = await fetch('/api/results');
+                allResults = await resultsRes.json();
+
+                // 加载拒绝记录
+                const rejRes = await fetch('/api/rejections');
+                rejectionsMap = await rejRes.json();
+
+                // 应用拒绝记录：过滤候选、重算最低价和价格优势
+                applyRejectionsToResults();
+
+                updateAdvantageCounts();
+                populateBrandSelect();
+                populateSupplierSelect();
+
+                // 恢复页码
+                const maxPage = Math.ceil(getFilteredResults().length / pageSize);
+                currentPage = (savedPage <= maxPage) ? savedPage : 1;
+                renderResults();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+            }
+        }
+
+        function isCandidateRejected(queryName, candidate) {
+            if (!candidate || !rejectionsMap[queryName]) return false;
+            return rejectionsMap[queryName].some(r =>
+                r.title === candidate.title && Number(r.price) === Number(candidate.price) && r.shop === (candidate.shop || '')
+            );
+        }
+
+        function applyRejectionsToResults() {
+            allResults.forEach(result => {
+                const queryName = result.queryName;
+                if (!result.candidates || !rejectionsMap[queryName]) return;
+
+                // 过滤掉被拒绝的候选
+                result.candidates = result.candidates.map(c => {
+                    if (c && isCandidateRejected(queryName, c)) return null;
+                    return c;
+                });
+
+                // 从剩余有效候选中重算参考价（优先可信渠道）
+                const selectBestCandidate = (candidates) => {
+                    if (!candidates || candidates.length === 0) return null;
+                    const trusted = candidates.filter(c => getShopTrustScore(c.shop, result.brand) > 0);
+                    if (trusted.length > 0) {
+                        return trusted.sort((a, b) => a.price - b.price)[0];
+                    }
+                    return candidates.sort((a, b) => a.price - b.price)[0];
+                };
+                const validCandidates = result.candidates.filter(c => c && !c.needsReview);
+                const allValidCandidates = result.candidates.filter(c => c);
+                const newMinCandidate = validCandidates.length > 0
+                    ? selectBestCandidate(validCandidates)
+                    : (allValidCandidates.length > 0 ? selectBestCandidate(allValidCandidates) : null);
+
+                if (newMinCandidate) {
+                    result.minPrice = newMinCandidate.price;
+                    result.minPriceItem = {
+                        title: newMinCandidate.title,
+                        original_title: newMinCandidate.original_title || newMinCandidate.title,
+                        price: newMinCandidate.price,
+                        shop: newMinCandidate.shop || '',
+                        link: newMinCandidate.link || ''
+                    };
+                    // 重算价格优势
+                    if (result.supplierPrice) {
+                        const diff = result.supplierPrice - newMinCandidate.price;
+                        const pct = ((diff / newMinCandidate.price) * 100).toFixed(1);
+                        result.priceAdvantage = diff <= 0
+                            ? `低于市场${Math.abs(pct)}%`
+                            : `高于市场${pct}%`;
+                    }
+                    // 重算推荐价优势
+                    if (result.youzanCostPrice && newMinCandidate.price) {
+                        const recDiff = result.youzanCostPrice - newMinCandidate.price;
+                        result.recommendedPriceAdvantage = recDiff < 0
+                            ? `成本价低于市场参考价 ${Math.abs(recDiff).toFixed(1)} 元`
+                            : `成本价高于市场参考价 ${recDiff.toFixed(1)} 元`;
+                    }
+                    result.hasAdvantage = result.recommendedPriceAdvantage.includes('成本价低于市场参考价') || result.priceAdvantage.includes('低于市场');
+                } else {
+                    // 所有候选都被拒绝了
+                    result.minPrice = '--';
+                    result.minPriceItem = null;
+                    result.priceAdvantage = '所有候选已拒绝';
+                    result.recommendedPriceAdvantage = '所有候选已拒绝';
+                    result.hasAdvantage = false;
+                    if (result.status === '已匹配') result.status = '需要人工复核';
+                }
+
+                // 更新市场报价数量（原始数量减去candidates中被拒绝的数量）
+                const rejectedInCandidates = result.candidates.filter(c => c === null).length;
+                // marketCount原始值包含所有匹配（可能>10），减去candidates中被拒绝的
+                // 需要从原始marketCount减去，但原始值可能已被修改，所以用candidates总数+原始marketCount-10来推算
+                // 简化：marketCount = 原始marketCount - 被拒绝数
+                if (!result._originalMarketCount) result._originalMarketCount = result.marketCount;
+                result.marketCount = Math.max(0, result._originalMarketCount - rejectedInCandidates);
+            });
+        }
+
+        function populateBrandSelect() {
+            const brandSet = new Set();
+            allResults.forEach(r => {
+                if (r.brand) brandSet.add(r.brand);
+            });
+            const brands = [...brandSet].sort();
+            const listEl = document.getElementById('brand-checkbox-list');
+            listEl.innerHTML = '';
+            brands.forEach(b => {
+                const count = allResults.filter(r => r.brand === b).length;
+                const div = document.createElement('div');
+                div.style.cssText = 'padding: 4px 10px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;';
+                div.onmouseover = function() { this.style.background = '#f3f4f6'; };
+                div.onmouseout = function() { this.style.background = ''; };
+                div.innerHTML = `<input type="checkbox" id="brand-cb-${b.replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g,'_')}" value="${b}" ${selectedBrands.has(b)?'checked':''} onclick="toggleBrand('${b.replace(/'/g,"\\'")}')"><label for="brand-cb-${b.replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g,'_')}" style="cursor:pointer;flex:1;">${b} (${count})</label>`;
+                listEl.appendChild(div);
+            });
+            updateBrandDropdownLabel();
+        }
+
+        function populateSupplierSelect() {
+            const supplierSet = new Set();
+            allResults.forEach(r => {
+                if (r.sourceFile) supplierSet.add(r.sourceFile);
+            });
+            const suppliers = [...supplierSet].sort();
+            const listEl = document.getElementById('supplier-checkbox-list');
+            listEl.innerHTML = '';
+            suppliers.forEach(s => {
+                const count = allResults.filter(r => r.sourceFile === s).length;
+                const div = document.createElement('div');
+                div.style.cssText = 'padding: 4px 10px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;';
+                div.onmouseover = function() { this.style.background = '#f3f4f6'; };
+                div.onmouseout = function() { this.style.background = ''; };
+                div.innerHTML = `<input type="checkbox" id="supplier-cb-${s.replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g,'_')}" value="${s}" ${selectedSuppliers.has(s)?'checked':''} onclick="toggleSupplier('${s.replace(/'/g,"\\'")}')"><label for="supplier-cb-${s.replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g,'_')}" style="cursor:pointer;flex:1;">${s} (${count})</label>`;
+                listEl.appendChild(div);
+            });
+            updateSupplierDropdownLabel();
+        }
+
+        function toggleSupplierDropdown() {
+            supplierDropdownOpen = !supplierDropdownOpen;
+            document.getElementById('supplier-dropdown-list').style.display = supplierDropdownOpen ? 'block' : 'none';
+        }
+
+        function toggleSupplier(supplier) {
+            if (selectedSuppliers.has(supplier)) {
+                selectedSuppliers.delete(supplier);
+            } else {
+                selectedSuppliers.add(supplier);
+            }
+            updateSupplierDropdownLabel();
+            applyAnalysisFilters();
+        }
+
+        function supplierSelectAll() {
+            const supplierSet = new Set();
+            allResults.forEach(r => { if (r.sourceFile) supplierSet.add(r.sourceFile); });
+            selectedSuppliers = new Set(supplierSet);
+            document.querySelectorAll('#supplier-checkbox-list input[type=checkbox]').forEach(cb => cb.checked = true);
+            updateSupplierDropdownLabel();
+            applyAnalysisFilters();
+        }
+
+        function supplierDeselectAll() {
+            selectedSuppliers.clear();
+            document.querySelectorAll('#supplier-checkbox-list input[type=checkbox]').forEach(cb => cb.checked = false);
+            updateSupplierDropdownLabel();
+            applyAnalysisFilters();
+        }
+
+        function updateSupplierDropdownLabel() {
+            const label = document.getElementById('supplier-dropdown-label');
+            if (selectedSuppliers.size === 0) {
+                label.textContent = '全部供应商';
+            } else {
+                const names = [...selectedSuppliers].sort();
+                label.textContent = names.length <= 2 ? names.join(', ') : names.slice(0, 2).join(', ') + ' 等' + names.length + '个供应商';
+            }
+        }
+
+        function toggleBrandDropdown() {
+            brandDropdownOpen = !brandDropdownOpen;
+            document.getElementById('brand-dropdown-list').style.display = brandDropdownOpen ? 'block' : 'none';
+        }
+
+        function toggleBrand(brand) {
+            if (selectedBrands.has(brand)) {
+                selectedBrands.delete(brand);
+            } else {
+                selectedBrands.add(brand);
+            }
+            updateBrandDropdownLabel();
+            applyAnalysisFilters();
+        }
+
+        function brandSelectAll() {
+            const brandSet = new Set();
+            allResults.forEach(r => { if (r.brand) brandSet.add(r.brand); });
+            selectedBrands = new Set(brandSet);
+            document.querySelectorAll('#brand-checkbox-list input[type=checkbox]').forEach(cb => cb.checked = true);
+            updateBrandDropdownLabel();
+            applyAnalysisFilters();
+        }
+
+        function brandDeselectAll() {
+            selectedBrands.clear();
+            document.querySelectorAll('#brand-checkbox-list input[type=checkbox]').forEach(cb => cb.checked = false);
+            updateBrandDropdownLabel();
+            applyAnalysisFilters();
+        }
+
+        function updateBrandDropdownLabel() {
+            const label = document.getElementById('brand-dropdown-label');
+            if (selectedBrands.size === 0) {
+                label.textContent = '全部品牌';
+            } else {
+                const names = [...selectedBrands].sort();
+                label.textContent = names.length <= 2 ? names.join(', ') : names.slice(0, 2).join(', ') + ' 等' + names.length + '个品牌';
+            }
+        }
+
+        // 点击外部关闭下拉
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('brand-dropdown-list');
+            const btn = document.getElementById('brand-dropdown-btn');
+            if (brandDropdownOpen && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+                brandDropdownOpen = false;
+                dropdown.style.display = 'none';
+            }
+            const sDropdown = document.getElementById('supplier-dropdown-list');
+            const sBtn = document.getElementById('supplier-dropdown-btn');
+            if (supplierDropdownOpen && !sDropdown.contains(e.target) && !sBtn.contains(e.target)) {
+                supplierDropdownOpen = false;
+                sDropdown.style.display = 'none';
+            }
+        });
+
+        function applyAnalysisFilters() {
+            analysisSearchText = document.getElementById('search-input').value.trim().toLowerCase();
+            currentPage = 1;
+            renderResults();
+        }
+
+        function clearAnalysisFilters() {
+            selectedBrands.clear();
+            selectedSuppliers.clear();
+            document.querySelectorAll('#brand-checkbox-list input[type=checkbox]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('#supplier-checkbox-list input[type=checkbox]').forEach(cb => cb.checked = false);
+            document.getElementById('search-input').value = '';
+            analysisSearchText = '';
+            updateBrandDropdownLabel();
+            updateSupplierDropdownLabel();
+            currentPage = 1;
+            renderResults();
+        }
+
+        function updateSummary(summary) {
+            document.getElementById('total-count').textContent = summary.total;
+            document.getElementById('matched-count').textContent = summary.matchedCount;
+            document.getElementById('unmatched-count').textContent = summary.unmatchedCount;
+            document.getElementById('review-count').textContent = summary.reviewCount || 0;
+            document.getElementById('update-time').textContent = '更新时间: ' + summary.updateTime;
+            
+            document.getElementById('all-count').textContent = summary.total;
+            document.getElementById('matched-tab-count').textContent = summary.matchedCount;
+            document.getElementById('unmatched-tab-count').textContent = summary.unmatchedCount;
+            document.getElementById('review-tab-count').textContent = summary.reviewCount || 0;
+        }
+
+        function updateAdvantageCounts() {
+            const advantageCount = allResults.filter(r => r.hasAdvantage).length;
+            const noAdvantageCount = allResults.filter(r => r.status === '已匹配' && !r.hasAdvantage).length;
+            document.getElementById('advantage-count').textContent = advantageCount;
+            document.getElementById('noadvantage-count').textContent = noAdvantageCount;
+            document.getElementById('advantage-tab-count').textContent = advantageCount;
+            document.getElementById('noadvantage-tab-count').textContent = noAdvantageCount;
+        }
+
+        function filterResults(filter) {
+            currentFilter = filter;
+            currentPage = 1;
+            
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            const filterMap = { 'all': 0, 'matched': 1, 'unmatched': 2, 'review': 3, 'advantage': 4, 'noadvantage': 5 };
+            document.querySelectorAll('.filter-tab')[filterMap[filter]].classList.add('active');
+            
+            renderResults();
+        }
+
+        function getFilteredResults() {
+            let results;
+            switch (currentFilter) {
+                case 'all': results = allResults; break;
+                case 'matched': results = allResults.filter(r => r.status === '已匹配'); break;
+                case 'unmatched': results = allResults.filter(r => r.status === '未匹配'); break;
+                case 'review': results = allResults.filter(r => r.status === '需要人工复核'); break;
+                case 'advantage': results = allResults.filter(r => r.hasAdvantage); break;
+                case 'noadvantage': results = allResults.filter(r => r.status === '已匹配' && !r.hasAdvantage); break;
+                default: results = allResults;
+            }
+            // 品牌筛选（多选）
+            if (selectedBrands.size > 0) {
+                results = results.filter(r => selectedBrands.has(r.brand));
+            }
+            // 供应商筛选（多选）
+            if (selectedSuppliers.size > 0) {
+                results = results.filter(r => selectedSuppliers.has(r.sourceFile));
+            }
+            // 搜索筛选
+            if (analysisSearchText) {
+                results = results.filter(r => {
+                    const name = (r.queryName || '').toLowerCase();
+                    const category = (r.category || '').toLowerCase();
+                    const brand = (r.brand || '').toLowerCase();
+                    return name.includes(analysisSearchText) || category.includes(analysisSearchText) || brand.includes(analysisSearchText);
+                });
+            }
+            return results;
+        }
+
+        function renderResults() {
+            const filtered = getFilteredResults();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            const start = (currentPage - 1) * pageSize;
+            const pageData = filtered.slice(start, start + pageSize);
+
+            // 清除旧的候选状态，避免内存泄漏
+            Object.keys(candidateStates).forEach(k => delete candidateStates[k]);
+
+            const container = document.getElementById('results-container');
+            
+            if (pageData.length === 0) {
+                container.innerHTML = '<div class="loading">暂无数据</div>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = pageData.map((result, resultIndex) => {
+                const globalIdx = (currentPage - 1) * pageSize + resultIndex;
+                return `
+                <div class="result-card" data-result-idx="${globalIdx}">
+                    <div class="result-header">
+                        <div>
+                            <span class="status-badge ${
+                                result.status === '已匹配' ? 'status-matched' : 
+                                result.status === '需要人工复核' ? 'status-review' : 'status-unmatched'
+                            }">${result.status}</span>
+                        </div>
+                        <div class="query-name">${result.queryName}</div>
+                        <div class="price-info">
+                            <div class="price-value">¥${result.supplierPrice ? Number(result.supplierPrice).toFixed(2) : '--'}</div>
+                            <div class="price-type">${result.priceType}</div>
+                        </div>
+                        <div class="price-info" style="border-left: 2px solid #667eea; padding-left: 8px;">
+                            <div style="font-size: 0.7rem; color: #667eea; font-weight: 600;">有赞成本价</div>
+                            <div class="price-value" style="color: #667eea;">¥${result.youzanCostPrice ? Number(result.youzanCostPrice).toFixed(2) : '--'}</div>
+                        </div>
+                        <div class="price-info" style="border-left: 2px solid #f59e0b; padding-left: 8px;">
+                            <div style="font-size: 0.7rem; color: #f59e0b; font-weight: 600;">推荐售价</div>
+                            <div class="price-value" style="color: #f59e0b;">¥${result.suggestedRetailPrice ? Number(result.suggestedRetailPrice).toFixed(2) : '--'}</div>
+                        </div>
+                        <div>
+                            <span class="advantage-badge ${result.hasAdvantage ? 'advantage-positive' : 'advantage-negative'}">
+                                ${result.recommendedPriceAdvantage || result.priceAdvantage || '--'}
+                            </span>
+                        </div>
+                        <div class="market-count">${result.marketCount}个报价</div>
+                        <div class="min-price-box">
+                            <div>参考价 <span class="min-price-value">¥${result.minPrice ? Number(result.minPrice).toFixed(2) : '--'}</span></div>
+                        </div>
+                        <div style="font-size: 0.7rem; color: #9ca3af;">${result.category || '--'}</div>
+                    </div>
+                    ${result.minPriceItem && result.minPriceItem.title ? `
+                        <div class="min-price-detail">
+                            <div class="min-price-detail-title">⭐ 参考价详情</div>
+                            <div style="font-size: 0.75rem; line-height: 1.4;">
+                                <div style="font-weight: 500;">${result.minPriceItem.original_title || result.minPriceItem.title}</div>
+                                <div>店铺: ${result.minPriceItem.shop || '--'} ${getTrustLabel(result.minPriceItem.shop, result.brand)}</div>
+                                ${result.minPriceItem.link ? '<div>链接: <a href="' + result.minPriceItem.link + '" target="_blank" style="color:#667eea;">🔗 点击查看</a></div>' : ''}
+                                <div style="margin-top:4px; display:flex; gap:4px;">
+                                    <button onclick="tagMinPriceCandidate(this, '符合')" style="padding:1px 8px; border-radius:3px; border:1px solid #10b981; background:#f0fdf4; color:#10b981; font-size:0.65rem; cursor:pointer;">符合</button>
+                                    <button onclick="rejectMinPriceCandidate(${globalIdx})" style="padding:1px 8px; border-radius:3px; border:1px solid #ef4444; background:#fef2f2; color:#ef4444; font-size:0.65rem; cursor:pointer;">不符合</button>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${result.candidates && result.candidates.filter(c=>c).length > 0 ? `
+                        <div class="candidates-section" id="candidates-section-${globalIdx}">
+                            <div class="candidates-header">📦 候选报价 <span id="candidates-count-${globalIdx}">${result.candidates.filter(c=>c).length}</span>个</div>
+                            <div class="candidates-grid" id="candidates-grid-${globalIdx}">
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `}).join('');
+
+            renderPagination(totalPages);
+
+            // 渲染所有候选卡片
+            pageData.forEach((result, idx) => {
+                const globalIdx = (currentPage - 1) * pageSize + idx;
+                renderCandidates(result, globalIdx);
+            });
+        }
+
+        function renderPagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+            let html = `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>`;
+            const maxVisible = 5;
+            let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let end = Math.min(totalPages, start + maxVisible - 1);
+            for (let i = start; i <= end; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>`;
+            pagination.innerHTML = html;
+        }
+
+        const DISPLAY_COUNT = 4; // 前端展示的候选数量
+
+        // 店铺可信度评分与标签（全局）
+        function getShopTrustScore(shopName, brandName) {
+            if (!shopName) return 0;
+            const s = String(shopName);
+            const brand = brandName ? String(brandName).trim() : '';
+            // 判断店铺名是否包含品牌名（品牌官方店）
+            const isBrandShop = brand && (
+                s.includes(brand) ||
+                (brand && new RegExp(brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(s))
+            );
+            if (isBrandShop) {
+                if (/旗舰店/.test(s)) return 4;
+                if (/官方店|官方直营|品牌直销/.test(s)) return 4;
+                if (/自营/.test(s)) return 3;
+            }
+            if (/旗舰店/.test(s)) return 1;
+            if (/官方店|官方直营/.test(s)) return 1;
+            if (/自营|京东超市/.test(s)) return 2;
+            if (/天猫超市|天猫国际/.test(s)) return 2;
+            if (/会员店|沃尔玛|山姆/.test(s)) return 2;
+            if (/专卖店|专营店|授权店/.test(s)) return 1;
+            return 0;
+        }
+        function getTrustLabel(shopName, brandName) {
+            const score = getShopTrustScore(shopName, brandName);
+            if (score >= 4) return '<span style="background:#dcfce7;color:#16a34a;padding:0 4px;border-radius:2px;font-size:0.6rem;font-weight:600;">品牌官方</span>';
+            if (score === 3) return '<span style="background:#d1fae5;color:#059669;padding:0 4px;border-radius:2px;font-size:0.6rem;font-weight:600;">品牌自营</span>';
+            if (score === 2) return '<span style="background:#dbeafe;color:#2563eb;padding:0 4px;border-radius:2px;font-size:0.6rem;font-weight:600;">平台自营</span>';
+            if (score === 1) return '<span style="background:#fef3c7;color:#d97706;padding:0 4px;border-radius:2px;font-size:0.6rem;font-weight:600;">授权专卖</span>';
+            return '';
+        }
+        // 存储每个结果的候选状态：{ globalIdx: { visible: [候选索引], rejected: [候选索引] } }
+        const candidateStates = {};
+
+        function renderCandidates(result, globalIdx) {
+            const grid = document.getElementById(`candidates-grid-${globalIdx}`);
+            if (!grid || !result.candidates) return;
+
+            // 初始化状态（仅用于跟踪可见候选索引）
+            if (!candidateStates[globalIdx]) {
+                candidateStates[globalIdx] = {
+                    visible: result.candidates.map((c, i) => c ? i : -1).filter(i => i >= 0),
+                    rejected: []
+                };
+            }
+
+            // 按可信渠道优先排序候选
+
+            // 收集并排序：可信渠道优先，同级别按价格从低到高
+            const validCandidates = [];
+            result.candidates.forEach((c, i) => {
+                if (c) validCandidates.push({ candidate: c, origIdx: i });
+            });
+            validCandidates.sort((a, b) => {
+                const aTrust = getShopTrustScore(a.candidate.shop, result.brand);
+                const bTrust = getShopTrustScore(b.candidate.shop, result.brand);
+                if (bTrust !== aTrust) return bTrust - aTrust;
+                return a.candidate.price - b.candidate.price;
+            });
+            const displayCandidates = validCandidates.slice(0, DISPLAY_COUNT);
+
+            // 更新计数
+            const countEl = document.getElementById(`candidates-count-${globalIdx}`);
+            if (countEl) countEl.textContent = validCandidates.length;
+
+            grid.innerHTML = displayCandidates.map((item, displayIdx) => {
+                const candidate = item.candidate;
+                const candIdx = item.origIdx;
+                return `
+                    <div class="candidate-card" data-cand-idx="${candIdx}">
+                        <div class="candidate-header">
+                            <span style="font-size: 0.65rem; color: #667eea; font-weight: 600;">候选${displayIdx + 1}</span>
+                            <span class="similarity-tag">${candidate.similarity}</span>
+                            ${candidate.needsReview ? '<span class="similarity-tag warning-tag">需复核</span>' : ''}
+                        </div>
+                        <div class="candidate-title">${candidate.original_title || candidate.title}</div>
+                        <div style="font-weight: 600; color: #ef4444;">¥${candidate.price} ${candidate.spec ? '<span style="font-weight:400;color:#6b7280;font-size:0.7rem;">' + candidate.spec + '</span>' : ''}</div>
+                        <div class="candidate-shop">店铺: ${candidate.shop || '--'} ${getTrustLabel(candidate.shop, result.brand)}</div>
+                        ${candidate.link ? '<div style="margin-top:2px;"><a href="' + candidate.link + '" target="_blank" style="color:#667eea;font-size:0.7rem;text-decoration:none;">🔗 查看链接</a></div>' : ''}
+                        <div style="margin-top:4px; display:flex; gap:4px;">
+                            <button onclick="tagCandidate(this, '符合', ${globalIdx}, ${candIdx})" style="padding:1px 8px; border-radius:3px; border:1px solid #10b981; background:#f0fdf4; color:#10b981; font-size:0.65rem; cursor:pointer;">符合</button>
+                            <button onclick="rejectCandidate(${globalIdx}, ${candIdx})" style="padding:1px 8px; border-radius:3px; border:1px solid #ef4444; background:#fef2f2; color:#ef4444; font-size:0.65rem; cursor:pointer;">不符合</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function tagCandidate(btn, tag, globalIdx, candIdx) {
+            const card = btn.closest('.candidate-card');
+            const buttons = card.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.style.fontWeight = '400';
+                b.style.opacity = '0.6';
+            });
+            btn.style.fontWeight = '700';
+            btn.style.opacity = '1';
+            let tagEl = card.querySelector('.tag-result');
+            if (!tagEl) {
+                tagEl = document.createElement('span');
+                tagEl.className = 'tag-result';
+                tagEl.style.cssText = 'display:inline-block;margin-left:6px;padding:1px 6px;border-radius:3px;font-size:0.65rem;font-weight:600;';
+                card.querySelector('.candidate-header').appendChild(tagEl);
+            }
+            if (tag === '符合') {
+                tagEl.textContent = '✓ 符合';
+                tagEl.style.background = '#dcfce7';
+                tagEl.style.color = '#16a34a';
+            }
+        }
+
+        async function rejectCandidate(globalIdx, candIdx) {
+            const filtered = getFilteredResults();
+            if (globalIdx < 0 || globalIdx >= filtered.length) return;
+
+            const result = filtered[globalIdx];
+            if (!result || !result.candidates) return;
+            const candidate = result.candidates[candIdx];
+            if (!candidate) return;
+
+            // 调用后端API持久化拒绝记录
+            try {
+                await fetch('/api/reject-candidate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        queryName: result.queryName,
+                        candidateTitle: candidate.title,
+                        candidatePrice: candidate.price,
+                        candidateShop: candidate.shop || ''
+                    })
+                });
+                // 同步版本号，避免5秒后重复刷新
+                try { const vr = await fetch('/api/data-version'); const vd = await vr.json(); lastDataVersion = vd.version; } catch(e){}
+            } catch (e) { console.error('保存拒绝记录失败:', e); }
+
+            // 前端也标记为null
+            result.candidates[candIdx] = null;
+
+            // 更新marketCount
+            if (!result._originalMarketCount) result._originalMarketCount = result.marketCount;
+            result.marketCount = Math.max(0, result._originalMarketCount - result.candidates.filter(c => c === null).length);
+
+            // 从剩余有效候选中重算最低价
+            recalcResultFromCandidates(result);
+
+            // 局部更新DOM，不重新渲染整个页面
+            updateResultCard(result, globalIdx);
+        }
+
+        function tagMinPriceCandidate(btn, tag) {
+            const card = btn.closest('.min-price-detail');
+            const buttons = card.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.style.fontWeight = '400';
+                b.style.opacity = '0.6';
+            });
+            btn.style.fontWeight = '700';
+            btn.style.opacity = '1';
+            let tagEl = card.querySelector('.tag-result');
+            if (!tagEl) {
+                tagEl = document.createElement('span');
+                tagEl.className = 'tag-result';
+                tagEl.style.cssText = 'display:inline-block;margin-left:6px;padding:1px 6px;border-radius:3px;font-size:0.65rem;font-weight:600;';
+                card.querySelector('.min-price-detail-title').appendChild(tagEl);
+            }
+            if (tag === '符合') {
+                tagEl.textContent = '✓ 符合';
+                tagEl.style.background = '#dcfce7';
+                tagEl.style.color = '#16a34a';
+            }
+        }
+
+        async function rejectMinPriceCandidate(globalIdx) {
+            const filtered = getFilteredResults();
+            if (globalIdx < 0 || globalIdx >= filtered.length) return;
+
+            const result = filtered[globalIdx];
+            if (!result.minPriceItem) return;
+
+            // 找到最低价对应的候选并拒绝
+            const minItem = result.minPriceItem;
+            let candIdx = -1;
+            if (result.candidates) {
+                for (let i = 0; i < result.candidates.length; i++) {
+                    const c = result.candidates[i];
+                    if (c && c.title === minItem.title && Number(c.price) === Number(minItem.price) && (c.shop || '') === (minItem.shop || '')) {
+                        candIdx = i;
+                        break;
+                    }
+                }
+            }
+
+            // 调用后端API持久化拒绝记录
+            try {
+                await fetch('/api/reject-candidate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        queryName: result.queryName,
+                        candidateTitle: minItem.title,
+                        candidatePrice: minItem.price,
+                        candidateShop: minItem.shop || ''
+                    })
+                });
+                // 同步版本号，避免5秒后重复刷新
+                try { const vr = await fetch('/api/data-version'); const vd = await vr.json(); lastDataVersion = vd.version; } catch(e){}
+            } catch (e) { console.error('保存拒绝记录失败:', e); }
+
+            // 从候选中移除
+            if (candIdx >= 0) {
+                result.candidates[candIdx] = null;
+            }
+
+            // 更新marketCount
+            if (!result._originalMarketCount) result._originalMarketCount = result.marketCount;
+            result.marketCount = Math.max(0, result._originalMarketCount - result.candidates.filter(c => c === null).length);
+
+            // 重算最低价
+            recalcResultFromCandidates(result);
+
+            // 局部更新DOM
+            updateResultCard(result, globalIdx);
+        }
+
+        // 局部更新单个结果卡片，不重新渲染整个页面
+        function updateResultCard(result, globalIdx) {
+            const card = document.querySelector(`.result-card[data-result-idx="${globalIdx}"]`);
+            if (!card) return;
+
+            // 更新最低价数字
+            const minPriceEl = card.querySelector('.min-price-value');
+            if (minPriceEl) {
+                minPriceEl.textContent = result.minPrice ? `¥${Number(result.minPrice).toFixed(2)}` : '--';
+            }
+
+            // 更新价格优势标签
+            const advantageEl = card.querySelector('.advantage-badge');
+            if (advantageEl) {
+                advantageEl.textContent = result.recommendedPriceAdvantage || result.priceAdvantage || '--';
+                advantageEl.className = 'advantage-badge ' + (result.hasAdvantage ? 'advantage-positive' : 'advantage-negative');
+            }
+
+            // 更新市场报价数量
+            const marketCountEl = card.querySelector('.market-count');
+            if (marketCountEl) {
+                marketCountEl.textContent = (result.marketCount || 0) + '个报价';
+            }
+
+            // 更新最低价详情
+            const detailEl = card.querySelector('.min-price-detail');
+            if (result.minPriceItem && result.minPriceItem.title) {
+                const detailHtml = `
+                    <div class="min-price-detail-title">⭐ 参考价详情</div>
+                    <div style="font-size: 0.75rem; line-height: 1.4;">
+                        <div style="font-weight: 500;">${result.minPriceItem.original_title || result.minPriceItem.title}</div>
+                        <div>店铺: ${result.minPriceItem.shop || '--'} ${getTrustLabel(result.minPriceItem.shop, result.brand)}</div>
+                        ${result.minPriceItem.link ? '<div>链接: <a href="' + result.minPriceItem.link + '" target="_blank" style="color:#667eea;">🔗 点击查看</a></div>' : ''}
+                        <div style="margin-top:4px; display:flex; gap:4px;">
+                            <button onclick="tagMinPriceCandidate(this, '符合')" style="padding:1px 8px; border-radius:3px; border:1px solid #10b981; background:#f0fdf4; color:#10b981; font-size:0.65rem; cursor:pointer;">符合</button>
+                            <button onclick="rejectMinPriceCandidate(${globalIdx})" style="padding:1px 8px; border-radius:3px; border:1px solid #ef4444; background:#fef2f2; color:#ef4444; font-size:0.65rem; cursor:pointer;">不符合</button>
+                        </div>
+                    </div>
+                `;
+                if (detailEl) {
+                    detailEl.innerHTML = detailHtml;
+                }
+            } else if (detailEl) {
+                detailEl.innerHTML = '<div class="min-price-detail-title">⭐ 参考价详情</div><div style="font-size:0.75rem;color:#9ca3af;">所有候选已拒绝</div>';
+            }
+
+            // 更新候选列表
+            renderCandidates(result, globalIdx);
+        }
+
+        function recalcResultFromCandidates(result) {
+            const selectBestCandidate = (candidates) => {
+                if (!candidates || candidates.length === 0) return null;
+                const trusted = candidates.filter(c => getShopTrustScore(c.shop) > 0);
+                if (trusted.length > 0) {
+                    return trusted.sort((a, b) => a.price - b.price)[0];
+                }
+                return candidates.sort((a, b) => a.price - b.price)[0];
+            };
+            const validCandidates = result.candidates.filter(c => c && !c.needsReview);
+            const allValidCandidates = result.candidates.filter(c => c);
+            const newMinCandidate = validCandidates.length > 0
+                ? selectBestCandidate(validCandidates)
+                : (allValidCandidates.length > 0 ? selectBestCandidate(allValidCandidates) : null);
+
+            if (newMinCandidate) {
+                result.minPrice = newMinCandidate.price;
+                result.minPriceItem = {
+                    title: newMinCandidate.title,
+                    original_title: newMinCandidate.original_title || newMinCandidate.title,
+                    price: newMinCandidate.price,
+                    shop: newMinCandidate.shop || '',
+                    link: newMinCandidate.link || ''
+                };
+                if (result.supplierPrice) {
+                    const diff = result.supplierPrice - newMinCandidate.price;
+                    const pct = ((diff / newMinCandidate.price) * 100).toFixed(1);
+                    result.priceAdvantage = diff <= 0
+                        ? `低于市场${Math.abs(pct)}%`
+                        : `高于市场${pct}%`;
+                }
+                if (result.recommendedPrice && newMinCandidate.price) {
+                    const recDiff = result.recommendedPrice - newMinCandidate.price;
+                    result.recommendedPriceAdvantage = recDiff < 0
+                        ? `成本价低于市场参考价 ${Math.abs(recDiff).toFixed(1)} 元`
+                        : `成本价高于市场参考价 ${recDiff.toFixed(1)} 元`;
+                }
+                result.hasAdvantage = result.recommendedPriceAdvantage.includes('成本价低于市场参考价') || result.priceAdvantage.includes('低于市场');
+            } else {
+                result.minPrice = '--';
+                result.minPriceItem = null;
+                result.priceAdvantage = '所有候选已拒绝';
+                result.recommendedPriceAdvantage = '所有候选已拒绝';
+                result.hasAdvantage = false;
+                if (result.status === '已匹配') result.status = '需要人工复核';
+            }
+            // marketCount不在本地更新中修改，由applyRejectionsToResults统一处理
+        }
+
+        // updateMinPrice 已被 updateResultCard 替代
+
+        function goToPage(page) {
+            if (page < 1 || page > Math.ceil(getFilteredResults().length / pageSize)) return;
+            currentPage = page;
+            renderResults();
+        }
+
+        async function exportData() {
+            try {
+                const filtered = getFilteredResults();
+                if (filtered.length === 0) {
+                    alert('当前筛选结果为空，无法导出');
+                    return;
+                }
+                // 发送筛选后的数据到后端生成Excel
+                const exportData = filtered.map(r => ({
+                    status: r.status,
+                    category: r.category || '',
+                    brand: r.brand || '',
+                    queryName: r.queryName || '',
+                    supplierPrice: r.supplierPrice || '',
+                    youzanCostPrice: r.youzanCostPrice || '',
+                    suggestedRetailPrice: r.suggestedRetailPrice || '',
+                    priceType: r.priceType || '',
+                    priceAdvantage: r.recommendedPriceAdvantage || r.priceAdvantage || '',
+                    marketCount: r.marketCount || 0,
+                    minPrice: r.minPrice || '',
+                    minPriceTitle: r.minPriceItem ? (r.minPriceItem.original_title || r.minPriceItem.title || '') : '',
+                    minPriceShop: r.minPriceItem ? (r.minPriceItem.shop || '') : '',
+                    minPriceLink: r.minPriceItem ? (r.minPriceItem.link || '') : ''
+                }));
+                const response = await fetch('/api/export-filtered', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: exportData })
+                });
+                if (!response.ok) throw new Error('导出失败');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '价格优势分析结果_筛选.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('导出失败:', error);
+                alert('导出失败，请重试');
+            }
+        }
+
+        async function loadMarketData() {
+            try {
+                const summaryRes = await fetch('/api/cleaned-summary');
+                const summary = await summaryRes.json();
+                updateMarketSummary(summary);
+                
+                const dataRes = await fetch('/api/cleaned');
+                const dataJson = await dataRes.json();
+                allMarketData = dataJson.data || [];
+                if (allMarketData.length === 0) {
+                    const allDataRes = await fetch('/api/cleaned?pageSize=99999');
+                    const allDataJson = await allDataRes.json();
+                    allMarketData = allDataJson.data || [];
+                }
+                
+                populateMarketFilters(summary);
+                filteredMarketData = [...allMarketData];
+                renderMarketData();
+            } catch (error) {
+                console.error('加载市场数据失败:', error);
+            }
+        }
+
+        function updateMarketSummary(summary) {
+            document.getElementById('market-total').textContent = summary.total;
+            document.getElementById('market-brands').textContent = Object.keys(summary.brandCount || {}).length;
+            document.getElementById('market-types').textContent = Object.keys(summary.typeCount || {}).length;
+            document.getElementById('market-files').textContent = Object.keys(summary.fileCount || {}).length;
+            document.getElementById('market-update-time').textContent = '更新时间: ' + summary.updateTime;
+            
+            const statsHTML = `
+                <div class="stats-section">
+                    <h4>🔥 热门品牌</h4>
+                    <div class="stats-list">
+                        ${Object.entries(summary.brandCount || {})
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 15)
+                            .map(([brand, count]) => `
+                                <div class="stats-item">
+                                    <span class="name">${brand || '未知'}</span>
+                                    <span class="count">${count}</span>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+                <div class="stats-section">
+                    <h4>📦 产品类型分布</h4>
+                    <div class="stats-list">
+                        ${Object.entries(summary.typeCount || {})
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 15)
+                            .map(([type, count]) => `
+                                <div class="stats-item">
+                                    <span class="name">${type}</span>
+                                    <span class="count">${count}</span>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+                <div class="stats-section">
+                    <h4>🏷️ 系列分布</h4>
+                    <div class="stats-list">
+                        ${Object.entries(summary.seriesCount || {})
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 15)
+                            .map(([series, count]) => `
+                                <div class="stats-item">
+                                    <span class="name">${series}</span>
+                                    <span class="count">${count}</span>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('market-stats-details').innerHTML = statsHTML;
+        }
+
+        function populateMarketFilters(summary) {
+            const brands = new Set();
+            const types = new Set();
+            const seriesList = new Set();
+            
+            allMarketData.forEach(item => {
+                if (item.brand) brands.add(item.brand);
+                if (item.product_type) {
+                    item.product_type.split('|').forEach(t => { if (t) types.add(t); });
+                }
+                if (item.series) seriesList.add(item.series);
+            });
+
+            if (summary) {
+                Object.keys(summary.brandCount || {}).forEach(b => brands.add(b));
+                Object.keys(summary.typeCount || {}).forEach(t => types.add(t));
+                Object.keys(summary.seriesCount || {}).forEach(s => seriesList.add(s));
+            }
+            
+            const brandSelect = document.getElementById('brand-filter');
+            const typeSelect = document.getElementById('type-filter');
+            const seriesSelect = document.getElementById('series-filter');
+            brandSelect.innerHTML = '<option value="">全部品牌</option>';
+            typeSelect.innerHTML = '<option value="">全部类型</option>';
+            seriesSelect.innerHTML = '<option value="">全部系列</option>';
+            
+            [...brands].sort().forEach(brand => {
+                brandSelect.innerHTML += `<option value="${brand}">${brand}</option>`;
+            });
+            [...types].sort().forEach(type => {
+                typeSelect.innerHTML += `<option value="${type}">${type}</option>`;
+            });
+            [...seriesList].sort().forEach(s => {
+                seriesSelect.innerHTML += `<option value="${s}">${s}</option>`;
+            });
+        }
+
+        function applyMarketFilters() {
+            const brandFilter = document.getElementById('brand-filter').value;
+            const typeFilter = document.getElementById('type-filter').value;
+            const seriesFilter = document.getElementById('series-filter').value;
+            const search = document.getElementById('search-filter').value.toLowerCase();
+            const minPrice = parseFloat(document.getElementById('min-price-filter').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('max-price-filter').value) || Infinity;
+            
+            filteredMarketData = allMarketData.filter(item => {
+                if (brandFilter && item.brand !== brandFilter) return false;
+                if (typeFilter && !(item.product_type || '').includes(typeFilter)) return false;
+                if (seriesFilter && item.series !== seriesFilter) return false;
+                if (search && !item.title.toLowerCase().includes(search) && !((item.original_title || '').toLowerCase().includes(search))) return false;
+                if (item.price < minPrice || item.price > maxPrice) return false;
+                return true;
+            });
+            
+            currentMarketPage = 1;
+            renderMarketData();
+        }
+
+        function renderMarketData() {
+            const totalPages = Math.ceil(filteredMarketData.length / marketPageSize);
+            const start = (currentMarketPage - 1) * marketPageSize;
+            const pageData = filteredMarketData.slice(start, start + marketPageSize);
+
+            document.getElementById('market-count-label').textContent = `(${filteredMarketData.length} 条)`;
+
+            const tbody = document.getElementById('market-data-body');
+            
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="loading">暂无数据</td></tr>';
+                document.getElementById('market-pagination').innerHTML = '';
+                return;
+            }
+
+            tbody.innerHTML = pageData.map((item, index) => `
+                <tr>
+                    <td>${start + index + 1}</td>
+                    <td>${item.brand ? '<span class="badge badge-brand">' + item.brand + '</span>' : '-'}</td>
+                    <td class="title-cell" title="${item.original_title || item.title}">${item.original_title || item.title}</td>
+                    <td style="font-weight: 600; color: #ef4444;">¥${item.price}</td>
+                    <td>${item.capacity || item.spec || '-'}</td>
+                    <td>${item.product_type ? item.product_type.split('|').map(t => '<span class="badge badge-type">' + t + '</span>').join(' ') : '-'}</td>
+                    <td>${item.series ? '<span class="badge badge-series">' + item.series + '</span>' : '-'}</td>
+                    <td class="shop-cell" title="${item.shop}">${item.shop || '-'}</td>
+                    <td style="font-size: 0.75rem;">${item.link ? '<a href="' + item.link + '" target="_blank" style="color:#667eea;">🔗</a>' : '-'}</td>
+                    <td style="font-size: 0.75rem; color: #6b7280;">${(item.source_file || '').slice(0, 20)}</td>
+                </tr>
+            `).join('');
+
+            renderMarketPagination(totalPages);
+        }
+
+        function renderMarketPagination(totalPages) {
+            const pagination = document.getElementById('market-pagination');
+            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+            let html = `<button class="page-btn" onclick="goToMarketPage(${currentMarketPage - 1})" ${currentMarketPage === 1 ? 'disabled' : ''}>上一页</button>`;
+            const maxVisible = 7;
+            let start = Math.max(1, currentMarketPage - Math.floor(maxVisible / 2));
+            let end = Math.min(totalPages, start + maxVisible - 1);
+            for (let i = start; i <= end; i++) {
+                html += `<button class="page-btn ${i === currentMarketPage ? 'active' : ''}" onclick="goToMarketPage(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn" onclick="goToMarketPage(${currentMarketPage + 1})" ${currentMarketPage === totalPages ? 'disabled' : ''}>下一页</button>`;
+            pagination.innerHTML = html;
+        }
+
+        function goToMarketPage(page) {
+            if (page < 1 || page > Math.ceil(filteredMarketData.length / marketPageSize)) return;
+            currentMarketPage = page;
+            renderMarketData();
+        }
+
+        // ========== 自动同步：轮询服务器数据版本号 ==========
+        let lastDataVersion = 0;
+        let syncPollingTimer = null;
+
+        async function checkDataVersion() {
+            try {
+                const res = await fetch('/api/data-version');
+                const data = await res.json();
+                if (lastDataVersion > 0 && data.version !== lastDataVersion) {
+                    console.log('[自动同步] 检测到数据更新，正在刷新...');
+                    await loadAnalysisData(true);
+                }
+                lastDataVersion = data.version;
+            } catch (e) {
+                // 忽略网络错误
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAnalysisData();
+            // 每5秒轮询一次数据版本
+            syncPollingTimer = setInterval(checkDataVersion, 5000);
+        });
+    </script>
+</body>
+</html>

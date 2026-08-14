@@ -12,22 +12,22 @@ const PRODUCT_COLORS = {
 }
 
 const ALL_CHANNELS = [
-  { name: 'Economy Extra Small', rate: 25, base: 3, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
-  { name: 'Standard Extra Small', rate: 35, base: 3, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
-  { name: 'Express Extra Small', rate: 45, base: 3, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
-  { name: 'Economy Budget', rate: 17, base: 23, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
-  { name: 'Standard Budget', rate: 25, base: 23, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
-  { name: 'Express Budget', rate: 33, base: 23, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
-  { name: 'Economy Small', rate: 25, base: 16, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
-  { name: 'Standard Small', rate: 35, base: 16, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
-  { name: 'Express Small', rate: 45, base: 16, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
-  { name: 'Economy Big', rate: 17, base: 36, weightMin: 2, weightMax: 30, sumMax: 250, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
-  { name: 'Standard Big', rate: 25, base: 36, weightMin: 2, weightMax: 30, sumMax: 250, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
-  { name: 'Economy Premium Small', rate: 25, base: 22, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
-  { name: 'Standard Premium Small', rate: 35, base: 22, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
-  { name: 'Express Premium Small', rate: 45, base: 22, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
-  { name: 'Economy Premium Big', rate: 23, base: 62, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
-  { name: 'Standard Premium Big', rate: 28, base: 62, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
+  { name: 'Economy Extra Small', rate: 26, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
+  { name: 'Standard Extra Small', rate: 36.4, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
+  { name: 'Express Extra Small', rate: 46.8, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
+  { name: 'Economy Budget', rate: 17.68, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
+  { name: 'Standard Budget', rate: 26, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
+  { name: 'Express Budget', rate: 34.32, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
+  { name: 'Economy Small', rate: 26, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
+  { name: 'Standard Small', rate: 36.4, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
+  { name: 'Express Small', rate: 46.8, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
+  { name: 'Economy Big', rate: 17.68, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
+  { name: 'Standard Big', rate: 26, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
+  { name: 'Economy Premium Small', rate: 26, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
+  { name: 'Standard Premium Small', rate: 36.4, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
+  { name: 'Express Premium Small', rate: 46.8, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
+  { name: 'Economy Premium Big', rate: 23.92, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
+  { name: 'Standard Premium Big', rate: 29.12, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
   { name: 'Express HK 香港空运', rate: 96, base: 19, rateUnit: 'per100g', weightMax: 25, sumMax: 310, sideMax: 150, priceMin: 1, priceMax: 500000, volumetric: 'conditional', volDiv: 6000, volThreshold: 60 },
 ]
 
@@ -98,11 +98,11 @@ export default function PricingCalc() {
           const pc = PRODUCT_COLORS[product.color]
           const pd = pricingData[product.id] || {}
           const skus = pd.skus || [{}]
-          const commission = Number(pd.commission) || 12
-          const adRate = Number(pd.adRate) || 10
-          const paymentFee = Number(pd.paymentFee) || 1
-          const agencyFee = Number(pd.agencyFee) || 2
-          const returnLoss = Number(pd.returnLoss) || 4
+          const commission = pd.commission !== undefined && pd.commission !== '' ? Number(pd.commission) : 12
+          const adRate = pd.adRate !== undefined && pd.adRate !== '' ? Number(pd.adRate) : 10
+          const paymentFee = pd.paymentFee !== undefined && pd.paymentFee !== '' ? Number(pd.paymentFee) : 1
+          const agencyFee = pd.agencyFee !== undefined && pd.agencyFee !== '' ? Number(pd.agencyFee) : 2
+          const returnLoss = pd.returnLoss !== undefined && pd.returnLoss !== '' ? Number(pd.returnLoss) : 4
           const platformRate = commission + adRate + paymentFee
 
           const updateSku = (idx, key, val) => {
@@ -122,7 +122,8 @@ export default function PricingCalc() {
           }
 
           const calcRow = (sku) => {
-            const price = Number(sku.price) || 0
+            const listPrice = Number(sku.listPrice) || 0
+            const price = Math.round(listPrice * 0.6 * 100) / 100
             const weight = Number(sku.weight) || 0
             const length = Number(sku.length) || 0
             const width = Number(sku.width) || 0
@@ -131,14 +132,17 @@ export default function PricingCalc() {
             const domesticShip = Number(sku.domesticShip) || 0
             const labelFee = Number(sku.labelFee) || 0
             const priceRMB = Math.round(price * R * 100) / 100
+            const listPriceRMB = Math.round(listPrice * R * 100) / 100
             const domesticCost = purchaseCost + domesticShip + labelFee
             const bestShip = price && weight && length && width && height ? getBestShipping(price, weight, length, width, height) : null
-            const crossBorderCost = bestShip ? bestShip.cost + priceRMB * agencyFee / 100 : null
+            const agencyAmtRub = Math.min(200, Math.max(15, price * agencyFee / 100))
+            const agencyAmt = Math.round(agencyAmtRub * R * 100) / 100
+            const crossBorderCost = bestShip ? bestShip.cost + agencyAmt : null
             const platformCost = priceRMB * platformRate / 100
             const returnAmt = priceRMB * returnLoss / 100
             const profit = crossBorderCost !== null ? Math.round((priceRMB - domesticCost - crossBorderCost - platformCost - returnAmt) * 100) / 100 : null
             const profitRate = profit !== null && priceRMB > 0 ? Math.round(profit / priceRMB * 1000) / 10 : null
-            return { priceRMB, domesticCost, bestShip, crossBorderCost, platformCost, returnAmt, profit, profitRate }
+            return { listPrice, price, priceRMB, listPriceRMB, domesticCost, bestShip, crossBorderCost, platformCost, returnAmt, profit, profitRate }
           }
 
           return (
@@ -173,17 +177,19 @@ export default function PricingCalc() {
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs border-collapse min-w-[1200px]">
+                  <table className="w-full text-xs border-collapse min-w-[1500px]">
                     <thead>
                       <tr className="bg-gray-50">
                         <th className="border border-gray-200 px-2 py-1.5 text-left text-morandi-text-light font-semibold w-20">规格</th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">重量<br/><span className="text-[9px]">KG</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-28">长×宽×高<br/><span className="text-[9px]">CM</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">售价<br/><span className="text-[9px]">₽</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-[9px]">₽</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-[9px]">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-[9px]">₽(6折)</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">采购成本<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">国内运费<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">贴标费<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">售价<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">国内成本<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-20">跨境物流<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">平台成本<br/><span className="text-[9px]">¥</span></th>
@@ -219,9 +225,12 @@ export default function PricingCalc() {
                               </div>
                             </td>
                             <td className="border border-gray-200 px-1 py-1">
-                              <input type="number" value={sku.price || ''} onChange={e => updateSku(idx, 'price', e.target.value)} placeholder="5200" step="any"
+                              <input type="number" value={sku.listPrice || ''} onChange={e => updateSku(idx, 'listPrice', e.target.value)} placeholder="8600" step="any"
                                 className="w-full text-xs border-0 bg-transparent focus:outline-none text-center text-morandi-text" />
                             </td>
+                            <td className="border border-gray-200 px-1.5 py-1 text-center text-morandi-text">{calc.listPriceRMB || '-'}</td>
+                            <td className="border border-gray-200 px-1.5 py-1 text-center text-blue-600 font-medium">{calc.price || '-'}</td>
+                            <td className="border border-gray-200 px-1.5 py-1 text-center text-blue-600 font-medium">{calc.priceRMB || '-'}</td>
                             <td className="border border-gray-200 px-1 py-1">
                               <input type="number" value={sku.purchaseCost || ''} onChange={e => updateSku(idx, 'purchaseCost', e.target.value)} placeholder="35" step="any"
                                 className="w-full text-xs border-0 bg-transparent focus:outline-none text-center text-morandi-text" />
@@ -234,7 +243,6 @@ export default function PricingCalc() {
                               <input type="number" value={sku.labelFee || ''} onChange={e => updateSku(idx, 'labelFee', e.target.value)} placeholder="2" step="any"
                                 className="w-full text-xs border-0 bg-transparent focus:outline-none text-center text-morandi-text" />
                             </td>
-                            <td className="border border-gray-200 px-1.5 py-1 text-center font-medium text-morandi-text">{calc.priceRMB || '-'}</td>
                             <td className="border border-gray-200 px-1.5 py-1 text-center text-red-500">{calc.domesticCost || '-'}</td>
                             <td className="border border-gray-200 px-1.5 py-1 text-center text-red-500">
                               {calc.crossBorderCost !== null ? Math.round(calc.crossBorderCost * 100) / 100 : '-'}

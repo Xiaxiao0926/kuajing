@@ -13,3 +13,38 @@ ozon_hair_dryer_analysis/__pycache__/
 nitrile_analysis.json
 nitrile_gloves.json
 extracted_words.json
+
+# API密钥与凭据（防止泄露）
+ai_config.json
+**/ai_config.json
+*.pem
+*.key
+.env.local
+credentials.json
+cookies.json
+
+# 二进制与大文件（GitHub单文件100MB限制）
+*.exe
+cloudflared.exe
+
+# 临时调试输出
+_tmp_*
+analysis_output.txt
+debug_output.txt
+
+# IDE与系统文件
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+
+# Python虚拟环境
+venv/
+.venv/
+env/
+
+# 构建产物
+*.spec
+
+# Streamlit缓存
+.streamlit/

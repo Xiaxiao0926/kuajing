@@ -203,6 +203,12 @@ export default defineConfig({
   plugins: [react(), ozonDataSyncPlugin()],
   server: {
     port: 5173,
-    host: true
-  }
+    host: true,
+    proxy: {
+      '/api/ai': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
+  },
 })

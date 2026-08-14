@@ -1,0 +1,13 @@
+{
+  "base_currency": "CNY",
+  "rub_per_cny": 12,
+  "exchange_rate_effective_from": "2026-08-11",
+  "tax_method": "none",
+  "tax_rate": 0,
+  "default_route_id": "DPX-SZ-382822",
+  "default_commission_rate": null,
+  "default_reverse_included": true,
+  "timezone": "Asia/Shanghai",
+  "profit_margin_threshold": 10,
+  "logistics_ratio_threshold": 30
+}

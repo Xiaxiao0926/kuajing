@@ -1,5 +1,15 @@
 {
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node node_modules/nodemon/bin/nodemon.js server.js --watch server.js --watch analyze_with_cleaned_data.js --watch config.js --watch market_data_processor.js"
+  },
   "dependencies": {
+    "csv-parser": "^3.2.1",
+    "express": "^5.2.1",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "ngrok": "^5.0.0-beta.2",
+    "nodemon": "^3.1.14"
   }
 }

@@ -6,9 +6,24 @@ export const ROADMAP_PHASES = [
       { id: 'n1', num: 1, title: '选品立项', icon: '🎯', status: 'pending' },
       { id: 'n2', num: 2, title: '市场调研', icon: '🔍', status: 'pending', dashboard: true },
       { id: 'n36', num: 4, title: '香薰产品调研', icon: '🕯️', status: 'pending', dashboard: true },
-      { id: 'n4', num: 3, title: '利润测算', icon: '💰', status: 'pending' },
-      { id: 'n38', num: 4, title: '定价计算', icon: '🧮', status: 'pending' },
-      { id: 'n39', num: 5, title: '京东商品采集', icon: '🛒', status: 'pending' },
+      { id: 'n4', num: 3, title: 'Ozon跨境核算', icon: '💰', status: 'pending' },
+      { id: 'n39', num: 5, title: 'WB跨境核算', icon: '🚚', status: 'pending' },
+    ]
+  },
+  {
+    id: 'phase-5',
+    title: '🚀 上架和运营',
+    nodes: [
+      { id: 'n14', num: 19, title: 'Listing内容制作', icon: '📝', status: 'pending' },
+      { id: 'n20', num: 20, title: '商品上架', icon: '📤', status: 'pending' },
+      { id: 'n21', num: 21, title: '冷启动测试', icon: '🧊', status: 'pending' },
+      { id: 'n22', num: 22, title: '广告投放启动', icon: '📢', status: 'pending' },
+      { id: 'n23', num: 23, title: '站内流量优化', icon: '🔄', status: 'pending' },
+      { id: 'n24', num: 24, title: '转化率优化', icon: '📈', status: 'pending' },
+      { id: 'n25', num: 25, title: '评价体系建设', icon: '⭐', status: 'pending' },
+      { id: 'n26', num: 26, title: '站外流量引入', icon: '🌐', status: 'pending' },
+      { id: 'n27', num: 27, title: '销量放量增长', icon: '销量放量增长', status: 'pending' },
+      { id: 'n28', num: 28, title: '排名优化', icon: '🏆', status: 'pending' },
     ]
   },
   {
@@ -44,22 +59,6 @@ export const ROADMAP_PHASES = [
     ]
   },
   {
-    id: 'phase-5',
-    title: '🚀 上架和运营',
-    nodes: [
-      { id: 'n14', num: 19, title: 'Listing内容制作', icon: '📝', status: 'pending' },
-      { id: 'n20', num: 20, title: '商品上架', icon: '📤', status: 'pending' },
-      { id: 'n21', num: 21, title: '冷启动测试', icon: '🧊', status: 'pending' },
-      { id: 'n22', num: 22, title: '广告投放启动', icon: '📢', status: 'pending' },
-      { id: 'n23', num: 23, title: '站内流量优化', icon: '🔄', status: 'pending' },
-      { id: 'n24', num: 24, title: '转化率优化', icon: '📈', status: 'pending' },
-      { id: 'n25', num: 25, title: '评价体系建设', icon: '⭐', status: 'pending' },
-      { id: 'n26', num: 26, title: '站外流量引入', icon: '🌐', status: 'pending' },
-      { id: 'n27', num: 27, title: '销量放量增长', icon: '🚀', status: 'pending' },
-      { id: 'n28', num: 28, title: '排名优化', icon: '🏆', status: 'pending' },
-    ]
-  },
-  {
     id: 'phase-6',
     title: '💳 物流和回款',
     nodes: [
@@ -86,9 +85,8 @@ export const NODE_DETAILS = {
   n1: { title: '选品立项', desc: '确定目标品类与产品方向，评估市场机会', checklist: ['确定目标市场（俄罗斯/独联体）', '选择产品类目方向', '初步评估市场规模', '立项决策评审'] },
   n2: { title: '市场调研', desc: '深入分析目标市场规模、趋势、消费者需求与竞品格局', checklist: ['类目规模与增长趋势', '价格带分布分析', '季节性需求波动', '消费者需求痛点', 'Top10卖家占比分析', '品牌垄断度评估', '竞品定价策略', '市场空白机会识别'] },
   n36: { title: '香薰产品调研', desc: '香氛定价模型与竞争力模拟，支持方案对比与谈判报告', checklist: [] },
-  n4: { title: '利润测算', desc: '全链路成本核算，验证利润可行性', checklist: ['采购成本估算', '物流费用测算', '平台佣金计算', '广告成本预估', '净利润率判断（≥15%可做 / 8-15%需优化 / ≤8%不建议）'] },
-  n38: { title: '定价计算', desc: '按产品规格对比成本、定价与利润，rFBS运费自动匹配', checklist: ['产品规格与重量录入', '售价(₽)设定', '采购/运费/贴标成本填写', 'rFBS最优渠道自动匹配', '毛利与利润率计算'] },
-  n39: { title: '京东商品采集', desc: '输入京东商品链接，自动获取标题、图片、详情等资料到本地', checklist: ['输入京东商品链接', '自动获取商品信息', '下载商品图片到本地', '查看已采集商品列表'] },
+  n4: { title: 'Ozon跨境核算', desc: '融合利润测算与定价计算，含单规格全渠道对比、多规格定价表、佣金费率查询', checklist: ['单规格全渠道运费+利润测算', '最优渠道自动匹配', '多产品多规格定价对比', '上架价×0.6折后价利润计算', 'rFBS运费自动匹配最低渠道', 'Ozon佣金费率表查询（96+类目）', '净利润率判断（≥15%可做 / 8-15%需优化 / ≤8%不建议）'] },
+  n39: { title: 'WB跨境核算', desc: 'Wildberries跨境利润与物流费用独立核算单元，支持DPX等多线路运费、佣金、利润、对账', checklist: ['DPX/超级经济/WB Plus/快线多线路运费计算', '按实际重量每100g向上取整', 'SKU利润表与盈亏平衡', '线路对比器', '费率版本与生效日期管理', '订单CSV导入导出与对账', 'WB品类佣金查询'] },
   n5: { title: '产品定义', desc: '明确产品功能定位、目标人群与差异化卖点', checklist: ['功能定位（解决什么问题）', '目标人群画像', '差异化点（结构/材料/设计）', '产品规格定义'] },
   n6: { title: '供应链开发', desc: '筛选供应商，评估产能与定制能力', checklist: ['3-5家工厂对比', 'MOQ/交期/工艺能力评估', 'OEM/ODM支持确认', '供应商资质审核'] },
   n7: { title: '样品打样确认', desc: '从初样到确认样的完整打样流程，含包装设计与打样', checklist: ['初样制作', '修改样调整', '确认样锁定', '样品质量评估', '包装视觉设计', '合规标签（EAC/CE等）', '外箱抗压设计', 'SKU条码系统'] },
@@ -98,7 +96,7 @@ export const NODE_DETAILS = {
   n10: { title: '认证与检测', desc: '完成产品认证与实验室检测', checklist: ['EAC/CE认证申请', '实验室测试安排', '合规报告获取', 'Declaration of Conformity'] },
   n11: { title: '品牌与商标注册', desc: '品牌保护与商标注册', checklist: ['品牌名可注册性查询', '商标注册申请', '类目保护布局', '马德里体系评估'] },
   n12: { title: '平台账号入驻', desc: '完成电商平台卖家账号注册与审核', checklist: ['Ozon Seller注册', 'FBO/FBS审核', '品牌备案（Brand Registry）', '支付通道绑定'] },
-  n14: { title: 'Listing内容制作', desc: '商品详情页内容制作与优化', checklist: ['图片体系（主图/场景/细节）', '视频内容（15-60s）', 'SEO关键词结构', '标题/五点/描述优化'] },
+  n14: { title: 'Listing内容制作', desc: '基于Ozon俄罗斯市场版SOP的商品详情页内容制作与优化', checklist: ['了解俄罗斯用户视觉习惯', '制作8-10张商品图片（主图/功效图/场景图/使用步骤图等）', '制作首图（产品+氛围+卖点短文案，非纯白底）', '制作15-30秒视频内容', '规划SEO关键词结构（核心词+功效词+场景词+属性词）', '撰写俄文标题（品牌+品类+功效+核心卖点+容量）', '撰写五点卖点（俄区转化版）', '制作详情页内容模块'] },
   n15: { title: '生产下单', desc: '确认PO，安排生产排期与质控节点', checklist: ['PO确认与签署', '生产排期确认', '质量控制节点设定', '物料采购启动'] },
   n16: { title: '质量检验(QC)', desc: '生产过程与出货质量检验', checklist: ['IPQC过程检验', 'OQC出货检验', 'AQL标准抽检', '质量问题整改'] },
   n17: { title: '成品入库/备货', desc: '成品入库管理，安全库存准备', checklist: ['成品入库登记', '安全库存计算', '断货风险控制', '仓储管理'] },
