@@ -44,17 +44,22 @@ function scoreDemand(c, ctx, deps, rules, subs) {
   // ---- T4-4A：Demand = λ×MarketScaleScore + (1-λ)×CandidateStrengthScore ----
   // MarketScale 仅 HIGH/MEDIUM（可靠产品类型基准）可用；LOW/domain 与 LOW_MARKET_CONTEXT → N/A，
   // 回退纯候选强度（不伪造市场规模证据）。全局类型池只用于"市场规模"排名，绝不冒充市场基准。
-  const scaleCfg = rules.dimensions.demand.scale_weight != null
-    ? rules.dimensions.demand
-    : { scale_weight: 0.3, scale_sales_weight: 0.6, scale_units_weight: 0.4 }
-  const scaleEligible = (ctx.context === 'HIGH' || ctx.context === 'MEDIUM')
-    && ctx.benchmark && deps.marketScalePool
+  // ---- T4-4B Gate 0（fail-close）：禁止静默回退旧 demand 语义 ----
+  const scaleCfg = rules.dimensions.demand
+  if (scaleCfg.scale_weight == null || scaleCfg.scale_sales_weight == null || scaleCfg.scale_units_weight == null) {
+    throw new Error('SCORING_CONFIG_FAIL: scoring_rules.dimensions.demand 缺少 scale_weight/scale_sales_weight/scale_units_weight（唯一规则源缺失，禁止静默回退旧 demand 语义）')
+  }
+  const scaleEligible = (ctx.context === 'HIGH' || ctx.context === 'MEDIUM') && ctx.benchmark
   let marketScaleScore = null
   if (scaleEligible) {
+    const sp = deps.marketScalePool
+    if (!sp || !Array.isArray(sp.sales_p50) || sp.sales_p50.length === 0 || !Array.isArray(sp.units_p50) || sp.units_p50.length === 0) {
+      throw new Error('SCORING_CONFIG_FAIL: HIGH/MEDIUM 需要 marketScalePool（市场规模全局类型池）未加载，禁止静默回退旧 demand 语义')
+    }
     const s = ctx.benchmark.sales_28d?.p50
     const u = ctx.benchmark.units_28d?.p50
-    const sRank = s != null ? percentileRank(s, deps.marketScalePool.sales_p50) : null
-    const uRank = u != null ? percentileRank(u, deps.marketScalePool.units_p50) : null
+    const sRank = s != null ? percentileRank(s, sp.sales_p50) : null
+    const uRank = u != null ? percentileRank(u, sp.units_p50) : null
     // 缺失一侧按剩余权重重归一，两侧全缺 → null（禁止用 0/50 补值）
     marketScaleScore = evidenceWeightedScore([
       { weight: scaleCfg.scale_sales_weight, score: sRank },

@@ -8,7 +8,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { scoreProduct } from './scoringEngine.js'
 import { buildExplanations } from './explanations.js'
-import { percentileRank, percentileRankFromQuantiles, evidenceWeightedScore, shrink } from './normalization.js'
+import { percentileRank, percentileRankFromQuantiles, benchmarkQuantiles, evidenceWeightedScore, shrink } from './normalization.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rules = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', 'config', 'scoring_rules.json'), 'utf-8'))
@@ -40,6 +40,11 @@ const pool = {
   revenue_loss_rate: Array.from({ length: 1000 }, (_, i) => (i % 30) * 0.01),
 }
 const rubPerCny = 12
+// T4-4B Gate 0：HIGH/MEDIUM 必需的市场规模全局类型池（fail-close，缺失抛错）
+const scalePool = {
+  sales_p50: Array.from({ length: 30 }, (_, i) => 100000 + i * 100000),
+  units_p50: Array.from({ length: 30 }, (_, i) => 50 + i * 200),
+}
 
 // CEL 渠道模拟（7 渠道，覆盖多速度档；语义与 ozonEngine 一致）
 function makeCel() {
@@ -118,15 +123,21 @@ function makeCandidate(overrides = {}) {
   }
 }
 
-const deps = { candidatePool: pool, rubPerCny, calcCelShipping }
+const deps = { candidatePool: pool, rubPerCny, calcCelShipping, marketScalePool: scalePool }
 
 // ============ 测试 ============
-console.log('测试1: 明显优秀 SKU（高需求+高毛利+轻小件+有映射）')
+console.log('测试1: 明显优秀 SKU（候选强度高+高毛利+轻小件+有映射；中等市场规模 → B/PILOT_TEST）')
 {
   const r = scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), deps, rules)
-  assert(r.grade === 'A', `grade=A (实际 ${r.grade}, score ${r.totalScore})`)
+  // T4-4A：单测市场规模池（100k..3M）中 1M 中位市场约排 31%，demand=0.5×scale+0.5×strength → B。
+  // A 级大市场案例由 golden excellent-mapped（83 分）与 grade-boundaries 固件覆盖。
+  assert(r.grade === 'B', `grade=B（中等市场规模语义, 实际 ${r.grade}, score ${r.totalScore}）`)
+  assert(r.totalScore >= 65 && r.totalScore < 80, `totalScore∈[65,80) (实际 ${r.totalScore})`)
+  assert(r.dimensions.demand.candidateStrengthScore >= 90, `候选相对表现高分 (实际 ${r.dimensions.demand.candidateStrengthScore})`)
+  assert(r.dimensions.demand.marketScaleScore !== null, 'marketScaleScore 已计算')
   assert(r.context === 'HIGH', 'context=HIGH')
   assert(r.decision.status === 'ELIGIBLE', `decision=ELIGIBLE (实际 ${r.decision.status})`)
+  assert(r.decision.action === 'PILOT_TEST', `action=PILOT_TEST (实际 ${r.decision.action})`)
   assert(r.supplyGap !== null, 'supplyGap 已计算')
 }
 
@@ -179,14 +190,16 @@ console.log('\n测试7: 异常极值不崩溃')
   assert(r.totalScore !== null && isFinite(r.totalScore), '正常打分')
 }
 
-console.log('\n测试8: 临界 A/B（80 附近）')
+console.log('\n测试8: 评级边界（A/B 精确边界由 golden grade-boundaries 固件覆盖）')
 {
-  // 构造 79.5 与 80.5 的归一化单元测试（直接测 gradeOf 行为通过 scoreProduct 间接验证）
+  // T4-4A 后单测市场的优秀候选为 B；此处验证等级与分数带一致性 + 差候选显著低于 80
   const rA = scoreProduct(makeCandidate(), makeMarketCtx(), deps, rules)
-  assert(rA.grade === 'A' && rA.totalScore >= 80, `A 需 ≥80 (实际 ${rA.totalScore})`)
-  // 差候选应显著低于 80
+  assert(rA.totalScore >= 65 && rA.totalScore < 80, `优秀候选落 B 带 [65,80) (实际 ${rA.totalScore})`)
+  assert(rA.grade === 'B', `grade=B (实际 ${rA.grade})`)
+  // 差候选应显著低于 80（且低于 65 → C/D）
   const rD = scoreProduct(makeCandidate({ sales_rub_28d: 100000, units_28d: 100, reviews: 1, gross_margin: -50 }), makeMarketCtx(), deps, rules)
   assert(rD.totalScore < 80, `差候选 <80 (实际 ${rD.totalScore})`)
+  assert(rD.grade === 'C' || rD.grade === 'D', `差候选 C/D (实际 ${rD.grade})`)
 }
 
 console.log('\n测试9: 无 BSR 映射')
@@ -329,44 +342,69 @@ console.log('\n测试17: percentileRankFromQuantiles 越界截断 10/90')
 
 console.log('\n测试19: T4-4A demand = λ×MarketScale + (1-λ)×CandidateStrength')
 {
-  const scalePool = {
-    sales_p50: Array.from({ length: 30 }, (_, i) => 100000 + i * 100000), // 100k..3M
-    units_p50: Array.from({ length: 30 }, (_, i) => 50 + i * 200),        // 50..5850
-  }
   const depsScale = { ...deps, marketScalePool: scalePool }
   const lam = rules.dimensions.demand.scale_weight
   const sRank = percentileRank(1000000, scalePool.sales_p50)
   const uRank = percentileRank(2000, scalePool.units_p50)
   const expectedScale = 0.6 * sRank + 0.4 * uRank
-  // 参照组：无 scale pool 的 HIGH 路径 = 纯候选强度（回退语义保证）
-  const rNoPool = scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), deps, rules)
-  const strength = rNoPool.dimensions.demand.score
+  // 候选强度参照：按引擎同口径逐子项计算（makeCandidate + HIGH benchmark + 单测池）
+  const b = makeMarketCtx().benchmark
+  const strengthItems = [
+    { weight: 35, score: percentileRankFromQuantiles(3500000, benchmarkQuantiles(b, 'sales_28d')) },
+    { weight: 25, score: percentileRankFromQuantiles(6500, benchmarkQuantiles(b, 'units_28d')) },
+    { weight: 15, score: percentileRankFromQuantiles(4.5, benchmarkQuantiles(b, 'conv_rate')) },
+    { weight: 10, score: percentileRankFromQuantiles(36, benchmarkQuantiles(b, 'cart_add')) },
+    { weight: 5, score: percentileRank(90000000, pool.exposure) },
+    { weight: 5, score: percentileRank(3000000, pool.card_visits) },
+    { weight: 5, score: percentileRank(90000, pool.reviews) },
+  ]
+  const strength = evidenceWeightedScore(strengthItems, 0.5).score
   const r = scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), depsScale, rules)
   const d = r.dimensions.demand
   eq(d.marketScaleScore, Math.round(expectedScale * 10) / 10, 'marketScaleScore=60/40 加权', 0.11)
-  eq(d.candidateStrengthScore, strength, 'candidateStrengthScore 保留原算法', 0.11)
+  eq(d.candidateStrengthScore, Math.round(strength * 10) / 10, 'candidateStrengthScore 保留原算法', 0.11)
   const expectedDemand = Math.round((lam * expectedScale + (1 - lam) * strength) * 10) / 10
   eq(d.score, expectedDemand, `demand=λ×scale+(1-λ)×strength (λ=${lam})`, 0.11)
   // MEDIUM 同样可计算 MarketScale
   const rMed = scoreProduct(makeCandidate(), makeMarketCtx({ context: 'MEDIUM' }), depsScale, rules)
   assert(rMed.dimensions.demand.marketScaleScore !== null, 'MEDIUM 计算 MarketScale')
-  // LOW → MarketScale=N/A，分数与无池路径逐位一致（路径不变）
+  // LOW → MarketScale=N/A；有池/无池分数逐位一致（scale 被忽略）
   const lowCtx = { context: 'LOW', benchmark: makeMarketCtx().benchmark, matchedType: 'x', sampleSize: 3, domainTypes: makeMarketCtx().domainTypes }
+  const depsNoPool = { candidatePool: pool, rubPerCny, calcCelShipping }
   const rLow = scoreProduct(makeCandidate(), lowCtx, depsScale, rules)
-  const rLowCtrl = scoreProduct(makeCandidate(), lowCtx, deps, rules)
+  const rLowNoPool = scoreProduct(makeCandidate(), lowCtx, depsNoPool, rules)
   assert(rLow.dimensions.demand.marketScaleScore === null, 'LOW → MarketScale=N/A')
-  eq(rLow.dimensions.demand.score, rLowCtrl.dimensions.demand.score, 'LOW demand 与旧路径一致')
-  // LMC → 分数与无池路径逐位一致（771 行不受影响）
+  eq(rLow.dimensions.demand.score, rLowNoPool.dimensions.demand.score, 'LOW 有池/无池分数一致')
+  // LMC → 有池/无池分数逐位一致（771 行不受影响）
   const lmcCtx = { context: 'LOW_MARKET_CONTEXT', benchmark: null, matchedType: null, sampleSize: null, domainTypes: [] }
   const rLmc = scoreProduct(makeCandidate(), lmcCtx, depsScale, rules)
-  const rLmcCtrl = scoreProduct(makeCandidate(), lmcCtx, deps, rules)
+  const rLmcNoPool = scoreProduct(makeCandidate(), lmcCtx, depsNoPool, rules)
   assert(rLmc.dimensions.demand.marketScaleScore === null, 'LMC → MarketScale=N/A')
-  eq(rLmc.dimensions.demand.score, rLmcCtrl.dimensions.demand.score, 'LMC demand 与旧路径一致')
+  eq(rLmc.dimensions.demand.score, rLmcNoPool.dimensions.demand.score, 'LMC 有池/无池分数一致')
   // scale 缺一侧 → 剩余权重重归一（禁止 0/50 补值）
   const ctxNoSales = makeMarketCtx({ context: 'HIGH' })
   ctxNoSales.benchmark = { ...ctxNoSales.benchmark, sales_28d: null }
   const r2 = scoreProduct(makeCandidate(), ctxNoSales, depsScale, rules)
   eq(r2.dimensions.demand.marketScaleScore, Math.round(uRank * 10) / 10, 'scale 缺 sales → 只用 units', 0.11)
+}
+
+console.log('\n测试20: T4-4B Gate 0 fail-close（禁止静默回退旧 demand 语义）')
+{
+  const depsNoPool = { candidatePool: pool, rubPerCny, calcCelShipping }
+  let threw = false
+  try { scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), depsNoPool, rules) } catch (e) { threw = /SCORING_CONFIG_FAIL/.test(e.message) }
+  assert(threw, 'HIGH 无 marketScalePool → fail-close 抛错')
+  let threwMed = false
+  try { scoreProduct(makeCandidate(), makeMarketCtx({ context: 'MEDIUM' }), depsNoPool, rules) } catch (e) { threwMed = /SCORING_CONFIG_FAIL/.test(e.message) }
+  assert(threwMed, 'MEDIUM 无 marketScalePool → fail-close 抛错')
+  let threwEmpty = false
+  try { scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), { ...deps, marketScalePool: { sales_p50: [], units_p50: [] } }, rules) } catch (e) { threwEmpty = /SCORING_CONFIG_FAIL/.test(e.message) }
+  assert(threwEmpty, 'marketScalePool 空数组 → fail-close 抛错')
+  let threwRules = false
+  const badRules = JSON.parse(JSON.stringify(rules))
+  delete badRules.dimensions.demand.scale_weight
+  try { scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), deps, badRules) } catch (e) { threwRules = /SCORING_CONFIG_FAIL/.test(e.message) }
+  assert(threwRules, 'rules 缺 scale_weight → fail-close 抛错')
 }
 
 console.log('\n测试18: 解释口径分级（LOW/domain 不得写"同类市场"）')

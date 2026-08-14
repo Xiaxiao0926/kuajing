@@ -15,10 +15,17 @@ export function winsorize(values) {
   return values.map((v) => Math.min(Math.max(v, lo), hi))
 }
 
-/** 百分位秩（0-100）：value 在 population 中的位置。population 非空；value 为 null 返回 null。 */
+/** 判断数组是否已升序（预排序池检测，行为零变化优化：跳过重复排序） */
+function isSortedAsc(arr) {
+  for (let i = 1; i < arr.length; i++) { if (arr[i] < arr[i - 1]) return false }
+  return true
+}
+
+/** 百分位秩（0-100）：value 在 population 中的位置。population 非空；value 为 null 返回 null。
+ *  已升序的 population 直接使用（与"复制后排序"结果逐位一致，仅省重复排序）。 */
 export function percentileRank(value, population) {
   if (value === null || value === undefined || !population || population.length === 0) return null
-  const sorted = [...population].sort((a, b) => a - b)
+  const sorted = isSortedAsc(population) ? population : [...population].sort((a, b) => a - b)
   if (sorted.length === 1) return value <= sorted[0] ? 0 : 100
   if (value <= sorted[0]) return 0
   if (value >= sorted[sorted.length - 1]) return 100
