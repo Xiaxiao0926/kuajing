@@ -87,7 +87,7 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
   }
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-100 flex flex-col">
+    <aside className="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
       <div className="p-4 border-b border-gray-100">
         <h1 className="text-lg font-bold text-morandi-text flex items-center gap-2">
           <span className="text-xl">🗺️</span>

@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
 import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
 import { getDataUrl } from './utils/runtime.js'
+import { ROADMAP_PHASES } from './data/roadmap'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
@@ -262,7 +263,7 @@ function App() {
   }
 
   return (
-    <div className="flex min-h-screen bg-morandi-bg">
+    <div className="min-h-screen bg-morandi-bg lg:flex">
       <Sidebar
         onFileUpload={handleFileUpload}
         loading={loading}
@@ -272,7 +273,43 @@ function App() {
         onNodeSelect={handleNodeSelect}
         nodeStatuses={nodeStatuses}
       />
-      <main ref={mainRef} className="flex-1 ml-64 p-6">
+      <div className="sticky top-0 z-20 border-b border-gray-100 bg-white p-3 lg:hidden">
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-bold text-morandi-text">坪山综合保跨境项目</p>
+            <p className="text-[10px] text-morandi-text-light">从选品到放量的全流程导航</p>
+          </div>
+          <label className="flex-shrink-0 cursor-pointer rounded-md border border-morandi-primary px-2.5 py-1.5 text-xs font-medium text-morandi-primary">
+            上传数据
+            <input
+              type="file"
+              accept="*"
+              className="hidden"
+              disabled={loading}
+              onChange={(event) => event.target.files?.[0] && handleFileUpload(event.target.files[0])}
+            />
+          </label>
+        </div>
+        <label className="block text-[10px] font-medium text-morandi-text-light" htmlFor="mobile-node-select">
+          当前步骤
+        </label>
+        <select
+          id="mobile-node-select"
+          value={activeNode}
+          onChange={(event) => handleNodeSelect(event.target.value)}
+          className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-morandi-text"
+        >
+          <option value="__project_flow__">项目流程总览</option>
+          {ROADMAP_PHASES.map((phase) => (
+            <optgroup key={phase.id} label={phase.title}>
+              {phase.nodes.map((node) => (
+                <option key={node.id} value={node.id}>{node.title}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+      <main ref={mainRef} className="min-w-0 flex-1 p-3 sm:p-4 lg:p-6">
         {renderContent()}
       </main>
     </div>
