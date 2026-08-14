@@ -12,7 +12,8 @@ export default function SearchInput({ value, onChange, placeholder = '搜索商�
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-8 w-full rounded-md border border-workspace-border-strong bg-workspace-surface pl-8 pr-7 text-[13px] text-workspace-text outline-none transition-colors placeholder:text-workspace-text-tertiary focus:border-workspace-primary"
+        aria-label={placeholder}
+        className="h-8 w-full rounded-md border border-workspace-border-strong bg-workspace-surface pl-8 pr-7 text-[13px] text-workspace-text outline-none transition-colors placeholder:text-workspace-text-tertiary focus:border-workspace-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-workspace-primary"
       />
       {value && (
         <button

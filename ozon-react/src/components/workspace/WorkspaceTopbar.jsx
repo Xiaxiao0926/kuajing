@@ -43,7 +43,7 @@ export default function WorkspaceTopbar({
 
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <span className="truncate text-[13px] font-semibold text-workspace-text">坪山综合保税项目</span>
+          <span className="truncate text-sm font-semibold text-workspace-text">坪山综合保税项目</span>
           <span className="hidden rounded bg-workspace-surface-subtle px-1.5 py-0.5 text-xs text-workspace-text-secondary sm:inline">俄罗斯 · Ozon / Wildberries</span>
         </div>
         <div className="text-xs text-workspace-text-tertiary">Workspace</div>

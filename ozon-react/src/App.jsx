@@ -67,6 +67,15 @@ function DashboardApp() {
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null)
   const mainRef = useRef(null)
 
+  // T5-5：1024–1279 区间自动 compact Sidebar（≥1280 展开；<1024 由 CSS 隐藏）
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px) and (max-width: 1279px)')
+    const apply = () => setSidebarCollapsed(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
   useEffect(() => {
     syncFromServer().then(() => {
       const saved = persistGet('roadmap-statuses')

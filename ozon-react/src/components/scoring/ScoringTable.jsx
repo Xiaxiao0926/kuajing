@@ -26,10 +26,10 @@ export default function ScoringTable({ rows, selectedIndex, onSelect }) {
           <th className="px-3 py-2.5 font-medium">Decision</th>
           <th className="px-3 py-2.5 text-right font-medium">市场规模</th>
           <th className="px-3 py-2.5 text-right font-medium">候选表现</th>
-          <th className="px-3 py-2.5 text-right font-medium">竞争</th>
+          <th className="hidden px-3 py-2.5 text-right font-medium xl:table-cell">竞争</th>
           <th className="px-3 py-2.5 text-right font-medium">利润</th>
           <th className="px-3 py-2.5 text-right font-medium">物流</th>
-          <th className="px-3 py-2.5 font-medium">Gap</th>
+          <th className="hidden px-3 py-2.5 font-medium xl:table-cell">Gap</th>
           <th className="px-3 py-2.5 font-medium">Context</th>
           <th className="px-3 py-2.5 font-medium">风险</th>
         </>
@@ -58,10 +58,10 @@ export default function ScoringTable({ rows, selectedIndex, onSelect }) {
             <td className="tabular-nums px-3 py-2 text-right text-[13px] text-workspace-text">
               {r.dimensions.demand.candidateStrengthScore ?? '—'}
             </td>
-            <td className="tabular-nums px-3 py-2 text-right text-[13px] text-workspace-text">{dim(r, 'competition') ?? '—'}</td>
+            <td className="hidden px-3 py-2 text-right text-[13px] text-workspace-text xl:table-cell">{dim(r, 'competition') ?? '—'}</td>
             <td className="tabular-nums px-3 py-2 text-right text-[13px] text-workspace-text">{dim(r, 'profitability') ?? '—'}</td>
             <td className="tabular-nums px-3 py-2 text-right text-[13px] text-workspace-text">{dim(r, 'logistics') ?? '—'}</td>
-            <td className="px-3 py-2 text-xs text-workspace-text-secondary">
+            <td className="hidden px-3 py-2 text-xs text-workspace-text-secondary xl:table-cell">
               {r.supplyGap ? (GAP_ZH[r.supplyGap.rank] || r.supplyGap.rank) : '无市场基准'}
             </td>
             <td className="px-3 py-2"><ContextBadge context={r.context} /></td>

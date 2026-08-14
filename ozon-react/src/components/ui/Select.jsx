@@ -8,7 +8,8 @@ export default function Select({ label, value, onChange, options, className = ''
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-8 rounded-md border border-workspace-border-strong bg-workspace-surface px-2 text-[13px] text-workspace-text outline-none transition-colors focus:border-workspace-primary"
+        aria-label={label || undefined}
+        className="h-8 rounded-md border border-workspace-border-strong bg-workspace-surface px-2 text-[13px] text-workspace-text outline-none transition-colors focus:border-workspace-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-workspace-primary"
       >
         {options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
       </select>

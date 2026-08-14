@@ -23,6 +23,7 @@ export default function Drawer({ open, onClose, title, children, width = 440 }) 
         style={{ width }}
         role="dialog"
         aria-modal="true"
+        aria-label={title}
       >
         <div className="flex h-14 flex-shrink-0 items-center justify-between border-b border-workspace-border px-5">
           <span className="text-sm font-semibold text-workspace-text">{title}</span>
