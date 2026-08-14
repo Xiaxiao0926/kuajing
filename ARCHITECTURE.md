@@ -94,7 +94,7 @@ config/*.json（唯一事实源，snake_case）
   └─ schema/*.json        （JSON Schema，费率/渠道结构约束）
 
 React 侧：wbConfig.js / ozonEngine.js 是 adapter（snake→camel 映射），对外 API 不变。
-Python 侧：wb_data.py 直接读 config/*.json（CONFIG_DIR），DEFAULT_* 仅作文件缺失兜底。
+Python 侧：wb_data.py 严格读 config/*.json（CONFIG_DIR），fail-fast——文件缺失/损坏/结构非法即抛 ConfigError，不存在第二套兜底数字；写入经 `_save_config_atomic`（校验→.tmp→os.replace）。
 同步时机：npm test 前置、vite buildStart；手动 node scripts/sync-config.js。
 ```
 
@@ -119,27 +119,29 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
 
 | 文件 | 作用 | 改动敏感度 |
 |---|---|---|
-| `ozon-react/src/App.jsx` | 路由编排（roadmap 节点→组件映射） | 中 |
-| `ozon-react/src/components/WBCalc.jsx` | WB 核算 UI（1692 行） | 高（只拆不改逻辑） |
+| `ozon-react/src/App.jsx` | 路由编排 + 五个页面 React.lazy（T3-4） | 中 |
+| `ozon-react/src/components/NewDashboard.jsx` | 市场调研编排层（T3-1 拆分后 115 行） | 中 |
+| `ozon-react/src/components/dashboard/` | 词库 dictionary.js / 计算 hook useDashboardStats.js / Cards / 5 展示区段 | 计算 hook 禁改逻辑；区段只改展示 |
+| `ozon-react/src/components/WBCalc.jsx` | WB 核算编排层（T3-2 拆分后 109 行） | 中 |
+| `ozon-react/src/components/wbcalc/` | 6 Tab + 5 共享组件 + format.js | 高（只拆不改逻辑） |
+| `ozon-react/src/components/fragrancePricing/` | data.js（常量+利润计算）/ InputField / PlanPanel（T3-3） | data.js 禁改计算 |
 | `ozon-react/src/components/OzonCalc.jsx` | Ozon 核算 UI | 高 |
-| `ozon-react/src/components/NewDashboard.jsx` | 市场调研看板（459KB 巨型） | 高（T3 拆分） |
 | `ozon-react/src/utils/wbEngine.js` | WB 计算引擎（纯函数） | **极高（禁改公式）** |
-| `ozon-react/src/utils/ozonEngine.js` | Ozon CEL 渠道+佣金+利润 | **极高（禁改公式）** |
-| `ozon-react/src/utils/wbConfig.js` | WB 配置 adapter（读 generated，禁改映射语义） | **极高** |
 | `ozon-react/src/utils/ozonEngine.js` | Ozon 引擎 + 渠道 adapter（费率数值在 config/） | **极高（禁改公式）** |
+| `ozon-react/src/utils/wbConfig.js` | WB 配置 adapter（读 generated，禁改映射语义） | **极高** |
 | `ozon-react/src/generated/*.js` | 自动生成物（勿手改，改 config 后重跑 sync） | 只读 |
 | `ozon-react/src/utils/dataProcessor.js` | 市场数据清洗 | 中 |
-| `ozon-react/vite.config.js` | 数据同步插件 + /api/persist + /api/upload | 高 |
+| `ozon-react/vite.config.js` | 数据同步插件 + config-sync（fail-close + dev watch） | 高 |
 | `server.js` | 价格分析 API（497 行自包含路由） | 中 |
 | `config.js` | Node 端路径配置 | 低（改环境变量即可） |
 | `market_data_processor.js` | 市场价清洗（848 行） | 中 |
 | `analyze_with_cleaned_data.js` | 报价匹配分析（2353 行） | 中 |
 | `ozon-product-analyzer/wb_calc.py` | WB 计算引擎（Decimal） | **极高（禁改公式）** |
-| `ozon-product-analyzer/wb_data.py` | Python 端数据存储+默认费率 | **极高（禁改数值）** |
+| `ozon-product-analyzer/wb_data.py` | Python 端配置 fail-fast 加载 + 原子写 | **极高（禁改校验逻辑）** |
 | `ozon-product-analyzer/wb_panel.py` | WB Streamlit 面板 | 高 |
 | `ozon-product-analyzer/app.py` | 选品评分面板 | 中 |
 | `scripts/run-wb-py-test.js` | 跨平台 Python 测试启动器 | 低 |
-| `scripts/run-golden-tests.js` | 黄金案例护栏（75 断言，provenance 分级） | 低 |
+| `scripts/run-golden-tests.js` | 黄金案例护栏（76 断言，provenance 分级，5 核心案例 ID 锁定） | 低 |
 | `scripts/verify_sync.js` | 双端对拍（16 边界+2 版本） | 低 |
 | `scripts/sync-config.js` | config→generated 同步+结构校验 | 低 |
 | `config/*.json` | **唯一事实源：费率/设置/渠道** | **极高（改动须全测试+对拍）** |
@@ -151,7 +153,7 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
 
 1. ~~汇率运行时覆盖风险~~ ✅ T2 已解决：单源 config/settings.json，运行态副本已删（TD-1 关闭）。
 2. Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称（TD-3）。
-3. ~~硬编码路径~~ ✅ T2 已解决：OZON_DATA_DIR / WB_COMMISSION_FILE / CONFIG_DIR 环境变量（TD-7 关闭）。
+3. 业务路径硬编码**大部分**已解决（T2：OZON_DATA_DIR / WB_COMMISSION_FILE / CONFIG_DIR）；残留 TD-18：`vite.config.js` 数据同步层仍写死 `D:/ozon/市场分析` 绝对路径。
 4. Ozon 单规格（售价直算）与多规格（上架价×0.6）价格语义不一致（TD-14）；Big/Budget 0.001kg 边界表述差异（TD-17）。
 5. `ozon-react/public/data/` 与根目录存在重复 xlsx（数据同步插件拷贝产物，约 11MB）。
-6. 生产构建无代码分割，主 chunk 2.7MB。
+6. ~~无代码分割~~ ✅ T3-4 已解决：React.lazy 页面级分割，主 chunk 2743KB→1122KB（gzip 780→336KB）。

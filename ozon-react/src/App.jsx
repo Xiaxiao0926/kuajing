@@ -1,7 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react'
 import Sidebar from './components/Sidebar'
 import NodePage from './components/NodePage'
-import MarketResearch from './components/MarketResearch'
 import ProjectSetup from './components/ProjectSetup'
 import SupplyChain from './components/SupplyChain'
 import CostQuote from './components/CostQuote'
@@ -10,13 +9,20 @@ import ComplianceAssessment from './components/ComplianceAssessment'
 import NodeOverview from './components/NodeOverview'
 import ProgressOverview from './components/ProgressOverview'
 import ProjectFlow from './components/ProjectFlow'
-import OzonCalc from './components/OzonCalc'
-import FragrancePricing from './components/FragrancePricing'
-import ListingContent from './components/ListingContent'
-import WBCalc from './components/WBCalc'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
 import { syncFromServer, persistGet, persistSet } from './utils/persist'
+
+// 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
+const MarketResearch = lazy(() => import('./components/MarketResearch'))
+const OzonCalc = lazy(() => import('./components/OzonCalc'))
+const FragrancePricing = lazy(() => import('./components/FragrancePricing'))
+const ListingContent = lazy(() => import('./components/ListingContent'))
+const WBCalc = lazy(() => import('./components/WBCalc'))
+
+const LazyFallback = () => (
+  <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
+)
 
 const DATA_DIR = '/data'
 
@@ -165,31 +171,35 @@ function App() {
     if (activeNode === 'n4') {
       return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
-          <OzonCalc />
+          <Suspense fallback={<LazyFallback />}><OzonCalc /></Suspense>
         </NodePage>
       )
     }
     if (activeNode === 'n36') {
       return (
-        <FragrancePricing
-          nodeId={activeNode}
-          status={nodeStatuses[activeNode] || 'pending'}
-          onStatusChange={handleStatusChange}
-        />
+        <Suspense fallback={<LazyFallback />}>
+          <FragrancePricing
+            nodeId={activeNode}
+            status={nodeStatuses[activeNode] || 'pending'}
+            onStatusChange={handleStatusChange}
+          />
+        </Suspense>
       )
     }
     if (activeNode === 'n2') {
       return (
-        <MarketResearch
-          data={data}
-          kpis={kpis}
-          dataFormat={dataFormat}
-          onFileUpload={handleFileUpload}
-          loading={loading}
-          error={error}
-          screenshotMode={screenshotMode}
-          setScreenshotMode={setScreenshotMode}
-        />
+        <Suspense fallback={<LazyFallback />}>
+          <MarketResearch
+            data={data}
+            kpis={kpis}
+            dataFormat={dataFormat}
+            onFileUpload={handleFileUpload}
+            loading={loading}
+            error={error}
+            screenshotMode={screenshotMode}
+            setScreenshotMode={setScreenshotMode}
+          />
+        </Suspense>
       )
     }
     if (activeNode === 'n6') {
@@ -223,14 +233,14 @@ function App() {
     if (activeNode === 'n14') {
       return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
-          <ListingContent />
+          <Suspense fallback={<LazyFallback />}><ListingContent /></Suspense>
         </NodePage>
       )
     }
     if (activeNode === 'n39') {
       return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
-          <WBCalc />
+          <Suspense fallback={<LazyFallback />}><WBCalc /></Suspense>
         </NodePage>
       )
     }
