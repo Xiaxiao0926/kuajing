@@ -10,7 +10,7 @@
  */
 import {
   percentileRank, percentileRankFromQuantiles, benchmarkQuantiles,
-  evidenceWeightedScore, shrink, round1,
+  evidenceWeightedScore, shrink, round1, round2,
 } from './normalization.js'
 
 // ---------- 评级 ----------
@@ -62,20 +62,28 @@ function scoreCompetition(ctx, deps, rules, subs) {
   const headPool = domTypes.map((t) => Math.max(t.top1_brand_share ?? 0, t.top10_seller_share ?? 0)).filter((v) => v > 0)
   items.push({ key: 'head_share_pressure', weight: subs.head_share_pressure.weight, label: subs.head_share_pressure.label,
     score: head !== null && headPool.length ? 100 - percentileRank(head, headPool) : null })
+  // 促销依赖：promo_share 60 / promo_days 40，缺失一侧按剩余权重重归一，两侧全缺 → null。
+  // 铁律：缺失子项不得用 0 补齐（0 会被解读为"无促销依赖"，属伪造证据）。
   const promoDep = (() => {
     const ps = b.promo_share?.p50, pd = b.promo_days?.p50
-    if (ps == null && pd == null) return null
-    const a = ps != null ? percentileRank(ps, arr('promo_share.p50')) : 0
-    const d = pd != null ? percentileRank(pd, arr('promo_days.p50')) : 0
-    return 100 - (0.6 * a + 0.4 * d)
+    const psRank = ps != null ? percentileRank(ps, arr('promo_share.p50')) : null
+    const pdRank = pd != null ? percentileRank(pd, arr('promo_days.p50')) : null
+    return evidenceWeightedScore([
+      { weight: 60, score: psRank != null ? 100 - psRank : null },
+      { weight: 40, score: pdRank != null ? 100 - pdRank : null },
+    ], 0).score
   })()
   items.push({ key: 'promo_dependency', weight: subs.promo_dependency.weight, label: subs.promo_dependency.label, score: promoDep })
+  // 广告机会：ad_days 60 / ad_roi 40，缺失一侧按剩余权重重归一，两侧全缺 → null。
+  // 铁律：缺失子项不得用固定 50 补齐（50 = 中位猜测，属伪造证据）。
   const adOpp = (() => {
     const ad = b.ad_days?.p50, roi = b.ad_roi?.p50
-    if (ad == null && roi == null) return null
-    const a = ad != null ? 100 - percentileRank(ad, arr('ad_days.p50')) : 50
-    const r = roi != null ? percentileRank(roi, arr('ad_roi.p50')) : 50
-    return 0.6 * a + 0.4 * r
+    const adRank = ad != null ? percentileRank(ad, arr('ad_days.p50')) : null
+    const roiRank = roi != null ? percentileRank(roi, arr('ad_roi.p50')) : null
+    return evidenceWeightedScore([
+      { weight: 60, score: adRank != null ? 100 - adRank : null },
+      { weight: 40, score: roiRank != null ? roiRank : null },
+    ], 0).score
   })()
   items.push({ key: 'ad_opportunity', weight: subs.ad_opportunity.weight, label: subs.ad_opportunity.label, score: adOpp })
   const r = evidenceWeightedScore(items, rules.subs_min_coverage)
@@ -98,11 +106,13 @@ function scorePrice(c, ctx, deps, rules, subs) {
     else bandScore = 40
   }
   items.push({ key: 'price_band_match', weight: subs.price_band_match.weight, label: subs.price_band_match.label, score: bandScore })
-  // 价格下限压力：市场最低价带相对中位价越低，价格战越激烈（方向：越低分越低）
-  // 实现说明：规格冻结了方向与权重，未冻结解析式；此处取保守线性实现并在单测固定行为。
+  // 价格下限压力（正式冻结公式）：市场最低价带相对主流成交中位价越低，价格战越激烈（越低分越低）。
+  //   price_floor_pressure = clamp(100 × P25(min_price_rub) / P50(avg_price_rub), 0, 100)
   items.push({ key: 'price_floor_pressure', weight: subs.price_floor_pressure.weight, label: subs.price_floor_pressure.label,
-    score: b.min_price_rub?.p25 != null && b.avg_price_rub?.p50 ? Math.max(0, Math.min(100, 100 - (1 - b.min_price_rub.p25 / b.avg_price_rub.p50) * 100)) : null })
-  // 折扣稳定性：市场折扣深度越大越不稳定（方向：折扣越深分越低）
+    score: b.min_price_rub?.p25 != null && b.avg_price_rub?.p50 != null && b.avg_price_rub.p50 > 0
+      ? Math.max(0, Math.min(100, (100 * b.min_price_rub.p25) / b.avg_price_rub.p50)) : null })
+  // 折扣稳定性（正式冻结公式）：市场折扣深度越大越不稳定（折扣越深分越低）。
+  //   discount_stability = clamp(100 − P50(discount), 0, 100)  （中位折扣 20%→80 / 50%→50 / 80%→20）
   items.push({ key: 'discount_stability', weight: subs.discount_stability.weight, label: subs.discount_stability.label,
     score: b.discount?.p50 != null ? Math.max(0, Math.min(100, 100 - b.discount.p50)) : null })
   const r = evidenceWeightedScore(items, rules.subs_min_coverage)
@@ -285,9 +295,11 @@ export function scoreProduct(c, marketContext, deps, rules) {
   const evidenceCoverage = total.coverage
   const totalScore = total.available ? round1(total.score) : null
 
-  if (evidenceCoverage < 0.5) status.push('NEEDS_DATA')
+  // 冻结契约：可用维度权重 <50% → NEEDS_DATA → 不可评级（grade=null），totalScore 仅作诊断值保留
+  const needsData = evidenceCoverage < 0.5
+  if (needsData) status.push('NEEDS_DATA')
 
-  const grade = totalScore !== null ? gradeOf(totalScore, rules) : null
+  const grade = !needsData && totalScore !== null ? gradeOf(totalScore, rules) : null
   const gradeTentative = ctx.context === 'LOW_MARKET_CONTEXT'
 
   // Supply Gap
@@ -307,12 +319,12 @@ export function scoreProduct(c, marketContext, deps, rules) {
     grade,
     gradeTentative,
     context: ctx.context,
-    evidenceCoverage: round1(evidenceCoverage),
+    evidenceCoverage: round2(evidenceCoverage),
     dimensions: Object.fromEntries(Object.entries(dimResults).map(([k, v]) => [k, {
       score: round1(v.score),
       weight: dims[k].weight,
       available: v.available,
-      coverage: round1(v.coverage),
+      coverage: round2(v.coverage),
       subs: v.subs.map((s) => ({ key: s.key, score: round1(s.score), weight: s.weight, label: s.label })),
     }])),
     supplyGap,

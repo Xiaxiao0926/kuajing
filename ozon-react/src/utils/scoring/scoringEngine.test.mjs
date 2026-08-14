@@ -199,6 +199,8 @@ console.log('\n测试9: 无 BSR 映射')
   assert(r.decision.status === 'RESEARCH', `decision=RESEARCH (实际 ${r.decision.status})`)
   assert(!r.dimensions.competition.available, 'competition N/A')
   assert(!r.dimensions.price_opportunity.available, 'price N/A')
+  // 冻结契约：coverage 保留两位小数，0.75 不得 round1 成 0.8（缺 competition 15 + price 10 = 25）
+  assert(r.evidenceCoverage === 0.75, `evidenceCoverage=0.75 (实际 ${r.evidenceCoverage})`)
 }
 
 console.log('\n测试10: 子指标覆盖 <50% 的维度 N/A')
@@ -221,6 +223,8 @@ console.log('\n测试11: 规范化工具')
   assert(ew.coverage === 0.8, 'coverage=0.8')
   const ew2 = evidenceWeightedScore([{ weight: 60, score: null }, { weight: 40, score: null }])
   assert(!ew2.available, '覆盖 0 → N/A')
+  const ew3 = evidenceWeightedScore([{ weight: 60, score: null }], 0)
+  assert(!ew3.available && ew3.score === null, 'minCoverage=0 且无任何证据 → N/A（不得 NaN）')
   eq(shrink(80, 60, 5, 5), 70, 'shrinkage n=5 α=0.5')
   eq(shrink(90, 60, 10, 5), 80, 'shrinkage n=10 α=2/3')
 }
@@ -247,6 +251,95 @@ console.log('\n测试13: 包含匹配 context 不高于 MEDIUM（由调用方保
   // 引擎只消费传入 context；调用方（管线）负责 mapping。此处验证引擎尊重传入的 LOW context
   const r = scoreProduct(makeCandidate(), { context: 'LOW', benchmark: makeMarketCtx().benchmark, matchedType: 'x', sampleSize: 8, domainTypes: makeMarketCtx().domainTypes }, deps, rules)
   assert(r.context === 'LOW', 'context 由调用方决定')
+}
+
+console.log('\n测试14: NEEDS_DATA（可用维度权重 <50%）→ grade=null 不可评级')
+{
+  const c = makeCandidate({
+    sales_rub_28d: null, units_28d: null, conv_rate: null, cart_add_rate: null, exposure: null, card_visits: null, reviews: null,
+    gross_margin: null, commission_fbs: null, commission_fbo: null, commission_rfbs: null, commission_fbp: null, ad_share: null,
+    sign_rate: null, oos_days_share: null, stock: null, turnover: null, revenue_loss_rate: null,
+    price_rub: 0, avg_price_rub: 0,
+  })
+  const r = scoreProduct(c, makeMarketCtx({ context: 'HIGH' }), deps, rules)
+  assert(r.status.includes('NEEDS_DATA'), '含 NEEDS_DATA')
+  assert(r.grade === null, `grade=null (实际 ${r.grade})`)
+  assert(r.totalScore !== null, 'totalScore 保留为诊断值')
+  assert(r.evidenceCoverage === 0.3, `evidenceCoverage=0.3 (实际 ${r.evidenceCoverage})`)
+  assert(r.decision.status === 'HOLD' && r.decision.action === 'NEEDS_DATA', `decision=HOLD/NEEDS_DATA (实际 ${r.decision.status}/${r.decision.action})`)
+}
+
+console.log('\n测试15: 促销依赖/广告机会缺失子项 → 按剩余权重重归一，不用 0/50 补值')
+{
+  // promo_share 有、promo_days 无 → 只用 promo_share 重归一（禁止 0 混合）
+  const ctx = makeMarketCtx()
+  ctx.benchmark = { ...ctx.benchmark, promo_days: null }
+  const r = scoreProduct(makeCandidate(), ctx, deps, rules)
+  const promoSub = r.dimensions.competition.subs.find((s) => s.key === 'promo_dependency')
+  const psArr = ctx.domainTypes.map((t) => t.promo_share?.p50).filter((v) => v != null)
+  const expectedPromo = Math.round((100 - percentileRank(30, psArr)) * 10) / 10
+  eq(promoSub.score, expectedPromo, 'promo 缺一侧按剩余权重重归一')
+  // ad_days 有、ad_roi 无 → 只用 ad_days（禁止 50 混合）
+  ctx.benchmark = { ...ctx.benchmark, ad_roi: null }
+  const r2 = scoreProduct(makeCandidate(), ctx, deps, rules)
+  const adSub = r2.dimensions.competition.subs.find((s) => s.key === 'ad_opportunity')
+  const adArr = ctx.domainTypes.map((t) => t.ad_days?.p50).filter((v) => v != null)
+  const expectedAd = Math.round((100 - percentileRank(10, adArr)) * 10) / 10
+  eq(adSub.score, expectedAd, 'ad 缺一侧按剩余权重重归一')
+  // 两侧全缺 → 子项 N/A，竞争维度由剩余子项重归一
+  ctx.benchmark = { ...ctx.benchmark, promo_share: null, promo_days: null, ad_days: null, ad_roi: null }
+  const r3 = scoreProduct(makeCandidate(), ctx, deps, rules)
+  const promoSub3 = r3.dimensions.competition.subs.find((s) => s.key === 'promo_dependency')
+  const adSub3 = r3.dimensions.competition.subs.find((s) => s.key === 'ad_opportunity')
+  assert(promoSub3.score === null, 'promo 两侧全缺 → 子项 null')
+  assert(adSub3.score === null, 'ad 两侧全缺 → 子项 null')
+  assert(r3.dimensions.competition.available, '竞争维度由剩余 70% 子权重重归一仍可用')
+}
+
+console.log('\n测试16: 价格空间两个正式冻结公式')
+{
+  const ctx = makeMarketCtx()
+  ctx.benchmark = {
+    ...ctx.benchmark,
+    min_price_rub: { ...ctx.benchmark.min_price_rub, p25: 400 },
+    avg_price_rub: { ...ctx.benchmark.avg_price_rub, p50: 700 },
+    discount: { ...ctx.benchmark.discount, p50: 30 },
+  }
+  const r = scoreProduct(makeCandidate(), ctx, deps, rules)
+  const subs = r.dimensions.price_opportunity.subs
+  const floor = subs.find((s) => s.key === 'price_floor_pressure')
+  const disc = subs.find((s) => s.key === 'discount_stability')
+  // clamp(100 × P25(min) / P50(avg), 0, 100) = 100×400/700 = 57.14 → round1 57.1
+  eq(floor.score, 57.1, 'price_floor_pressure 冻结公式', 0.11)
+  // clamp(100 − P50(discount), 0, 100) = 100−30 = 70
+  eq(disc.score, 70, 'discount_stability 冻结公式 (p50=30 → 70)')
+  // 中位折扣 80% → 20 分；50% → 50 分
+  ctx.benchmark = { ...ctx.benchmark, discount: { ...ctx.benchmark.discount, p50: 80 } }
+  const r80 = scoreProduct(makeCandidate(), ctx, deps, rules)
+  eq(r80.dimensions.price_opportunity.subs.find((s) => s.key === 'discount_stability').score, 20, 'discount p50=80 → 20')
+}
+
+console.log('\n测试17: percentileRankFromQuantiles 越界截断 10/90')
+{
+  const qs = [{ q: 0.10, v: 100 }, { q: 0.50, v: 500 }, { q: 0.90, v: 900 }]
+  eq(percentileRankFromQuantiles(50, qs), 10, '低于 P10 → 10')
+  eq(percentileRankFromQuantiles(950, qs), 90, '高于 P90 → 90')
+  eq(percentileRankFromQuantiles(500, qs), 50, '区间内正常插值')
+}
+
+console.log('\n测试18: 解释口径分级（LOW/domain 不得写"同类市场"）')
+{
+  // HIGH（type 基准）→ 同类市场措辞
+  const ctxH = makeMarketCtx()
+  const rH = scoreProduct(makeCandidate(), ctxH, deps, rules)
+  const exH = buildExplanations(makeCandidate(), rH, ctxH)
+  assert(exH.strengths.some((s) => s.includes('同类市场')), 'HIGH → 同类市场措辞')
+  // LOW（domain 基准）→ 对应 BSR 市场域，禁止同类市场
+  const ctxL = { context: 'LOW', benchmark: makeMarketCtx().benchmark, matchedType: 'x', sampleSize: 3, domainTypes: makeMarketCtx().domainTypes }
+  const rL = scoreProduct(makeCandidate(), ctxL, deps, rules)
+  const exL = buildExplanations(makeCandidate(), rL, ctxL)
+  assert(exL.strengths.some((s) => s.includes('对应 BSR 市场域')), 'LOW → 对应 BSR 市场域措辞')
+  assert(!exL.strengths.some((s) => s.includes('同类市场')), 'LOW 不得伪装成产品类型市场基准')
 }
 
 console.log(`\n===== 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)

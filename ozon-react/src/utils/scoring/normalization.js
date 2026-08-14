@@ -44,6 +44,7 @@ export function evidenceWeightedScore(items, minCoverage = 0.5) {
     weightedSum += it.weight * it.score
   }
   const coverage = availWeight / totalWeight
+  if (availWeight === 0) return { score: null, coverage: 0, available: false }
   if (coverage < minCoverage) return { score: null, coverage, available: false }
   return { score: weightedSum / availWeight, coverage, available: true }
 }
@@ -62,8 +63,10 @@ export function shrink(typeValue, domainValue, n, k = 5) {
 }
 
 /**
- * 由分位点序列（如 benchmark 的 p10/p25/p50/p75/p90）对 value 做分段线性插值百分位（0-100）。
- * quantiles: [{q: 0.10, v: ...}, ...] 按 q 升序；value 越界截断到 0/100。
+ * 由分位点序列（如 benchmark 的 p10/p25/p50/p75/p90）对 value 做分段线性插值百分位。
+ * quantiles: [{q: 0.10, v: ...}, ...] 按 q 升序。
+ * 越界截断到首/末分位对应的百分位：只有 P10–P90 数据时，低于 P10 → 10、高于 P90 → 90
+ * （不得声称 P0/P100 —— 只有 P10–P90 观测时不能把区间外值伪装成市场极值）。
  */
 export function percentileRankFromQuantiles(value, quantiles) {
   if (value === null || value === undefined || !quantiles || quantiles.length < 2) return null
@@ -96,4 +99,10 @@ export function benchmarkQuantiles(bench, key) {
 export function round1(v) {
   if (v === null || v === undefined) return null
   return Math.round(v * 10) / 10
+}
+
+/** 把 [0,1] 覆盖度四舍五入到 2 位小数（evidenceCoverage/coverage 专用；禁止用 round1，0.75→0.8 是错的） */
+export function round2(v) {
+  if (v === null || v === undefined) return null
+  return Math.round(v * 100) / 100
 }

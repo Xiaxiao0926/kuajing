@@ -1,9 +1,10 @@
 /**
  * scoring/explanations.js — 评分解释生成（纯函数）
  * 依据 T4-1B §6 输出契约：strengths / risks / missingMetrics。
- * 口径铁律：
- *   - 有 BSR 映射 → 可写"超过俄罗斯同类市场 X% 商品"；
- *   - 无映射 → 只能写"候选池表现前 X%"。
+ * 口径铁律（context 分级，不得把 domain 基准伪装成产品类型基准）：
+ *   - HIGH / MEDIUM（type 基准）→ 可写"超过同类市场 X 商品"；
+ *   - LOW（domain 基准 / shrinkage）→ 只能写"对应 BSR 市场域"；
+ *   - LOW_MARKET_CONTEXT（无映射）→ 只能写"候选池表现前 X%"。
  */
 import { percentileRankFromQuantiles, benchmarkQuantiles } from './normalization.js'
 
@@ -21,6 +22,9 @@ export function buildExplanations(c, result, marketContext) {
   const missing = []
   const ctx = marketContext || { context: 'LOW_MARKET_CONTEXT', benchmark: null, matchedType: null }
   const marketAware = ctx.benchmark !== null
+  // HIGH/MEDIUM = type 基准；LOW = domain 基准；LOW_MARKET_CONTEXT = 无基准
+  const isTypeBenchmark = ctx.context === 'HIGH' || ctx.context === 'MEDIUM'
+  const marketLabel = () => (isTypeBenchmark ? `同类市场 ${ctx.matchedType || '该类型'}` : '对应 BSR 市场域')
 
   const dim = (k) => result.dimensions[k]
   const poolWording = (key, label, percentile) =>
@@ -34,7 +38,7 @@ export function buildExplanations(c, result, marketContext) {
       if (marketAware) {
         const qs = benchmarkQuantiles(ctx.benchmark, 'sales_28d')
         const rank = qs ? percentileRankFromQuantiles(c.sales_rub_28d, qs) : null
-        strengths.push(`28天销售额达到同类市场 ${ctx.matchedType || '该类型'} 前 ${fmt(100 - rank)}% 水平`)
+        strengths.push(`28天销售额达到${marketLabel()}前 ${fmt(100 - rank)}% 水平`)
       } else {
         strengths.push(poolWording('sales', '28天销售额', salesSub.score))
       }
@@ -96,7 +100,7 @@ export function buildExplanations(c, result, marketContext) {
 
   // ---- supply gap ----
   if (result.supplyGap && result.supplyGap.rank === 'HIGH_GAP') {
-    strengths.push(`供应缺口信号强：${ctx.matchedType || '该类型'} 需求高且缺货/错失销售显著，卖家集中度不构成壁垒`)
+    strengths.push(`供应缺口信号强：${marketLabel()}需求高且缺货/错失销售显著，卖家集中度不构成壁垒`)
   } else if (result.supplyGap && result.supplyGap.rank === 'MEDIUM_GAP') {
     strengths.push('存在中等供应缺口信号，值得进一步验证')
   }

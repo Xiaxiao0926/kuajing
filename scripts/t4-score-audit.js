@@ -1,5 +1,5 @@
-// T4-2 1000 SKU 分数分布审计（一次性脚本，非生产代码）
-// 输出：A/B/C/D 分布、LOW_MARKET_CONTEXT 虚高检查、销售领导者 enrichment 对比 19.8% 基线
+// T4-2/T4-3 1000 SKU 分数分布审计（一次性脚本，非生产代码）
+// 输出：A/B/C/D/不可评级 五档分布、LOW_MARKET_CONTEXT 虚高检查、Top20% 模型 enrichment（candidate-weighted + unique-type）
 const fs = require('fs');
 const path = require('path');
 const xlsx = require(path.join(process.cwd(), 'node_modules', 'xlsx'));
@@ -133,7 +133,10 @@ async function main() {
     }
     return out
   }
+  const dimsValid = (c) => Array.isArray(c.dims) && c.dims.length === 3 && c.dims.every((v) => v !== null && v !== undefined && v > 0)
   for (const c of candidates) {
+    // 冻结契约：尺寸/重量无效的 SKU 不得进入 shipping_ratio / billable_weight percentile 池
+    if (!(c.weight_kg > 0) || !dimsValid(c)) continue
     const chs = celChannels(c)
     if (chs.length > 0) {
       const best = chs.reduce((a, b) => (b.cost < a.cost ? b : a), chs[0])
@@ -205,19 +208,44 @@ async function main() {
   console.log(`  LOW_MARKET_CONTEXT 组: n=${lmc.length}, 均分 ${avg(lmc).toFixed(1)}, A 数 ${aLmc} (${(aLmc / Math.max(contextCount.LOW_MARKET_CONTEXT, 1) * 100).toFixed(1)}%)`)
   console.log(`  有映射组: n=${mapped.length}, 均分 ${avg(mapped).toFixed(1)}, A 数 ${aMapped} (${(aMapped / Math.max(total - contextCount.LOW_MARKET_CONTEXT, 1) * 100).toFixed(1)}%)`)
 
-  // ---- 7. 销售领导者 enrichment（BSR 数据侧验证，独立于候选评分） ----
-  // 用 BSR 明细验证：基准里 bsr_leader_share 均值 vs 高分类型
-  const leaderShares = Object.values(typeBench).map((t) => t.bsr_leader_share).filter((v) => v !== null)
-  const baselineLeader = leaderShares.length ? leaderShares.reduce((s, v) => s + v, 0) / leaderShares.length : null
-  console.log(`\n销售领导者 enrichment（BSR 基准层，独立验证）:`)
-  console.log(`  全体产品类型 bsr_leader_share 均值: ${baselineLeader?.toFixed(1)}% (候选评估口径的 19.8% 是商品级基线)`)
-  // 需求分高分类型（demand 代理用 sales_28d.p50）的 leader share
-  const typeSales = Object.entries(typeBench).map(([k, t]) => ({ k, sales50: t.sales_28d?.p50, leader: t.bsr_leader_share })).filter((x) => x.sales50 != null)
-  typeSales.sort((a, b) => b.sales50 - a.sales50)
-  const top20 = typeSales.slice(0, Math.ceil(typeSales.length * 0.2))
-  const topLeader = top20.map((x) => x.leader).filter((v) => v !== null)
-  console.log(`  Top20% 高销量类型的 bsr_leader_share 均值: ${topLeader.length ? (topLeader.reduce((s, v) => s + v, 0) / topLeader.length).toFixed(1) : 'N/A'}%`)
-  console.log(`  enrichment 倍数: ${baselineLeader && topLeader.length ? (topLeader.reduce((s, v) => s + v, 0) / topLeader.length / baselineLeader).toFixed(2) : 'N/A'}`)
+  // ---- 7. 模型验证：Top20% 总分 SKU 的 matched-type 销售领导者 enrichment ----
+  // 真实验证流程（T4-3 口径）：仅取有 BSR 映射的候选 → 按 totalScore 排序 → 模型 Top20%
+  // → 其 matched type 的 bsr_leader_share 均值 vs 全部 mapped 候选的 matched-type baseline。
+  const mappedResults = results.filter((r) => r.context !== 'LOW_MARKET_CONTEXT' && r.totalScore !== null)
+  const leaderOf = (r) => {
+    const t = r.matchedProductType ? typeBench[r.matchedProductType] : null
+    return t && t.bsr_leader_share != null ? t.bsr_leader_share : null
+  }
+  const withLeader = mappedResults.filter((r) => leaderOf(r) !== null)
+  const mean = (a) => (a.length ? a.reduce((s, v) => s + v, 0) / a.length : null)
+  const baseLeader = mean(withLeader.map((r) => leaderOf(r)))
+  const byScore = [...withLeader].sort((a, b) => b.totalScore - a.totalScore)
+  const top20 = byScore.slice(0, Math.ceil(byScore.length * 0.2))
+  const topLeader = mean(top20.map((r) => leaderOf(r)))
+  console.log(`\n模型验证：Top20% 总分 SKU 的 matched-type 销售领导者 enrichment`)
+  console.log(`  参与: mapped 且可评级 ${mappedResults.length} 行; matched type 有 bsr_leader_share 的 ${withLeader.length} 行`)
+  console.log(`  baseline (candidate-weighted): ${baseLeader?.toFixed(1) ?? 'N/A'}%`)
+  console.log(`  模型 Top20% 组 (candidate-weighted): ${topLeader?.toFixed(1) ?? 'N/A'}%`)
+  console.log(`  enrichment 倍数 (candidate-weighted): ${baseLeader && topLeader ? (topLeader / baseLeader).toFixed(2) : 'N/A'}`)
+  // unique-type 口径：避免同一产品类型因候选 SKU 多而被重复加权
+  const byType = {}
+  for (const r of withLeader) {
+    if (!byType[r.matchedProductType]) byType[r.matchedProductType] = []
+    byType[r.matchedProductType].push(r)
+  }
+  const typeRows = Object.values(byType).map((rs) => ({
+    type: rs[0].matchedProductType,
+    score: rs.reduce((s, r) => s + r.totalScore, 0) / rs.length,
+    leader: leaderOf(rs[0]),
+  }))
+  const baseType = mean(typeRows.map((t) => t.leader))
+  typeRows.sort((a, b) => b.score - a.score)
+  const topTypes = typeRows.slice(0, Math.ceil(typeRows.length * 0.2))
+  const topTypeLeader = mean(topTypes.map((t) => t.leader))
+  console.log(`  unique-type: 覆盖 ${typeRows.length} 个产品类型`)
+  console.log(`  baseline (unique-type): ${baseType?.toFixed(1) ?? 'N/A'}%`)
+  console.log(`  Top20% 类型组 (unique-type): ${topTypeLeader?.toFixed(1) ?? 'N/A'}%`)
+  console.log(`  enrichment 倍数 (unique-type): ${baseType && topTypeLeader ? (topTypeLeader / baseType).toFixed(2) : 'N/A'}`)
 
   // 保存明细（本地审计用，不入 git）
   fs.writeFileSync(path.join(ROOT, '_audit', 'tmp', 't4-score-audit-raw.json'), JSON.stringify(results, null, 2), 'utf-8')
