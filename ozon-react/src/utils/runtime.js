@@ -1,5 +1,12 @@
 export function getRuntimeConfig() {
-  return globalThis.window?.KUAJING_CONFIG || {}
+  if (globalThis.window?.KUAJING_CONFIG) return globalThis.window.KUAJING_CONFIG
+  const configElement = globalThis.document?.getElementById('fyzsxnb-kuajing-config')
+  if (!configElement?.textContent) return {}
+  try {
+    return JSON.parse(configElement.textContent)
+  } catch {
+    return {}
+  }
 }
 
 let sessionAuthorized = Boolean(getRuntimeConfig().authorized)

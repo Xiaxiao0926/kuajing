@@ -1,10 +1,16 @@
 import assert from 'node:assert/strict'
 
-globalThis.window = {
-  KUAJING_CONFIG: {
-    apiBase: 'https://example.test/wp-json/kuajing/v1',
-    authorized: false,
-    sessionRequired: true,
+globalThis.window = {}
+globalThis.document = {
+  getElementById(id) {
+    if (id !== 'fyzsxnb-kuajing-config') return null
+    return {
+      textContent: JSON.stringify({
+        apiBase: 'https://example.test/wp-json/kuajing/v1',
+        authorized: false,
+        sessionRequired: true,
+      }),
+    }
   },
 }
 

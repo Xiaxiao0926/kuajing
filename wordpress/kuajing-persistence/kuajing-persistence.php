@@ -298,20 +298,17 @@ final class FYZSXNB_Kuajing_Dashboard {
             self::VERSION,
             true
         );
-        wp_add_inline_script(
-            $handle,
-            'window.KUAJING_CONFIG=' . wp_json_encode(array(
-                'apiBase' => esc_url_raw(rest_url('kuajing/v1')),
-                'assetBase' => esc_url_raw(plugins_url('dist/', __FILE__)),
-                'dataBase' => 'https://raw.githubusercontent.com/Xiaxiao0926/kuajing/main/ozon-react/public/data/',
-                'authorized' => $authorized,
-                'sessionRequired' => true,
-                'nonce' => $authorized ? wp_create_nonce('wp_rest') : '',
-            )) . ';',
-            'before'
-        );
+        $config = wp_json_encode(array(
+            'apiBase' => esc_url_raw(rest_url('kuajing/v1')),
+            'assetBase' => esc_url_raw(plugins_url('dist/', __FILE__)),
+            'dataBase' => 'https://raw.githubusercontent.com/Xiaxiao0926/kuajing/main/ozon-react/public/data/',
+            'authorized' => $authorized,
+            'sessionRequired' => true,
+            'nonce' => $authorized ? wp_create_nonce('wp_rest') : '',
+        ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
-        return '<div id="root" class="fyzsxnb-kuajing-root"></div>';
+        return '<script type="application/json" id="fyzsxnb-kuajing-config">' . $config . '</script>'
+            . '<div id="root" class="fyzsxnb-kuajing-root"></div>';
     }
 
     public static function module_script_tag($tag, $handle, $src) {
