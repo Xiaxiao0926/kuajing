@@ -75,21 +75,25 @@ function validateChannels(data) {
   }
 }
 
-// T4-4B Gate 0：评分规则必须自洽（缺 λ/子权重直接 fail-close，禁止静默回退）
+// T4-4B Gate 0 / T4-5 final hardening：评分规则必须自洽（缺 λ/子权重/权重越界直接 fail-close，禁止静默回退）
 function validateScoringRules(data) {
   const d = data.dimensions?.demand;
   if (!d) fail('scoring_rules.json 缺少 dimensions.demand');
   for (const k of ['scale_weight', 'scale_sales_weight', 'scale_units_weight']) {
     if (typeof d[k] !== 'number' || d[k] <= 0) fail(`scoring_rules.json demand.${k} 必须为正数`);
   }
+  if (d.scale_weight > 1) fail('scoring_rules.json demand.scale_weight 必须 <= 1（λ∈(0,1]，禁止 >1）');
   if (Math.abs(d.scale_sales_weight + d.scale_units_weight - 1) > 1e-9) {
     fail('scoring_rules.json demand.scale_sales_weight + scale_units_weight 必须等于 1');
   }
   if (!Array.isArray(data.grades) || data.grades.length === 0) fail('scoring_rules.json grades 必须为非空数组');
+  let weightSum = 0;
   for (const key of ['demand', 'competition', 'price_opportunity', 'profitability', 'logistics', 'operations']) {
     const dim = data.dimensions?.[key];
     if (!dim || typeof dim.weight !== 'number') fail(`scoring_rules.json 维度 ${key} 缺少权重`);
+    weightSum += dim.weight;
   }
+  if (Math.abs(weightSum - 100) > 1e-9) fail(`scoring_rules.json 六维权重之和必须 = 100（实际 ${weightSum}）`);
 }
 
 function main() {

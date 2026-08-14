@@ -27,6 +27,7 @@
 | TD-17 | Big 渠道重量下限代码为 2kg、原表为 2.001kg；Budget 下限代码 0.5kg、原表 0.501kg——边界表述差异，T2 按"行为冻结"原则保留代码现值 | `config/ozon_channels.json` | 低：0.001kg 边界无实际影响 | 需求方确认后统一（改 config 一处即可） |
 | TD-15 | ✅ 已解决（T2+hardening）：config 语义正确（96元/kg+100g进位）；UI 单位文案已修正为「96元/KG · 100g进位」（OzonCalc.jsx）；adapter 中 `rateUnit:'per100g'` 仅作 calcShipping 内部分支标志并加注释说明 | — | — | 关闭 |
 | TD-18 | `vite.config.js` 数据同步层仍写死 `D:/ozon/市场分析`、`D:/ozon/市场分析/persisted-data.json` 绝对路径（T0 只处理了 server.js/config.js 与 Python 端） | `ozon-react/vite.config.js` | 中：换机器/换盘后 React dev 数据同步失效 | 单独任务：改为环境变量 OZON_DATA_DIR + 相对回退（不做，仅登记） |
+| TD-19 | 业务数据公开化：`选品/跨境项目产品线扩展计划.xlsx`、`public/data/scoring_candidates.json`、`市场分析/市场bsr/*.xlsx`、`public/data/` 热销 xlsx 均已在 public GitHub（含历史提交）。单独删除/.gitignore 无效——历史仍在；彻底清除需历史重写+force push（人工审批 Gate，禁止代理顺手执行） | 仓库 + `public/data/` | 高：真实业务数据公开可下载 | 立 Data Governance / Private Data Migration 项目统一处理（源 xlsx、JSON、BSR 明细、部署数据源、WordPress 私有接口、Git 历史） |
 
 ---
 

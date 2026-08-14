@@ -4,10 +4,12 @@
  * 评分在 useMemo 中只跑一次，不随 rerender 重算 1000 SKU。
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
+import * as XLSX from 'xlsx'
 import { getDataUrl } from '../../../utils/runtime'
 import scoringRules from '../../../generated/scoring_rules'
 import settings from '../../../generated/settings'
 import { scoreAllCandidates } from '../../../utils/scoring/scoringDataAdapter'
+import { rowsToCsv, rowsToXlsx, exportFilename } from '../../../utils/scoring/scoringExport'
 
 const DECISION_STATUS_ZH = { ELIGIBLE: '可执行', REVIEW: '需复核', RESEARCH: '需调研', HOLD: '暂缓', BLOCKED: '不可行' }
 const DECISION_ACTION_ZH = {
@@ -25,6 +27,16 @@ const GRADE_STYLE = {
 }
 // 默认排序：可执行 Decision 优先 → 综合分 → Evidence（86+BLOCKED 不得排在 78+ELIGIBLE 前面）
 const DECISION_TIER = { ELIGIBLE: 0, REVIEW: 1, RESEARCH: 2, HOLD: 3, BLOCKED: 4 }
+
+// 列表简版原因：仅对引擎已输出的 status 做中文标签映射（不新增判断规则）
+function briefReason(r) {
+  if (r.status.includes('BLOCKED_LOGISTICS')) return '物流不可行·禁止采样'
+  if (r.status.includes('MARGIN_RISK')) return '毛利为负·核实成本'
+  if (r.status.includes('REVIEW_REQUIRED')) return '命中合规词·人工复核'
+  if (r.status.includes('LOW_MARKET_CONTEXT')) return '无市场基准·补充调研'
+  if (r.status.includes('NEEDS_DATA')) return '关键数据不足·暂不评级'
+  return '—'
+}
 
 export default function ProductScoringSection() {
   const [candidates, setCandidates] = useState(null)
@@ -199,7 +211,30 @@ export default function ProductScoringSection() {
         <Select label="Supply Gap" value={fGap} onChange={setFGap} options={[['ALL', '全部'], ['HIGH_GAP', '强缺口'], ['MEDIUM_GAP', '中缺口'], ['NONE', '无信号']]} />
         <Select label="风险" value={fRisk} onChange={setFRisk} options={[['ALL', '全部'], ['MARGIN_RISK', '毛利风险'], ['REVIEW_REQUIRED', '合规'], ['BLOCKED_LOGISTICS', '物流'], ['NEEDS_DATA', '数据不足']]} />
         <Select label="类目" value={fCategory} onChange={setFCategory} options={[['ALL', '全部'], ...categories.map((c) => [c, c])]} />
-        <div className="ml-auto text-sm text-morandi-text-light">{filtered.length} / {overview.total} 行</div>
+        <div className="ml-auto flex items-center gap-2">
+          <span className="text-sm text-morandi-text-light">{filtered.length} / {overview.total} 行</span>
+          <button
+            onClick={() => rowsToXlsx(filtered, XLSX, exportFilename('xlsx'))}
+            disabled={filtered.length === 0}
+            className="px-3 py-1.5 rounded-lg bg-morandi-primary text-white text-xs font-medium hover:bg-morandi-primary/90 disabled:opacity-50"
+          >
+            导出 XLSX（{filtered.length}）
+          </button>
+          <button
+            onClick={() => {
+              const blob = new Blob([rowsToCsv(filtered)], { type: 'text/csv;charset=utf-8' })
+              const a = document.createElement('a')
+              a.href = URL.createObjectURL(blob)
+              a.download = exportFilename('csv')
+              a.click()
+              URL.revokeObjectURL(a.href)
+            }}
+            disabled={filtered.length === 0}
+            className="px-3 py-1.5 rounded-lg border border-morandi-line bg-white text-morandi-text text-xs font-medium hover:bg-morandi-bg disabled:opacity-50"
+          >
+            导出 CSV（{filtered.length}）
+          </button>
+        </div>
       </div>
 
       {/* 排名表 */}
@@ -220,6 +255,7 @@ export default function ProductScoringSection() {
                 <th className="px-3 py-2 text-right">物流</th>
                 <th className="px-3 py-2 text-center">Supply Gap</th>
                 <th className="px-3 py-2 text-center">Context</th>
+                <th className="px-3 py-2 text-left">简版原因</th>
                 <th className="px-3 py-2 text-left">风险标记</th>
               </tr>
             </thead>
@@ -252,6 +288,7 @@ export default function ProductScoringSection() {
                     <td className="px-3 py-2 text-right">{r.dimensions.logistics.available ? r.dimensions.logistics.score : '—'}</td>
                     <td className="px-3 py-2 text-center">{r.supplyGap ? GAP_ZH[r.supplyGap.rank] || r.supplyGap.rank : '—'}</td>
                     <td className="px-3 py-2 text-center">{CONTEXT_ZH[r.context]}</td>
+                    <td className="px-3 py-2 text-left text-xs text-morandi-text-light whitespace-nowrap">{briefReason(r)}</td>
                     <td className="px-3 py-2 text-left">
                       {risks.length === 0 ? <span className="text-morandi-text-light">—</span> : risks.map((s) => (
                         <span key={s} className="inline-block px-1.5 py-0.5 mr-1 rounded bg-rose-50 text-rose-600 text-xs">
