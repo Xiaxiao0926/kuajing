@@ -168,7 +168,31 @@ async function main() {
     }
     const deps = { candidatePool, rubPerCny: settings.rub_per_cny, calcCelShipping: celChannels }
     const r = scoreProduct(c, { context, benchmark, matchedType: m.matchedType, sampleSize: m.n, domainTypes }, deps, rules)
-    return { ...r, kind: m.kind, leaf: c.category_leaf, sales: c.sales_rub_28d }
+    // ---- 诊断字段（维度验证矩阵用；matched type 一律取原始 typeBench，不用 blendBench） ----
+    const diag = { grossMargin: c.gross_margin, signRate: c.sign_rate, shippingRatio: null, bandIn: null }
+    const t = m.matchedType ? typeBench[m.matchedType] : null
+    if (t) {
+      diag.typeLeader = t.bsr_leader_share ?? null
+      diag.typeSellerHhi = t.seller_hhi ?? null
+      diag.typeTop10 = t.top10_seller_share ?? null
+      diag.typeSalesP50 = t.sales_28d?.p50 ?? null
+      diag.typeAvgP25 = t.avg_price_rub?.p25 ?? null
+      diag.typeAvgP75 = t.avg_price_rub?.p75 ?? null
+    }
+    if (c.weight_kg > 0 && dimsValid(c)) {
+      const chs = celChannels(c)
+      if (chs.length > 0) {
+        const best = chs.reduce((a, b) => (b.cost < a.cost ? b : a), chs[0])
+        const eff = effPriceOf(c)
+        if (eff != null && eff > 0) {
+          diag.shippingRatio = best.cost / (eff / settings.rub_per_cny)
+          if (diag.typeAvgP25 != null && diag.typeAvgP75 != null) {
+            diag.bandIn = eff >= diag.typeAvgP25 && eff <= diag.typeAvgP75
+          }
+        }
+      }
+    }
+    return { ...r, ...diag, kind: m.kind, leaf: c.category_leaf, sales: c.sales_rub_28d }
   })
 
   // ---- 6. 分布统计 ----
@@ -209,9 +233,9 @@ async function main() {
   console.log(`  有映射组: n=${mapped.length}, 均分 ${avg(mapped).toFixed(1)}, A 数 ${aMapped} (${(aMapped / Math.max(total - contextCount.LOW_MARKET_CONTEXT, 1) * 100).toFixed(1)}%)`)
 
   // ---- 7. 模型验证：Top20% 总分 SKU 的 matched-type 销售领导者 enrichment ----
-  // 真实验证流程（T4-3 口径）：仅取有 BSR 映射的候选 → 按 totalScore 排序 → 模型 Top20%
-  // → 其 matched type 的 bsr_leader_share 均值 vs 全部 mapped 候选的 matched-type baseline。
-  const mappedResults = results.filter((r) => r.context !== 'LOW_MARKET_CONTEXT' && r.totalScore !== null)
+  // 真实验证流程（T4-3 口径）：仅取有 BSR 映射且可评级（grade!==null，NEEDS_DATA 诊断分不混入）的候选
+  // → 按 totalScore 排序 → 模型 Top20% → 其 matched type 的 bsr_leader_share 均值 vs 全部 mapped baseline。
+  const mappedResults = results.filter((r) => r.context !== 'LOW_MARKET_CONTEXT' && r.grade !== null)
   const leaderOf = (r) => {
     const t = r.matchedProductType ? typeBench[r.matchedProductType] : null
     return t && t.bsr_leader_share != null ? t.bsr_leader_share : null
@@ -246,6 +270,47 @@ async function main() {
   console.log(`  baseline (unique-type): ${baseType?.toFixed(1) ?? 'N/A'}%`)
   console.log(`  Top20% 类型组 (unique-type): ${topTypeLeader?.toFixed(1) ?? 'N/A'}%`)
   console.log(`  enrichment 倍数 (unique-type): ${baseType && topTypeLeader ? (topTypeLeader / baseType).toFixed(2) : 'N/A'}`)
+
+  // ---- 8. 维度验证矩阵（T4-3 第三层）----
+  // 每个维度按其维度分排序取 Top20%，比较该组与 baseline 的验证指标；
+  // 期望方向来自需求方口径表：demand→leader/salesP50 高、competition→HHI/top10 低、
+  // price→落带比例高、profitability→gross 高、logistics→shipping ratio 低、operations→sign rate 高、
+  // total→gap 占比与 leader-share 仅观察记录（不作 pass/fail）。
+  const mappedEligible = results.filter((r) => r.context !== 'LOW_MARKET_CONTEXT' && r.grade !== null)
+  const dimEligible = (key) => mappedEligible.filter((r) => r.dimensions[key] && r.dimensions[key].available)
+  const top20ByScore = (rows, f) => [...rows].sort((a, b) => f(b) - f(a)).slice(0, Math.ceil(rows.length * 0.2))
+  const meanOf = (rows, f) => {
+    const v = rows.map(f).filter((x) => x !== null && x !== undefined && !isNaN(x))
+    return v.length ? v.reduce((s, x) => s + x, 0) / v.length : null
+  }
+  const shareOf = (rows, f) => {
+    const v = rows.map(f).filter((x) => x !== null && x !== undefined)
+    return v.length ? v.filter(Boolean).length / v.length : null
+  }
+  const matrix = [
+    { key: 'demand', metric: 'BSR leader-share', get: (r) => r.typeLeader, dir: '>', expect: 'higher' },
+    { key: 'demand', metric: 'sales P50', get: (r) => r.typeSalesP50, dir: '>', expect: 'higher' },
+    { key: 'competition', metric: 'seller HHI', get: (r) => r.typeSellerHhi, dir: '<', expect: 'lower' },
+    { key: 'competition', metric: 'top10 seller share', get: (r) => r.typeTop10, dir: '<', expect: 'lower' },
+    { key: 'price_opportunity', metric: '落 P25-P75 比例', get: (r) => r.bandIn, dir: '>', expect: 'higher', share: true },
+    { key: 'profitability', metric: 'gross margin', get: (r) => r.grossMargin, dir: '>', expect: 'higher' },
+    { key: 'logistics', metric: 'shipping ratio', get: (r) => r.shippingRatio, dir: '<', expect: 'lower' },
+    { key: 'operations', metric: 'sign rate', get: (r) => r.signRate, dir: '>', expect: 'higher' },
+    { key: 'total', metric: 'Supply Gap HIGH/MEDIUM 占比', get: (r) => !!(r.supplyGap && (r.supplyGap.rank === 'HIGH_GAP' || r.supplyGap.rank === 'MEDIUM_GAP')), dir: 'obs', expect: 'observe', share: true },
+    { key: 'total', metric: 'BSR leader-share', get: (r) => r.typeLeader, dir: 'obs', expect: 'record' },
+  ]
+  console.log(`\n维度验证矩阵 (mapped 且可评级 n=${mappedEligible.length}):`)
+  for (const d of matrix) {
+    const eligible = d.key === 'total' ? mappedEligible : dimEligible(d.key)
+    const top = d.key === 'total' ? top20ByScore(eligible, (r) => r.totalScore) : top20ByScore(eligible, (r) => r.dimensions[d.key].score)
+    const fmt = (v, share) => (v == null ? 'N/A' : share ? `${(v * 100).toFixed(1)}%` : String(Math.round(v * 10) / 10))
+    const baseV = d.share ? shareOf(eligible, d.get) : meanOf(eligible, d.get)
+    const topV = d.share ? shareOf(top, d.get) : meanOf(top, d.get)
+    let verdict = 'OBSERVE'
+    if (d.dir === '>' && baseV != null && topV != null) verdict = topV > baseV ? 'OK' : 'REVERSED'
+    if (d.dir === '<' && baseV != null && topV != null) verdict = topV < baseV ? 'OK' : 'REVERSED'
+    console.log(`  [${verdict.padEnd(8)}] ${d.key.padEnd(18)} ${d.metric.padEnd(26)} baseline ${String(fmt(baseV, d.share)).padEnd(8)} | Top20% ${String(fmt(topV, d.share)).padEnd(8)} (期待 ${d.expect}, n=${eligible.length})`)
+  }
 
   // 保存明细（本地审计用，不入 git）
   fs.writeFileSync(path.join(ROOT, '_audit', 'tmp', 't4-score-audit-raw.json'), JSON.stringify(results, null, 2), 'utf-8')
