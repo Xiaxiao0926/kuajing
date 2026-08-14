@@ -7,6 +7,7 @@ export default function Badge({ tone = 'neutral', className = '', children, ...r
     primary: 'bg-workspace-primary-soft text-workspace-primary border border-transparent',
     success: 'bg-workspace-success-soft text-workspace-success border border-transparent',
     warning: 'bg-workspace-warning-soft text-workspace-warning border border-transparent',
+    hold: 'bg-[#FFF4E5] text-[#B54708] border border-transparent',
     danger: 'bg-workspace-danger-soft text-workspace-danger border border-transparent',
     info: 'bg-workspace-primary-soft text-workspace-info border border-transparent',
   }
