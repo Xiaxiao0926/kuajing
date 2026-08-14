@@ -155,18 +155,21 @@ with st.sidebar:
     )
 
     if st.button("💾 保存设置", use_container_width=True):
-        st.session_state.settings.update({
+        candidate = dict(st.session_state.settings)
+        candidate.update({
             'rub_per_cny': rub_per_cny,
             'tax_method': tax_method,
             'tax_rate': tax_rate,
             'profit_margin_threshold': profit_threshold,
             'logistics_ratio_threshold': logistics_threshold,
         })
-        saved = wb_data.save_settings(st.session_state.settings)
+        saved = wb_data.save_settings(candidate)
         if saved:
+            st.session_state.settings = candidate
             st.success("设置已保存")
         else:
-            st.error("保存被拒绝：设置未通过结构校验（如汇率为 0），config 文件未修改。")
+            st.session_state.settings = wb_data.load_settings()
+            st.error("保存失败，已恢复磁盘配置。")
         st.rerun()
 
     st.caption(f"费率生效: {s.get('exchange_rate_effective_from', '—')}")
@@ -175,10 +178,12 @@ with st.sidebar:
 
     st.divider()
     if st.button("🔄 重置为默认费率", use_container_width=True):
-        wb_data.reset_to_default()
-        st.session_state.tariffs = wb_data.load_tariffs()
-        st.session_state.settings = wb_data.load_settings()
-        st.success("已重置")
+        if wb_data.reset_to_default():
+            st.session_state.tariffs = wb_data.load_tariffs()
+            st.session_state.settings = wb_data.load_settings()
+            st.success("已重置")
+        else:
+            st.error("重置失败，配置未完全更新")
         st.rerun()
 
 
