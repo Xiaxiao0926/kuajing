@@ -1,6 +1,10 @@
 """
 WB跨境核算 - 数据存储管理
 本地JSON持久化、CSV导入导出、备份恢复。
+
+配置唯一事实源：D:/ozon/config/*.json（wb_tariffs.json / settings.json）
+- 经环境变量 CONFIG_DIR 指定；默认相对路径 ../../config（仓库根/config）
+- wb_data/ 目录仅保留运行时数据（skus.json / orders.json / 备份）
 """
 import json
 import os
@@ -10,19 +14,26 @@ from datetime import datetime, date
 from decimal import Decimal
 
 
-# 数据目录
+# 数据目录（运行时数据）
 WB_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wb_data')
 os.makedirs(WB_DATA_DIR, exist_ok=True)
 
+# 配置目录（唯一事实源）
+CONFIG_DIR = os.environ.get('CONFIG_DIR') or os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config')
+)
+
 # 各类数据文件路径
-SETTINGS_FILE = os.path.join(WB_DATA_DIR, 'settings.json')
-TARIFFS_FILE = os.path.join(WB_DATA_DIR, 'tariffs.json')
+SETTINGS_FILE = os.path.join(CONFIG_DIR, 'settings.json')
+TARIFFS_FILE = os.path.join(CONFIG_DIR, 'wb_tariffs.json')
 SKUS_FILE = os.path.join(WB_DATA_DIR, 'skus.json')
 ORDERS_FILE = os.path.join(WB_DATA_DIR, 'orders.json')
 
 
 # ----------------------
-# 默认数据
+# 默认数据（兜底：config 文件缺失/损坏时使用；内容必须与 config 一致）
+# 注意：唯一事实源是 config/wb_tariffs.json 与 config/settings.json；
+#       下方常量仅为加载失败时的最后防线，改费率请改 config 文件。
 # ----------------------
 DEFAULT_SETTINGS = {
     'base_currency': 'CNY',
@@ -420,3 +431,22 @@ def reset_to_default():
     _save_json(SETTINGS_FILE, DEFAULT_SETTINGS.copy())
     _save_json(TARIFFS_FILE, [t.copy() for t in DEFAULT_TARIFFS])
     return True
+
+
+# ----------------------
+# 唯一事实源装载（模块导入时执行）
+# config/*.json 为唯一事实源；上方内嵌常量仅作 config 缺失/损坏时的兜底。
+# ----------------------
+def _apply_config_source():
+    global DEFAULT_SETTINGS, DEFAULT_TARIFFS
+    cfg_settings = _load_json(SETTINGS_FILE, None)
+    if cfg_settings is not None:
+        merged = DEFAULT_SETTINGS.copy()
+        merged.update(cfg_settings)
+        DEFAULT_SETTINGS = merged
+    cfg_tariffs = _load_json(TARIFFS_FILE, None)
+    if cfg_tariffs is not None and isinstance(cfg_tariffs, list) and len(cfg_tariffs) > 0:
+        DEFAULT_TARIFFS = cfg_tariffs
+
+
+_apply_config_source()

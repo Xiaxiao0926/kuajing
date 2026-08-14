@@ -1,0 +1,45 @@
+{
+  "id": "wb-profit-normal-order",
+  "name": "WB 正常签收订单经营利润（1200₽/25%佣金/500g）",
+  "provenance": {
+    "source_type": "spec_derived",
+    "verified_by_human": false,
+    "source": "wbEngine.test.mjs 测试12（已验证 65/65 的既有断言）"
+  },
+  "engine": "react_wb",
+  "tariff_id": "DPX-SZ-382822-20260722",
+  "case_type": "operating_profit",
+  "cases": [
+    {
+      "input": {
+        "settings": { "rubPerCny": 12 },
+        "order": {
+          "sellerRevenueBaseRub": 1200,
+          "commissionRate": 25,
+          "promotionCostRub": 0,
+          "acquiringFeeRub": 0,
+          "platformOtherDeductionRub": 0,
+          "otherOperatingCostCny": 0,
+          "taxCostCny": 0,
+          "reverseEventType": "none",
+          "forwardFeeApplied": true,
+          "parcels": [{ "actualWeightG": 500 }]
+        },
+        "sku": {
+          "purchaseCostCny": 10,
+          "packagingCostCny": 1,
+          "chinaInboundCostCny": 2,
+          "certificationAllocationCny": 0
+        }
+      },
+      "expected": {
+        "salesRevenueCny": 100,
+        "commissionCny": 25,
+        "totalLogisticsCostCny": 29.50,
+        "platformNetSettlementCny": 45.50,
+        "operatingProfitCny": 32.50,
+        "profitMargin": 32.5
+      }
+    }
+  ]
+}

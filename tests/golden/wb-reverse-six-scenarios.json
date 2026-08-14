@@ -1,0 +1,62 @@
+{
+  "id": "wb-reverse-six-scenarios",
+  "name": "WB 反向配送赔偿六场景（规格 §15.5，500g 订单 CSG=¥29.50）",
+  "provenance": {
+    "source_type": "spec_derived",
+    "verified_by_human": false,
+    "source": "需求规格说明书 §15.5 反向配送赔偿测试表"
+  },
+  "engine": "react_wb",
+  "tariff_id": "DPX-SZ-382822-20260722",
+  "case_type": "total_logistics",
+  "cases": [
+    {
+      "input": {
+        "parcels": [{ "actualWeightG": 500 }],
+        "reverseEventType": "none",
+        "forwardFeeApplied": true
+      },
+      "expected": { "multiplier": 0, "reverseCompensationUsedCny": 0, "forwardLogisticsUsedCny": 29.50, "totalLogisticsCostCny": 29.50 }
+    },
+    {
+      "input": {
+        "parcels": [{ "actualWeightG": 500 }],
+        "reverseEventType": "not_exported_from_china_after_handover",
+        "forwardFeeApplied": false
+      },
+      "expected": { "multiplier": 1, "reverseCompensationUsedCny": 29.50, "forwardLogisticsUsedCny": 0, "totalLogisticsCostCny": 29.50 }
+    },
+    {
+      "input": {
+        "parcels": [{ "actualWeightG": 500 }],
+        "reverseEventType": "buyer_returned",
+        "forwardFeeApplied": true
+      },
+      "expected": { "multiplier": 1, "reverseCompensationUsedCny": 29.50, "forwardLogisticsUsedCny": 29.50, "totalLogisticsCostCny": 59.00 }
+    },
+    {
+      "input": {
+        "parcels": [{ "actualWeightG": 500 }],
+        "reverseEventType": "customs_failed_returned_to_china",
+        "forwardFeeApplied": false
+      },
+      "expected": { "multiplier": 2, "reverseCompensationUsedCny": 59.00, "forwardLogisticsUsedCny": 0, "totalLogisticsCostCny": 59.00 }
+    },
+    {
+      "input": {
+        "parcels": [{ "actualWeightG": 500 }],
+        "reverseEventType": "cancelled_before_handover",
+        "forwardFeeApplied": false
+      },
+      "expected": { "multiplier": 0, "reverseCompensationUsedCny": 0, "forwardLogisticsUsedCny": 0, "totalLogisticsCostCny": 0 }
+    },
+    {
+      "input": {
+        "parcels": [{ "actualWeightG": 500 }],
+        "reverseEventType": "refused_or_unclaimed",
+        "forwardFeeApplied": true
+      },
+      "expected": { "multiplier": 1, "reverseCompensationUsedCny": 29.50, "forwardLogisticsUsedCny": 29.50, "totalLogisticsCostCny": 59.00, "needsBillConfirmation": true }
+    }
+  ]
+}

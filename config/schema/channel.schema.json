@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "channel.schema.json",
+  "title": "Ozon CEL 渠道配置",
+  "type": "object",
+  "required": ["id", "name", "kg_rate_cny", "fixed_fee_cny", "volumetric"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "speed": { "type": "string" },
+    "kg_rate_cny": { "type": "number", "minimum": 0 },
+    "fixed_fee_cny": { "type": "number", "minimum": 0 },
+    "weight_min_kg": { "type": "number", "minimum": 0 },
+    "weight_max_kg": { "type": "number", "minimum": 0 },
+    "weight_rounding_g": { "type": ["integer", "null"], "minimum": 1 },
+    "sum_max_cm": { "type": "number", "minimum": 0 },
+    "side_max_cm": { "type": "number", "minimum": 0 },
+    "price_min_rub": { "type": "number", "minimum": 0 },
+    "price_max_rub": { "type": "number", "minimum": 0 },
+    "volumetric": { "type": ["boolean", "string"], "enum": [true, false, "conditional"] },
+    "vol_div": { "type": ["integer", "null"], "minimum": 1 },
+    "vol_threshold_sum_cm": { "type": ["integer", "null"], "minimum": 1 },
+    "charge_weight_max_kg": { "type": ["number", "null"], "minimum": 0 }
+  }
+}

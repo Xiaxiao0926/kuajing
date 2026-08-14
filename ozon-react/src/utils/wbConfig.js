@@ -1,14 +1,16 @@
 /**
- * WB跨境核算 - 默认费率配置
- * 依据《WB跨境利润与物流费用核算面板-需求规格说明书》第4.4节
+ * WB跨境核算 - 默认费率配置（适配器层）
+ * 唯一事实源: D:/ozon/config/*.json（snake_case，经 scripts/sync-config.js 生成为
+ * src/generated/*.js）。本文件只做 snake_case → camelCase 映射，保证对外 API
+ * 与历史版本完全一致；费率数值禁止在本文件修改。
  *
  * 费率版本历史：
  *   - 2026-02-09: 原始版本 (来源: DPX运费(1).pdf)
  *   - 2026-07-22: 0726版本 (来源: warehouse_and_tarrifs/0726.pdf)
- *
- * 说明：DPX标准线路的费率数值（58元/kg+2元、43元/kg+8元）保持不变，
- *       仅更新生效日期和来源文件。
  */
+
+import tariffsData from '../generated/wb_tariffs.js'
+import settingsData from '../generated/settings.js'
 
 /**
  * 反向配送事件类型枚举
@@ -64,304 +66,58 @@ export const NEEDS_BILL_CONFIRMATION = {
   [REVERSE_EVENT_TYPE.MANUAL]: false,
 }
 
+/**
+ * 默认设置（来自 config/settings.json，snake→camel 映射）
+ */
 export const DEFAULT_SETTINGS = {
-  baseCurrency: 'CNY',
-  rubPerCny: 12,
-  exchangeRateEffectiveFrom: '2026-08-11',
-  taxMethod: 'none', // none / manual / revenue / settlement
-  taxRate: 0,
-  defaultRouteId: 'DPX-SZ-382822',
-  defaultCommissionRate: null,
+  baseCurrency: settingsData.base_currency,
+  rubPerCny: settingsData.rub_per_cny,
+  exchangeRateEffectiveFrom: settingsData.exchange_rate_effective_from,
+  taxMethod: settingsData.tax_method, // none / manual / revenue / settlement
+  taxRate: settingsData.tax_rate,
+  defaultRouteId: settingsData.default_route_id,
+  defaultCommissionRate: settingsData.default_commission_rate,
   // 旧字段 defaultReverseIncluded 已废弃，保留以做向后兼容
-  // 新字段：
-  buyerToRuWarehouseReverseIncluded: true, // 买家至俄罗斯WB合作仓的物理退回运输和暂存已包含（13.1.11）
-  timezone: 'Asia/Shanghai',
-  profitMarginThreshold: 10,
-  logisticsRatioThreshold: 30,
+  buyerToRuWarehouseReverseIncluded: settingsData.buyer_to_ru_warehouse_reverse_included, // 买家至俄罗斯WB合作仓的物理退回运输和暂存已包含（13.1.11）
+  timezone: settingsData.timezone,
+  profitMarginThreshold: settingsData.profit_margin_threshold,
+  logisticsRatioThreshold: settingsData.logistics_ratio_threshold,
 }
 
 /**
- * 默认费率表
+ * 默认费率表（来自 config/wb_tariffs.json，snake→camel 映射）
  * - 历史版本（2026-02-09）：保留 effectiveTo = '2026-07-21'，用于历史订单
  * - 当前版本（2026-07-22）：effectiveFrom = '2026-07-22'，来源 0726.pdf
- *
- * 费率数值不变，仅版本切换。
  */
-export const DEFAULT_TARIFFS = [
-  // ============ 历史版本：2026-02-09 ============
-  {
-    tariffId: 'DPX-SZ-382822-20260209',
-    routeId: 'DPX-SZ-382822',
-    routeName: 'DPX深圳标准',
-    warehouseCode: '382822',
-    originCity: '深圳',
-    destinationCountry: 'RU',
-    serviceLevel: 'standard',
-    etaMinDays: 15,
-    etaMaxDays: 30,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 120,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-02-09',
-    effectiveTo: '2026-07-21', // 已被0726版本取代
-    active: true, // 保留启用，用于历史订单按日期匹配
-    sourceName: 'DPX运费(1).pdf',
-    notes: 'DPX深圳标准线路（历史版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 58, fixedFeeCny: 2 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 43, fixedFeeCny: 8 },
-    ],
-  },
-  {
-    tariffId: 'WB-SE-20260209',
-    routeId: 'WB-SE',
-    routeName: 'WB超级经济',
-    warehouseCode: '',
-    originCity: '深圳',
-    destinationCountry: 'RU',
-    serviceLevel: 'economy',
-    etaMinDays: 15,
-    etaMaxDays: 30,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 115,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-02-09',
-    effectiveTo: '2026-07-21',
-    active: true,
-    sourceName: 'DPX运费(1).pdf',
-    notes: 'WB超级经济线路（历史版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 58, fixedFeeCny: 2 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 43, fixedFeeCny: 8 },
-    ],
-  },
-  {
-    tariffId: 'WB-PLUS-20260209',
-    routeId: 'WB-PLUS',
-    routeName: 'WB Plus东莞/珲春',
-    warehouseCode: '',
-    originCity: '东莞',
-    destinationCountry: 'RU',
-    serviceLevel: 'plus',
-    etaMinDays: 7,
-    etaMaxDays: 7,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 120,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-02-09',
-    effectiveTo: '2026-07-21',
-    active: true,
-    sourceName: 'DPX运费(1).pdf',
-    notes: 'WB Plus 快速线路（历史版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 48, fixedFeeCny: 9 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 48, fixedFeeCny: 9 },
-    ],
-  },
-  {
-    tariffId: 'HK-EXP-20260209',
-    routeId: 'HK-EXP',
-    routeName: '香港快线',
-    warehouseCode: '',
-    originCity: '香港',
-    destinationCountry: 'RU',
-    serviceLevel: 'express',
-    etaMinDays: 10,
-    etaMaxDays: 10,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 60,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-02-09',
-    effectiveTo: '2026-07-21',
-    active: true,
-    sourceName: 'DPX运费(1).pdf',
-    notes: '香港快线，单边≤60cm（历史版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 89, fixedFeeCny: 17 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 89, fixedFeeCny: 17 },
-    ],
-  },
-  {
-    tariffId: 'DG-EXP-20260209',
-    routeId: 'DG-EXP',
-    routeName: '东莞快线',
-    warehouseCode: '',
-    originCity: '东莞',
-    destinationCountry: 'RU',
-    serviceLevel: 'express',
-    etaMinDays: 10,
-    etaMaxDays: 10,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 100,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-02-09',
-    effectiveTo: '2026-07-21',
-    active: true,
-    sourceName: 'DPX运费(1).pdf',
-    notes: '东莞快线，单边≤100cm（历史版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 122, fixedFeeCny: 19 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 122, fixedFeeCny: 19 },
-    ],
-  },
-
-  // ============ 当前版本：2026-07-22（0726.pdf）============
-  {
-    tariffId: 'DPX-SZ-382822-20260722',
-    routeId: 'DPX-SZ-382822',
-    routeName: 'DPX深圳标准',
-    warehouseCode: '382822',
-    originCity: '深圳',
-    destinationCountry: 'RU',
-    serviceLevel: 'standard',
-    etaMinDays: 15,
-    etaMaxDays: 30,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 120,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-07-22',
-    effectiveTo: null,
-    active: true,
-    sourceName: 'warehouse_and_tarrifs/0726.pdf',
-    notes: 'DPX深圳标准线路（0726版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 58, fixedFeeCny: 2 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 43, fixedFeeCny: 8 },
-    ],
-  },
-  {
-    tariffId: 'WB-SE-20260722',
-    routeId: 'WB-SE',
-    routeName: 'WB超级经济',
-    warehouseCode: '',
-    originCity: '深圳',
-    destinationCountry: 'RU',
-    serviceLevel: 'economy',
-    etaMinDays: 15,
-    etaMaxDays: 30,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 115,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-07-22',
-    effectiveTo: null,
-    active: true,
-    sourceName: 'warehouse_and_tarrifs/0726.pdf',
-    notes: 'WB超级经济线路（0726版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 58, fixedFeeCny: 2 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 43, fixedFeeCny: 8 },
-    ],
-  },
-  {
-    tariffId: 'WB-PLUS-20260722',
-    routeId: 'WB-PLUS',
-    routeName: 'WB Plus东莞/珲春',
-    warehouseCode: '',
-    originCity: '东莞',
-    destinationCountry: 'RU',
-    serviceLevel: 'plus',
-    etaMinDays: 7,
-    etaMaxDays: 7,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 120,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-07-22',
-    effectiveTo: null,
-    active: true,
-    sourceName: 'warehouse_and_tarrifs/0726.pdf',
-    notes: 'WB Plus 快速线路（0726版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 48, fixedFeeCny: 9 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 48, fixedFeeCny: 9 },
-    ],
-  },
-  {
-    tariffId: 'HK-EXP-20260722',
-    routeId: 'HK-EXP',
-    routeName: '香港快线',
-    warehouseCode: '',
-    originCity: '香港',
-    destinationCountry: 'RU',
-    serviceLevel: 'express',
-    etaMinDays: 10,
-    etaMaxDays: 10,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 60,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-07-22',
-    effectiveTo: null,
-    active: true,
-    sourceName: 'warehouse_and_tarrifs/0726.pdf',
-    notes: '香港快线，单边≤60cm（0726版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 89, fixedFeeCny: 17 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 89, fixedFeeCny: 17 },
-    ],
-  },
-  {
-    tariffId: 'DG-EXP-20260722',
-    routeId: 'DG-EXP',
-    routeName: '东莞快线',
-    warehouseCode: '',
-    originCity: '东莞',
-    destinationCountry: 'RU',
-    serviceLevel: 'express',
-    etaMinDays: 10,
-    etaMaxDays: 10,
-    weightRoundingG: 100,
-    chargeBasis: 'actual_weight',
-    maxWeightKg: 20,
-    maxSumDimensionsCm: 200,
-    maxSingleSideCm: 100,
-    batteryLimitWh: 100,
-    buyerToRuWarehouseReverseIncluded: true,
-    effectiveFrom: '2026-07-22',
-    effectiveTo: null,
-    active: true,
-    sourceName: 'warehouse_and_tarrifs/0726.pdf',
-    notes: '东莞快线，单边≤100cm（0726版本）',
-    tiers: [
-      { minWeightKg: 0.1, maxWeightKg: 0.3, kgRateCny: 122, fixedFeeCny: 19 },
-      { minWeightKg: 0.4, maxWeightKg: 20, kgRateCny: 122, fixedFeeCny: 19 },
-    ],
-  },
-]
+export const DEFAULT_TARIFFS = tariffsData.map((t) => ({
+  tariffId: t.tariff_id,
+  routeId: t.route_id,
+  routeName: t.route_name,
+  warehouseCode: t.warehouse_code,
+  originCity: t.origin_city,
+  destinationCountry: t.destination_country,
+  serviceLevel: t.service_level,
+  etaMinDays: t.eta_min_days,
+  etaMaxDays: t.eta_max_days,
+  weightRoundingG: t.weight_rounding_g,
+  chargeBasis: t.charge_basis,
+  maxWeightKg: t.max_weight_kg,
+  maxSumDimensionsCm: t.max_sum_dimensions_cm,
+  maxSingleSideCm: t.max_single_side_cm,
+  batteryLimitWh: t.battery_limit_wh,
+  buyerToRuWarehouseReverseIncluded: t.reverse_to_ru_warehouse_included,
+  effectiveFrom: t.effective_from,
+  effectiveTo: t.effective_to,
+  active: t.active,
+  sourceName: t.source_name,
+  notes: t.notes,
+  tiers: t.tiers.map((tier) => ({
+    minWeightKg: tier.min_weight_kg,
+    maxWeightKg: tier.max_weight_kg,
+    kgRateCny: tier.kg_rate_cny,
+    fixedFeeCny: tier.fixed_fee_cny,
+  })),
+}))
 
 /**
  * CSV导入模板列

@@ -25,8 +25,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# WB佣金文件路径
-COMMISSION_FILE = r"d:\ozon\运费计算\wb佣金.xlsx"
+# WB佣金文件路径：环境变量 WB_COMMISSION_FILE 优先，回退到仓库内 运费计算/wb佣金.xlsx
+import os
+COMMISSION_FILE = os.environ.get('WB_COMMISSION_FILE') or os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '运费计算', 'wb佣金.xlsx')
+)
 
 
 # ----------------------

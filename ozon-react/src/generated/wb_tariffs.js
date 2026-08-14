@@ -1,0 +1,374 @@
+// 自动生成 - 勿手改。来源: config/wb_tariffs.json（唯一事实源）。
+// 重新生成: node scripts/sync-config.js
+export default [
+  {
+    "tariff_id": "DPX-SZ-382822-20260209",
+    "route_id": "DPX-SZ-382822",
+    "route_name": "DPX深圳标准",
+    "warehouse_code": "382822",
+    "origin_city": "深圳",
+    "destination_country": "RU",
+    "service_level": "standard",
+    "eta_min_days": 15,
+    "eta_max_days": 30,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 120,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-02-09",
+    "effective_to": "2026-07-21",
+    "active": true,
+    "source_name": "DPX运费(1).pdf",
+    "notes": "DPX深圳标准线路（历史版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 58,
+        "fixed_fee_cny": 2
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 43,
+        "fixed_fee_cny": 8
+      }
+    ]
+  },
+  {
+    "tariff_id": "WB-SE-20260209",
+    "route_id": "WB-SE",
+    "route_name": "WB超级经济",
+    "warehouse_code": "",
+    "origin_city": "深圳",
+    "destination_country": "RU",
+    "service_level": "economy",
+    "eta_min_days": 15,
+    "eta_max_days": 30,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 115,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-02-09",
+    "effective_to": "2026-07-21",
+    "active": true,
+    "source_name": "DPX运费(1).pdf",
+    "notes": "WB超级经济线路（历史版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 58,
+        "fixed_fee_cny": 2
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 43,
+        "fixed_fee_cny": 8
+      }
+    ]
+  },
+  {
+    "tariff_id": "WB-PLUS-20260209",
+    "route_id": "WB-PLUS",
+    "route_name": "WB Plus东莞/珲春",
+    "warehouse_code": "",
+    "origin_city": "东莞",
+    "destination_country": "RU",
+    "service_level": "plus",
+    "eta_min_days": 7,
+    "eta_max_days": 7,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 120,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-02-09",
+    "effective_to": "2026-07-21",
+    "active": true,
+    "source_name": "DPX运费(1).pdf",
+    "notes": "WB Plus 快速线路（历史版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 48,
+        "fixed_fee_cny": 9
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 48,
+        "fixed_fee_cny": 9
+      }
+    ]
+  },
+  {
+    "tariff_id": "HK-EXP-20260209",
+    "route_id": "HK-EXP",
+    "route_name": "香港快线",
+    "warehouse_code": "",
+    "origin_city": "香港",
+    "destination_country": "RU",
+    "service_level": "express",
+    "eta_min_days": 10,
+    "eta_max_days": 10,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 60,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-02-09",
+    "effective_to": "2026-07-21",
+    "active": true,
+    "source_name": "DPX运费(1).pdf",
+    "notes": "香港快线，单边≤60cm（历史版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 89,
+        "fixed_fee_cny": 17
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 89,
+        "fixed_fee_cny": 17
+      }
+    ]
+  },
+  {
+    "tariff_id": "DG-EXP-20260209",
+    "route_id": "DG-EXP",
+    "route_name": "东莞快线",
+    "warehouse_code": "",
+    "origin_city": "东莞",
+    "destination_country": "RU",
+    "service_level": "express",
+    "eta_min_days": 10,
+    "eta_max_days": 10,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 100,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-02-09",
+    "effective_to": "2026-07-21",
+    "active": true,
+    "source_name": "DPX运费(1).pdf",
+    "notes": "东莞快线，单边≤100cm（历史版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 122,
+        "fixed_fee_cny": 19
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 122,
+        "fixed_fee_cny": 19
+      }
+    ]
+  },
+  {
+    "tariff_id": "DPX-SZ-382822-20260722",
+    "route_id": "DPX-SZ-382822",
+    "route_name": "DPX深圳标准",
+    "warehouse_code": "382822",
+    "origin_city": "深圳",
+    "destination_country": "RU",
+    "service_level": "standard",
+    "eta_min_days": 15,
+    "eta_max_days": 30,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 120,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-07-22",
+    "effective_to": null,
+    "active": true,
+    "source_name": "warehouse_and_tarrifs/0726.pdf",
+    "notes": "DPX深圳标准线路（0726版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 58,
+        "fixed_fee_cny": 2
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 43,
+        "fixed_fee_cny": 8
+      }
+    ]
+  },
+  {
+    "tariff_id": "WB-SE-20260722",
+    "route_id": "WB-SE",
+    "route_name": "WB超级经济",
+    "warehouse_code": "",
+    "origin_city": "深圳",
+    "destination_country": "RU",
+    "service_level": "economy",
+    "eta_min_days": 15,
+    "eta_max_days": 30,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 115,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-07-22",
+    "effective_to": null,
+    "active": true,
+    "source_name": "warehouse_and_tarrifs/0726.pdf",
+    "notes": "WB超级经济线路（0726版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 58,
+        "fixed_fee_cny": 2
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 43,
+        "fixed_fee_cny": 8
+      }
+    ]
+  },
+  {
+    "tariff_id": "WB-PLUS-20260722",
+    "route_id": "WB-PLUS",
+    "route_name": "WB Plus东莞/珲春",
+    "warehouse_code": "",
+    "origin_city": "东莞",
+    "destination_country": "RU",
+    "service_level": "plus",
+    "eta_min_days": 7,
+    "eta_max_days": 7,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 120,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-07-22",
+    "effective_to": null,
+    "active": true,
+    "source_name": "warehouse_and_tarrifs/0726.pdf",
+    "notes": "WB Plus 快速线路（0726版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 48,
+        "fixed_fee_cny": 9
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 48,
+        "fixed_fee_cny": 9
+      }
+    ]
+  },
+  {
+    "tariff_id": "HK-EXP-20260722",
+    "route_id": "HK-EXP",
+    "route_name": "香港快线",
+    "warehouse_code": "",
+    "origin_city": "香港",
+    "destination_country": "RU",
+    "service_level": "express",
+    "eta_min_days": 10,
+    "eta_max_days": 10,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 60,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-07-22",
+    "effective_to": null,
+    "active": true,
+    "source_name": "warehouse_and_tarrifs/0726.pdf",
+    "notes": "香港快线，单边≤60cm（0726版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 89,
+        "fixed_fee_cny": 17
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 89,
+        "fixed_fee_cny": 17
+      }
+    ]
+  },
+  {
+    "tariff_id": "DG-EXP-20260722",
+    "route_id": "DG-EXP",
+    "route_name": "东莞快线",
+    "warehouse_code": "",
+    "origin_city": "东莞",
+    "destination_country": "RU",
+    "service_level": "express",
+    "eta_min_days": 10,
+    "eta_max_days": 10,
+    "weight_rounding_g": 100,
+    "charge_basis": "actual_weight",
+    "max_weight_kg": 20,
+    "max_sum_dimensions_cm": 200,
+    "max_single_side_cm": 100,
+    "battery_limit_wh": 100,
+    "reverse_to_ru_warehouse_included": true,
+    "effective_from": "2026-07-22",
+    "effective_to": null,
+    "active": true,
+    "source_name": "warehouse_and_tarrifs/0726.pdf",
+    "notes": "东莞快线，单边≤100cm（0726版本）",
+    "tiers": [
+      {
+        "min_weight_kg": 0.1,
+        "max_weight_kg": 0.3,
+        "kg_rate_cny": 122,
+        "fixed_fee_cny": 19
+      },
+      {
+        "min_weight_kg": 0.4,
+        "max_weight_kg": 20,
+        "kg_rate_cny": 122,
+        "fixed_fee_cny": 19
+      }
+    ]
+  }
+]

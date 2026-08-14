@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
+import { execFileSync } from 'child_process'
 
 const OZON_DATA_DIR = path.resolve('D:/ozon/市场分析')
 const OZON_UPLOADS_DIR = path.resolve('D:/ozon/市场分析/uploads')
@@ -200,7 +201,21 @@ function ozonDataSyncPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), ozonDataSyncPlugin()],
+  plugins: [
+    react(),
+    {
+      // 构建前把 config/*.json 同步为 src/generated/*.js（唯一事实源）
+      name: 'config-sync',
+      buildStart() {
+        try {
+          execFileSync('node', [path.resolve(__dirname, '../scripts/sync-config.js')], { stdio: 'inherit' })
+        } catch (e) {
+          console.error('[config-sync] 同步失败，构建继续使用已有 generated 文件:', e.message)
+        }
+      },
+    },
+    ozonDataSyncPlugin(),
+  ],
   server: {
     port: 5173,
     host: true,

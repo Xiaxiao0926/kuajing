@@ -47,13 +47,13 @@ curl http://localhost:8888/                 # 期望 200 HTML
 ## 2. 测试（唯一入口：npm，禁止裸调 python）
 
 ```bash
-npm test             # 强制：React 65 + Python 31（跨平台，自动探测 py -3/python3/python）
-npm run test:python  # 仅 Python 31 项
-npm run test:golden  # ⚠️ T2 完成前是占位器（SKIP 退出 0），不代表黄金案例通过
-npm run test:sync    # ⚠️ T2 完成前是占位器（SKIP 退出 0），不代表双端对拍通过
+npm test              # 强制：React 65 + Python 31（自动前置 sync-config）
+npm run test:golden   # 强制：黄金业务案例（tests/golden/，provenance 分级）
+npm run test:sync     # 强制：双端对拍（16 边界重量 + 2 版本边界，零差异）
+npm run sync:config   # 手动同步 config/*.json → src/generated/*.js
 ```
 
-**修改任何涉及 wbEngine/ozonEngine/tariffs/commission/logistics/profit/税费/汇率/成本的代码后，必须 `npm test` 全绿后才能提交。**
+**修改任何涉及 wbEngine/ozonEngine/tariffs/commission/logistics/profit/税费/汇率/成本的代码后，必须三条全部执行且全绿后才能提交。**
 
 ---
 
@@ -64,9 +64,9 @@ npm run test:sync    # ⚠️ T2 完成前是占位器（SKIP 退出 0），不�
 | `BASE_PATH` | 价格分析 API 数据根目录（含 市场价/报价表/分析结果 子目录） | Legacy 回退见下 |
 | `PORT` | 价格分析 API 端口 | 8888 |
 | `LEGACY_PATH_ENABLED` | 是否允许回退到 `E:\Desktop\坪优报价分析` | `true` |
-| `OZON_DATA_DIR` | Python 选品面板数据目录（T2 生效） | — |
-| `WB_DATA_DIR` | Python WB 面板数据目录（T2 生效） | — |
-| `CONFIG_DIR` | 双端共享配置目录（T2 生效） | — |
+| `OZON_DATA_DIR` | Python 选品面板数据目录 | `../选品/`（仓库内） |
+| `WB_COMMISSION_FILE` | WB 佣金 xlsx 路径 | `../运费计算/wb佣金.xlsx` |
+| `CONFIG_DIR` | 双端共享配置目录（唯一事实源） | `../config/`（仓库内） |
 
 三层优先级（`config.js` 已实现）：
 1. `BASE_PATH` 环境变量；
@@ -77,14 +77,16 @@ npm run test:sync    # ⚠️ T2 完成前是占位器（SKIP 退出 0），不�
 
 ---
 
-## 4. 更新费率流程（示例：WB 平台调价）
+## 4. 更新费率流程（T2 后：只改 config，禁止改引擎）
 
 1. 取得官方费率文件/公告，存入 `运费计算/`（保留原文件名+日期）。
-2. **不修改引擎代码**——T2 后只改 `config/wb_tariffs.json`（新增版本条目：`effective_from` 新日期，旧版本设 `effective_to`）。
-3. T2 前临时做法：React 在 `wbConfig.js` 追加新版本对象；Python 在 `wb_data/tariffs.json` 追加同值条目；**两端必须同步改**。
-4. `npm test` 全绿；补充新版本测试用例（参考 `wbEngine.test.mjs` 的历史版本测试写法）。
-5. 更新 `BUSINESS_RULES.md` §3 与 `CHANGELOG.md`。
-6. 历史订单不受影响（按订单日期匹配版本）。
+2. **只改 `config/wb_tariffs.json`（WB）或 `config/ozon_channels.json`（Ozon）**：新增版本条目（`effective_from` 新日期，旧版本设 `effective_to`）；数值语义遵守 `config/schema/`。
+3. `npm run sync:config` 生成 React 侧 generated 文件（`npm test` 会自动执行）。
+4. 全量验证：`npm test`（65+31）+ `npm run test:golden` + `npm run test:sync`（对拍零差异）。
+5. 更新 `BUSINESS_RULES.md` 对应章节与 `CHANGELOG.md`。
+6. 历史订单不受影响（引擎按订单日期匹配版本）。
+
+**禁止**：不得在 `wbConfig.js` / `ozonEngine.js` / `wb_data.py` 内嵌常量中改数值（它们只是 adapter/兜底）。
 
 ---
 
@@ -92,7 +94,7 @@ npm run test:sync    # ⚠️ T2 完成前是占位器（SKIP 退出 0），不�
 
 - **代码**：git 是唯一事实源。每阶段合并到 main 并打 tag（如 `v3-t0-baseline`）。备份 = `git clone https://github.com/Xiaxiao0926/kuajing.git`。
 - **业务数据**（市场分析/、选品/、运费计算/、根目录 xlsx）：git 内包含；另有原位置（`E:\Desktop\坪优报价分析`）保留原始文件。
-- **Python 面板运行时数据**：`ozon-product-analyzer/wb_data/*.json`（settings/tariffs/skus/orders）。tariffs 在 git 内；skus/orders 为本地数据，定期拷出备份。
+- **Python 面板运行时数据**：skus/orders 在 `ozon-product-analyzer/wb_data/`（本地数据，定期拷出备份）；**设置与费率唯一事实源在 `config/*.json`（git 跟踪）**。
 - **React 本地状态**：`市场分析/persisted-data.json`（gitignored，本地持久化）。
 
 ---

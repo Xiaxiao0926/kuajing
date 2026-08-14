@@ -67,19 +67,15 @@ Ozon/WB 俄罗斯跨境电商运营工作区 = **4 个应用 + 多类业务数�
 
 ## 5. 修改后必须跑（真执行，禁止口头声称"应该没影响"）
 
-### 当前强制测试（每次修改后必须运行且必须全绿）
+### 强制测试（每次修改后必须运行且必须全绿）
 ```bash
-npm test          # React wbEngine 65 项 + Python wb_test 31 项
+npm test              # React wbEngine 65 项 + Python wb_test 31 项（前置自动同步 config → generated）
+npm run test:golden   # 黄金业务案例（tests/golden/，含 provenance 分级）
+npm run test:sync     # 双端对拍（React vs Python，边界重量 + 费率版本选择）
 ```
 
-### 阶段化测试（T2 完成前**未启用**，不得依赖其结果）
-```bash
-npm run test:golden   # ⚠️ 当前为占位器（输出 SKIP 后退出 0），不代表黄金案例已通过
-npm run test:sync     # ⚠️ 当前为占位器（输出 SKIP 后退出 0），不代表双端对拍已通过
-```
-
-> T2 完成后，这两条升级为强制测试，届时删除本"未启用"说明。
 > 只允许使用以上 npm 命令；禁止直接调用 `python` / `python3` / `py` 启动器（跨平台探测已封装在 `scripts/run-wb-py-test.js`）。
+> 配置唯一事实源是 `config/*.json`（经 `scripts/sync-config.js` 生成 `ozon-react/src/generated/*.js`；npm test 与 vite 构建已自动执行同步，一般无需手动）。
 
 ---
 

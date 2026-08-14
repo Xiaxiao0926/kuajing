@@ -191,7 +191,9 @@ total_logistics_cost_cny = forward_logistics_used_cny
 
 **历史运行态观察（非仓库事实）**：
 - 2026-08-14 整改过程中，曾在本机 Python 运行态观察到 `settings.json` 值为 11.5（生效 2026-02-09）；当前 Git 仓库各分支均无法复现该状态。
-- 因此**不得将 11.5 视为仓库事实**；T2 建立 config 唯一事实源时，仍需验证运行时是否存在外部/持久化配置覆盖造成漂移的风险（见 TECH_DEBT TD-1）。
+- 因此**不得将 11.5 视为仓库事实**。
+
+**T2 已解决（2026-08-14）**：配置单源化后，Python 读写均指向 `config/settings.json`（原 `wb_data/settings.json` 运行态副本已删除），React 经 generated 读同一文件——运行时副本覆盖风险在结构上消除（TECH_DEBT TD-1 关闭）。
 
 ## 11. 修改公式的流程（强制）
 

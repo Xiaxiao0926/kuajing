@@ -1,0 +1,30 @@
+{
+  "id": "wb-parcel-weight-boundaries",
+  "name": "WB DPX 单包裹计费重量边界（规格 §4.5 全表）",
+  "provenance": {
+    "source_type": "spec_derived",
+    "verified_by_human": false,
+    "source": "需求规格说明书 §4.5 DPX标准测试结果表"
+  },
+  "engine": "react_wb",
+  "tariff_id": "DPX-SZ-382822-20260722",
+  "case_type": "parcel_logistics",
+  "cases": [
+    { "input": { "actualWeightG": 1 }, "expected": { "billableWeightKg": 0.1, "feeCny": 7.80 } },
+    { "input": { "actualWeightG": 80 }, "expected": { "billableWeightKg": 0.1, "feeCny": 7.80 } },
+    { "input": { "actualWeightG": 100 }, "expected": { "billableWeightKg": 0.1, "feeCny": 7.80 } },
+    { "input": { "actualWeightG": 101 }, "expected": { "billableWeightKg": 0.2, "feeCny": 13.60 } },
+    { "input": { "actualWeightG": 270 }, "expected": { "billableWeightKg": 0.3, "feeCny": 19.40 } },
+    { "input": { "actualWeightG": 300 }, "expected": { "billableWeightKg": 0.3, "feeCny": 19.40 } },
+    { "input": { "actualWeightG": 301 }, "expected": { "billableWeightKg": 0.4, "feeCny": 25.20 } },
+    { "input": { "actualWeightG": 400 }, "expected": { "billableWeightKg": 0.4, "feeCny": 25.20 } },
+    { "input": { "actualWeightG": 401 }, "expected": { "billableWeightKg": 0.5, "feeCny": 29.50 } },
+    { "input": { "actualWeightG": 500 }, "expected": { "billableWeightKg": 0.5, "feeCny": 29.50 } },
+    { "input": { "actualWeightG": 800 }, "expected": { "billableWeightKg": 0.8, "feeCny": 42.40 } },
+    { "input": { "actualWeightG": 1000 }, "expected": { "billableWeightKg": 1.0, "feeCny": 51.00 } },
+    { "input": { "actualWeightG": 1050 }, "expected": { "billableWeightKg": 1.1, "feeCny": 55.30 } },
+    { "input": { "actualWeightG": 2000 }, "expected": { "billableWeightKg": 2.0, "feeCny": 94.00 } },
+    { "input": { "actualWeightG": 20000 }, "expected": { "billableWeightKg": 20.0, "feeCny": 868.00 } },
+    { "input": { "actualWeightG": 20001 }, "expected": { "feeCny": null } }
+  ]
+}
