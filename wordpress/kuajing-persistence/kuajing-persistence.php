@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.2.2
+ * Version: 0.2.3
  * Author: FYZSXNB
  */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.2.2';
+    private const VERSION = '0.2.3';
     private const TABLE_SUFFIX = 'kuajing_state';
     private const VERSION_OPTION = 'fyzsxnb_kuajing_version';
     private const SECRET_OPTION = 'fyzsxnb_kuajing_access_secret';
@@ -28,6 +28,15 @@ final class FYZSXNB_Kuajing_Dashboard {
         add_filter('rest_post_dispatch', array(__CLASS__, 'prevent_rest_cache'), 10, 3);
         add_filter('script_loader_tag', array(__CLASS__, 'module_script_tag'), 10, 3);
         add_action('template_redirect', array(__CLASS__, 'serve_private_file'));
+        // T5-1：给 /kuajing/ 页面加 body class，供 Workspace 全出血样式 scope（不影响其他页面）
+        add_filter('body_class', array(__CLASS__, 'add_dashboard_body_class'));
+    }
+
+    public static function add_dashboard_body_class($classes) {
+        if (is_page('kuajing')) {
+            $classes[] = 'fyzsxnb-kuajing-page';
+        }
+        return $classes;
     }
 
     public static function activate() {
@@ -339,7 +348,12 @@ final class FYZSXNB_Kuajing_Dashboard {
             'nonce' => $authorized ? wp_create_nonce('wp_rest') : '',
         ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
-        return '<script type="application/json" id="fyzsxnb-kuajing-config">' . $config . '</script>'
+        return '<style id="fyzsxnb-kuajing-workspace-css">'
+            // T5-1：全出血 Workspace（scope 到 /kuajing/ 页 body class，禁止全局选择器）
+            . 'body.fyzsxnb-kuajing-page{overflow-x:clip;}'
+            . 'body.fyzsxnb-kuajing-page .fyzsxnb-kuajing-root{width:100vw;margin-left:calc(50% - 50vw);}'
+            . '</style>'
+            . '<script type="application/json" id="fyzsxnb-kuajing-config">' . $config . '</script>'
             . '<div id="root" class="fyzsxnb-kuajing-root"></div>';
     }
 

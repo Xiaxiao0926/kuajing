@@ -6,7 +6,7 @@ import { getDataUrl } from '../utils/runtime.js'
 
 const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
-export default function Sidebar({ onFileUpload, loading, data, error, activeNode, onNodeSelect, nodeStatuses }) {
+export default function Sidebar({ onFileUpload, loading, data, error, activeNode, onNodeSelect, nodeStatuses, collapsed }) {
   const fileInputRef = useRef(null)
   const [availableFiles, setAvailableFiles] = useState([])
   const [loadingFiles, setLoadingFiles] = useState(false)
@@ -86,8 +86,37 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
     return { done, total: phase.nodes.length, pct: phase.nodes.length > 0 ? Math.round(done / phase.nodes.length * 100) : 0 }
   }
 
+  // T5-1：折叠态窄轨（完整导航 T5-2 重做；折叠开关在 WorkspaceTopbar）
+  if (collapsed) {
+    return (
+      <aside className="sticky top-0 hidden h-screen w-16 flex-shrink-0 flex-col items-center border-r border-gray-100 bg-white py-3 lg:flex">
+        <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-[#315EFB] text-sm font-bold text-white">K</div>
+        <div className="flex-1 w-full space-y-1 overflow-y-auto px-2">
+          {ROADMAP_PHASES.map((phase) => {
+            const firstNode = phase.nodes[0]
+            const phaseDone = phase.nodes.every(n => getNodeStatus(n.id) === 'done')
+            return (
+              <button
+                key={phase.id}
+                onClick={() => firstNode && onNodeSelect(firstNode.id)}
+                title={phase.title}
+                className={`flex h-9 w-full items-center justify-center rounded-lg text-base ${phaseDone ? 'bg-green-50' : 'hover:bg-gray-100'}`}
+              >
+                {phase.title.replace(/^[^\u4e00-\u9fa5A-Za-z]+/, '').trim().charAt(0) || '·'}
+              </button>
+            )
+          })}
+        </div>
+        <label className="mt-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-[#667085] hover:bg-gray-100" title="上传数据">
+          <Upload className="h-4 w-4" />
+          <input type="file" accept="*" className="hidden" disabled={loading} onChange={handleFileChange} />
+        </label>
+      </aside>
+    )
+  }
+
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
+    <aside className="sticky top-0 hidden h-screen w-[232px] flex-shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
       <div className="p-4 border-b border-gray-100">
         <h1 className="text-lg font-bold text-morandi-text flex items-center gap-2">
           <span className="text-xl">🗺️</span>
