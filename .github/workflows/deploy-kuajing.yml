@@ -71,4 +71,4 @@ jobs:
           test -n "$FTP_USERNAME"
           test -n "$FTP_PASSWORD"
           test -n "$FTP_TARGET_DIR"
-          lftp -c "set cmd:fail-exit true; open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\"; mirror --reverse --delete --verbose=1 deploy/kuajing-persistence \"$FTP_TARGET_DIR\""
+          lftp -c "set cmd:fail-exit true; set ssl:verify-certificate no; open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\"; mirror --reverse --delete --verbose=1 deploy/kuajing-persistence \"$FTP_TARGET_DIR\""
