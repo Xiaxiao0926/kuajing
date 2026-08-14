@@ -5,7 +5,12 @@ async function request(path, options = {}) {
 
   const headers = new Headers(options.headers || {})
   if (getNonce()) headers.set('X-WP-Nonce', getNonce())
-  const response = await fetch(`${getApiBase()}${path}`, {
+  const method = options.method || 'GET'
+  const separator = path.includes('?') ? '&' : '?'
+  const url = method === 'GET'
+    ? `${getApiBase()}${path}${separator}_=${Date.now()}`
+    : `${getApiBase()}${path}`
+  const response = await fetch(url, {
     credentials: 'same-origin',
     ...options,
     headers,

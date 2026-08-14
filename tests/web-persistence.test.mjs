@@ -34,6 +34,8 @@ const persistence = await import('../ozon-react/src/utils/persist.js')
 
 await persistence.syncFromServer()
 assert.deepEqual(persistence.persistGet('server-only'), { restored: true })
+assert.match(requests[0].url, /^https:\/\/example\.test\/wp-json\/kuajing\/v1\/state\?_=[0-9]+$/)
+assert.equal(requests[0].options.method, undefined)
 
 localStorage.setItem('legacy-local', JSON.stringify({ migrated: true }))
 assert.deepEqual(persistence.persistGet('legacy-local'), { migrated: true })

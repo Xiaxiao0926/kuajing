@@ -1,7 +1,11 @@
 import { getApiBase, setSessionAuthorized } from './runtime.js'
 
 async function sessionRequest(options = {}) {
-  const response = await fetch(`${getApiBase()}/session`, {
+  const method = options.method || 'GET'
+  const url = method === 'GET'
+    ? `${getApiBase()}/session?_=${Date.now()}`
+    : `${getApiBase()}/session`
+  const response = await fetch(url, {
     credentials: 'same-origin',
     ...options,
     headers: {

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.2.1
+ * Version: 0.2.2
  * Author: FYZSXNB
  */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.2.1';
+    private const VERSION = '0.2.2';
     private const TABLE_SUFFIX = 'kuajing_state';
     private const VERSION_OPTION = 'fyzsxnb_kuajing_version';
     private const SECRET_OPTION = 'fyzsxnb_kuajing_access_secret';
@@ -62,6 +62,8 @@ final class FYZSXNB_Kuajing_Dashboard {
         self::migrate_shared_state();
         self::migrate_shared_files();
         update_option(self::VERSION_OPTION, self::VERSION, false);
+        do_action('litespeed_purge_url', rest_url('kuajing/v1/session'));
+        do_action('litespeed_purge_url', rest_url('kuajing/v1/state'));
         do_action('litespeed_purge_all');
         wp_cache_flush();
     }
@@ -235,8 +237,13 @@ final class FYZSXNB_Kuajing_Dashboard {
     }
 
     private static function send_private_cache_headers() {
+        if (!defined('DONOTCACHEPAGE')) {
+            define('DONOTCACHEPAGE', true);
+        }
+        do_action('litespeed_control_set_nocache', 'Kuajing private REST response');
         nocache_headers();
         header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0, private', true);
+        header('X-LiteSpeed-Cache-Control: no-cache', true);
         header('Vary: Cookie', false);
     }
 
@@ -246,6 +253,7 @@ final class FYZSXNB_Kuajing_Dashboard {
         }
         $response = rest_ensure_response($response);
         $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0, private');
+        $response->header('X-LiteSpeed-Cache-Control', 'no-cache');
         $response->header('Pragma', 'no-cache');
         $response->header('Vary', 'Cookie');
         return $response;
