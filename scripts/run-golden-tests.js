@@ -15,6 +15,16 @@ const { pathToFileURL } = require('url');
 
 const GOLDEN_DIR = path.join(__dirname, '..', 'tests', 'golden');
 
+// 核心护栏基线：以下案例 ID 必须全部存在（防止误删个别文件后仍全绿）。
+// 新增案例不受此表限制（不使用固定断言总数，避免加案例误报）。
+const REQUIRED_GOLDEN_IDS = [
+  'wb-parcel-weight-boundaries',
+  'wb-multi-parcel',
+  'wb-profit-normal-order',
+  'wb-reverse-six-scenarios',
+  'ozon-cel-channels',
+];
+
 const importModule = (p) => import(pathToFileURL(p).href);
 
 async function main() {
@@ -38,6 +48,22 @@ async function main() {
   const { ALL_CHANNELS, calcShipping } = await importModule(
     path.join(__dirname, '..', 'ozon-react', 'src', 'utils', 'ozonEngine.js')
   );
+
+  // 校验核心案例完整性
+  const loadedIds = [];
+  for (const file of files) {
+    try {
+      const spec = JSON.parse(fs.readFileSync(path.join(GOLDEN_DIR, file), 'utf-8'));
+      if (spec && spec.id) loadedIds.push(spec.id);
+    } catch (e) {
+      /* 解析错误稍后在逐文件阶段报告 */
+    }
+  }
+  const missingIds = REQUIRED_GOLDEN_IDS.filter((id) => !loadedIds.includes(id));
+  if (missingIds.length > 0) {
+    console.error(`[test:golden] FAIL — 缺少核心案例: ${missingIds.join(', ')}。核心护栏不允许缺失。`);
+    process.exit(1);
+  }
 
   let pass = 0;
   let fail = 0;

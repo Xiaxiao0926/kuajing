@@ -12,6 +12,7 @@ import json
 import os
 import csv
 import io
+import copy
 from datetime import datetime, date
 from decimal import Decimal
 
@@ -55,17 +56,21 @@ def _load_config_strict(filepath, label):
 
 
 def _validate_settings_structure(data):
+    # 与 scripts/sync-config.js 校验对齐（共享唯一事实源，两端必填一致）
     required = ['base_currency', 'rub_per_cny', 'exchange_rate_effective_from',
-                'tax_method', 'tax_rate', 'default_route_id', 'timezone',
-                'profit_margin_threshold', 'logistics_ratio_threshold']
+                'tax_method', 'tax_rate', 'default_route_id',
+                'buyer_to_ru_warehouse_reverse_included', 'timezone',
+                'profit_margin_threshold', 'logistics_ratio_threshold', 'ozon_rub_to_cny']
     missing = [k for k in required if k not in data]
     if missing:
         raise ConfigError(f'[config] settings.json 缺少必填字段: {missing}')
-    for k in ['rub_per_cny', 'tax_rate', 'profit_margin_threshold', 'logistics_ratio_threshold']:
+    for k in ['rub_per_cny', 'tax_rate', 'profit_margin_threshold', 'logistics_ratio_threshold', 'ozon_rub_to_cny']:
         if not isinstance(data[k], (int, float)):
             raise ConfigError(f'[config] settings.json 字段 {k} 必须为数字, 实际 {data[k]!r}')
     if data['rub_per_cny'] <= 0:
-        raise ConfigError(f'[config] settings.json rub_per_cny 必须为正数')
+        raise ConfigError('[config] settings.json rub_per_cny 必须为正数（汇率不得为 0）')
+    if data['ozon_rub_to_cny'] <= 0:
+        raise ConfigError('[config] settings.json ozon_rub_to_cny 必须为正数')
 
 
 def _validate_tariffs_structure(data):
@@ -86,6 +91,11 @@ DEFAULT_SETTINGS = _load_config_strict(SETTINGS_FILE, 'settings.json')
 _validate_settings_structure(DEFAULT_SETTINGS)
 DEFAULT_TARIFFS = _load_config_strict(TARIFFS_FILE, 'wb_tariffs.json')
 _validate_tariffs_structure(DEFAULT_TARIFFS)
+
+# 只读 baseline 快照（本次进程启动时的 config 内容），供"重置为默认"使用。
+# 不构成第二套持久化费率：进程退出即消失；磁盘唯一事实源仍是 config/*.json。
+BASELINE_SETTINGS = copy.deepcopy(DEFAULT_SETTINGS)
+BASELINE_TARIFFS = copy.deepcopy(DEFAULT_TARIFFS)
 
 CSV_TEMPLATE_COLUMNS = [
     'order_id', 'order_date', 'status', 'sku_id', 'quantity',
@@ -132,8 +142,32 @@ def _save_json(filepath, data):
         return False
 
 
+def _save_config_atomic(filepath, data, validator, label):
+    """配置写入唯一通道：先校验 → 写 .tmp → os.replace 原子替换。
+    校验失败或写入异常时，canonical 文件保持原样（fail-safe 写）。"""
+    try:
+        validator(data)
+    except ConfigError as e:
+        print(f'[config] 拒绝写入 {label}: {e}')
+        return False
+    tmp_path = filepath + '.tmp'
+    try:
+        with open(tmp_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2, cls=WBJSONEncoder)
+        os.replace(tmp_path, filepath)
+        return True
+    except Exception as e:
+        try:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+        except OSError:
+            pass
+        print(f'[config] 写入失败 {label}: {e}')
+        return False
+
+
 # ----------------------
-# 设置（唯一事实源 config/settings.json，fail-fast）
+# 设置（唯一事实源 config/settings.json，fail-fast 读 + 校验原子写）
 # ----------------------
 def load_settings():
     data = _load_config_strict(SETTINGS_FILE, 'settings.json')
@@ -142,13 +176,13 @@ def load_settings():
 
 
 def save_settings(settings):
-    """面板编辑设置 → 写回唯一事实源 config/settings.json（用户显式操作）"""
+    """面板编辑设置 → 校验后原子写回唯一事实源 config/settings.json（用户显式操作）"""
     settings['updated_at'] = datetime.now().isoformat()
-    return _save_json(SETTINGS_FILE, settings)
+    return _save_config_atomic(SETTINGS_FILE, settings, _validate_settings_structure, 'settings.json')
 
 
 # ----------------------
-# 费率（唯一事实源 config/wb_tariffs.json，fail-fast）
+# 费率（唯一事实源 config/wb_tariffs.json，fail-fast 读 + 校验原子写）
 # ----------------------
 def load_tariffs():
     data = _load_config_strict(TARIFFS_FILE, 'wb_tariffs.json')
@@ -157,8 +191,8 @@ def load_tariffs():
 
 
 def save_tariffs(tariffs):
-    """面板编辑费率 → 写回唯一事实源 config/wb_tariffs.json（用户显式操作）"""
-    return _save_json(TARIFFS_FILE, tariffs)
+    """面板编辑费率 → 校验后原子写回唯一事实源 config/wb_tariffs.json（用户显式操作）"""
+    return _save_config_atomic(TARIFFS_FILE, tariffs, _validate_tariffs_structure, 'wb_tariffs.json')
 
 
 def get_active_routes(tariffs=None):
@@ -309,24 +343,22 @@ def backup_all():
 
 
 def restore_all(backup):
-    """从备份恢复"""
+    """从备份恢复：配置类走校验原子写，运行数据宽容写"""
+    ok = True
     if 'settings' in backup:
-        _save_json(SETTINGS_FILE, backup['settings'])
+        ok = _save_config_atomic(SETTINGS_FILE, backup['settings'], _validate_settings_structure, 'settings.json') and ok
     if 'tariffs' in backup:
-        _save_json(TARIFFS_FILE, backup['tariffs'])
+        ok = _save_config_atomic(TARIFFS_FILE, backup['tariffs'], _validate_tariffs_structure, 'wb_tariffs.json') and ok
     if 'skus' in backup:
-        _save_json(SKUS_FILE, backup['skus'])
+        ok = _save_json(SKUS_FILE, backup['skus']) and ok
     if 'orders' in backup:
-        _save_json(ORDERS_FILE, backup['orders'])
-    return True
+        ok = _save_json(ORDERS_FILE, backup['orders']) and ok
+    return ok
 
 
 def reset_to_default():
-    """重置为仓库基线配置（重新从唯一事实源 config 文件读取并写回，清除运行期编辑）"""
-    settings = _load_config_strict(SETTINGS_FILE, 'settings.json')
-    _validate_settings_structure(settings)
-    tariffs = _load_config_strict(TARIFFS_FILE, 'wb_tariffs.json')
-    _validate_tariffs_structure(tariffs)
-    ok1 = _save_json(SETTINGS_FILE, settings)
-    ok2 = _save_json(TARIFFS_FILE, tariffs)
+    """重置为仓库基线配置：把启动时快照的 baseline 校验后原子写回。
+    baseline 是本次进程启动时 canonical config 的只读快照（非第二套持久化数据）。"""
+    ok1 = _save_config_atomic(SETTINGS_FILE, copy.deepcopy(BASELINE_SETTINGS), _validate_settings_structure, 'settings.json')
+    ok2 = _save_config_atomic(TARIFFS_FILE, copy.deepcopy(BASELINE_TARIFFS), _validate_tariffs_structure, 'wb_tariffs.json')
     return ok1 and ok2

@@ -132,7 +132,8 @@ with st.sidebar:
     s = st.session_state.settings
     rub_per_cny = st.number_input(
         "汇率 (1¥ = ?₽)",
-        min_value=0.0, value=float(s.get('rub_per_cny', 12)), step=0.1, format="%.4f"
+        min_value=0.0001, value=float(s.get('rub_per_cny', 12)), step=0.1, format="%.4f",
+        help="必须为正数。保存时后端仍会二次校验，非法值将被拒绝且不写盘。"
     )
     tax_method = st.selectbox(
         "税费方式",
@@ -161,8 +162,11 @@ with st.sidebar:
             'profit_margin_threshold': profit_threshold,
             'logistics_ratio_threshold': logistics_threshold,
         })
-        wb_data.save_settings(st.session_state.settings)
-        st.success("设置已保存")
+        saved = wb_data.save_settings(st.session_state.settings)
+        if saved:
+            st.success("设置已保存")
+        else:
+            st.error("保存被拒绝：设置未通过结构校验（如汇率为 0），config 文件未修改。")
         st.rerun()
 
     st.caption(f"费率生效: {s.get('exchange_rate_effective_from', '—')}")
@@ -688,8 +692,12 @@ def page_tariff_manage():
         if uploaded:
             try:
                 imported = json.loads(uploaded.read().decode('utf-8'))
+                if not isinstance(imported, list) or len(imported) == 0:
+                    raise ValueError('导入内容必须为非空费率数组')
+                saved = wb_data.save_tariffs(imported)
+                if not saved:
+                    raise ValueError('结构校验未通过，config 文件未修改')
                 st.session_state.tariffs = imported
-                wb_data.save_tariffs(imported)
                 st.success("导入成功")
                 st.rerun()
             except Exception as e:
@@ -755,8 +763,12 @@ def page_tariff_manage():
                 'tiers': tiers,
             }
             st.session_state.tariffs.append(new_tariff)
-            wb_data.save_tariffs(st.session_state.tariffs)
-            st.success(f"费率 {t_route_name} 已保存")
+            saved = wb_data.save_tariffs(st.session_state.tariffs)
+            if saved:
+                st.success(f"费率 {t_route_name} 已保存")
+            else:
+                st.session_state.tariffs.pop()
+                st.error("保存被拒绝：费率未通过结构校验，config 文件未修改。")
             st.rerun()
 
 
