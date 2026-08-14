@@ -10,7 +10,7 @@
 | # | 描述 | 位置 | 风险 | 建议处理 |
 |---|---|---|---|---|
 | TD-1 | 运行时配置来源存在漂移风险：仓库基线三处一致（React 12 / Python 默认 12 / tracked settings.json 12），但 2026-08-14 曾观察到本机 Python 运行态 11.5（当前仓库无法复现）——运行时持久化文件可覆盖代码默认值 | `wbConfig.js` / `wb_data.py` / `wb_data/settings.json` | 高：运行态与仓库态可能不一致 | T2 建立 config 唯一事实源时，验证运行时是否存在外部覆盖；以需求方确认值为准 |
-| TD-2 | WB 核算双引擎并行，规则靠人工同步（已有漂移先例 TD-1） | `wbEngine.js` vs `wb_calc.py` | 高：改一处忘另一处 | T2 配置唯一事实源 + T2-4 双端对拍 |
+| TD-2 | WB 核算双引擎并行，规则靠人工同步（已有运行态异常观察 TD-1） | `wbEngine.js` vs `wb_calc.py` | 高：改一处忘另一处 | T2 配置唯一事实源 + T2-4 双端对拍 |
 | TD-3 | Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称 | `wb_calc.py` | 中：Python 面板算不出拒收/清关赔偿 | T2 或独立任务补齐并加测试 |
 | TD-4 | `NewDashboard.jsx` 459KB 巨型组件 | `ozon-react/src/components/NewDashboard.jsx` | 中：任何改动易牵一发动全身 | T3-1 按职责拆分 |
 | TD-5 | `WBCalc.jsx` 1692 行、`FragrancePricing.jsx` 42KB 同样偏大 | `ozon-react/src/components/` | 中 | T3-1 |

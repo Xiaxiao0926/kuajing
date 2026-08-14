@@ -116,7 +116,7 @@ npm run test:sync    # ⚠️ T2 完成前是占位器（SKIP 退出 0），不�
 ```text
 feature branch（fix/ feat/ docs/ refactor/ 前缀）
   → 自检：npm test 全绿 + git diff 无超范围改动
-  → commit（一个任务一个清晰 commit）
+  → commit（一个逻辑变更一个清晰 commit）
   → push → 人验收
   → merge --no-ff 到 main（重大阶段打 tag）
 ```
