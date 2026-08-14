@@ -19,10 +19,10 @@ const CATEGORY_KEYWORDS = {
 }
 
 const CATEGORY_COLORS = {
-  '吹风机': { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', accent: 'bg-rose-500', light: 'bg-rose-100' },
-  '枕头': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', accent: 'bg-blue-500', light: 'bg-blue-100' },
-  '发膜': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', accent: 'bg-purple-500', light: 'bg-purple-100' },
-  '精油': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', accent: 'bg-green-500', light: 'bg-green-100' },
+  '吹风机': { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-text', border: 'border-rose-200', accent: 'bg-workspace-surface-subtle0', light: 'bg-workspace-surface-subtle' },
+  '枕头': { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-primary', border: 'border-workspace-border', accent: 'bg-workspace-surface-subtle0', light: 'bg-workspace-surface-subtle' },
+  '发膜': { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-text', border: 'border-workspace-border', accent: 'bg-workspace-surface-subtle0', light: 'bg-workspace-surface-subtle' },
+  '精油': { bg: 'bg-workspace-success-soft', text: 'text-workspace-success', border: 'border-green-200', accent: 'bg-workspace-success-soft0', light: 'bg-workspace-success-soft' },
 }
 
 const CATEGORY_LUCIDE = {
@@ -113,7 +113,7 @@ function CatTag({ cat }) {
   const c = CATEGORY_COLORS[cat]
   if (!c) return null
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium ${c.bg} ${c.text} border ${c.border}`}>
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${c.bg} ${c.text} border ${c.border}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${c.accent}`} />
       {cat}
     </span>
@@ -126,7 +126,7 @@ function DetailRow({ icon: Icon, label, value }) {
     <div className="flex items-start gap-2">
       <Icon className="w-3.5 h-3.5 text-gray-300 mt-0.5 flex-shrink-0" />
       <div className="min-w-0">
-        <div className="text-[10px] text-gray-400 leading-none mb-0.5">{label}</div>
+        <div className="text-xs text-workspace-text-tertiary leading-none mb-0.5">{label}</div>
         <p className="text-xs text-morandi-text leading-relaxed whitespace-pre-line">{value}</p>
       </div>
     </div>
@@ -151,17 +151,17 @@ function EditModal({ factory, onSave, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-white border-b border-workspace-border px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <h3 className="text-sm font-semibold text-morandi-text flex items-center gap-2">
             <Factory className="w-4 h-4 text-morandi-primary" />
             {factory.id ? '编辑工厂' : '新增工厂'}
           </h3>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg"><X className="w-4 h-4 text-gray-400" /></button>
+          <button onClick={onClose} className="p-1 hover:bg-workspace-surface-subtle rounded-lg"><X className="w-4 h-4 text-workspace-text-tertiary" /></button>
         </div>
         <div className="p-6 space-y-3">
           {FIELDS.map(f => (
             <div key={f.key}>
-              <label className="text-[11px] font-medium text-morandi-text-light mb-1 block">
+              <label className="text-xs font-medium text-morandi-text-light mb-1 block">
                 {f.label}{f.required && <span className="text-red-400 ml-0.5">*</span>}
               </label>
               {f.type === 'textarea' ? (
@@ -169,21 +169,21 @@ function EditModal({ factory, onSave, onClose }) {
                   value={form[f.key] || ''}
                   onChange={e => update(f.key, e.target.value)}
                   rows={3}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary resize-none"
+                  className="w-full text-xs border border-workspace-border rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary resize-none"
                 />
               ) : (
                 <input
                   type="text"
                   value={form[f.key] || ''}
                   onChange={e => update(f.key, e.target.value)}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary"
+                  className="w-full text-xs border border-workspace-border rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary"
                 />
               )}
             </div>
           ))}
         </div>
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 flex justify-end gap-2 rounded-b-2xl z-10">
-          <button onClick={onClose} className="px-4 py-2 text-xs text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">取消</button>
+        <div className="sticky bottom-0 bg-white border-t border-workspace-border px-6 py-4 flex justify-end gap-2 rounded-b-2xl z-10">
+          <button onClick={onClose} className="px-4 py-2 text-xs text-workspace-text-secondary bg-workspace-surface-subtle rounded-lg hover:bg-gray-200">取消</button>
           <button onClick={handleSave} className="px-4 py-2 text-xs text-white bg-morandi-primary rounded-lg hover:bg-morandi-primary/90 flex items-center gap-1">
             <Save className="w-3 h-3" />保存
           </button>
@@ -324,13 +324,13 @@ export default function SupplyChain() {
             <Factory className="w-5 h-5 text-morandi-primary" />
             供应链工厂目录
           </h2>
-          <p className="text-[10px] text-morandi-text-light mt-0.5">数据来源：2026年Ozon平台供应链工厂目录0406 · 支持手动编辑与新增</p>
+          <p className="text-xs text-morandi-text-light mt-0.5">数据来源：2026年Ozon平台供应链工厂目录0406 · 支持手动编辑与新增</p>
         </div>
         <div className="flex items-center gap-2">
           <select
             value={filterCat}
             onChange={e => setFilterCat(e.target.value)}
-            className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-morandi-primary"
+            className="text-xs border border-workspace-border rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-morandi-primary"
           >
             <option value="all">全部品类</option>
             {Object.keys(CATEGORY_KEYWORDS).map(cat => (
@@ -345,7 +345,7 @@ export default function SupplyChain() {
           </button>
           <button
             onClick={handleReset}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-workspace-text-secondary bg-workspace-surface-subtle rounded-lg hover:bg-gray-200"
             title="重置为原始文件数据"
           >
             <RotateCcw className="w-3 h-3" />重置
@@ -357,50 +357,50 @@ export default function SupplyChain() {
         <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100">
           <div className="flex items-center gap-1.5 mb-2">
             <Factory className="w-3.5 h-3.5 text-blue-500" />
-            <span className="text-[10px] font-medium text-blue-600">验厂数量</span>
+            <span className="text-xs font-medium text-workspace-text-secondary">验厂数量</span>
           </div>
-          <div className="text-2xl font-bold text-blue-700">{factories.length}</div>
-          <div className="text-[9px] text-blue-400 mt-0.5">已实地验厂</div>
+          <div className="text-2xl font-bold text-workspace-primary">{factories.length}</div>
+          <div className="text-xs text-blue-400 mt-0.5">已实地验厂</div>
         </div>
         <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-4 border border-purple-100">
           <div className="flex items-center gap-1.5 mb-2">
             <Package className="w-3.5 h-3.5 text-purple-500" />
-            <span className="text-[10px] font-medium text-purple-600">品类覆盖</span>
+            <span className="text-xs font-medium text-workspace-text-secondary">品类覆盖</span>
           </div>
-          <div className="text-2xl font-bold text-purple-700">{Object.values(catStats).filter(v => v > 0).length}/4</div>
-          <div className="text-[9px] text-purple-400 mt-0.5">吹风机/枕头/发膜/精油</div>
+          <div className="text-2xl font-bold text-workspace-text">{Object.values(catStats).filter(v => v > 0).length}/4</div>
+          <div className="text-xs text-purple-400 mt-0.5">吹风机/枕头/发膜/精油</div>
         </div>
         <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl p-4 border border-green-100">
           <div className="flex items-center gap-1.5 mb-2">
             <Shield className="w-3.5 h-3.5 text-green-500" />
-            <span className="text-[10px] font-medium text-green-600">认证配合</span>
+            <span className="text-xs font-medium text-workspace-success">认证配合</span>
           </div>
-          <div className="text-2xl font-bold text-green-700">{certCoop}</div>
-          <div className="text-[9px] text-green-400 mt-0.5">占 {factories.length > 0 ? Math.round(certCoop / factories.length * 100) : 0}%</div>
+          <div className="text-2xl font-bold text-workspace-success">{certCoop}</div>
+          <div className="text-xs text-green-400 mt-0.5">占 {factories.length > 0 ? Math.round(certCoop / factories.length * 100) : 0}%</div>
         </div>
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-amber-100">
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-workspace-border">
           <div className="flex items-center gap-1.5 mb-2">
             <FileCheck className="w-3.5 h-3.5 text-amber-500" />
-            <span className="text-[10px] font-medium text-amber-600">样品带回</span>
+            <span className="text-xs font-medium text-amber-600">样品带回</span>
           </div>
-          <div className="text-2xl font-bold text-amber-700">{sampleYes}</div>
-          <div className="text-[9px] text-amber-400 mt-0.5">占 {factories.length > 0 ? Math.round(sampleYes / factories.length * 100) : 0}%</div>
+          <div className="text-2xl font-bold text-workspace-warning">{sampleYes}</div>
+          <div className="text-xs text-amber-400 mt-0.5">占 {factories.length > 0 ? Math.round(sampleYes / factories.length * 100) : 0}%</div>
         </div>
         <div className="bg-gradient-to-br from-rose-50 to-rose-100/50 rounded-xl p-4 border border-rose-100">
           <div className="flex items-center gap-1.5 mb-2">
             <Building2 className="w-3.5 h-3.5 text-rose-500" />
-            <span className="text-[10px] font-medium text-rose-600">OEM代工</span>
+            <span className="text-xs font-medium text-workspace-text-secondary">OEM代工</span>
           </div>
-          <div className="text-2xl font-bold text-rose-700">{hasOEM}</div>
-          <div className="text-[9px] text-rose-400 mt-0.5">家工厂支持</div>
+          <div className="text-2xl font-bold text-workspace-text">{hasOEM}</div>
+          <div className="text-xs text-rose-400 mt-0.5">家工厂支持</div>
         </div>
         <div className="bg-gradient-to-br from-indigo-50 to-indigo-100/50 rounded-xl p-4 border border-indigo-100">
           <div className="flex items-center gap-1.5 mb-2">
             <ClipboardCheck className="w-3.5 h-3.5 text-indigo-500" />
-            <span className="text-[10px] font-medium text-indigo-600">ODM定制</span>
+            <span className="text-xs font-medium text-indigo-600">ODM定制</span>
           </div>
           <div className="text-2xl font-bold text-indigo-700">{hasODM}</div>
-          <div className="text-[9px] text-indigo-400 mt-0.5">家工厂支持</div>
+          <div className="text-xs text-indigo-400 mt-0.5">家工厂支持</div>
         </div>
       </div>
 
@@ -415,45 +415,45 @@ export default function SupplyChain() {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className={`text-xs font-semibold ${c.text}`}>{cat}</span>
-                <span className={`text-[10px] ${c.text} opacity-60`}>{factories.length > 0 ? Math.round(count / factories.length * 100) : 0}%</span>
+                <span className={`text-xs ${c.text} opacity-60`}>{factories.length > 0 ? Math.round(count / factories.length * 100) : 0}%</span>
               </div>
               <div className="text-2xl font-bold text-morandi-text">{count}</div>
               <div className="mt-2 h-1.5 bg-white/60 rounded-full overflow-hidden">
                 <div className={`h-full ${c.accent} rounded-full transition-all duration-500`} style={{ width: `${factories.length > 0 ? (count / factories.length) * 100 : 0}%` }} />
               </div>
-              <div className="text-[9px] text-morandi-text-light mt-1.5">家工厂</div>
+              <div className="text-xs text-morandi-text-light mt-1.5">家工厂</div>
             </div>
           )
         })}
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl shadow-sm border border-workspace-border">
         <div className="px-5 py-3 border-b border-gray-50 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Building2 className="w-4 h-4 text-morandi-primary" />
             <span className="text-xs font-semibold text-morandi-text">工厂列表</span>
-            <span className="text-[10px] text-morandi-text-light">({filtered.length} 家)</span>
+            <span className="text-xs text-morandi-text-light">({filtered.length} 家)</span>
           </div>
-          <span className="text-[10px] text-gray-300">点击展开详情 · 支持编辑/删除</span>
+          <span className="text-xs text-gray-300">点击展开详情 · 支持编辑/删除</span>
         </div>
         <div className="divide-y divide-gray-50">
           {filtered.map(f => (
-            <div key={f.id} className={expandedId === f.id ? 'bg-gray-50/30' : ''}>
+            <div key={f.id} className={expandedId === f.id ? 'bg-workspace-surface-subtle/30' : ''}>
               <div
-                className="flex items-center gap-3 px-5 py-3 cursor-pointer hover:bg-gray-50/50 transition-colors"
+                className="flex items-center gap-3 px-5 py-3 cursor-pointer hover:bg-workspace-surface-subtle/50 transition-colors"
                 onClick={() => setExpandedId(expandedId === f.id ? null : f.id)}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold text-morandi-text truncate">{f.name}</span>
                     {f.source === 'manual' && (
-                      <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-50 text-amber-600 border border-amber-200">手动添加</span>
+                      <span className="px-1.5 py-0.5 rounded text-xs font-medium bg-workspace-warning-soft text-amber-600 border border-amber-200">手动添加</span>
                     )}
                     <div className="flex gap-1">
                       {(f.categories || []).map(cat => <CatTag key={cat} cat={cat} />)}
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 mt-1 text-[10px] text-morandi-text-light">
+                  <div className="flex items-center gap-4 mt-1 text-xs text-morandi-text-light">
                     {f.mainCategory && f.mainCategory !== '/' && (
                       <span className="flex items-center gap-1"><Tag className="w-3 h-3" />{f.mainCategory}</span>
                     )}
@@ -471,14 +471,14 @@ export default function SupplyChain() {
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <button
                     onClick={e => { e.stopPropagation(); setEditFactory(f) }}
-                    className="p-1.5 hover:bg-blue-50 rounded-lg text-gray-400 hover:text-blue-500 transition-colors"
+                    className="p-1.5 hover:bg-workspace-surface-subtle rounded-lg text-workspace-text-tertiary hover:text-blue-500 transition-colors"
                     title="编辑"
                   >
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={e => { e.stopPropagation(); handleDelete(f.id) }}
-                    className="p-1.5 hover:bg-red-50 rounded-lg text-gray-400 hover:text-red-500 transition-colors"
+                    className="p-1.5 hover:bg-red-50 rounded-lg text-workspace-text-tertiary hover:text-red-500 transition-colors"
                     title="删除"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -489,7 +489,7 @@ export default function SupplyChain() {
 
               {expandedId === f.id && (
                 <div className="px-5 pb-4 pt-0">
-                  <div className="bg-gray-50/50 rounded-xl p-4">
+                  <div className="bg-workspace-surface-subtle/50 rounded-xl p-4">
                     <div className="grid grid-cols-2 gap-x-8 gap-y-3">
                       <DetailRow icon={Phone} label="联系人/电话" value={f.contact} />
                       <DetailRow icon={MapPin} label="企业地址" value={f.address} />
@@ -507,26 +507,26 @@ export default function SupplyChain() {
                     </div>
 
                     {f.productDetail && f.productDetail !== '/' && (
-                      <div className="mt-3 pt-3 border-t border-gray-200/50">
+                      <div className="mt-3 pt-3 border-t border-workspace-border/50">
                         <DetailRow icon={FileText} label="产品详情" value={f.productDetail} />
                       </div>
                     )}
 
                     {f.suggestion && f.suggestion !== '/' && (
-                      <div className="mt-3 p-3 bg-amber-50/80 rounded-lg border border-amber-100">
+                      <div className="mt-3 p-3 bg-workspace-warning-soft/80 rounded-lg border border-workspace-border">
                         <div className="flex items-center gap-1.5 mb-1.5">
                           <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-                          <span className="text-[10px] font-semibold text-amber-700">工厂建议 / 市场信息</span>
+                          <span className="text-xs font-semibold text-workspace-warning">工厂建议 / 市场信息</span>
                         </div>
-                        <p className="text-xs text-amber-800 leading-relaxed whitespace-pre-line">{f.suggestion}</p>
+                        <p className="text-xs text-workspace-warning leading-relaxed whitespace-pre-line">{f.suggestion}</p>
                       </div>
                     )}
 
                     {f.notes && f.notes !== '/' && (
-                      <div className="mt-2 p-3 bg-blue-50/80 rounded-lg border border-blue-100">
+                      <div className="mt-2 p-3 bg-workspace-surface-subtle/80 rounded-lg border border-blue-100">
                         <div className="flex items-center gap-1.5 mb-1.5">
                           <Star className="w-3.5 h-3.5 text-blue-500" />
-                          <span className="text-[10px] font-semibold text-blue-700">备注</span>
+                          <span className="text-xs font-semibold text-workspace-primary">备注</span>
                         </div>
                         <p className="text-xs text-blue-800 leading-relaxed whitespace-pre-line">{f.notes}</p>
                       </div>

@@ -67,7 +67,7 @@ export function TariffTab({ tariffs, onSaveTariffs }) {
                   <td className="px-2 py-1.5 border-b border-gray-100 text-gray-600">{t.effectiveFrom}</td>
                   <td className="px-2 py-1.5 border-b border-gray-100 text-gray-600">{t.effectiveTo || '—'}</td>
                   <td className="px-2 py-1.5 border-b border-gray-100">{t.active !== false ? <CheckCircle2 className="w-4 h-4 text-green-600" /> : <XCircle className="w-4 h-4 text-gray-400" />}</td>
-                  <td className="px-2 py-1.5 border-b border-gray-100 text-[10px] text-gray-500">{(t.tiers || []).map((tier) => `${tier.minWeightKg}-${tier.maxWeightKg}kg: ${tier.kgRateCny}+${tier.fixedFeeCny}`).join(' | ')}</td>
+                  <td className="px-2 py-1.5 border-b border-gray-100 text-xs text-gray-500">{(t.tiers || []).map((tier) => `${tier.minWeightKg}-${tier.maxWeightKg}kg: ${tier.kgRateCny}+${tier.fixedFeeCny}`).join(' | ')}</td>
                 </tr>
               ))}
             </tbody>

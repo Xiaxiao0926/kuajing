@@ -6,9 +6,9 @@ import {
 } from 'lucide-react'
 
 const STATUS_CONFIG = {
-  done: { label: '已完成', color: 'bg-green-100 text-green-700', dot: 'bg-green-500', icon: CheckCircle2 },
-  progress: { label: '进行中', color: 'bg-amber-100 text-amber-700', dot: 'bg-amber-500', icon: Clock },
-  pending: { label: '待处理', color: 'bg-gray-100 text-gray-500', dot: 'bg-gray-300', icon: AlertTriangle },
+  done: { label: '已完成', color: 'bg-workspace-success-soft text-workspace-success', dot: 'bg-workspace-success-soft0', icon: CheckCircle2 },
+  progress: { label: '进行中', color: 'bg-workspace-warning-soft text-workspace-warning', dot: 'bg-workspace-warning-soft0', icon: Clock },
+  pending: { label: '待处理', color: 'bg-workspace-surface-subtle text-workspace-text-tertiary', dot: 'bg-gray-300', icon: AlertTriangle },
 }
 
 const BLOCKS = [
@@ -49,9 +49,9 @@ const BLOCKS = [
 ]
 
 const BLOCK_COLORS = {
-  blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', accent: 'bg-blue-500', bar: 'bg-blue-400', light: 'bg-blue-100', headerBg: 'bg-blue-50/80' },
-  purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', accent: 'bg-purple-500', bar: 'bg-purple-400', light: 'bg-purple-100', headerBg: 'bg-purple-50/80' },
-  amber: { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', accent: 'bg-amber-500', bar: 'bg-amber-400', light: 'bg-amber-100', headerBg: 'bg-amber-50/80' },
+  blue: { bg: 'bg-workspace-surface-subtle', border: 'border-workspace-border', text: 'text-workspace-primary', accent: 'bg-workspace-surface-subtle0', bar: 'bg-blue-400', light: 'bg-workspace-surface-subtle', headerBg: 'bg-workspace-surface-subtle/80' },
+  purple: { bg: 'bg-workspace-surface-subtle', border: 'border-workspace-border', text: 'text-workspace-text', accent: 'bg-workspace-surface-subtle0', bar: 'bg-purple-400', light: 'bg-workspace-surface-subtle', headerBg: 'bg-workspace-surface-subtle/80' },
+  amber: { bg: 'bg-workspace-warning-soft', border: 'border-amber-200', text: 'text-workspace-warning', accent: 'bg-workspace-warning-soft0', bar: 'bg-amber-400', light: 'bg-workspace-warning-soft', headerBg: 'bg-workspace-warning-soft/80' },
 }
 
 const PRODUCTS = [
@@ -62,10 +62,10 @@ const PRODUCTS = [
 ]
 
 const PRODUCT_COLOR_MAP = {
-  rose: { bg: 'bg-rose-50', border: 'border-rose-200', text: 'text-rose-700', accent: 'bg-rose-500' },
-  blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', accent: 'bg-blue-500' },
-  purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', accent: 'bg-purple-500' },
-  green: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', accent: 'bg-green-500' },
+  rose: { bg: 'bg-workspace-surface-subtle', border: 'border-rose-200', text: 'text-workspace-text', accent: 'bg-workspace-surface-subtle0' },
+  blue: { bg: 'bg-workspace-surface-subtle', border: 'border-workspace-border', text: 'text-workspace-primary', accent: 'bg-workspace-surface-subtle0' },
+  purple: { bg: 'bg-workspace-surface-subtle', border: 'border-workspace-border', text: 'text-workspace-text', accent: 'bg-workspace-surface-subtle0' },
+  green: { bg: 'bg-workspace-success-soft', border: 'border-green-200', text: 'text-workspace-success', accent: 'bg-workspace-success-soft0' },
 }
 
 const PRODUCT_NODE_MAP = {
@@ -121,7 +121,7 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-morandi-text">{block.title}</h3>
-                  <p className="text-[10px] text-morandi-text-light">{block.desc}</p>
+                  <p className="text-xs text-morandi-text-light">{block.desc}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -129,7 +129,7 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
                   <div className={`h-full ${colors.bar} rounded-full transition-all`} style={{ width: `${stats.pct}%` }} />
                 </div>
                 <span className={`text-xs font-bold ${colors.text}`}>{stats.pct}%</span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${stats.pct === 100 ? 'bg-green-100 text-green-700' : stats.pct > 0 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'}`}>
+                <span className={`text-xs px-1.5 py-0.5 rounded-full ${stats.pct === 100 ? 'bg-workspace-success-soft text-workspace-success' : stats.pct > 0 ? 'bg-workspace-warning-soft text-workspace-warning' : 'bg-workspace-surface-subtle text-workspace-text-tertiary'}`}>
                   {stats.done}/{stats.total}
                 </span>
               </div>
@@ -141,12 +141,12 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
                 return (
                   <div key={si}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[11px] font-semibold text-morandi-text">{sg.name}</span>
+                      <span className="text-xs font-semibold text-morandi-text">{sg.name}</span>
                       <div className="flex items-center gap-2">
-                        <div className="w-16 h-1 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="w-16 h-1 bg-workspace-surface-subtle rounded-full overflow-hidden">
                           <div className={`h-full ${colors.bar} rounded-full transition-all`} style={{ width: `${sgPct}%` }} />
                         </div>
-                        <span className="text-[9px] text-morandi-text-light">{sgDone}/{sg.nodes.length}</span>
+                        <span className="text-xs text-morandi-text-light">{sgDone}/{sg.nodes.length}</span>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
@@ -160,12 +160,12 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
                           <button
                             key={nodeId}
                             onClick={() => onNodeSelect?.(nodeId)}
-                            className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-gray-100 hover:border-morandi-primary/30 hover:bg-morandi-primary/5 transition-all text-left group"
+                            className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-workspace-border hover:border-morandi-primary/30 hover:bg-morandi-primary/5 transition-all text-left group"
                           >
                             <span className={`w-2 h-2 rounded-full flex-shrink-0 ${cfg.dot}`} />
                             <div className="min-w-0 flex-1">
                               <p className="text-xs font-medium text-morandi-text truncate group-hover:text-morandi-primary">{node.title}</p>
-                              {detail && <p className="text-[9px] text-morandi-text-light truncate">{detail.desc}</p>}
+                              {detail && <p className="text-xs text-morandi-text-light truncate">{detail.desc}</p>}
                             </div>
                             <span className={`text-[8px] px-1 py-0.5 rounded flex-shrink-0 ${cfg.color}`}>{cfg.label}</span>
                           </button>
@@ -193,13 +193,13 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
         {Object.entries(groups).map(([key, group]) => {
           const cfg = STATUS_CONFIG[key]
           return (
-            <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div key={key} className="bg-white rounded-xl shadow-sm border border-workspace-border overflow-hidden">
               <div className="px-5 py-4 flex items-center justify-between border-b border-gray-50">
                 <div className="flex items-center gap-2">
                   <cfg.icon className="w-4 h-4 text-morandi-primary" />
                   <h3 className="text-sm font-bold text-morandi-text">{group.label}</h3>
                 </div>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${cfg.color}`}>{group.nodes.length} 个节点</span>
+                <span className={`text-xs px-1.5 py-0.5 rounded-full ${cfg.color}`}>{group.nodes.length} 个节点</span>
               </div>
               <div className="p-4">
                 {group.nodes.length === 0 ? (
@@ -213,12 +213,12 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
                         <button
                           key={node.id}
                           onClick={() => onNodeSelect?.(node.id)}
-                          className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-gray-100 hover:border-morandi-primary/30 hover:bg-morandi-primary/5 transition-all text-left group"
+                          className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-workspace-border hover:border-morandi-primary/30 hover:bg-morandi-primary/5 transition-all text-left group"
                         >
                           <span className={`w-2 h-2 rounded-full flex-shrink-0 ${cfg.dot}`} />
                           <div className="min-w-0 flex-1">
                             <p className="text-xs font-medium text-morandi-text truncate group-hover:text-morandi-primary">{node.title}</p>
-                            <p className="text-[9px] text-morandi-text-light truncate">{block?.title || ''}</p>
+                            <p className="text-xs text-morandi-text-light truncate">{block?.title || ''}</p>
                           </div>
                           <ChevronRight className="w-3 h-3 text-gray-300 group-hover:text-morandi-primary flex-shrink-0" />
                         </button>
@@ -243,18 +243,18 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
         const pct = productNodes.length > 0 ? Math.round(done / productNodes.length * 100) : 0
         const colors = PRODUCT_COLOR_MAP[product.color]
         return (
-          <div key={product.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div key={product.id} className="bg-white rounded-xl shadow-sm border border-workspace-border overflow-hidden">
             <div className={`px-5 py-4 flex items-center justify-between border-b border-gray-50 ${colors.bg}`}>
               <div className="flex items-center gap-2">
                 <span className="text-lg">{product.icon}</span>
                 <h3 className="text-sm font-bold text-morandi-text">{product.name}</h3>
-                <span className="text-[10px] text-morandi-text-light">{productNodes.length} 个节点</span>
+                <span className="text-xs text-morandi-text-light">{productNodes.length} 个节点</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-24 h-1.5 bg-white/50 rounded-full overflow-hidden">
                   <div className={`h-full ${colors.accent} rounded-full transition-all`} style={{ width: `${pct}%` }} />
                 </div>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${pct === 100 ? 'bg-green-100 text-green-700' : pct > 0 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'}`}>
+                <span className={`text-xs px-1.5 py-0.5 rounded-full ${pct === 100 ? 'bg-workspace-success-soft text-workspace-success' : pct > 0 ? 'bg-workspace-warning-soft text-workspace-warning' : 'bg-workspace-surface-subtle text-workspace-text-tertiary'}`}>
                   {done}/{productNodes.length}
                 </span>
               </div>
@@ -268,12 +268,12 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
                   <button
                     key={node.id}
                     onClick={() => onNodeSelect?.(node.id)}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-gray-100 hover:border-morandi-primary/30 hover:bg-morandi-primary/5 transition-all text-left group"
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-workspace-border hover:border-morandi-primary/30 hover:bg-morandi-primary/5 transition-all text-left group"
                   >
                     <span className={`w-2 h-2 rounded-full flex-shrink-0 ${cfg.dot}`} />
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-medium text-morandi-text truncate group-hover:text-morandi-primary">{node.title}</p>
-                      {detail && <p className="text-[9px] text-morandi-text-light truncate">{cfg.label}</p>}
+                      {detail && <p className="text-xs text-morandi-text-light truncate">{cfg.label}</p>}
                     </div>
                   </button>
                 )
@@ -293,9 +293,9 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
             <Map className="w-5 h-5 text-morandi-primary" />
             项目节点总览
           </h2>
-          <p className="text-[10px] text-morandi-text-light mt-0.5">全流程节点状态一览，点击节点可跳转详情</p>
+          <p className="text-xs text-morandi-text-light mt-0.5">全流程节点状态一览，点击节点可跳转详情</p>
         </div>
-        <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5">
+        <div className="flex items-center gap-1 bg-workspace-surface-subtle rounded-lg p-0.5">
           {VIEW_MODES.map(mode => (
             <button
               key={mode.key}
@@ -318,21 +318,21 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
             <div key={block.id} className={`bg-gradient-to-br ${colors.bg} to-white/50 rounded-xl p-4 border ${colors.border}`}>
               <div className="flex items-center gap-1.5 mb-2">
                 <BlockIcon className={`w-3.5 h-3.5 ${colors.text}`} />
-                <span className={`text-[10px] font-medium ${colors.text}`}>{block.title}</span>
+                <span className={`text-xs font-medium ${colors.text}`}>{block.title}</span>
               </div>
               <div className={`text-2xl font-bold ${colors.text}`}>{stats.pct}%</div>
-              <div className="text-[9px] text-morandi-text-light mt-0.5">{stats.done}/{stats.total} 已完成</div>
+              <div className="text-xs text-morandi-text-light mt-0.5">{stats.done}/{stats.total} 已完成</div>
             </div>
           )
         })}
       </div>
 
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-4 shadow-sm border border-workspace-border">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-medium text-morandi-text">整体进度</span>
           <span className="text-xs text-morandi-primary font-semibold">{totalNodes > 0 ? Math.round(doneNodes / totalNodes * 100) : 0}%</span>
         </div>
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden flex">
+        <div className="h-2 bg-workspace-surface-subtle rounded-full overflow-hidden flex">
           {BLOCKS.map(block => {
             const stats = getBlockStats(block)
             const colors = BLOCK_COLORS[block.color]
@@ -348,7 +348,7 @@ export default function NodeOverview({ nodeStatuses, onNodeSelect }) {
             return (
               <div key={block.id} className="flex items-center gap-1">
                 <span className={`w-2 h-2 rounded-full ${colors.accent}`} />
-                <span className="text-[9px] text-morandi-text-light">{block.title}</span>
+                <span className="text-xs text-morandi-text-light">{block.title}</span>
               </div>
             )
           })}

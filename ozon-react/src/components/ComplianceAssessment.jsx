@@ -67,8 +67,8 @@ const CHECKLIST = [
 
 const RISK_COLORS = {
   high: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', dot: 'bg-red-500', label: '高风险' },
-  mid: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-500', label: '中风险' },
-  low: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', dot: 'bg-green-500', label: '低风险' },
+  mid: { bg: 'bg-workspace-warning-soft', text: 'text-workspace-warning', border: 'border-amber-200', dot: 'bg-workspace-warning-soft0', label: '中风险' },
+  low: { bg: 'bg-workspace-success-soft', text: 'text-workspace-success', border: 'border-green-200', dot: 'bg-workspace-success-soft0', label: '低风险' },
 }
 
 const FIELDS = [
@@ -87,17 +87,17 @@ function EditModal({ item, onSave, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-white border-b border-workspace-border px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <h3 className="text-sm font-semibold text-morandi-text flex items-center gap-2">
             <Shield className="w-4 h-4 text-morandi-primary" />
             {item.id ? '编辑合规项' : '新增合规项'}
           </h3>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg"><X className="w-4 h-4 text-gray-400" /></button>
+          <button onClick={onClose} className="p-1 hover:bg-workspace-surface-subtle rounded-lg"><X className="w-4 h-4 text-workspace-text-tertiary" /></button>
         </div>
         <div className="p-6 space-y-3">
           {FIELDS.map(f => (
             <div key={f.key}>
-              <label className="text-[11px] font-medium text-morandi-text-light mb-1 block">
+              <label className="text-xs font-medium text-morandi-text-light mb-1 block">
                 {f.label}{f.required && <span className="text-red-400 ml-0.5">*</span>}
               </label>
               {f.type === 'textarea' ? (
@@ -105,13 +105,13 @@ function EditModal({ item, onSave, onClose }) {
                   value={form[f.key] || ''}
                   onChange={e => update(f.key, e.target.value)}
                   rows={3}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary resize-none"
+                  className="w-full text-xs border border-workspace-border rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary resize-none"
                 />
               ) : f.type === 'select' ? (
                 <select
                   value={form[f.key] || ''}
                   onChange={e => update(f.key, e.target.value)}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary bg-white"
+                  className="w-full text-xs border border-workspace-border rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary bg-white"
                 >
                   <option value="">请选择</option>
                   {f.options.map(o => (
@@ -125,14 +125,14 @@ function EditModal({ item, onSave, onClose }) {
                   type="text"
                   value={form[f.key] || ''}
                   onChange={e => update(f.key, e.target.value)}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary"
+                  className="w-full text-xs border border-workspace-border rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary"
                 />
               )}
             </div>
           ))}
         </div>
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 flex justify-end gap-2 rounded-b-2xl z-10">
-          <button onClick={onClose} className="px-4 py-2 text-xs text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">取消</button>
+        <div className="sticky bottom-0 bg-white border-t border-workspace-border px-6 py-4 flex justify-end gap-2 rounded-b-2xl z-10">
+          <button onClick={onClose} className="px-4 py-2 text-xs text-workspace-text-secondary bg-workspace-surface-subtle rounded-lg hover:bg-gray-200">取消</button>
           <button onClick={() => onSave(form)} className="px-4 py-2 text-xs text-white bg-morandi-primary rounded-lg hover:bg-morandi-primary/90 flex items-center gap-1">
             <Save className="w-3 h-3" />保存
           </button>
@@ -421,12 +421,12 @@ export default function ComplianceAssessment() {
       return (
         <div className="space-y-1.5 max-h-[400px] overflow-y-auto">
           {displayData.map((row, i) => (
-            <div key={i} className="flex gap-2 text-xs py-1 px-2 hover:bg-gray-50 rounded">
+            <div key={i} className="flex gap-2 text-xs py-1 px-2 hover:bg-workspace-surface-subtle rounded">
               <span className="text-morandi-text-light flex-shrink-0 w-6 text-right">{row['序号']}</span>
               <span className="text-morandi-text">{row['内容']}</span>
             </div>
           ))}
-          {data.length > 200 && <p className="text-[10px] text-morandi-text-light text-center py-2">仅显示前200段，共{data.length}段</p>}
+          {data.length > 200 && <p className="text-xs text-morandi-text-light text-center py-2">仅显示前200段，共{data.length}段</p>}
         </div>
       )
     }
@@ -434,7 +434,7 @@ export default function ComplianceAssessment() {
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
+            <tr className="bg-workspace-surface-subtle border-b border-workspace-border">
               {headers.map(h => (
                 <th key={h} className="text-left py-2 px-3 font-semibold text-morandi-text whitespace-nowrap">{h}</th>
               ))}
@@ -442,7 +442,7 @@ export default function ComplianceAssessment() {
           </thead>
           <tbody>
             {displayData.map((row, i) => (
-              <tr key={i} className="border-b border-gray-50 hover:bg-gray-50/30">
+              <tr key={i} className="border-b border-gray-50 hover:bg-workspace-surface-subtle/30">
                 {headers.map(h => (
                   <td key={h} className="py-1.5 px-3 text-morandi-text-light max-w-[200px] truncate">{row[h] != null ? String(row[h]) : ''}</td>
                 ))}
@@ -450,7 +450,7 @@ export default function ComplianceAssessment() {
             ))}
           </tbody>
         </table>
-        {data.length > 200 && <p className="text-[10px] text-morandi-text-light text-center py-2">仅显示前200行，共{data.length}行</p>}
+        {data.length > 200 && <p className="text-xs text-morandi-text-light text-center py-2">仅显示前200行，共{data.length}行</p>}
       </div>
     )
   }
@@ -463,7 +463,7 @@ export default function ComplianceAssessment() {
             <Shield className="w-5 h-5 text-morandi-primary" />
             合规评估
           </h2>
-          <p className="text-[10px] text-morandi-text-light mt-0.5">上传合规文档，跟踪合规进度与风险</p>
+          <p className="text-xs text-morandi-text-light mt-0.5">上传合规文档，跟踪合规进度与风险</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -474,7 +474,7 @@ export default function ComplianceAssessment() {
           </button>
           <button
             onClick={handleReset}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-workspace-text-secondary bg-workspace-surface-subtle rounded-lg hover:bg-gray-200"
             title="重置合规项"
           >
             <RotateCcw className="w-3 h-3" />重置
@@ -486,38 +486,38 @@ export default function ComplianceAssessment() {
         <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100">
           <div className="flex items-center gap-1.5 mb-2">
             <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" />
-            <span className="text-[10px] font-medium text-blue-600">合规进度</span>
+            <span className="text-xs font-medium text-workspace-text-secondary">合规进度</span>
           </div>
-          <div className="text-2xl font-bold text-blue-700">{doneCount}/{CHECKLIST.length}</div>
-          <div className="text-[9px] text-blue-400 mt-0.5">核心合规项已完成</div>
+          <div className="text-2xl font-bold text-workspace-primary">{doneCount}/{CHECKLIST.length}</div>
+          <div className="text-xs text-blue-400 mt-0.5">核心合规项已完成</div>
         </div>
         <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-xl p-4 border border-red-100">
           <div className="flex items-center gap-1.5 mb-2">
             <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
-            <span className="text-[10px] font-medium text-red-600">高风险项</span>
+            <span className="text-xs font-medium text-red-600">高风险项</span>
           </div>
           <div className="text-2xl font-bold text-red-700">{highRiskCount}</div>
-          <div className="text-[9px] text-red-400 mt-0.5">需要优先处理</div>
+          <div className="text-xs text-red-400 mt-0.5">需要优先处理</div>
         </div>
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-amber-100">
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-workspace-border">
           <div className="flex items-center gap-1.5 mb-2">
             <Clock className="w-3.5 h-3.5 text-amber-500" />
-            <span className="text-[10px] font-medium text-amber-600">中风险项</span>
+            <span className="text-xs font-medium text-amber-600">中风险项</span>
           </div>
-          <div className="text-2xl font-bold text-amber-700">{midRiskCount}</div>
-          <div className="text-[9px] text-amber-400 mt-0.5">持续关注</div>
+          <div className="text-2xl font-bold text-workspace-warning">{midRiskCount}</div>
+          <div className="text-xs text-amber-400 mt-0.5">持续关注</div>
         </div>
         <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl p-4 border border-green-100">
           <div className="flex items-center gap-1.5 mb-2">
             <FileText className="w-3.5 h-3.5 text-green-500" />
-            <span className="text-[10px] font-medium text-green-600">合规文档</span>
+            <span className="text-xs font-medium text-workspace-success">合规文档</span>
           </div>
-          <div className="text-2xl font-bold text-green-700">{files.length}</div>
-          <div className="text-[9px] text-green-400 mt-0.5">已上传文件</div>
+          <div className="text-2xl font-bold text-workspace-success">{files.length}</div>
+          <div className="text-xs text-green-400 mt-0.5">已上传文件</div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+      <div className="bg-white rounded-xl shadow-sm border border-workspace-border p-5">
         <h3 className="text-sm font-semibold text-morandi-text mb-4 flex items-center gap-1.5">
           <CheckCircle2 className="w-4 h-4 text-morandi-primary" />
           核心合规清单
@@ -526,7 +526,7 @@ export default function ComplianceAssessment() {
           {CHECKLIST.map(c => {
             const status = checklistStatus[c.id] || 'pending'
             return (
-              <div key={c.id} className={`rounded-xl p-4 border ${status === 'done' ? 'bg-green-50/50 border-green-200' : status === 'progress' ? 'bg-amber-50/50 border-amber-200' : 'bg-gray-50/50 border-gray-200'}`}>
+              <div key={c.id} className={`rounded-xl p-4 border ${status === 'done' ? 'bg-workspace-success-soft/50 border-green-200' : status === 'progress' ? 'bg-workspace-warning-soft/50 border-amber-200' : 'bg-workspace-surface-subtle/50 border-workspace-border'}`}>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {statusIcon(status)}
@@ -535,34 +535,34 @@ export default function ComplianceAssessment() {
                   <select
                     value={status}
                     onChange={e => toggleChecklist(c.id, e.target.value)}
-                    className="text-[10px] border border-gray-200 rounded px-1.5 py-0.5 bg-white focus:outline-none focus:border-morandi-primary"
+                    className="text-xs border border-workspace-border rounded px-1.5 py-0.5 bg-white focus:outline-none focus:border-morandi-primary"
                   >
                     <option value="pending">待处理</option>
                     <option value="progress">进行中</option>
                     <option value="done">已完成</option>
                   </select>
                 </div>
-                <p className="text-[10px] text-morandi-text-light">{c.desc}</p>
+                <p className="text-xs text-morandi-text-light">{c.desc}</p>
               </div>
             )
           })}
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+      <div className="bg-white rounded-xl shadow-sm border border-workspace-border p-5">
         <h3 className="text-sm font-semibold text-morandi-text mb-4 flex items-center gap-1.5">
           <Upload className="w-4 h-4 text-morandi-primary" />
           合规文档上传
-          <span className="text-[10px] text-morandi-text-light font-normal ml-1">支持 xlsx / xls / html / csv / doc / docx 文件</span>
+          <span className="text-xs text-morandi-text-light font-normal ml-1">支持 xlsx / xls / html / csv / doc / docx 文件</span>
         </h3>
         <div
-          className="border-2 border-dashed border-gray-200 hover:border-morandi-primary rounded-xl p-6 text-center cursor-pointer transition-all hover:bg-gray-50/50 mb-4"
+          className="border-2 border-dashed border-workspace-border hover:border-morandi-primary rounded-xl p-6 text-center cursor-pointer transition-all hover:bg-workspace-surface-subtle/50 mb-4"
           onClick={() => fileInputRef.current?.click()}
         >
           <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.html,.htm,.csv,.doc,.docx" multiple className="hidden" onChange={handleUpload} />
           <Upload className="w-6 h-6 text-morandi-primary mx-auto mb-2" />
           <p className="text-xs text-morandi-text">点击上传合规文档</p>
-          <p className="text-[10px] text-morandi-text-light mt-1">文件将保存到本地，刷新后自动恢复</p>
+          <p className="text-xs text-morandi-text-light mt-1">文件将保存到本地，刷新后自动恢复</p>
         </div>
 
         {files.length > 0 && (
@@ -571,13 +571,13 @@ export default function ComplianceAssessment() {
               const isActive = activeFile === f.name
               const isExpanded = expandedFile === f.name
               return (
-                <div key={f.name} className={`rounded-xl border transition-all ${isActive ? 'border-morandi-primary/30 bg-morandi-primary/5' : 'border-gray-100 hover:border-gray-200'}`}>
+                <div key={f.name} className={`rounded-xl border transition-all ${isActive ? 'border-morandi-primary/30 bg-morandi-primary/5' : 'border-workspace-border hover:border-workspace-border'}`}>
                   <div className="flex items-center justify-between px-4 py-3">
                     <div className="flex items-center gap-2 min-w-0 flex-1 cursor-pointer" onClick={() => handleSelectFile(f.name)}>
-                      <FileText className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-morandi-primary' : 'text-gray-400'}`} />
+                      <FileText className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-morandi-primary' : 'text-workspace-text-tertiary'}`} />
                       <div className="min-w-0 flex-1">
                         <p className={`text-xs truncate ${isActive ? 'font-semibold text-morandi-primary' : 'font-medium text-morandi-text'}`}>{f.name}</p>
-                        <p className="text-[9px] text-morandi-text-light">
+                        <p className="text-xs text-morandi-text-light">
                           {formatSize(f.size)} · {f.data?.length || 0}行
                           {f.savedAt ? ` · ${new Date(f.savedAt).toLocaleDateString()}` : ''}
                         </p>
@@ -586,7 +586,7 @@ export default function ComplianceAssessment() {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => setExpandedFile(isExpanded ? null : f.name)}
-                        className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-morandi-text transition-colors"
+                        className="p-1 hover:bg-workspace-surface-subtle rounded text-workspace-text-tertiary hover:text-morandi-text transition-colors"
                         title={isExpanded ? '收起' : '展开'}
                       >
                         {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -601,7 +601,7 @@ export default function ComplianceAssessment() {
                     </div>
                   </div>
                   {isExpanded && f.data && (
-                    <div className="px-4 pb-3 border-t border-gray-100 pt-3">
+                    <div className="px-4 pb-3 border-t border-workspace-border pt-3">
                       {renderDataTable(f.data)}
                     </div>
                   )}
@@ -620,16 +620,16 @@ export default function ComplianceAssessment() {
       </div>
 
       {items.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-white rounded-xl shadow-sm border border-workspace-border p-5">
           <h3 className="text-sm font-semibold text-morandi-text mb-4 flex items-center gap-1.5">
             <AlertTriangle className="w-4 h-4 text-morandi-primary" />
             合规风险项
-            <span className="text-[10px] text-morandi-text-light font-normal ml-1">({items.length} 项)</span>
+            <span className="text-xs text-morandi-text-light font-normal ml-1">({items.length} 项)</span>
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-gray-100">
+                <tr className="border-b border-workspace-border">
                   <th className="text-left py-2 px-3 font-semibold text-morandi-text">项目名称</th>
                   <th className="text-left py-2 px-3 font-semibold text-morandi-text">合规类别</th>
                   <th className="text-left py-2 px-3 font-semibold text-morandi-text">风险等级</th>
@@ -642,24 +642,24 @@ export default function ComplianceAssessment() {
                 {items.map(it => {
                   const rc = RISK_COLORS[it.risk] || RISK_COLORS.mid
                   return (
-                    <tr key={it.id} className="border-b border-gray-50 hover:bg-gray-50/30">
+                    <tr key={it.id} className="border-b border-gray-50 hover:bg-workspace-surface-subtle/30">
                       <td className="py-2 px-3 font-medium text-morandi-text">{it.name}</td>
                       <td className="py-2 px-3 text-morandi-text-light">{it.category || '—'}</td>
                       <td className="py-2 px-3">
-                        <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${rc.bg} ${rc.text} border ${rc.border}`}>
+                        <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${rc.bg} ${rc.text} border ${rc.border}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${rc.dot}`} />
                           {rc.label}
                         </span>
                       </td>
                       <td className="py-2 px-3">
-                        <span className={`text-[10px] font-medium ${it.status === 'done' ? 'text-green-600' : it.status === 'progress' ? 'text-amber-600' : 'text-gray-400'}`}>
+                        <span className={`text-xs font-medium ${it.status === 'done' ? 'text-workspace-success' : it.status === 'progress' ? 'text-amber-600' : 'text-workspace-text-tertiary'}`}>
                           {statusLabel(it.status)}
                         </span>
                       </td>
                       <td className="py-2 px-3 text-morandi-text-light max-w-[200px] truncate">{it.desc || '—'}</td>
                       <td className="py-2 px-3">
                         <div className="flex items-center gap-0.5">
-                          <button onClick={() => setEditItem(it)} className="p-1 hover:bg-blue-50 rounded text-gray-300 hover:text-blue-500 transition-colors" title="编辑">
+                          <button onClick={() => setEditItem(it)} className="p-1 hover:bg-workspace-surface-subtle rounded text-gray-300 hover:text-blue-500 transition-colors" title="编辑">
                             <Pencil className="w-3 h-3" />
                           </button>
                           <button onClick={() => handleDeleteItem(it.id)} className="p-1 hover:bg-red-50 rounded text-gray-300 hover:text-red-400 transition-colors" title="删除">

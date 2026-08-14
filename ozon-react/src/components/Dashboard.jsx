@@ -34,8 +34,8 @@ export default function Dashboard({ data, kpis, screenshotMode = false }) {
   return (
     <div className={`space-y-8 ${screenshotMode ? 'screenshot-mode' : ''}`}>
       {screenshotMode && (
-        <div className="text-center py-2 bg-green-50 border border-green-200 rounded-lg mb-4">
-          <span className="text-green-700 font-medium">📸 截图模式已开启 - 可使用屏幕截图工具</span>
+        <div className="text-center py-2 bg-workspace-success-soft border border-green-200 rounded-lg mb-4">
+          <span className="text-workspace-success font-medium">📸 截图模式已开启 - 可使用屏幕截图工具</span>
         </div>
       )}
       

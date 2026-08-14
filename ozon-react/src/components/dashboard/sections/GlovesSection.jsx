@@ -192,7 +192,7 @@ export default function GlovesSection({ stats, data, CC }) {
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-sm font-semibold text-morandi-text flex items-center gap-2">
-                <span className="text-lg">🎯</span> 我方产品竞争雷达图{stats.competitorAnalysis?.compIs100pcs && <span className="text-[10px] text-amber-600 ml-1">（基于{stats.competitorAnalysis?.compProductCount}款100只装产品）</span>}
+                <span className="text-lg">🎯</span> 我方产品竞争雷达图{stats.competitorAnalysis?.compIs100pcs && <span className="text-xs text-amber-600 ml-1">（基于{stats.competitorAnalysis?.compProductCount}款100只装产品）</span>}
               </h4>
               <div className="flex items-center gap-4 text-xs">
                 <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>我方产品</span>
@@ -235,7 +235,7 @@ export default function GlovesSection({ stats, data, CC }) {
                 <div className="bg-white rounded-lg p-3 border border-green-100">
                   <h5 className="text-xs font-bold text-green-700 mb-2">💰 利润测算（实际售价）</h5>
                   <div className="space-y-1 text-xs border-b border-gray-100 pb-2 mb-2">
-                    <div className="text-[10px] font-bold text-gray-500 mb-1">50只装 Safe Grip ₽{stats.competitorAnalysis?.ourPrice50}</div>
+                    <div className="text-xs font-bold text-gray-500 mb-1">50只装 Safe Grip ₽{stats.competitorAnalysis?.ourPrice50}</div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">售价</span><span className="font-bold">₽{stats.competitorAnalysis?.ourPrice50} ≈ ¥{(stats.competitorAnalysis?.ourPrice50 * R).toFixed(1)}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">采购成本（50只）</span><span className="text-red-500">-¥{stats.competitorAnalysis?.ourPurchase50}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">物流费</span><span className="text-red-500">-¥{stats.competitorAnalysis?.ourLogistics50}</span></div>
@@ -246,7 +246,7 @@ export default function GlovesSection({ stats, data, CC }) {
                     <div className="border-t border-gray-100 pt-1 flex justify-between font-bold"><span>净利润/单</span><span className={parseFloat(stats.competitorAnalysis?.profit50) >= 0 ? 'text-green-600' : 'text-red-600'}>¥{stats.competitorAnalysis?.profit50}（{stats.competitorAnalysis?.profitRate50}%）</span></div>
                   </div>
                   <div className="space-y-1 text-xs">
-                    <div className="text-[10px] font-bold text-gray-500 mb-1">100只装 Steel Grip ₽{stats.competitorAnalysis?.ourPrice100}</div>
+                    <div className="text-xs font-bold text-gray-500 mb-1">100只装 Steel Grip ₽{stats.competitorAnalysis?.ourPrice100}</div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">售价</span><span className="font-bold">₽{stats.competitorAnalysis?.ourPrice100} ≈ ¥{(stats.competitorAnalysis?.ourPrice100 * R).toFixed(1)}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">采购成本</span><span className="text-red-500">-¥{stats.competitorAnalysis?.ourCostCNY}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">物流费</span><span className="text-red-500">-¥{stats.competitorAnalysis?.ourLogistics}</span></div>
@@ -257,7 +257,7 @@ export default function GlovesSection({ stats, data, CC }) {
                     <div className="border-t border-gray-100 pt-1 flex justify-between font-bold"><span className="text-morandi-text">净利润/单</span><span className={parseFloat(stats.competitorAnalysis?.profit100) >= 0 ? 'text-green-600' : 'text-red-600'}>¥{stats.competitorAnalysis?.profit100} {parseFloat(stats.competitorAnalysis?.profit100) < 0 && '⚠️'}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">净利率</span><span className={`font-bold ${parseFloat(stats.competitorAnalysis?.profitRate100) >= 0 ? 'text-green-600' : 'text-red-600'}`}>{stats.competitorAnalysis?.profitRate100}%</span></div>
                   </div>
-                  <p className="text-[10px] text-amber-600 mt-1.5 bg-amber-50 rounded px-2 py-1">💡 费用结构：Ozon 12% + 广告 10% + 汇损 1% + 售后 3% = 合计26%平台运营费。我方为<b>重型防滑手套</b>，非一次性产品，高克重8.5g支撑溢价</p>
+                  <p className="text-xs text-amber-600 mt-1.5 bg-amber-50 rounded px-2 py-1">💡 费用结构：Ozon 12% + 广告 10% + 汇损 1% + 售后 3% = 合计26%平台运营费。我方为<b>重型防滑手套</b>，非一次性产品，高克重8.5g支撑溢价</p>
                 </div>
 
                 <div className="bg-white rounded-lg p-3 border border-purple-100">
@@ -269,7 +269,7 @@ export default function GlovesSection({ stats, data, CC }) {
                     <div className="flex items-start gap-1.5"><span className="text-amber-500 mt-0.5">⚠</span><span><b>市场熟悉度50分</b>：需积累俄文评价和店铺评分</span></div>
                     <div className="flex items-start gap-1.5"><span className="text-amber-500 mt-0.5">⚠</span><span><b>品牌故事65分</b>：需包装"中国智造+高克重耐用"故事</span></div>
                   </div>
-                  <div className="mt-2 bg-amber-50 rounded px-2 py-1.5 text-[10px] text-amber-700 border border-amber-200">
+                  <div className="mt-2 bg-amber-50 rounded px-2 py-1.5 text-xs text-amber-700 border border-amber-200">
                     ⚡ <b>重型防滑手套</b>：我方产品为重型防滑手套，非一次性产品！8.5g高克重+双面防滑，与市场5-6g薄款一次性手套形成代差，价格偏高合理
                   </div>
                 </div>
@@ -296,7 +296,7 @@ export default function GlovesSection({ stats, data, CC }) {
                   <div className="flex justify-between items-center"><span className="text-morandi-text-light">颜色</span><span className="font-bold">🟢黑色 🟠橙色</span></div>
                   <div className="flex justify-between items-center"><span className="text-morandi-text-light">尺码</span><span className="font-bold">M码</span></div>
                   <div className="flex justify-between items-center"><span className="text-morandi-text-light">规格</span><span className="font-bold">50只/100只</span></div>
-                  <div className="flex justify-between items-center"><span className="text-morandi-text-light">定位</span><span className="text-[10px] font-bold text-red-600">重型防滑手套 | 非一次性 | 双面防滑 | 无乳胶</span></div>
+                  <div className="flex justify-between items-center"><span className="text-morandi-text-light">定位</span><span className="text-xs font-bold text-red-600">重型防滑手套 | 非一次性 | 双面防滑 | 无乳胶</span></div>
                 </div>
               </div>
 
@@ -332,23 +332,23 @@ export default function GlovesSection({ stats, data, CC }) {
                     <div className="w-28 text-xs text-morandi-text text-right">{item.label}</div>
                     <div className="flex-1 relative h-6 bg-gray-100 rounded-full overflow-hidden">
                       <div className="absolute left-0 top-0 h-full bg-blue-500 rounded-full flex items-center justify-end pr-2" style={{ width: `${item.our}%` }}>
-                        <span className="text-white text-[10px] font-bold">{item.our}</span>
+                        <span className="text-white text-xs font-bold">{item.our}</span>
                       </div>
                       <div className="absolute top-0 h-full rounded-full border-2 border-dashed border-gray-400" style={{ left: `${item.top10}%` }}>
-                        <span className="absolute -top-4 text-[9px] text-gray-500 whitespace-nowrap">{item.top10}分</span>
+                        <span className="absolute -top-4 text-xs text-gray-500 whitespace-nowrap">{item.top10}分</span>
                       </div>
                     </div>
                     <div className="w-4 text-center"><span className="text-blue-500 text-xs font-bold">↑</span></div>
                   </div>
                 ))}
               </div>
-              <p className="text-[10px] text-morandi-text-light mt-2">蓝色条=我方产品 | 虚线=TOP10平均 | ↑表示我方占优</p>
+              <p className="text-xs text-morandi-text-light mt-2">蓝色条=我方产品 | 虚线=TOP10平均 | ↑表示我方占优</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-green-50 rounded-lg p-3">
                 <h5 className="text-xs font-bold text-green-700 mb-2">✅ 我方优势</h5>
-                <div className="space-y-1 text-[11px] text-green-700">
+                <div className="space-y-1 text-xs text-green-700">
                   <p>• <b>重型防滑定位</b>：8.5g高克重双面防滑，非一次性产品，耐用性远超市场5-6g薄款</p>
                   <p>• <b>无乳胶过敏</b>：差异化卖点，医疗/美容/工业场景加分</p>
                   <p>• <b>成本优势</b>：¥38/100只，规模化后成本可控</p>
@@ -358,7 +358,7 @@ export default function GlovesSection({ stats, data, CC }) {
               </div>
               <div className="bg-amber-50 rounded-lg p-3">
                 <h5 className="text-xs font-bold text-amber-700 mb-2">⚠️ 我方劣势与应对</h5>
-                <div className="space-y-1 text-[11px] text-amber-700">
+                <div className="space-y-1 text-xs text-amber-700">
                   <p>• <b>市场熟悉度低</b>：需积累俄文评价，建议送样给KOL测评</p>
                   <p>• <b>品牌认知为零</b>：需包装"重型防滑手套专家"故事，突出非一次性定位</p>
                   <p>• <b>价格偏高</b>：需强调重型防滑≠一次性，Listing中突出"8.5g高克重""双面防滑"差异化</p>

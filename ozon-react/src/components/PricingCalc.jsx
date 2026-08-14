@@ -90,7 +90,7 @@ export default function PricingCalc() {
     <div className="space-y-5">
       <div>
         <h2 className="text-lg font-bold text-morandi-text">定价计算</h2>
-        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润</p>
+        <p className="text-xs text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润</p>
       </div>
 
       <div className="space-y-4">
@@ -168,10 +168,10 @@ export default function PricingCalc() {
                     ['退货', 'returnLoss', '%', returnLoss],
                   ].map(([label, key, unit, val]) => (
                     <div key={key} className="flex items-center gap-1">
-                      <span className="text-[10px] text-morandi-text-light">{label}</span>
+                      <span className="text-xs text-morandi-text-light">{label}</span>
                       <input type="number" value={val} onChange={e => updateCommon(key, e.target.value)}
                         className="w-12 text-xs text-center border border-gray-200 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-green-200 bg-white" />
-                      <span className="text-[10px] text-gray-400">{unit}</span>
+                      <span className="text-xs text-gray-400">{unit}</span>
                     </div>
                   ))}
                 </div>
@@ -181,21 +181,21 @@ export default function PricingCalc() {
                     <thead>
                       <tr className="bg-gray-50">
                         <th className="border border-gray-200 px-2 py-1.5 text-left text-morandi-text-light font-semibold w-20">规格</th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">重量<br/><span className="text-[9px]">KG</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-28">长×宽×高<br/><span className="text-[9px]">CM</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-[9px]">₽</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-[9px]">₽(6折)</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">采购成本<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">国内运费<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">贴标费<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">国内成本<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-20">跨境物流<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">平台成本<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">退货损失<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">毛利<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">利润率<br/><span className="text-[9px]">%</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">重量<br/><span className="text-xs">KG</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-28">长×宽×高<br/><span className="text-xs">CM</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-xs">₽</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-xs">₽(6折)</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">采购成本<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">国内运费<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">贴标费<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">国内成本<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-20">跨境物流<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">平台成本<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">退货损失<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">毛利<br/><span className="text-xs">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">利润率<br/><span className="text-xs">%</span></th>
                         <th className="border border-gray-200 px-1 py-1.5 w-8"></th>
                       </tr>
                     </thead>

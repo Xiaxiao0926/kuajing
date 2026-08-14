@@ -19,7 +19,7 @@ export function ReverseOrderForm({ form, update, tariff }) {
           <span className="text-sm font-semibold text-orange-700">异常订单配置</span>
         </div>
         {needsConfirm && (
-          <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">
+          <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">
             待账单确认
           </span>
         )}
@@ -61,7 +61,7 @@ export function ReverseOrderForm({ form, update, tariff }) {
         <div>
           <label className="text-xs text-gray-500 mb-1 block">
             实际正向物流费 (¥)
-            <span className="text-[10px] text-gray-400 ml-1">留空用预计值</span>
+            <span className="text-xs text-gray-400 ml-1">留空用预计值</span>
           </label>
           <input
             type="number"
@@ -75,7 +75,7 @@ export function ReverseOrderForm({ form, update, tariff }) {
         <div>
           <label className="text-xs text-gray-500 mb-1 block">
             实际反向赔偿 (¥)
-            <span className="text-[10px] text-gray-400 ml-1">留空用预计值</span>
+            <span className="text-xs text-gray-400 ml-1">留空用预计值</span>
           </label>
           <input
             type="number"
@@ -119,7 +119,7 @@ export function ReverseOrderForm({ form, update, tariff }) {
         </div>
       </div>
 
-      <div className="text-[10px] text-orange-700 bg-orange-100/50 rounded p-2">
+      <div className="text-xs text-orange-700 bg-orange-100/50 rounded p-2">
         <p className="font-semibold mb-1">📋 说明（依据WB服务条款13.1.14）</p>
         <ul className="list-disc pl-4 space-y-0.5">
           <li>未运出中国或买家退货：1×CSG赔偿</li>

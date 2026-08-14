@@ -93,9 +93,9 @@ export default function HairMaskSection({ stats, data }) {
                   <tr key={i} className="border-b border-gray-50 hover:bg-gray-50">
                     <td className="px-2 py-2 font-bold text-morandi-text">{i + 1}</td>
                     <td className="px-2 py-2 max-w-[200px] truncate" title={p.name}>{p.name}</td>
-                    <td className="px-2 py-2 text-center"><span className="bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded text-[10px]">{p._weight || '-'}</span></td>
-                    <td className="px-2 py-2 text-center"><span className="bg-violet-100 text-violet-700 px-1.5 py-0.5 rounded text-[10px]">{p._effects || '-'}</span></td>
-                    <td className="px-2 py-2 text-center"><span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded text-[10px]">{p._hairTypes || '-'}</span></td>
+                    <td className="px-2 py-2 text-center"><span className="bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded text-xs">{p._weight || '-'}</span></td>
+                    <td className="px-2 py-2 text-center"><span className="bg-violet-100 text-violet-700 px-1.5 py-0.5 rounded text-xs">{p._effects || '-'}</span></td>
+                    <td className="px-2 py-2 text-center"><span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded text-xs">{p._hairTypes || '-'}</span></td>
                     <td className="px-2 py-2 text-right font-medium">₽{Math.round(p.price).toLocaleString()}</td>
                     <td className="px-2 py-2 text-right">{p._pricePer100ml ? <span className="text-indigo-600">₽{p._pricePer100ml}</span> : <span className="text-gray-300">-</span>}</td>
                     <td className="px-2 py-2 text-right font-bold">{(p.qty || 0).toLocaleString()}</td>
@@ -121,7 +121,7 @@ export default function HairMaskSection({ stats, data }) {
                   <div className="flex justify-between"><span className="text-morandi-text-light">每100g</span><span className="font-bold text-blue-600">₽{(stats.hairMaskAnalysis.ourMask.ourPriceRUB / 300 * 100).toFixed(1)}</span></div>
                 </div>
                 <div className="mt-2 pt-2 border-t border-amber-200">
-                  <div className="text-[10px] text-amber-700 space-y-0.5">
+                  <div className="text-xs text-amber-700 space-y-0.5">
                     {stats.hairMaskAnalysis.ourMask.features.map((f, i) => (
                       <div key={i}>✓ {f}</div>
                     ))}
@@ -135,12 +135,12 @@ export default function HairMaskSection({ stats, data }) {
                   <div className="flex justify-between"><span className="text-morandi-text-light">规格</span><span className="font-bold">{stats.hairMaskAnalysis.competitorMask.weight}</span></div>
                   <div className="flex justify-between"><span className="text-morandi-text-light">售价</span><span className="font-bold text-red-600">₽{stats.hairMaskAnalysis.competitorMask.priceRUB} ≈ ¥{(stats.hairMaskAnalysis.competitorMask.priceRUB * R).toFixed(1)}</span></div>
                   <div className="flex justify-between"><span className="text-morandi-text-light">每100g</span><span className="font-bold text-red-600">₽{(stats.hairMaskAnalysis.competitorMask.priceRUB / 350 * 100).toFixed(1)}</span></div>
-                  <div className="flex justify-between"><span className="text-morandi-text-light">定位</span><span className="text-[10px] font-bold text-red-600">重修护·厚膜·强顺滑·沙龙老派</span></div>
-                  <div className="flex justify-between"><span className="text-morandi-text-light">适合发质</span><span className="text-[10px]">粗硬发/干枯炸毛发</span></div>
-                  <div className="flex justify-between"><span className="text-morandi-text-light">核心短板</span><span className="text-[10px] text-red-600">含DMDM甲醛释放体+Parabens</span></div>
+                  <div className="flex justify-between"><span className="text-morandi-text-light">定位</span><span className="text-xs font-bold text-red-600">重修护·厚膜·强顺滑·沙龙老派</span></div>
+                  <div className="flex justify-between"><span className="text-morandi-text-light">适合发质</span><span className="text-xs">粗硬发/干枯炸毛发</span></div>
+                  <div className="flex justify-between"><span className="text-morandi-text-light">核心短板</span><span className="text-xs text-red-600">含DMDM甲醛释放体+Parabens</span></div>
                 </div>
                 <div className="mt-2 pt-2 border-t border-red-200">
-                  <div className="text-[10px] text-red-600 space-y-0.5">
+                  <div className="text-xs text-red-600 space-y-0.5">
                     <div>❌ DMDM Hydantoin（甲醛释放体）</div>
                     <div>❌ Methylparaben / Propylparaben（防腐酯）</div>
                     <div>⚠️ 易塌发/油腻/头皮负担大</div>
@@ -153,21 +153,21 @@ export default function HairMaskSection({ stats, data }) {
               <div className="bg-white rounded-lg p-3 border border-green-100">
                 <h5 className="text-xs font-bold text-green-700 mb-2">💰 利润测算</h5>
                 <div className="space-y-1 text-xs border-b border-gray-100 pb-2 mb-2">
-                  <div className="text-[10px] font-bold text-blue-600">方案A：竞品对标价₽{stats.hairMaskAnalysis.competitorMask.priceRUB}</div>
+                  <div className="text-xs font-bold text-blue-600">方案A：竞品对标价₽{stats.hairMaskAnalysis.competitorMask.priceRUB}</div>
                   <div className="flex justify-between"><span>售价</span><span className="font-bold">₽{stats.hairMaskAnalysis.competitorMask.priceRUB} ≈ ¥{(stats.hairMaskAnalysis.competitorMask.priceRUB * R).toFixed(1)}</span></div>
                   <div className="flex justify-between"><span>采购+物流</span><span className="text-red-500">-¥{stats.hairMaskAnalysis.ourMask.priceCNY} -¥{stats.hairMaskAnalysis.ourMask.logistics}</span></div>
                   <div className="flex justify-between"><span>平台运营费(26%)</span><span className="text-red-500">-₽{Math.round(stats.hairMaskAnalysis.competitorMask.priceRUB * 0.26)} ≈ -¥{(stats.hairMaskAnalysis.competitorMask.priceRUB * 0.26 * R).toFixed(1)}</span></div>
                   <div className="border-t border-gray-100 pt-1 flex justify-between font-bold"><span>净利润/单</span><span className={stats.hairMaskAnalysis.profitAtCompetitor.profit >= 0 ? 'text-green-600' : 'text-red-600'}>¥{stats.hairMaskAnalysis.profitAtCompetitor.profit.toFixed(2)}（{stats.hairMaskAnalysis.profitAtCompetitor.rate.toFixed(1)}%）</span></div>
                 </div>
                 <div className="space-y-1 text-xs border-b border-gray-100 pb-2 mb-2">
-                  <div className="text-[10px] font-bold text-green-600">方案B：我方定价₽{stats.hairMaskAnalysis.ourMask.ourPriceRUB}（溢价{Math.round((stats.hairMaskAnalysis.ourMask.ourPriceRUB / stats.hairMaskAnalysis.competitorMask.priceRUB - 1) * 100)}%，突出温和高端）</div>
+                  <div className="text-xs font-bold text-green-600">方案B：我方定价₽{stats.hairMaskAnalysis.ourMask.ourPriceRUB}（溢价{Math.round((stats.hairMaskAnalysis.ourMask.ourPriceRUB / stats.hairMaskAnalysis.competitorMask.priceRUB - 1) * 100)}%，突出温和高端）</div>
                   <div className="flex justify-between"><span>售价</span><span className="font-bold">₽{stats.hairMaskAnalysis.ourMask.ourPriceRUB} ≈ ¥{(stats.hairMaskAnalysis.ourMask.ourPriceRUB * R).toFixed(1)}</span></div>
                   <div className="flex justify-between"><span>采购+物流</span><span className="text-red-500">-¥{stats.hairMaskAnalysis.ourMask.priceCNY} -¥{stats.hairMaskAnalysis.ourMask.logistics}</span></div>
                   <div className="flex justify-between"><span>平台运营费(26%)</span><span className="text-red-500">-₽{Math.round(stats.hairMaskAnalysis.ourMask.ourPriceRUB * 0.26)} ≈ -¥{(stats.hairMaskAnalysis.ourMask.ourPriceRUB * 0.26 * R).toFixed(1)}</span></div>
                   <div className="border-t border-gray-100 pt-1 flex justify-between font-bold"><span>净利润/单</span><span className={stats.hairMaskAnalysis.profitAtOurPrice.profit >= 0 ? 'text-green-600' : 'text-red-600'}>¥{stats.hairMaskAnalysis.profitAtOurPrice.profit.toFixed(2)}（{stats.hairMaskAnalysis.profitAtOurPrice.rate.toFixed(1)}%）</span></div>
                 </div>
                 <div className="space-y-1 text-xs">
-                  <div className="text-[10px] font-bold text-gray-500">按300g规格均价 ₽{stats.hairMaskAnalysis.mask300gAvgPrice}</div>
+                  <div className="text-xs font-bold text-gray-500">按300g规格均价 ₽{stats.hairMaskAnalysis.mask300gAvgPrice}</div>
                   <div className="flex justify-between"><span>售价</span><span className="font-bold">₽{stats.hairMaskAnalysis.mask300gAvgPrice} ≈ ¥{(stats.hairMaskAnalysis.mask300gAvgPrice * R).toFixed(1)}</span></div>
                   <div className="flex justify-between"><span>采购+物流</span><span className="text-red-500">-¥{stats.hairMaskAnalysis.ourMask.priceCNY} -¥{stats.hairMaskAnalysis.ourMask.logistics}</span></div>
                   <div className="flex justify-between"><span>平台运营费(26%)</span><span className="text-red-500">-₽{Math.round(stats.hairMaskAnalysis.mask300gAvgPrice * 0.26)} ≈ -¥{(stats.hairMaskAnalysis.mask300gAvgPrice * 0.26 * R).toFixed(1)}</span></div>

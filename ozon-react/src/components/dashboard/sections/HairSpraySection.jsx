@@ -94,9 +94,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                   <tr key={i} className="border-b border-gray-50 hover:bg-gray-50">
                     <td className="px-2 py-2 font-bold text-morandi-text">{i + 1}</td>
                     <td className="px-2 py-2 max-w-[200px] truncate" title={p.name}>{p.name}</td>
-                    <td className="px-2 py-2 text-center"><span className="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded text-[10px]">{p._volume || '-'}</span></td>
-                    <td className="px-2 py-2 text-center"><span className="bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded text-[10px]">{p._effects || '-'}</span></td>
-                    <td className="px-2 py-2 text-center"><span className="bg-cyan-100 text-cyan-700 px-1.5 py-0.5 rounded text-[10px]">{p._hairTypes || '-'}</span></td>
+                    <td className="px-2 py-2 text-center"><span className="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded text-xs">{p._volume || '-'}</span></td>
+                    <td className="px-2 py-2 text-center"><span className="bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded text-xs">{p._effects || '-'}</span></td>
+                    <td className="px-2 py-2 text-center"><span className="bg-cyan-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs">{p._hairTypes || '-'}</span></td>
                     <td className="px-2 py-2 text-right font-medium">₽{Math.round(p.price).toLocaleString()}</td>
                     <td className="px-2 py-2 text-right">{p._pricePer100ml ? <span className="text-teal-600">₽{p._pricePer100ml}</span> : <span className="text-gray-300">-</span>}</td>
                     <td className="px-2 py-2 text-right font-bold">{(p.qty || 0).toLocaleString()}</td>
@@ -121,9 +121,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                     <div className="flex justify-between"><span className="text-morandi-text-light">市场150ml段均价</span><span className="font-bold">₽{stats.sprayAnalysis.packagingAnalysis.fullSize.avgMarketPrice}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">我方150ml定价</span><span className="font-bold text-emerald-700">₽599</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">我方每100ml</span><span className="font-bold text-emerald-600">₽{stats.sprayAnalysis.packagingAnalysis.fullSize.pricePer100ml.toFixed(0)}</span></div>
-                    <div className="flex justify-between"><span className="text-morandi-text-light">国内兼容性</span><span className="text-[10px] text-emerald-600 font-bold">✅ 150ml为国内主流护发精油容量，包材通用</span></div>
+                    <div className="flex justify-between"><span className="text-morandi-text-light">国内兼容性</span><span className="text-xs text-emerald-600 font-bold">✅ 150ml为国内主流护发精油容量，包材通用</span></div>
                   </div>
-                  <div className="mt-2 pt-2 border-t border-emerald-200 text-[10px] text-emerald-700 space-y-0.5">
+                  <div className="mt-2 pt-2 border-t border-emerald-200 text-xs text-emerald-700 space-y-0.5">
                     <div>💡 150ml兼顾俄罗斯大容量偏好和国内标准规格</div>
                     <div>💡 对标竞品100ml定价₽459，150ml容量溢价自然</div>
                     <div>💡 大容量降低单位成本，提升复购周期</div>
@@ -138,9 +138,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                     <div className="flex justify-between"><span className="text-morandi-text-light">市场50ml段均价</span><span className="font-bold">₽{stats.sprayAnalysis.packagingAnalysis.trialSize.avgMarketPrice}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">试用装定价</span><span className="font-bold text-cyan-700">₽{stats.sprayAnalysis.ourSpray.skus[0].ourPriceRUB}</span></div>
                     <div className="flex justify-between"><span className="text-morandi-text-light">试用装每100ml</span><span className="font-bold text-cyan-600">₽{stats.sprayAnalysis.packagingAnalysis.trialSize.pricePer100ml.toFixed(0)}</span></div>
-                    <div className="flex justify-between"><span className="text-morandi-text-light">国内兼容性</span><span className="text-[10px] text-cyan-600 font-bold">✅ 50ml为国内旅行装/试用装标准规格</span></div>
+                    <div className="flex justify-between"><span className="text-morandi-text-light">国内兼容性</span><span className="text-xs text-cyan-600 font-bold">✅ 50ml为国内旅行装/试用装标准规格</span></div>
                   </div>
-                  <div className="mt-2 pt-2 border-t border-cyan-200 text-[10px] text-cyan-700 space-y-0.5">
+                  <div className="mt-2 pt-2 border-t border-cyan-200 text-xs text-cyan-700 space-y-0.5">
                     <div>💡 低价引流降低首次购买门槛</div>
                     <div>💡 试用装→正装转化路径清晰</div>
                     <div>💡 可做"买正装送试用装"促销组合</div>
@@ -151,36 +151,36 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
               <h5 className="text-xs font-semibold text-morandi-text mb-3">📈 备货量与可销售时间分析</h5>
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="bg-amber-50 rounded-lg p-3 text-center">
-                  <div className="text-[10px] text-morandi-text-light">TOP10日均总销量</div>
+                  <div className="text-xs text-morandi-text-light">TOP10日均总销量</div>
                   <div className="text-xl font-bold text-amber-700">{stats.sprayAnalysis.packagingAnalysis.top10AvgDailyQty}</div>
-                  <div className="text-[10px] text-amber-600">件/天（30天均值）</div>
+                  <div className="text-xs text-amber-600">件/天（30天均值）</div>
                 </div>
                 <div className="bg-amber-50 rounded-lg p-3 text-center">
-                  <div className="text-[10px] text-morandi-text-light">TOP10单品日均销量</div>
+                  <div className="text-xs text-morandi-text-light">TOP10单品日均销量</div>
                   <div className="text-xl font-bold text-amber-700">{stats.sprayAnalysis.packagingAnalysis.top10AvgDailyQtyPerProduct}</div>
-                  <div className="text-[10px] text-amber-600">件/天/款（30天均值）</div>
+                  <div className="text-xs text-amber-600">件/天/款（30天均值）</div>
                 </div>
                 <div className="bg-red-50 rounded-lg p-3 text-center">
-                  <div className="text-[10px] text-morandi-text-light">补货警戒线</div>
+                  <div className="text-xs text-morandi-text-light">补货警戒线</div>
                   <div className="text-xl font-bold text-red-700">{stats.sprayAnalysis.packagingAnalysis.reorderPoint}</div>
-                  <div className="text-[10px] text-red-600">件（生产{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}用量）</div>
+                  <div className="text-xs text-red-600">件（生产{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}用量）</div>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="bg-blue-50 rounded-lg p-3 text-center">
-                  <div className="text-[10px] text-morandi-text-light">180天内新品日均 × 30%</div>
+                  <div className="text-xs text-morandi-text-light">180天内新品日均 × 30%</div>
                   <div className="text-xl font-bold text-blue-700">{stats.sprayAnalysis.packagingAnalysis.newProductEstByNewProduct}</div>
-                  <div className="text-[10px] text-blue-600">件/天（新品TOP{stats.sprayAnalysis.packagingAnalysis.sprayNewProducts180Count}款，日均{stats.sprayAnalysis.packagingAnalysis.sprayNewProductAvgDailyQtyPerProduct}件×30%）</div>
+                  <div className="text-xs text-blue-600">件/天（新品TOP{stats.sprayAnalysis.packagingAnalysis.sprayNewProducts180Count}款，日均{stats.sprayAnalysis.packagingAnalysis.sprayNewProductAvgDailyQtyPerProduct}件×30%）</div>
                 </div>
                 <div className="bg-purple-50 rounded-lg p-3 text-center">
-                  <div className="text-[10px] text-morandi-text-light">TOP10单品日均 × 10%</div>
+                  <div className="text-xs text-morandi-text-light">TOP10单品日均 × 10%</div>
                   <div className="text-xl font-bold text-purple-700">{stats.sprayAnalysis.packagingAnalysis.newProductEstByTop10}</div>
-                  <div className="text-[10px] text-purple-600">件/天（TOP10日均{stats.sprayAnalysis.packagingAnalysis.top10AvgDailyQtyPerProduct}件×10%）</div>
+                  <div className="text-xs text-purple-600">件/天（TOP10日均{stats.sprayAnalysis.packagingAnalysis.top10AvgDailyQtyPerProduct}件×10%）</div>
                 </div>
                 <div className="bg-emerald-50 rounded-lg p-3 text-center border-2 border-emerald-200">
-                  <div className="text-[10px] text-morandi-text-light">综合预估日均销量</div>
+                  <div className="text-xs text-morandi-text-light">综合预估日均销量</div>
                   <div className="text-xl font-bold text-emerald-700">{stats.sprayAnalysis.packagingAnalysis.newProductEstDailyQty}</div>
-                  <div className="text-[10px] text-emerald-600">件/天（双参考均值）</div>
+                  <div className="text-xs text-emerald-600">件/天（双参考均值）</div>
                 </div>
               </div>
 
@@ -197,9 +197,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                       <td className="px-3 py-2 text-center">{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}</td>
                       <td className="px-3 py-2 text-center">
                         {stats.sprayAnalysis.packagingAnalysis.fullSizeSellDays > stats.sprayAnalysis.packagingAnalysis.productionDaysMax ? (
-                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.fullSizeSellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
+                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.fullSizeSellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
                         ) : (
-                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">⚠️ 不足（需提前补货）</span>
+                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">⚠️ 不足（需提前补货）</span>
                         )}
                       </td>
                     </tr>
@@ -211,9 +211,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                       <td className="px-3 py-2 text-center">{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}</td>
                       <td className="px-3 py-2 text-center">
                         {stats.sprayAnalysis.packagingAnalysis.trialSizeSellDays > stats.sprayAnalysis.packagingAnalysis.productionDaysMax ? (
-                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.trialSizeSellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
+                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.trialSizeSellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
                         ) : (
-                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">⚠️ 不足（需提前补货）</span>
+                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">⚠️ 不足（需提前补货）</span>
                         )}
                       </td>
                     </tr>
@@ -231,16 +231,16 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                         <td className="px-3 py-2 font-bold text-blue-700">🧴 正装 150ml</td>
                         <td className="px-3 py-2 text-center font-bold">
                           <div>{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.totalStock}件</div>
-                          <div className="text-[10px] text-blue-500 font-normal">🇷🇺 俄向{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.stock}件 + 🇨🇳 国内{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.domesticStock}件</div>
+                          <div className="text-xs text-blue-500 font-normal">🇷🇺 俄向{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.stock}件 + 🇨🇳 国内{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.domesticStock}件</div>
                         </td>
                         <td className="px-3 py-2 text-center">{stats.sprayAnalysis.packagingAnalysis.newProductEstDailyQty}件/天</td>
                         <td className="px-3 py-2 text-center font-bold">{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.sellDays}天</td>
                         <td className="px-3 py-2 text-center">{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}</td>
                         <td className="px-3 py-2 text-center">
                           {stats.sprayAnalysis.packagingAnalysis.improvedFullSize.sellDays > stats.sprayAnalysis.packagingAnalysis.productionDaysMax ? (
-                            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.sellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
+                            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.sellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
                           ) : (
-                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">⚠️ 不足（需提前补货）</span>
+                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">⚠️ 不足（需提前补货）</span>
                           )}
                         </td>
                       </tr>
@@ -252,15 +252,15 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                         <td className="px-3 py-2 text-center">{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}</td>
                         <td className="px-3 py-2 text-center">
                           {stats.sprayAnalysis.packagingAnalysis.improvedTrialSize.sellDays > stats.sprayAnalysis.packagingAnalysis.productionDaysMax ? (
-                            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.improvedTrialSize.sellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
+                            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">✅ 安全（可售{stats.sprayAnalysis.packagingAnalysis.improvedTrialSize.sellDays}天 &gt; 生产{stats.sprayAnalysis.packagingAnalysis.productionDaysMax}天）</span>
                           ) : (
-                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">⚠️ 不足（需提前补货）</span>
+                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">⚠️ 不足（需提前补货）</span>
                           )}
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <div className="mt-2 text-[10px] text-blue-700 space-y-0.5 bg-blue-50 rounded p-2">
+                  <div className="mt-2 text-xs text-blue-700 space-y-0.5 bg-blue-50 rounded p-2">
                     <div>💡 正装150ml总计{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.totalStock}件（俄向{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.stock}件 + 国内{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.domesticStock}件），俄方可售{stats.sprayAnalysis.packagingAnalysis.improvedFullSize.sellDays}天</div>
                     <div>💡 试用装50ml保持200件不变，可售{stats.sprayAnalysis.packagingAnalysis.improvedTrialSize.sellDays}天</div>
                     <div>💡 150ml包材通用，俄向/国内共享同款包材，降低包材开模成本</div>
@@ -306,8 +306,8 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <h5 className="text-xs font-bold text-indigo-800 mb-3">🎯 选品原因与市场容量</h5>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <h6 className="text-[11px] font-semibold text-indigo-700">为什么选护发精油喷雾？</h6>
-                    <ul className="text-[11px] text-morandi-text space-y-1 leading-relaxed list-none">
+                    <h6 className="text-xs font-semibold text-indigo-700">为什么选护发精油喷雾？</h6>
+                    <ul className="text-xs text-morandi-text space-y-1 leading-relaxed list-none">
                       <li>✅ 市场需求大：喷雾品类共{stats.sprayAnalysis.totalProducts}款产品，30天总销量{stats.sprayAnalysis.totalQty?.toLocaleString()}件，需求旺盛</li>
                       <li>✅ 竞争可切入：TOP10品牌集中度适中，新品牌有机会突围</li>
                       <li>✅ 差异化定位：轻盈不塌·无矿物油·高端修护，填补市场空白</li>
@@ -316,32 +316,32 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                     </ul>
                   </div>
                   <div className="space-y-2">
-                    <h6 className="text-[11px] font-semibold text-emerald-700">市场分析</h6>
+                    <h6 className="text-xs font-semibold text-emerald-700">市场分析</h6>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="bg-white/60 rounded p-2 text-center">
-                        <div className="text-[10px] text-morandi-text-light">TOP300产品数</div>
+                        <div className="text-xs text-morandi-text-light">TOP300产品数</div>
                         <div className="text-sm font-bold text-emerald-700">{stats.sprayAnalysis.totalProducts}款</div>
                       </div>
                       <div className="bg-white/60 rounded p-2 text-center">
-                        <div className="text-[10px] text-morandi-text-light">30天总销量</div>
+                        <div className="text-xs text-morandi-text-light">30天总销量</div>
                         <div className="text-sm font-bold text-teal-700">{stats.sprayAnalysis.totalQty?.toLocaleString()}件</div>
                       </div>
                       <div className="bg-white/60 rounded p-2 text-center">
-                        <div className="text-[10px] text-morandi-text-light">30天总销售额</div>
+                        <div className="text-xs text-morandi-text-light">30天总销售额</div>
                         <div className="text-sm font-bold text-indigo-700">¥{Math.round(stats.sprayAnalysis.totalSales * R).toLocaleString()}</div>
                       </div>
                       <div className="bg-white/60 rounded p-2 text-center">
-                        <div className="text-[10px] text-morandi-text-light">品类均价</div>
+                        <div className="text-xs text-morandi-text-light">品类均价</div>
                         <div className="text-sm font-bold text-amber-700">¥{Math.round(stats.sprayAnalysis.sprayAvgPrice * R)}</div>
                       </div>
                       <div className="bg-white/60 rounded p-2 text-center">
-                        <div className="text-[10px] text-morandi-text-light">市场集中度</div>
-                        <div className="text-[11px] font-bold text-rose-700">TOP3 {stats.sprayAnalysis.sprayMarketConcentration?.toFixed(1)}% / TOP10 {stats.sprayAnalysis.sprayMarketConcentrationTop10?.toFixed(1)}%</div>
+                        <div className="text-xs text-morandi-text-light">市场集中度</div>
+                        <div className="text-xs font-bold text-rose-700">TOP3 {stats.sprayAnalysis.sprayMarketConcentration?.toFixed(1)}% / TOP10 {stats.sprayAnalysis.sprayMarketConcentrationTop10?.toFixed(1)}%</div>
                       </div>
                       <div className="bg-white/60 rounded p-2 text-center">
-                        <div className="text-[10px] text-morandi-text-light">竞争格局</div>
+                        <div className="text-xs text-morandi-text-light">竞争格局</div>
                         <div className="text-sm font-bold text-green-700">分散型</div>
-                        <div className="text-[10px] text-green-500">新品有进入机会</div>
+                        <div className="text-xs text-green-500">新品有进入机会</div>
                       </div>
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
               </div>
 
               <h5 className="text-xs font-semibold text-morandi-text mb-3">📊 市场容量分布（按销量占比）</h5>
-              <div className="flex items-center gap-4 mb-2 text-[10px]">
+              <div className="flex items-center gap-4 mb-2 text-xs">
                 <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 rounded-sm" style={{backgroundColor:'#6EE7B7'}}></span> 销量（件）</span>
                 <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 rounded-sm" style={{backgroundColor:'#34D399'}}></span> 销量占比（%）</span>
               </div>
@@ -383,9 +383,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                       <td className="px-3 py-2 text-center font-bold" rowSpan="1">{stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.sellDays}天</td>
                       <td className="px-3 py-2 text-center" rowSpan="1">
                         {stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.sellDays > stats.sprayAnalysis.packagingAnalysis.productionDaysMax ? (
-                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold">✅ 安全</span>
+                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">✅ 安全</span>
                         ) : (
-                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">⚠️ 不足</span>
+                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">⚠️ 不足</span>
                         )}
                       </td>
                     </tr>
@@ -394,7 +394,7 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                       <td className="px-3 py-2 text-center font-bold">{stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.domestic}件</td>
                       <td className="px-3 py-2 text-center text-gray-400">—</td>
                       <td className="px-3 py-2 text-center text-gray-400">—</td>
-                      <td className="px-3 py-2 text-center"><span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-[10px]">国内商城</span></td>
+                      <td className="px-3 py-2 text-center"><span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">国内商城</span></td>
                     </tr>
                     <tr className="border-t border-indigo-100 bg-cyan-50/30">
                       <td className="px-3 py-2 font-bold text-cyan-700" rowSpan="3">🧪 50ml 试用装</td>
@@ -405,14 +405,14 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                       <td className="px-3 py-2 text-center font-bold text-cyan-700" rowSpan="3">{stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.total}件</td>
                       <td className="px-3 py-2 text-center text-gray-400">—</td>
                       <td className="px-3 py-2 text-center text-gray-400">—</td>
-                      <td className="px-3 py-2 text-center"><span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-[10px]">赠品</span></td>
+                      <td className="px-3 py-2 text-center"><span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">赠品</span></td>
                     </tr>
                     <tr className="border-t border-indigo-100 bg-cyan-50/20">
                       <td className="px-3 py-2 text-center">🇨🇳 国内备货</td>
                       <td className="px-3 py-2 text-center font-bold">{stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.domestic}件</td>
                       <td className="px-3 py-2 text-center text-gray-400">—</td>
                       <td className="px-3 py-2 text-center text-gray-400">—</td>
-                      <td className="px-3 py-2 text-center"><span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-[10px]">国内商城</span></td>
+                      <td className="px-3 py-2 text-center"><span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">国内商城</span></td>
                     </tr>
                     <tr className="border-t border-indigo-100 bg-cyan-50/10">
                       <td className="px-3 py-2 text-center">🇷🇺 俄向销售</td>
@@ -421,9 +421,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                       <td className="px-3 py-2 text-center font-bold">{stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.sellDays}天</td>
                       <td className="px-3 py-2 text-center">
                         {stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.sellDays > stats.sprayAnalysis.packagingAnalysis.productionDaysMax ? (
-                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold">✅ 安全</span>
+                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">✅ 安全</span>
                         ) : (
-                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">⚠️ 不足</span>
+                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">⚠️ 不足</span>
                         )}
                       </td>
                     </tr>
@@ -435,15 +435,15 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <h5 className="text-xs font-bold text-indigo-800 mb-2">📦 总量计算</h5>
                 <div className="text-xs text-indigo-700 space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="bg-cyan-100 text-cyan-700 px-1.5 py-0.5 rounded text-[10px] font-bold">50ml</span>
+                    <span className="bg-cyan-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-bold">50ml</span>
                     <span>💨{stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.hairDryer}件 + 🇨🇳{stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.domestic}件 + 🇷🇺{stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.overseas}件 = <b>{stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.total}件</b> × 50ml = <b>{(stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.total * 50).toLocaleString()}ml</b></span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded text-[10px] font-bold">150ml</span>
+                    <span className="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded text-xs font-bold">150ml</span>
                     <span>🇷🇺{stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.overseas}件 + 🇨🇳{stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.domestic}件 = <b>{stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.total}件</b> × 150ml = <b>{(stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.total * 150).toLocaleString()}ml</b></span>
                   </div>
                   <div className="flex items-center gap-2 pt-1 border-t border-indigo-200">
-                    <span className="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded text-[10px] font-bold">合计</span>
+                    <span className="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded text-xs font-bold">合计</span>
                     <span className="font-bold text-indigo-800">{stats.sprayAnalysis.packagingAnalysis.finalStock.totalStock}件 / {(stats.sprayAnalysis.packagingAnalysis.finalStock.size50ml.total * 50 + stats.sprayAnalysis.packagingAnalysis.finalStock.size150ml.total * 150).toLocaleString()}ml</span>
                   </div>
                 </div>
@@ -451,24 +451,24 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
 
               <div className="grid grid-cols-4 gap-3 mb-4">
                 <div className="bg-indigo-50 rounded-lg p-3 text-center border border-indigo-100">
-                  <div className="text-[10px] text-morandi-text-light">总备货量</div>
+                  <div className="text-xs text-morandi-text-light">总备货量</div>
                   <div className="text-xl font-bold text-indigo-700">{stats.sprayAnalysis.packagingAnalysis.finalStock.totalStock}</div>
-                  <div className="text-[10px] text-indigo-600">件</div>
+                  <div className="text-xs text-indigo-600">件</div>
                 </div>
                 <div className="bg-blue-50 rounded-lg p-3 text-center border border-blue-100">
-                  <div className="text-[10px] text-morandi-text-light">综合预估日均</div>
+                  <div className="text-xs text-morandi-text-light">综合预估日均</div>
                   <div className="text-xl font-bold text-blue-700">{stats.sprayAnalysis.packagingAnalysis.newProductEstDailyQty}</div>
-                  <div className="text-[10px] text-blue-600">件/天</div>
+                  <div className="text-xs text-blue-600">件/天</div>
                 </div>
                 <div className="bg-red-50 rounded-lg p-3 text-center border border-red-100">
-                  <div className="text-[10px] text-morandi-text-light">补货警戒线</div>
+                  <div className="text-xs text-morandi-text-light">补货警戒线</div>
                   <div className="text-xl font-bold text-red-700">{stats.sprayAnalysis.packagingAnalysis.reorderPoint}</div>
-                  <div className="text-[10px] text-red-600">件（{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}用量）</div>
+                  <div className="text-xs text-red-600">件（{stats.sprayAnalysis.packagingAnalysis.productionDaysDisplay}用量）</div>
                 </div>
                 <div className="bg-amber-50 rounded-lg p-3 text-center border border-amber-100">
-                  <div className="text-[10px] text-morandi-text-light">生产周期</div>
+                  <div className="text-xs text-morandi-text-light">生产周期</div>
                   <div className="text-xl font-bold text-amber-700">{stats.sprayAnalysis.packagingAnalysis.productionDaysMin}</div>
-                  <div className="text-[10px] text-amber-600">天</div>
+                  <div className="text-xs text-amber-600">天</div>
                 </div>
               </div>
 
@@ -502,9 +502,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                   <div className="flex justify-between"><span className="text-morandi-text-light">物流费</span><span className="font-bold">¥{stats.sprayAnalysis.ourSpray.skus.map(s => s.logistics).join(' / ¥')}</span></div>
                 </div>
                 <div className="mt-2 pt-2 border-t border-emerald-200">
-                  <div className="text-[10px] text-emerald-700 font-bold mb-1">核心配方</div>
-                  <div className="text-[10px] text-emerald-600 mb-1.5">{stats.sprayAnalysis.ourSpray.ingredients}</div>
-                  <div className="text-[10px] text-emerald-700 space-y-0.5">
+                  <div className="text-xs text-emerald-700 font-bold mb-1">核心配方</div>
+                  <div className="text-xs text-emerald-600 mb-1.5">{stats.sprayAnalysis.ourSpray.ingredients}</div>
+                  <div className="text-xs text-emerald-700 space-y-0.5">
                     {stats.sprayAnalysis.ourSpray.features.map((f, i) => (
                       <div key={i}>✓ {f}</div>
                     ))}
@@ -518,13 +518,13 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                   {stats.sprayAnalysis.competitorsSpray.map(c => (
                     <div key={c.id} className="flex justify-between items-center border-b border-gray-50 pb-1">
                       <span className="font-bold text-red-600">{c.brand}</span>
-                      <span className="text-[10px]">{c.volume} / <b>₽{c.priceRUB}</b> / ₽{c.volume === '50ml' ? (c.priceRUB / 50 * 100).toFixed(0) : c.priceRUB}/100ml</span>
-                      <span className="text-[10px] text-morandi-text-light">{c.positioning}</span>
+                      <span className="text-xs">{c.volume} / <b>₽{c.priceRUB}</b> / ₽{c.volume === '50ml' ? (c.priceRUB / 50 * 100).toFixed(0) : c.priceRUB}/100ml</span>
+                      <span className="text-xs text-morandi-text-light">{c.positioning}</span>
                     </div>
                   ))}
                 </div>
                 <div className="mt-2 pt-2 border-t border-red-200">
-                  <div className="text-[10px] text-red-600 space-y-0.5">
+                  <div className="text-xs text-red-600 space-y-0.5">
                     <div>📌 主流价格带：<b>₽320-500/100ml</b></div>
                     <div>📌 全部为<b>硅油主导派</b>，植物油仅做卖点包装</div>
                     <div>📌 竞品2和5几乎同配方不同品牌，同质化极高</div>
@@ -538,7 +538,7 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <h5 className="text-xs font-bold text-green-700 mb-2">💰 三规格利润测算</h5>
                 {stats.sprayAnalysis.profitBySku.map((sku, i) => (
                   <div key={i} className="space-y-1 text-xs border-b border-gray-100 pb-2 mb-2 last:border-0 last:pb-0 last:mb-0">
-                    <div className="text-[10px] font-bold text-blue-600">{sku.label} {sku.volume} · ₽{sku.ourPriceRUB}</div>
+                    <div className="text-xs font-bold text-blue-600">{sku.label} {sku.volume} · ₽{sku.ourPriceRUB}</div>
                     <div className="flex justify-between"><span>售价</span><span className="font-bold">₽{sku.ourPriceRUB} ≈ ¥{(sku.ourPriceRUB * R).toFixed(1)}</span></div>
                     <div className="flex justify-between"><span>采购+物流</span><span className="text-red-500">-¥{sku.priceCNY} -¥{sku.logistics}</span></div>
                     <div className="flex justify-between"><span>平台运营费(26%)</span><span className="text-red-500">-₽{Math.round(sku.ourPriceRUB * 0.26)} ≈ -¥{(sku.ourPriceRUB * 0.26 * R).toFixed(1)}</span></div>
@@ -549,19 +549,19 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
               <div className="bg-white rounded-lg p-3 border border-blue-100">
                 <h5 className="text-xs font-bold text-blue-700 mb-2">🚚 物流时效利润对比</h5>
                 <table className="w-full text-xs">
-                  <thead><tr className="bg-blue-50"><th className="px-2 py-1 text-left">规格</th><th className="px-2 py-1 text-center">🚀 特快<br/><span className="text-[9px] font-normal">5-10天</span></th><th className="px-2 py-1 text-center">📦 标准<br/><span className="text-[9px] font-normal">10-15天</span></th><th className="px-2 py-1 text-center">🚛 经济<br/><span className="text-[9px] font-normal">15-25天</span></th></tr></thead>
+                  <thead><tr className="bg-blue-50"><th className="px-2 py-1 text-left">规格</th><th className="px-2 py-1 text-center">🚀 特快<br/><span className="text-xs font-normal">5-10天</span></th><th className="px-2 py-1 text-center">📦 标准<br/><span className="text-xs font-normal">10-15天</span></th><th className="px-2 py-1 text-center">🚛 经济<br/><span className="text-xs font-normal">15-25天</span></th></tr></thead>
                   <tbody>
                     {stats.sprayAnalysis.profitBySku.map((sku, i) => (
                       <tr key={i} className="border-t border-gray-100">
-                        <td className="px-2 py-1.5 font-bold">{sku.label}<br/><span className="text-[9px] font-normal text-gray-500">₽{sku.ourPriceRUB}</span></td>
-                        <td className="px-2 py-1.5 text-center"><div className={sku.express.profit >= 0 ? 'text-green-600' : 'text-red-600'}>¥{sku.express.profit.toFixed(1)}</div><div className="text-[9px] text-gray-500">{sku.express.rate.toFixed(1)}%</div><div className="text-[9px] text-red-400">运费¥{sku.logistics + 5}</div></td>
-                        <td className="px-2 py-1.5 text-center bg-blue-50/50"><div className={sku.standard.profit >= 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>¥{sku.standard.profit.toFixed(1)}</div><div className="text-[9px] text-gray-500">{sku.standard.rate.toFixed(1)}%</div><div className="text-[9px] text-gray-400">运费¥{sku.logistics}</div></td>
-                        <td className="px-2 py-1.5 text-center"><div className={sku.economy.profit >= 0 ? 'text-green-600' : 'text-red-600'}>¥{sku.economy.profit.toFixed(1)}</div><div className="text-[9px] text-gray-500">{sku.economy.rate.toFixed(1)}%</div><div className="text-[9px] text-green-400">运费¥{Math.max(0, sku.logistics - 5)}</div></td>
+                        <td className="px-2 py-1.5 font-bold">{sku.label}<br/><span className="text-xs font-normal text-gray-500">₽{sku.ourPriceRUB}</span></td>
+                        <td className="px-2 py-1.5 text-center"><div className={sku.express.profit >= 0 ? 'text-green-600' : 'text-red-600'}>¥{sku.express.profit.toFixed(1)}</div><div className="text-xs text-gray-500">{sku.express.rate.toFixed(1)}%</div><div className="text-xs text-red-400">运费¥{sku.logistics + 5}</div></td>
+                        <td className="px-2 py-1.5 text-center bg-blue-50/50"><div className={sku.standard.profit >= 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>¥{sku.standard.profit.toFixed(1)}</div><div className="text-xs text-gray-500">{sku.standard.rate.toFixed(1)}%</div><div className="text-xs text-gray-400">运费¥{sku.logistics}</div></td>
+                        <td className="px-2 py-1.5 text-center"><div className={sku.economy.profit >= 0 ? 'text-green-600' : 'text-red-600'}>¥{sku.economy.profit.toFixed(1)}</div><div className="text-xs text-gray-500">{sku.economy.rate.toFixed(1)}%</div><div className="text-xs text-green-400">运费¥{Math.max(0, sku.logistics - 5)}</div></td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <div className="mt-2 text-[10px] text-blue-600 space-y-0.5">
+                <div className="mt-2 text-xs text-blue-600 space-y-0.5">
                   <div>💡 特快运费+¥5，适合急需补货/新品冷启动快速到仓</div>
                   <div>💡 标准运费为当前基准，平衡时效与成本</div>
                   <div>💡 经济运费-¥5，适合稳定期大批量补货</div>
@@ -593,19 +593,19 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
               <table className="w-full text-xs border border-gray-200 rounded">
                 <thead><tr className="bg-gray-50"><th className="px-3 py-2 text-left">产品</th><th className="px-3 py-2 text-center">容量</th><th className="px-3 py-2 text-right">售价(₽)</th><th className="px-3 py-2 text-right">₽/100ml</th><th className="px-3 py-2 text-left">价格定位</th></tr></thead>
                 <tbody>
-                  <tr className="border-t border-gray-100 bg-emerald-50/30"><td className="px-3 py-2 font-bold text-emerald-700">🌿 我方</td><td className="px-3 py-2 text-center">{stats.sprayAnalysis.ourSpray.skus.map(s => s.volume).join('/')}</td><td className="px-3 py-2 text-right font-bold text-emerald-700">{stats.sprayAnalysis.ourSpray.skus.map(s => s.ourPriceRUB).join('-')}</td><td className="px-3 py-2 text-right font-bold text-emerald-700">{stats.sprayAnalysis.ourSpray.skus.map(s => Math.round(s.ourPriceRUB / parseInt(s.volume) * 100)).join('-')}</td><td className="px-3 py-2"><span className="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded text-[10px]">轻盈高端·中高价位</span></td></tr>
+                  <tr className="border-t border-gray-100 bg-emerald-50/30"><td className="px-3 py-2 font-bold text-emerald-700">🌿 我方</td><td className="px-3 py-2 text-center">{stats.sprayAnalysis.ourSpray.skus.map(s => s.volume).join('/')}</td><td className="px-3 py-2 text-right font-bold text-emerald-700">{stats.sprayAnalysis.ourSpray.skus.map(s => s.ourPriceRUB).join('-')}</td><td className="px-3 py-2 text-right font-bold text-emerald-700">{stats.sprayAnalysis.ourSpray.skus.map(s => Math.round(s.ourPriceRUB / parseInt(s.volume) * 100)).join('-')}</td><td className="px-3 py-2"><span className="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded text-xs">轻盈高端·中高价位</span></td></tr>
                   {stats.sprayAnalysis.competitorsSpray.map(c => (
                     <tr key={c.id} className="border-t border-gray-100">
                       <td className="px-3 py-2 font-bold text-red-600">{c.brand}</td>
                       <td className="px-3 py-2 text-center">{c.volume}</td>
                       <td className="px-3 py-2 text-right font-medium">{c.priceRUB}</td>
                       <td className="px-3 py-2 text-right font-bold">{c.volume === '50ml' ? (c.priceRUB / 50 * 100).toFixed(0) : c.priceRUB}</td>
-                      <td className="px-3 py-2"><span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-[10px]">{c.positioning}</span></td>
+                      <td className="px-3 py-2"><span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">{c.positioning}</span></td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div className="text-[10px] text-morandi-text-light mt-1.5">📌 俄罗斯护发精油主流价格带：₽320-500/100ml，我方₽{stats.sprayAnalysis.ourSpray.skus.map(s => Math.round(s.ourPriceRUB / parseInt(s.volume) * 100)).join('-')}/100ml处于中高段</div>
+              <div className="text-xs text-morandi-text-light mt-1.5">📌 俄罗斯护发精油主流价格带：₽320-500/100ml，我方₽{stats.sprayAnalysis.ourSpray.skus.map(s => Math.round(s.ourPriceRUB / parseInt(s.volume) * 100)).join('-')}/100ml处于中高段</div>
             </div>
 
             <h5 className="text-sm font-semibold text-morandi-text mb-3">二、核心配方结构对比</h5>
@@ -630,19 +630,19 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <div key={c.id} className="bg-white rounded-lg p-4 border border-gray-200">
                   <div className="flex items-center justify-between mb-2">
                     <h6 className="text-sm font-bold text-red-700">🔴 {c.brand}（{c.volume} / ₽{c.priceRUB}）</h6>
-                    <span className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{c.positioning}</span>
+                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{c.positioning}</span>
                   </div>
-                  <div className="text-[10px] text-morandi-text-light mb-2">核心成分：{c.ingredients}</div>
+                  <div className="text-xs text-morandi-text-light mb-2">核心成分：{c.ingredients}</div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <div className="text-[10px] font-bold text-green-700 mb-1">✅ 优点</div>
-                      <div className="text-[10px] text-green-700 space-y-0.5">
+                      <div className="text-xs font-bold text-green-700 mb-1">✅ 优点</div>
+                      <div className="text-xs text-green-700 space-y-0.5">
                         {c.strengths.map((s, i) => <div key={i}>• {s}</div>)}
                       </div>
                     </div>
                     <div>
-                      <div className="text-[10px] font-bold text-red-700 mb-1">❌ 缺点/风险</div>
-                      <div className="text-[10px] text-red-700 space-y-0.5">
+                      <div className="text-xs font-bold text-red-700 mb-1">❌ 缺点/风险</div>
+                      <div className="text-xs text-red-700 space-y-0.5">
                         {c.risks.map((r, i) => <div key={i}>• {r}</div>)}
                       </div>
                     </div>
@@ -658,9 +658,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <div className="space-y-2">
                   {[{name: '竞品3', val: 5}, {name: '竞品4', val: 4}, {name: '🌿我方', val: 4, isOurs: true}, {name: '竞品2', val: 3}, {name: '竞品5', val: 3}, {name: '竞品1', val: 3}].map((item, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <span className={`text-[10px] w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
+                      <span className={`text-xs w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
                       <div className="flex-1 bg-gray-100 rounded-full h-3"><div className={`h-3 rounded-full ${item.isOurs ? 'bg-emerald-400' : 'bg-amber-300'}`} style={{width: `${item.val * 20}%`}}></div></div>
-                      <span className="text-[10px] text-gray-500">{item.val}/5</span>
+                      <span className="text-xs text-gray-500">{item.val}/5</span>
                     </div>
                   ))}
                 </div>
@@ -670,9 +670,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <div className="space-y-2">
                   {[{name: '竞品1', val: 5}, {name: '竞品4', val: 5}, {name: '🌿我方', val: 4, isOurs: true}, {name: '竞品2', val: 4}, {name: '竞品3', val: 4}, {name: '竞品5', val: 4}].map((item, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <span className={`text-[10px] w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
+                      <span className={`text-xs w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
                       <div className="flex-1 bg-gray-100 rounded-full h-3"><div className={`h-3 rounded-full ${item.isOurs ? 'bg-emerald-400' : 'bg-blue-300'}`} style={{width: `${item.val * 20}%`}}></div></div>
-                      <span className="text-[10px] text-gray-500">{item.val}/5</span>
+                      <span className="text-xs text-gray-500">{item.val}/5</span>
                     </div>
                   ))}
                 </div>
@@ -682,9 +682,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <div className="space-y-2">
                   {[{name: '竞品1', val: 5}, {name: '竞品2', val: 3}, {name: '竞品5', val: 3}, {name: '🌿我方', val: 3, isOurs: true}, {name: '竞品4', val: 2}, {name: '竞品3', val: 2}].map((item, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <span className={`text-[10px] w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
+                      <span className={`text-xs w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
                       <div className="flex-1 bg-gray-100 rounded-full h-3"><div className={`h-3 rounded-full ${item.isOurs ? 'bg-emerald-400' : 'bg-purple-300'}`} style={{width: `${item.val * 20}%`}}></div></div>
-                      <span className="text-[10px] text-gray-500">{item.val}/5</span>
+                      <span className="text-xs text-gray-500">{item.val}/5</span>
                     </div>
                   ))}
                 </div>
@@ -694,9 +694,9 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                 <div className="space-y-2">
                   {[{name: '🌿我方', val: 5, isOurs: true}, {name: '竞品4', val: 5}, {name: '竞品3', val: 4}, {name: '竞品2', val: 2}, {name: '竞品5', val: 2}, {name: '竞品1', val: 1}].map((item, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <span className={`text-[10px] w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
+                      <span className={`text-xs w-14 ${item.isOurs ? 'font-bold text-emerald-700' : 'text-gray-600'}`}>{item.name}</span>
                       <div className="flex-1 bg-gray-100 rounded-full h-3"><div className={`h-3 rounded-full ${item.isOurs ? 'bg-emerald-400' : 'bg-teal-300'}`} style={{width: `${item.val * 20}%`}}></div></div>
-                      <span className="text-[10px] text-gray-500">{item.val}/5</span>
+                      <span className="text-xs text-gray-500">{item.val}/5</span>
                     </div>
                   ))}
                 </div>
@@ -715,7 +715,7 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
                   <tr className="border-t border-gray-100"><td className="px-3 py-2 font-bold text-amber-600">成分过于复杂</td><td className="px-3 py-2 text-center">竞品3</td><td className="px-3 py-2">提取物多，供应链文件和稳定性风险上升</td></tr>
                 </tbody>
               </table>
-              <div className="text-[10px] text-morandi-text-light mt-1.5">📌 真正容易引发投诉的是<b>香精致敏</b>和<b>油腻塌发</b>，我方配方均无此风险</div>
+              <div className="text-xs text-morandi-text-light mt-1.5">📌 真正容易引发投诉的是<b>香精致敏</b>和<b>油腻塌发</b>，我方配方均无此风险</div>
             </div>
 
             <h5 className="text-sm font-semibold text-morandi-text mb-3">六、市场格局结论</h5>

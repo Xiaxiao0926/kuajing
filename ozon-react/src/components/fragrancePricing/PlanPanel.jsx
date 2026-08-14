@@ -15,7 +15,7 @@ export function PlanPanel({ title, plan, onChange, color }) {
         <InputField label="广告费占比" value={(plan.adRate * 100).toFixed(0)} onChange={v => onChange({ ...plan, adRate: v / 100 })} suffix="%" step={1} min={0} max={50} />
         <InputField label="售后损耗率" value={(plan.returnRate * 100).toFixed(0)} onChange={v => onChange({ ...plan, returnRate: v / 100 })} suffix="%" step={1} min={0} max={30} />
         <div>
-          <label className="text-[10px] font-medium text-morandi-text-light mb-1 block">销售渠道</label>
+          <label className="text-xs font-medium text-morandi-text-light mb-1 block">销售渠道</label>
           <select value={plan.channel} onChange={e => onChange({ ...plan, channel: e.target.value })} className="w-full text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-morandi-primary">
             {Object.entries(CHANNEL_PRESETS).map(([k, v]) => <option key={k} value={k}>{v.name}(费率{(v.rate * 100).toFixed(1)}%)</option>)}
           </select>

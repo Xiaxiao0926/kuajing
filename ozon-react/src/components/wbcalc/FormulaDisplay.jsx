@@ -58,10 +58,10 @@ export function FormulaDisplay({ form, settings, tariff, logisticsCalc, logistic
           <Calculator className="w-3.5 h-3.5 text-amber-700" />
           <span className="text-xs font-semibold text-amber-800">公式展示</span>
         </span>
-        <span className="text-[10px] text-amber-700">{showFormula ? '收起 ▲' : '展开 ▼'}</span>
+        <span className="text-xs text-amber-700">{showFormula ? '收起 ▲' : '展开 ▼'}</span>
       </button>
       {showFormula && (
-        <div className="px-3 pb-3 space-y-3 text-[11px] text-gray-700 leading-relaxed">
+        <div className="px-3 pb-3 space-y-3 text-xs text-gray-700 leading-relaxed">
           {/* 1. 物流费 */}
           <div>
             <p className="font-semibold text-amber-700 mb-0.5">① 物流费（每包裹独立取整计费）</p>
@@ -97,7 +97,7 @@ export function FormulaDisplay({ form, settings, tariff, logisticsCalc, logistic
               <p className="font-semibold text-orange-700 mb-0.5">⑤ 异常订单物流总成本（依据WB条款13.1.14）</p>
               <p className="pl-3">物流总成本 = 正向物流费 + 反向配送赔偿 + 其他退回费</p>
               <p className="pl-3">= {fwdUsed} + {revComp} + {otherRev} = <span className="font-bold text-orange-700">{totalLogistics}元</span></p>
-              <p className="pl-3 text-[10px] text-gray-500 mt-0.5">
+              <p className="pl-3 text-xs text-gray-500 mt-0.5">
                 其中：反向赔偿 = CSG × 倍数 = {logisticsCny} × {reverseCalcResult?.multiplier} = {reverseCalcResult?.estimatedReverseCompensationCny}元
                 {reverseCalcResult?.calculationBasis === 'actual' && <span className="text-orange-600">（已使用实际账单值覆盖）</span>}
               </p>

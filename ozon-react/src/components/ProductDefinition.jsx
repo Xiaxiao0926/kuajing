@@ -121,10 +121,10 @@ const SECTIONS = [
 ]
 
 const COLOR_MAP = {
-  rose: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', header: 'bg-rose-100/80', accent: 'bg-rose-500', light: 'bg-rose-50/50' },
-  blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', header: 'bg-blue-100/80', accent: 'bg-blue-500', light: 'bg-blue-50/50' },
-  purple: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', header: 'bg-purple-100/80', accent: 'bg-purple-500', light: 'bg-purple-50/50' },
-  green: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', header: 'bg-green-100/80', accent: 'bg-green-500', light: 'bg-green-50/50' },
+  rose: { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-text', border: 'border-rose-200', header: 'bg-workspace-surface-subtle/80', accent: 'bg-workspace-surface-subtle0', light: 'bg-workspace-surface-subtle/50' },
+  blue: { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-primary', border: 'border-workspace-border', header: 'bg-workspace-surface-subtle/80', accent: 'bg-workspace-surface-subtle0', light: 'bg-workspace-surface-subtle/50' },
+  purple: { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-text', border: 'border-workspace-border', header: 'bg-workspace-surface-subtle/80', accent: 'bg-workspace-surface-subtle0', light: 'bg-workspace-surface-subtle/50' },
+  green: { bg: 'bg-workspace-success-soft', text: 'text-workspace-success', border: 'border-green-200', header: 'bg-workspace-success-soft/80', accent: 'bg-workspace-success-soft0', light: 'bg-workspace-success-soft/50' },
 }
 
 export default function ProductDefinition() {
@@ -138,14 +138,14 @@ export default function ProductDefinition() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-5 shadow-sm border border-workspace-border">
         <h3 className="text-sm font-semibold text-morandi-text mb-3">产品定义怎么做</h3>
         <p className="text-xs text-morandi-text-light leading-relaxed">
           产品定义就是回答四个问题：
-          <span className="font-medium text-rose-600">做什么</span>（功能）、
-          <span className="font-medium text-blue-600">给谁做</span>（人群）、
-          <span className="font-medium text-purple-600">怎么赢</span>（差异）、
-          <span className="font-medium text-green-600">做到什么程度</span>（规格）。
+          <span className="font-medium text-workspace-text-secondary">做什么</span>（功能）、
+          <span className="font-medium text-workspace-text-secondary">给谁做</span>（人群）、
+          <span className="font-medium text-workspace-text-secondary">怎么赢</span>（差异）、
+          <span className="font-medium text-workspace-success">做到什么程度</span>（规格）。
           每个问题下面都有具体做法和实际案例，点击展开查看。
         </p>
       </div>
@@ -168,7 +168,7 @@ export default function ProductDefinition() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className={`text-sm font-semibold ${c.text}`}>{section.title}</span>
-                    <span className="text-[10px] text-morandi-text-light">{section.subtitle}</span>
+                    <span className="text-xs text-morandi-text-light">{section.subtitle}</span>
                   </div>
                 </div>
                 {isExpanded ? <ChevronUp className={`w-4 h-4 ${c.text}`} /> : <ChevronDown className="w-4 h-4 text-gray-300" />}
@@ -187,12 +187,12 @@ export default function ProductDefinition() {
                       const isMethodOpen = expandedMethod[methodKey]
 
                       return (
-                        <div key={idx} className="border border-gray-100 rounded-lg overflow-hidden">
+                        <div key={idx} className="border border-workspace-border rounded-lg overflow-hidden">
                           <div
-                            className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-gray-50/50 transition-colors"
+                            className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-workspace-surface-subtle/50 transition-colors"
                             onClick={() => toggleMethod(section.id, idx)}
                           >
-                            <span className={`w-5 h-5 rounded-full ${c.accent} text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0`}>
+                            <span className={`w-5 h-5 rounded-full ${c.accent} text-white text-xs font-bold flex items-center justify-center flex-shrink-0`}>
                               {idx + 1}
                             </span>
                             <span className="text-xs font-semibold text-morandi-text flex-1">{m.name}</span>
@@ -203,17 +203,17 @@ export default function ProductDefinition() {
                             <div className="px-4 pb-4 pt-0 space-y-3">
                               <p className="text-xs text-morandi-text leading-relaxed">{m.desc}</p>
 
-                              <div className="p-3 bg-amber-50/80 rounded-lg border border-amber-100">
-                                <span className="text-[10px] font-semibold text-amber-700 block mb-1">举例</span>
-                                <p className="text-xs text-amber-800 leading-relaxed whitespace-pre-line">{m.example}</p>
+                              <div className="p-3 bg-workspace-warning-soft/80 rounded-lg border border-workspace-border">
+                                <span className="text-xs font-semibold text-workspace-warning block mb-1">举例</span>
+                                <p className="text-xs text-workspace-warning leading-relaxed whitespace-pre-line">{m.example}</p>
                               </div>
 
                               <div>
-                                <span className="text-[10px] font-semibold text-morandi-text-light">怎么做</span>
+                                <span className="text-xs font-semibold text-morandi-text-light">怎么做</span>
                                 <div className="mt-1.5 space-y-1.5">
                                   {m.steps.map((step, si) => (
                                     <div key={si} className="flex items-start gap-2">
-                                      <span className={`w-4 h-4 rounded ${c.bg} ${c.text} text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                                      <span className={`w-4 h-4 rounded ${c.bg} ${c.text} text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5`}>
                                         {si + 1}
                                       </span>
                                       <span className="text-xs text-morandi-text leading-relaxed">{step}</span>
@@ -229,7 +229,7 @@ export default function ProductDefinition() {
                   </div>
 
                   <div className={`p-3 rounded-lg border ${c.border} ${c.light}`}>
-                    <span className="text-[10px] font-semibold text-morandi-text-light">做完要产出</span>
+                    <span className="text-xs font-semibold text-morandi-text-light">做完要产出</span>
                     <p className="text-xs text-morandi-text mt-1 leading-relaxed">{section.output}</p>
                   </div>
                 </div>

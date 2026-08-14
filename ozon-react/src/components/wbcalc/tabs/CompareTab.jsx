@@ -25,7 +25,7 @@ export function CompareTab({ tariffs }) {
       <div className="relative">
         <input type="number" value={form[key]} onChange={(e) => update(key, e.target.value)} step="any"
           className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 pr-8 bg-white" />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400">{unit}</span>
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">{unit}</span>
       </div>
     </div>
   )
@@ -64,7 +64,7 @@ export function CompareTab({ tariffs }) {
                   <td className="px-3 py-2 border-b border-gray-100 text-right font-semibold text-gray-700">{r.feeCny !== null ? fmtCny(r.feeCny) : '—'}</td>
                   <td className="px-3 py-2 border-b border-gray-100 text-right text-gray-600">{r.diffToMin !== null ? fmtCny(r.diffToMin) : '—'}</td>
                   <td className="px-3 py-2 border-b border-gray-100">{r.valid ? <CheckCircle2 className="w-4 h-4 text-green-600" /> : <XCircle className="w-4 h-4 text-red-500" />}</td>
-                  <td className="px-3 py-2 border-b border-gray-100 text-gray-500 text-[10px]">{r.messages?.join('; ') || ''}</td>
+                  <td className="px-3 py-2 border-b border-gray-100 text-gray-500 text-xs">{r.messages?.join('; ') || ''}</td>
                 </tr>
               ))}
             </tbody>

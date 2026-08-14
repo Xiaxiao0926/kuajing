@@ -163,11 +163,11 @@ export default function AiImageGen() {
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-purple-600" />
             <span className="text-sm font-bold text-purple-800">AI 图片生成</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-600">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-purple-100 text-purple-600">
               {modeLabel}
             </span>
             {!isConfigured && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-600">未配置</span>
+              <span className="text-xs px-1.5 py-0.5 rounded bg-red-100 text-red-600">未配置</span>
             )}
           </div>
           <button
@@ -181,7 +181,7 @@ export default function AiImageGen() {
         {showConfig && (
           <div className="p-5 bg-purple-50/30 border-b border-purple-100 space-y-3">
             <div>
-              <label className="text-[10px] text-gray-500 block mb-1">使用方式</label>
+              <label className="text-xs text-gray-500 block mb-1">使用方式</label>
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfigInput({ ...configInput, mode: 'browser' })}
@@ -207,16 +207,16 @@ export default function AiImageGen() {
             {configInput.mode === 'browser' ? (
               <div className="space-y-3">
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                  <p className="text-[10px] text-green-700 font-medium mb-1.5">🖥️ 浏览器连接模式</p>
-                  <p className="text-[9px] text-green-600 leading-relaxed">
+                  <p className="text-xs text-green-700 font-medium mb-1.5">🖥️ 浏览器连接模式</p>
+                  <p className="text-xs text-green-600 leading-relaxed">
                     直接连接你已登录的 Chrome 浏览器，通过浏览器发送请求。<br/>
                     ✅ 无需配置代理 ✅ 无需手动复制 Cookie ✅ 自动复用浏览器登录状态
                   </p>
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <p className="text-[10px] text-blue-700 font-medium mb-1.5">📋 启动步骤</p>
-                  <ol className="text-[9px] text-blue-600 space-y-1 list-decimal list-inside">
+                  <p className="text-xs text-blue-700 font-medium mb-1.5">📋 启动步骤</p>
+                  <ol className="text-xs text-blue-600 space-y-1 list-decimal list-inside">
                     <li><strong>关闭所有 Chrome 窗口</strong>（包括后台进程）</li>
                     <li>打开命令行（Win+R → cmd），执行以下命令启动 Chrome：
                       <div className="mt-1 bg-white/80 rounded px-2 py-1 font-mono text-[8px] text-blue-800 select-all">
@@ -230,14 +230,14 @@ export default function AiImageGen() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] text-gray-500 block mb-1">CDP 调试端口</label>
+                  <label className="text-xs text-gray-500 block mb-1">CDP 调试端口</label>
                   <input
                     type="number"
                     value={configInput.cdp_port}
                     onChange={e => setConfigInput({ ...configInput, cdp_port: parseInt(e.target.value) || 9222 })}
                     className="w-32 text-xs border border-purple-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-200 font-mono"
                   />
-                  <p className="text-[10px] text-gray-400 mt-1">默认 9222，与启动 Chrome 时的 --remote-debugging-port 参数一致</p>
+                  <p className="text-xs text-gray-400 mt-1">默认 9222，与启动 Chrome 时的 --remote-debugging-port 参数一致</p>
                 </div>
 
                 {testResult && (
@@ -262,12 +262,12 @@ export default function AiImageGen() {
             ) : configInput.mode === 'web' ? (
               <div className="space-y-3">
                 <div className="bg-amber-50 border border-amber-100 rounded-lg p-3">
-                  <p className="text-[10px] text-amber-700 font-medium mb-2">🔐 认证方式（选其一即可）</p>
-                  <p className="text-[9px] text-amber-600">需要配置代理才能使用此模式，推荐使用「浏览器连接」模式</p>
+                  <p className="text-xs text-amber-700 font-medium mb-2">🔐 认证方式（选其一即可）</p>
+                  <p className="text-xs text-amber-600">需要配置代理才能使用此模式，推荐使用「浏览器连接」模式</p>
                 </div>
                 
                 <div>
-                  <label className="text-[10px] text-gray-500 block mb-1">
+                  <label className="text-xs text-gray-500 block mb-1">
                     Session Cookie {config.session_token_set ? '(已设置 ✓)' : '(未设置)'}
                   </label>
                   <input
@@ -280,7 +280,7 @@ export default function AiImageGen() {
                 </div>
 
                 <div className="border-t border-gray-100 pt-3">
-                  <label className="text-[10px] text-gray-500 block mb-1">
+                  <label className="text-xs text-gray-500 block mb-1">
                     或 Access Token {config.access_token_set ? '(已设置 ✓)' : '(未设置)'}
                   </label>
                   <input
@@ -293,7 +293,7 @@ export default function AiImageGen() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] text-gray-500 block mb-1">代理地址</label>
+                  <label className="text-xs text-gray-500 block mb-1">代理地址</label>
                   <input
                     type="text"
                     value={configInput.proxy}
@@ -325,7 +325,7 @@ export default function AiImageGen() {
               <div className="space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">API Key {config.api_key_set ? '(已设置)' : '(未设置)'}</label>
+                    <label className="text-xs text-gray-500 block mb-1">API Key {config.api_key_set ? '(已设置)' : '(未设置)'}</label>
                     <input
                       type="password"
                       value={configInput.api_key}
@@ -335,7 +335,7 @@ export default function AiImageGen() {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">API 地址</label>
+                    <label className="text-xs text-gray-500 block mb-1">API 地址</label>
                     <input
                       type="text"
                       value={configInput.base_url}
@@ -345,7 +345,7 @@ export default function AiImageGen() {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">模型</label>
+                    <label className="text-xs text-gray-500 block mb-1">模型</label>
                     <select
                       value={configInput.model}
                       onChange={e => setConfigInput({ ...configInput, model: e.target.value })}
@@ -357,7 +357,7 @@ export default function AiImageGen() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">质量</label>
+                    <label className="text-xs text-gray-500 block mb-1">质量</label>
                     <select
                       value={configInput.quality}
                       onChange={e => setConfigInput({ ...configInput, quality: e.target.value })}
@@ -386,7 +386,7 @@ export default function AiImageGen() {
                 <button
                   key={i}
                   onClick={() => setPrompt(t.prompt)}
-                  className="text-[10px] px-2.5 py-1 rounded-lg bg-gray-50 text-gray-600 hover:bg-purple-50 hover:text-purple-700 border border-gray-100 hover:border-purple-200 transition-colors"
+                  className="text-xs px-2.5 py-1 rounded-lg bg-gray-50 text-gray-600 hover:bg-purple-50 hover:text-purple-700 border border-gray-100 hover:border-purple-200 transition-colors"
                 >
                   {t.label}
                 </button>
@@ -432,7 +432,7 @@ export default function AiImageGen() {
               )}
             </div>
             {selectedRefImage && (
-              <p className="text-[10px] text-purple-500 mt-1">已选择参考图片: {selectedRefImage}</p>
+              <p className="text-xs text-purple-500 mt-1">已选择参考图片: {selectedRefImage}</p>
             )}
           </div>
 
@@ -475,12 +475,12 @@ export default function AiImageGen() {
                     )}
                     {img.url && (
                       <div className="absolute bottom-0 left-0 right-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex justify-center gap-2 py-1.5">
-                        <a href={img.url} download className="text-white text-[10px] flex items-center gap-0.5 hover:text-purple-200">
+                        <a href={img.url} download className="text-white text-xs flex items-center gap-0.5 hover:text-purple-200">
                           <Download className="w-3 h-3" />下载
                         </a>
                         <button
                           onClick={() => handleUseAsRef(img.filepath)}
-                          className="text-white text-[10px] flex items-center gap-0.5 hover:text-purple-200"
+                          className="text-white text-xs flex items-center gap-0.5 hover:text-purple-200"
                         >
                           <Wand2 className="w-3 h-3" />作为参考图
                         </button>
@@ -500,7 +500,7 @@ export default function AiImageGen() {
             <Image className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-bold text-morandi-text">生成历史</span>
             {history.length > 0 && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-50 text-purple-600">{history.length} 张</span>
+              <span className="text-xs px-1.5 py-0.5 rounded bg-purple-50 text-purple-600">{history.length} 张</span>
             )}
           </div>
           <button onClick={loadHistory} className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center gap-1">
@@ -525,7 +525,7 @@ export default function AiImageGen() {
                 </div>
                 <button
                   onClick={() => handleUseAsRef(img.filepath || '')}
-                  className="absolute bottom-1 left-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-purple-600 text-white text-[9px] py-0.5 rounded text-center hover:bg-purple-700"
+                  className="absolute bottom-1 left-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-purple-600 text-white text-xs py-0.5 rounded text-center hover:bg-purple-700"
                 >
                   作为参考图
                 </button>

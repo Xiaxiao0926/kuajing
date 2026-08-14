@@ -314,7 +314,7 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
                   >
                     <span>{expanded ? <ChevronDown className="h-3 w-3 text-gray-400" /> : <ChevronRight className="h-3 w-3 text-gray-400" />}</span>
                     <span className="flex-1 truncate text-left font-medium text-workspace-text">{stripEmoji(phase.title)}</span>
-                    <span className="text-[11px] text-workspace-text-secondary">{phaseDone}/{phase.nodes.length}</span>
+                    <span className="text-xs text-workspace-text-secondary">{phaseDone}/{phase.nodes.length}</span>
                   </button>
                   {expanded && (
                     <div className="ml-3 space-y-0.5 border-l border-workspace-border pl-1.5">

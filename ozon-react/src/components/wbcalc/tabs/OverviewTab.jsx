@@ -49,9 +49,9 @@ export function OverviewTab({ orders, settings }) {
       <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
         {metrics.map((m) => (
           <div key={m.label} className={`rounded-xl border border-gray-100 ${m.bg} p-3`}>
-            <p className="text-[10px] text-gray-500 mb-0.5">{m.label}</p>
+            <p className="text-xs text-gray-500 mb-0.5">{m.label}</p>
             <p className={`text-lg font-bold ${m.color}`}>{m.value}</p>
-            {m.sub && <p className="text-[10px] text-gray-400">{m.sub}</p>}
+            {m.sub && <p className="text-xs text-gray-400">{m.sub}</p>}
           </div>
         ))}
       </div>
@@ -75,7 +75,7 @@ export function OverviewTab({ orders, settings }) {
                 <span className="text-xs text-gray-600 w-32 truncate">{status}</span>
                 <div className="flex-1 bg-gray-100 rounded-full h-5 relative">
                   <div className="bg-blue-400 h-5 rounded-full" style={{ width: `${(count / totalOrders) * 100}%` }} />
-                  <span className="absolute inset-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-gray-700">{count}</span>
+                  <span className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-semibold text-gray-700">{count}</span>
                 </div>
               </div>
             ))}
@@ -89,7 +89,7 @@ export function OverviewTab({ orders, settings }) {
                 <span className="text-xs text-gray-600 w-40 truncate">{route}</span>
                 <div className="flex-1 bg-gray-100 rounded-full h-5 relative">
                   <div className="bg-orange-400 h-5 rounded-full" style={{ width: `${(count / totalOrders) * 100}%` }} />
-                  <span className="absolute inset-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-gray-700">{count}</span>
+                  <span className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-semibold text-gray-700">{count}</span>
                 </div>
               </div>
             ))}

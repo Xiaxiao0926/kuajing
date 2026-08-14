@@ -99,7 +99,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
           step="any"
           className="w-full text-sm text-morandi-text border border-gray-200 rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-orange-200 focus:border-orange-300 bg-white"
         />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400">{unit}</span>
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">{unit}</span>
       </div>
     </div>
   )
@@ -153,10 +153,10 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
                   form.commissionAutoMatched ? 'border-orange-300 bg-orange-50/50' : 'border-gray-200'
                 }`}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400">%</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">%</span>
             </div>
             {form.commissionAutoMatched && (
-              <p className="text-[10px] text-orange-600 mt-0.5">✓ 已从佣金表自动匹配</p>
+              <p className="text-xs text-orange-600 mt-0.5">✓ 已从佣金表自动匹配</p>
             )}
           </div>
         </div>
@@ -308,12 +308,12 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
             <p className="text-xs font-semibold text-gray-600">物流计算</p>
             {logisticsCalc?.parcels.map((p, i) => (
               <div key={i} className="space-y-0.5">
-                <p className="text-[11px] font-semibold text-gray-600">包裹 #{p.parcelIndex}</p>
-                {p.steps.map((s, j) => <p key={j} className="text-[11px] text-gray-500 pl-3">{s}</p>)}
+                <p className="text-xs font-semibold text-gray-600">包裹 #{p.parcelIndex}</p>
+                {p.steps.map((s, j) => <p key={j} className="text-xs text-gray-500 pl-3">{s}</p>)}
               </div>
             ))}
             <p className="text-xs font-semibold text-gray-600 mt-2">利润计算</p>
-            {profitCalc.steps.map((s, i) => <p key={i} className="text-[11px] text-gray-500 pl-3">{s}</p>)}
+            {profitCalc.steps.map((s, i) => <p key={i} className="text-xs text-gray-500 pl-3">{s}</p>)}
           </div>
         )}
 

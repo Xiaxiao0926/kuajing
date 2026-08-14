@@ -65,7 +65,7 @@ export default function WBCalc() {
             </div>
             <div>
               <h3 className="text-base font-bold text-orange-700">WB跨境利润与物流费用核算</h3>
-              <p className="text-[10px] text-orange-600">DPX深圳标准 · 费率生效 2026-02-09 · 按实际重量每100g向上取整</p>
+              <p className="text-xs text-orange-600">DPX深圳标准 · 费率生效 2026-02-09 · 按实际重量每100g向上取整</p>
             </div>
           </div>
           <div className="flex items-center gap-3 text-xs">

@@ -11,10 +11,10 @@ const PRICE_FILE = getDataUrl('各供应商起订量及价格清单表.xlsx')
 const STORAGE_KEY = 'cost-quote-data'
 
 const CATEGORY_COLORS = {
-  '发膜': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', accent: 'bg-purple-500' },
-  '精油': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', accent: 'bg-green-500' },
-  '吹风机': { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', accent: 'bg-rose-500' },
-  '枕头': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', accent: 'bg-blue-500' },
+  '发膜': { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-text', border: 'border-workspace-border', accent: 'bg-workspace-surface-subtle0' },
+  '精油': { bg: 'bg-workspace-success-soft', text: 'text-workspace-success', border: 'border-green-200', accent: 'bg-workspace-success-soft0' },
+  '吹风机': { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-text', border: 'border-rose-200', accent: 'bg-workspace-surface-subtle0' },
+  '枕头': { bg: 'bg-workspace-surface-subtle', text: 'text-workspace-primary', border: 'border-workspace-border', accent: 'bg-workspace-surface-subtle0' },
 }
 
 const FIELDS = [
@@ -86,17 +86,17 @@ function EditModal({ item, onSave, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-white border-b border-workspace-border px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <h3 className="text-sm font-semibold text-morandi-text flex items-center gap-2">
             <DollarSign className="w-4 h-4 text-morandi-primary" />
             {item.id ? '编辑报价' : '新增报价'}
           </h3>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg"><X className="w-4 h-4 text-gray-400" /></button>
+          <button onClick={onClose} className="p-1 hover:bg-workspace-surface-subtle rounded-lg"><X className="w-4 h-4 text-workspace-text-tertiary" /></button>
         </div>
         <div className="p-6 space-y-3">
           {FIELDS.map(f => (
             <div key={f.key}>
-              <label className="text-[11px] font-medium text-morandi-text-light mb-1 block">
+              <label className="text-xs font-medium text-morandi-text-light mb-1 block">
                 {f.label}{f.required && <span className="text-red-400 ml-0.5">*</span>}
               </label>
               {f.type === 'textarea' ? (
@@ -104,21 +104,21 @@ function EditModal({ item, onSave, onClose }) {
                   value={form[f.key] || ''}
                   onChange={e => update(f.key, e.target.value)}
                   rows={3}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary resize-none"
+                  className="w-full text-xs border border-workspace-border rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary resize-none"
                 />
               ) : (
                 <input
                   type="text"
                   value={form[f.key] || ''}
                   onChange={e => update(f.key, e.target.value)}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary"
+                  className="w-full text-xs border border-workspace-border rounded-lg px-3 py-2 focus:outline-none focus:border-morandi-primary"
                 />
               )}
             </div>
           ))}
         </div>
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 flex justify-end gap-2 rounded-b-2xl z-10">
-          <button onClick={onClose} className="px-4 py-2 text-xs text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">取消</button>
+        <div className="sticky bottom-0 bg-white border-t border-workspace-border px-6 py-4 flex justify-end gap-2 rounded-b-2xl z-10">
+          <button onClick={onClose} className="px-4 py-2 text-xs text-workspace-text-secondary bg-workspace-surface-subtle rounded-lg hover:bg-gray-200">取消</button>
           <button onClick={() => onSave(form)} className="px-4 py-2 text-xs text-white bg-morandi-primary rounded-lg hover:bg-morandi-primary/90 flex items-center gap-1">
             <Save className="w-3 h-3" />保存
           </button>
@@ -277,13 +277,13 @@ export default function CostQuote() {
             <DollarSign className="w-5 h-5 text-morandi-primary" />
             成本与报价锁定
           </h2>
-          <p className="text-[10px] text-morandi-text-light mt-0.5">数据来源：各供应商起订量及价格清单表 · 支持手动编辑与新增</p>
+          <p className="text-xs text-morandi-text-light mt-0.5">数据来源：各供应商起订量及价格清单表 · 支持手动编辑与新增</p>
         </div>
         <div className="flex items-center gap-2">
           <select
             value={filterCat}
             onChange={e => setFilterCat(e.target.value)}
-            className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-morandi-primary"
+            className="text-xs border border-workspace-border rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-morandi-primary"
           >
             <option value="all">全部类别</option>
             {categories.map(cat => (
@@ -293,7 +293,7 @@ export default function CostQuote() {
           <select
             value={filterSupplier}
             onChange={e => setFilterSupplier(e.target.value)}
-            className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-morandi-primary"
+            className="text-xs border border-workspace-border rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-morandi-primary"
           >
             <option value="all">全部供应商</option>
             {suppliers.map(s => (
@@ -308,7 +308,7 @@ export default function CostQuote() {
           </button>
           <button
             onClick={handleReset}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-workspace-text-secondary bg-workspace-surface-subtle rounded-lg hover:bg-gray-200"
             title="重置为原始文件数据"
           >
             <RotateCcw className="w-3 h-3" />重置
@@ -320,39 +320,39 @@ export default function CostQuote() {
         <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100">
           <div className="flex items-center gap-1.5 mb-2">
             <Factory className="w-3.5 h-3.5 text-blue-500" />
-            <span className="text-[10px] font-medium text-blue-600">供应商数</span>
+            <span className="text-xs font-medium text-workspace-text-secondary">供应商数</span>
           </div>
-          <div className="text-2xl font-bold text-blue-700">{suppliers.length}</div>
-          <div className="text-[9px] text-blue-400 mt-0.5">家供应商报价</div>
+          <div className="text-2xl font-bold text-workspace-primary">{suppliers.length}</div>
+          <div className="text-xs text-blue-400 mt-0.5">家供应商报价</div>
         </div>
         <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-4 border border-purple-100">
           <div className="flex items-center gap-1.5 mb-2">
             <Tag className="w-3.5 h-3.5 text-purple-500" />
-            <span className="text-[10px] font-medium text-purple-600">产品类别</span>
+            <span className="text-xs font-medium text-workspace-text-secondary">产品类别</span>
           </div>
-          <div className="text-2xl font-bold text-purple-700">{categories.length}</div>
-          <div className="text-[9px] text-purple-400 mt-0.5">{categories.join(' / ')}</div>
+          <div className="text-2xl font-bold text-workspace-text">{categories.length}</div>
+          <div className="text-xs text-purple-400 mt-0.5">{categories.join(' / ')}</div>
         </div>
         <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl p-4 border border-green-100">
           <div className="flex items-center gap-1.5 mb-2">
             <Scale className="w-3.5 h-3.5 text-green-500" />
-            <span className="text-[10px] font-medium text-green-600">报价条目</span>
+            <span className="text-xs font-medium text-workspace-success">报价条目</span>
           </div>
-          <div className="text-2xl font-bold text-green-700">{items.length}</div>
-          <div className="text-[9px] text-green-400 mt-0.5">含阶梯价格</div>
+          <div className="text-2xl font-bold text-workspace-success">{items.length}</div>
+          <div className="text-xs text-green-400 mt-0.5">含阶梯价格</div>
         </div>
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-amber-100">
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-workspace-border">
           <div className="flex items-center gap-1.5 mb-2">
             <DollarSign className="w-3.5 h-3.5 text-amber-500" />
-            <span className="text-[10px] font-medium text-amber-600">平均瓶成本</span>
+            <span className="text-xs font-medium text-amber-600">平均瓶成本</span>
           </div>
-          <div className="text-2xl font-bold text-amber-700">{avgCost || '—'}</div>
-          <div className="text-[9px] text-amber-400 mt-0.5">元/瓶（基于备注提取）</div>
+          <div className="text-2xl font-bold text-workspace-warning">{avgCost || '—'}</div>
+          <div className="text-xs text-amber-400 mt-0.5">元/瓶（基于备注提取）</div>
         </div>
       </div>
 
       {suppliers.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-white rounded-xl shadow-sm border border-workspace-border p-5">
           <h3 className="text-sm font-semibold text-morandi-text mb-4 flex items-center gap-1.5">
             <Factory className="w-4 h-4 text-morandi-primary" />
             供应商报价对比
@@ -364,18 +364,18 @@ export default function CostQuote() {
               const taxNote = supplier.includes('不含税') ? '（不含税13%）' : supplier.includes('含税') ? '（含税）' : ''
 
               return (
-                <div key={supplier} className="border border-gray-100 rounded-xl overflow-hidden">
-                  <div className="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                <div key={supplier} className="border border-workspace-border rounded-xl overflow-hidden">
+                  <div className="bg-workspace-surface-subtle px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Factory className="w-4 h-4 text-morandi-primary" />
                       <span className="text-sm font-semibold text-morandi-text">{supplier.replace(/（.*）/, '')}</span>
-                      {taxNote && <span className="text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">{taxNote}</span>}
+                      {taxNote && <span className="text-xs text-amber-600 bg-workspace-warning-soft px-1.5 py-0.5 rounded border border-amber-200">{taxNote}</span>}
                     </div>
                     <div className="flex gap-1">
                       {supplierCats.map(cat => {
-                        const c = CATEGORY_COLORS[cat] || { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' }
+                        const c = CATEGORY_COLORS[cat] || { bg: 'bg-workspace-surface-subtle', text: 'text-gray-700', border: 'border-workspace-border' }
                         return (
-                          <span key={cat} className={`px-2 py-0.5 rounded text-[10px] font-medium ${c.bg} ${c.text} border ${c.border}`}>
+                          <span key={cat} className={`px-2 py-0.5 rounded text-xs font-medium ${c.bg} ${c.text} border ${c.border}`}>
                             {cat}
                           </span>
                         )
@@ -385,7 +385,7 @@ export default function CostQuote() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs">
                       <thead>
-                        <tr className="border-b border-gray-100 bg-gray-50/50">
+                        <tr className="border-b border-workspace-border bg-workspace-surface-subtle/50">
                           <th className="text-left py-2 px-4 font-semibold text-morandi-text w-28">产品名称</th>
                           <th className="text-left py-2 px-4 font-semibold text-morandi-text w-20">规格</th>
                           <th className="text-left py-2 px-4 font-semibold text-morandi-text w-20">起订量</th>
@@ -399,7 +399,7 @@ export default function CostQuote() {
                         {supplierItems.map(it => {
                           const cost = extractCostPerBottle(it.notes)
                           return (
-                            <tr key={it.id} className="border-b border-gray-50 hover:bg-gray-50/30">
+                            <tr key={it.id} className="border-b border-gray-50 hover:bg-workspace-surface-subtle/30">
                               <td className="py-2 px-4 font-medium text-morandi-text">{it.productName || '—'}</td>
                               <td className="py-2 px-4 text-morandi-text-light">{it.spec || '—'}</td>
                               <td className="py-2 px-4 text-morandi-text-light">{it.moq || '—'}</td>
@@ -414,7 +414,7 @@ export default function CostQuote() {
                                 <div className="flex items-center gap-0.5">
                                   <button
                                     onClick={() => setEditItem(it)}
-                                    className="p-1 hover:bg-blue-50 rounded text-gray-300 hover:text-blue-500 transition-colors"
+                                    className="p-1 hover:bg-workspace-surface-subtle rounded text-gray-300 hover:text-blue-500 transition-colors"
                                     title="编辑"
                                   >
                                     <Pencil className="w-3 h-3" />
@@ -435,14 +435,14 @@ export default function CostQuote() {
                     </table>
                   </div>
                   {supplierItems.some(it => it.notes) && (
-                    <div className="px-4 py-3 bg-gray-50/50 border-t border-gray-100">
+                    <div className="px-4 py-3 bg-workspace-surface-subtle/50 border-t border-workspace-border">
                       <div className="space-y-1.5">
                         {supplierItems.filter(it => it.notes).map(it => (
                           <div key={it.id} className="flex items-start gap-2">
                             <FileText className="w-3 h-3 text-gray-300 mt-0.5 flex-shrink-0" />
                             <div>
-                              <span className="text-[10px] text-gray-400">{it.productName} {it.spec} · {it.priceCondition}:</span>
-                              <span className="text-[10px] text-morandi-text ml-1">{it.notes}</span>
+                              <span className="text-xs text-workspace-text-tertiary">{it.productName} {it.spec} · {it.priceCondition}:</span>
+                              <span className="text-xs text-morandi-text ml-1">{it.notes}</span>
                             </div>
                           </div>
                         ))}
@@ -456,16 +456,16 @@ export default function CostQuote() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+      <div className="bg-white rounded-xl shadow-sm border border-workspace-border p-5">
         <h3 className="text-sm font-semibold text-morandi-text mb-4 flex items-center gap-1.5">
           <Package className="w-4 h-4 text-morandi-primary" />
           全部报价明细
-          <span className="text-[10px] text-morandi-text-light font-normal ml-1">({filtered.length} 条)</span>
+          <span className="text-xs text-morandi-text-light font-normal ml-1">({filtered.length} 条)</span>
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="border-b border-gray-100">
+              <tr className="border-b border-workspace-border">
                 <th className="text-left py-2 px-3 font-semibold text-morandi-text">供应商</th>
                 <th className="text-left py-2 px-3 font-semibold text-morandi-text">类别</th>
                 <th className="text-left py-2 px-3 font-semibold text-morandi-text">产品名称</th>
@@ -480,12 +480,12 @@ export default function CostQuote() {
             <tbody>
               {filtered.map(it => {
                 const cost = extractCostPerBottle(it.notes)
-                const c = CATEGORY_COLORS[it.category] || { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' }
+                const c = CATEGORY_COLORS[it.category] || { bg: 'bg-workspace-surface-subtle', text: 'text-gray-700', border: 'border-workspace-border' }
                 return (
-                  <tr key={it.id} className="border-b border-gray-50 hover:bg-gray-50/30">
+                  <tr key={it.id} className="border-b border-gray-50 hover:bg-workspace-surface-subtle/30">
                     <td className="py-2 px-3 font-medium text-morandi-text max-w-[140px] truncate">{it.supplier}</td>
                     <td className="py-2 px-3">
-                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${c.bg} ${c.text} border ${c.border}`}>
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${c.bg} ${c.text} border ${c.border}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${c.accent || 'bg-gray-400'}`} />
                         {it.category}
                       </span>
@@ -502,7 +502,7 @@ export default function CostQuote() {
                     </td>
                     <td className="py-2 px-3">
                       <div className="flex items-center gap-0.5">
-                        <button onClick={() => setEditItem(it)} className="p-1 hover:bg-blue-50 rounded text-gray-300 hover:text-blue-500 transition-colors" title="编辑">
+                        <button onClick={() => setEditItem(it)} className="p-1 hover:bg-workspace-surface-subtle rounded text-gray-300 hover:text-blue-500 transition-colors" title="编辑">
                           <Pencil className="w-3 h-3" />
                         </button>
                         <button onClick={() => handleDelete(it.id)} className="p-1 hover:bg-red-50 rounded text-gray-300 hover:text-red-400 transition-colors" title="删除">

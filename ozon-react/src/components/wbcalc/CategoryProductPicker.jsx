@@ -122,8 +122,8 @@ export function CategoryProductPicker({ value, onChange, compact = false }) {
                   className="w-full text-left px-3 py-1.5 hover:bg-orange-50 border-b border-gray-100 last:border-0"
                 >
                   <span className="text-xs text-gray-700">{it.product}</span>
-                  <span className="text-[10px] text-gray-400 ml-2">{it.category}</span>
-                  <span className="text-[10px] text-orange-600 ml-2 font-semibold">{it.commission}%</span>
+                  <span className="text-xs text-gray-400 ml-2">{it.category}</span>
+                  <span className="text-xs text-orange-600 ml-2 font-semibold">{it.commission}%</span>
                 </button>
               ))}
             </div>
@@ -131,7 +131,7 @@ export function CategoryProductPicker({ value, onChange, compact = false }) {
         </div>
       )}
       {valueCategory && productsInCategory.length > 0 && (
-        <p className="text-[10px] text-gray-400">
+        <p className="text-xs text-gray-400">
           当前类目「{valueCategory}」共 {productsInCategory.length} 个商品
           {productsInCategory[0] && (
             <>，佣金范围 {Math.min(...productsInCategory.map((p) => p.commission))}%-{Math.max(...productsInCategory.map((p) => p.commission))}%</>

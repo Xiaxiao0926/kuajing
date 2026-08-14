@@ -132,7 +132,7 @@ export function OrdersTab({ orders, tariffs, settings, onSaveOrders }) {
                         <td className="px-2 py-1.5 border-b border-gray-100">
                           <div className="flex gap-1 flex-wrap">
                             {labels.map((lbl, j) => (
-                              <span key={j} className={`text-[9px] px-1.5 py-0.5 rounded border ${labelColorMap[lbl.color] || labelColorMap.gray}`}>
+                              <span key={j} className={`text-xs px-1.5 py-0.5 rounded border ${labelColorMap[lbl.color] || labelColorMap.gray}`}>
                                 {lbl.text}
                               </span>
                             ))}
