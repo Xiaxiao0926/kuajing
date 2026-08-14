@@ -25,7 +25,6 @@ cookies.json
 
 # 二进制与大文件（GitHub单文件100MB限制）
 *.exe
-cloudflared.exe
 
 # 临时调试输出
 _tmp_*
@@ -48,3 +47,7 @@ env/
 
 # Streamlit缓存
 .streamlit/
+
+# 审计：报告入库，仅原始/临时产物忽略
+_audit/raw/
+_audit/tmp/
