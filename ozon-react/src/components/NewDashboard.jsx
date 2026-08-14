@@ -7,7 +7,6 @@ import HairMaskSection from './dashboard/sections/HairMaskSection'
 import HairSpraySection from './dashboard/sections/HairSpraySection'
 import GlovesSection from './dashboard/sections/GlovesSection'
 import InsightsSections from './dashboard/sections/InsightsSections'
-import ProductScoringSection from './dashboard/sections/ProductScoringSection'
 
 /**
  * 市场调研面板（编排层）
@@ -24,15 +23,12 @@ export default function NewDashboard({ data, kpis }) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center">
-            <div className="text-6xl mb-6">📊</div>
-            <h2 className="text-2xl font-semibold text-morandi-text mb-3">新版市场分析面板</h2>
-            <p className="text-morandi-text-light">请上传Ozon分析报告数据开始分析</p>
-          </div>
+      <div className="flex items-center justify-center min-h-[80vh]">
+        <div className="text-center">
+          <div className="text-6xl mb-6">📊</div>
+          <h2 className="text-2xl font-semibold text-morandi-text mb-3">新版市场分析面板</h2>
+          <p className="text-morandi-text-light">请上传Ozon分析报告数据开始分析</p>
         </div>
-        <ProductScoringSection />
       </div>
     )
   }
@@ -81,7 +77,6 @@ export default function NewDashboard({ data, kpis }) {
         <GlovesSection stats={stats} data={data} CC={CC} />
       )}
       <InsightsSections stats={stats} data={data} />
-      <ProductScoringSection />
     </div>
   )
 }
