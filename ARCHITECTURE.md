@@ -172,8 +172,9 @@ WB 核算两套实现**同读 config/wb_tariffs.json**，`npm run test:sync` 对
   → scripts/scoring-xlsx.js（唯一解析实现 → canonical candidates，T4-1B §1.1 契约）
   → scripts/build-scoring-input.js → ozon-react/public/data/scoring_candidates.json
 
-市场分析/市场bsr/*.xlsx（19 域 ~19000 行明细）
-  → scripts/build-bsr-benchmark.js（聚合统计：类型/域 P10-P90；只入库聚合，不存明细）
+市场分析/市场bsr/*.xlsx（19 域 ~19000 行明细；原始 xlsx 当前仍保留在 Git 仓库中，数据公开风险见 TD-19）
+  → scripts/build-bsr-benchmark.js（聚合统计：类型/域 P10-P90。浏览器运行资产仅消费聚合后的
+    bsr_market_benchmarks.json，不把 19,000 行明细复制进运行时 JSON）
   → ozon-react/public/data/bsr_market_benchmarks.json（855 类型 / 19 域）
 
 config/scoring_rules.json（唯一规则源：λ=0.5、六维权重 25/15/10/20/15/15、评级线、Gate、SupplyGap、Decision）

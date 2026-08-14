@@ -142,7 +142,9 @@ feature branch（fix/ feat/ docs/ refactor/ 前缀）
 - **更新候选数据**：替换 `选品/跨境项目产品线扩展计划.xlsx` 后运行
   `node scripts/build-scoring-input.js` → 重新生成 `ozon-react/public/data/scoring_candidates.json`；
   随后必跑 `npm run test:scoring`（适配层回归锁定分布，期望值需随新数据复核）+ `node scripts/t4-score-audit.js`。
-- **重建 BSR 基准**：更新 `市场分析/市场bsr/*.xlsx` 后运行 `node scripts/build-bsr-benchmark.js`（只入库聚合统计，不存 19000 行明细）；
+- **重建 BSR 基准**：更新 `市场分析/市场bsr/*.xlsx` 后运行 `node scripts/build-bsr-benchmark.js`
+  （浏览器运行资产仅消费聚合后的 `bsr_market_benchmarks.json`，不把 19,000 行明细复制进运行时 JSON；
+  原始 BSR xlsx 当前仍保留在 Git 仓库中，数据公开风险见 TD-19）；
   同样重跑审计确认映射覆盖率与维度验证矩阵。
 - **评分规则**：只改 `config/scoring_rules.json`（唯一事实源）；`npm run test:sync` 校验生成物一致性；
   λ 越界（>1）或六维权重和≠100 会被 sync-config fail-close 拒绝。
