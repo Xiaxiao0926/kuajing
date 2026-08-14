@@ -6,7 +6,8 @@
     "start": "node server.js",
     "dev": "node node_modules/nodemon/bin/nodemon.js server.js --watch server.js --watch analyze_with_cleaned_data.js --watch config.js --watch market_data_processor.js",
     "sync:config": "node scripts/sync-config.js",
-    "test": "node scripts/sync-config.js && node --experimental-vm-modules ozon-react/src/utils/wbEngine.test.mjs && npm run test:python",
+    "test": "node scripts/sync-config.js && node --experimental-vm-modules ozon-react/src/utils/wbEngine.test.mjs && node --experimental-vm-modules ozon-react/src/utils/scoring/scoringEngine.test.mjs && npm run test:python",
+    "test:scoring": "node --experimental-vm-modules ozon-react/src/utils/scoring/scoringEngine.test.mjs",
     "test:python": "node scripts/run-wb-py-test.js",
     "test:golden": "node scripts/sync-config.js && node scripts/run-golden-tests.js",
     "test:sync": "node scripts/sync-config.js && node scripts/verify_sync.js"
