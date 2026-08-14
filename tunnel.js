@@ -1,10 +1,20 @@
-// 优先从项目内 node_modules 加载 localtunnel，回退到全局安装
+/**
+ * 坪山优选价格分析 - 公网穿透（可选工具）
+ *
+ * localtunnel 为可选依赖：未安装时打印指引并正常退出（exit 0），
+ * 不影响主服务（server.js 独立运行）。
+ * 安装可选依赖：npm install localtunnel
+ */
 let localtunnel;
 try {
     localtunnel = require('localtunnel');
 } catch (e) {
-    console.error('未找到 localtunnel 模块。请执行: npm install localtunnel');
-    process.exit(1);
+    console.log('========================================');
+    console.log('  Tunnel feature unavailable.');
+    console.log('  Install optional dependency: npm install localtunnel');
+    console.log('  (主服务 server.js 不受影响，可直接 npm start)');
+    console.log('========================================');
+    process.exit(0);
 }
 
 (async () => {
