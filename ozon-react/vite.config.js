@@ -204,14 +204,11 @@ export default defineConfig({
   plugins: [
     react(),
     {
-      // 构建前把 config/*.json 同步为 src/generated/*.js（唯一事实源）
+      // 构建前把 config/*.json 同步为 src/generated/*.js（唯一事实源，fail-close）
+      // 同步/校验失败必须 throw：禁止拿着 stale generated 配置继续出包。
       name: 'config-sync',
       buildStart() {
-        try {
-          execFileSync('node', [path.resolve(__dirname, '../scripts/sync-config.js')], { stdio: 'inherit' })
-        } catch (e) {
-          console.error('[config-sync] 同步失败，构建继续使用已有 generated 文件:', e.message)
-        }
+        execFileSync('node', [path.resolve(__dirname, '../scripts/sync-config.js')], { stdio: 'inherit' })
       },
     },
     ozonDataSyncPlugin(),

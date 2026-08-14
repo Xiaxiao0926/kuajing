@@ -25,6 +25,6 @@
     { "input": { "actualWeightG": 1050 }, "expected": { "billableWeightKg": 1.1, "feeCny": 55.30 } },
     { "input": { "actualWeightG": 2000 }, "expected": { "billableWeightKg": 2.0, "feeCny": 94.00 } },
     { "input": { "actualWeightG": 20000 }, "expected": { "billableWeightKg": 20.0, "feeCny": 868.00 } },
-    { "input": { "actualWeightG": 20001 }, "expected": { "feeCny": null } }
+    { "input": { "actualWeightG": 20001 }, "expected": { "billableWeightKg": null, "feeCny": null } }
   ]
 }

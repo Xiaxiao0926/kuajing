@@ -25,7 +25,8 @@
 | TD-14 | Ozon 两个 Tab 价格语义不一致：SingleTab 输入"售价"直接计算（不乘 0.6），MultiTab 输入"上架价"×0.6 得折后价 | `ozon-react/src/components/OzonCalc.jsx` / `ozonEngine.js` calcRow/calcChannelProfit | 中：同一产品两口径得出不同利润 | 需求方确认是否统一口径后再立项 |
 | TD-16 | Ozon 渠道表 3 份重复定义已收敛为 1 份（`config/ozon_channels.json` → `ozonEngine.js` adapter）；但 `PricingCalc.jsx`、`ShippingCalc.jsx` 两个旧组件仍内嵌自己的渠道数组且未被 App.jsx 引用（死代码） | `ozon-react/src/components/PricingCalc.jsx` / `ShippingCalc.jsx` | 低：死代码不参与计算，但误导 | T3 拆分时删除或改为消费引擎导出 |
 | TD-17 | Big 渠道重量下限代码为 2kg、原表为 2.001kg；Budget 下限代码 0.5kg、原表 0.501kg——边界表述差异，T2 按"行为冻结"原则保留代码现值 | `config/ozon_channels.json` | 低：0.001kg 边界无实际影响 | 需求方确认后统一（改 config 一处即可） |
-| TD-15 | ✅ 已定性（2026-08-14 Gate 0 核验）：代码数值正确（96 即元/kg），仅配置标签 `rateUnit:'per100g'` 与 UI 文案错误。核验报告：`T2-Gate0-CEL-HK核验报告.md`。T2 迁移按 **96元/kg + 百克进位** 存储 | `ozon-react/src/utils/ozonEngine.js` / `OzonCalc.jsx` | 已降级：迁移时修正语义即可 | T2-2 建 config 时修语义与 UI 文案 |
+| TD-15 | ✅ 已解决（T2+hardening）：config 语义正确（96元/kg+100g进位）；UI 单位文案已修正为「96元/KG · 100g进位」（OzonCalc.jsx）；adapter 中 `rateUnit:'per100g'` 仅作 calcShipping 内部分支标志并加注释说明 | — | — | 关闭 |
+| TD-18 | `vite.config.js` 数据同步层仍写死 `D:/ozon/市场分析`、`D:/ozon/市场分析/persisted-data.json` 绝对路径（T0 只处理了 server.js/config.js 与 Python 端） | `ozon-react/vite.config.js` | 中：换机器/换盘后 React dev 数据同步失效 | 单独任务：改为环境变量 OZON_DATA_DIR + 相对回退（不做，仅登记） |
 
 ---
 

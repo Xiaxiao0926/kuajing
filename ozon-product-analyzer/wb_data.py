@@ -2,9 +2,11 @@
 WB跨境核算 - 数据存储管理
 本地JSON持久化、CSV导入导出、备份恢复。
 
-配置唯一事实源：D:/ozon/config/*.json（wb_tariffs.json / settings.json）
-- 经环境变量 CONFIG_DIR 指定；默认相对路径 ../../config（仓库根/config）
-- wb_data/ 目录仅保留运行时数据（skus.json / orders.json / 备份）
+配置唯一事实源：config/wb_tariffs.json 与 config/settings.json（fail-fast）
+- 经环境变量 CONFIG_DIR 指定；默认相对路径 ../config（仓库根/config）
+- 模块导入时严格加载：文件缺失/JSON损坏/结构非法 → 抛出 RuntimeError，
+  不静默回退到任何内嵌数值（避免第二套费率数字）。
+- wb_data/ 目录仅保留运行时数据（skus.json / orders.json，宽容加载）。
 """
 import json
 import os
@@ -31,161 +33,59 @@ ORDERS_FILE = os.path.join(WB_DATA_DIR, 'orders.json')
 
 
 # ----------------------
-# 默认数据（兜底：config 文件缺失/损坏时使用；内容必须与 config 一致）
-# 注意：唯一事实源是 config/wb_tariffs.json 与 config/settings.json；
-#       下方常量仅为加载失败时的最后防线，改费率请改 config 文件。
+# 配置严格加载（fail-fast，唯一事实源）
 # ----------------------
-DEFAULT_SETTINGS = {
-    'base_currency': 'CNY',
-    'rub_per_cny': 12,
-    'exchange_rate_effective_from': '2026-08-11',
-    'tax_method': 'none',
-    'tax_rate': 0,
-    'default_route_id': 'DPX-SZ-382822',
-    'default_commission_rate': None,
-    'default_reverse_included': True,
-    'timezone': 'Asia/Shanghai',
-    'profit_margin_threshold': 10,
-    'logistics_ratio_threshold': 30,
-}
+class ConfigError(RuntimeError):
+    """配置文件缺失/损坏/结构非法。"""
 
-DEFAULT_TARIFFS = [
-    {
-        'tariff_id': 'DPX-SZ-382822-20260209',
-        'route_id': 'DPX-SZ-382822',
-        'route_name': 'DPX深圳标准',
-        'warehouse_code': '382822',
-        'origin_city': '深圳',
-        'destination_country': 'RU',
-        'service_level': 'standard',
-        'eta_min_days': 15,
-        'eta_max_days': 30,
-        'weight_rounding_g': 100,
-        'charge_basis': 'actual_weight',
-        'max_weight_kg': 20,
-        'max_sum_dimensions_cm': 200,
-        'max_single_side_cm': 120,
-        'battery_limit_wh': 100,
-        'reverse_to_ru_warehouse_included': True,
-        'effective_from': '2026-02-09',
-        'effective_to': None,
-        'active': True,
-        'source_name': 'DPX运费(1).pdf',
-        'notes': 'DPX深圳标准线路',
-        'tiers': [
-            {'min_weight_kg': 0.1, 'max_weight_kg': 0.3, 'kg_rate_cny': 58, 'fixed_fee_cny': 2},
-            {'min_weight_kg': 0.4, 'max_weight_kg': 20, 'kg_rate_cny': 43, 'fixed_fee_cny': 8},
-        ]
-    },
-    {
-        'tariff_id': 'WB-SE-20260209',
-        'route_id': 'WB-SE',
-        'route_name': 'WB超级经济',
-        'warehouse_code': '',
-        'origin_city': '深圳',
-        'destination_country': 'RU',
-        'service_level': 'economy',
-        'eta_min_days': 15,
-        'eta_max_days': 30,
-        'weight_rounding_g': 100,
-        'charge_basis': 'actual_weight',
-        'max_weight_kg': 20,
-        'max_sum_dimensions_cm': 200,
-        'max_single_side_cm': 115,
-        'battery_limit_wh': 100,
-        'reverse_to_ru_warehouse_included': True,
-        'effective_from': '2026-02-09',
-        'effective_to': None,
-        'active': True,
-        'source_name': 'DPX运费(1).pdf',
-        'notes': 'WB超级经济线路',
-        'tiers': [
-            {'min_weight_kg': 0.1, 'max_weight_kg': 0.3, 'kg_rate_cny': 58, 'fixed_fee_cny': 2},
-            {'min_weight_kg': 0.4, 'max_weight_kg': 20, 'kg_rate_cny': 43, 'fixed_fee_cny': 8},
-        ]
-    },
-    {
-        'tariff_id': 'WB-PLUS-20260209',
-        'route_id': 'WB-PLUS',
-        'route_name': 'WB Plus东莞/珲春',
-        'warehouse_code': '',
-        'origin_city': '东莞',
-        'destination_country': 'RU',
-        'service_level': 'plus',
-        'eta_min_days': 7,
-        'eta_max_days': 7,
-        'weight_rounding_g': 100,
-        'charge_basis': 'actual_weight',
-        'max_weight_kg': 20,
-        'max_sum_dimensions_cm': 200,
-        'max_single_side_cm': 120,
-        'battery_limit_wh': 100,
-        'reverse_to_ru_warehouse_included': True,
-        'effective_from': '2026-02-09',
-        'effective_to': None,
-        'active': True,
-        'source_name': 'DPX运费(1).pdf',
-        'notes': 'WB Plus 快速线路',
-        'tiers': [
-            {'min_weight_kg': 0.1, 'max_weight_kg': 0.3, 'kg_rate_cny': 48, 'fixed_fee_cny': 9},
-            {'min_weight_kg': 0.4, 'max_weight_kg': 20, 'kg_rate_cny': 48, 'fixed_fee_cny': 9},
-        ]
-    },
-    {
-        'tariff_id': 'HK-EXP-20260209',
-        'route_id': 'HK-EXP',
-        'route_name': '香港快线',
-        'warehouse_code': '',
-        'origin_city': '香港',
-        'destination_country': 'RU',
-        'service_level': 'express',
-        'eta_min_days': 10,
-        'eta_max_days': 10,
-        'weight_rounding_g': 100,
-        'charge_basis': 'actual_weight',
-        'max_weight_kg': 20,
-        'max_sum_dimensions_cm': 200,
-        'max_single_side_cm': 60,
-        'battery_limit_wh': 100,
-        'reverse_to_ru_warehouse_included': True,
-        'effective_from': '2026-02-09',
-        'effective_to': None,
-        'active': True,
-        'source_name': 'DPX运费(1).pdf',
-        'notes': '香港快线，单边≤60cm',
-        'tiers': [
-            {'min_weight_kg': 0.1, 'max_weight_kg': 0.3, 'kg_rate_cny': 89, 'fixed_fee_cny': 17},
-            {'min_weight_kg': 0.4, 'max_weight_kg': 20, 'kg_rate_cny': 89, 'fixed_fee_cny': 17},
-        ]
-    },
-    {
-        'tariff_id': 'DG-EXP-20260209',
-        'route_id': 'DG-EXP',
-        'route_name': '东莞快线',
-        'warehouse_code': '',
-        'origin_city': '东莞',
-        'destination_country': 'RU',
-        'service_level': 'express',
-        'eta_min_days': 10,
-        'eta_max_days': 10,
-        'weight_rounding_g': 100,
-        'charge_basis': 'actual_weight',
-        'max_weight_kg': 20,
-        'max_sum_dimensions_cm': 200,
-        'max_single_side_cm': 100,
-        'battery_limit_wh': 100,
-        'reverse_to_ru_warehouse_included': True,
-        'effective_from': '2026-02-09',
-        'effective_to': None,
-        'active': True,
-        'source_name': 'DPX运费(1).pdf',
-        'notes': '东莞快线，单边≤100cm',
-        'tiers': [
-            {'min_weight_kg': 0.1, 'max_weight_kg': 0.3, 'kg_rate_cny': 122, 'fixed_fee_cny': 19},
-            {'min_weight_kg': 0.4, 'max_weight_kg': 20, 'kg_rate_cny': 122, 'fixed_fee_cny': 19},
-        ]
-    },
-]
+
+def _load_config_strict(filepath, label):
+    if not os.path.exists(filepath):
+        raise ConfigError(
+            f'[config] {label} 不存在: {filepath}。'
+            f'唯一事实源 config/ 目录不得缺失；请检查仓库完整性或 CONFIG_DIR 环境变量。'
+        )
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        raise ConfigError(f'[config] {label} JSON 损坏: {filepath} (行{e.lineno}列{e.colno}: {e.msg})') from e
+    except OSError as e:
+        raise ConfigError(f'[config] {label} 读取失败: {filepath}: {e}') from e
+
+
+def _validate_settings_structure(data):
+    required = ['base_currency', 'rub_per_cny', 'exchange_rate_effective_from',
+                'tax_method', 'tax_rate', 'default_route_id', 'timezone',
+                'profit_margin_threshold', 'logistics_ratio_threshold']
+    missing = [k for k in required if k not in data]
+    if missing:
+        raise ConfigError(f'[config] settings.json 缺少必填字段: {missing}')
+    for k in ['rub_per_cny', 'tax_rate', 'profit_margin_threshold', 'logistics_ratio_threshold']:
+        if not isinstance(data[k], (int, float)):
+            raise ConfigError(f'[config] settings.json 字段 {k} 必须为数字, 实际 {data[k]!r}')
+    if data['rub_per_cny'] <= 0:
+        raise ConfigError(f'[config] settings.json rub_per_cny 必须为正数')
+
+
+def _validate_tariffs_structure(data):
+    if not isinstance(data, list) or len(data) == 0:
+        raise ConfigError('[config] wb_tariffs.json 必须为非空数组')
+    for t in data:
+        for k in ['tariff_id', 'route_id', 'effective_from', 'tiers']:
+            if not t.get(k):
+                raise ConfigError(f'[config] wb_tariffs.json 费率 {t.get("tariff_id") or "?"} 缺少字段 {k}')
+        for tier in t['tiers']:
+            for k in ['min_weight_kg', 'max_weight_kg', 'kg_rate_cny', 'fixed_fee_cny']:
+                if not isinstance(tier.get(k), (int, float)):
+                    raise ConfigError(f'[config] wb_tariffs.json {t["tariff_id"]} 区间字段 {k} 非数字')
+
+
+# 模块导入即严格加载（唯一事实源；失败即抛错，绝无第二套数字）
+DEFAULT_SETTINGS = _load_config_strict(SETTINGS_FILE, 'settings.json')
+_validate_settings_structure(DEFAULT_SETTINGS)
+DEFAULT_TARIFFS = _load_config_strict(TARIFFS_FILE, 'wb_tariffs.json')
+_validate_tariffs_structure(DEFAULT_TARIFFS)
 
 CSV_TEMPLATE_COLUMNS = [
     'order_id', 'order_date', 'status', 'sku_id', 'quantity',
@@ -210,6 +110,7 @@ class WBJSONEncoder(json.JSONEncoder):
 
 # ----------------------
 # 通用加载/保存
+# 运行数据（skus/orders）宽容加载；配置数据一律经 _load_config_strict fail-fast
 # ----------------------
 def _load_json(filepath, default):
     if not os.path.exists(filepath):
@@ -232,37 +133,31 @@ def _save_json(filepath, data):
 
 
 # ----------------------
-# 设置
+# 设置（唯一事实源 config/settings.json，fail-fast）
 # ----------------------
 def load_settings():
-    data = _load_json(SETTINGS_FILE, None)
-    if data is None:
-        # 首次：写入默认
-        _save_json(SETTINGS_FILE, DEFAULT_SETTINGS)
-        return DEFAULT_SETTINGS.copy()
-    # 合并默认键（向后兼容）
-    merged = DEFAULT_SETTINGS.copy()
-    merged.update(data)
-    return merged
+    data = _load_config_strict(SETTINGS_FILE, 'settings.json')
+    _validate_settings_structure(data)
+    return data
 
 
 def save_settings(settings):
+    """面板编辑设置 → 写回唯一事实源 config/settings.json（用户显式操作）"""
     settings['updated_at'] = datetime.now().isoformat()
     return _save_json(SETTINGS_FILE, settings)
 
 
 # ----------------------
-# 费率
+# 费率（唯一事实源 config/wb_tariffs.json，fail-fast）
 # ----------------------
 def load_tariffs():
-    data = _load_json(TARIFFS_FILE, None)
-    if data is None:
-        _save_json(TARIFFS_FILE, DEFAULT_TARIFFS)
-        return [t.copy() for t in DEFAULT_TARIFFS]
+    data = _load_config_strict(TARIFFS_FILE, 'wb_tariffs.json')
+    _validate_tariffs_structure(data)
     return data
 
 
 def save_tariffs(tariffs):
+    """面板编辑费率 → 写回唯一事实源 config/wb_tariffs.json（用户显式操作）"""
     return _save_json(TARIFFS_FILE, tariffs)
 
 
@@ -427,26 +322,11 @@ def restore_all(backup):
 
 
 def reset_to_default():
-    """重置为默认配置（仅费率和设置，不清空SKU和订单）"""
-    _save_json(SETTINGS_FILE, DEFAULT_SETTINGS.copy())
-    _save_json(TARIFFS_FILE, [t.copy() for t in DEFAULT_TARIFFS])
-    return True
-
-
-# ----------------------
-# 唯一事实源装载（模块导入时执行）
-# config/*.json 为唯一事实源；上方内嵌常量仅作 config 缺失/损坏时的兜底。
-# ----------------------
-def _apply_config_source():
-    global DEFAULT_SETTINGS, DEFAULT_TARIFFS
-    cfg_settings = _load_json(SETTINGS_FILE, None)
-    if cfg_settings is not None:
-        merged = DEFAULT_SETTINGS.copy()
-        merged.update(cfg_settings)
-        DEFAULT_SETTINGS = merged
-    cfg_tariffs = _load_json(TARIFFS_FILE, None)
-    if cfg_tariffs is not None and isinstance(cfg_tariffs, list) and len(cfg_tariffs) > 0:
-        DEFAULT_TARIFFS = cfg_tariffs
-
-
-_apply_config_source()
+    """重置为仓库基线配置（重新从唯一事实源 config 文件读取并写回，清除运行期编辑）"""
+    settings = _load_config_strict(SETTINGS_FILE, 'settings.json')
+    _validate_settings_structure(settings)
+    tariffs = _load_config_strict(TARIFFS_FILE, 'wb_tariffs.json')
+    _validate_tariffs_structure(tariffs)
+    ok1 = _save_json(SETTINGS_FILE, settings)
+    ok2 = _save_json(TARIFFS_FILE, tariffs)
+    return ok1 and ok2

@@ -38,6 +38,9 @@ export const CHANNEL_GROUPS = channelsData.groups.map((g) => ({
       volumetric: ch.volumetric,
     }
     if (ch.weight_min_kg !== undefined && ch.weight_min_kg !== null) c.weightMin = ch.weight_min_kg
+    // 内部映射：weight_rounding_g=100 → rateUnit='per100g'。
+    // 语义 = "每 kg 费率 + 计费重量按 100g 进位"（Gate0 核验结论），
+    // rateUnit 仅为 calcShipping 的分支标志（引擎内部字段，非展示文案）。
     if (ch.weight_rounding_g !== undefined && ch.weight_rounding_g !== null) c.rateUnit = 'per100g'
     if (ch.vol_div !== undefined && ch.vol_div !== null) c.volDiv = ch.vol_div
     if (ch.vol_threshold_sum_cm !== undefined && ch.vol_threshold_sum_cm !== null) c.volThreshold = ch.vol_threshold_sum_cm

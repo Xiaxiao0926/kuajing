@@ -18,14 +18,15 @@ const GOLDEN_DIR = path.join(__dirname, '..', 'tests', 'golden');
 const importModule = (p) => import(pathToFileURL(p).href);
 
 async function main() {
+  // fail-close：黄金案例是强制护栏，目录缺失/为空 = 失败，不允许 SKIP 通过
   if (!fs.existsSync(GOLDEN_DIR)) {
-    console.log('[test:golden] SKIP — tests/golden/ 不存在');
-    process.exit(0);
+    console.error('[test:golden] FAIL — tests/golden/ 目录缺失。黄金案例是强制护栏，删除目录即视为护栏失效。');
+    process.exit(1);
   }
   const files = fs.readdirSync(GOLDEN_DIR).filter((f) => f.endsWith('.json')).sort();
   if (files.length === 0) {
-    console.log('[test:golden] SKIP — 无案例文件');
-    process.exit(0);
+    console.error('[test:golden] FAIL — tests/golden/ 为空。黄金案例是强制护栏，零案例即视为护栏失效。');
+    process.exit(1);
   }
 
   const { calculateParcelLogistics, calculateOrderLogistics, calculateTotalLogisticsCost, calculateOperatingProfitV2 } = await importModule(
