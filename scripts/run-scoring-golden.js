@@ -59,7 +59,7 @@ async function main() {
   console.log('\n===== T4-3 黄金评分案例 =====\n');
   for (const f of files) {
     const fx = JSON.parse(fs.readFileSync(path.join(GOLDEN_DIR, f), 'utf-8'));
-    const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny ?? 12, calcCelShipping: celChannels };
+    const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny ?? 12, calcCelShipping: celChannels, marketScalePool: fx.marketScalePool };
     for (const cs of fx.cases) {
       const r = scoreProduct(cs.candidate, cs.marketContext, deps, rules);
       const ex = buildExplanations(cs.candidate, r, cs.marketContext);

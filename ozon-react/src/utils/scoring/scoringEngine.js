@@ -39,8 +39,44 @@ function scoreDemand(c, ctx, deps, rules, subs) {
   items.push({ key: 'exposure', weight: subs.exposure.weight, label: subs.exposure.label, score: percentileRank(c.exposure, pool.exposure) })
   items.push({ key: 'card_visits', weight: subs.card_visits.weight, label: subs.card_visits.label, score: percentileRank(c.card_visits, pool.card_visits) })
   items.push({ key: 'reviews', weight: subs.reviews.weight, label: subs.reviews.label, score: percentileRank(c.reviews, pool.reviews) })
-  const r = evidenceWeightedScore(items, rules.subs_min_coverage)
-  return { ...r, subs: items }
+  const strength = evidenceWeightedScore(items, rules.subs_min_coverage)
+
+  // ---- T4-4A：Demand = λ×MarketScaleScore + (1-λ)×CandidateStrengthScore ----
+  // MarketScale 仅 HIGH/MEDIUM（可靠产品类型基准）可用；LOW/domain 与 LOW_MARKET_CONTEXT → N/A，
+  // 回退纯候选强度（不伪造市场规模证据）。全局类型池只用于"市场规模"排名，绝不冒充市场基准。
+  const scaleCfg = rules.dimensions.demand.scale_weight != null
+    ? rules.dimensions.demand
+    : { scale_weight: 0.3, scale_sales_weight: 0.6, scale_units_weight: 0.4 }
+  const scaleEligible = (ctx.context === 'HIGH' || ctx.context === 'MEDIUM')
+    && ctx.benchmark && deps.marketScalePool
+  let marketScaleScore = null
+  if (scaleEligible) {
+    const s = ctx.benchmark.sales_28d?.p50
+    const u = ctx.benchmark.units_28d?.p50
+    const sRank = s != null ? percentileRank(s, deps.marketScalePool.sales_p50) : null
+    const uRank = u != null ? percentileRank(u, deps.marketScalePool.units_p50) : null
+    // 缺失一侧按剩余权重重归一，两侧全缺 → null（禁止用 0/50 补值）
+    marketScaleScore = evidenceWeightedScore([
+      { weight: scaleCfg.scale_sales_weight, score: sRank },
+      { weight: scaleCfg.scale_units_weight, score: uRank },
+    ], 0).score
+  }
+
+  let score = null
+  let available = strength.available
+  if (strength.available && marketScaleScore !== null) {
+    score = scaleCfg.scale_weight * marketScaleScore + (1 - scaleCfg.scale_weight) * strength.score
+  } else if (strength.available) {
+    score = strength.score
+  }
+  return {
+    ...strength,
+    score,
+    available,
+    subs: items,
+    candidateStrengthScore: strength.available ? strength.score : null,
+    marketScaleScore,
+  }
 }
 
 function scoreCompetition(ctx, deps, rules, subs) {
@@ -326,6 +362,11 @@ export function scoreProduct(c, marketContext, deps, rules) {
       available: v.available,
       coverage: round2(v.coverage),
       subs: v.subs.map((s) => ({ key: s.key, score: round1(s.score), weight: s.weight, label: s.label })),
+      // T4-4A：demand 暴露两分量（UI 解释用："市场规模" vs "候选相对表现"）
+      ...(k === 'demand' ? {
+        marketScaleScore: round1(v.marketScaleScore),
+        candidateStrengthScore: round1(v.candidateStrengthScore),
+      } : {}),
     }])),
     supplyGap,
     status,

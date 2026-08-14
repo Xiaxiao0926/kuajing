@@ -327,6 +327,48 @@ console.log('\n测试17: percentileRankFromQuantiles 越界截断 10/90')
   eq(percentileRankFromQuantiles(500, qs), 50, '区间内正常插值')
 }
 
+console.log('\n测试19: T4-4A demand = λ×MarketScale + (1-λ)×CandidateStrength')
+{
+  const scalePool = {
+    sales_p50: Array.from({ length: 30 }, (_, i) => 100000 + i * 100000), // 100k..3M
+    units_p50: Array.from({ length: 30 }, (_, i) => 50 + i * 200),        // 50..5850
+  }
+  const depsScale = { ...deps, marketScalePool: scalePool }
+  const lam = rules.dimensions.demand.scale_weight
+  const sRank = percentileRank(1000000, scalePool.sales_p50)
+  const uRank = percentileRank(2000, scalePool.units_p50)
+  const expectedScale = 0.6 * sRank + 0.4 * uRank
+  // 参照组：无 scale pool 的 HIGH 路径 = 纯候选强度（回退语义保证）
+  const rNoPool = scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), deps, rules)
+  const strength = rNoPool.dimensions.demand.score
+  const r = scoreProduct(makeCandidate(), makeMarketCtx({ context: 'HIGH' }), depsScale, rules)
+  const d = r.dimensions.demand
+  eq(d.marketScaleScore, Math.round(expectedScale * 10) / 10, 'marketScaleScore=60/40 加权', 0.11)
+  eq(d.candidateStrengthScore, strength, 'candidateStrengthScore 保留原算法', 0.11)
+  const expectedDemand = Math.round((lam * expectedScale + (1 - lam) * strength) * 10) / 10
+  eq(d.score, expectedDemand, `demand=λ×scale+(1-λ)×strength (λ=${lam})`, 0.11)
+  // MEDIUM 同样可计算 MarketScale
+  const rMed = scoreProduct(makeCandidate(), makeMarketCtx({ context: 'MEDIUM' }), depsScale, rules)
+  assert(rMed.dimensions.demand.marketScaleScore !== null, 'MEDIUM 计算 MarketScale')
+  // LOW → MarketScale=N/A，分数与无池路径逐位一致（路径不变）
+  const lowCtx = { context: 'LOW', benchmark: makeMarketCtx().benchmark, matchedType: 'x', sampleSize: 3, domainTypes: makeMarketCtx().domainTypes }
+  const rLow = scoreProduct(makeCandidate(), lowCtx, depsScale, rules)
+  const rLowCtrl = scoreProduct(makeCandidate(), lowCtx, deps, rules)
+  assert(rLow.dimensions.demand.marketScaleScore === null, 'LOW → MarketScale=N/A')
+  eq(rLow.dimensions.demand.score, rLowCtrl.dimensions.demand.score, 'LOW demand 与旧路径一致')
+  // LMC → 分数与无池路径逐位一致（771 行不受影响）
+  const lmcCtx = { context: 'LOW_MARKET_CONTEXT', benchmark: null, matchedType: null, sampleSize: null, domainTypes: [] }
+  const rLmc = scoreProduct(makeCandidate(), lmcCtx, depsScale, rules)
+  const rLmcCtrl = scoreProduct(makeCandidate(), lmcCtx, deps, rules)
+  assert(rLmc.dimensions.demand.marketScaleScore === null, 'LMC → MarketScale=N/A')
+  eq(rLmc.dimensions.demand.score, rLmcCtrl.dimensions.demand.score, 'LMC demand 与旧路径一致')
+  // scale 缺一侧 → 剩余权重重归一（禁止 0/50 补值）
+  const ctxNoSales = makeMarketCtx({ context: 'HIGH' })
+  ctxNoSales.benchmark = { ...ctxNoSales.benchmark, sales_28d: null }
+  const r2 = scoreProduct(makeCandidate(), ctxNoSales, depsScale, rules)
+  eq(r2.dimensions.demand.marketScaleScore, Math.round(uRank * 10) / 10, 'scale 缺 sales → 只用 units', 0.11)
+}
+
 console.log('\n测试18: 解释口径分级（LOW/domain 不得写"同类市场"）')
 {
   // HIGH（type 基准）→ 同类市场措辞

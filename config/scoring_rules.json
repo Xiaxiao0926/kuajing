@@ -2,15 +2,22 @@
   "version": "1.0",
   "source_doc": "T4-1B-评分模型设计冻结.md",
   "dimensions": {
-    "demand": { "weight": 25, "label": "市场需求", "subs": {
-      "sales_rub_28d": { "weight": 35, "pool": "market_then_candidate", "label": "28天销售额" },
-      "units_28d": { "weight": 25, "pool": "market_then_candidate", "label": "28天销量" },
-      "conv_rate": { "weight": 15, "pool": "market_then_candidate", "label": "订单转化率" },
-      "cart_add_rate": { "weight": 10, "pool": "market_then_candidate", "label": "商品卡加购率" },
-      "exposure": { "weight": 5, "pool": "candidate_only", "label": "曝光量" },
-      "card_visits": { "weight": 5, "pool": "candidate_only", "label": "浏览量" },
-      "reviews": { "weight": 5, "pool": "candidate_only", "label": "评论沉淀" }
-    }},
+    "demand": {
+      "weight": 25,
+      "label": "市场需求",
+      "scale_weight": 0.5,
+      "scale_sales_weight": 0.6,
+      "scale_units_weight": 0.4,
+      "subs": {
+        "sales_rub_28d": { "weight": 35, "pool": "market_then_candidate", "label": "28天销售额" },
+        "units_28d": { "weight": 25, "pool": "market_then_candidate", "label": "28天销量" },
+        "conv_rate": { "weight": 15, "pool": "market_then_candidate", "label": "订单转化率" },
+        "cart_add_rate": { "weight": 10, "pool": "market_then_candidate", "label": "商品卡加购率" },
+        "exposure": { "weight": 5, "pool": "candidate_only", "label": "曝光量" },
+        "card_visits": { "weight": 5, "pool": "candidate_only", "label": "浏览量" },
+        "reviews": { "weight": 5, "pool": "candidate_only", "label": "评论沉淀" }
+      }
+    },
     "competition": { "weight": 15, "label": "竞争机会", "requiresMarket": true, "subs": {
       "seller_concentration": { "weight": 30, "label": "卖家集中度" },
       "brand_concentration": { "weight": 25, "label": "品牌集中度" },

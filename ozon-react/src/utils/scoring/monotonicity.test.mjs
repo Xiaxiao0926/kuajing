@@ -44,7 +44,7 @@ console.log('\n===== 单调性 / 不变式测试 =====\n')
 
 console.log('M1: 销售额 ↑ → demand 不得下降')
 {
-  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel() }
+  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(), marketScalePool: fx.marketScalePool }
   const low = scoreProduct({ ...baseCandidate, sales_rub_28d: 800000 }, baseCtx, deps, rules)
   const high = scoreProduct({ ...baseCandidate, sales_rub_28d: 3500000 }, baseCtx, deps, rules)
   assert(high.dimensions.demand.score >= low.dimensions.demand.score - 1e-9,
@@ -54,7 +54,7 @@ console.log('M1: 销售额 ↑ → demand 不得下降')
 
 console.log('M2: 毛利率 ↑ → profitability 不得下降')
 {
-  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel() }
+  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(), marketScalePool: fx.marketScalePool }
   const g30 = scoreProduct({ ...baseCandidate, gross_margin: 30 }, baseCtx, deps, rules)
   const g50 = scoreProduct({ ...baseCandidate, gross_margin: 50 }, baseCtx, deps, rules)
   assert(g50.dimensions.profitability.score >= g30.dimensions.profitability.score - 1e-9,
@@ -64,7 +64,7 @@ console.log('M2: 毛利率 ↑ → profitability 不得下降')
 
 console.log('M3: 广告负担 ↑ → profitability 不得上升')
 {
-  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel() }
+  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(), marketScalePool: fx.marketScalePool }
   const a3 = scoreProduct({ ...baseCandidate, ad_share: 3 }, baseCtx, deps, rules)
   const a20 = scoreProduct({ ...baseCandidate, ad_share: 20 }, baseCtx, deps, rules)
   assert(a20.dimensions.profitability.score <= a3.dimensions.profitability.score + 1e-9,
@@ -74,7 +74,7 @@ console.log('M3: 广告负担 ↑ → profitability 不得上升')
 
 console.log('M4: seller HHI ↑ → competition 不得上升')
 {
-  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel() }
+  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(), marketScalePool: fx.marketScalePool }
   const lo = scoreProduct(baseCandidate, { ...baseCtx, benchmark: { ...baseCtx.benchmark, seller_hhi: 1200 } }, deps, rules)
   const hi = scoreProduct(baseCandidate, { ...baseCtx, benchmark: { ...baseCtx.benchmark, seller_hhi: 1800 } }, deps, rules)
   assert(hi.dimensions.competition.score <= lo.dimensions.competition.score + 1e-9,
@@ -84,8 +84,8 @@ console.log('M4: seller HHI ↑ → competition 不得上升')
 
 console.log('M5: 物流成本占比 ↑ → logistics 不得上升')
 {
-  const c1 = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(1) }
-  const c2 = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(2) }
+  const c1 = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(1), marketScalePool: fx.marketScalePool }
+  const c2 = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(2), marketScalePool: fx.marketScalePool }
   const lo = scoreProduct(baseCandidate, baseCtx, c1, rules)
   const hi = scoreProduct(baseCandidate, baseCtx, c2, rules)
   assert(hi.dimensions.logistics.score <= lo.dimensions.logistics.score + 1e-9,
@@ -95,8 +95,8 @@ console.log('M5: 物流成本占比 ↑ → logistics 不得上升')
 
 console.log('M6: 有 CEL 渠道 → 无 CEL 渠道 → BLOCKED_LOGISTICS 必须出现')
 {
-  const withCel = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel() }
-  const noCel = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: () => [] }
+  const withCel = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(), marketScalePool: fx.marketScalePool }
+  const noCel = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: () => [], marketScalePool: fx.marketScalePool }
   const r1 = scoreProduct(baseCandidate, baseCtx, withCel, rules)
   const r2 = scoreProduct(baseCandidate, baseCtx, noCel, rules)
   assert(!r1.status.includes('BLOCKED_LOGISTICS'), '有渠道时无 BLOCKED')
@@ -107,7 +107,7 @@ console.log('M6: 有 CEL 渠道 → 无 CEL 渠道 → BLOCKED_LOGISTICS 必须�
 
 console.log('M7: 删除 BSR benchmark → competition/price/supplyGap N/A（不得偷切全局基准）')
 {
-  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel() }
+  const deps = { candidatePool: fx.pool, rubPerCny: fx.rubPerCny, calcCelShipping: makeCel(), marketScalePool: fx.marketScalePool }
   const withB = scoreProduct(baseCandidate, baseCtx, deps, rules)
   const lmcCtx = { context: 'LOW_MARKET_CONTEXT', benchmark: null, matchedType: null, sampleSize: null, domainTypes: [] }
   const noB = scoreProduct(baseCandidate, lmcCtx, deps, rules)

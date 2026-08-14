@@ -9,6 +9,12 @@ const ROOT = process.cwd();
 
 async function main() {
   const rules = JSON.parse(fs.readFileSync(path.join(ROOT, 'config', 'scoring_rules.json'), 'utf-8'));
+  // T4-4A 校准实验：T4_SCALE_WEIGHT 环境变量临时覆盖 λ（生产值以 scoring_rules.json 为准）
+  const scaleOverride = process.env.T4_SCALE_WEIGHT;
+  if (scaleOverride != null && !isNaN(parseFloat(scaleOverride))) {
+    rules.dimensions.demand.scale_weight = parseFloat(scaleOverride);
+  }
+  console.log(`[audit] demand scale_weight λ = ${rules.dimensions.demand.scale_weight}`);
   const settings = JSON.parse(fs.readFileSync(path.join(ROOT, 'config', 'settings.json'), 'utf-8'));
   const bench = JSON.parse(fs.readFileSync(path.join(ROOT, 'ozon-react', 'public', 'data', 'bsr_market_benchmarks.json'), 'utf-8'));
   const { scoreProduct } = await import(pathToFileURL(path.join(ROOT, 'ozon-react', 'src', 'utils', 'scoring', 'scoringEngine.js')).href);
@@ -73,6 +79,13 @@ async function main() {
 
   // ---- 2. 候选池（percentile 用） ----
   const poolArr = (key) => candidates.map((c) => c[key]).filter((v) => v !== null && v !== undefined);
+  // T4-4A：MarketScale 全局产品类型池（市场规模排名用；不是市场基准，不冒充对应市场）
+  const scaleTypeKeys = Object.keys(bench.product_types).filter((t) => t !== '(未分类)');
+  const marketScalePool = {
+    sales_p50: scaleTypeKeys.map((t) => bench.product_types[t].sales_28d?.p50).filter((v) => v !== null && v !== undefined),
+    units_p50: scaleTypeKeys.map((t) => bench.product_types[t].units_28d?.p50).filter((v) => v !== null && v !== undefined),
+  };
+  console.log(`[audit] marketScalePool: sales_p50 n=${marketScalePool.sales_p50.length}, units_p50 n=${marketScalePool.units_p50.length}`);
   const candidatePool = {
     sales_rub_28d: poolArr('sales_rub_28d'), units_28d: poolArr('units_28d'),
     conv_rate: poolArr('conv_rate'), cart_add_rate: poolArr('cart_add_rate'),
@@ -166,7 +179,7 @@ async function main() {
         .filter(([, t]) => t.domain === m.domain)
         .map(([, t]) => t)
     }
-    const deps = { candidatePool, rubPerCny: settings.rub_per_cny, calcCelShipping: celChannels }
+    const deps = { candidatePool, rubPerCny: settings.rub_per_cny, calcCelShipping: celChannels, marketScalePool }
     const r = scoreProduct(c, { context, benchmark, matchedType: m.matchedType, sampleSize: m.n, domainTypes }, deps, rules)
     // ---- 诊断字段（维度验证矩阵用；matched type 一律取原始 typeBench，不用 blendBench） ----
     const diag = { grossMargin: c.gross_margin, signRate: c.sign_rate, shippingRatio: null, bandIn: null }
@@ -176,6 +189,7 @@ async function main() {
       diag.typeSellerHhi = t.seller_hhi ?? null
       diag.typeTop10 = t.top10_seller_share ?? null
       diag.typeSalesP50 = t.sales_28d?.p50 ?? null
+      diag.typeUnitsP50 = t.units_28d?.p50 ?? null
       diag.typeAvgP25 = t.avg_price_rub?.p25 ?? null
       diag.typeAvgP75 = t.avg_price_rub?.p75 ?? null
     }
@@ -290,6 +304,7 @@ async function main() {
   const matrix = [
     { key: 'demand', metric: 'BSR leader-share', get: (r) => r.typeLeader, dir: '>', expect: 'higher' },
     { key: 'demand', metric: 'sales P50', get: (r) => r.typeSalesP50, dir: '>', expect: 'higher' },
+    { key: 'demand', metric: 'units P50', get: (r) => r.typeUnitsP50, dir: '>', expect: 'higher' },
     { key: 'competition', metric: 'seller HHI', get: (r) => r.typeSellerHhi, dir: '<', expect: 'lower' },
     { key: 'competition', metric: 'top10 seller share', get: (r) => r.typeTop10, dir: '<', expect: 'lower' },
     { key: 'price_opportunity', metric: '落 P25-P75 比例', get: (r) => r.bandIn, dir: '>', expect: 'higher', share: true },
