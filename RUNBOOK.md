@@ -105,7 +105,7 @@ npm run test:sync    # ⚠️ T2 完成前是占位器（SKIP 退出 0），不�
 | `npm start` 提示文件夹不存在 | `BASE_PATH` 指向的目录缺 市场价/报价表 子目录；确认 `LEGACY_PATH_ENABLED` 或自建 `data/市场价`、`data/报价表` |
 | `node tunnel.js` 报 localtunnel 未安装 | 可选功能，不影响主服务；需要时 `npm install --no-save localtunnel` |
 | React 页面上传后不显示新文件 | vite 数据同步插件需 dev server 运行；检查 `市场分析/uploads/` 与 `public/data/manifest.json` 的 `updatedAt` |
-| Python 面板与 React 算出的 WB 费用不同 | 已知汇率漂移（BUSINESS_RULES §10：React 12 vs Python settings.json 11.5）——T2 统一 config 前属预期，报告中注明即可，**禁止顺手改** |
+| Python 面板与 React 算出的 WB 费用不同 | 先检查 `ozon-product-analyzer/wb_data/settings.json` 的 `rub_per_cny` 是否被本机运行态改成非 12（仓库基线 12/12/12，见 BUSINESS_RULES §10）——若不一致，**登记 TD-1 并向需求方确认正确值，禁止顺手改** |
 | `/api/ai` 502 | AI 图片服务（localhost:8000）未启动；非核心功能 |
 | push 报 schannel 凭证错误 | Windows 凭据管理器配置 GitHub PAT：`git config credential.helper manager` 后首次 push 弹窗输入 |
 

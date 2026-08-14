@@ -9,7 +9,7 @@
 
 | # | 描述 | 位置 | 风险 | 建议处理 |
 |---|---|---|---|---|
-| TD-1 | 双端汇率漂移：React 默认 12 vs Python settings.json 11.5，两端 WB 计算结果不一致 | `wbConfig.js` / `wb_data/settings.json` | 高：业务数字两端打架 | T2 统一 config 层时解决，以需求方确认值为准 |
+| TD-1 | 运行时配置来源存在漂移风险：仓库基线三处一致（React 12 / Python 默认 12 / tracked settings.json 12），但 2026-08-14 曾观察到本机 Python 运行态 11.5（当前仓库无法复现）——运行时持久化文件可覆盖代码默认值 | `wbConfig.js` / `wb_data.py` / `wb_data/settings.json` | 高：运行态与仓库态可能不一致 | T2 建立 config 唯一事实源时，验证运行时是否存在外部覆盖；以需求方确认值为准 |
 | TD-2 | WB 核算双引擎并行，规则靠人工同步（已有漂移先例 TD-1） | `wbEngine.js` vs `wb_calc.py` | 高：改一处忘另一处 | T2 配置唯一事实源 + T2-4 双端对拍 |
 | TD-3 | Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称 | `wb_calc.py` | 中：Python 面板算不出拒收/清关赔偿 | T2 或独立任务补齐并加测试 |
 | TD-4 | `NewDashboard.jsx` 459KB 巨型组件 | `ozon-react/src/components/NewDashboard.jsx` | 中：任何改动易牵一发动全身 | T3-1 按职责拆分 |
@@ -22,6 +22,8 @@
 | TD-11 | `server.js` 用自包含 http 路由（497 行无框架分层），扩展性有限 | `server.js` | 低 | 待定：有真实扩展需求再改 Express 分层 |
 | TD-12 | `market_data_processor.js`(848行)/`analyze_with_cleaned_data.js`(2353行) 大文件无单测 | 根目录 | 中：清洗/匹配逻辑改动无护栏 | 待定：核心清洗函数补单测 |
 | TD-13 | 黄金案例与双端对拍仍是占位器（`scripts/run-golden-tests.js` / `verify_sync.js` 输出 SKIP） | `scripts/` | 高：假护栏（看起来有测试，实际没有） | **T2-3 / T2-4 必须完成，此前不得宣称已通过** |
+| TD-14 | Ozon 两个 Tab 价格语义不一致：SingleTab 输入"售价"直接计算（不乘 0.6），MultiTab 输入"上架价"×0.6 得折后价 | `ozon-react/src/components/OzonCalc.jsx` / `ozonEngine.js` calcRow/calcChannelProfit | 中：同一产品两口径得出不同利润 | 需求方确认是否统一口径后再立项 |
+| TD-15 | HK 渠道费率单位存疑：配置 `rate:96 rateUnit:'per100g'`，代码实际 `ceil(kg×10)/10 × 96 + 19`（≈96元/kg），UI 曾显示"9.6元/KG (96元/100g)"互相矛盾 | `ozon-react/src/utils/ozonEngine.js` / `OzonCalc.jsx` | **高：若按错误费率迁移，T2 会把错误统一到所有端** | **T2 迁移前必须核对 `运费计算/CEL产品资费表 V5.23.xlsx` 原文确定正确费率** |
 
 ---
 

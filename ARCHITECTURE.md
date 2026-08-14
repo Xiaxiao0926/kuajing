@@ -129,10 +129,11 @@ WB 核算有 **两套独立实现**，功能平行、数值应一致（当前有
 
 ---
 
-## 5. 已知漂移与限制（与 TECH_DEBT.md 联动）
+## 5. 已知风险与限制（与 TECH_DEBT.md 联动）
 
-1. **汇率双端不一致**：React 默认 `rubPerCny: 12`（生效 2026-08-11）；Python 运行时读取的 `wb_data/settings.json` 为 `11.5`（生效 2026-02-09），而其代码默认值是 12。两端当前实际计算结果不同。T2 统一 config 前**任何 AI 不得顺手修改任何一端**。
+1. **汇率运行时覆盖风险**：仓库内三处基线一致（React `DEFAULT_SETTINGS` 12 / Python `DEFAULT_SETTINGS` 12 / tracked `settings.json` 12）；但 2026-08-14 曾观察到本机 Python 运行态 `settings.json` 为 11.5（当前仓库无法复现）。运行时存在外部/持久化配置覆盖代码默认值的可能，T2 统一 config 时需验证（TD-1）。
 2. Python 端未实现反向赔偿 V2（13.1.14），与 React 端功能不对称。
 3. `app.py` `DATA_DIR` 与 `wb_panel.py` `COMMISSION_FILE` 仍硬编码本机路径（T2 修复）。
-4. `ozon-react/public/data/` 与根目录存在重复 xlsx（数据同步插件拷贝产物，约 11MB）。
-5. 生产构建无代码分割，主 chunk 2.7MB。
+4. Ozon 单规格（售价直算）与多规格（上架价×0.6）价格语义不一致（TD-14）；HK 渠道费率单位待 CEL 原始表复核（TD-15）。
+5. `ozon-react/public/data/` 与根目录存在重复 xlsx（数据同步插件拷贝产物，约 11MB）。
+6. 生产构建无代码分割，主 chunk 2.7MB。

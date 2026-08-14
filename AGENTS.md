@@ -95,15 +95,20 @@ npm run test:sync     # ⚠️ 当前为占位器（输出 SKIP 后退出 0）�
 
 ```text
 main
-  ├── fix/<issue>-<desc>      一个任务 = 一个分支 = 一个清晰 commit
+  ├── fix/<issue>-<desc>      一个任务 = 一个分支；一个逻辑变更 = 一个清晰 commit
   ├── feat/<desc>
   ├── docs/<desc>
   └── refactor/<desc>
 ```
 
-- 禁止连续多天工作后一次性提交；每个 commit 只做一件事。
-- 提交前自查 `git diff` 是否超范围；**业务计算文件的意外改动 = 失败**。
-- 改坏了 `git reset` 即回滚；重大阶段合并用 `--no-ff` 并在 main 上打 tag（如 `v3-t0-baseline`）。
+- 一个任务允许主 commit + 少量 cleanup commit，但每个 commit 只表达一个逻辑变更。
+- 禁止连续多天工作后一次性提交；提交前自查 `git diff` 是否超范围；**业务计算文件的意外改动 = 失败**。
+- 回滚纪律（按危险程度递进）：
+  - 未提交的改动：优先 `git restore <file>`；
+  - 已提交但未 push：按情况 `git reset`；
+  - 已 push / 已合并：优先 `git revert`；
+  - **禁止 AI 在未经需求方确认的情况下执行 `git reset --hard` 或改写已推送历史。**
+- 重大阶段合并用 `--no-ff` 并在 main 上打 tag（如 `v3-t0-baseline`）。
 
 ---
 

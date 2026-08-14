@@ -154,19 +154,44 @@ total_logistics_cost_cny = forward_logistics_used_cny
 | Big 大件 | Standard / Economy | 26 / 17.68 元/kg + 37.44 元 | 2–30kg；三边和≤310cm；单边≤150cm；体积重÷12000 |
 | Premium Small | 三档 | 46.8 / 36.4 / 26 元/kg + 22.88 元 | ≤5kg；三边和≤250cm；价7001–250000₽ |
 | Premium Big | Standard / Economy | 29.12 / 23.92 元/kg + 64.48 元 | 5–30kg；体积重÷12000 |
-| HK 香港空运 | 7-12天 | 96元/100g + 19元 | ≤25kg；三边和>60cm 时按÷6000 条件体积重 |
+| HK 香港空运 | 7-12天 | **待 CEL 原始表人工复核**（配置为 rate=96/100g 粒度取整 + 19 元固定费；代码实际按 `ceil(kg×10)/10 × 96 + 19` 计算；UI 曾显示"9.6元/KG (96元/100g)"互相矛盾） | ≤25kg；三边和>60cm 时按÷6000 条件体积重 |
 
 - 体积重渠道（Big/Premium Big/HK）：`charge_weight = max(实际重量, 体积重)`。
-- Ozon 侧利润口径（`calcChannelProfit`）：上架价 × 0.6 = 折后价 → 折后价×R 转人民币 → 减去国内成本(采购+国内运费+贴标)、跨境运费、平台成本(佣金+广告+支付)、退货损失 → 毛利。
 
-## 10. 汇率事实（当前两端不一致，见 ARCHITECTURE.md §5）
+### 9.1 单规格测算口径（`SingleTab` → `calcChannelProfit`）
 
-| 端 | 当前生效值 | 来源 |
-|---|---|---|
-| React | `rubPerCny = 12`（1¥=12₽），生效 2026-08-11 | `wbConfig.js` DEFAULT_SETTINGS |
-| Python 运行时 | `rub_per_cny = 11.5`，生效 2026-02-09 | `wb_data/settings.json`（持久化文件，覆盖代码默认值 12） |
+- 用户输入字段名为**售价（₽）**，**直接作为计算价**，不乘 0.6。
+- `calcChannelProfit(ch, price, ...)`：`priceRMB = price × R`，无任何 0.6 系数。
+- 利润 = 折后价（即输入价）×R − 国内成本(采购+国内运费+贴标) − 跨境运费(含代理费) − 平台成本(佣金+广告+支付) − 退货损失。
 
-**禁止在 T2 统一配置前修改任何一端**；此差异必须在所有双端结果对比中注明。
+### 9.2 多规格定价口径（`MultiTab` → `calcRow`）
+
+- 用户输入字段名为**上架价**；`price = round2(listPrice × 0.6)` 得折后价。
+- UI 明示「上架价 × 0.6 = 折后价」。
+- 其余成本结构与 9.1 相同。
+
+### 9.3 两者当前差异（如实记录，未统一）
+
+```text
+单规格 SingleTab：输入"售价" → 不乘 0.6 → 直接计算
+多规格 MultiTab ：输入"上架价" → ×0.6 → 以折后价计算
+```
+
+两者价格语义不同（一个输入成交价、一个输入挂牌价）。是否应统一口径，由需求方后续确认（TECH_DEBT TD-14），**T1 只记录不修改代码**。
+
+## 10. 汇率状态（仓库事实）
+
+**仓库基线（三处一致，均为 12）**：
+
+| 位置 | 值 |
+|---|---|
+| React `DEFAULT_SETTINGS`（`wbConfig.js`） | `rubPerCny = 12`（1¥=12₽），生效 2026-08-11 |
+| Python `DEFAULT_SETTINGS`（`wb_data.py`） | `rub_per_cny = 12`，生效 2026-08-11 |
+| Python tracked `wb_data/settings.json`（仓库内） | `rub_per_cny = 12`，生效 2026-08-11 |
+
+**历史运行态观察（非仓库事实）**：
+- 2026-08-14 整改过程中，曾在本机 Python 运行态观察到 `settings.json` 值为 11.5（生效 2026-02-09）；当前 Git 仓库各分支均无法复现该状态。
+- 因此**不得将 11.5 视为仓库事实**；T2 建立 config 唯一事实源时，仍需验证运行时是否存在外部/持久化配置覆盖造成漂移的风险（见 TECH_DEBT TD-1）。
 
 ## 11. 修改公式的流程（强制）
 
