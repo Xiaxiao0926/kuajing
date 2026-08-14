@@ -23,7 +23,7 @@
 | TD-12 | `market_data_processor.js`(848行)/`analyze_with_cleaned_data.js`(2353行) 大文件无单测 | 根目录 | 中：清洗/匹配逻辑改动无护栏 | 待定：核心清洗函数补单测 |
 | TD-13 | 黄金案例与双端对拍仍是占位器（`scripts/run-golden-tests.js` / `verify_sync.js` 输出 SKIP） | `scripts/` | 高：假护栏（看起来有测试，实际没有） | **T2-3 / T2-4 必须完成，此前不得宣称已通过** |
 | TD-14 | Ozon 两个 Tab 价格语义不一致：SingleTab 输入"售价"直接计算（不乘 0.6），MultiTab 输入"上架价"×0.6 得折后价 | `ozon-react/src/components/OzonCalc.jsx` / `ozonEngine.js` calcRow/calcChannelProfit | 中：同一产品两口径得出不同利润 | 需求方确认是否统一口径后再立项 |
-| TD-15 | HK 渠道费率单位存疑：配置 `rate:96 rateUnit:'per100g'`，代码实际 `ceil(kg×10)/10 × 96 + 19`（≈96元/kg），UI 曾显示"9.6元/KG (96元/100g)"互相矛盾 | `ozon-react/src/utils/ozonEngine.js` / `OzonCalc.jsx` | **高：若按错误费率迁移，T2 会把错误统一到所有端** | **T2 迁移前必须核对 `运费计算/CEL产品资费表 V5.23.xlsx` 原文确定正确费率** |
+| TD-15 | ✅ 已定性（2026-08-14 Gate 0 核验）：代码数值正确（96 即元/kg），仅配置标签 `rateUnit:'per100g'` 与 UI 文案错误。核验报告：`T2-Gate0-CEL-HK核验报告.md`。T2 迁移按 **96元/kg + 百克进位** 存储 | `ozon-react/src/utils/ozonEngine.js` / `OzonCalc.jsx` | 已降级：迁移时修正语义即可 | T2-2 建 config 时修语义与 UI 文案 |
 
 ---
 
