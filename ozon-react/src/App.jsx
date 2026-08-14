@@ -11,7 +11,8 @@ import ProgressOverview from './components/ProgressOverview'
 import ProjectFlow from './components/ProjectFlow'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
-import { syncFromServer, persistGet, persistSet } from './utils/persist'
+import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
+import { getAssetUrl } from './utils/runtime.js'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
@@ -24,7 +25,7 @@ const LazyFallback = () => (
   <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
 )
 
-const DATA_DIR = '/data'
+const DATA_DIR = getAssetUrl('data').replace(/\/$/, '')
 
 function App() {
   const [data, setData] = useState(null)
@@ -50,6 +51,17 @@ function App() {
       if (saved && Object.keys(saved).length > 0) setNodeStatuses(saved)
       setServerSynced(true)
     }).catch(() => setServerSynced(true))
+  }, [])
+
+  useEffect(() => {
+    const flushWhenHidden = () => {
+      if (document.visibilityState === 'hidden') flushPersistence()
+    }
+    document.addEventListener('visibilitychange', flushWhenHidden)
+    return () => {
+      document.removeEventListener('visibilitychange', flushWhenHidden)
+      flushPersistence()
+    }
   }, [])
 
   useEffect(() => {

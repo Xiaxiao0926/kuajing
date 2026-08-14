@@ -1,0 +1,73 @@
+name: Deploy Kuajing dashboard
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: kuajing-production
+  cancel-in-progress: false
+
+jobs:
+  test-build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            ozon-react/package-lock.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm --prefix ozon-react ci
+
+      - name: Install deployment tools
+        run: sudo apt-get update && sudo apt-get install -y lftp php-cli
+
+      - name: Verify business and persistence behavior
+        run: |
+          npm test
+          npm run test:golden
+          npm run test:sync
+          npm run test:web-persistence
+          php -l wordpress/kuajing-persistence/kuajing-persistence.php
+
+      - name: Build dashboard
+        env:
+          KUAJING_BASE_PATH: ./
+        run: npm --prefix ozon-react run build
+
+      - name: Stage WordPress plugin
+        run: |
+          mkdir -p deploy/kuajing-persistence
+          cp wordpress/kuajing-persistence/kuajing-persistence.php deploy/kuajing-persistence/
+          cp wordpress/kuajing-persistence/README.md deploy/kuajing-persistence/
+          cp -R ozon-react/dist deploy/kuajing-persistence/dist
+          printf '%s\n' "${GITHUB_SHA}" > deploy/kuajing-persistence/DEPLOYED_COMMIT
+
+      - name: Deploy plugin to Hostinger
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TARGET_DIR: ${{ secrets.FTP_TARGET_DIR }}
+        run: |
+          test -n "$FTP_SERVER"
+          test -n "$FTP_USERNAME"
+          test -n "$FTP_PASSWORD"
+          test -n "$FTP_TARGET_DIR"
+          lftp -c "set cmd:fail-exit true; open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\"; mirror --reverse --delete --verbose=1 deploy/kuajing-persistence \"$FTP_TARGET_DIR\""

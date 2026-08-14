@@ -6,11 +6,13 @@ import {
   AlertTriangle, CheckCircle2, Clock, X, Save, Plus, Pencil, RotateCcw
 } from 'lucide-react'
 import { persistGet, persistSet, persistRemove } from '../utils/persist'
+import { deleteServerFile, listServerFiles, uploadServerFile } from '../utils/serverFiles.js'
 
 const DB_NAME = 'ozon-compliance'
 const DB_VERSION = 1
 const STORE_NAME = 'files'
 const STORAGE_KEY = 'compliance-items'
+const FILE_NAMESPACE = 'compliance'
 
 function openDB() {
   return new Promise((resolve, reject) => {
@@ -250,10 +252,32 @@ export default function ComplianceAssessment() {
         const savedChecklist = persistGet('compliance-checklist')
         if (savedChecklist) setChecklistStatus(savedChecklist)
         const savedFiles = await dbGetAll()
-        setFiles(savedFiles.sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0)))
+        const byName = new Map(savedFiles.map(file => [file.name, file]))
+        const serverFiles = await listServerFiles(FILE_NAMESPACE)
+        for (const remoteFile of serverFiles) {
+          if (byName.has(remoteFile.name)) continue
+          try {
+            const response = await fetch(remoteFile.downloadUrl)
+            if (!response.ok) continue
+            const arrayBuffer = await response.arrayBuffer()
+            const record = {
+              name: remoteFile.name,
+              size: remoteFile.size,
+              type: remoteFile.type || remoteFile.name.split('.').pop(),
+              data: await parseFile(arrayBuffer, remoteFile.name),
+              savedAt: remoteFile.updatedAt || Date.now(),
+            }
+            await dbPut(record)
+            byName.set(record.name, record)
+          } catch (error) {
+            console.warn('Compliance server file restore skipped:', error.message)
+          }
+        }
+        const mergedFiles = [...byName.values()].sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0))
+        setFiles(mergedFiles)
         const lastActive = persistGet('compliance-active-file')
         if (lastActive) {
-          const found = savedFiles.find(f => f.name === lastActive)
+          const found = mergedFiles.find(f => f.name === lastActive)
           if (found) {
             setActiveFile(found.name)
             setFileData(found.data)
@@ -303,6 +327,11 @@ export default function ComplianceAssessment() {
           setFileData(data)
           persistSet('compliance-active-file', file.name)
         }
+        try {
+          await uploadServerFile(FILE_NAMESPACE, file)
+        } catch (serverError) {
+          console.warn('Compliance server upload deferred:', serverError.message)
+        }
       } catch (err) {
         console.error('Upload error:', err)
       }
@@ -328,6 +357,7 @@ export default function ComplianceAssessment() {
   const handleDeleteFile = async (name) => {
     if (!confirm('确认删除该文件？')) return
     await dbDelete(name)
+    await deleteServerFile(FILE_NAMESPACE, name)
     setFiles(prev => prev.filter(f => f.name !== name))
     if (activeFile === name) {
       setActiveFile(null)

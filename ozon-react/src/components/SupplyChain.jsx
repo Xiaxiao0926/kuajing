@@ -6,8 +6,9 @@ import {
   Truck, Lightbulb, Star, Phone, FileText, ClipboardCheck, Tag
 } from 'lucide-react'
 import { persistGet, persistSet, persistRemove } from '../utils/persist'
+import { getAssetUrl } from '../utils/runtime.js'
 
-const SUPPLY_FILE = '/data/2026年Ozon平台供应链工厂目录0406.xlsx'
+const SUPPLY_FILE = getAssetUrl('data/2026年Ozon平台供应链工厂目录0406.xlsx')
 const STORAGE_KEY = 'supply-chain-factories'
 
 const CATEGORY_KEYWORDS = {

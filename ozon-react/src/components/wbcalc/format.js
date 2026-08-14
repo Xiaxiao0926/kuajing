@@ -7,7 +7,7 @@ let _commissionCache = null
 export async function loadCommissionData() {
   if (_commissionCache) return _commissionCache
   try {
-    const resp = await fetch('/data/wb_commission.json?t=' + Date.now())
+    const resp = await fetch(getAssetUrl('data/wb_commission.json') + '?t=' + Date.now())
     if (!resp.ok) return null
     const data = await resp.json()
     _commissionCache = data
@@ -17,3 +17,4 @@ export async function loadCommissionData() {
     return null
   }
 }
+import { getAssetUrl } from '../../utils/runtime.js'
