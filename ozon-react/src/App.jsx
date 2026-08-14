@@ -23,6 +23,8 @@ const OzonCalc = lazy(() => import('./components/OzonCalc'))
 const FragrancePricing = lazy(() => import('./components/FragrancePricing'))
 const ListingContent = lazy(() => import('./components/ListingContent'))
 const WBCalc = lazy(() => import('./components/WBCalc'))
+// T5-2：选品评分升级为一级页面（懒加载，含 xlsx 导出依赖）
+const ProductScoringSection = lazy(() => import('./components/dashboard/sections/ProductScoringSection'))
 
 const LazyFallback = () => (
   <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
@@ -180,6 +182,13 @@ function DashboardApp() {
     }
     if (activeNode === '__progress_overview__') {
       return <ProgressOverview nodeStatuses={nodeStatuses} onNodeSelect={handleNodeSelect} />
+    }
+    if (activeNode === '__scoring__') {
+      return (
+        <Suspense fallback={<LazyFallback />}>
+          <ProductScoringSection />
+        </Suspense>
+      )
     }
     if (activeNode === 'n1') {
       return (
