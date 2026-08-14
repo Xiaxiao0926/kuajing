@@ -11,7 +11,7 @@ try {
 } catch (e) {
     console.log('========================================');
     console.log('  Tunnel feature unavailable.');
-    console.log('  Install optional dependency: npm install localtunnel');
+    console.log('  Install optional dependency: npm install --no-save localtunnel');
     console.log('  (主服务 server.js 不受影响，可直接 npm start)');
     console.log('========================================');
     process.exit(0);
