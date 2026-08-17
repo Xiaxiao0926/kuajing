@@ -28,6 +28,8 @@
 | TD-15 | ✅ 已解决（T2+hardening）：config 语义正确（96元/kg+100g进位）；UI 单位文案已修正为「96元/KG · 100g进位」（OzonCalc.jsx）；adapter 中 `rateUnit:'per100g'` 仅作 calcShipping 内部分支标志并加注释说明 | — | — | 关闭 |
 | TD-18 | `vite.config.js` 数据同步层仍写死 `D:/ozon/市场分析`、`D:/ozon/市场分析/persisted-data.json` 绝对路径（T0 只处理了 server.js/config.js 与 Python 端） | `ozon-react/vite.config.js` | 中：换机器/换盘后 React dev 数据同步失效 | 单独任务：改为环境变量 OZON_DATA_DIR + 相对回退（不做，仅登记） |
 | TD-19 | 业务数据公开化：`选品/跨境项目产品线扩展计划.xlsx`、`public/data/scoring_candidates.json`、`市场分析/市场bsr/*.xlsx`、`public/data/` 热销 xlsx 均已在 public GitHub（含历史提交）。单独删除/.gitignore 无效——历史仍在；彻底清除需历史重写+force push（人工审批 Gate，禁止代理顺手执行） | 仓库 + `public/data/` | 高：真实业务数据公开可下载 | 立 Data Governance / Private Data Migration 项目统一处理（源 xlsx、JSON、BSR 明细、部署数据源、WordPress 私有接口、Git 历史） |
+| TD-20 | WP 页面「跨境运营工具」Hero 标题压缩（插件 0.2.5 scoped h1 catch-all + `<!-- kuajing-theme: -->` 诊断）尚未在生产截图确认命中；若未命中需按真实元素 class 做精确 selector 修复 | `wordpress/kuajing-persistence/kuajing-persistence.php` | 中：首屏 Hero 占用视觉注意力 | T5 视觉收尾时按生产截图闭环（T5-5 分支未 merge，随其验收） |
+| TD-21 | 旧业务页深层视觉残留：部分 emoji、个别图表内色彩、个别卡片结构未做逐像素级统一（T5-5 只做了表面层 harmonization + 字号 sweep） | `ozon-react/src/components/*`（旧页） | 低：与新 Workspace 存在局部风格落差 | T5 视觉收尾二期或随页面重做逐个处理 |
 
 ---
 
