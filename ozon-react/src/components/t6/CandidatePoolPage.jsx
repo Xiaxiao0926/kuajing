@@ -18,14 +18,13 @@ import PageHeader from '../ui/PageHeader'
 import Button from '../ui/Button'
 import Select from '../ui/Select'
 import EmptyState from '../ui/EmptyState'
-import LoadingState from '../ui/LoadingState'
 import ScoreCell from '../scoring/ScoreCell'
 import DecisionBadge from '../scoring/DecisionBadge'
 import ContextBadge from '../scoring/ContextBadge'
 
 const BIZ_STATUS = [['观察', '观察'], ['待调研', '待调研'], ['待立项', '待立项'], ['暂缓', '暂缓'], ['淘汰', '淘汰']]
 
-export default function CandidatePoolPage({ serverSynced = true }) {
+export default function CandidatePoolPage() {
   const [tick, setTick] = useState(0)
   const [notice, setNotice] = useState('')
   const [dataset, setDataset] = useState(null)
@@ -109,11 +108,6 @@ export default function CandidatePoolPage({ serverSynced = true }) {
   const snapshotView = (cand) => {
     const snap = cand.latestSnapshotId ? getSnapshot(cand.latestSnapshotId) : null
     return snap?.scoreResult || null
-  }
-
-  // T6-1 hardening：server sync 完成前不允许读写 T6 主数据
-  if (!serverSynced) {
-    return <LoadingState text="正在同步项目数据…" />
   }
 
   return (

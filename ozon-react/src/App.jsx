@@ -25,6 +25,7 @@ import { ROADMAP_PHASES, ALL_NODES } from './data/roadmap'
 import ProductScoringSection from './components/dashboard/sections/ProductScoringSection'
 import CandidatePoolPage from './components/t6/CandidatePoolPage'
 import ProjectListPage from './components/t6/ProjectListPage'
+import LoadingState from './components/ui/LoadingState'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
@@ -205,11 +206,15 @@ function DashboardApp() {
     if (activeNode === '__scoring__') {
       return <ProductScoringSection />
     }
+    if ((activeNode === '__t6_candidates__' || activeNode === '__t6_projects__') && !serverSynced) {
+      // T6-1 hardening：server sync 完成前不挂载 T6 主数据页（防止 useMemo 先读未同步的旧 localStorage）
+      return <LoadingState text="正在同步项目数据…" />
+    }
     if (activeNode === '__t6_candidates__') {
-      return <CandidatePoolPage serverSynced={serverSynced} />
+      return <CandidatePoolPage />
     }
     if (activeNode === '__t6_projects__') {
-      return <ProjectListPage serverSynced={serverSynced} />
+      return <ProjectListPage />
     }
     if (activeNode === 'n1') {
       return (
