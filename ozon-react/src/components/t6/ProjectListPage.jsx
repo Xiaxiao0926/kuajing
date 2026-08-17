@@ -24,7 +24,7 @@ const STAGE_ZH = {
   COMPLIANCE: '合规认证', PRODUCTION: '生产物流', LAUNCH: '上架启动', OPERATIONS: '运营放量', REVIEW: '复盘迭代',
 }
 
-export default function ProjectListPage() {
+export default function ProjectListPage({ onOpenProject }) {
   const [tick, setTick] = useState(0)
   const [notice, setNotice] = useState('')
 
@@ -64,8 +64,12 @@ export default function ProjectListPage() {
             const progress = projectProgress(project)
             const nextNodeId = project.workflow.states.find((s) => s.status !== 'done' && s.status !== 'skipped')
             return (
-              <Surface key={project.id} className="p-5">
-                <div className="flex items-start justify-between gap-3">
+              <Surface
+                key={project.id}
+                className="cursor-pointer p-5 transition-colors hover:border-workspace-primary"
+                onClick={() => onOpenProject?.(project.id)}
+              >
+                <div className="flex items-start justify-between gap-3" onClick={(e) => e.stopPropagation()}>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="tabular-nums text-xs font-medium text-workspace-text-tertiary">{project.projectCode}</span>

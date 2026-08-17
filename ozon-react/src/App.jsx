@@ -25,6 +25,7 @@ import { ROADMAP_PHASES, ALL_NODES } from './data/roadmap'
 import ProductScoringSection from './components/dashboard/sections/ProductScoringSection'
 import CandidatePoolPage from './components/t6/CandidatePoolPage'
 import ProjectListPage from './components/t6/ProjectListPage'
+import ProjectDetailPage from './components/t6/ProjectDetailPage'
 import LoadingState from './components/ui/LoadingState'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
@@ -45,6 +46,7 @@ function pageLabelForNode(nodeId) {
   if (nodeId === '__scoring__') return '选品评分'
   if (nodeId === '__t6_candidates__') return '候选池'
   if (nodeId === '__t6_projects__') return 'SKU 项目'
+  if (nodeId === '__t6_project_detail__') return '项目详情'
   if (nodeId === '__project_flow__') return '项目流程总览'
   if (nodeId === '__node_overview__') return '数据与设置'
   if (nodeId === '__progress_overview__') return '工作台'
@@ -70,7 +72,13 @@ function DashboardApp() {
   const [serverSynced, setServerSynced] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null)
+  const [activeProjectId, setActiveProjectId] = useState(null)
   const mainRef = useRef(null)
+
+  const openProjectDetail = (projectId) => {
+    setActiveProjectId(projectId)
+    setActiveNode('__t6_project_detail__')
+  }
 
   useEffect(() => {
     syncFromServer().then(() => {
@@ -206,7 +214,7 @@ function DashboardApp() {
     if (activeNode === '__scoring__') {
       return <ProductScoringSection />
     }
-    if ((activeNode === '__t6_candidates__' || activeNode === '__t6_projects__') && !serverSynced) {
+    if ((activeNode === '__t6_candidates__' || activeNode === '__t6_projects__' || activeNode === '__t6_project_detail__') && !serverSynced) {
       // T6-1 hardening：server sync 完成前不挂载 T6 主数据页（防止 useMemo 先读未同步的旧 localStorage）
       return <LoadingState text="正在同步项目数据…" />
     }
@@ -214,7 +222,10 @@ function DashboardApp() {
       return <CandidatePoolPage />
     }
     if (activeNode === '__t6_projects__') {
-      return <ProjectListPage />
+      return <ProjectListPage onOpenProject={openProjectDetail} />
+    }
+    if (activeNode === '__t6_project_detail__') {
+      return <ProjectDetailPage projectId={activeProjectId} onBack={() => setActiveNode('__t6_projects__')} />
     }
     if (activeNode === 'n1') {
       return (
