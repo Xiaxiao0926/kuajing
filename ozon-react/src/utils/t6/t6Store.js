@@ -21,6 +21,9 @@ export const T6_PREFIX = {
   snapshot: 't6.snapshot.',
   log: 't6.log.',
   costScenario: 't6.costScenario.',
+  supplier: 't6.supplier.',
+  supplierQuote: 't6.supplierQuote.',
+  sample: 't6.sample.',
 }
 
 export function uuid() {
@@ -65,7 +68,7 @@ export function initWorkflowStates() {
 }
 
 // ---------- DecisionLog（append-only：仅 create/read；禁止覆盖系统字段/key 冲突） ----------
-const FORBIDDEN_SYSTEM_FIELDS = ['id', 'createdAt', 'schemaVersion']
+const FORBIDDEN_SYSTEM_FIELDS = ['id', 'createdAt', 'schemaVersion', 'version'] // version 由 store 计算（如 SupplierQuote），payload 一律禁带
 
 function assertNoSystemFields(payload, entityName) {
   for (const f of FORBIDDEN_SYSTEM_FIELDS) {
@@ -498,4 +501,222 @@ export function projectNextStep(project) {
   const states = project?.workflow?.states || []
   const node = states.find((s) => s.status !== 'done' && s.status !== 'skipped')
   return node ? node.nodeId : null
+}
+
+// ---------- Supplier / SupplierQuote / SampleRecord / supply（T7-1，T7-0 V1.0 冻结） ----------
+// 存储同构扩展：t6.supplier.<uuid> / t6.supplierQuote.<uuid> / t6.sample.<uuid>
+// 铁律：Quote 与 SampleRecord 的创建即冻结（append-only，无 update/delete API）；
+//       Supplier 仅 name/contact/notes 可改；version 由 store 计算，payload 禁带。
+
+const SAMPLE_STATUS_MACHINE = {
+  ordered: ['arrived'],
+  arrived: ['tested'],
+  tested: ['approved', 'rejected'],
+  approved: [],
+  rejected: [],
+}
+
+export function getSupplier(id) { return read(`${T6_PREFIX.supplier}${id}`) }
+export function listSuppliers() { return listEntities(T6_PREFIX.supplier) }
+export function getProjectSuppliers(projectId) {
+  return listSuppliers().filter((s) => s.projectId === projectId)
+}
+
+export function getSupplierQuote(id) { return read(`${T6_PREFIX.supplierQuote}${id}`) }
+export function listSupplierQuotes() { return listEntities(T6_PREFIX.supplierQuote) }
+export function getSupplierQuotes(supplierId) {
+  return listSupplierQuotes().filter((q) => q.supplierId === supplierId)
+}
+
+export function getSampleRecord(id) { return read(`${T6_PREFIX.sample}${id}`) }
+export function listSampleRecords() { return listEntities(T6_PREFIX.sample) }
+export function getProjectSamples(projectId) {
+  return listSampleRecords().filter((s) => s.projectId === projectId)
+}
+
+/** 新增供应商：项目必须存在；追加 project.suppliers[]；log supplier_create */
+export function createSupplier(args) {
+  assertNoSystemFields(args, 'supplier')
+  const { projectId, name, contact = '', notes = '' } = args
+  if (!name || !String(name).trim()) throw new Error('T7_STORE: 供应商名称必填')
+  const project = getProject(projectId)
+  if (!project) throw new Error('T7_STORE: 项目不存在')
+  const id = uuid()
+  const key = `${T6_PREFIX.supplier}${id}`
+  if (read(key) !== null) throw new Error(`T7_STORE: supplier key 冲突 ${key}`)
+  const now = new Date().toISOString()
+  const record = { id, schemaVersion: SCHEMA_VERSION, projectId, name, contact, quotes: [], notes, createdAt: now, updatedAt: now }
+  write(key, record)
+  write(`${T6_PREFIX.project}${projectId}`, {
+    ...project,
+    suppliers: [...(project.suppliers || []), id],
+    updatedAt: now,
+  })
+  appendLog({ subjectType: 'project', subjectId: projectId, projectId, kind: 'supplier_create', from: null, to: id, reason: `新增供应商「${name}」` })
+  return record
+}
+
+/** 供应商可变字段更新：仅 name/contact/notes（其它字段不存在于 API） */
+export function updateSupplier(id, { name, contact, notes } = {}) {
+  const rec = getSupplier(id)
+  if (!rec) throw new Error('T7_STORE: 供应商不存在')
+  const next = {
+    ...rec,
+    name: name !== undefined ? name : rec.name,
+    contact: contact !== undefined ? contact : rec.contact,
+    notes: notes !== undefined ? notes : rec.notes,
+    updatedAt: new Date().toISOString(),
+  }
+  write(`${T6_PREFIX.supplier}${id}`, next)
+  return next
+}
+
+/**
+ * 新增报价版本（不可变）：version = 该供应商现有报价 max+1（1 起），payload 禁带 version/系统字段；
+ * 追加 supplier.quotes[]；log quote_create。
+ */
+export function createSupplierQuote(args) {
+  assertNoSystemFields(args, 'supplierQuote')
+  const { supplierId, unitPriceCny, currency = 'CNY', moq = 0, exw = false, fob = false, packagingSpec = '', toolingFeeCny = null, sampleFeeCny = null, leadTimeDays = 0, paymentTerms = '', remark = '' } = args
+  const supplier = getSupplier(supplierId)
+  if (!supplier) throw new Error('T7_STORE: 供应商不存在')
+  if (!Number.isFinite(Number(unitPriceCny)) || Number(unitPriceCny) < 0) {
+    throw new Error('T7_STORE: 报价单价 unitPriceCny 必须为非负数值（CNY 口径）')
+  }
+  if (!['CNY', 'RUB', 'USD'].includes(currency)) {
+    throw new Error(`T7_STORE: 非法报价币种 "${currency}"（允许: CNY/RUB/USD）`)
+  }
+  const id = uuid()
+  const key = `${T6_PREFIX.supplierQuote}${id}`
+  if (read(key) !== null) throw new Error(`T7_STORE: supplierQuote key 冲突 ${key}`)
+  const existing = getSupplierQuotes(supplierId)
+  const version = existing.length ? Math.max(...existing.map((q) => q.version)) + 1 : 1
+  const now = new Date().toISOString()
+  const record = {
+    id, schemaVersion: SCHEMA_VERSION, supplierId, version,
+    unitPriceCny: Number(unitPriceCny), currency, moq: Number(moq) || 0,
+    exw: !!exw, fob: !!fob, packagingSpec, toolingFeeCny: toolingFeeCny === null ? null : Number(toolingFeeCny),
+    sampleFeeCny: sampleFeeCny === null ? null : Number(sampleFeeCny),
+    leadTimeDays: Number(leadTimeDays) || 0, paymentTerms, remark,
+    createdAt: now,
+  }
+  write(key, record)
+  write(`${T6_PREFIX.supplier}${supplierId}`, {
+    ...supplier,
+    quotes: [...(supplier.quotes || []), id],
+    updatedAt: now,
+  })
+  appendLog({ subjectType: 'project', subjectId: supplier.projectId, projectId: supplier.projectId, kind: 'quote_create', from: null, to: id, reason: `供应商「${supplier.name}」报价 v${version}（¥${record.unitPriceCny}）` })
+  return record
+}
+
+/**
+ * 新增样品记录：项目/供应商引用一致性校验；quoteId（可选）必须属于该供应商；
+ * 初始状态必为 ordered；追加 project.samples[]；log sample_change。
+ */
+export function createSampleRecord(args) {
+  assertNoSystemFields(args, 'sample')
+  const { projectId, supplierId, quoteId = null, status = 'ordered', trackNo = '', testResult = '', notes = '' } = args
+  const project = getProject(projectId)
+  if (!project) throw new Error('T7_STORE: 项目不存在')
+  const supplier = getSupplier(supplierId)
+  if (!supplier) throw new Error('T7_STORE: 供应商不存在')
+  if (supplier.projectId !== projectId) {
+    throw new Error(`T7_STORE: 供应商 ${supplierId} 不属于项目 ${projectId}（跨项目引用，fail-close）`)
+  }
+  if (quoteId) {
+    const quote = getSupplierQuote(quoteId)
+    if (!quote) throw new Error(`T7_STORE: 报价 ${quoteId} 不存在`)
+    if (quote.supplierId !== supplierId) {
+      throw new Error(`T7_STORE: 报价 ${quoteId} 不属于供应商 ${supplierId}（引用不一致，fail-close）`)
+    }
+  }
+  if (status !== 'ordered') throw new Error('T7_STORE: 样品初始状态必须为 ordered')
+  const id = uuid()
+  const key = `${T6_PREFIX.sample}${id}`
+  if (read(key) !== null) throw new Error(`T7_STORE: sample key 冲突 ${key}`)
+  const now = new Date().toISOString()
+  const record = {
+    id, schemaVersion: SCHEMA_VERSION, projectId, supplierId, quoteId,
+    status, trackNo, arrivedAt: null, testResult, notes, createdAt: now, updatedAt: now,
+  }
+  write(key, record)
+  write(`${T6_PREFIX.project}${projectId}`, {
+    ...project,
+    samples: [...(project.samples || []), id],
+    updatedAt: now,
+  })
+  appendLog({ subjectType: 'project', subjectId: projectId, projectId, kind: 'sample_change', from: null, to: status, reason: `打样记录创建（供应商 ${supplier.name}）` })
+  return record
+}
+
+/** 样品状态推进：前向状态机 ordered→arrived→tested→approved|rejected（approved/rejected 为终态，不可回退/变更）；log sample_change */
+export function updateSampleRecord(id, patch = {}) {
+  const rec = getSampleRecord(id)
+  if (!rec) throw new Error('T7_STORE: 样品记录不存在')
+  const nextStatus = patch.status !== undefined ? patch.status : rec.status
+  if (!(nextStatus in SAMPLE_STATUS_MACHINE)) {
+    throw new Error(`T7_STORE: 非法样品状态 "${nextStatus}"`)
+  }
+  if (nextStatus !== rec.status) {
+    const allowed = SAMPLE_STATUS_MACHINE[rec.status] || []
+    if (!allowed.includes(nextStatus)) {
+      throw new Error(`T7_STORE: 样品状态不可从 ${rec.status} → ${nextStatus}（状态机: ${rec.status} 仅允许 ${allowed.join('/') || '终态'}）`)
+    }
+  }
+  const now = new Date().toISOString()
+  const next = {
+    ...rec,
+    status: nextStatus,
+    trackNo: patch.trackNo !== undefined ? patch.trackNo : rec.trackNo,
+    arrivedAt: patch.arrivedAt !== undefined ? patch.arrivedAt : (nextStatus === 'arrived' ? (rec.arrivedAt || now) : rec.arrivedAt),
+    testResult: patch.testResult !== undefined ? patch.testResult : rec.testResult,
+    notes: patch.notes !== undefined ? patch.notes : rec.notes,
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.sample}${id}`, next)
+  appendLog({ subjectType: 'project', subjectId: rec.projectId, projectId: rec.projectId, kind: 'sample_change', from: rec.status, to: nextStatus, reason: '样品状态推进' })
+  return next
+}
+
+/**
+ * 设置项目供应方案（引用型变更，不改报价/场景字节）：
+ * quoteId 必须属于 supplierId，且 supplier 必须属于项目；log supply_plan_change。
+ */
+export function setProjectSupply(projectId, args) {
+  assertNoSystemFields(args, 'supply')
+  const { supplierId, quoteId, by = 'user', note = '' } = args
+  const project = getProject(projectId)
+  if (!project) throw new Error('T7_STORE: 项目不存在')
+  const supplier = getSupplier(supplierId)
+  if (!supplier) throw new Error('T7_STORE: 供应商不存在')
+  if (supplier.projectId !== projectId) {
+    throw new Error(`T7_STORE: 供应商 ${supplierId} 不属于项目 ${projectId}（跨项目引用，fail-close）`)
+  }
+  const quote = getSupplierQuote(quoteId)
+  if (!quote) throw new Error(`T7_STORE: 报价 ${quoteId} 不存在`)
+  if (quote.supplierId !== supplierId) {
+    throw new Error(`T7_STORE: 报价 ${quoteId} 不属于供应商 ${supplierId}（供应方案引用不一致，fail-close）`)
+  }
+  const now = new Date().toISOString()
+  const next = {
+    ...project,
+    supply: { supplierId, quoteId, selectedAt: now, selectedBy: by, note },
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.project}${projectId}`, next)
+  appendLog({ subjectType: 'project', subjectId: projectId, projectId, kind: 'supply_plan_change', from: project.supply ? `${project.supply.supplierId}@${project.supply.quoteId}` : null, to: `${supplierId}@${quoteId}`, reason: `供应方案切换：${supplier.name} 报价 v${quote.version}${note ? `（${note}）` : ''}` })
+  return next
+}
+
+/** 清除供应方案（引用型）；log supply_plan_change */
+export function clearProjectSupply(projectId) {
+  const project = getProject(projectId)
+  if (!project) throw new Error('T7_STORE: 项目不存在')
+  if (!project.supply) return project
+  const now = new Date().toISOString()
+  const next = { ...project, supply: null, updatedAt: now }
+  write(`${T6_PREFIX.project}${projectId}`, next)
+  appendLog({ subjectType: 'project', subjectId: projectId, projectId, kind: 'supply_plan_change', from: `${project.supply.supplierId}@${project.supply.quoteId}`, to: null, reason: '清除供应方案' })
+  return next
 }
