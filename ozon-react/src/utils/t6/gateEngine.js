@@ -32,7 +32,22 @@ const MODULE_ZH = {
   launch: '冷启动计划（后续版本接入）',
 }
 
-// 每段进入时执行的检查；kind=data/workflow 用项目自身数据，kind=module 依赖未实现域 → NOT_EVALUATED
+// 基线场景毛利率（Ozon/WB 通用判定：≥15 PASS；<15 WARN；无场景/无基线 FAIL）
+function baselineMarginResult(project, ctx) {
+  const scenarios = ctx.scenarios || []
+  if (scenarios.length === 0) return { result: GATE_RESULTS.FAIL, message: '尚无成本场景（到「成本与物流」Tab 用核算面板生成）' }
+  const baseline = scenarios.find((s) => s.id === project.costing?.baselineScenarioId)
+  if (!baseline) return { result: GATE_RESULTS.FAIL, message: '未设置基线成本场景' }
+  const margin = Number(baseline.outputPayload?.profitRate)
+  if (!Number.isFinite(margin)) return { result: GATE_RESULTS.FAIL, message: '基线场景缺少利润率' }
+  return margin >= 15
+    ? { result: GATE_RESULTS.PASS }
+    : { result: GATE_RESULTS.WARN, message: `基线毛利率 ${margin}% < 15%` }
+}
+
+// 每段进入时执行的检查；
+// kind=data/workflow 用项目自身数据；kind=costing 用真实成本场景（T6-2B1）；
+// kind=module 依赖未实现域 → NOT_EVALUATED（supplier/samples/compliance/listing/operations/launch）
 const CHECKS = {
   RESEARCH: [
     {
@@ -43,12 +58,29 @@ const CHECKS = {
     },
   ],
   COSTING: [
-    { id: 'cost_scenario', label: '至少 1 个成本场景（Ozon/WB）', kind: 'module', module: 'costing' },
-    { id: 'target_price', label: '目标售价已填', kind: 'module', module: 'costing' },
+    {
+      id: 'cost_scenario', label: '至少 1 个成本场景且基线毛利率 ≥ 15%', kind: 'costing',
+      evaluate: (p, ctx) => baselineMarginResult(p, ctx),
+    },
+    {
+      id: 'target_price', label: '目标售价已填（基线场景）', kind: 'costing',
+      evaluate: (p, ctx) => {
+        const scenarios = ctx.scenarios || []
+        const baseline = scenarios.find((s) => s.id === p.costing?.baselineScenarioId)
+        if (!baseline) return { result: GATE_RESULTS.FAIL, message: '未设置基线成本场景' }
+        const price = Number(baseline.inputPayload?.price)
+        return price > 0
+          ? { result: GATE_RESULTS.PASS }
+          : { result: GATE_RESULTS.FAIL, message: '基线场景目标售价为空' }
+      },
+    },
   ],
   SAMPLING: [
     { id: 'supplier_quote', label: '至少 1 个供应商报价', kind: 'module', module: 'supplier' },
-    { id: 'margin_warning', label: '毛利率预期 ≥ 15%（不满足仅提示）', kind: 'module', module: 'costing' },
+    {
+      id: 'margin_warning', label: '毛利率预期 ≥ 15%', kind: 'costing',
+      evaluate: (p, ctx) => baselineMarginResult(p, ctx),
+    },
   ],
   COMPLIANCE: [
     { id: 'samples_record', label: '样品记录存在', kind: 'module', module: 'samples' },
@@ -102,18 +134,16 @@ export function evaluateProjectGate(project, targetStage, deps = {}) {
   const toIdx = stageIndex(targetStage)
   const path = PROJECT_STAGES.slice(fromIdx + 1, toIdx + 1)
 
-  const { availableModules = {}, snapshot = null } = deps
+  const { availableModules = {}, snapshot = null, scenarios = [] } = deps
+  const ctx = { scenarios }
   const checks = []
   for (const stage of path) {
     for (const def of CHECKS[stage] || []) {
       if (def.kind === 'module') {
-        if (!availableModules[def.module]) {
-          checks.push({ stage, id: def.id, label: def.label, result: GATE_RESULTS.NOT_EVALUATED, message: MODULE_ZH[def.module] || '该依赖模块尚未实现' })
-        } else {
-          checks.push({ stage, id: def.id, label: def.label, result: GATE_RESULTS.NOT_EVALUATED, message: MODULE_ZH[def.module] || '该依赖模块尚未实现' })
-        }
+        // 未实现依赖域一律 NOT_EVALUATED（不伪装 PASS，也不当 FAIL）
+        checks.push({ stage, id: def.id, label: def.label, result: GATE_RESULTS.NOT_EVALUATED, message: MODULE_ZH[def.module] || '该依赖模块尚未实现' })
       } else {
-        checks.push({ stage, id: def.id, label: def.label, ...def.evaluate(project) })
+        checks.push({ stage, id: def.id, label: def.label, ...def.evaluate(project, ctx) })
       }
     }
   }

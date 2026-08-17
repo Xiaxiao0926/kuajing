@@ -1,12 +1,13 @@
 /**
- * t6/gateEngine.test.mjs — Stage Gate 引擎测试（T6-2A hardening：路径 Gate + 流转 domain action）
+ * t6/gateEngine.test.mjs — Stage Gate 引擎测试（T6-2A hardening + T6-2B1 真实成本场景 Gate）
  * 运行: node --experimental-vm-modules src/utils/t6/gateEngine.test.mjs
  * 覆盖：
  *  G1-G6 业务语义（RESEARCH/模块/硬阻断/优先级/REVIEW 无检查/override）
- *  I18  非法目标阶段 fail-close（绝不把未知 stage 当空 checks → GREEN）
+ *  G-C1..C5 成本场景 Gate：无场景→FAIL(RED)、基线毛利≥15→PASS、<15→WARN(YELLOW)、无基线→FAIL、供应商仍 NOT_EVALUATED
+ *  I18  非法目标阶段 fail-close
  *  I19  非法当前阶段 fail-close
- *  I20  SAME 不执行前向检查（verdict=SAME，checks 空）
- *  I21  BACKWARD 不执行前向 Gate（verdict=BACKWARD；store 流转写 stage_change 默认理由，无 gate_override）
+ *  I20  SAME 不执行前向检查
+ *  I21  BACKWARD 不执行前向 Gate（stage_change 默认理由，无 gate_override）
  *  I22  RED 推进必填理由：为空 throw、stage 不变、不产生任何日志
  */
 import { evaluateProjectGate, GATE_VERDICTS, GATE_RESULTS } from './gateEngine.js'
@@ -16,7 +17,7 @@ import * as store from './t6Store.js'
 let pass = 0, fail = 0
 const assert = (cond, msg) => { if (cond) { pass++; console.log(`  ✅ ${msg}`) } else { fail++; console.log(`  ❌ ${msg}`) } }
 
-console.log('\n===== Stage Gate 引擎测试（路径 Gate） =====\n')
+console.log('\n===== Stage Gate 引擎测试（路径 Gate + 成本场景） =====\n')
 
 const mem = new Map()
 store._setAdapterForTests({
@@ -39,7 +40,17 @@ function makeProject(overrides = {}) {
   }
 }
 
-/** 走 store 建一个真实项目（供 transition 测试），返回项目 */
+/** 纯 fixture 成本场景（模拟 store 中的 CostScenario 记录） */
+function makeScenario({ id = 'sc1', projectId = 'p1', price = 5000, profitRate = 20 } = {}) {
+  return {
+    id, projectId, platform: 'OZON', name: `场景-${id}`, sourceSnapshotId: 's1',
+    inputPayload: { price },
+    outputPayload: { profit: 100, profitRate },
+    resolvedConfig: { calculatorVersion: 'ozon-rfbs-single-v1', selectedChannel: { id: 'standard_small', name: 'Standard Small' } },
+    createdAt: '',
+  }
+}
+
 function makeRealProject(sourceProductId = 'P-GATE-001') {
   const { candidate } = store.ensureCandidate({ sourceProductId, candidateIndex: 0, name: 'x', categoryLeaf: 'x', categoryFull: 'x' })
   const snap = store.buildScoringSnapshot({
@@ -64,15 +75,60 @@ console.log('G1: RESEARCH 有立项快照 → GREEN；无快照 → RED')
   assert(noSnap.verdict === GATE_VERDICTS.RED && noSnap.blockingReasons.length > 0, '无快照 → RED + blockingReasons')
 }
 
-console.log('G2: 依赖模块未实现 → NOT_EVALUATED（不伪装 PASS，也不当 FAIL；check 带 stage 归属）')
+console.log('G2: 未实现依赖模块 → NOT_EVALUATED（不伪装 PASS，也不当 FAIL；check 带 stage 归属）')
 {
-  const g = evaluateProjectGate(makeProject(), 'COSTING', { availableModules: {} })
-  assert(g.verdict === GATE_VERDICTS.NOT_EVALUATED, `COSTING 无模块 → NOT_EVALUATED (实际 ${g.verdict})`)
-  const costChecks = g.checks.filter((c) => c.stage === 'COSTING')
-  assert(costChecks.length === 2 && costChecks.every((c) => c.result === GATE_RESULTS.NOT_EVALUATED), 'COSTING 段检查全部 NOT_EVALUATED')
-  assert(costChecks.some((c) => c.message.includes('成本场景')), 'NOT_EVALUATED 带模块说明（成本场景 T6-2B1 起接入）')
+  // 项目已在 COSTING 且基线场景就绪，目标 COMPLIANCE：路径 SAMPLING/COMPLIANCE 上的 supplier/samples/compliance 均为未实现模块
+  const project = makeProject({
+    stage: 'COSTING',
+    costing: { scenarios: ['sc1'], baselineScenarioId: 'sc1' },
+  })
+  const g = evaluateProjectGate(project, 'COMPLIANCE', { scenarios: [makeScenario({ id: 'sc1', projectId: 'p1' })] })
+  assert(g.verdict === GATE_VERDICTS.NOT_EVALUATED, `未实现模块 → NOT_EVALUATED (实际 ${g.verdict})`)
+  const moduleChecks = g.checks.filter((c) => ['supplier_quote', 'samples_record', 'compliance_pending'].includes(c.id))
+  assert(moduleChecks.length === 3 && moduleChecks.every((c) => c.result === GATE_RESULTS.NOT_EVALUATED), 'supplier/samples/compliance 检查全部 NOT_EVALUATED')
   assert(g.checks.every((c) => c.stage && typeof c.stage === 'string'), '每个 check 都标注所属 stage')
   assert(g.blockingReasons.length === 0 && g.warnings.length === 0, 'NOT_EVALUATED 不产生 blocking/warning')
+}
+
+console.log('G-C1: COSTING 无成本场景 → FAIL → RED（fail-close，不伪装通过）')
+{
+  const g = evaluateProjectGate(makeProject(), 'COSTING', { scenarios: [] })
+  assert(g.verdict === GATE_VERDICTS.RED, `无场景 → RED (实际 ${g.verdict})`)
+  assert(g.blockingReasons.some((r) => r.includes('尚无成本场景')), '阻塞理由含「尚无成本场景」')
+}
+
+console.log('G-C2: 基线毛利 ≥15 → COSTING 全 PASS → GREEN')
+{
+  const project = makeProject({ costing: { scenarios: ['sc1'], baselineScenarioId: 'sc1' } })
+  const g = evaluateProjectGate(project, 'COSTING', { scenarios: [makeScenario({ id: 'sc1', projectId: 'p1', profitRate: 22 })] })
+  assert(g.verdict === GATE_VERDICTS.GREEN, `基线毛利 22% → GREEN (实际 ${g.verdict})`)
+  assert(g.checks.every((c) => c.result === GATE_RESULTS.PASS), 'cost_scenario/target_price 均 PASS')
+}
+
+console.log('G-C3: 基线毛利 <15 → WARN → YELLOW')
+{
+  const project = makeProject({ costing: { scenarios: ['sc1'], baselineScenarioId: 'sc1' } })
+  const g = evaluateProjectGate(project, 'COSTING', { scenarios: [makeScenario({ id: 'sc1', projectId: 'p1', profitRate: 10 })] })
+  assert(g.verdict === GATE_VERDICTS.YELLOW, `基线毛利 10% → YELLOW (实际 ${g.verdict})`)
+  assert(g.warnings.some((w) => w.includes('10%') && w.includes('15%')), '警告含「基线毛利率 10% < 15%」')
+}
+
+console.log('G-C4: 有场景但未设基线 → FAIL')
+{
+  const project = makeProject({ costing: { scenarios: ['sc1'], baselineScenarioId: null } })
+  const g = evaluateProjectGate(project, 'COSTING', { scenarios: [makeScenario({ id: 'sc1', projectId: 'p1' })] })
+  assert(g.verdict === GATE_VERDICTS.RED && g.blockingReasons.some((r) => r.includes('未设置基线')), '未设基线 → RED + 阻塞理由')
+}
+
+console.log('G-C5: SAMPLING 供应商仍 NOT_EVALUATED（成本已真实，供应商未实现）')
+{
+  const project = makeProject({ stage: 'COSTING', costing: { scenarios: ['sc1'], baselineScenarioId: 'sc1' } })
+  const g = evaluateProjectGate(project, 'SAMPLING', { scenarios: [makeScenario({ id: 'sc1', projectId: 'p1', profitRate: 20 })] })
+  const supplier = g.checks.find((c) => c.id === 'supplier_quote')
+  const margin = g.checks.find((c) => c.id === 'margin_warning')
+  assert(supplier && supplier.result === GATE_RESULTS.NOT_EVALUATED, 'supplier_quote NOT_EVALUATED')
+  assert(margin && margin.result === GATE_RESULTS.PASS, 'margin_warning 用真实基线 → PASS')
+  assert(g.verdict === GATE_VERDICTS.NOT_EVALUATED, `整体 → NOT_EVALUATED (实际 ${g.verdict})`)
 }
 
 console.log('G3: hard block——立项快照 BLOCKED_LOGISTICS 且 当前<SAMPLING、目标>=SAMPLING 才触发一次')
@@ -90,14 +146,18 @@ console.log('G3: hard block——立项快照 BLOCKED_LOGISTICS 且 当前<SAMPL
   assert(g3.verdict === GATE_VERDICTS.NOT_EVALUATED, '当前已是 SAMPLING → 不再触发 hard block（只提示模块）')
 }
 
-console.log('G4: 混合结果优先级——OPERATIONS（n20 未完成 FAIL + 模块 NOT_EVALUATED）→ RED')
+console.log('G4: 混合结果优先级——OPERATIONS（n20 未完成 FAIL + 模块 NOT_EVALUATED）→ RED；场景就绪后只剩模块 → NOT_EVALUATED')
 {
-  const g = evaluateProjectGate(makeProject(), 'OPERATIONS', { availableModules: {} })
-  assert(g.verdict === GATE_VERDICTS.RED, `RED 优先于 NOT_EVALUATED (实际 ${g.verdict})`)
+  const g = evaluateProjectGate(makeProject(), 'OPERATIONS', { scenarios: [] })
+  assert(g.verdict === GATE_VERDICTS.RED, `无场景时 → RED (实际 ${g.verdict})`)
   assert(g.blockingReasons.includes('尚未完成「商品上架」节点'), '包含 n20 阻塞理由')
-  const done = makeProject({ workflow: { templateVersion: 'roadmap-v1', states: [{ nodeId: 'n20', status: 'done', updatedAt: null, updatedBy: null, note: null }] } })
-  const g2 = evaluateProjectGate(done, 'OPERATIONS', { availableModules: {} })
-  assert(g2.verdict === GATE_VERDICTS.NOT_EVALUATED, 'n20 完成后只剩模块 → NOT_EVALUATED')
+
+  const ready = makeProject({
+    workflow: { templateVersion: 'roadmap-v1', states: [{ nodeId: 'n20', status: 'done', updatedAt: null, updatedBy: null, note: null }] },
+    costing: { scenarios: ['sc1'], baselineScenarioId: 'sc1' },
+  })
+  const g2 = evaluateProjectGate(ready, 'OPERATIONS', { scenarios: [makeScenario({ id: 'sc1', projectId: 'p1', profitRate: 20 })] })
+  assert(g2.verdict === GATE_VERDICTS.NOT_EVALUATED, '场景就绪 + n20 完成 → 只剩未实现模块 → NOT_EVALUATED')
 }
 
 console.log('G5: REVIEW 段无检查 → 单段推进 GREEN；Gate 只建议不自动改 stage')
@@ -116,7 +176,7 @@ console.log('G6: override 流程——RED 下人工强制推进必须写理由 �
   const res = transitionProjectStage({
     projectId: project.id,
     targetStage: 'OPERATIONS',
-    deps: { availableModules: {} },
+    deps: { availableModules: {}, scenarios: [] },
     reason: '强制推进：物流风险已知，先做成本测算',
   })
   const logs = store.listLogs().filter((l) => l.projectId === project.id)
@@ -167,7 +227,7 @@ console.log('I22: RED 推进必填理由——为空 throw、stage 不变、不�
   const project = makeRealProject('P-GATE-RED')
   let threw = false
   try {
-    transitionProjectStage({ projectId: project.id, targetStage: 'OPERATIONS', deps: { availableModules: {} } })
+    transitionProjectStage({ projectId: project.id, targetStage: 'OPERATIONS', deps: { availableModules: {}, scenarios: [] } })
   } catch (e) {
     threw = true
     assert(String(e.message).includes('T6_GATE') && String(e.message).includes('RED'), `错误信息含 T6_GATE/RED (实际 ${e.message})`)
