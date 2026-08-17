@@ -190,3 +190,52 @@ config/scoring_rules.json（唯一规则源：λ=0.5、六维权重 25/15/10/20/
 审计（Node）：scripts/t4-score-audit.js 与 UI 共用同一 scoringDataAdapter（同源保证逐位一致），
 输出 A/B/C/D/不可评级分布 + 维度验证矩阵；对拍脚本 _audit/tmp/verify-ui-audit-identity.js（5 SKU 逐位一致）。
 ```
+
+## 7. SKU 项目生命周期（T6）数据流
+
+### 7.1 主数据（T6-1，契约 V1.1）
+
+```text
+候选（t6.candidate.<uuid>）─ source_product_id 稳定身份（1000 唯一）
+  → ScoringSnapshot（t6.snapshot.<uuid>，不可变：scoreProduct 全量输出 + sourceInputs + marketContext + versions）
+  → SkuProject（t6.project.<uuid>，一键立项：RU-YYYY-NNN + creationSnapshotId 冻结）
+  → Workflow（roadmap-v1 模板 36 节点，registry 静态冻结；状态变更写 workflow_change 日志）
+  → DecisionLog（t6.log.<uuid>，append-only：subjectType candidate|project）
+  → 阶段 Gate（t6/stageEngine.js 路径 Gate：FORWARD 逐段聚合，SAME/BACKWARD 不执行前向检查；
+     非法 stage fail-close；BLOCKED_LOGISTICS 硬阻断精确语义；YELLOW/RED 推进必填理由走
+     stageTransition.js → gate_override 日志）
+```
+
+### 7.2 成本场景（T6-2B，Ozon/WB 联动）
+
+```text
+核算面板（OzonCalc / WBCalc，projectContext 显式状态，prefill 仅挂载一次）
+  → costScenarioAdapter.js（冻结适配）：
+      Ozon：buildOzonPrefill 只取 price/weight/dims/commission_rfbs（绝不 fbs/fbo/fbp、绝不虚构成本）
+            resolvedConfig 冻结 config/ozon_channels.json 完整渠道记录 + source/source_date/verified_by meta
+            + 汇率双语义（rubToCny=ozon_rub_to_cny 0.09 引擎实际使用；celRubPerCny=rub_per_cny 12 CEL 资费上下文，禁止统一）
+            outputPayload = calcChannelProfit 原文；calculatorVersion 'ozon-rfbs-single-v1'
+      WB：buildWbPrefill 只取 5 项（productName/actualWeightG=weight_kg×1000/尺寸/sellerRevenueRub←price_rub 参考售价）
+            佣金/线路/成本假设全部用户填写（绝不带入 Ozon commission_rfbs）
+            resolvedConfig 冻结完整费率版本快照（tariffId/routeId/routeName/有效期/取整/限制/tiers/反向规则/来源，非仅 routeId）
+            outputPayload = wbEngine 原文（logisticsCalc/profitCalc/reverseCalcResult/breakEvenPriceRub）
+            calculatorVersion 'wb-order-v2'（公式不变，仅元数据）
+  → CostScenario（t6.costScenario.<uuid>，不可变：仅 create/read；payload 禁带系统字段；快照归属校验）
+  → project.costing.scenarios[] + baselineScenarioId（首个自动基线；其后仅人工 setProjectBaselineScenario 切换）
+  → 跨平台比较表：scenarioSummary 统一 profitMarginPct（OZON=profitRate；WB=profitCalc.profitMargin），
+    值来自各平台现有核算引擎，不跨平台重算费用
+  → Gate：costing 检查用真实场景（无场景 FAIL / 基线毛利≥15 PASS / <15 WARN；supplier 等未实现域仍 NOT_EVALUATED）
+```
+
+### 7.3 关键文件（T6）
+
+| 文件 | 作用 |
+|---|---|
+| `ozon-react/src/utils/t6/t6Store.js` | 主数据 store（逐实体持久化、append-only、fail-close 校验、CostScenario 实体） |
+| `ozon-react/src/utils/t6/stageModel.js` | 阶段唯一事实源（PIPELINE..REVIEW 9 段，SAMPLING 硬阻断界点） |
+| `ozon-react/src/utils/t6/gateEngine.js` | 路径 Stage Gate（纯函数，只建议不自动改状态） |
+| `ozon-react/src/utils/t6/stageTransition.js` | 阶段流转 domain action（YELLOW/RED 必填理由） |
+| `ozon-react/src/utils/t6/costScenarioAdapter.js` | Ozon/WB 场景冻结适配 + 统一摘要（scenarioSummary/scenarioMarginPct） |
+| `ozon-react/src/utils/t6/*.test.mjs` | 4 套测试（store/gate/costScenario/wbScenario，184 断言） |
+| `ozon-react/src/components/t6/` | 候选池 / 项目列表 / 项目详情（Gate + Workflow + 成本场景 + 比较表） |
+| `ozon-react/src/components/OzonCalc.jsx`、`WBCalc.jsx` | 核算面板（projectContext 模式） |

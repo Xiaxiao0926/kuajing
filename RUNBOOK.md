@@ -47,13 +47,15 @@ curl http://localhost:8888/                 # 期望 200 HTML
 ## 2. 测试（唯一入口：npm，禁止裸调 python）
 
 ```bash
-npm test              # 强制：React 65 + Python 31（自动前置 sync-config）
+npm test              # 强制：React 65 + Python 31（自动前置 sync-config）+ scoring 81/20/13/22 + T6 四套（56/42/44/42）+ golden 56
 npm run test:golden   # 强制：黄金业务案例（tests/golden/，provenance 分级）
 npm run test:sync     # 强制：双端对拍（16 边界重量 + 2 版本边界，零差异）
 npm run sync:config   # 手动同步 config/*.json → src/generated/*.js
 ```
 
 **修改任何涉及 wbEngine/ozonEngine/tariffs/commission/logistics/profit/税费/汇率/成本的代码后，必须三条全部执行且全绿后才能提交。**
+
+**T6 专项**：`npm run test:t6`（t6Store 56 + gateEngine 42 + costScenario 44 + wbScenario 42）。
 
 ---
 

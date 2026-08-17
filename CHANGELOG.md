@@ -7,6 +7,12 @@
 
 ## 2026-08-14（整改阶段 V3）
 
+### feat — T6 SKU 项目生命周期：成本场景与平台联动（T6-2B，已合并 main，tag `v3-t6-sku-project-lifecycle`）
+- **T6-2A hardening**（`fix(t6-2a)` `2b2758d`，merge `f1ef799`）：路径 Stage Gate 重构——`stageModel.js` 阶段唯一事实源（PIPELINE..REVIEW 9 段，SAMPLING 硬阻断界点）；`gateEngine.js` 路径 Gate（FORWARD 逐段聚合带 stage 归属、SAME/BACKWARD 不执行前向检查、非法 stage fail-close、BLOCKED_LOGISTICS 精确触发一次、RED>YELLOW>NOT_EVALUATED>GREEN）；`stageTransition.js` 流转 domain action（YELLOW/RED 推进必填理由，空理由 throw 且不产生日志）；`setWorkflowNode` 审计（状态变化写 workflow_change，仅备注不写日志，备注可清空/保留）；ProjectDetailPage 路径 Gate UI（分组检查/回退提示/理由输入）+ 备注草稿 onBlur 保存；ProjectListPage 移除列表内生命周期按钮与 window.prompt（收敛到详情页）。Gate 测试 33（I18-I22 新增），Store 测试 56（I17 新增）。
+- **T6-2B1**（`feat(t6-2b1)` `ce4949c`，merge `0b78bac`）：CostScenario 不可变实体（`t6.costScenario.<uuid>`，仅 create/read，payload 禁带系统字段，快照归属 fail-close，首个自动基线 + cost_scenario_create/cost_baseline_change 日志）；`costScenarioAdapter.js` Ozon 冻结（prefill 只取 price/weight/dims/commission_rfbs，绝不虚构成本；resolvedConfig 冻结完整渠道配置+source/source_date/verified_by meta；汇率双语义 rubToCny=0.09 / celRubPerCny=12 并存不统一；outputPayload=calcChannelProfit 原文；calculatorVersion 'ozon-rfbs-single-v1'）；OzonCalc projectContext 模式（显式状态、prefill 一次、不写共享持久化键、[保存此方案到项目]）；Gate 成本检查真实化（无场景 FAIL、基线毛利≥15 PASS、<15 WARN，supplier 仍 NOT_EVALUATED）；测试 44（C1-C9）。
+- **T6-2B2**（`feat(t6-2b2)` `8271d3f`，merge `797b6c2`）：WB 成本场景（prefill 只 5 项：名称/重量克=weight_kg×1000/尺寸/sellerRevenueRub←price_rub 参考售价；佣金绝不预填即使 commission_rfbs=99；resolvedConfig 冻结完整费率版本快照 tariffId/routeId/routeName/有效期/取整/限制/tiers/反向规则/来源，非仅 routeId；outputPayload=wbEngine 原文 logisticsCalc/profitCalc/reverseCalcResult/breakEvenPriceRub；calculatorVersion 'wb-order-v2' 公式不变）；WBCalc/CalculatorTab projectContext 模式 + [保存此方案到项目]；跨平台方案比较表（scenarioSummary 统一 profitMarginPct，注明"比较值来自各平台现有核算引擎；不跨平台重新计算费用"）；基线仅人工切换（WB 场景仅测算参考）；Gate target_price 平台统一口径（price/sellerRevenueRub）；测试 42（W1-W10）。
+- 全程未改 wbEngine/ozonEngine/wb_calc.py 公式、config 费率、评分分布；A1/B191/C448/D169/不可评级191 不变。
+
 ### feat — T4 选品评分与决策解释系统（分支 `feat/v3-t4-product-scoring`，待验收合并）
 - **T4-0**：1000×63 选品数据审计（`T4-0-选品数据审计报告.md`）；**T4-1A**：BSR 市场基准层（855 类型/19 域聚合，`T4-1A-BSR市场基准层审计报告.md`）；**T4-1B**：机器可执行规格（`T4-1B-评分模型设计冻结.md`）。
 - **T4-2**：纯评分引擎（六维 25/15/10/20/15/15 + Gate/Decision 分离 + Supply Gap + 证据感知重归一），41 单测；hardening（NEEDS_DATA→不可评级、coverage 两位精度、缺失子项重归一、两价格公式冻结、物流池排除无效尺寸、merge main）。
