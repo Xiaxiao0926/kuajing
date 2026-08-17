@@ -130,7 +130,7 @@ feature branch（fix/ feat/ docs/ refactor/ 前缀）
 | 角色 | 当前推荐模型 |
 |---|---|
 | Lead / Pro（技术负责人） | DeepSeek V4 Pro（deepseek-v4-pro）；同级候选：GPT-5.6 |
-| Fast / Flash（日常开发） | DeepSeek V4 Flash（deepseek-v4-flash）；同级候选：Kimi K3 |
+| Fast / Flash（日常开发） | DeepSeek V4 Flash（deepseek-v4-flash）；同级候选：Kimi K3、Gemini 3.7 Flash（本机 Antigravity CLI：`agy --print --model gemini-3.7-flash-medium`，仅限有界子任务，产物必须过主代理评审与全量测试门） |
 | Design / UI | 多模态模型（按需选择） |
 
 > 说明：`deepseek-chat` / `deepseek-reasoner` 旧模型名已于 2026-07-24 停用；接 Agent 工具链时使用新模型名。AGENTS.md 不绑定任何型号。

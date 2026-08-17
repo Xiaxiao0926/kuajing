@@ -9,6 +9,7 @@
  */
 import { persistGet, persistSet } from '../persist.js'
 import { getWorkflowTemplate } from '../../data/workflowTemplates/registry.js'
+import { PROJECT_STAGES as PROJECT_STAGES_ALLOWED, isValidStage } from './stageModel.js'
 
 const SCHEMA_VERSION = 1
 export const WORKFLOW_TEMPLATE_VERSION = 'roadmap-v1'
@@ -339,11 +340,11 @@ export function setProjectLifecycle(id, status, reason = '') {
   return next
 }
 
-const PROJECT_STAGES = ['PIPELINE', 'RESEARCH', 'COSTING', 'SAMPLING', 'COMPLIANCE', 'PRODUCTION', 'LAUNCH', 'OPERATIONS', 'REVIEW']
+const PROJECT_STAGES = null // 唯一事实源见 stageModel.js（T6-2A：禁止此处再维护一份）
 
 export function setProjectStage(id, stage, reason = '') {
-  if (!PROJECT_STAGES.includes(stage)) {
-    throw new Error(`T6_STORE: 非法项目阶段 "${stage}"（允许: ${PROJECT_STAGES.join('/')}）`)
+  if (!isValidStage(stage)) {
+    throw new Error(`T6_STORE: 非法项目阶段 "${stage}"（允许: ${PROJECT_STAGES_ALLOWED.join('/')}）`)
   }
   const rec = getProject(id)
   if (!rec) throw new Error('T6_STORE: 项目不存在')
@@ -363,23 +364,36 @@ export function setProjectName(id, name) {
 
 const WORKFLOW_STATUS = ['pending', 'active', 'done', 'skipped']
 
-export function setWorkflowNode(id, nodeId, status, note = '') {
+/**
+ * 更新项目 workflow 节点。
+ * - 状态变化：写 DecisionLog(kind=workflow_change, from→to, reason=节点标题)
+ * - 仅备注变化：不写日志（note-only）
+ * - note 语义：note===undefined 保留旧值；否则按传入值保存（允许清空为 ''）
+ */
+export function setWorkflowNode(id, nodeId, status, note) {
   if (!WORKFLOW_STATUS.includes(status)) {
     throw new Error(`T6_STORE: 非法节点状态 "${status}"（允许: ${WORKFLOW_STATUS.join('/')}）`)
   }
   const rec = getProject(id)
   if (!rec) throw new Error('T6_STORE: 项目不存在')
   const template = getProjectWorkflowTemplate(rec)
-  if (!template.nodes.some((n) => n.nodeId === nodeId)) {
+  const nodeDef = template.nodes.find((n) => n.nodeId === nodeId)
+  if (!nodeDef) {
     throw new Error(`T6_STORE: nodeId ${nodeId} 不属于模板 ${rec.workflow.templateVersion}（fail-close）`)
   }
-  if (!rec.workflow.states.some((s) => s.nodeId === nodeId)) {
+  const state = rec.workflow.states.find((s) => s.nodeId === nodeId)
+  if (!state) {
     throw new Error(`T6_STORE: 项目 workflow 实例缺少节点 ${nodeId}（数据损坏，fail-close）`)
   }
   const now = new Date().toISOString()
-  const states = rec.workflow.states.map((s) => (s.nodeId === nodeId ? { ...s, status, updatedAt: now, note: note || s.note } : s))
+  const nextNote = note === undefined ? state.note : note
+  const statusChanged = state.status !== status
+  const states = rec.workflow.states.map((s) => (s.nodeId === nodeId ? { ...s, status, note: nextNote, updatedAt: statusChanged || nextNote !== state.note ? now : s.updatedAt } : s))
   const next = { ...rec, workflow: { ...rec.workflow, states }, updatedAt: now }
   write(`${T6_PREFIX.project}${id}`, next)
+  if (statusChanged) {
+    appendLog({ subjectType: 'project', subjectId: id, projectId: id, kind: 'workflow_change', from: state.status, to: status, reason: nodeDef.title })
+  }
   return next
 }
 
