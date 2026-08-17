@@ -223,3 +223,21 @@ total_logistics_cost_cny = forward_logistics_used_cny
 **证据感知**：子指标覆盖<50% → 维度 N/A；维度层按可用权重重归一；缺失子项按剩余权重重归一，禁止用 0/50 补值。
 
 **修改纪律**：任何权重/公式变更 = 需求方书面确认 + 更新本节与 `T4-1B-评分模型设计冻结.md` + 重跑 scoring golden/monotonicity/审计三件套 + 重跑 λ 校准验证（若涉及 demand）。
+
+## 13. 成本场景冻结规则（T6-2B，Ozon/WB 联动）
+
+**CostScenario（`t6.costScenario.<uuid>`）是不可变快照**：保存后不可编辑/删除；`project.costing.scenarios[]` 追加，首个场景自动设为基线（`cost_baseline_change` 日志），其后基线**仅人工** `setProjectBaselineScenario` 切换（WB 场景保存仅测算参考，绝不自动改基线）。
+
+**Ozon 预填（`buildOzonPrefill`）只取 4 项**：price←`price_rub`（SingleTab 实际售价语义，**绝不 ×0.6**）、weight←`weight_kg`、尺寸←`dims`、commission←`commission_rfbs`（rFBS 自发货；**绝不取 fbs/fbo/fbp**）。采购成本/国内段运费/贴标费/广告/支付/代理/退货损失**绝不虚构**，由用户在核算面板填写真实值。
+
+**WB 预填（`buildWbPrefill`）只取 5 项**：productName、actualWeightG=`weight_kg×1000`、尺寸、sellerRevenueRub←`price_rub`（标记"来自候选市场的参考售价"）。**WB 佣金/线路/成本假设全部用户填写**——即使候选 `commission_rfbs=99` 也绝不带入（WB 是完全独立的利润模型，禁止移植 Ozon 佣金）。
+
+**resolvedConfig 冻结规则（不复制费率）**：
+- Ozon：冻结 `config/ozon_channels.json` 完整渠道记录 + `source/source_date/verified_by` meta；汇率双语义并存且禁止统一——`rubToCny = ozon_rub_to_cny`（0.09，Ozon 引擎实际使用）、`celRubPerCny = rub_per_cny`（12，CEL 资费上下文存档）。
+- WB：冻结完整费率版本快照（tariffId/routeId/routeName/effectiveFrom/effectiveTo/weightRoundingG/尺寸重量限制/tiers/反向规则/sourceName），**不是只存 routeId**；设置子集（rubPerCny/阈值）。
+
+**outputPayload**：冻结引擎输出原文（Ozon=`calcChannelProfit` 结果；WB=`logisticsCalc/profitCalc/reverseCalcResult/breakEvenPriceRub`）。`calculatorVersion` 仅元数据（'ozon-rfbs-single-v1' / 'wb-order-v2'），**公式不变**。
+
+**跨平台比较表**：值来自各平台现有核算引擎（OZON=profitRate；WB=profitCalc.profitMargin，统一为 `profitMarginPct`），**不跨平台重新计算费用**。
+
+**Gate（COSTING 段）用真实场景**：无场景→FAIL(RED)；基线毛利率 ≥15%→PASS；<15%→WARN(YELLOW)；未设基线→FAIL。supplier/samples/compliance/listing/operations/launch 等未实现域仍 NOT_EVALUATED。

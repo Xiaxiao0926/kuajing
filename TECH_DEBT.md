@@ -31,6 +31,7 @@
 | TD-20 | WP 页面「跨境运营工具」Hero 标题压缩（插件 0.2.5 scoped h1 catch-all + `<!-- kuajing-theme: -->` 诊断）尚未在生产截图确认命中；若未命中需按真实元素 class 做精确 selector 修复 | `wordpress/kuajing-persistence/kuajing-persistence.php` | 中：首屏 Hero 占用视觉注意力 | T5 视觉收尾时按生产截图闭环（T5-5 分支未 merge，随其验收） |
 | TD-21 | 旧业务页深层视觉残留：部分 emoji、个别图表内色彩、个别卡片结构未做逐像素级统一（T5-5 只做了表面层 harmonization + 字号 sweep） | `ozon-react/src/components/*`（旧页） | 低：与新 Workspace 存在局部风格落差 | T5 视觉收尾二期或随页面重做逐个处理 |
 | TD-22 | `RU-YYYY-NNN` 编号靠扫描已有项目 max+1 生成：多设备并发创建时人类编号可能重复（UUID 主键不受影响） | `ozon-react/src/utils/t6/t6Store.js` → `nextProjectCode()` | 低：当前无团队协同写入 | 多人使用时把 sequence 移到 WP 服务端原子生成（不阻塞 T6-2） |
+| TD-23 | 成本场景保存不校验「实际值字段」与估算值一致性（如 WB 反向配送 actualForwardLogisticsCny/actualReverseCompensationCny 由用户手工填写），场景字节冻结后不可修正，只能新建场景覆盖基线 | `ozon-react/src/components/wbcalc/tabs/CalculatorTab.jsx` / `costScenarioAdapter.js` | 低-中：与实际账单对不上时需人工重建场景 | 保存前增加估算/实际值差异提示（不阻塞 T6） |
 
 ---
 
