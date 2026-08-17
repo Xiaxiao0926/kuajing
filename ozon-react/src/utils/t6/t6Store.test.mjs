@@ -293,5 +293,39 @@ console.log('I16: setWorkflowNode 按项目自己的 templateVersion 取模板�
   assert(WORKFLOW_TEMPLATES['roadmap-v1'] && !WORKFLOW_TEMPLATES['roadmap-v2'], 'registry 只含已冻结版本')
 }
 
+console.log('I17: workflow 节点审计——状态变化写 1 条 workflow_change；仅备注变化不写日志；备注可清空/保留')
+{
+  const project = store.listProjects()[0]
+  const tpl = getWorkflowTemplate('roadmap-v1')
+  const n1Title = tpl.nodes.find((n) => n.nodeId === 'n1').title
+  const pLogs = () => store.listLogs().filter((l) => l.projectId === project.id)
+  const wfLogs = () => pLogs().filter((l) => l.kind === 'workflow_change')
+
+  // 状态变化：pending → done → 恰好 1 条 workflow_change（from→to, reason=节点标题）
+  store.setWorkflowNode(project.id, 'n1', 'done', '已通过')
+  let wf = wfLogs()
+  assert(wf.length === 1 && wf[0].from === 'pending' && wf[0].to === 'done' && wf[0].reason === n1Title,
+    `状态变化 → 1 条 workflow_change (from=pending, to=done, reason=${n1Title})`)
+
+  // 仅备注变化（状态不变）→ 0 条新日志，备注已保存
+  store.setWorkflowNode(project.id, 'n1', 'done', '备注更新')
+  assert(wfLogs().length === 1, '仅备注变化 → 不写日志')
+  assert(store.getProject(project.id).workflow.states.find((s) => s.nodeId === 'n1').note === '备注更新', '备注已保存')
+
+  // note=undefined → 保留旧值
+  store.setWorkflowNode(project.id, 'n1', 'done', undefined)
+  assert(store.getProject(project.id).workflow.states.find((s) => s.nodeId === 'n1').note === '备注更新', 'note=undefined 保留旧值')
+
+  // 清空备注为 '' 允许（仍不写日志）
+  store.setWorkflowNode(project.id, 'n1', 'done', '')
+  assert(store.getProject(project.id).workflow.states.find((s) => s.nodeId === 'n1').note === '', '备注可清空为 \'\'')
+  assert(wfLogs().length === 1, '清空备注也不写日志')
+
+  // 再次状态变化 → 新增 1 条
+  store.setWorkflowNode(project.id, 'n1', 'active', '推进中')
+  wf = wfLogs()
+  assert(wf.length === 2 && wf[1].from === 'done' && wf[1].to === 'active', '第二次状态变化 → 共 2 条 workflow_change')
+}
+
 console.log(`\n===== T6 Store 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)
 if (fail > 0) process.exit(1)
