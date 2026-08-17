@@ -8,12 +8,13 @@ import ScoreCell from './ScoreCell'
 import DecisionBadge from './DecisionBadge'
 import ContextBadge from './ContextBadge'
 import RiskIndicators from './RiskIndicators'
+import { UserPlus } from 'lucide-react'
 
 const GAP_ZH = { HIGH_GAP: '强供应缺口', MEDIUM_GAP: '中等缺口', NO_STRONG_GAP_SIGNAL: '暂无强信号' }
 
 const dim = (r, key) => (r.dimensions[key]?.available ? r.dimensions[key].score : null)
 
-export default function ScoringTable({ rows, selectedIndex, onSelect }) {
+export default function ScoringTable({ rows, selectedIndex, onSelect, onAddCandidate }) {
   return (
     <DataTable
       minHeight={480}
@@ -32,6 +33,7 @@ export default function ScoringTable({ rows, selectedIndex, onSelect }) {
           <th className="px-3 py-2.5 font-medium">Gap</th>
           <th className="px-3 py-2.5 font-medium">Context</th>
           <th className="px-3 py-2.5 font-medium">风险</th>
+          <th className="px-3 py-2.5 text-right font-medium">操作</th>
         </>
       }
     >
@@ -66,6 +68,19 @@ export default function ScoringTable({ rows, selectedIndex, onSelect }) {
             </td>
             <td className="px-3 py-2"><ContextBadge context={r.context} /></td>
             <td className="px-3 py-2"><RiskIndicators status={r.status} /></td>
+            <td className="px-3 py-2 text-right">
+              {onAddCandidate && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); onAddCandidate(r) }}
+                  title="加入候选（生成不可变评分快照）"
+                  className="inline-flex h-7 items-center gap-1 rounded-md border border-workspace-border-strong bg-workspace-surface px-2 text-xs text-workspace-text-secondary transition-colors hover:bg-workspace-primary-soft hover:text-workspace-primary"
+                >
+                  <UserPlus className="h-3.5 w-3.5" />
+                  加入候选
+                </button>
+              )}
+            </td>
           </tr>
         )
       })}

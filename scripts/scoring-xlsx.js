@@ -13,6 +13,7 @@ function loadCanonicalCandidates(xlsxPath) {
   const idx = {
     name: col('商品名称'), brand: col('品牌'), cat: col('所属类目'),
     rating: col('商品评分'), reviews: col('评论数'), price: col('价格'), avgPrice: col('平均单价'),
+    productId: col('商品ID'),
     sales: col('销售额'), units: col('销量'), exposure: col('曝光量'), visits: col('浏览次数'),
     conv: col('订单转化率'), cartAdd: col('商品卡加入购物车率'),
     gross: col('预估毛利率'), fbs: col('FBS佣金（%）'), fbo: col('FBO佣金（%）'), rfbs: col('RFBS佣金（%）'), fbp: col('FBP佣金（%）'),
@@ -32,6 +33,8 @@ function loadCanonicalCandidates(xlsxPath) {
       const avgPrice = pctNum(r[idx.avgPrice]);
       return {
         name: String(r[idx.name] || '').trim(),
+        // T6-1：稳定业务身份（原始 商品ID，1000 行 1000 唯一）；评分引擎忽略此字段
+        source_product_id: r[idx.productId] != null ? String(r[idx.productId]).trim() : '',
         category_leaf: catFull.split('>').pop().trim(),
         category_full: catFull,
         price_rub: price != null && price > 0 ? price : null,

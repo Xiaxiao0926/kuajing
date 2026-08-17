@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from 'react'
 import {
   Upload, FileSpreadsheet, Loader2, FolderOpen, ChevronDown, ChevronRight, CheckCircle2, Info, GitBranch,
   LayoutDashboard, Search, Target, ClipboardList, Store, Truck, FileText, Package, Factory, ShieldCheck, Wallet, Database, BarChart3,
+  Inbox, FolderKanban,
 } from 'lucide-react'
 import { ROADMAP_PHASES } from '../data/roadmap'
 import { persistGet, persistSet } from '../utils/persist'
@@ -41,7 +42,11 @@ const NAV_SECTIONS = [
   },
   {
     id: 'goods', label: '商品中心', icon: Package,
-    items: [{ id: 'n5', label: '商品中心', icon: Package }],
+    items: [
+      { id: '__t6_candidates__', label: '候选池', icon: Inbox },
+      { id: '__t6_projects__', label: 'SKU 项目', icon: FolderKanban },
+      { id: 'n5', label: '商品档案', icon: Package },
+    ],
   },
   {
     id: 'supply', label: '供应链', icon: Factory,

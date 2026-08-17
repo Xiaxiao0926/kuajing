@@ -4,8 +4,9 @@
  * → 商业可行性五维横条 → Supply Gap → 为什么值得做/主要风险（buildExplanations 输出）
  * → 市场基准 → 下一步。不使用 emoji；N/A 显示 —（tooltip 说明证据不足）。
  */
-import { CheckCircle2, AlertTriangle } from 'lucide-react'
+import { CheckCircle2, AlertTriangle, UserPlus, FolderPlus } from 'lucide-react'
 import Drawer from '../ui/Drawer'
+import Button from '../ui/Button'
 import ScoreCell from './ScoreCell'
 import DecisionBadge from './DecisionBadge'
 import ContextBadge from './ContextBadge'
@@ -51,7 +52,7 @@ function Section({ title, children }) {
   )
 }
 
-export default function ScoringDetailDrawer({ row, open, onClose }) {
+export default function ScoringDetailDrawer({ row, open, onClose, onAddCandidate, onCreateProject }) {
   if (!row) return null
   const d = row.dimensions?.demand
   return (
@@ -77,6 +78,16 @@ export default function ScoringDetailDrawer({ row, open, onClose }) {
         {row.gradeTentative && (
           <span className="rounded-[5px] bg-workspace-warning-soft px-1.5 py-0.5 text-workspace-warning">评级暂定</span>
         )}
+      </div>
+
+      {/* T6-1：候选池 / 一键立项（生成不可变快照 + SKU Project） */}
+      <div className="mt-4 flex items-center gap-2 border-t border-workspace-border pt-3">
+        <Button variant="secondary" size="sm" onClick={() => onAddCandidate?.(row)}>
+          <UserPlus className="h-3.5 w-3.5" /> 加入候选
+        </Button>
+        <Button variant="primary" size="sm" onClick={() => onCreateProject?.(row)}>
+          <FolderPlus className="h-3.5 w-3.5" /> 创建项目
+        </Button>
       </div>
 
       {/* 市场需求（双分量必须显示） */}
