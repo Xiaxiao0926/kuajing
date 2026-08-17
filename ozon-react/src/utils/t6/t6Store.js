@@ -20,6 +20,7 @@ export const T6_PREFIX = {
   project: 't6.project.',
   snapshot: 't6.snapshot.',
   log: 't6.log.',
+  costScenario: 't6.costScenario.',
 }
 
 export function uuid() {
@@ -394,6 +395,94 @@ export function setWorkflowNode(id, nodeId, status, note) {
   if (statusChanged) {
     appendLog({ subjectType: 'project', subjectId: id, projectId: id, kind: 'workflow_change', from: state.status, to: status, reason: nodeDef.title })
   }
+  return next
+}
+
+// ---------- CostScenario（T6-2B1：不可变成本场景；仅 create/read；payload 禁带系统字段） ----------
+const COST_PLATFORMS = ['OZON', 'WB']
+
+/**
+ * 创建成本场景（append-only，不可变）：
+ * - 必须归属一个已存在项目；sourceSnapshotId 必须 = 项目立项快照 id（快照归属 fail-close）
+ * - 首个场景自动设为项目基线（写 cost_baseline_change 日志）
+ * - 日志：cost_scenario_create / cost_baseline_change
+ */
+export function createCostScenario(args) {
+  assertNoSystemFields(args, 'costScenario')
+  const { projectId, platform, name, sourceSnapshotId, inputPayload, resolvedConfig, outputPayload } = args
+  if (!COST_PLATFORMS.includes(platform)) {
+    throw new Error(`T6_STORE: 非法成本平台 "${platform}"（允许: ${COST_PLATFORMS.join('/')}）`)
+  }
+  if (!name || !String(name).trim()) throw new Error('T6_STORE: 成本场景名称必填')
+  if (!inputPayload || !resolvedConfig || !outputPayload) {
+    throw new Error('T6_STORE: 成本场景载荷不完整（inputPayload/resolvedConfig/outputPayload 必填）')
+  }
+  const project = getProject(projectId)
+  if (!project) throw new Error('T6_STORE: 项目不存在')
+  if (sourceSnapshotId !== project.source.creationSnapshotId) {
+    throw new Error(`T6_STORE: 成本场景快照归属不一致（必须冻结立项快照 ${project.source.creationSnapshotId} 的上下文）`)
+  }
+  const snap = getSnapshot(sourceSnapshotId)
+  if (!snap) throw new Error(`T6_STORE: 立项快照 ${sourceSnapshotId} 不存在（场景上下文缺失，fail-close）`)
+
+  const id = uuid()
+  const key = `${T6_PREFIX.costScenario}${id}`
+  if (read(key) !== null) throw new Error(`T6_STORE: costScenario key 冲突 ${key}`)
+  const now = new Date().toISOString()
+  const record = {
+    id, schemaVersion: SCHEMA_VERSION,
+    projectId, platform, name,
+    sourceSnapshotId,
+    inputPayload: JSON.parse(JSON.stringify(inputPayload)),
+    resolvedConfig: JSON.parse(JSON.stringify(resolvedConfig)),
+    outputPayload: JSON.parse(JSON.stringify(outputPayload)),
+    createdAt: now, updatedAt: now,
+  }
+  write(key, record)
+
+  const costing = project.costing || { scenarios: [], baselineScenarioId: null }
+  const wasBaseline = !!costing.baselineScenarioId
+  const next = {
+    ...project,
+    costing: {
+      scenarios: [...(costing.scenarios || []), id],
+      baselineScenarioId: costing.baselineScenarioId || id,
+    },
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.project}${projectId}`, next)
+
+  appendLog({ subjectType: 'project', subjectId: projectId, projectId, kind: 'cost_scenario_create', from: null, to: id, reason: `${platform} 成本场景「${name}」` })
+  if (!wasBaseline) {
+    appendLog({ subjectType: 'project', subjectId: projectId, projectId, kind: 'cost_baseline_change', from: null, to: id, reason: '首个成本场景自动设为基线' })
+  }
+  return record
+}
+
+export function getCostScenario(id) { return read(`${T6_PREFIX.costScenario}${id}`) }
+export function listCostScenarios() { return listEntities(T6_PREFIX.costScenario) }
+export function getProjectScenarios(projectId) {
+  return listCostScenarios().filter((s) => s.projectId === projectId)
+}
+
+/** 设置项目基线场景（引用型变更，不改场景字节；跨项目设置 fail-close） */
+export function setProjectBaselineScenario(projectId, scenarioId) {
+  const project = getProject(projectId)
+  if (!project) throw new Error('T6_STORE: 项目不存在')
+  const scenario = getCostScenario(scenarioId)
+  if (!scenario) throw new Error(`T6_STORE: 成本场景 ${scenarioId} 不存在`)
+  if (scenario.projectId !== projectId) {
+    throw new Error(`T6_STORE: 跨项目设置基线（场景属于 ${scenario.projectId}，目标项目 ${projectId}，fail-close）`)
+  }
+  const costing = project.costing || { scenarios: [], baselineScenarioId: null }
+  if (costing.baselineScenarioId === scenarioId) return project
+  const now = new Date().toISOString()
+  const next = { ...project, costing: { ...costing, baselineScenarioId: scenarioId }, updatedAt: now }
+  write(`${T6_PREFIX.project}${projectId}`, next)
+  appendLog({
+    subjectType: 'project', subjectId: projectId, projectId, kind: 'cost_baseline_change',
+    from: costing.baselineScenarioId, to: scenarioId, reason: `基线切换：${scenario.name}`,
+  })
   return next
 }
 

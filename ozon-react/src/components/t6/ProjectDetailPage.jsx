@@ -12,11 +12,14 @@ import {
 } from 'lucide-react'
 import {
   getProject, getSnapshot, getLog, setProjectLifecycle, setWorkflowNode, projectProgress,
+  createCostScenario, getProjectScenarios, setProjectBaselineScenario,
 } from '../../utils/t6/t6Store'
 import { evaluateProjectGate, GATE_VERDICTS, GATE_RESULTS } from '../../utils/t6/gateEngine'
 import { transitionProjectStage } from '../../utils/t6/stageTransition'
 import { PROJECT_STAGES, transitionDirection, isValidStage } from '../../utils/t6/stageModel'
+import { buildOzonPrefill, buildOzonScenarioPayload, scenarioSummary } from '../../utils/t6/costScenarioAdapter'
 import { getWorkflowTemplate } from '../../data/workflowTemplates/registry'
+import OzonCalc from '../OzonCalc'
 import Surface from '../ui/Surface'
 import PageHeader from '../ui/PageHeader'
 import Button from '../ui/Button'
@@ -37,11 +40,11 @@ const NODE_STATUS_ZH = { pending: '待办', active: '进行中', done: '完成',
 const LOG_KIND_ZH = {
   status_change: '状态变更', stage_change: '阶段变更', gate_override: '强制推进',
   snapshot_create: '评分快照', project_create: '一键立项', workflow_change: '节点变更', note: '备注',
+  cost_scenario_create: '成本场景', cost_baseline_change: '基线切换',
 }
 const PLACEHOLDERS = {
   product: '产品定义域将在后续版本接入',
   suppliers: '供应商管理将在 T7 接入',
-  costing: '成本场景与 Ozon/WB 联动将在 T6-2B 接入',
   compliance: '合规数据域将在后续版本接入',
   operations: '订单 / 库存 / 广告数据将在 T8 接入',
 }
@@ -79,6 +82,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
   const [targetStage, setTargetStage] = useState('RESEARCH')
   const [reason, setReason] = useState('')
   const [notice, setNotice] = useState('')
+  const [ozonContext, setOzonContext] = useState(null) // { prefill } — Ozon 核算面板项目上下文（显式状态，非残余 activeProjectId）
 
   const project = useMemo(() => { void tick; return projectId ? getProject(projectId) : null }, [projectId, tick])
   const snapshot = useMemo(() => (project?.source?.creationSnapshotId ? getSnapshot(project.source.creationSnapshotId) : null), [project])
@@ -90,6 +94,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
       .filter(Boolean)
       .sort((a, b) => String(b.at).localeCompare(String(a.at)))
   }, [project])
+  const scenarios = useMemo(() => (project ? getProjectScenarios(project.id) : []), [project])
 
   if (!project) return <EmptyState title="项目不存在" description="请返回 SKU 项目列表" />
 
@@ -105,8 +110,13 @@ export default function ProjectDetailPage({ projectId, onBack }) {
   const direction = isValidStage(project.stage) && isValidStage(targetStage)
     ? transitionDirection(project.stage, targetStage)
     : 'INVALID'
+  const gateDeps = {
+    availableModules: {},
+    snapshot: snapshot ? { status: snapshot.scoreResult?.status || [] } : null,
+    scenarios,
+  }
   const gate = direction === 'FORWARD'
-    ? evaluateProjectGate(project, targetStage, { availableModules: {}, snapshot: snapshot ? { status: snapshot.scoreResult?.status || [] } : null })
+    ? evaluateProjectGate(project, targetStage, gateDeps)
     : null
 
   const gateTone = { GREEN: 'success', YELLOW: 'warning', RED: 'danger', NOT_EVALUATED: 'neutral' }[gate?.verdict]
@@ -120,11 +130,41 @@ export default function ProjectDetailPage({ projectId, onBack }) {
       const res = transitionProjectStage({
         projectId: project.id,
         targetStage,
-        deps: { availableModules: {}, snapshot: snapshot ? { status: snapshot.scoreResult?.status || [] } : null },
+        deps: gateDeps,
         reason,
       })
       setReason('')
       refresh(`${res.direction === 'BACKWARD' ? '已回退到' : '已推进到'} ${STAGE_ZH[targetStage] || targetStage}`)
+    } catch (e) {
+      refresh(e.message || String(e))
+    }
+  }
+
+  // T6-2B1：保存 Ozon 核算面板当前方案为不可变成本场景
+  const saveOzonScenario = (data) => {
+    try {
+      const payload = buildOzonScenarioPayload({ project, inputPayload: data.inputPayload, selectedChannelId: data.selectedChannelId, outputPayload: data.outputPayload })
+      const sc = createCostScenario({
+        projectId: project.id,
+        platform: 'OZON',
+        name: `${project.projectCode} Ozon rFBS 场景 #${scenarios.length + 1}`,
+        sourceSnapshotId: payload.sourceSnapshotId,
+        inputPayload: payload.inputPayload,
+        resolvedConfig: payload.resolvedConfig,
+        outputPayload: payload.outputPayload,
+      })
+      setOzonContext(null)
+      const s = scenarioSummary(sc)
+      refresh(`已保存成本场景（${s.channelName}，毛利率 ${s.profitMarginPct}%）`)
+    } catch (e) {
+      refresh(e.message || String(e))
+    }
+  }
+
+  const setBaseline = (scenarioId) => {
+    try {
+      setProjectBaselineScenario(project.id, scenarioId)
+      refresh('基线已切换')
     } catch (e) {
       refresh(e.message || String(e))
     }
@@ -274,7 +314,73 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                 {notice && <div className="text-xs text-workspace-text-secondary">{notice}</div>}
               </div>
             )}
-            {tab !== 'overview' && (
+            {tab === 'costing' && (
+              ozonContext ? (
+                <div>
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="text-sm font-medium text-workspace-text">Ozon 核算面板 · 项目 {project.projectCode}</div>
+                    <Button variant="ghost" size="sm" onClick={() => setOzonContext(null)}>返回成本场景列表</Button>
+                  </div>
+                  <OzonCalc
+                    projectContext={{
+                      projectId: project.id,
+                      projectCode: project.projectCode,
+                      prefill: ozonContext.prefill,
+                      onSaveScenario: saveOzonScenario,
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <div className="text-sm font-semibold text-workspace-text">成本场景（不可变快照，只读列表）</div>
+                      <div className="mt-0.5 text-xs text-workspace-text-tertiary">场景一旦保存不可编辑/删除；首个场景自动设为基线；基线毛利率 ≥15% 才可通过 COSTING Gate</div>
+                    </div>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      disabled={!snapshot}
+                      onClick={() => setOzonContext({ prefill: buildOzonPrefill({ snapshot }) })}
+                    >
+                      使用 Ozon 核算
+                    </Button>
+                  </div>
+                  {scenarios.length === 0 ? (
+                    <div className="text-[13px] text-workspace-text-tertiary">尚无成本场景——点击「使用 Ozon 核算」，预填候选数据后填写真实成本并保存。</div>
+                  ) : (
+                    <div className="space-y-2">
+                      {scenarios.map((sc) => {
+                        const s = scenarioSummary(sc)
+                        const isBaseline = project.costing?.baselineScenarioId === sc.id
+                        return (
+                          <div key={sc.id} className="rounded-lg border border-workspace-border p-3">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="flex items-center gap-2">
+                                <Badge tone="primary">{s.platform}</Badge>
+                                <span className="text-sm font-medium text-workspace-text">{s.name}</span>
+                                {isBaseline && <Badge tone="success">基线</Badge>}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-workspace-text-secondary">
+                                  {s.channelName} · 售价 ₽{s.priceRub} · 毛利率{' '}
+                                  <b className={s.profitMarginPct >= 15 ? 'text-workspace-success' : 'text-workspace-warning'}>{s.profitMarginPct}%</b>
+                                </span>
+                                {!isBaseline && <Button variant="ghost" size="sm" onClick={() => setBaseline(sc.id)}>设为基线</Button>}
+                              </div>
+                            </div>
+                            <div className="mt-1 text-xs text-workspace-text-tertiary">
+                              冻结于 {new Date(s.createdAt).toLocaleString('zh-CN')} · {s.calculatorVersion}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            )}
+            {tab !== 'overview' && tab !== 'costing' && (
               <div className="py-8 text-center">
                 <div className="text-sm font-medium text-workspace-text">{STAGE_ZH[project.stage]}</div>
                 <div className="mt-2 text-[13px] text-workspace-text-tertiary">{PLACEHOLDERS[tab]}</div>

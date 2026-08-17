@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Calculator, Package, DollarSign, TrendingUp, Info, Table as TableIcon } from 'lucide-react'
+import { Calculator, Package, DollarSign, TrendingUp, Info, Table as TableIcon, Save } from 'lucide-react'
 import { persistGet, persistSet } from '../utils/persist'
 import {
   R, CHANNEL_GROUPS, ALL_CHANNELS,
@@ -7,6 +7,7 @@ import {
   PRICING_PRODUCTS, PRODUCT_COLORS, COMMISSION_TABLE,
 } from '../utils/ozonEngine'
 import { Plus, Trash2 } from 'lucide-react'
+import Button from './ui/Button'
 
 const SHIPPING_KEY = 'shipping-calc-rfbs-v2'
 const PRICING_KEY = 'product-pricing-v2'
@@ -17,7 +18,13 @@ const TABS = [
   { id: 'commission', name: '佣金费率表', icon: TableIcon },
 ]
 
-export default function OzonCalc() {
+/**
+ * OzonCalc({ projectContext }) — T6-2B1 项目上下文模式：
+ * projectContext = { projectId, projectCode, prefill, onSaveScenario } | null
+ * 显式状态传入（不读残余 activeProjectId）；prefill 只在挂载时生效一次（key 强制重挂）；
+ * 项目模式下编辑不写共享持久化键；[保存此方案到项目] 走 onSaveScenario 冻结场景。
+ */
+export default function OzonCalc({ projectContext = null }) {
   const [tab, setTab] = useState('single')
 
   return (
@@ -58,7 +65,7 @@ export default function OzonCalc() {
       </div>
 
       {/* 内容区 */}
-      {tab === 'single' && <SingleTab />}
+      {tab === 'single' && <SingleTab key={projectContext ? `ctx-${projectContext.projectId}` : 'standalone'} projectContext={projectContext} />}
       {tab === 'multi' && <MultiTab />}
       {tab === 'commission' && <CommissionTab />}
     </div>
@@ -66,27 +73,33 @@ export default function OzonCalc() {
 }
 
 // ===================== Tab1: 单规格测算（原 ShippingCalc） =====================
-function SingleTab() {
-  const [params, setParams] = useState(() => persistGet(SHIPPING_KEY) || {
-    price: 5200,
-    weight: 1.55,
-    length: 52,
-    width: 45,
-    height: 28,
-    purchaseCost: 35,
-    domesticShipping: 3,
-    labelingFee: 2,
-    commission: 12,
-    adRate: 10,
-    paymentFee: 1,
-    agencyFee: 2,
-    returnLoss: 4,
+const SINGLE_DEFAULTS = {
+  price: 5200,
+  weight: 1.55,
+  length: 52,
+  width: 45,
+  height: 28,
+  purchaseCost: 35,
+  domesticShipping: 3,
+  labelingFee: 2,
+  commission: 12,
+  adRate: 10,
+  paymentFee: 1,
+  agencyFee: 2,
+  returnLoss: 4,
+}
+
+function SingleTab({ projectContext = null }) {
+  // prefill 只在挂载时生效一次（key 按 projectId 强制重挂）；项目模式下不写共享持久化键
+  const [params, setParams] = useState(() => {
+    if (projectContext?.prefill) return { ...SINGLE_DEFAULTS, ...projectContext.prefill }
+    return persistGet(SHIPPING_KEY) || { ...SINGLE_DEFAULTS }
   })
 
   const updateParam = (key, val) => {
     const newData = { ...params, [key]: val }
     setParams(newData)
-    persistSet(SHIPPING_KEY, newData)
+    if (!projectContext) persistSet(SHIPPING_KEY, newData)
   }
 
   const price = Number(params.price) || 0
@@ -120,6 +133,18 @@ function SingleTab() {
 
   const bestChannel = results.flatMap((c) => c.channels).filter((ch) => ch.result).sort((a, b) => b.profit - a.profit)[0]
 
+  // T6-2B1：项目模式下把当前方案冻结为不可变成本场景（引擎输出 verbatim）
+  const saveScenario = () => {
+    if (!projectContext?.onSaveScenario || !bestChannel) return
+    const engineCh = ALL_CHANNELS.find((c) => c.id === bestChannel.id)
+    const out = calcChannelProfit(engineCh, price, weight, length, width, height, params)
+    projectContext.onSaveScenario({
+      inputPayload: { price, weight, length, width, height, purchaseCost, domesticShipping, labelingFee, commission, adRate, paymentFee, agencyFee, returnLoss },
+      selectedChannelId: bestChannel.id,
+      outputPayload: out,
+    })
+  }
+
   const inputField = (label, key, unit, placeholder) => (
     <div>
       <label className="text-sm font-medium text-morandi-text-light mb-1 block">{label}</label>
@@ -140,6 +165,17 @@ function SingleTab() {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-5">
+        {projectContext && (
+          <div className="mb-5 flex items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
+            <div className="text-xs text-blue-700">
+              正在为项目 <b>{projectContext.projectCode}</b> 核算：预填候选真实数据（售价/重量/尺寸/rFBS 佣金），
+              成本与费率字段请填写真实值后再保存为不可变成本场景。
+            </div>
+            <Button variant="primary" size="sm" disabled={!bestChannel} onClick={saveScenario}>
+              <Save className="h-3.5 w-3.5" /> 保存此方案到项目
+            </Button>
+          </div>
+        )}
         <div className="space-y-5 mb-5">
           <div>
             <p className="text-sm font-semibold text-morandi-text mb-2">📦 商品与物流参数</p>
