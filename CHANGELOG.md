@@ -7,6 +7,17 @@
 
 ## 2026-08-14（整改阶段 V3）
 
+### fix — T6-2B production hotfix（`fix/v3-t6-master-production-hotfix`，验收后）
+- **P0**：`ProjectDetailPage.jsx` 补 WB 联动 imports（`buildWbPrefill`/`buildWbScenarioPayload`/`WBCalc`）——此前缺导入，点「使用 WB 核算」会运行时 ReferenceError（vite build 无法发现运行时标识符）。
+- **P1**：`mergeTrustedPrefill`（costScenarioAdapter）——项目模式预填仅非空值覆盖既有成本假设，禁止 `''` 把采购/广告等清成 0 产生虚假高利润基线；OzonCalc/CalculatorTab 共用。
+- **P1**：Ozon/WB 项目模式保存前「已确认成本与费率假设」人工确认 Gate，未确认禁用保存。
+- **P1**：`buildWbResolvedConfig` 冻结进入利润公式的 `taxMethod`/`taxRate`（连同 rubPerCny）。
+- **P1**：`scenarioMarginPct`/`scenarioSummary` 用 `num()` 安全取值——null/undefined/`''` → null（不再 Number(null)→0），Gate 基线缺利润率 → FAIL 而非 WARN 0%。
+- **P2**：跨平台比较表补 `logisticsCostCny`/`platformCostCny`/`profitCny` 列（映射各引擎原文，不重算）。
+- **P2**：`T6-MASTER-REPORT.md` FINAL MAIN 文案改为「release baseline f9ef3a3 + post-release hotfix」，消除自指 sha 漂移。
+- **护栏**：新增 `t6UiContract.test.mjs`（UI 契约 + 项目联动保存流 smoke，23 断言）永久进 `npm run test:t6`。
+- 回归全绿：npm test（T6 五套 56/42/46/53/23）+ golden 76 + sync 零差异 + verify:scoring-build + web-persistence + vite build；分布 1/191/448/169/191 不变；引擎/config 0 改动；旧 tag `v3-t6-sku-project-lifecycle` 未移动。
+
 ### feat — T6 SKU 项目生命周期：成本场景与平台联动（T6-2B，已合并 main，tag `v3-t6-sku-project-lifecycle`）
 - **T6-2A hardening**（`fix(t6-2a)` `2b2758d`，merge `f1ef799`）：路径 Stage Gate 重构——`stageModel.js` 阶段唯一事实源（PIPELINE..REVIEW 9 段，SAMPLING 硬阻断界点）；`gateEngine.js` 路径 Gate（FORWARD 逐段聚合带 stage 归属、SAME/BACKWARD 不执行前向检查、非法 stage fail-close、BLOCKED_LOGISTICS 精确触发一次、RED>YELLOW>NOT_EVALUATED>GREEN）；`stageTransition.js` 流转 domain action（YELLOW/RED 推进必填理由，空理由 throw 且不产生日志）；`setWorkflowNode` 审计（状态变化写 workflow_change，仅备注不写日志，备注可清空/保留）；ProjectDetailPage 路径 Gate UI（分组检查/回退提示/理由输入）+ 备注草稿 onBlur 保存；ProjectListPage 移除列表内生命周期按钮与 window.prompt（收敛到详情页）。Gate 测试 33（I18-I22 新增），Store 测试 56（I17 新增）。
 - **T6-2B1**（`feat(t6-2b1)` `ce4949c`，merge `0b78bac`）：CostScenario 不可变实体（`t6.costScenario.<uuid>`，仅 create/read，payload 禁带系统字段，快照归属 fail-close，首个自动基线 + cost_scenario_create/cost_baseline_change 日志）；`costScenarioAdapter.js` Ozon 冻结（prefill 只取 price/weight/dims/commission_rfbs，绝不虚构成本；resolvedConfig 冻结完整渠道配置+source/source_date/verified_by meta；汇率双语义 rubToCny=0.09 / celRubPerCny=12 并存不统一；outputPayload=calcChannelProfit 原文；calculatorVersion 'ozon-rfbs-single-v1'）；OzonCalc projectContext 模式（显式状态、prefill 一次、不写共享持久化键、[保存此方案到项目]）；Gate 成本检查真实化（无场景 FAIL、基线毛利≥15 PASS、<15 WARN，supplier 仍 NOT_EVALUATED）；测试 44（C1-C9）。

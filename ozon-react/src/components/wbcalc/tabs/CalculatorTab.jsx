@@ -7,6 +7,7 @@ import {
   calculateReverseCompensation, calculateTotalLogisticsCost, calculateOperatingProfitV2,
   inferReverseEventType, getOrderLabels,
 } from '../../../utils/wbEngine'
+import { mergeTrustedPrefill } from '../../../utils/t6/costScenarioAdapter'
 import { fmtCny, fmtRub, fmtPct } from '../format'
 import { CategoryProductPicker } from '../CategoryProductPicker'
 import { MetricCard } from '../MetricCard'
@@ -34,12 +35,14 @@ const FORM_DEFAULTS = {
 
 export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus, projectContext = null }) {
   // T6-2B2：项目上下文预填只生效一次（key 按 projectId 强制重挂）；佣金/成本/线路假设绝不预填
+  // T6-2B hotfix：只有"有值"的 project prefill 覆盖默认值，'' 不得把成本/售价清成 0
   const [form, setForm] = useState(() => {
     const defaults = { ...FORM_DEFAULTS, routeId: tariffs[0]?.routeId || '' }
-    if (projectContext?.prefill) return { ...defaults, ...projectContext.prefill }
-    return defaults
+    return projectContext?.prefill ? mergeTrustedPrefill(defaults, projectContext.prefill) : defaults
   })
   const [showSteps, setShowSteps] = useState(false)
+  // T6-2B hotfix：项目模式保存前必须人工确认成本与费率假设（WB 默认成本为 0，未确认禁止保存场景）
+  const [costConfirmed, setCostConfirmed] = useState(false)
 
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }))
 
@@ -150,9 +153,15 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
       {/* 输入 */}
       <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-4">
         {projectContext && (
-          <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 text-xs text-orange-700">
-            正在为项目 <b>{projectContext.projectCode}</b> 核算：已预填候选真实数据（名称/重量/尺寸/参考售价）。
-            WB 佣金率、线路与成本假设请自行填写；售价仅作参考。
+          <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 text-xs text-orange-700 space-y-2">
+            <div>
+              正在为项目 <b>{projectContext.projectCode}</b> 核算：已预填候选真实数据（名称/重量/尺寸/参考售价）。
+              WB 佣金率、线路与成本假设请自行填写；售价仅作参考。
+            </div>
+            <label className="flex items-center gap-1.5 text-orange-800">
+              <input type="checkbox" checked={costConfirmed} onChange={(e) => setCostConfirmed(e.target.checked)} className="rounded" />
+              已确认采购成本、佣金率与费用假设
+            </label>
           </div>
         )}
         <h4 className="text-sm font-semibold text-morandi-text">输入参数</h4>
@@ -373,7 +382,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         {projectContext && (
           <button
             onClick={saveScenario}
-            disabled={!tariff || !form.productName}
+            disabled={!tariff || !form.productName || !costConfirmed}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium py-2 rounded-lg"
           >
             保存此方案到项目（不可变成本场景）

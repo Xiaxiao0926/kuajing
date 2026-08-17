@@ -38,11 +38,12 @@
 
 ## FINAL MAIN sha
 
-- **`bdd2816`**（交付主线最终 merge：T6-2B2 代码 `797b6c2` + docs merge `bdd2816`）；tag `v3-t6-sku-project-lifecycle` 打在含本报告回填的最终 main HEAD 上。
+- **release baseline**：main `f9ef3a3`（tag `v3-t6-sku-project-lifecycle` 指向该提交；T6-2B2 代码 merge `797b6c2` + docs merge `bdd2816` + 报告回填 `f9ef3a3`）。
+- **post-release hotfix**：验收发现 WB 项目联动 P0（缺 imports）+ 3 个成本场景可信度 P1 后，已在 `fix/v3-t6-master-production-hotfix` 修复并 merge --no-ff 到 main——release 后的 main 提交见 tag 之后的 git log（不在本报告硬编码最终 HEAD sha，避免自指漂移）。
 
 ## FINAL TAG
 
-- `v3-t6-sku-project-lifecycle`（T6-2B 回归全绿后打在最终 main）
+- `v3-t6-sku-project-lifecycle` → main `f9ef3a3`（release snapshot；hotfix 合并后**不移动、不 force-retag**，旧 tag 保持指向真实发布基线）。
 
 ## SCORING DISTRIBUTION（冻结不变）
 

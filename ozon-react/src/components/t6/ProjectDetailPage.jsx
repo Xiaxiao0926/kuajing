@@ -17,9 +17,10 @@ import {
 import { evaluateProjectGate, GATE_VERDICTS, GATE_RESULTS } from '../../utils/t6/gateEngine'
 import { transitionProjectStage } from '../../utils/t6/stageTransition'
 import { PROJECT_STAGES, transitionDirection, isValidStage } from '../../utils/t6/stageModel'
-import { buildOzonPrefill, buildOzonScenarioPayload, scenarioSummary } from '../../utils/t6/costScenarioAdapter'
+import { buildOzonPrefill, buildOzonScenarioPayload, buildWbPrefill, buildWbScenarioPayload, scenarioSummary } from '../../utils/t6/costScenarioAdapter'
 import { getWorkflowTemplate } from '../../data/workflowTemplates/registry'
 import OzonCalc from '../OzonCalc'
+import WBCalc from '../WBCalc'
 import Surface from '../ui/Surface'
 import PageHeader from '../ui/PageHeader'
 import Button from '../ui/Button'
@@ -412,7 +413,9 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-workspace-text-secondary">
                                   {s.channelName} · 售价 ₽{s.priceRub} · 毛利率{' '}
-                                  <b className={s.profitMarginPct >= 15 ? 'text-workspace-success' : 'text-workspace-warning'}>{s.profitMarginPct}%</b>
+                                  <b className={s.profitMarginPct !== null && s.profitMarginPct >= 15 ? 'text-workspace-success' : 'text-workspace-warning'}>
+                                    {s.profitMarginPct === null ? '—' : `${s.profitMarginPct}%`}
+                                  </b>
                                 </span>
                                 {!isBaseline && <Button variant="ghost" size="sm" onClick={() => setBaseline(sc.id)}>设为基线</Button>}
                               </div>
@@ -438,6 +441,9 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                               <th className="px-3 py-2 text-left font-medium">场景</th>
                               <th className="px-3 py-2 text-left font-medium">渠道 / 线路</th>
                               <th className="px-3 py-2 text-right font-medium">售价 ₽</th>
+                              <th className="px-3 py-2 text-right font-medium">物流成本 ¥</th>
+                              <th className="px-3 py-2 text-right font-medium">平台费用 ¥</th>
+                              <th className="px-3 py-2 text-right font-medium">利润 ¥</th>
                               <th className="px-3 py-2 text-right font-medium">毛利率</th>
                               <th className="px-3 py-2 text-left font-medium">冻结时间</th>
                               <th className="px-3 py-2 text-left font-medium">基线</th>
@@ -453,7 +459,14 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                                   <td className="px-3 py-2 text-workspace-text">{s.name}</td>
                                   <td className="px-3 py-2 text-workspace-text-secondary">{s.channelName}</td>
                                   <td className="px-3 py-2 text-right tabular-nums text-workspace-text">{s.priceRub}</td>
-                                  <td className={`px-3 py-2 text-right tabular-nums font-semibold ${s.profitMarginPct >= 15 ? 'text-workspace-success' : 'text-workspace-warning'}`}>{s.profitMarginPct}%</td>
+                                  <td className="px-3 py-2 text-right tabular-nums text-workspace-text-secondary">{s.logisticsCostCny === null ? '—' : s.logisticsCostCny}</td>
+                                  <td className="px-3 py-2 text-right tabular-nums text-workspace-text-secondary">{s.platformCostCny === null ? '—' : s.platformCostCny}</td>
+                                  <td className={`px-3 py-2 text-right tabular-nums font-semibold ${s.profitCny !== null && s.profitCny >= 0 ? 'text-workspace-success' : 'text-workspace-danger'}`}>
+                                    {s.profitCny === null ? '—' : s.profitCny}
+                                  </td>
+                                  <td className={`px-3 py-2 text-right tabular-nums font-semibold ${s.profitMarginPct !== null && s.profitMarginPct >= 15 ? 'text-workspace-success' : 'text-workspace-warning'}`}>
+                                    {s.profitMarginPct === null ? '—' : `${s.profitMarginPct}%`}
+                                  </td>
                                   <td className="px-3 py-2 text-workspace-text-tertiary">{new Date(s.createdAt).toLocaleDateString('zh-CN')}</td>
                                   <td className="px-3 py-2">{isBaseline ? <Badge tone="success">基线</Badge> : '—'}</td>
                                 </tr>
