@@ -38,7 +38,7 @@
 
 ## FINAL MAIN sha
 
-- 代码主线：`797b6c2`（T6-2B2 merge）→ 最终 main（含本文档与 docs merge）：见 tag 指向提交（本报告提交后由 docs merge + 回填提交定稿）。
+- **`bdd2816`**（交付主线最终 merge：T6-2B2 代码 `797b6c2` + docs merge `bdd2816`）；tag `v3-t6-sku-project-lifecycle` 打在含本报告回填的最终 main HEAD 上。
 
 ## FINAL TAG
 
