@@ -18,13 +18,14 @@ import PageHeader from '../ui/PageHeader'
 import Button from '../ui/Button'
 import Select from '../ui/Select'
 import EmptyState from '../ui/EmptyState'
+import LoadingState from '../ui/LoadingState'
 import ScoreCell from '../scoring/ScoreCell'
 import DecisionBadge from '../scoring/DecisionBadge'
 import ContextBadge from '../scoring/ContextBadge'
 
 const BIZ_STATUS = [['观察', '观察'], ['待调研', '待调研'], ['待立项', '待立项'], ['暂缓', '暂缓'], ['淘汰', '淘汰']]
 
-export default function CandidatePoolPage() {
+export default function CandidatePoolPage({ serverSynced = true }) {
   const [tick, setTick] = useState(0)
   const [notice, setNotice] = useState('')
   const [dataset, setDataset] = useState(null)
@@ -89,22 +90,30 @@ export default function CandidatePoolPage() {
     const entry = scoredByProductId.get(String(cand.sourceProductId))
     if (!entry) { flush('未找到该商品的当前评分数据'); return }
     const snap = makeSnapshot(entry, cand.id)
-    refreshCandidateSnapshot(cand.id, snap)
+    refreshCandidateSnapshot(cand.id, snap.id)
     flush(`已刷新评分快照（${entry.row.totalScore} ${entry.row.grade}）`)
   }
 
   const handleCreateProject = (cand) => {
-    const entry = scoredByProductId.get(String(cand.sourceProductId))
-    const snap = cand.latestSnapshotId ? getSnapshot(cand.latestSnapshotId) : makeSnapshot(entry, cand.id)
-    if (!snap) { flush('缺少评分快照，无法立项'); return }
-    const project = createProject({ candidate: cand, creationSnapshot: snap })
-    setProjectLifecycle(project.id, 'ACTIVE', '一键立项后启动')
-    flush(`已创建项目 ${project.projectCode}`)
+    // 候选池展示的就是 latestSnapshotId 对应的快照，立项复用该快照（与评分页"冻结当前可见评分"语义一致）
+    if (!cand.latestSnapshotId) { flush('缺少评分快照，无法立项'); return }
+    try {
+      const project = createProject({ candidateId: cand.id, creationSnapshotId: cand.latestSnapshotId })
+      setProjectLifecycle(project.id, 'ACTIVE', '一键立项后启动')
+      flush(`已创建项目 ${project.projectCode}`)
+    } catch (e) {
+      flush(e.message || String(e))
+    }
   }
 
   const snapshotView = (cand) => {
     const snap = cand.latestSnapshotId ? getSnapshot(cand.latestSnapshotId) : null
     return snap?.scoreResult || null
+  }
+
+  // T6-1 hardening：server sync 完成前不允许读写 T6 主数据
+  if (!serverSynced) {
+    return <LoadingState text="正在同步项目数据…" />
   }
 
   return (

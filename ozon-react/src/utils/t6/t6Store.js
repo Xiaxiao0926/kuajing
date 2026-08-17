@@ -8,7 +8,7 @@
  *  - 生产走 persist（localStorage + WP REST 同步）；测试可注入内存 adapter
  */
 import { persistGet, persistSet } from '../persist.js'
-import { ROADMAP_PHASES } from '../../data/roadmap.js'
+import { getWorkflowTemplate } from '../../data/workflowTemplates/roadmap-v1.js'
 
 const SCHEMA_VERSION = 1
 export const WORKFLOW_TEMPLATE_VERSION = 'roadmap-v1'
@@ -42,51 +42,63 @@ function listEntities(prefix) {
   return adapter.keys().filter((k) => k.startsWith(prefix)).map((k) => read(k)).filter((v) => v != null)
 }
 
-// ---------- Workflow 模板（roadmap-v1 不可变快照） ----------
+// ---------- Workflow 模板（roadmap-v1 静态冻结 registry；禁止运行时从 ROADMAP_PHASES 生成） ----------
 export function buildWorkflowTemplate() {
-  const phases = ROADMAP_PHASES.map((p, i) => ({ phaseId: p.id, title: p.title, order: i }))
-  const nodes = []
-  let order = 0
-  for (const p of ROADMAP_PHASES) {
-    for (const n of p.nodes) nodes.push({ nodeId: n.id, phaseId: p.id, title: n.title, order: order++ })
-  }
-  return { version: WORKFLOW_TEMPLATE_VERSION, phases, nodes }
+  const template = getWorkflowTemplate(WORKFLOW_TEMPLATE_VERSION)
+  if (!template) throw new Error(`T6_STORE: workflow 模板 ${WORKFLOW_TEMPLATE_VERSION} 不存在（fail-close）`)
+  return template
 }
 
 export function initWorkflowStates() {
-  return buildWorkflowTemplate().nodes.map((n) => ({
+  return getWorkflowTemplate(WORKFLOW_TEMPLATE_VERSION).nodes.map((n) => ({
     nodeId: n.nodeId, status: 'pending', updatedAt: null, updatedBy: null, note: null,
   }))
 }
 
-// ---------- DecisionLog（append-only：仅 create/read） ----------
-export function appendLog({ subjectType, subjectId, projectId = null, kind, from = null, to, reason = '', by = 'user' }) {
-  const entry = {
+// ---------- DecisionLog（append-only：仅 create/read；禁止覆盖系统字段/key 冲突） ----------
+const FORBIDDEN_SYSTEM_FIELDS = ['id', 'createdAt', 'schemaVersion']
+
+function assertNoSystemFields(payload, entityName) {
+  for (const f of FORBIDDEN_SYSTEM_FIELDS) {
+    if (f in (payload || {})) throw new Error(`T6_STORE: ${entityName} payload 禁止携带系统字段 ${f}（fail-close）`)
+  }
+}
+
+export function appendLog(entry) {
+  assertNoSystemFields(entry, 'log')
+  const { subjectType, subjectId, projectId = null, kind, from = null, to, reason = '', by = 'user' } = entry
+  const record = {
     id: uuid(), schemaVersion: SCHEMA_VERSION,
     subjectType, subjectId, projectId, kind, from, to, reason,
     at: new Date().toISOString(), by,
   }
-  write(`${T6_PREFIX.log}${entry.id}`, entry)
+  const key = `${T6_PREFIX.log}${record.id}`
+  if (read(key) !== null) throw new Error(`T6_STORE: log key 冲突 ${key}`)
+  write(key, record)
   if (projectId) {
     const project = read(`${T6_PREFIX.project}${projectId}`)
     if (project) {
       write(`${T6_PREFIX.project}${projectId}`, {
         ...project,
-        decisionLog: [...(project.decisionLog || []), entry.id],
-        updatedAt: entry.at,
+        decisionLog: [...(project.decisionLog || []), record.id],
+        updatedAt: record.at,
       })
     }
   }
-  return entry
+  return record
 }
 
 export function getLog(id) { return read(`${T6_PREFIX.log}${id}`) }
 export function listLogs() { return listEntities(T6_PREFIX.log) }
 
-// ---------- ScoringSnapshot（不可变：仅 create/read） ----------
+// ---------- ScoringSnapshot（不可变：仅 create/read；payload 禁带系统字段；key 冲突 throw） ----------
 export function createSnapshot(payload) {
-  const record = { id: uuid(), createdAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION, ...payload }
-  write(`${T6_PREFIX.snapshot}${record.id}`, record)
+  assertNoSystemFields(payload, 'snapshot')
+  const id = uuid()
+  const key = `${T6_PREFIX.snapshot}${id}`
+  if (read(key) !== null) throw new Error(`T6_STORE: snapshot key 冲突 ${key}`)
+  const record = { ...payload, id, createdAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION }
+  write(key, record)
   return record
 }
 export function getSnapshot(id) { return read(`${T6_PREFIX.snapshot}${id}`) }
@@ -172,8 +184,11 @@ export function findCandidateByProductId(sourceProductId) {
   return listEntities(T6_PREFIX.candidate).find((c) => String(c.sourceProductId) === pid) || null
 }
 
-/** 候选不存在则创建（latestSnapshotId 置 null，随后由 refreshCandidateSnapshot 挂快照） */
+/** 候选不存在则创建（latestSnapshotId 置 null，随后由 refreshCandidateSnapshot 挂快照）；sourceProductId 为空 fail-close */
 export function ensureCandidate({ sourceProductId, candidateIndex, name, categoryLeaf, categoryFull, owner = '', notes = '' }) {
+  if (!sourceProductId || !String(sourceProductId).trim()) {
+    throw new Error('T6_STORE: sourceProductId 为空，禁止创建候选（稳定业务身份缺失，fail-close）')
+  }
   const existing = findCandidateByProductId(sourceProductId)
   if (existing) return { candidate: existing, created: false }
   const now = new Date().toISOString()
@@ -191,7 +206,12 @@ export function ensureCandidate({ sourceProductId, candidateIndex, name, categor
   return { candidate: record, created: true }
 }
 
+const CANDIDATE_BIZ_STATUS = ['观察', '待调研', '待立项', '暂缓', '淘汰']
+
 export function setCandidateBizStatus(id, status, reason = '') {
+  if (!CANDIDATE_BIZ_STATUS.includes(status)) {
+    throw new Error(`T6_STORE: 非法候选业务状态 "${status}"（允许: ${CANDIDATE_BIZ_STATUS.join('/')}）`)
+  }
   const rec = getCandidate(id)
   if (!rec) throw new Error('T6_STORE: 候选不存在')
   const next = { ...rec, bizStatus: status, updatedAt: new Date().toISOString() }
@@ -208,13 +228,21 @@ export function setCandidateOwner(id, owner) {
   return next
 }
 
-/** 刷新评分：生成新快照 → 更新 latestSnapshotId；旧快照字节不变 */
-export function refreshCandidateSnapshot(id, snapshot) {
-  const rec = getCandidate(id)
+/** 刷新评分（ID 驱动）：快照必须已存储、candidateId/sourceProductId 必须与候选一致；旧快照字节不变 */
+export function refreshCandidateSnapshot(candidateId, snapshotId) {
+  const rec = getCandidate(candidateId)
   if (!rec) throw new Error('T6_STORE: 候选不存在')
-  const next = { ...rec, latestSnapshotId: snapshot.id, updatedAt: new Date().toISOString() }
-  write(`${T6_PREFIX.candidate}${id}`, next)
-  appendLog({ subjectType: 'candidate', subjectId: id, kind: 'snapshot_create', from: rec.latestSnapshotId, to: snapshot.id, reason: '刷新评分' })
+  const snap = getSnapshot(snapshotId)
+  if (!snap) throw new Error(`T6_STORE: 快照 ${snapshotId} 不存在（引用一致性 fail-close）`)
+  if (snap.candidateId !== candidateId) {
+    throw new Error(`T6_STORE: 快照 candidateId(${snap.candidateId}) 与候选(${candidateId}) 不一致（fail-close）`)
+  }
+  if (String(snap.sourceProductId) !== String(rec.sourceProductId)) {
+    throw new Error(`T6_STORE: 快照 sourceProductId(${snap.sourceProductId}) 与候选(${rec.sourceProductId}) 不一致（fail-close）`)
+  }
+  const next = { ...rec, latestSnapshotId: snapshotId, updatedAt: new Date().toISOString() }
+  write(`${T6_PREFIX.candidate}${candidateId}`, next)
+  appendLog({ subjectType: 'candidate', subjectId: candidateId, kind: 'snapshot_create', from: rec.latestSnapshotId, to: snapshotId, reason: '刷新评分' })
   return next
 }
 
@@ -242,8 +270,18 @@ export function nextProjectCode() {
   return `${prefix}${String((nums.length ? Math.max(...nums) : 0) + 1).padStart(3, '0')}`
 }
 
-/** 一键立项：创建项目（creationSnapshotId 永久冻结）、候选 projectIds 追加、双域日志 */
-export function createProject({ candidate, creationSnapshot, name }) {
+/** 一键立项（ID 驱动，引用一致性 fail-close）：Store 自取候选/快照并校验归属后才创建项目 */
+export function createProject({ candidateId, creationSnapshotId, name }) {
+  const candidate = getCandidate(candidateId)
+  if (!candidate) throw new Error('T6_STORE: 候选不存在')
+  const creationSnapshot = getSnapshot(creationSnapshotId)
+  if (!creationSnapshot) throw new Error(`T6_STORE: 立项快照 ${creationSnapshotId} 不存在（fail-close）`)
+  if (creationSnapshot.candidateId !== candidateId) {
+    throw new Error(`T6_STORE: 立项快照 candidateId(${creationSnapshot.candidateId}) 与候选(${candidateId}) 不一致（fail-close）`)
+  }
+  if (String(creationSnapshot.sourceProductId) !== String(candidate.sourceProductId)) {
+    throw new Error(`T6_STORE: 立项快照 sourceProductId 与候选不一致（fail-close）`)
+  }
   const now = new Date().toISOString()
   const project = {
     id: uuid(), projectCode: nextProjectCode(), marketCode: 'RU', schemaVersion: SCHEMA_VERSION,
@@ -294,7 +332,12 @@ export function setProjectLifecycle(id, status, reason = '') {
   return next
 }
 
+const PROJECT_STAGES = ['PIPELINE', 'RESEARCH', 'COSTING', 'SAMPLING', 'COMPLIANCE', 'PRODUCTION', 'LAUNCH', 'OPERATIONS', 'REVIEW']
+
 export function setProjectStage(id, stage, reason = '') {
+  if (!PROJECT_STAGES.includes(stage)) {
+    throw new Error(`T6_STORE: 非法项目阶段 "${stage}"（允许: ${PROJECT_STAGES.join('/')}）`)
+  }
   const rec = getProject(id)
   if (!rec) throw new Error('T6_STORE: 项目不存在')
   const next = { ...rec, stage, updatedAt: new Date().toISOString() }
@@ -311,9 +354,21 @@ export function setProjectName(id, name) {
   return next
 }
 
+const WORKFLOW_STATUS = ['pending', 'active', 'done', 'skipped']
+
 export function setWorkflowNode(id, nodeId, status, note = '') {
+  if (!WORKFLOW_STATUS.includes(status)) {
+    throw new Error(`T6_STORE: 非法节点状态 "${status}"（允许: ${WORKFLOW_STATUS.join('/')}）`)
+  }
   const rec = getProject(id)
   if (!rec) throw new Error('T6_STORE: 项目不存在')
+  const template = buildWorkflowTemplate()
+  if (!template.nodes.some((n) => n.nodeId === nodeId)) {
+    throw new Error(`T6_STORE: nodeId ${nodeId} 不属于模板 ${rec.workflow.templateVersion}（fail-close）`)
+  }
+  if (!rec.workflow.states.some((s) => s.nodeId === nodeId)) {
+    throw new Error(`T6_STORE: 项目 workflow 实例缺少节点 ${nodeId}（数据损坏，fail-close）`)
+  }
   const now = new Date().toISOString()
   const states = rec.workflow.states.map((s) => (s.nodeId === nodeId ? { ...s, status, updatedAt: now, note: note || s.note } : s))
   const next = { ...rec, workflow: { ...rec.workflow, states }, updatedAt: now }

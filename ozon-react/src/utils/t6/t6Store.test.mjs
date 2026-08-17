@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as store from './t6Store.js'
+import { getWorkflowTemplate } from '../../data/workflowTemplates/roadmap-v1.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..', '..', '..', '..')
@@ -66,10 +67,10 @@ console.log('I2: 刷新评分 → 旧 Snapshot 完全不变（字节级）')
 {
   const cand = store.findCandidateByProductId('P-GLOVES-001')
   const snap1 = makeSnapshot(cand.id)
-  store.refreshCandidateSnapshot(cand.id, snap1)
+  store.refreshCandidateSnapshot(cand.id, snap1.id)
   const bytes1 = JSON.stringify(store.getSnapshot(snap1.id))
   const snap2 = makeSnapshot(cand.id)
-  store.refreshCandidateSnapshot(cand.id, snap2)
+  store.refreshCandidateSnapshot(cand.id, snap2.id)
   const bytes1After = JSON.stringify(store.getSnapshot(snap1.id))
   assert(bytes1 === bytes1After, '旧快照字节不变')
   const candAfter = store.getCandidate(cand.id)
@@ -81,11 +82,11 @@ console.log('I3: 项目创建后刷新 Candidate → Project.creationSnapshotId 
 {
   const cand = store.findCandidateByProductId('P-GLOVES-001')
   const creationSnap = store.getSnapshot(cand.latestSnapshotId)
-  const project = store.createProject({ candidate: cand, creationSnapshot: creationSnap, name: '家用手套-黑色10mil' })
+  const project = store.createProject({ candidateId: cand.id, creationSnapshotId: creationSnap.id, name: '家用手套-黑色10mil' })
   const creationBytes = JSON.stringify(store.getSnapshot(creationSnap.id))
   // 候选刷新（评分变化）
   const snap3 = makeSnapshot(cand.id)
-  store.refreshCandidateSnapshot(cand.id, snap3)
+  store.refreshCandidateSnapshot(cand.id, snap3.id)
   const projectAfter = store.getProject(project.id)
   assert(projectAfter.source.creationSnapshotId === creationSnap.id, 'creationSnapshotId 永久冻结')
   assert(JSON.stringify(store.getSnapshot(creationSnap.id)) === creationBytes, '立项快照字节不变')
@@ -95,7 +96,7 @@ console.log('I4: 一个 Candidate 可创建多个 SKU Project（1:0..N）')
 {
   const cand = store.findCandidateByProductId('P-GLOVES-001')
   const snap = store.getSnapshot(cand.latestSnapshotId)
-  const p2 = store.createProject({ candidate: cand, creationSnapshot: snap, name: '家用手套-橙色10mil' })
+  const p2 = store.createProject({ candidateId: cand.id, creationSnapshotId: snap.id, name: '家用手套-橙色10mil' })
   const candAfter = store.getCandidate(cand.id)
   assert(candAfter.projectIds.length === 2, 'projectIds 长度 = 2')
   const codes = store.listProjects().map((p) => p.projectCode)
@@ -150,6 +151,94 @@ console.log('I9: 决策日志覆盖立项前事件（candidate 域 + project 域
   const projectKinds = logs.filter((l) => l.subjectType === 'project').map((l) => l.kind)
   assert(candidateKinds.includes('snapshot_create') && candidateKinds.includes('project_create'), 'candidate 域含 snapshot_create/project_create')
   assert(projectKinds.includes('status_change') && projectKinds.includes('stage_change'), 'project 域含 status/stage 变更')
+}
+
+console.log('I10: Snapshot create 真正不可覆盖（payload 禁带系统字段；传旧 id 必须抛错且原字节不变）')
+{
+  const cand = store.findCandidateByProductId('P-GLOVES-001')
+  const existing = store.getSnapshot(cand.latestSnapshotId)
+  const bytesBefore = JSON.stringify(existing)
+  let threwId = false
+  try { store.createSnapshot({ id: existing.id, scoreResult: { hacked: true } }) } catch (e) { threwId = /系统字段 id/.test(e.message) }
+  assert(threwId, 'payload 携带 id → 抛错')
+  let threwCreatedAt = false
+  try { store.createSnapshot({ createdAt: '2000-01-01', scoreResult: { hacked: true } }) } catch (e) { threwCreatedAt = /系统字段 createdAt/.test(e.message) }
+  assert(threwCreatedAt, 'payload 携带 createdAt → 抛错')
+  let threwSchema = false
+  try { store.createSnapshot({ schemaVersion: 99 }) } catch (e) { threwSchema = /系统字段 schemaVersion/.test(e.message) }
+  assert(threwSchema, 'payload 携带 schemaVersion → 抛错')
+  assert(JSON.stringify(store.getSnapshot(existing.id)) === bytesBefore, '原快照字节完全不变')
+  let threwLog = false
+  try { store.appendLog({ id: 'hack', subjectType: 'candidate', subjectId: 'x', kind: 'note', to: 'x' }) } catch (e) { threwLog = /系统字段 id/.test(e.message) }
+  assert(threwLog, 'appendLog payload 携带 id → 抛错')
+}
+
+console.log('I11: 引用一致性 fail-close（错配快照 / 不存在快照 → throw）')
+{
+  const cand = store.findCandidateByProductId('P-GLOVES-001')
+  // 造一个归属其它商品的快照
+  const foreign = store.createSnapshot({ candidateId: 'other-candidate', sourceProductId: 'P-OTHER-999', scoreResult: { totalScore: 1 } })
+  let threwRefresh = false
+  try { store.refreshCandidateSnapshot(cand.id, foreign.id) } catch (e) { threwRefresh = /不一致/.test(e.message) }
+  assert(threwRefresh, '错配快照 → refresh 抛错')
+  let threwMissing = false
+  try { store.refreshCandidateSnapshot(cand.id, 'no-such-snapshot') } catch (e) { threwMissing = /不存在/.test(e.message) }
+  assert(threwMissing, '不存在 snapshotId → refresh 抛错')
+  let threwProject = false
+  try { store.createProject({ candidateId: cand.id, creationSnapshotId: foreign.id }) } catch (e) { threwProject = /不一致/.test(e.message) }
+  assert(threwProject, '错配快照 → 创建项目抛错')
+  let threwProjectMissing = false
+  try { store.createProject({ candidateId: cand.id, creationSnapshotId: 'no-such-snapshot' }) } catch (e) { threwProjectMissing = /不存在/.test(e.message) }
+  assert(threwProjectMissing, '不存在快照 → 创建项目抛错')
+  assert(store.getCandidate(cand.id).latestSnapshotId !== foreign.id, 'latestSnapshotId 未被污染')
+}
+
+console.log('I12: 枚举与空身份校验（bizStatus/stage/workflow/空 sourceProductId）')
+{
+  const cand = store.findCandidateByProductId('P-GLOVES-001')
+  let threwBiz = false
+  try { store.setCandidateBizStatus(cand.id, '随便写') } catch (e) { threwBiz = /非法候选业务状态/.test(e.message) }
+  assert(threwBiz, '非法 bizStatus → 抛错')
+  const project = store.listProjects()[0]
+  let threwStage = false
+  try { store.setProjectStage(project.id, 'HOLD') } catch (e) { threwStage = /非法项目阶段/.test(e.message) }
+  assert(threwStage, 'stage=HOLD（已从枚举删除）→ 抛错')
+  let threwNode = false
+  try { store.setWorkflowNode(project.id, 'n999', 'done') } catch (e) { threwNode = /不属于模板/.test(e.message) }
+  assert(threwNode, 'nodeId 不属于模板 → 抛错')
+  let threwNodeStatus = false
+  try { store.setWorkflowNode(project.id, 'n1', 'banana') } catch (e) { threwNodeStatus = /非法节点状态/.test(e.message) }
+  assert(threwNodeStatus, '非法节点状态 → 抛错')
+  let threwEmpty = false
+  try { store.ensureCandidate({ sourceProductId: '', candidateIndex: 0, name: 'x', categoryLeaf: 'x', categoryFull: 'x' }) } catch (e) { threwEmpty = /sourceProductId 为空/.test(e.message) }
+  assert(threwEmpty, '空 sourceProductId → ensureCandidate 抛错')
+  // 合法路径不受影响
+  store.setWorkflowNode(project.id, 'n1', 'done', '已完成')
+  assert(store.getProject(project.id).workflow.states.find((s) => s.nodeId === 'n1').status === 'done', '合法节点更新正常')
+}
+
+console.log('I13: roadmap-v1 是静态冻结模板（不从 ROADMAP_PHASES 运行时生成；冻结字段不可变）')
+{
+  const tpl = getWorkflowTemplate('roadmap-v1')
+  assert(tpl && tpl.nodes.length === 36 && tpl.phases.length === 7, '模板存在且 36 节点 / 7 阶段')
+  assert(Object.isFrozen(tpl) && Object.isFrozen(tpl.nodes) && Object.isFrozen(tpl.nodes[0]), '模板与节点对象冻结')
+  let threwMutate = false
+  try { tpl.nodes[0].title = 'hacked' } catch (e) { threwMutate = true }
+  assert(threwMutate, '修改冻结字段抛错（strict mode）')
+  assert(store.buildWorkflowTemplate() === tpl, 'store 读取同一注册表实例')
+  assert(getWorkflowTemplate('roadmap-v2') === null, '未定义版本返回 null')
+}
+
+console.log('I14: 评分页立项语义——每次立项冻结"当前可见评分"（新快照，不复用旧快照）')
+{
+  const cand = store.findCandidateByProductId('P-GLOVES-001')
+  const oldLatest = cand.latestSnapshotId
+  // 模拟评分页当前 row 生成新快照（即使候选已有旧快照）
+  const fresh = makeSnapshot(cand.id)
+  store.refreshCandidateSnapshot(cand.id, fresh.id)
+  const project = store.createProject({ candidateId: cand.id, creationSnapshotId: fresh.id })
+  assert(project.source.creationSnapshotId === fresh.id, 'creationSnapshotId = 本次新快照')
+  assert(fresh.id !== oldLatest, '新快照与旧快照不同（未复用旧评分）')
 }
 
 console.log(`\n===== T6 Store 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)

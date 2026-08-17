@@ -44,7 +44,9 @@ SkuProject（marketCode 'RU' + RU-YYYY-NNN 人类编号；UUID 主键）
 
 ## 3. 实体定义（V1.1 钉死）
 
-### 3.1 ScoringSnapshot（不可变快照 = 完整可复现的评分依据）
+### 3.1 ScoringSnapshot（不可变快照 = 完整可审计、可追溯的评分依据）
+
+> 措辞精确化（V1.1 hardening）：快照保存 scoreResult 全量输出 + explanations + 本次实际 canonical 输入 + 市场上下文 + 四版本号，属于**完整可审计、可追溯**；它不包含当时的完整候选池/BSR 全量基准资产，因此不承诺脱离历史数据资产后仍能 100% 独立重算。
 
 ```ts
 interface ScoringSnapshot {
