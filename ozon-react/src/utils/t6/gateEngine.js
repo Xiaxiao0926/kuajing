@@ -8,6 +8,7 @@
  * BLOCKED_LOGISTICS 精确语义：仅当 当前<samplingIndex 且 目标>=samplingIndex 触发一次 RED。
  */
 import { PROJECT_STAGES, stageIndex, isValidStage, transitionDirection, SAMPLING_INDEX } from './stageModel.js'
+import { scenarioMarginPct } from './costScenarioAdapter.js'
 
 export const GATE_RESULTS = {
   PASS: 'PASS',
@@ -33,13 +34,14 @@ const MODULE_ZH = {
 }
 
 // 基线场景毛利率（Ozon/WB 通用判定：≥15 PASS；<15 WARN；无场景/无基线 FAIL）
+// 统一取 scenarioMarginPct（OZON: profitRate；WB: profitCalc.profitMargin）
 function baselineMarginResult(project, ctx) {
   const scenarios = ctx.scenarios || []
   if (scenarios.length === 0) return { result: GATE_RESULTS.FAIL, message: '尚无成本场景（到「成本与物流」Tab 用核算面板生成）' }
   const baseline = scenarios.find((s) => s.id === project.costing?.baselineScenarioId)
   if (!baseline) return { result: GATE_RESULTS.FAIL, message: '未设置基线成本场景' }
-  const margin = Number(baseline.outputPayload?.profitRate)
-  if (!Number.isFinite(margin)) return { result: GATE_RESULTS.FAIL, message: '基线场景缺少利润率' }
+  const margin = scenarioMarginPct(baseline)
+  if (margin === null) return { result: GATE_RESULTS.FAIL, message: '基线场景缺少利润率' }
   return margin >= 15
     ? { result: GATE_RESULTS.PASS }
     : { result: GATE_RESULTS.WARN, message: `基线毛利率 ${margin}% < 15%` }
@@ -68,7 +70,8 @@ const CHECKS = {
         const scenarios = ctx.scenarios || []
         const baseline = scenarios.find((s) => s.id === p.costing?.baselineScenarioId)
         if (!baseline) return { result: GATE_RESULTS.FAIL, message: '未设置基线成本场景' }
-        const price = Number(baseline.inputPayload?.price)
+        // 平台统一售价口径：OZON=price；WB=sellerRevenueRub
+        const price = Number(baseline.inputPayload?.price ?? baseline.inputPayload?.sellerRevenueRub)
         return price > 0
           ? { result: GATE_RESULTS.PASS }
           : { result: GATE_RESULTS.FAIL, message: '基线场景目标售价为空' }

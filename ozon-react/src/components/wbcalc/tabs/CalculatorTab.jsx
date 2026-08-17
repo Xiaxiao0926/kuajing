@@ -15,23 +15,30 @@ import { ReverseOrderForm } from '../ReverseOrderForm'
 import { ReverseOrderResult } from '../ReverseOrderResult'
 
 // ===================== 单订单核算器 =====================
-export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus }) {
-  const [form, setForm] = useState(() => ({
-    productName: '', actualWeightG: 100, lengthCm: 20, widthCm: 15, heightCm: 10,
-    purchaseCost: 0, packagingCost: 0, quantity: 1, parcelCount: 1,
-    routeId: tariffs[0]?.routeId || '', sellerRevenueRub: 1000, commissionRate: 25,
-    chinaInbound: 0, promotionCostRub: 0, status: '已签收',
-    useSku: false, selectedSkuIdx: 0,
-    category: '', commissionAutoMatched: false,
-    // V2 异常订单字段
-    reverseEventType: 'none',
-    reverseCompensationMultiplier: '',
-    actualForwardLogisticsCny: '',
-    actualReverseCompensationCny: '',
-    otherReverseCostCny: 0,
-    forwardFeeApplied: true,
-    inventoryRecoveryRate: 0,
-  }))
+const FORM_DEFAULTS = {
+  productName: '', actualWeightG: 100, lengthCm: 20, widthCm: 15, heightCm: 10,
+  purchaseCost: 0, packagingCost: 0, quantity: 1, parcelCount: 1,
+  routeId: '', sellerRevenueRub: 1000, commissionRate: 25,
+  chinaInbound: 0, promotionCostRub: 0, status: '已签收',
+  useSku: false, selectedSkuIdx: 0,
+  category: '', commissionAutoMatched: false,
+  // V2 异常订单字段
+  reverseEventType: 'none',
+  reverseCompensationMultiplier: '',
+  actualForwardLogisticsCny: '',
+  actualReverseCompensationCny: '',
+  otherReverseCostCny: 0,
+  forwardFeeApplied: true,
+  inventoryRecoveryRate: 0,
+}
+
+export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus, projectContext = null }) {
+  // T6-2B2：项目上下文预填只生效一次（key 按 projectId 强制重挂）；佣金/成本/线路假设绝不预填
+  const [form, setForm] = useState(() => {
+    const defaults = { ...FORM_DEFAULTS, routeId: tariffs[0]?.routeId || '' }
+    if (projectContext?.prefill) return { ...defaults, ...projectContext.prefill }
+    return defaults
+  })
   const [showSteps, setShowSteps] = useState(false)
 
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }))
@@ -88,6 +95,40 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
   const fixedCost = form.purchaseCost * form.quantity + form.packagingCost * form.quantity + form.chinaInbound * form.quantity + logisticsCny
   const bePriceRub = commissionPct < 1 && rubPerCny > 0 ? (fixedCost * rubPerCny) / (1 - commissionPct) : null
 
+  // T6-2B2：项目模式下把当前方案冻结为不可变成本场景（wbEngine 输出 verbatim）
+  const saveScenario = () => {
+    if (!projectContext?.onSaveScenario || !tariff) return
+    projectContext.onSaveScenario({
+      inputPayload: {
+        productName: form.productName,
+        actualWeightG: toNum(form.actualWeightG),
+        lengthCm: toNum(form.lengthCm),
+        widthCm: toNum(form.widthCm),
+        heightCm: toNum(form.heightCm),
+        quantity: toNum(form.quantity),
+        parcelCount: toNum(form.parcelCount),
+        routeId: form.routeId,
+        sellerRevenueRub: toNum(form.sellerRevenueRub),
+        commissionRate: toNum(form.commissionRate),
+        promotionCostRub: toNum(form.promotionCostRub),
+        purchaseCost: toNum(form.purchaseCost),
+        packagingCost: toNum(form.packagingCost),
+        chinaInbound: toNum(form.chinaInbound),
+        status: form.status,
+        reverseEventType: form.reverseEventType,
+        reverseCompensationMultiplier: form.reverseCompensationMultiplier,
+        actualForwardLogisticsCny: form.actualForwardLogisticsCny,
+        actualReverseCompensationCny: form.actualReverseCompensationCny,
+        otherReverseCostCny: toNum(form.otherReverseCostCny),
+        forwardFeeApplied: form.forwardFeeApplied,
+        inventoryRecoveryRate: toNum(form.inventoryRecoveryRate),
+      },
+      tariff,
+      settings,
+      outputs: { logisticsCalc, profitCalc, reverseCalcResult, breakEvenPriceRub: bePriceRub },
+    })
+  }
+
   const inputField = (label, key, unit, opts = {}) => (
     <div>
       <label className="text-xs font-medium text-gray-500 mb-1 block">{label}</label>
@@ -108,6 +149,12 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* 输入 */}
       <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-4">
+        {projectContext && (
+          <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 text-xs text-orange-700">
+            正在为项目 <b>{projectContext.projectCode}</b> 核算：已预填候选真实数据（名称/重量/尺寸/参考售价）。
+            WB 佣金率、线路与成本假设请自行填写；售价仅作参考。
+          </div>
+        )}
         <h4 className="text-sm font-semibold text-morandi-text">输入参数</h4>
 
         {skus.length > 0 && (
@@ -195,7 +242,12 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          {inputField('卖家收入基数', 'sellerRevenueRub', '₽')}
+          <div>
+            {inputField('卖家收入基数', 'sellerRevenueRub', '₽')}
+            {projectContext?.prefill?.sellerRevenueRub !== undefined && (
+              <p className="text-[10px] text-gray-400 mt-0.5">来自候选市场的参考售价（可修改）</p>
+            )}
+          </div>
           {inputField('促销费', 'promotionCostRub', '₽')}
         </div>
         <div className="grid grid-cols-3 gap-3">
@@ -318,6 +370,15 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         )}
 
         {/* 保存 */}
+        {projectContext && (
+          <button
+            onClick={saveScenario}
+            disabled={!tariff || !form.productName}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium py-2 rounded-lg"
+          >
+            保存此方案到项目（不可变成本场景）
+          </button>
+        )}
         <button
           onClick={() => {
             if (!form.productName) { alert('请填写商品名称'); return }
