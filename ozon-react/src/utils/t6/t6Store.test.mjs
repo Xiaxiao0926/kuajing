@@ -6,7 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as store from './t6Store.js'
-import { getWorkflowTemplate } from '../../data/workflowTemplates/roadmap-v1.js'
+import { getWorkflowTemplate, WORKFLOW_TEMPLATES } from '../../data/workflowTemplates/registry.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..', '..', '..', '..')
@@ -239,6 +239,58 @@ console.log('I14: 评分页立项语义——每次立项冻结"当前可见评�
   const project = store.createProject({ candidateId: cand.id, creationSnapshotId: fresh.id })
   assert(project.source.creationSnapshotId === fresh.id, 'creationSnapshotId = 本次新快照')
   assert(fresh.id !== oldLatest, '新快照与旧快照不同（未复用旧评分）')
+}
+
+console.log('I15: server sync 生命周期（false→true 后能读到同步后的实体；App 层 Gate 源码锁定）')
+{
+  // 全新内存后端模拟冷启动：同步前为空 → 同步写入实体 → 再次读取可见
+  const mem2 = new Map()
+  const adapter2 = {
+    get: (k) => (mem2.has(k) ? JSON.parse(mem2.get(k)) : null),
+    set: (k, v) => mem2.set(k, JSON.stringify(v)),
+    keys: () => [...mem2.keys()],
+  }
+  store._setAdapterForTests(adapter2)
+  assert(store.listCandidates().length === 0, '同步完成前读取为空（模拟冷启动）')
+  // 模拟 WP REST 同步完成：持久层写入一条候选
+  adapter2.set('t6.candidate.synced-1', JSON.stringify({
+    id: 'synced-1', schemaVersion: 1, sourceProductId: 'P-SYNC-001', candidateIndex: 0,
+    candidateName: '同步商品', categoryLeaf: 'x', categoryFull: 'x',
+    latestSnapshotId: null, bizStatus: '观察', owner: '', notes: '', projectIds: [],
+    addedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+  }))
+  assert(store.listCandidates().length === 1, '同步完成后再次读取可见（useMemo 生命周期已由 App 层 Gate 规避）')
+  // App 层 Gate 源码锁：T6 页面在 !serverSynced 时不挂载
+  const fs2 = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'App.jsx'), 'utf-8')
+  assert(fs2.includes("'__t6_candidates__' || activeNode === '__t6_projects__'") && fs2.includes('!serverSynced'), 'App.jsx 含 T6 server-sync Gate')
+  assert(fs2.includes('正在同步项目数据'), 'Gate 显示同步提示')
+  // 还原主适配器供后续用例
+  store._setAdapterForTests({
+    get: (k) => (mem.has(k) ? JSON.parse(mem.get(k)) : null),
+    set: (k, v) => mem.set(k, JSON.stringify(v)),
+    keys: () => [...mem.keys()],
+  })
+}
+
+console.log('I16: setWorkflowNode 按项目自己的 templateVersion 取模板（伪造 v2 项目 fail-close）')
+{
+  // 手工写入一个 templateVersion='roadmap-v2' 的项目（模拟未来数据）
+  const fake = {
+    id: 'fake-v2', projectCode: 'RU-2099-001', marketCode: 'RU', schemaVersion: 1,
+    name: '未来项目',
+    source: { kind: 'manual', candidateId: null, sourceProductId: null, candidateName: 'x', category: '', creationSnapshotId: null },
+    lifecycleStatus: 'DRAFT', stage: 'PIPELINE', goLiveAt: null,
+    workflow: { templateVersion: 'roadmap-v2', states: [{ nodeId: 'n1', status: 'pending', updatedAt: null, updatedBy: null, note: null }] },
+    product: {}, suppliers: [], samples: [], compliance: {},
+    costing: { scenarios: [], baselineScenarioId: null },
+    logistics: {}, listing: {}, launch: {}, operations: {}, settlement: {},
+    decisionLog: [], createdAt: '', updatedAt: '',
+  }
+  mem.set('t6.project.fake-v2', JSON.stringify(fake))
+  let threwV2 = false
+  try { store.setWorkflowNode('fake-v2', 'n1', 'done') } catch (e) { threwV2 = /未注册/.test(e.message) }
+  assert(threwV2, 'v2 项目在未注册模板时 setWorkflowNode 抛错（不会误用 v1 校验）')
+  assert(WORKFLOW_TEMPLATES['roadmap-v1'] && !WORKFLOW_TEMPLATES['roadmap-v2'], 'registry 只含已冻结版本')
 }
 
 console.log(`\n===== T6 Store 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)

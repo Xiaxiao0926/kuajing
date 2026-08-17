@@ -8,7 +8,7 @@
  *  - 生产走 persist（localStorage + WP REST 同步）；测试可注入内存 adapter
  */
 import { persistGet, persistSet } from '../persist.js'
-import { getWorkflowTemplate } from '../../data/workflowTemplates/roadmap-v1.js'
+import { getWorkflowTemplate } from '../../data/workflowTemplates/registry.js'
 
 const SCHEMA_VERSION = 1
 export const WORKFLOW_TEMPLATE_VERSION = 'roadmap-v1'
@@ -46,6 +46,13 @@ function listEntities(prefix) {
 export function buildWorkflowTemplate() {
   const template = getWorkflowTemplate(WORKFLOW_TEMPLATE_VERSION)
   if (!template) throw new Error(`T6_STORE: workflow 模板 ${WORKFLOW_TEMPLATE_VERSION} 不存在（fail-close）`)
+  return template
+}
+
+/** 按项目自己的 templateVersion 取模板（v2 项目不会误用 v1 校验） */
+function getProjectWorkflowTemplate(project) {
+  const template = getWorkflowTemplate(project.workflow.templateVersion)
+  if (!template) throw new Error(`T6_STORE: 项目模板版本 ${project.workflow.templateVersion} 未注册（fail-close）`)
   return template
 }
 
@@ -362,7 +369,7 @@ export function setWorkflowNode(id, nodeId, status, note = '') {
   }
   const rec = getProject(id)
   if (!rec) throw new Error('T6_STORE: 项目不存在')
-  const template = buildWorkflowTemplate()
+  const template = getProjectWorkflowTemplate(rec)
   if (!template.nodes.some((n) => n.nodeId === nodeId)) {
     throw new Error(`T6_STORE: nodeId ${nodeId} 不属于模板 ${rec.workflow.templateVersion}（fail-close）`)
   }
