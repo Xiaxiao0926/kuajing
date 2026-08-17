@@ -6,6 +6,7 @@ import {
   calcShipping, getBestShipping, calcRow, calcChannelProfit,
   PRICING_PRODUCTS, PRODUCT_COLORS, COMMISSION_TABLE,
 } from '../utils/ozonEngine'
+import { mergeTrustedPrefill } from '../utils/t6/costScenarioAdapter'
 import { Plus, Trash2 } from 'lucide-react'
 import Button from './ui/Button'
 
@@ -91,10 +92,14 @@ const SINGLE_DEFAULTS = {
 
 function SingleTab({ projectContext = null }) {
   // prefill 只在挂载时生效一次（key 按 projectId 强制重挂）；项目模式下不写共享持久化键
+  // T6-2B hotfix：base = 既有保存值（或默认值），只有"有值"的 project prefill 覆盖 base——
+  // 禁止 '' 把采购/广告等成本假设清成 0（否则会算出虚假高利润基线）
   const [params, setParams] = useState(() => {
-    if (projectContext?.prefill) return { ...SINGLE_DEFAULTS, ...projectContext.prefill }
-    return persistGet(SHIPPING_KEY) || { ...SINGLE_DEFAULTS }
+    const base = persistGet(SHIPPING_KEY) || { ...SINGLE_DEFAULTS }
+    return projectContext?.prefill ? mergeTrustedPrefill(base, projectContext.prefill) : base
   })
+  // T6-2B hotfix：项目模式保存前必须人工确认成本与费率假设
+  const [costConfirmed, setCostConfirmed] = useState(false)
 
   const updateParam = (key, val) => {
     const newData = { ...params, [key]: val }
@@ -166,14 +171,20 @@ function SingleTab({ projectContext = null }) {
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-5">
         {projectContext && (
-          <div className="mb-5 flex items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
             <div className="text-xs text-blue-700">
               正在为项目 <b>{projectContext.projectCode}</b> 核算：预填候选真实数据（售价/重量/尺寸/rFBS 佣金），
               成本与费率字段请填写真实值后再保存为不可变成本场景。
             </div>
-            <Button variant="primary" size="sm" disabled={!bestChannel} onClick={saveScenario}>
-              <Save className="h-3.5 w-3.5" /> 保存此方案到项目
-            </Button>
+            <div className="flex items-center gap-3">
+              <label className="flex items-center gap-1.5 text-xs text-blue-800">
+                <input type="checkbox" checked={costConfirmed} onChange={(e) => setCostConfirmed(e.target.checked)} className="rounded" />
+                已确认采购成本及平台费用假设
+              </label>
+              <Button variant="primary" size="sm" disabled={!bestChannel || !costConfirmed} onClick={saveScenario}>
+                <Save className="h-3.5 w-3.5" /> 保存此方案到项目
+              </Button>
+            </div>
           </div>
         )}
         <div className="space-y-5 mb-5">

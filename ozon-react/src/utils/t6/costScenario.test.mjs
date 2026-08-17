@@ -193,6 +193,8 @@ console.log('C8: scenarioSummary——统一摘要字段（跨平台比较用）
   assert(s.id === sc.id && s.platform === 'OZON' && s.name === '摘要场景', 'id/platform/name')
   assert(s.channelId === CHANNEL_ID && s.channelName === 'Standard Small', 'channelId/channelName')
   assert(s.priceRub === 5000, 'priceRub 来自 inputPayload.price')
+  assert(s.logisticsCostCny === p.outputPayload.costBreakdown.crossBorderCost, 'logisticsCostCny = costBreakdown.crossBorderCost（引擎原文）')
+  assert(s.platformCostCny === p.outputPayload.costBreakdown.platformAmt, 'platformCostCny = costBreakdown.platformAmt（引擎原文）')
   assert(s.profitMarginPct === p.outputPayload.profitRate, 'profitMarginPct = 引擎 profitRate（统一口径）')
   assert(s.profitCny === p.outputPayload.profit, 'profitCny = 引擎 profit')
   assert(s.calculatorVersion === OZON_CALC_VERSION, 'calculatorVersion')

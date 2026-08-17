@@ -94,12 +94,38 @@ export function buildOzonScenarioPayload({ project, inputPayload, selectedChanne
   }
 }
 
+/** 数值安全取值：null/undefined/''/NaN → null（绝不 Number(null)→0） */
+function num(v) {
+  if (v === null || v === undefined || v === '') return null
+  const n = Number(v)
+  return Number.isFinite(n) ? n : null
+}
+
+/**
+ * 项目模式预填合并（T6-2B hotfix）：
+ * 只有"有值"的 project prefill 才覆盖 base；'' / null / undefined 一律不覆盖，
+ * 防止把既有成本/费率假设清成 0（从而算出虚假高利润基线）。
+ * OzonCalc 与 CalculatorTab 共用同一实现。
+ */
+export function mergeTrustedPrefill(base, prefill) {
+  const trusted = Object.fromEntries(
+    Object.entries(prefill || {}).filter(([, v]) => v !== '' && v !== null && v !== undefined),
+  )
+  return { ...base, ...trusted }
+}
+
 /** 场景统一摘要（OZON/WB 通用字段，供项目成本列表与跨平台比较表使用） */
 export function scenarioSummary(scenario) {
   if (!scenario) return null
   const cfg = scenario.resolvedConfig || {}
   const out = scenario.outputPayload || {}
   const isWb = scenario.platform === 'WB'
+  const pc = out.profitCalc || {}
+  const cb = out.costBreakdown || {}
+  // WB 平台费用 = 佣金+支付+促销+其他扣款（均为引擎输出字段）；OZON = costBreakdown.platformAmt
+  const wbPlatformCost = [pc.commissionCny, pc.acquiringFeeCny, pc.promotionCostCny, pc.platformOtherCny].every((v) => num(v) !== null)
+    ? Math.round((pc.commissionCny + pc.acquiringFeeCny + pc.promotionCostCny + pc.platformOtherCny) * 100) / 100
+    : null
   return {
     id: scenario.id,
     platform: scenario.platform,
@@ -108,12 +134,12 @@ export function scenarioSummary(scenario) {
     channelId: isWb ? (cfg.tariff?.routeId ?? null) : (cfg.selectedChannel?.id ?? null),
     channelName: isWb ? (cfg.tariff?.routeName ?? null) : (cfg.selectedChannel?.name ?? null),
     priceRub: isWb ? (scenario.inputPayload?.sellerRevenueRub ?? null) : (scenario.inputPayload?.price ?? null),
-    profitCny: isWb
-      ? (Number.isFinite(Number(out.profitCalc?.operatingProfitCny)) ? Number(out.profitCalc.operatingProfitCny) : null)
-      : (Number.isFinite(out.profit) ? out.profit : null),
-    profitMarginPct: isWb
-      ? (Number.isFinite(Number(out.profitCalc?.profitMargin)) ? Number(out.profitCalc.profitMargin) : null)
-      : (Number.isFinite(out.profitRate) ? out.profitRate : null),
+    // 物流成本：WB=logisticsCalc.totalFeeCny；OZON=costBreakdown.crossBorderCost（均来自各引擎输出原文，不跨平台重算）
+    logisticsCostCny: isWb ? num(out.logisticsCalc?.totalFeeCny) : num(cb.crossBorderCost),
+    // 平台费用：WB=佣金+支付+促销+其他扣款；OZON=costBreakdown.platformAmt
+    platformCostCny: isWb ? wbPlatformCost : num(cb.platformAmt),
+    profitCny: isWb ? num(pc.operatingProfitCny) : num(out.profit),
+    profitMarginPct: isWb ? num(pc.profitMargin) : num(out.profitRate),
     calculatorVersion: cfg.calculatorVersion ?? null,
   }
 }
@@ -122,8 +148,8 @@ export function scenarioSummary(scenario) {
 export function scenarioMarginPct(scenario) {
   if (!scenario) return null
   const out = scenario.outputPayload || {}
-  const margin = scenario.platform === 'WB' ? Number(out.profitCalc?.profitMargin) : Number(out.profitRate)
-  return Number.isFinite(margin) ? margin : null
+  const raw = scenario.platform === 'WB' ? out.profitCalc?.profitMargin : out.profitRate
+  return num(raw)
 }
 
 // ---------- T6-2B2 WB ----------
@@ -152,7 +178,7 @@ export function buildWbPrefill({ snapshot }) {
  * 冻结 WB 费率版本完整快照（不是只存 routeId）：
  * tariff = 用户实际选用的费率版本记录（tariffId/routeId/routeName/effectiveFrom/effectiveTo/
  *           weightRoundingG/limits(尺寸/重量限制)/tiers/反向规则(reverse_to_ru_warehouse_included)/source_name）
- * settings = 引擎实际用到的设置子集（rubPerCny 等）
+ * settings = 引擎实际用到的设置子集（含进入利润公式的 taxMethod/taxRate；不含则不完整，无法复算历史场景）
  */
 export function buildWbResolvedConfig({ tariff, settings }) {
   if (!tariff) throw new Error('T6_COST: WB 费率版本缺失（无法冻结）')
@@ -160,7 +186,11 @@ export function buildWbResolvedConfig({ tariff, settings }) {
   return {
     tariff: JSON.parse(JSON.stringify(tariff)),
     settings: {
+      // 进入利润公式（wbEngine calculatePlatformSettlement / calculateOperatingProfit）
       rubPerCny: settings.rubPerCny,
+      taxMethod: settings.taxMethod,
+      taxRate: settings.taxRate,
+      // 展示/提示用阈值 + 汇率生效日（存档上下文）
       exchangeRateEffectiveFrom: settings.exchangeRateEffectiveFrom,
       profitMarginThreshold: settings.profitMarginThreshold,
       logisticsRatioThreshold: settings.logisticsRatioThreshold,

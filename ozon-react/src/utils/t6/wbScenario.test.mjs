@@ -144,6 +144,7 @@ console.log('W2: buildWbResolvedConfig——冻结完整费率版本快照（非
   assert(t.buyerToRuWarehouseReverseIncluded === TARIFF.buyerToRuWarehouseReverseIncluded, '反向规则（reverse_to_ru_warehouse_included）')
   assert(t.sourceName === TARIFF.sourceName, '费率来源 sourceName')
   assert(cfg.settings.rubPerCny === DEFAULT_SETTINGS.rubPerCny && cfg.settings.profitMarginThreshold === DEFAULT_SETTINGS.profitMarginThreshold, '设置子集（rubPerCny/阈值）')
+  assert(cfg.settings.taxMethod === DEFAULT_SETTINGS.taxMethod && cfg.settings.taxRate === DEFAULT_SETTINGS.taxRate, '进入利润公式的税务设置 taxMethod/taxRate 已冻结')
   assert(cfg.calculatorVersion === WB_CALC_VERSION, 'calculatorVersion = wb-order-v2')
 }
 
@@ -189,6 +190,9 @@ console.log('W6: scenarioSummary(WB)——毛利率取 profitCalc.profitMargin�
   const s = scenarioSummary(store.getCostScenario(sc.id))
   assert(s.profitMarginPct === outputs.profitCalc.profitMargin, `profitMarginPct = profitCalc.profitMargin (${s.profitMarginPct})`)
   assert(s.profitCny === outputs.profitCalc.operatingProfitCny, 'profitCny = operatingProfitCny')
+  assert(s.logisticsCostCny === outputs.logisticsCalc.totalFeeCny, 'logisticsCostCny = logisticsCalc.totalFeeCny（引擎原文）')
+  const expectedPlatform = Math.round((outputs.profitCalc.commissionCny + outputs.profitCalc.acquiringFeeCny + outputs.profitCalc.promotionCostCny + outputs.profitCalc.platformOtherCny) * 100) / 100
+  assert(s.platformCostCny === expectedPlatform, `platformCostCny = 佣金+支付+促销+其他扣款 (${expectedPlatform})`)
   assert(s.channelName === TARIFF.routeName && s.channelId === TARIFF.routeId, 'channelName/channelId = 线路名/routeId')
   assert(s.priceRub === WB_INPUT.sellerRevenueRub, 'priceRub = sellerRevenueRub')
   assert(s.calculatorVersion === WB_CALC_VERSION, 'calculatorVersion')
@@ -274,6 +278,41 @@ console.log('W10: 基线仅人工切换——WB 场景创建不自动改基线�
   assert(logs.filter((l) => l.to === wbSc.id).length === 0, '无指向 WB 场景的自动基线日志')
   store.setProjectBaselineScenario(project.id, wbSc.id)
   assert(store.getProject(project.id).costing.baselineScenarioId === wbSc.id, '人工 setProjectBaselineScenario 可切换（human-only）')
+}
+
+console.log('W11: scenarioMarginPct / scenarioSummary——null/undefined/\'\' → null（绝不 Number(null)→0）')
+{
+  assert(scenarioMarginPct({ platform: 'WB', outputPayload: { profitCalc: { profitMargin: null } } }) === null, 'WB margin=null → null（不是 0）')
+  assert(scenarioMarginPct({ platform: 'OZON', outputPayload: { profitRate: null } }) === null, 'OZON profitRate=null → null')
+  assert(scenarioMarginPct({ platform: 'WB', outputPayload: { profitCalc: {} } }) === null, 'WB 缺 profitMargin → null')
+  assert(scenarioMarginPct({ platform: 'OZON', outputPayload: { profitRate: '' } }) === null, 'OZON profitRate=\'\' → null')
+  assert(scenarioMarginPct({ platform: 'WB', outputPayload: { profitCalc: { profitMargin: 12.5 } } }) === 12.5, '有值正常返回')
+  const s = scenarioSummary({ id: 'x', platform: 'WB', name: 'n', createdAt: '', inputPayload: { sellerRevenueRub: 1 }, outputPayload: { profitCalc: { profitMargin: null, operatingProfitCny: null } }, resolvedConfig: {} })
+  assert(s.profitMarginPct === null && s.profitCny === null, 'scenarioSummary 不可计算 → null（UI 显示 —，不是 0%）')
+}
+
+console.log('W12: Gate invariant——基线毛利率缺失 → FAIL「基线场景缺少利润率」，绝不 WARN 0%')
+{
+  const baseProject = {
+    id: 'p-wb-gate2', projectCode: 'RU-2026-998', marketCode: 'RU', schemaVersion: 1, name: 'x',
+    source: { kind: 'candidate', candidateId: 'c1', sourceProductId: 'P-1', candidateName: 'x', category: 'x', creationSnapshotId: 's1' },
+    lifecycleStatus: 'ACTIVE', stage: 'PIPELINE', goLiveAt: null,
+    workflow: { templateVersion: 'roadmap-v1', states: [] },
+    product: {}, suppliers: [], samples: [], compliance: {},
+    costing: { scenarios: ['wbs1'], baselineScenarioId: 'wbs1' },
+    logistics: {}, listing: {}, launch: {}, operations: {}, settlement: {},
+    decisionLog: [], createdAt: '', updatedAt: '',
+  }
+  const broken = {
+    id: 'wbs1', projectId: 'p-wb-gate2', platform: 'WB', name: 'WB基线', sourceSnapshotId: 's1',
+    inputPayload: { sellerRevenueRub: 5000 },
+    outputPayload: { profitCalc: { profitMargin: null, operatingProfitCny: null } },
+    resolvedConfig: { tariff: { routeId: 'DPX-SZ-382822' }, calculatorVersion: WB_CALC_VERSION },
+    createdAt: '',
+  }
+  const g = evaluateProjectGate(baseProject, 'COSTING', { scenarios: [broken] })
+  assert(g.verdict === GATE_VERDICTS.RED, `margin=null → RED（不是 YELLOW，实际 ${g.verdict}）`)
+  assert(g.blockingReasons.some((r) => r.includes('缺少利润率')), '阻塞理由含「基线场景缺少利润率」')
 }
 
 console.log(`\n===== WB 成本场景测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)
