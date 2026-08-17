@@ -13,7 +13,7 @@ import { scoreAllCandidates } from '../../../utils/scoring/scoringDataAdapter'
 import { rowsToCsv, rowsToXlsx, exportFilename } from '../../../utils/scoring/scoringExport'
 import {
   ensureCandidate, refreshCandidateSnapshot, buildScoringSnapshot,
-  createProject, getSnapshot, setProjectLifecycle,
+  createProject, setProjectLifecycle,
 } from '../../../utils/t6/t6Store'
 import LoadingState from '../../ui/LoadingState'
 import ErrorState from '../../ui/ErrorState'
@@ -159,7 +159,7 @@ export default function ProductScoringSection() {
         categoryFull: row.categoryFull,
       })
       const snap = buildSnap(row, candidate.id)
-      refreshCandidateSnapshot(candidate.id, snap)
+      refreshCandidateSnapshot(candidate.id, snap.id)
       setT6Notice(`已加入候选：${row.name}（快照 ${snap.id.slice(0, 8)}…）`)
     } catch (e) {
       setT6Notice(e.message || String(e))
@@ -177,12 +177,11 @@ export default function ProductScoringSection() {
         categoryLeaf: row.leaf,
         categoryFull: row.categoryFull,
       })
-      let snap = candidate.latestSnapshotId ? getSnapshot(candidate.latestSnapshotId) : null
-      if (!snap) {
-        snap = buildSnap(row, candidate.id)
-        refreshCandidateSnapshot(candidate.id, snap)
-      }
-      const project = createProject({ candidate, creationSnapshot: snap })
+      // T6-1 hardening：一键立项永远冻结用户眼前看到的当前评分——
+      // 每次生成新快照（更新 latestSnapshotId），绝不复用旧快照。
+      const snap = buildSnap(row, candidate.id)
+      refreshCandidateSnapshot(candidate.id, snap.id)
+      const project = createProject({ candidateId: candidate.id, creationSnapshotId: snap.id })
       setProjectLifecycle(project.id, 'ACTIVE', '一键立项后启动')
       setT6Notice(`已创建项目 ${project.projectCode}（立项快照 ${snap.id.slice(0, 8)}…）`)
     } catch (e) {

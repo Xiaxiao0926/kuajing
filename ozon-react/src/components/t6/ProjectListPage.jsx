@@ -11,6 +11,7 @@ import PageHeader from '../ui/PageHeader'
 import Button from '../ui/Button'
 import Badge from '../ui/Badge'
 import EmptyState from '../ui/EmptyState'
+import LoadingState from '../ui/LoadingState'
 import ScoreCell from '../scoring/ScoreCell'
 import DecisionBadge from '../scoring/DecisionBadge'
 import ContextBadge from '../scoring/ContextBadge'
@@ -24,7 +25,7 @@ const STAGE_ZH = {
   COMPLIANCE: '合规认证', PRODUCTION: '生产物流', LAUNCH: '上架启动', OPERATIONS: '运营放量', REVIEW: '复盘迭代',
 }
 
-export default function ProjectListPage() {
+export default function ProjectListPage({ serverSynced = true }) {
   const [tick, setTick] = useState(0)
   const [notice, setNotice] = useState('')
 
@@ -32,6 +33,11 @@ export default function ProjectListPage() {
     void tick
     return [...listProjects()].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))
   }, [tick])
+
+  // T6-1 hardening：server sync 完成前不允许读写 T6 主数据
+  if (!serverSynced) {
+    return <LoadingState text="正在同步项目数据…" />
+  }
 
   const act = (project, status, label) => {
     const reason = window.prompt(`${label}原因（写入决策日志，建议填写）:`) || ''

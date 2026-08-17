@@ -206,10 +206,10 @@ function DashboardApp() {
       return <ProductScoringSection />
     }
     if (activeNode === '__t6_candidates__') {
-      return <CandidatePoolPage />
+      return <CandidatePoolPage serverSynced={serverSynced} />
     }
     if (activeNode === '__t6_projects__') {
-      return <ProjectListPage />
+      return <ProjectListPage serverSynced={serverSynced} />
     }
     if (activeNode === 'n1') {
       return (
