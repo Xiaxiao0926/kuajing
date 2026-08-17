@@ -11,6 +11,10 @@ import scoringRules from '../../../generated/scoring_rules'
 import settings from '../../../generated/settings'
 import { scoreAllCandidates } from '../../../utils/scoring/scoringDataAdapter'
 import { rowsToCsv, rowsToXlsx, exportFilename } from '../../../utils/scoring/scoringExport'
+import {
+  ensureCandidate, refreshCandidateSnapshot, buildScoringSnapshot,
+  createProject, getSnapshot, setProjectLifecycle,
+} from '../../../utils/t6/t6Store'
 import LoadingState from '../../ui/LoadingState'
 import ErrorState from '../../ui/ErrorState'
 import Surface from '../../ui/Surface'
@@ -26,8 +30,10 @@ const DECISION_TIER = { ELIGIBLE: 0, REVIEW: 1, RESEARCH: 2, HOLD: 3, BLOCKED: 4
 export default function ProductScoringSection() {
   const [candidates, setCandidates] = useState(null)
   const [benchmark, setBenchmark] = useState(null)
+  const [datasetDoc, setDatasetDoc] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [t6Notice, setT6Notice] = useState('')
   const scoreMsRef = useRef(null)
   const filterMsRef = useRef(null)
 
@@ -48,6 +54,7 @@ export default function ProductScoringSection() {
         if (cancelled) return
         setCandidates(cDoc.candidates)
         setBenchmark(bDoc)
+        setDatasetDoc(cDoc)
       } catch (e) {
         if (!cancelled) setError(e.message || String(e))
       } finally {
@@ -127,6 +134,62 @@ export default function ProductScoringSection() {
 
   const selected = selectedIndex != null ? scored.find((r) => r.index === selectedIndex) : null
 
+  // ---- T6-1：候选池 / 一键立项（快照不可变，写入走 t6Store） ----
+  const canonicalFor = (row) => (candidates && row && Number.isInteger(row.index) ? candidates[row.index] : null)
+
+  const buildSnap = (row, candidateId = null) => buildScoringSnapshot({
+    scored: row,
+    canonical: canonicalFor(row),
+    benchmarkMeta: benchmark?.meta,
+    benchmarkDoc: benchmark,
+    rules: scoringRules,
+    datasetVersion: `${datasetDoc?.source || 'candidates'}#${datasetDoc?.generatedAt || '?'}`,
+    candidateId,
+  })
+
+  const handleAddCandidate = (row) => {
+    try {
+      const canonical = canonicalFor(row)
+      if (!canonical) { setT6Notice('缺少该 SKU 的候选数据'); return }
+      const { candidate } = ensureCandidate({
+        sourceProductId: canonical.source_product_id ?? '',
+        candidateIndex: row.index,
+        name: row.name,
+        categoryLeaf: row.leaf,
+        categoryFull: row.categoryFull,
+      })
+      const snap = buildSnap(row, candidate.id)
+      refreshCandidateSnapshot(candidate.id, snap)
+      setT6Notice(`已加入候选：${row.name}（快照 ${snap.id.slice(0, 8)}…）`)
+    } catch (e) {
+      setT6Notice(e.message || String(e))
+    }
+  }
+
+  const handleCreateProject = (row) => {
+    try {
+      const canonical = canonicalFor(row)
+      if (!canonical) { setT6Notice('缺少该 SKU 的候选数据'); return }
+      const { candidate } = ensureCandidate({
+        sourceProductId: canonical.source_product_id ?? '',
+        candidateIndex: row.index,
+        name: row.name,
+        categoryLeaf: row.leaf,
+        categoryFull: row.categoryFull,
+      })
+      let snap = candidate.latestSnapshotId ? getSnapshot(candidate.latestSnapshotId) : null
+      if (!snap) {
+        snap = buildSnap(row, candidate.id)
+        refreshCandidateSnapshot(candidate.id, snap)
+      }
+      const project = createProject({ candidate, creationSnapshot: snap })
+      setProjectLifecycle(project.id, 'ACTIVE', '一键立项后启动')
+      setT6Notice(`已创建项目 ${project.projectCode}（立项快照 ${snap.id.slice(0, 8)}…）`)
+    } catch (e) {
+      setT6Notice(e.message || String(e))
+    }
+  }
+
   return (
     <div className="space-y-4">
       <ScoringPageHeader
@@ -164,19 +227,31 @@ export default function ProductScoringSection() {
             没有符合当前筛选条件的 SKU
           </div>
         ) : (
-          <ScoringTable rows={filtered} selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
+          <ScoringTable
+            rows={filtered}
+            selectedIndex={selectedIndex}
+            onSelect={setSelectedIndex}
+            onAddCandidate={handleAddCandidate}
+          />
         )}
       </Surface>
 
-      {/* 底部 meta（规则/λ/性能，不进主视觉） */}
+      {/* 底部 meta（规则/λ/性能 + T6 操作反馈，不进主视觉） */}
       <div className="flex items-center gap-3 text-xs text-workspace-text-tertiary">
         <span>规则 V1 · λ {scoringRules.dimensions.demand.scale_weight}</span>
         <span>{selectedIndex != null ? `已选 #${selectedIndex}` : '未选择 SKU'}</span>
         {scoreMsRef.current != null && <span className="hidden md:inline">首次评分 {scoreMsRef.current} ms</span>}
         {filterMsRef.current != null && <span className="hidden md:inline">筛选 {filterMsRef.current} ms</span>}
+        {t6Notice && <span className="text-workspace-text-secondary">{t6Notice}</span>}
       </div>
 
-      <ScoringDetailDrawer row={selected} open={selectedIndex != null} onClose={() => setSelectedIndex(null)} />
+      <ScoringDetailDrawer
+        row={selected}
+        open={selectedIndex != null}
+        onClose={() => setSelectedIndex(null)}
+        onAddCandidate={handleAddCandidate}
+        onCreateProject={handleCreateProject}
+      />
     </div>
   )
 }

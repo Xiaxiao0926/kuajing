@@ -23,6 +23,8 @@ import { ROADMAP_PHASES, ALL_NODES } from './data/roadmap'
 // 且 App 本身已静态 import xlsx，lazy 收益不足以承担线上白屏风险。
 // 后续如需代码分割优化，单独立项，不在 P0 中处理。
 import ProductScoringSection from './components/dashboard/sections/ProductScoringSection'
+import CandidatePoolPage from './components/t6/CandidatePoolPage'
+import ProjectListPage from './components/t6/ProjectListPage'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
@@ -40,6 +42,8 @@ const DATA_DIR = getDataUrl().replace(/\/$/, '')
 // 页面错误边界的标题映射（仅展示用）
 function pageLabelForNode(nodeId) {
   if (nodeId === '__scoring__') return '选品评分'
+  if (nodeId === '__t6_candidates__') return '候选池'
+  if (nodeId === '__t6_projects__') return 'SKU 项目'
   if (nodeId === '__project_flow__') return '项目流程总览'
   if (nodeId === '__node_overview__') return '数据与设置'
   if (nodeId === '__progress_overview__') return '工作台'
@@ -200,6 +204,12 @@ function DashboardApp() {
     }
     if (activeNode === '__scoring__') {
       return <ProductScoringSection />
+    }
+    if (activeNode === '__t6_candidates__') {
+      return <CandidatePoolPage />
+    }
+    if (activeNode === '__t6_projects__') {
+      return <ProjectListPage />
     }
     if (activeNode === 'n1') {
       return (
