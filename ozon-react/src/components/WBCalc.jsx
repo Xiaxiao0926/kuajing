@@ -27,8 +27,10 @@ const TABS = [
  * WB跨境利润与物流费用核算（编排层）
  * 计算逻辑：utils/wbEngine.js（禁改）；配置：config/wb_tariffs.json
  * Tab 区块：./wbcalc/tabs/*.jsx；共享组件：./wbcalc/
+ * projectContext（T6-2B2）：{ projectId, projectCode, prefill, onSaveScenario } | null
+ * 项目模式下在单订单核算器预填候选数据（仅 5 项，佣金绝不预填）并允许保存不可变成本场景。
  */
-export default function WBCalc() {
+export default function WBCalc({ projectContext = null }) {
   const [tab, setTab] = useState('overview')
   // 汇率迁移：强制将旧值更新为当前默认值（1¥=12₽，2026-08-11生效）
   const [settings, setSettings] = useState(() => {
@@ -96,7 +98,7 @@ export default function WBCalc() {
 
       {/* 内容区 */}
       {tab === 'overview' && <OverviewTab orders={orders} settings={settings} />}
-      {tab === 'calculator' && <CalculatorTab settings={settings} tariffs={activeRoutes} skus={skus} onSaveOrder={(o) => saveOrders([...orders, o])} onSaveSkus={saveSkus} />}
+      {tab === 'calculator' && <CalculatorTab key={projectContext ? `ctx-${projectContext.projectId}` : 'standalone'} projectContext={projectContext} settings={settings} tariffs={activeRoutes} skus={skus} onSaveOrder={(o) => saveOrders([...orders, o])} onSaveSkus={saveSkus} />}
       {tab === 'sku' && <SkuTab skus={skus} tariffs={activeRoutes} settings={settings} onSaveSkus={saveSkus} />}
       {tab === 'compare' && <CompareTab tariffs={activeRoutes} />}
       {tab === 'tariff' && <TariffTab tariffs={tariffs} onSaveTariffs={saveTariffs} />}

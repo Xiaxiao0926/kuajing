@@ -130,6 +130,7 @@ export function buildScoringSnapshot({ scored, canonical, benchmarkMeta, benchma
     benchmarkSampleSize: scored.benchmarkSampleSize,
   })
   const sourceInputs = {
+    name: canonical?.name ?? scored.name ?? '',
     price_rub: canonical?.price_rub ?? null,
     avg_price_rub: canonical?.avg_price_rub ?? null,
     sales_rub_28d: canonical?.sales_rub_28d ?? null,

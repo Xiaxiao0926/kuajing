@@ -83,6 +83,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
   const [reason, setReason] = useState('')
   const [notice, setNotice] = useState('')
   const [ozonContext, setOzonContext] = useState(null) // { prefill } — Ozon 核算面板项目上下文（显式状态，非残余 activeProjectId）
+  const [wbContext, setWbContext] = useState(null) // { prefill } — WB 核算面板项目上下文
 
   const project = useMemo(() => { void tick; return projectId ? getProject(projectId) : null }, [projectId, tick])
   const snapshot = useMemo(() => (project?.source?.creationSnapshotId ? getSnapshot(project.source.creationSnapshotId) : null), [project])
@@ -165,6 +166,27 @@ export default function ProjectDetailPage({ projectId, onBack }) {
     try {
       setProjectBaselineScenario(project.id, scenarioId)
       refresh('基线已切换')
+    } catch (e) {
+      refresh(e.message || String(e))
+    }
+  }
+
+  // T6-2B2：保存 WB 核算面板当前方案为不可变成本场景（仅测算参考，绝不自动改基线）
+  const saveWbScenario = (data) => {
+    try {
+      const payload = buildWbScenarioPayload({ project, inputPayload: data.inputPayload, tariff: data.tariff, settings: data.settings, outputs: data.outputs })
+      const sc = createCostScenario({
+        projectId: project.id,
+        platform: 'WB',
+        name: `${project.projectCode} WB 订单场景 #${scenarios.length + 1}`,
+        sourceSnapshotId: payload.sourceSnapshotId,
+        inputPayload: payload.inputPayload,
+        resolvedConfig: payload.resolvedConfig,
+        outputPayload: payload.outputPayload,
+      })
+      setWbContext(null)
+      const s = scenarioSummary(sc)
+      refresh(`已保存 WB 成本场景（${s.channelName}，毛利率 ${s.profitMarginPct}%；仅测算参考，基线需人工设置）`)
     } catch (e) {
       refresh(e.message || String(e))
     }
@@ -330,24 +352,49 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                     }}
                   />
                 </div>
+              ) : wbContext ? (
+                <div>
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="text-sm font-medium text-workspace-text">WB 核算面板 · 项目 {project.projectCode}</div>
+                    <Button variant="ghost" size="sm" onClick={() => setWbContext(null)}>返回成本场景列表</Button>
+                  </div>
+                  <WBCalc
+                    projectContext={{
+                      projectId: project.id,
+                      projectCode: project.projectCode,
+                      prefill: wbContext.prefill,
+                      onSaveScenario: saveWbScenario,
+                    }}
+                  />
+                </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <div className="text-sm font-semibold text-workspace-text">成本场景（不可变快照，只读列表）</div>
                       <div className="mt-0.5 text-xs text-workspace-text-tertiary">场景一旦保存不可编辑/删除；首个场景自动设为基线；基线毛利率 ≥15% 才可通过 COSTING Gate</div>
                     </div>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      disabled={!snapshot}
-                      onClick={() => setOzonContext({ prefill: buildOzonPrefill({ snapshot }) })}
-                    >
-                      使用 Ozon 核算
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={!snapshot}
+                        onClick={() => setWbContext({ prefill: buildWbPrefill({ snapshot }) })}
+                      >
+                        使用 WB 核算
+                      </Button>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        disabled={!snapshot}
+                        onClick={() => setOzonContext({ prefill: buildOzonPrefill({ snapshot }) })}
+                      >
+                        使用 Ozon 核算
+                      </Button>
+                    </div>
                   </div>
                   {scenarios.length === 0 ? (
-                    <div className="text-[13px] text-workspace-text-tertiary">尚无成本场景——点击「使用 Ozon 核算」，预填候选数据后填写真实成本并保存。</div>
+                    <div className="text-[13px] text-workspace-text-tertiary">尚无成本场景——点击「使用 Ozon 核算」或「使用 WB 核算」，预填候选数据后填写真实成本并保存。</div>
                   ) : (
                     <div className="space-y-2">
                       {scenarios.map((sc) => {
@@ -357,9 +404,10 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                           <div key={sc.id} className="rounded-lg border border-workspace-border p-3">
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <div className="flex items-center gap-2">
-                                <Badge tone="primary">{s.platform}</Badge>
+                                <Badge tone={s.platform === 'WB' ? 'warning' : 'primary'}>{s.platform}</Badge>
                                 <span className="text-sm font-medium text-workspace-text">{s.name}</span>
                                 {isBaseline && <Badge tone="success">基线</Badge>}
+                                {s.platform === 'WB' && !isBaseline && <span className="text-xs text-workspace-text-tertiary">仅测算参考</span>}
                               </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-workspace-text-secondary">
@@ -375,6 +423,46 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                           </div>
                         )
                       })}
+                    </div>
+                  )}
+
+                  {/* 跨平台方案比较表（值来自各平台现有核算引擎；不跨平台重新计算费用） */}
+                  {scenarios.length > 0 && (
+                    <div>
+                      <div className="mb-2 text-sm font-semibold text-workspace-text">跨平台方案比较</div>
+                      <div className="overflow-x-auto rounded-lg border border-workspace-border">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="bg-workspace-surface-subtle text-workspace-text-secondary">
+                              <th className="px-3 py-2 text-left font-medium">平台</th>
+                              <th className="px-3 py-2 text-left font-medium">场景</th>
+                              <th className="px-3 py-2 text-left font-medium">渠道 / 线路</th>
+                              <th className="px-3 py-2 text-right font-medium">售价 ₽</th>
+                              <th className="px-3 py-2 text-right font-medium">毛利率</th>
+                              <th className="px-3 py-2 text-left font-medium">冻结时间</th>
+                              <th className="px-3 py-2 text-left font-medium">基线</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {scenarios.map((sc) => {
+                              const s = scenarioSummary(sc)
+                              const isBaseline = project.costing?.baselineScenarioId === sc.id
+                              return (
+                                <tr key={sc.id} className="border-t border-workspace-border">
+                                  <td className="px-3 py-2"><Badge tone={s.platform === 'WB' ? 'warning' : 'primary'}>{s.platform}</Badge></td>
+                                  <td className="px-3 py-2 text-workspace-text">{s.name}</td>
+                                  <td className="px-3 py-2 text-workspace-text-secondary">{s.channelName}</td>
+                                  <td className="px-3 py-2 text-right tabular-nums text-workspace-text">{s.priceRub}</td>
+                                  <td className={`px-3 py-2 text-right tabular-nums font-semibold ${s.profitMarginPct >= 15 ? 'text-workspace-success' : 'text-workspace-warning'}`}>{s.profitMarginPct}%</td>
+                                  <td className="px-3 py-2 text-workspace-text-tertiary">{new Date(s.createdAt).toLocaleDateString('zh-CN')}</td>
+                                  <td className="px-3 py-2">{isBaseline ? <Badge tone="success">基线</Badge> : '—'}</td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                      <p className="mt-1.5 text-xs text-workspace-text-tertiary">比较值来自各平台现有核算引擎；不跨平台重新计算费用。</p>
                     </div>
                   )}
                 </div>
