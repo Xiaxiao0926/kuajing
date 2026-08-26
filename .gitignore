@@ -48,6 +48,9 @@ env/
 # Streamlit缓存
 .streamlit/
 
+# 手动部署临时打包目录（流程任务书 §4.1）
+deploy/
+
 # 审计：报告入库，仅原始/临时产物忽略
 _audit/raw/
 _audit/tmp/

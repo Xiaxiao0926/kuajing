@@ -5,6 +5,28 @@
 
 ---
 
+## 2026-08-26（CEL 资费表 V7.24 + 每日汇率自动更新，已上线 fyzsxnb.com）
+
+> 完整交接归档见《流程任务书-20260826-CEL费率V724与每日汇率自动更新.md》。
+
+### feat — 每日汇率自动更新 + 页头动态版本号（`a0dfa64`，已部署）
+- **数据源三级**：俄罗斯央行官方牌价（主，cbr-xml-daily.ru）→ open.er-api.com（备）→ config 兜底 13₽/¥；防护：区间 8–20、新鲜度 ≤10 天、8s 超时；localStorage 按日缓存（`fx-rate-daily-v1`），当日不重复请求。
+- **live binding**：`ozonEngine` 的 `rubPerCny`/`R` 改 `let` + `setLiveRubPerCny()`，11 个组件既有引用零改动全局生效（Rollup 打包保真已验证，139 处共享引用）；React 侧 `useSyncExternalStore` hook；WBCalc 订阅同步进 WB settings（原"强制迁移汇率"逻辑删除）。
+- **TARIFF_VERSION**：从 `config/ozon_channels.json` source 动态提取，消灭 OzonCalc/ShippingCalc 硬编码 "V5.23"（本次缺陷根因）；汇率显示格式化 4 位 + 来源/日期标注。
+- 新增 `exchangeRate.js`/`useExchangeRate.js`/`exchangeRate.test.mjs`（27 单测入 npm test 链）；回归：npm test 44/44、golden 76/76、sync 零差异、web-persistence、build 全绿。
+- 用户决策：暂不加手动锁定开关，按央行牌价跑（任务书 §2.4）。
+
+### data — CEL 资费表 V5.23 → V7.24 全渠道更新（`288a374`，已部署）
+- `config/ozon_channels.json`：17 个 Ozon 渠道费率上调约 7-8%（express_xs 5.46→5.90、standard_big 384.11→415.11），HK 渠道不变（沿用 T2-Gate0 核验结论）。
+- 黄金测试纪律：`ozon-cel-channels`/`costScenario.test`/`grade-boundaries` 三处期望值随官方表更新，均附 provenance.change_log（边界毛利率 49/48→51/50 校准）。
+
+### docs — 交接归档
+- 新增《流程任务书-20260826-CEL费率V724与每日汇率自动更新.md》（修改清单/执行时间线/手动部署流程/遗留待办/接手约束）。
+- `.gitignore` 补 `deploy/`（手动部署临时打包目录）。
+- 遗留：hPanel 清理 4 个部署残留目录；GitHub Actions FTP 超时待修（期间部署走手动流程，任务书 §4）。
+
+---
+
 ## 2026-08-14（整改阶段 V3）
 
 ### fix — T6-2B production hotfix（`fix/v3-t6-master-production-hotfix`，验收后）
