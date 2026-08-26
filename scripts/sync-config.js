@@ -50,15 +50,24 @@ function validateSettings(data) {
     'base_currency', 'rub_per_cny', 'exchange_rate_effective_from',
     'tax_method', 'tax_rate', 'default_route_id',
     'buyer_to_ru_warehouse_reverse_included', 'timezone',
-    'profit_margin_threshold', 'logistics_ratio_threshold', 'ozon_rub_to_cny',
+    'profit_margin_threshold', 'logistics_ratio_threshold',
+    'calculation_version', 'agency_fee',
   ];
   const missing = required.filter((k) => data[k] === undefined || data[k] === null);
   if (missing.length > 0) fail(`settings.json 缺少必填字段: ${missing.join(', ')}`);
-  for (const k of ['rub_per_cny', 'ozon_rub_to_cny', 'tax_rate', 'profit_margin_threshold', 'logistics_ratio_threshold']) {
+  for (const k of ['rub_per_cny', 'tax_rate', 'profit_margin_threshold', 'logistics_ratio_threshold']) {
     if (typeof data[k] !== 'number') fail(`settings.json 字段 ${k} 必须为数字, 实际 ${JSON.stringify(data[k])}`);
   }
   if (data.rub_per_cny <= 0) fail('settings.json rub_per_cny 必须为正数');
-  if (data.ozon_rub_to_cny <= 0) fail('settings.json ozon_rub_to_cny 必须为正数');
+  if (typeof data.calculation_version !== 'string' || !data.calculation_version.trim()) {
+    fail('settings.json calculation_version 必须为非空字符串');
+  }
+  if (typeof data.agency_fee.rate !== 'number' || typeof data.agency_fee.min_rub !== 'number' || typeof data.agency_fee.max_rub !== 'number') {
+    fail('settings.json agency_fee 格式必须包含 rate, min_rub, max_rub 数字');
+  }
+  if (data.agency_fee.rate < 0 || data.agency_fee.min_rub < 0 || data.agency_fee.max_rub < data.agency_fee.min_rub) {
+    fail('settings.json agency_fee 数值无效（rate/min 不得为负，max 必须 >= min）');
+  }
 }
 
 function validateChannels(data) {

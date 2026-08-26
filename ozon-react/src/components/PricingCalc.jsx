@@ -1,75 +1,14 @@
 import { useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
 import { persistGet, persistSet } from '../utils/persist'
+import { calcRow, rubPerCny } from '../utils/ozonEngine'
 
 const PRICING_KEY = 'product-pricing-v2'
-const R = 0.09
 
 const PRODUCT_COLORS = {
   purple: { bg: 'bg-purple-50', text: 'text-purple-700', bar: 'bg-purple-400', dot: 'bg-purple-500', light: 'bg-purple-100' },
   indigo: { bg: 'bg-indigo-50', text: 'text-indigo-700', bar: 'bg-indigo-400', dot: 'bg-indigo-500', light: 'bg-indigo-100' },
   teal: { bg: 'bg-teal-50', text: 'text-teal-700', bar: 'bg-teal-400', dot: 'bg-teal-500', light: 'bg-teal-100' },
-}
-
-const ALL_CHANNELS = [
-  { name: 'Economy Extra Small', rate: 26, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
-  { name: 'Standard Extra Small', rate: 36.4, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
-  { name: 'Express Extra Small', rate: 46.8, base: 3.12, weightMax: 0.5, sumMax: 90, sideMax: 60, priceMax: 1500 },
-  { name: 'Economy Budget', rate: 17.68, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
-  { name: 'Standard Budget', rate: 26, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
-  { name: 'Express Budget', rate: 34.32, base: 23.92, weightMin: 0.5, weightMax: 30, sumMax: 150, sideMax: 60, priceMax: 1500 },
-  { name: 'Economy Small', rate: 26, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
-  { name: 'Standard Small', rate: 36.4, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
-  { name: 'Express Small', rate: 46.8, base: 16.64, weightMax: 2, sumMax: 150, sideMax: 60, priceMin: 1501, priceMax: 7000 },
-  { name: 'Economy Big', rate: 17.68, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
-  { name: 'Standard Big', rate: 26, base: 37.44, weightMin: 2, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 1501, priceMax: 7000, volumetric: true, volDiv: 12000, chargeWeightMax: 31 },
-  { name: 'Economy Premium Small', rate: 26, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
-  { name: 'Standard Premium Small', rate: 36.4, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
-  { name: 'Express Premium Small', rate: 46.8, base: 22.88, weightMax: 5, sumMax: 250, sideMax: 150, priceMin: 7001, priceMax: 250000 },
-  { name: 'Economy Premium Big', rate: 23.92, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
-  { name: 'Standard Premium Big', rate: 29.12, base: 64.48, weightMin: 5, weightMax: 30, sumMax: 310, sideMax: 150, priceMin: 7001, priceMax: 250000, volumetric: true, volDiv: 12000, chargeWeightMax: 80 },
-  { name: 'Express HK 香港空运', rate: 96, base: 19, rateUnit: 'per100g', weightMax: 25, sumMax: 310, sideMax: 150, priceMin: 1, priceMax: 500000, volumetric: 'conditional', volDiv: 6000, volThreshold: 60 },
-]
-
-const calcShipping = (ch, price, weight, length, width, height) => {
-  const sum = length + width + height
-  if (length > ch.sideMax || width > ch.sideMax || height > ch.sideMax) return null
-  if (sum > ch.sumMax) return null
-  if (price < (ch.priceMin || 0) || price > ch.priceMax) return null
-  const weightMin = ch.weightMin || 0
-  if (weight < weightMin || weight > ch.weightMax) return null
-  let chargeWeight = weight
-  if (ch.volumetric === true) {
-    const volW = (length * width * height) / ch.volDiv
-    chargeWeight = Math.max(weight, volW)
-    if (chargeWeight > ch.chargeWeightMax) return null
-  } else if (ch.volumetric === 'conditional') {
-    if (sum > ch.volThreshold) {
-      const volW = Math.ceil((length * width * height) / ch.volDiv * 10) / 10
-      chargeWeight = Math.max(weight, volW)
-    }
-    chargeWeight = Math.ceil(chargeWeight * 10) / 10
-  }
-  let cost
-  if (ch.rateUnit === 'per100g') {
-    cost = Math.ceil(chargeWeight * 10) / 10 * ch.rate + ch.base
-  } else {
-    cost = chargeWeight * ch.rate + ch.base
-  }
-  return Math.round(cost * 100) / 100
-}
-
-const getBestShipping = (price, weight, length, width, height) => {
-  let best = null
-  let bestCost = Infinity
-  for (const ch of ALL_CHANNELS) {
-    const cost = calcShipping(ch, price, weight, length, width, height)
-    if (cost !== null && cost < bestCost) {
-      bestCost = cost
-      best = { name: ch.name, cost }
-    }
-  }
-  return best
 }
 
 const PRICING_PRODUCTS = [
@@ -90,7 +29,7 @@ export default function PricingCalc() {
     <div className="space-y-5">
       <div>
         <h2 className="text-lg font-bold text-morandi-text">定价计算</h2>
-        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润</p>
+        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润（汇率 1¥ = {rubPerCny}₽）</p>
       </div>
 
       <div className="space-y-4">
@@ -103,46 +42,23 @@ export default function PricingCalc() {
           const paymentFee = pd.paymentFee !== undefined && pd.paymentFee !== '' ? Number(pd.paymentFee) : 1
           const agencyFee = pd.agencyFee !== undefined && pd.agencyFee !== '' ? Number(pd.agencyFee) : 2
           const returnLoss = pd.returnLoss !== undefined && pd.returnLoss !== '' ? Number(pd.returnLoss) : 4
-          const platformRate = commission + adRate + paymentFee
+          const discountRate = pd.discountRate !== undefined && pd.discountRate !== '' ? Number(pd.discountRate) : 0.6
+          const common = { commission, adRate, paymentFee, agencyFee, returnLoss, discountRate }
 
           const updateSku = (idx, key, val) => {
             const newSkus = [...skus]
             newSkus[idx] = { ...newSkus[idx], [key]: val }
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss } })
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss, discountRate } })
           }
           const addSku = () => {
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus: [...skus, {}], commission, adRate, paymentFee, agencyFee, returnLoss } })
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus: [...skus, {}], commission, adRate, paymentFee, agencyFee, returnLoss, discountRate } })
           }
           const removeSku = (idx) => {
             const newSkus = skus.filter((_, i) => i !== idx)
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss } })
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss, discountRate } })
           }
           const updateCommon = (key, val) => {
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus, commission, adRate, paymentFee, agencyFee, returnLoss, [key]: val } })
-          }
-
-          const calcRow = (sku) => {
-            const listPrice = Number(sku.listPrice) || 0
-            const price = Math.round(listPrice * 0.6 * 100) / 100
-            const weight = Number(sku.weight) || 0
-            const length = Number(sku.length) || 0
-            const width = Number(sku.width) || 0
-            const height = Number(sku.height) || 0
-            const purchaseCost = Number(sku.purchaseCost) || 0
-            const domesticShip = Number(sku.domesticShip) || 0
-            const labelFee = Number(sku.labelFee) || 0
-            const priceRMB = Math.round(price * R * 100) / 100
-            const listPriceRMB = Math.round(listPrice * R * 100) / 100
-            const domesticCost = purchaseCost + domesticShip + labelFee
-            const bestShip = price && weight && length && width && height ? getBestShipping(price, weight, length, width, height) : null
-            const agencyAmtRub = Math.min(200, Math.max(15, price * agencyFee / 100))
-            const agencyAmt = Math.round(agencyAmtRub * R * 100) / 100
-            const crossBorderCost = bestShip ? bestShip.cost + agencyAmt : null
-            const platformCost = priceRMB * platformRate / 100
-            const returnAmt = priceRMB * returnLoss / 100
-            const profit = crossBorderCost !== null ? Math.round((priceRMB - domesticCost - crossBorderCost - platformCost - returnAmt) * 100) / 100 : null
-            const profitRate = profit !== null && priceRMB > 0 ? Math.round(profit / priceRMB * 1000) / 10 : null
-            return { listPrice, price, priceRMB, listPriceRMB, domesticCost, bestShip, crossBorderCost, platformCost, returnAmt, profit, profitRate }
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus, commission, adRate, paymentFee, agencyFee, returnLoss, discountRate, [key]: val } })
           }
 
           return (
@@ -166,10 +82,14 @@ export default function PricingCalc() {
                     ['支付费', 'paymentFee', '%', paymentFee],
                     ['代理费', 'agencyFee', '%', agencyFee],
                     ['退货', 'returnLoss', '%', returnLoss],
+                    ['折扣系数', 'discountRate', '折', Math.round(discountRate * 10 * 10) / 10],
                   ].map(([label, key, unit, val]) => (
                     <div key={key} className="flex items-center gap-1">
                       <span className="text-[10px] text-morandi-text-light">{label}</span>
-                      <input type="number" value={val} onChange={e => updateCommon(key, e.target.value)}
+                      <input type="number" step={key === 'discountRate' ? '0.1' : '1'} value={key === 'discountRate' ? val : val} onChange={e => {
+                        const v = e.target.value
+                        updateCommon(key, key === 'discountRate' ? (v === '' ? '' : Number(v) / 10) : v)
+                      }}
                         className="w-12 text-xs text-center border border-gray-200 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-green-200 bg-white" />
                       <span className="text-[10px] text-gray-400">{unit}</span>
                     </div>
@@ -185,8 +105,8 @@ export default function PricingCalc() {
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-28">长×宽×高<br/><span className="text-[9px]">CM</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-[9px]">₽</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br/><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-[9px]">₽(6折)</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br/><span className="text-[9px]">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后成交价<br/><span className="text-[9px]">₽({Math.round(discountRate * 100)}%)</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后成交价<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">采购成本<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">国内运费<br/><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">贴标费<br/><span className="text-[9px]">¥</span></th>
@@ -201,7 +121,7 @@ export default function PricingCalc() {
                     </thead>
                     <tbody>
                       {skus.map((sku, idx) => {
-                        const calc = calcRow(sku)
+                        const calc = calcRow(sku, common)
                         return (
                           <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}>
                             <td className="border border-gray-200 px-1.5 py-1">

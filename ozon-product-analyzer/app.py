@@ -7,6 +7,7 @@ from plotly.subplots import make_subplots
 import io
 import os
 import glob
+import json
 
 from utils.ai_service import AIService
 
@@ -27,6 +28,15 @@ import os
 DATA_DIR = os.environ.get('OZON_DATA_DIR') or os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '选品')
 )
+SETTINGS_FILE = os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config', 'settings.json')
+)
+with open(SETTINGS_FILE, 'r', encoding='utf-8') as _settings_fp:
+    _runtime_settings = json.load(_settings_fp)
+RUB_PER_CNY = float(_runtime_settings['rub_per_cny'])
+if RUB_PER_CNY <= 0:
+    raise ValueError('config/settings.json rub_per_cny 必须为正数')
+RUB_TO_CNY = 1 / RUB_PER_CNY
 
 # 高风险关键词（合规风险分用）
 HIGH_RISK_KEYWORDS = {
@@ -254,7 +264,7 @@ def calc_competition(df):
 # 3. 利润空间分（0-100）+ 利润测算字段
 # ----------------------
 def calc_profit(df, params):
-    rate = params.get('exchange_rate', 0.09)
+    rate = RUB_TO_CNY
     procurement = params.get('procurement_cost', 15.0)
     domestic_ship = params.get('domestic_shipping', 2.0)
     label_pack = params.get('label_packing', 1.0)
@@ -645,7 +655,7 @@ def render_category(df):
 def render_profit(df, params):
     st.subheader("💰 利润测算")
     c1, c2, c3, c4, c5, c6 = st.columns(6)
-    c1.metric("汇率", params['exchange_rate'])
+    c1.metric("汇率", f"1¥ = {RUB_PER_CNY:g}₽")
     c2.metric("采购成本(¥)", f"{params['procurement_cost']:.0f}")
     c3.metric("国内物流(¥)", f"{params['domestic_shipping']:.1f}")
     c4.metric("贴标包装(¥)", f"{params['label_packing']:.1f}")
@@ -798,7 +808,6 @@ def main():
 
     if 'params' not in st.session_state:
         st.session_state['params'] = {
-            'exchange_rate': 0.09,
             'procurement_cost': 15.0,
             'domestic_shipping': 2.0,
             'label_packing': 1.0,
@@ -815,7 +824,7 @@ def main():
     
     st.sidebar.subheader("汇率与成本")
     p = st.session_state['params']
-    p['exchange_rate'] = st.sidebar.number_input("汇率 (₽→¥)", 0.01, 0.20, 0.09, 0.01)
+    st.sidebar.caption(f"汇率（配置只读）: 1¥ = {RUB_PER_CNY:g}₽；1₽ ≈ ¥{RUB_TO_CNY:.4f}")
     p['procurement_cost'] = st.sidebar.number_input("采购成本(¥)", 0.0, 500.0, 15.0, 1.0)
     p['domestic_shipping'] = st.sidebar.number_input("国内物流费(¥)", 0.0, 50.0, 2.0, 0.5)
     p['label_packing'] = st.sidebar.number_input("贴标包装费(¥)", 0.0, 50.0, 1.0, 0.5)

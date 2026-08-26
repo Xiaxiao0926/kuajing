@@ -1,14 +1,20 @@
-export const R = 0.09
+import settingsData from '../../generated/settings.js'
+
+export const rubPerCny = Number(settingsData.rub_per_cny)
+if (!Number.isFinite(rubPerCny) || rubPerCny <= 0) {
+  throw new Error('DASHBOARD: config/settings.json rub_per_cny 必须为正数')
+}
+export const R = 1 / rubPerCny
 
 export const fmtCNY = (v) => {
-  const cny = v * R
+  const cny = (Number(v) || 0) / rubPerCny
   if (cny >= 10000) return `${(cny / 10000).toFixed(1)}万`
   if (cny >= 1000) return `${(cny / 1000).toFixed(1)}K`
   return cny?.toFixed(0) || 0
 }
 
 export const fmtCNYFull = (v) => {
-  const cny = Math.round(v * R)
+  const cny = Math.round((Number(v) || 0) / rubPerCny)
   return cny.toLocaleString()
 }
 

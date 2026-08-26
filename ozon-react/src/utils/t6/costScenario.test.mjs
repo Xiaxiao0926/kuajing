@@ -13,8 +13,9 @@
  *  C9 创建校验：项目不存在 / 快照归属不一致 / 非法平台 / 空名称 / 载荷不完整 → throw
  */
 import * as store from './t6Store.js'
-import { buildOzonPrefill, buildOzonScenarioPayload, scenarioSummary, findOzonChannelRaw, OZON_CALC_VERSION } from './costScenarioAdapter.js'
-import { R, ALL_CHANNELS, calcChannelProfit } from '../ozonEngine.js'
+import { buildOzonPrefill, buildOzonResolvedConfig, buildOzonScenarioPayload, recalculateOzonScenario, scenarioSummary, findOzonChannelRaw, OZON_CALC_VERSION } from './costScenarioAdapter.js'
+import { R, ALL_CHANNELS, calcChannelProfit, calcRow, toCNY, toRUB, rubToCnyExact, calculateAgencyFeeRub } from '../ozonEngine.js'
+import { calculatePlatformSettlement } from '../wbEngine.js'
 import settingsData from '../../generated/settings.js'
 import channelsData from '../../generated/ozon_channels.js'
 
@@ -165,16 +166,17 @@ console.log('C6: buildOzonPrefill——只取 price/weight/dims/commission_rfbs�
   assert(noDims.length === '' && noDims.width === '' && noDims.height === '', 'dims 缺失 → 空（不编造）')
 }
 
-console.log('C7: buildOzonScenarioPayload——resolvedConfig 冻结渠道完整配置+meta、汇率双语义、引擎输出 verbatim')
+console.log('C7: buildOzonScenarioPayload——resolvedConfig 冻结渠道完整配置+meta、单源汇率、快照保护、引擎输出 verbatim')
 {
   const { project, snap } = makeProject()
   const p = makeScenarioPayloads(project, snap)
   const payload = buildOzonScenarioPayload({ project, inputPayload: p.inputPayload, selectedChannelId: CHANNEL_ID, outputPayload: p.outputPayload })
   const cfg = payload.resolvedConfig
   assert(cfg.calculatorVersion === OZON_CALC_VERSION, `calculatorVersion = ${OZON_CALC_VERSION}`)
-  assert(cfg.rubToCny === settingsData.ozon_rub_to_cny, `rubToCny = ozon_rub_to_cny (${cfg.rubToCny})`)
-  assert(cfg.celRubPerCny === settingsData.rub_per_cny, `celRubPerCny = rub_per_cny (${cfg.celRubPerCny})`)
-  assert(cfg.rubToCny !== cfg.celRubPerCny, '两种汇率语义并存且不统一')
+  assert(cfg.exchange_rate === 13, `exchange_rate = 13 (${cfg.exchange_rate})`)
+  assert(cfg.currency === 'RUB/CNY', `currency = RUB/CNY (${cfg.currency})`)
+  assert(cfg.calculation_version === 'v1.0', `calculation_version = v1.0 (${cfg.calculation_version})`)
+  assert(cfg.agencyFee.rate === 0.02 && cfg.agencyFee.min_rub === 15 && cfg.agencyFee.max_rub === 200, 'agencyFee 配置快照冻结')
   const raw = findOzonChannelRaw(CHANNEL_ID)
   assert(cfg.selectedChannel.id === raw.id && cfg.selectedChannel.kg_rate_cny === raw.kg_rate_cny, 'selectedChannel = config 原始渠道记录（不复制费率）')
   assert(cfg.selectedChannel.meta.source === channelsData.source && cfg.selectedChannel.meta.source_date === channelsData.source_date && cfg.selectedChannel.meta.verified_by === channelsData.verified_by, 'selectedChannel 含 source/source_date/verified_by meta')
@@ -221,9 +223,126 @@ console.log('C9: 创建校验——项目不存在 / 快照归属不一致 / 非
   let threwPayload = false
   try { store.createCostScenario({ ...base, inputPayload: null, resolvedConfig: {}, outputPayload: {} }) } catch (e) { threwPayload = /载荷不完整/.test(e.message) }
   assert(threwPayload, '载荷不完整 → throw')
-  // 汇率双语义来自 config 唯一事实源（不应被测试改坏）
-  assert(settingsData.rub_per_cny === 12 && settingsData.ozon_rub_to_cny === 0.09, 'config 汇率双语义保持（rub_per_cny=12 / ozon_rub_to_cny=0.09）')
+  assert(settingsData.rub_per_cny === 13, 'config 汇率单源化保持（rub_per_cny=13）')
+}
+
+console.log('C10: 汇率单源化与精度测试——3998 RUB / 13 = 307.54 RMB')
+{
+  assert(toCNY(3998) === 307.54, `toCNY(3998) = 307.54 (实际: ${toCNY(3998)})`)
+  assert(toCNY(5200) === 400, `toCNY(5200) = 400.00 (实际: ${toCNY(5200)})`)
+  assert(toCNY(100000) === 7692.31, `toCNY(100000) = 7692.31 (实际: ${toCNY(100000)})`)
+  assert(rubToCnyExact(3998) === 3998 / 13, '内部 RUB/CNY 换算不提前 round2')
+  assert(toRUB(307.54) === 3998.02, `toRUB(307.54) = 3998.02 (实际: ${toRUB(307.54)})`)
+}
+
+console.log('C11: 代理费纯函数与阶梯测试——500₽(15₽保底) / 2000₽(40₽) / 15000₽(200₽封顶)')
+{
+  assert(calculateAgencyFeeRub(500) === 15, `500 RUB -> 15 RUB 保底 (实际: ${calculateAgencyFeeRub(500)})`)
+  assert(calculateAgencyFeeRub(0.01) === 15, '0.01 RUB -> 15 RUB')
+  assert(calculateAgencyFeeRub(750) === 15, '750 RUB -> 15 RUB')
+  assert(calculateAgencyFeeRub(751) === 15.02, '751 RUB -> 15.02 RUB')
+  assert(calculateAgencyFeeRub(2000) === 40, `2000 RUB -> 40 RUB (实际: ${calculateAgencyFeeRub(2000)})`)
+  assert(calculateAgencyFeeRub(10000) === 200, '10000 RUB -> 200 RUB')
+  assert(calculateAgencyFeeRub(15000) === 200, `15000 RUB -> 200 RUB 封顶 (实际: ${calculateAgencyFeeRub(15000)})`)
+  assert(calculateAgencyFeeRub(0) === 0, '0 RUB -> 0 RUB')
+  assert(calculateAgencyFeeRub(-1) === 0, '负数 -> 0 RUB')
+}
+
+console.log('C12: 历史快照不可变保护测试——旧场景保留创建时汇率与配置')
+{
+  const { project, snap } = makeProject()
+  const p = makeScenarioPayloads(project, snap)
+  const histScenario = store.createCostScenario({
+    projectId: project.id,
+    platform: 'OZON',
+    name: '历史场景_202607',
+    sourceSnapshotId: snap.id,
+    inputPayload: p.inputPayload,
+    resolvedConfig: {
+      exchange_rate: 12,
+      currency: 'RUB/CNY',
+      calculation_version: 'v0.9',
+      rubPerCny: 12,
+      agencyFee: { rate: 0.02, min_rub: 15, max_rub: 200 },
+      selectedChannel: p.resolvedConfig.selectedChannel,
+      calculatorVersion: OZON_CALC_VERSION,
+    },
+    outputPayload: p.outputPayload,
+  })
+  const retrieved = store.getCostScenario(histScenario.id)
+  assert(retrieved.resolvedConfig.exchange_rate === 12, '历史快照 exchange_rate 保持 12 不变')
+  assert(retrieved.resolvedConfig.calculation_version === 'v0.9', '历史快照 calculation_version 保持 v0.9 不变')
+  const simulatedCurrent = {
+    ...settingsData,
+    rub_per_cny: 13,
+    agency_fee: { rate: 0.03, min_rub: 20, max_rub: 250 },
+  }
+  const recalculated = recalculateOzonScenario(retrieved, simulatedCurrent)
+  assert(recalculated.costBreakdown.agencyAmtRub === 100, `历史场景仍按 5000×2%=100 RUB（实际 ${recalculated.costBreakdown.agencyAmtRub}）`)
+  assert(recalculated.costBreakdown.agencyAmt === 8.33, `历史场景仍按汇率12换算代理费（实际 ${recalculated.costBreakdown.agencyAmt}）`)
+
+  const newCfg = buildOzonResolvedConfig(CHANNEL_ID, simulatedCurrent)
+  assert(newCfg.exchange_rate === 13, '新场景读取当前汇率13')
+  assert(newCfg.agencyFee.rate === 0.03 && newCfg.agencyFee.min_rub === 20 && newCfg.agencyFee.max_rub === 250, '新场景读取当前3% / 20 / 250配置')
+
+  const legacyScenario = {
+    ...retrieved,
+    resolvedConfig: { selectedChannel: retrieved.resolvedConfig.selectedChannel, calculatorVersion: OZON_CALC_VERSION },
+  }
+  const legacyRecalculated = recalculateOzonScenario(legacyScenario, simulatedCurrent)
+  assert(legacyRecalculated.costBreakdown.agencyAmtRub === 150, '缺少新字段的旧场景明确回退当前3%配置')
+  assert(legacyRecalculated.costBreakdown.agencyAmt === 11.54, '缺少新字段的旧场景明确回退当前汇率13')
+}
+console.log('C13: 多规格折扣只执行一次——8600×0.6=5160，成交后费用基于5160')
+{
+  const out = calcRow({ listPrice: 8600, discountRate: 0.6, weight: 1, length: 20, width: 15, height: 10 }, {
+    commission: 0, adRate: 0, paymentFee: 0, returnLoss: 0,
+  })
+  assert(out.price === 5160, `transactionPrice = 5160（实际 ${out.price}）`)
+  assert(out.agencyAmtRub === 103.2, `代理费基于5160而非8600（实际 ${out.agencyAmtRub}）`)
+}
+
+console.log('C14: Ozon/WB 平台隔离——WB 不读取 Ozon 代理费配置')
+{
+  const order = { sellerRevenueBaseRub: 3998, commissionRate: 10 }
+  const base = calculatePlatformSettlement(order, { rubPerCny: 13 })
+  const withOzonAgency = calculatePlatformSettlement(order, {
+    rubPerCny: 13,
+    agencyFee: { rate: 0.99, min_rub: 999, max_rub: 9999 },
+  })
+  assert(JSON.stringify(base) === JSON.stringify(withOzonAgency), 'WB 结算结果不受 Ozon agencyFee 配置影响')
+}
+
+console.log('C15: WB 中间换算保持全精度——净结算不是展示值相减')
+{
+  const out = calculatePlatformSettlement({
+    sellerRevenueBaseRub: 3998,
+    commissionRate: 7,
+    acquiringFeeRub: 1,
+    promotionCostRub: 1,
+    platformOtherDeductionRub: 1,
+  }, { rubPerCny: 13 })
+  assert(out.platformNetSettlementCny === 285.78, `全精度净结算=285.78（实际 ${out.platformNetSettlementCny}）`)
+}
+
+console.log('C16: Ozon 利润使用全精度汇率换算——仅输出阶段四舍五入')
+{
+  const channel = ALL_CHANNELS.find((item) => item.id === 'express_small')
+  const out = calcChannelProfit(channel, 1503, 1, 20, 15, 10, {
+    purchaseCost: 0,
+    domesticShipping: 0,
+    labelingFee: 0,
+    commission: 7,
+    adRate: 0,
+    paymentFee: 0,
+    agencyFee: 2,
+    returnLoss: 0,
+    rubPerCny: 13,
+  })
+  assert(out.profit === 41.77, `Ozon 全精度利润=41.77（实际 ${out.profit}）`)
 }
 
 console.log(`\n===== CostScenario 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)
-if (fail > 0) process.exit(1)
+if (fail > 0) {
+  process.exitCode = 1
+}

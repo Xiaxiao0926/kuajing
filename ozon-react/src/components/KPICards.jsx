@@ -1,6 +1,5 @@
 import { TrendingUp, DollarSign, Crown, Percent, Package, Star, TrendingDown, Tag } from 'lucide-react'
-
-const EXCHANGE_RATE = 0.075
+import { R as EXCHANGE_RATE } from '../utils/ozonEngine'
 
 const formatNumber = (num) => {
   if (num === null || num === undefined) return '-'

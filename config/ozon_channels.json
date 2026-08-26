@@ -2,7 +2,6 @@
   "source": "CEL产品资费表 V5.23.xlsx (OZON-rFBS sheet)",
   "source_date": "2026-08-14",
   "verified_by": "T2-Gate0-CEL-HK核验报告.md",
-  "rub_to_cny": 0.09,
   "groups": [
     {
       "group_id": "extra_small",

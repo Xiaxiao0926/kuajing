@@ -2,8 +2,7 @@ import { useMemo } from 'react'
 import { Filter, Target, AlertCircle } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { chartColors } from '../utils/chartConfigs'
-
-const EXCHANGE_RATE = 0.075
+import { R as EXCHANGE_RATE } from '../utils/ozonEngine'
 
 export default function PriceBandAnalysis({ data }) {
   const priceBandData = useMemo(() => {

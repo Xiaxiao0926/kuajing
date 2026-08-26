@@ -228,16 +228,10 @@ export const calculateOrderLogistics = (parcels, tariff) => {
 /**
  * 平台结算预估
  */
-export const calculatePlatformSettlement = (order, settings) => {
+const calculatePlatformSettlementRaw = (order, settings) => {
   const rubPerCny = toNum(settings?.rubPerCny)
   if (rubPerCny <= 0) {
-    return {
-      error: '汇率为0或空，无法转换',
-      salesRevenueCny: null,
-      commissionCny: null,
-      platformNetSettlementCny: null,
-      steps: ['汇率为0或空，无法转换'],
-    }
+    return { error: '汇率为0或空，无法转换' }
   }
 
   const sellerRevenueBaseRub = toNum(order?.sellerRevenueBaseRub)
@@ -248,21 +242,57 @@ export const calculatePlatformSettlement = (order, settings) => {
   const platformOtherRub = toNum(order?.platformOtherDeductionRub)
   const orderLogisticsCny = toNum(order?.orderLogisticsCny)
 
-  const salesRevenueCny = round2(sellerRevenueBaseRub / rubPerCny)
-  const commissionCny = round2((commissionBaseRub * commissionRate) / 100 / rubPerCny)
-  const acquiringFeeCny = round2(acquiringFeeRub / rubPerCny)
-  const promotionCostCny = round2(promotionCostRub / rubPerCny)
-  const platformOtherCny = round2(platformOtherRub / rubPerCny)
-  const net = round2(salesRevenueCny - commissionCny - orderLogisticsCny - acquiringFeeCny - promotionCostCny - platformOtherCny)
+  const salesRevenueCny = sellerRevenueBaseRub / rubPerCny
+  const commissionCny = (commissionBaseRub * commissionRate) / 100 / rubPerCny
+  const acquiringFeeCny = acquiringFeeRub / rubPerCny
+  const promotionCostCny = promotionCostRub / rubPerCny
+  const platformOtherCny = platformOtherRub / rubPerCny
+  const platformNetSettlementCny = salesRevenueCny - commissionCny - orderLogisticsCny - acquiringFeeCny - promotionCostCny - platformOtherCny
+
+  return {
+    rubPerCny,
+    sellerRevenueBaseRub,
+    commissionBaseRub,
+    commissionRate,
+    acquiringFeeRub,
+    promotionCostRub,
+    platformOtherRub,
+    orderLogisticsCny,
+    salesRevenueCny,
+    commissionCny,
+    acquiringFeeCny,
+    promotionCostCny,
+    platformOtherCny,
+    platformNetSettlementCny,
+  }
+}
+
+const formatPlatformSettlement = (raw) => {
+  if (raw.error) {
+    return {
+      error: raw.error,
+      salesRevenueCny: null,
+      commissionCny: null,
+      platformNetSettlementCny: null,
+      steps: [raw.error],
+    }
+  }
+
+  const salesRevenueCny = round2(raw.salesRevenueCny)
+  const commissionCny = round2(raw.commissionCny)
+  const acquiringFeeCny = round2(raw.acquiringFeeCny)
+  const promotionCostCny = round2(raw.promotionCostCny)
+  const platformOtherCny = round2(raw.platformOtherCny)
+  const net = round2(raw.platformNetSettlementCny)
 
   const steps = [
-    `卖家收入基数: ${sellerRevenueBaseRub}₽ / ${rubPerCny} = ${salesRevenueCny}¥`,
-    `佣金: ${commissionBaseRub}₽ × ${commissionRate}% / ${rubPerCny} = ${commissionCny}¥`,
-    `物流费: ${orderLogisticsCny}¥`,
-    `支付费: ${acquiringFeeRub}₽ / ${rubPerCny} = ${acquiringFeeCny}¥`,
-    `促销费: ${promotionCostRub}₽ / ${rubPerCny} = ${promotionCostCny}¥`,
-    `其他扣款: ${platformOtherRub}₽ / ${rubPerCny} = ${platformOtherCny}¥`,
-    `平台净结算 = ${salesRevenueCny} - ${commissionCny} - ${orderLogisticsCny} - ${acquiringFeeCny} - ${promotionCostCny} - ${platformOtherCny} = ${net}¥`,
+    `卖家收入基数: ${raw.sellerRevenueBaseRub}₽ / ${raw.rubPerCny} = ${salesRevenueCny}¥`,
+    `佣金: ${raw.commissionBaseRub}₽ × ${raw.commissionRate}% / ${raw.rubPerCny} = ${commissionCny}¥`,
+    `物流费: ${raw.orderLogisticsCny}¥`,
+    `支付费: ${raw.acquiringFeeRub}₽ / ${raw.rubPerCny} = ${acquiringFeeCny}¥`,
+    `促销费: ${raw.promotionCostRub}₽ / ${raw.rubPerCny} = ${promotionCostCny}¥`,
+    `其他扣款: ${raw.platformOtherRub}₽ / ${raw.rubPerCny} = ${platformOtherCny}¥`,
+    `平台净结算（内部全精度计算）= ${net}¥`,
   ]
 
   return {
@@ -276,20 +306,25 @@ export const calculatePlatformSettlement = (order, settings) => {
   }
 }
 
+export const calculatePlatformSettlement = (order, settings) => formatPlatformSettlement(
+  calculatePlatformSettlementRaw(order, settings),
+)
+
 /**
  * 单订单经营利润
  */
 export const calculateOperatingProfit = (order, sku, settings, logisticsCny) => {
-  const settlement = calculatePlatformSettlement(
+  const settlementRaw = calculatePlatformSettlementRaw(
     { ...order, orderLogisticsCny: logisticsCny },
     settings
   )
+  const settlement = formatPlatformSettlement(settlementRaw)
   if (settlement.platformNetSettlementCny === null) {
     return { ...settlement, operatingProfitCny: null }
   }
 
-  const net = settlement.platformNetSettlementCny
-  const salesRevenueCny = settlement.salesRevenueCny
+  const netRaw = settlementRaw.platformNetSettlementCny
+  const salesRevenueRaw = settlementRaw.salesRevenueCny
   const purchaseCost = toNum(sku?.purchaseCostCny)
   const packagingCost = toNum(sku?.packagingCostCny)
   const chinaInbound = toNum(sku?.chinaInboundCostCny)
@@ -297,22 +332,24 @@ export const calculateOperatingProfit = (order, sku, settings, logisticsCny) => 
   const otherOperating = toNum(order?.otherOperatingCostCny)
 
   // 税费
-  let taxCost = 0
+  let taxCostRaw = 0
   const taxMethod = settings?.taxMethod || 'none'
   const taxRate = toNum(settings?.taxRate)
-  if (taxMethod === 'revenue' && salesRevenueCny !== null) {
-    taxCost = round2((salesRevenueCny * taxRate) / 100)
+  if (taxMethod === 'revenue' && salesRevenueRaw !== null) {
+    taxCostRaw = (salesRevenueRaw * taxRate) / 100
   } else if (taxMethod === 'settlement') {
-    taxCost = round2((net * taxRate) / 100)
+    taxCostRaw = (netRaw * taxRate) / 100
   } else if (taxMethod === 'manual') {
-    taxCost = round2(toNum(order?.taxCostCny))
+    taxCostRaw = toNum(order?.taxCostCny)
   }
 
-  const profit = round2(net - purchaseCost - packagingCost - chinaInbound - certification - taxCost - otherOperating)
-  const profitMargin = salesRevenueCny && salesRevenueCny > 0 ? round2((profit / salesRevenueCny) * 100) : null
-  const logisticsRatio = salesRevenueCny && salesRevenueCny > 0 ? round2((toNum(logisticsCny) / salesRevenueCny) * 100) : null
-  const costTotal = purchaseCost + packagingCost + chinaInbound + toNum(logisticsCny) + toNum(settlement.promotionCostCny)
-  const costRoi = costTotal > 0 ? round2((profit / costTotal) * 100) : null
+  const profitRaw = netRaw - purchaseCost - packagingCost - chinaInbound - certification - taxCostRaw - otherOperating
+  const taxCost = round2(taxCostRaw)
+  const profit = round2(profitRaw)
+  const profitMargin = salesRevenueRaw > 0 ? round2((profitRaw / salesRevenueRaw) * 100) : null
+  const logisticsRatio = salesRevenueRaw > 0 ? round2((toNum(logisticsCny) / salesRevenueRaw) * 100) : null
+  const costTotal = purchaseCost + packagingCost + chinaInbound + toNum(logisticsCny) + settlementRaw.promotionCostCny
+  const costRoi = costTotal > 0 ? round2((profitRaw / costTotal) * 100) : null
 
   const steps = [
     ...settlement.steps,
@@ -322,9 +359,9 @@ export const calculateOperatingProfit = (order, sku, settings, logisticsCny) => 
     `认证分摊: ${certification}¥`,
     `税费(${taxMethod}): ${taxCost}¥`,
     `其他成本: ${otherOperating}¥`,
-    `经营利润 = ${net} - ${purchaseCost} - ${packagingCost} - ${chinaInbound} - ${certification} - ${taxCost} - ${otherOperating} = ${profit}¥`,
-    profitMargin !== null ? `利润率 = ${profit} / ${salesRevenueCny} = ${profitMargin}%` : '利润率: 不可计算',
-    logisticsRatio !== null ? `物流费率 = ${logisticsCny} / ${salesRevenueCny} = ${logisticsRatio}%` : '物流费率: 不可计算',
+    `经营利润（内部全精度计算）= ${profit}¥`,
+    profitMargin !== null ? `利润率 = ${profit} / ${settlement.salesRevenueCny} = ${profitMargin}%` : '利润率: 不可计算',
+    logisticsRatio !== null ? `物流费率 = ${logisticsCny} / ${settlement.salesRevenueCny} = ${logisticsRatio}%` : '物流费率: 不可计算',
   ]
 
   return {
@@ -692,11 +729,11 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
   const promotionCostRub = toNum(order?.promotionCostRub)
   const platformOtherRub = toNum(order?.platformOtherDeductionRub)
 
-  const salesRevenueCny = round2(sellerRevenueBaseRub / rubPerCny)
-  const commissionCny = round2((commissionBaseRub * commissionRate) / 100 / rubPerCny)
-  const acquiringFeeCny = round2(acquiringFeeRub / rubPerCny)
-  const promotionCostCny = round2(promotionCostRub / rubPerCny)
-  const platformOtherCny = round2(platformOtherRub / rubPerCny)
+  const salesRevenueRaw = sellerRevenueBaseRub / rubPerCny
+  const commissionRaw = (commissionBaseRub * commissionRate) / 100 / rubPerCny
+  const acquiringFeeRaw = acquiringFeeRub / rubPerCny
+  const promotionCostRaw = promotionCostRub / rubPerCny
+  const platformOtherRaw = platformOtherRub / rubPerCny
 
   // 成本
   const purchaseCost = toNum(sku?.purchaseCostCny)
@@ -706,15 +743,15 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
   const otherOperating = toNum(order?.otherOperatingCostCny)
 
   // 税费
-  let taxCost = 0
+  let taxCostRaw = 0
   const taxMethod = settings?.taxMethod || 'none'
   const taxRate = toNum(settings?.taxRate)
-  if (taxMethod === 'revenue' && salesRevenueCny > 0) {
-    taxCost = round2((salesRevenueCny * taxRate) / 100)
+  if (taxMethod === 'revenue' && salesRevenueRaw > 0) {
+    taxCostRaw = (salesRevenueRaw * taxRate) / 100
   } else if (taxMethod === 'settlement') {
-    taxCost = round2((salesRevenueCny * taxRate) / 100)
+    taxCostRaw = (salesRevenueRaw * taxRate) / 100
   } else if (taxMethod === 'manual') {
-    taxCost = round2(toNum(order?.taxCostCny))
+    taxCostRaw = toNum(order?.taxCostCny)
   }
 
   // 库存回收（仅退货/拒收场景）
@@ -725,17 +762,21 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
   }
 
   // 经营利润
-  const platformNetSettlement = round2(
-    salesRevenueCny - commissionCny - totalLogisticsCost - acquiringFeeCny - promotionCostCny - platformOtherCny
-  )
-  const profit = round2(
-    platformNetSettlement - purchaseCost - packagingCost - chinaInbound - certification - taxCost - otherOperating - inventoryLossCny
-  )
+  const platformNetSettlementRaw = salesRevenueRaw - commissionRaw - totalLogisticsCost - acquiringFeeRaw - promotionCostRaw - platformOtherRaw
+  const profitRaw = platformNetSettlementRaw - purchaseCost - packagingCost - chinaInbound - certification - taxCostRaw - otherOperating - inventoryLossCny
+  const salesRevenueCny = round2(salesRevenueRaw)
+  const commissionCny = round2(commissionRaw)
+  const acquiringFeeCny = round2(acquiringFeeRaw)
+  const promotionCostCny = round2(promotionCostRaw)
+  const platformOtherCny = round2(platformOtherRaw)
+  const taxCost = round2(taxCostRaw)
+  const platformNetSettlement = round2(platformNetSettlementRaw)
+  const profit = round2(profitRaw)
 
-  const profitMargin = salesRevenueCny > 0 ? round2((profit / salesRevenueCny) * 100) : null
-  const logisticsRatio = salesRevenueCny > 0 ? round2((totalLogisticsCost / salesRevenueCny) * 100) : null
-  const costTotal = purchaseCost + packagingCost + chinaInbound + totalLogisticsCost + promotionCostCny
-  const costRoi = costTotal > 0 ? round2((profit / costTotal) * 100) : null
+  const profitMargin = salesRevenueRaw > 0 ? round2((profitRaw / salesRevenueRaw) * 100) : null
+  const logisticsRatio = salesRevenueRaw > 0 ? round2((totalLogisticsCost / salesRevenueRaw) * 100) : null
+  const costTotal = purchaseCost + packagingCost + chinaInbound + totalLogisticsCost + promotionCostRaw
+  const costRoi = costTotal > 0 ? round2((profitRaw / costTotal) * 100) : null
 
   const steps = [
     `===== 订单经营利润计算（V2）=====`,
@@ -757,8 +798,8 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
     `其他成本: ${otherOperating}¥`,
     inventoryLossCny > 0 ? `库存损失: ${inventoryLossCny}¥ (回收率${toNum(order?.inventoryRecoveryRate)}%)` : `库存损失: 0¥`,
     ``,
-    `平台净结算 = ${salesRevenueCny} - ${commissionCny} - ${totalLogisticsCost} - ${acquiringFeeCny} - ${promotionCostCny} - ${platformOtherCny} = ${platformNetSettlement}¥`,
-    `经营利润 = ${platformNetSettlement} - ${purchaseCost} - ${packagingCost} - ${chinaInbound} - ${certification} - ${taxCost} - ${otherOperating} - ${inventoryLossCny} = ${profit}¥`,
+    `平台净结算（内部全精度计算）= ${platformNetSettlement}¥`,
+    `经营利润（内部全精度计算）= ${profit}¥`,
     profitMargin !== null ? `利润率 = ${profit} / ${salesRevenueCny} = ${profitMargin}%` : `利润率: 不可计算(销售收入为0)`,
     `物流费率 = ${totalLogisticsCost} / ${salesRevenueCny || '—'} = ${logisticsRatio !== null ? logisticsRatio + '%' : '不可计算'}`,
     `成本ROI = ${profit} / ${costTotal} = ${costRoi !== null ? costRoi + '%' : '不可计算'}`,

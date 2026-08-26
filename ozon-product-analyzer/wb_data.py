@@ -60,17 +60,23 @@ def _validate_settings_structure(data):
     required = ['base_currency', 'rub_per_cny', 'exchange_rate_effective_from',
                 'tax_method', 'tax_rate', 'default_route_id',
                 'buyer_to_ru_warehouse_reverse_included', 'timezone',
-                'profit_margin_threshold', 'logistics_ratio_threshold', 'ozon_rub_to_cny']
+                'profit_margin_threshold', 'logistics_ratio_threshold',
+                'calculation_version', 'agency_fee']
     missing = [k for k in required if k not in data]
     if missing:
         raise ConfigError(f'[config] settings.json 缺少必填字段: {missing}')
-    for k in ['rub_per_cny', 'tax_rate', 'profit_margin_threshold', 'logistics_ratio_threshold', 'ozon_rub_to_cny']:
+    for k in ['rub_per_cny', 'tax_rate', 'profit_margin_threshold', 'logistics_ratio_threshold']:
         if not isinstance(data[k], (int, float)):
             raise ConfigError(f'[config] settings.json 字段 {k} 必须为数字, 实际 {data[k]!r}')
     if data['rub_per_cny'] <= 0:
         raise ConfigError('[config] settings.json rub_per_cny 必须为正数（汇率不得为 0）')
-    if data['ozon_rub_to_cny'] <= 0:
-        raise ConfigError('[config] settings.json ozon_rub_to_cny 必须为正数')
+    if not isinstance(data['calculation_version'], str) or not data['calculation_version'].strip():
+        raise ConfigError('[config] settings.json calculation_version 必须为非空字符串')
+    af = data['agency_fee']
+    if not (isinstance(af, dict) and isinstance(af.get('rate'), (int, float)) and isinstance(af.get('min_rub'), (int, float)) and isinstance(af.get('max_rub'), (int, float))):
+        raise ConfigError('[config] settings.json agency_fee 必须包含 rate, min_rub, max_rub 数字')
+    if af['rate'] < 0 or af['min_rub'] < 0 or af['max_rub'] < af['min_rub']:
+        raise ConfigError('[config] settings.json agency_fee 数值无效（rate/min 不得为负，max 必须 >= min）')
 
 
 def _validate_tariffs_structure(data):

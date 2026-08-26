@@ -96,9 +96,10 @@ export function formatCurrency(num) {
 
 export function formatCurrencyDual(num) {
   if (num === null || num === undefined) return { rub: '-', cny: '-' };
-  const rmb = Math.round(num * 0.075);
+  const rmb = Math.round(num * R);
   return {
     rub: '₽ ' + formatNumber(num),
     cny: '¥ ' + formatNumber(rmb)
   };
 }
+import { R } from './ozonEngine'

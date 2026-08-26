@@ -2,8 +2,7 @@ import { useMemo } from 'react'
 import { Star, Zap, Thermometer, Wind, TrendingUp, DollarSign, Globe } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts'
 import { chartColors } from '../utils/chartConfigs'
-
-const EXCHANGE_RATE = 0.075
+import { R as EXCHANGE_RATE } from '../utils/ozonEngine'
 
 const RUSSIAN_FEATURES = [
   { keywords: ['5 в 1', '5в1', '5 in 1'], label: '5合1多功能', en: '5 in 1', ru: '5 в 1' },

@@ -237,6 +237,44 @@ def test_tariff_version():
     return passed, total
 
 
+def test_agency_fee_and_exchange_rate():
+    """代理费纯函数与单源汇率测试"""
+    print("\n=== 代理费与单源汇率测试 ===")
+    passed = 0
+    total = 0
+
+    for rub, expected in [('3998', '307.54'), ('5200', '400.00'), ('100000', '7692.31')]:
+        total += 1
+        cny = wb_calc.round2(Decimal(rub) / Decimal('13'))
+        if assert_eq(cny, Decimal(expected), f"{rub} RUB / 13 = {expected} RMB"):
+            passed += 1
+
+    for amount, expected in [
+        ('-1', '0'), ('0', '0'), ('0.01', '15'), ('500', '15'),
+        ('750', '15'), ('751', '15.02'), ('2000', '40'),
+        ('10000', '200'), ('15000', '200'),
+    ]:
+        total += 1
+        actual = wb_calc.calculate_agency_fee_rub(Decimal(amount))
+        if assert_eq(actual, Decimal(expected), f"{amount} RUB -> {expected} RUB"):
+            passed += 1
+
+    # 逐项展示值为两位，但净结算必须由未取整中间值聚合后再 round2。
+    total += 1
+    settlement = wb_calc.calculate_platform_settlement({
+        'seller_revenue_base_rub': 3998,
+        'commission_rate': 7,
+        'acquiring_fee_rub': 1,
+        'promotion_cost_rub': 1,
+        'platform_other_deduction_rub': 1,
+    }, {'rub_per_cny': 13})
+    if assert_eq(settlement['platform_net_settlement_cny'], Decimal('285.78'), "净结算按内部全精度聚合"):
+        passed += 1
+
+    print(f"\n代理费与汇率测试: {passed}/{total} 通过")
+    return passed, total
+
+
 if __name__ == '__main__':
     print("WB跨境核算 - 自动化测试")
     print("=" * 50)
@@ -246,9 +284,10 @@ if __name__ == '__main__':
     p3, t3 = test_route_compare()
     p4, t4 = test_profit()
     p5, t5 = test_tariff_version()
+    p6, t6 = test_agency_fee_and_exchange_rate()
 
-    total_passed = p1 + p2 + p3 + p4 + p5
-    total_tests = t1 + t2 + t3 + t4 + t5
+    total_passed = p1 + p2 + p3 + p4 + p5 + p6
+    total_tests = t1 + t2 + t3 + t4 + t5 + t6
 
     print("\n" + "=" * 50)
     print(f"总计: {total_passed}/{total_tests} 通过")

@@ -132,7 +132,7 @@ with st.sidebar:
     s = st.session_state.settings
     rub_per_cny = st.number_input(
         "汇率 (1¥ = ?₽)",
-        min_value=0.0001, value=float(s.get('rub_per_cny', 12)), step=0.1, format="%.4f",
+        min_value=0.0001, value=float(s['rub_per_cny']), step=0.1, format="%.4f",
         help="必须为正数。保存时后端仍会二次校验，非法值将被拒绝且不写盘。"
     )
     tax_method = st.selectbox(
@@ -227,7 +227,7 @@ def page_overview():
     # 计算指标
     total_orders = len(filtered)
     total_revenue_rub = sum(float(o.get('seller_revenue_base_rub', 0) or 0) for o in filtered)
-    total_revenue_cny = total_revenue_rub / float(settings.get('rub_per_cny', 12)) if settings.get('rub_per_cny') else 0
+    total_revenue_cny = total_revenue_rub / float(settings['rub_per_cny'])
     total_logistics = sum(float(o.get('actual_logistics_cny', 0) or o.get('estimated_logistics_cny', 0) or 0) for o in filtered)
     avg_logistics = total_logistics / total_orders if total_orders else 0
     logistics_ratio = total_logistics / total_revenue_cny * 100 if total_revenue_cny else 0
@@ -376,7 +376,7 @@ def page_calculator():
         }
 
         settings_dict = {
-            'rub_per_cny': settings.get('rub_per_cny', 12),
+            'rub_per_cny': settings['rub_per_cny'],
             'tax_method': settings.get('tax_method', 'none'),
             'tax_rate': settings.get('tax_rate', 0),
         }
@@ -434,7 +434,7 @@ def page_calculator():
                 # 简单估算：固定其他成本，求利润=0时的售价
                 # 利润 = (售价_rub/rate) - 物流 - 平台扣费 - 采购成本
                 # 设售价为X，平台扣费率约为 (佣金率+0+0)%
-                rate = float(settings.get('rub_per_cny', 12))
+                rate = float(settings['rub_per_cny'])
                 commission_pct = commission_rate / 100
                 # 固定成本（不随售价变化）
                 fixed_cost = purchase_cost * quantity + packaging_cost * quantity + china_inbound * quantity + logistics_cny
@@ -515,7 +515,7 @@ def page_sku_profit():
             china_in = to_float(sku.get('china_inbound_cost_cny')) or 0
             commission = to_float(sku.get('commission_rate')) or 0
 
-            price_cny = price_rub / float(settings.get('rub_per_cny', 12)) if settings.get('rub_per_cny') else 0
+            price_cny = price_rub / float(settings['rub_per_cny'])
             commission_cny = price_cny * commission / 100
             profit = price_cny - logistics_cny - commission_cny - purchase - packaging - china_in
             profit_margin = profit / price_cny * 100 if price_cny else None

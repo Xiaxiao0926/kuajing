@@ -44,6 +44,22 @@ def round4(val):
     return to_decimal(val).quantize(Decimal('0.0001'), rounding=ROUND_HALF_UP)
 
 
+def calculate_agency_fee_rub(order_amount_rub, custom_config=None):
+    """
+    统一代理费计算（卢布口径）
+    agencyFeeRub = clamp(orderAmountRub * rate, min_rub, max_rub)
+    """
+    amt = to_decimal(order_amount_rub)
+    if amt <= Decimal('0'):
+        return Decimal('0')
+    cfg = custom_config or {'rate': Decimal('0.02'), 'min_rub': Decimal('15'), 'max_rub': Decimal('200')}
+    rate = to_decimal(cfg.get('rate', Decimal('0.02')))
+    min_rub = to_decimal(cfg.get('min_rub', Decimal('15')))
+    max_rub = to_decimal(cfg.get('max_rub', Decimal('200')))
+    raw = amt * rate
+    return max(min_rub, min(raw, max_rub))
+
+
 # ----------------------
 # 费率选择
 # ----------------------
@@ -281,24 +297,10 @@ def calculate_order_logistics(parcels, tariff):
 # ----------------------
 # 平台结算与利润
 # ----------------------
-def calculate_platform_settlement(order, settings):
-    """
-    平台结算预估。
-    order: {
-        seller_revenue_base_rub, commission_base_rub, commission_rate,
-        acquiring_fee_rub, promotion_cost_rub, platform_other_deduction_rub,
-        order_logistics_cny
-    }
-    settings: {rub_per_cny}
-    """
+def _calculate_platform_settlement_raw(order, settings):
     rub_per_cny = to_decimal(settings.get('rub_per_cny', 0))
     if rub_per_cny <= 0:
-        return {
-            'error': '汇率为0或空，无法转换',
-            'sales_revenue_cny': None,
-            'commission_cny': None,
-            'platform_net_settlement_cny': None
-        }
+        return {'error': '汇率为0或空，无法转换'}
 
     seller_revenue_base_rub = to_decimal(order.get('seller_revenue_base_rub', 0))
     commission_base_rub = to_decimal(order.get('commission_base_rub', seller_revenue_base_rub))
@@ -308,23 +310,55 @@ def calculate_platform_settlement(order, settings):
     platform_other_rub = to_decimal(order.get('platform_other_deduction_rub', 0))
     order_logistics_cny = to_decimal(order.get('order_logistics_cny', 0))
 
-    sales_revenue_cny = round2(seller_revenue_base_rub / rub_per_cny)
-    commission_cny = round2(commission_base_rub * commission_rate / 100 / rub_per_cny)
-    acquiring_fee_cny = round2(acquiring_fee_rub / rub_per_cny)
-    promotion_cost_cny = round2(promotion_cost_rub / rub_per_cny)
-    platform_other_cny = round2(platform_other_rub / rub_per_cny)
-
+    sales_revenue_cny = seller_revenue_base_rub / rub_per_cny
+    commission_cny = commission_base_rub * commission_rate / 100 / rub_per_cny
+    acquiring_fee_cny = acquiring_fee_rub / rub_per_cny
+    promotion_cost_cny = promotion_cost_rub / rub_per_cny
+    platform_other_cny = platform_other_rub / rub_per_cny
     net = sales_revenue_cny - commission_cny - order_logistics_cny - acquiring_fee_cny - promotion_cost_cny - platform_other_cny
-    net = round2(net)
+
+    return {
+        'rub_per_cny': rub_per_cny,
+        'seller_revenue_base_rub': seller_revenue_base_rub,
+        'commission_base_rub': commission_base_rub,
+        'commission_rate': commission_rate,
+        'acquiring_fee_rub': acquiring_fee_rub,
+        'promotion_cost_rub': promotion_cost_rub,
+        'platform_other_rub': platform_other_rub,
+        'order_logistics_cny': order_logistics_cny,
+        'sales_revenue_cny': sales_revenue_cny,
+        'commission_cny': commission_cny,
+        'acquiring_fee_cny': acquiring_fee_cny,
+        'promotion_cost_cny': promotion_cost_cny,
+        'platform_other_cny': platform_other_cny,
+        'platform_net_settlement_cny': net,
+    }
+
+
+def _format_platform_settlement(raw):
+    if raw.get('error'):
+        return {
+            'error': raw['error'],
+            'sales_revenue_cny': None,
+            'commission_cny': None,
+            'platform_net_settlement_cny': None,
+            'steps': [raw['error']],
+        }
+    sales_revenue_cny = round2(raw['sales_revenue_cny'])
+    commission_cny = round2(raw['commission_cny'])
+    acquiring_fee_cny = round2(raw['acquiring_fee_cny'])
+    promotion_cost_cny = round2(raw['promotion_cost_cny'])
+    platform_other_cny = round2(raw['platform_other_cny'])
+    net = round2(raw['platform_net_settlement_cny'])
 
     steps = [
-        f'卖家收入基数: {seller_revenue_base_rub}₽ / {rub_per_cny} = {sales_revenue_cny}¥',
-        f'佣金: {commission_base_rub}₽ × {commission_rate}% / {rub_per_cny} = {commission_cny}¥',
-        f'物流费: {order_logistics_cny}¥',
-        f'支付费: {acquiring_fee_rub}₽ / {rub_per_cny} = {acquiring_fee_cny}¥',
-        f'促销费: {promotion_cost_rub}₽ / {rub_per_cny} = {promotion_cost_cny}¥',
-        f'其他扣款: {platform_other_rub}₽ / {rub_per_cny} = {platform_other_cny}¥',
-        f'平台净结算 = {sales_revenue_cny} - {commission_cny} - {order_logistics_cny} - {acquiring_fee_cny} - {promotion_cost_cny} - {platform_other_cny} = {net}¥'
+        f"卖家收入基数: {raw['seller_revenue_base_rub']}₽ / {raw['rub_per_cny']} = {sales_revenue_cny}¥",
+        f"佣金: {raw['commission_base_rub']}₽ × {raw['commission_rate']}% / {raw['rub_per_cny']} = {commission_cny}¥",
+        f"物流费: {raw['order_logistics_cny']}¥",
+        f"支付费: {raw['acquiring_fee_rub']}₽ / {raw['rub_per_cny']} = {acquiring_fee_cny}¥",
+        f"促销费: {raw['promotion_cost_rub']}₽ / {raw['rub_per_cny']} = {promotion_cost_cny}¥",
+        f"其他扣款: {raw['platform_other_rub']}₽ / {raw['rub_per_cny']} = {platform_other_cny}¥",
+        f'平台净结算（内部全精度计算）= {net}¥'
     ]
 
     return {
@@ -338,6 +372,11 @@ def calculate_platform_settlement(order, settings):
     }
 
 
+def calculate_platform_settlement(order, settings):
+    """平台结算预估；内部保持 Decimal 全精度，对外金额保留两位。"""
+    return _format_platform_settlement(_calculate_platform_settlement_raw(order, settings))
+
+
 def calculate_operating_profit(order, sku, settings, logistics_cny):
     """
     单订单经营利润。
@@ -346,16 +385,17 @@ def calculate_operating_profit(order, sku, settings, logistics_cny):
     settings: {rub_per_cny, tax_method, tax_rate}
     logistics_cny: 已计算的物流费
     """
-    settlement = calculate_platform_settlement({
+    settlement_raw = _calculate_platform_settlement_raw({
         **order,
         'order_logistics_cny': logistics_cny
     }, settings)
+    settlement = _format_platform_settlement(settlement_raw)
 
     if settlement.get('platform_net_settlement_cny') is None:
         return {**settlement, 'operating_profit_cny': None, 'steps': settlement.get('steps', [])}
 
-    net = settlement['platform_net_settlement_cny']
-    sales_revenue_cny = settlement['sales_revenue_cny']
+    net_raw = settlement_raw['platform_net_settlement_cny']
+    sales_revenue_raw = settlement_raw['sales_revenue_cny']
 
     purchase_cost = to_decimal(sku.get('purchase_cost_cny', 0))
     packaging_cost = to_decimal(sku.get('packaging_cost_cny', 0))
@@ -364,24 +404,25 @@ def calculate_operating_profit(order, sku, settings, logistics_cny):
     other_operating = to_decimal(order.get('other_operating_cost_cny', 0))
 
     # 税费
-    tax_cost = Decimal('0')
+    tax_cost_raw = Decimal('0')
     tax_method = settings.get('tax_method', 'none')
     tax_rate = to_decimal(settings.get('tax_rate', 0))
-    if tax_method == 'revenue' and sales_revenue_cny is not None:
-        tax_cost = round2(sales_revenue_cny * tax_rate / 100)
+    if tax_method == 'revenue' and sales_revenue_raw is not None:
+        tax_cost_raw = sales_revenue_raw * tax_rate / 100
     elif tax_method == 'settlement':
-        tax_cost = round2(net * tax_rate / 100)
+        tax_cost_raw = net_raw * tax_rate / 100
     elif tax_method == 'manual':
-        tax_cost = round2(order.get('tax_cost_cny', 0))
+        tax_cost_raw = to_decimal(order.get('tax_cost_cny', 0))
 
-    profit = net - purchase_cost - packaging_cost - china_inbound - certification - tax_cost - other_operating
-    profit = round2(profit)
+    profit_raw = net_raw - purchase_cost - packaging_cost - china_inbound - certification - tax_cost_raw - other_operating
+    tax_cost = round2(tax_cost_raw)
+    profit = round2(profit_raw)
 
-    profit_margin = round2(profit / sales_revenue_cny * 100) if sales_revenue_cny and sales_revenue_cny > 0 else None
-    logistics_ratio = round2(to_decimal(logistics_cny) / sales_revenue_cny * 100) if sales_revenue_cny and sales_revenue_cny > 0 else None
+    profit_margin = round2(profit_raw / sales_revenue_raw * 100) if sales_revenue_raw and sales_revenue_raw > 0 else None
+    logistics_ratio = round2(to_decimal(logistics_cny) / sales_revenue_raw * 100) if sales_revenue_raw and sales_revenue_raw > 0 else None
 
-    cost_total = purchase_cost + packaging_cost + china_inbound + to_decimal(logistics_cny) + to_decimal(settlement.get('promotion_cost_cny', 0))
-    cost_roi = round2(profit / cost_total * 100) if cost_total and cost_total > 0 else None
+    cost_total = purchase_cost + packaging_cost + china_inbound + to_decimal(logistics_cny) + settlement_raw['promotion_cost_cny']
+    cost_roi = round2(profit_raw / cost_total * 100) if cost_total and cost_total > 0 else None
 
     steps = settlement['steps'] + [
         f'采购成本: {purchase_cost}¥',
@@ -390,9 +431,9 @@ def calculate_operating_profit(order, sku, settings, logistics_cny):
         f'认证分摊: {certification}¥',
         f'税费({tax_method}): {tax_cost}¥',
         f'其他成本: {other_operating}¥',
-        f'经营利润 = {net} - {purchase_cost} - {packaging_cost} - {china_inbound} - {certification} - {tax_cost} - {other_operating} = {profit}¥',
-        f'利润率 = {profit} / {sales_revenue_cny} = {profit_margin}%' if profit_margin is not None else '利润率: 不可计算',
-        f'物流费率 = {logistics_cny} / {sales_revenue_cny} = {logistics_ratio}%' if logistics_ratio is not None else '物流费率: 不可计算',
+        f'经营利润（内部全精度计算）= {profit}¥',
+        f"利润率 = {profit} / {settlement['sales_revenue_cny']} = {profit_margin}%" if profit_margin is not None else '利润率: 不可计算',
+        f"物流费率 = {logistics_cny} / {settlement['sales_revenue_cny']} = {logistics_ratio}%" if logistics_ratio is not None else '物流费率: 不可计算',
     ]
 
     return {

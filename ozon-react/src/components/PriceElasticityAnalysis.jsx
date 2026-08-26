@@ -2,8 +2,7 @@ import { useMemo } from 'react'
 import { Search, Target, Zap } from 'lucide-react'
 import { ScatterChart, Scatter, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts'
 import { chartColors } from '../utils/chartConfigs'
-
-const EXCHANGE_RATE = 0.075
+import { R as EXCHANGE_RATE } from '../utils/ozonEngine'
 
 export default function PriceElasticityAnalysis({ data }) {
   const elasticityData = useMemo(() => {

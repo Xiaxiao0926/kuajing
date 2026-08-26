@@ -11,8 +11,59 @@
 import channelsData from '../generated/ozon_channels.js'
 import settingsData from '../generated/settings.js'
 
-// 汇率：1₽ = ¥0.09（唯一事实源 config/settings.json ozon_rub_to_cny）
-export const R = settingsData.ozon_rub_to_cny
+// 汇率单源化：唯一事实源 config/settings.json rub_per_cny。
+const configuredRubPerCny = Number(settingsData.rub_per_cny)
+if (!Number.isFinite(configuredRubPerCny) || configuredRubPerCny <= 0) {
+  throw new Error('OZON_ENGINE: config/settings.json rub_per_cny 必须为正数')
+}
+export const rubPerCny = configuredRubPerCny
+export const R = 1 / rubPerCny
+
+export const round2 = (value) => Math.round((Number(value) || 0) * 100) / 100
+
+/** 内部计算使用：不做展示取整。 */
+export const rubToCnyExact = (rub, rate = rubPerCny) => {
+  const r = Number(rate)
+  return Number.isFinite(r) && r > 0 ? (Number(rub) || 0) / r : 0
+}
+
+/**
+ * 卢布转人民币（四舍五入保留2位）
+ * @param {number} rub 卢布金额
+ * @param {number} [rate] 可选汇率（默认 rub_per_cny）
+ */
+export const toCNY = (rub, rate = rubPerCny) => {
+  return round2(rubToCnyExact(rub, rate))
+}
+
+/**
+ * 人民币转卢布（四舍五入保留2位）
+ * @param {number} cny 人民币金额
+ * @param {number} [rate] 可选汇率（默认 rub_per_cny）
+ */
+export const toRUB = (cny, rate = rubPerCny) => {
+  const r = Number(rate)
+  return Number.isFinite(r) && r > 0 ? round2((Number(cny) || 0) * r) : 0
+}
+
+/**
+ * 统一代理费计算（卢布口径）
+ * agencyFeeRub = clamp(orderAmountRub * rate, minRub, maxRub)
+ * @param {number} orderAmountRub 订单金额 (RUB)
+ * @param {Object} [customConfig] 可选自定义配置 { rate, min_rub, max_rub }
+ * @returns {number} 代理费金额 (RUB)
+ */
+export const calculateAgencyFeeRub = (orderAmountRub, customConfig = null) => {
+  const amt = Number(orderAmountRub) || 0
+  if (amt <= 0) return 0
+  const defaultCfg = settingsData.agency_fee
+  if (!defaultCfg) throw new Error('OZON_ENGINE: config/settings.json agency_fee 缺失')
+  const rate = customConfig?.rate !== undefined ? Number(customConfig.rate) : Number(defaultCfg.rate)
+  const minRub = customConfig?.min_rub !== undefined ? Number(customConfig.min_rub) : Number(defaultCfg.min_rub)
+  const maxRub = customConfig?.max_rub !== undefined ? Number(customConfig.max_rub) : Number(defaultCfg.max_rub)
+  const raw = amt * rate
+  return Math.max(minRub, Math.min(raw, maxRub))
+}
 
 /**
  * CEL 物流渠道分组（按类目组织）
@@ -20,33 +71,32 @@ export const R = settingsData.ozon_rub_to_cny
  * 映射规则：kg_rate_cny → rate，fixed_fee_cny → base；
  * weight_rounding_g 存在 → rateUnit='per100g'（百克进位语义）
  */
+export const mapChannelConfig = (ch) => {
+  const c = {
+    id: ch.id,
+    name: ch.name,
+    speed: ch.speed,
+    rate: ch.kg_rate_cny,
+    base: ch.fixed_fee_cny,
+    weightMax: ch.weight_max_kg,
+    sumMax: ch.sum_max_cm,
+    sideMax: ch.side_max_cm,
+    priceMin: ch.price_min_rub,
+    priceMax: ch.price_max_rub,
+    volumetric: ch.volumetric,
+  }
+  if (ch.weight_min_kg !== undefined && ch.weight_min_kg !== null) c.weightMin = ch.weight_min_kg
+  if (ch.weight_rounding_g !== undefined && ch.weight_rounding_g !== null) c.rateUnit = 'per100g'
+  if (ch.vol_div !== undefined && ch.vol_div !== null) c.volDiv = ch.vol_div
+  if (ch.vol_threshold_sum_cm !== undefined && ch.vol_threshold_sum_cm !== null) c.volThreshold = ch.vol_threshold_sum_cm
+  if (ch.charge_weight_max_kg !== undefined && ch.charge_weight_max_kg !== null) c.chargeWeightMax = ch.charge_weight_max_kg
+  return c
+}
+
 export const CHANNEL_GROUPS = channelsData.groups.map((g) => ({
   category: g.group_name,
   categoryZh: g.group_name_zh,
-  channels: g.channels.map((ch) => {
-    const c = {
-      id: ch.id,
-      name: ch.name,
-      speed: ch.speed,
-      rate: ch.kg_rate_cny,
-      base: ch.fixed_fee_cny,
-      weightMax: ch.weight_max_kg,
-      sumMax: ch.sum_max_cm,
-      sideMax: ch.side_max_cm,
-      priceMin: ch.price_min_rub,
-      priceMax: ch.price_max_rub,
-      volumetric: ch.volumetric,
-    }
-    if (ch.weight_min_kg !== undefined && ch.weight_min_kg !== null) c.weightMin = ch.weight_min_kg
-    // 内部映射：weight_rounding_g=100 → rateUnit='per100g'。
-    // 语义 = "每 kg 费率 + 计费重量按 100g 进位"（Gate0 核验结论），
-    // rateUnit 仅为 calcShipping 的分支标志（引擎内部字段，非展示文案）。
-    if (ch.weight_rounding_g !== undefined && ch.weight_rounding_g !== null) c.rateUnit = 'per100g'
-    if (ch.vol_div !== undefined && ch.vol_div !== null) c.volDiv = ch.vol_div
-    if (ch.vol_threshold_sum_cm !== undefined && ch.vol_threshold_sum_cm !== null) c.volThreshold = ch.vol_threshold_sum_cm
-    if (ch.charge_weight_max_kg !== undefined && ch.charge_weight_max_kg !== null) c.chargeWeightMax = ch.charge_weight_max_kg
-    return c
-  }),
+  channels: g.channels.map(mapChannelConfig),
 }))
 
 /**
@@ -122,14 +172,15 @@ export const getBestShipping = (price, weight, length, width, height) => {
 
 /**
  * 计算单规格行级利润（用于多规格对比 Tab）
- * 上架价 → 6折折后价 → 国内成本 → 跨境物流 → 平台成本 → 退货损失 → 毛利
+ * 显性化模型：挂牌价 (listPrice) → 平台折扣率 (discountRate) → 实际成交价 (price) → 成本 → 毛利
  * @param {Object} sku 单规格行数据
- * @param {Object} common 公共费率 { commission, adRate, paymentFee, agencyFee, returnLoss }
+ * @param {Object} common 公共费率 { commission, adRate, paymentFee, agencyFee, returnLoss, discountRate }
  * @returns {Object} 计算结果
  */
 export const calcRow = (sku, common) => {
   const listPrice = Number(sku.listPrice) || 0
-  const price = Math.round(listPrice * 0.6 * 100) / 100
+  const discountRate = sku.discountRate !== undefined && sku.discountRate !== '' ? Number(sku.discountRate) : (common?.discountRate !== undefined && common?.discountRate !== '' ? Number(common.discountRate) : 0.6)
+  const price = Math.round(listPrice * discountRate * 100) / 100
   const weight = Number(sku.weight) || 0
   const length = Number(sku.length) || 0
   const width = Number(sku.width) || 0
@@ -137,21 +188,29 @@ export const calcRow = (sku, common) => {
   const purchaseCost = Number(sku.purchaseCost) || 0
   const domesticShip = Number(sku.domesticShip) || 0
   const labelFee = Number(sku.labelFee) || 0
-  const priceRMB = Math.round(price * R * 100) / 100
-  const listPriceRMB = Math.round(listPrice * R * 100) / 100
+  const effectiveRubPerCny = common?.rubPerCny ?? rubPerCny
+  const priceCnyRaw = rubToCnyExact(price, effectiveRubPerCny)
+  const priceRMB = round2(priceCnyRaw)
+  const listPriceRMB = toCNY(listPrice)
   const domesticCost = purchaseCost + domesticShip + labelFee
   const bestShip = price && weight && length && width && height ? getBestShipping(price, weight, length, width, height) : null
-  const agencyFee = Number(common?.agencyFee) || 0
+  const agencyConfig = common?.agencyFeeConfig || null
+  const agencyFee = common?.agencyFee !== undefined && common?.agencyFee !== '' ? Number(common.agencyFee) : Number(settingsData.agency_fee.rate) * 100
   const platformRate = (Number(common?.commission) || 0) + (Number(common?.adRate) || 0) + (Number(common?.paymentFee) || 0)
   const returnLoss = Number(common?.returnLoss) || 0
-  const agencyAmtRub = Math.min(200, Math.max(15, (price * agencyFee) / 100))
-  const agencyAmt = Math.round(agencyAmtRub * R * 100) / 100
-  const crossBorderCost = bestShip ? bestShip.cost + agencyAmt : null
-  const platformCost = (priceRMB * platformRate) / 100
-  const returnAmt = (priceRMB * returnLoss) / 100
-  const profit = crossBorderCost !== null ? Math.round((priceRMB - domesticCost - crossBorderCost - platformCost - returnAmt) * 100) / 100 : null
-  const profitRate = profit !== null && priceRMB > 0 ? Math.round((profit / priceRMB) * 1000) / 10 : null
-  return { listPrice, price, priceRMB, listPriceRMB, domesticCost, bestShip, crossBorderCost, platformCost, returnAmt, profit, profitRate }
+  const agencyAmtRub = calculateAgencyFeeRub(price, agencyConfig || { rate: agencyFee / 100 })
+  const agencyCnyRaw = rubToCnyExact(agencyAmtRub, effectiveRubPerCny)
+  const crossBorderCostRaw = bestShip ? bestShip.cost + agencyCnyRaw : null
+  const platformCostRaw = (priceCnyRaw * platformRate) / 100
+  const returnAmtRaw = (priceCnyRaw * returnLoss) / 100
+  const profitRaw = crossBorderCostRaw !== null ? priceCnyRaw - domesticCost - crossBorderCostRaw - platformCostRaw - returnAmtRaw : null
+  const agencyAmt = round2(agencyCnyRaw)
+  const crossBorderCost = crossBorderCostRaw !== null ? round2(crossBorderCostRaw) : null
+  const platformCost = round2(platformCostRaw)
+  const returnAmt = round2(returnAmtRaw)
+  const profit = profitRaw !== null ? round2(profitRaw) : null
+  const profitRate = profitRaw !== null && priceCnyRaw > 0 ? Math.round((profitRaw / priceCnyRaw) * 1000) / 10 : null
+  return { listPrice, discountRate, price, priceRMB, listPriceRMB, domesticCost, bestShip, crossBorderCost, agencyAmtRub, agencyAmt, platformCost, returnAmt, profit, profitRate }
 }
 
 /**
@@ -174,19 +233,26 @@ export const calcChannelProfit = (ch, price, weight, length, width, height, para
   const commission = Number(params.commission) || 0
   const adRate = Number(params.adRate) || 0
   const paymentFee = Number(params.paymentFee) || 0
-  const agencyFee = Number(params.agencyFee) || 0
+  const agencyConfig = params.agencyFeeConfig || null
+  const agencyFee = params.agencyFee !== undefined && params.agencyFee !== '' ? Number(params.agencyFee) : Number(settingsData.agency_fee.rate) * 100
   const returnLoss = Number(params.returnLoss) || 0
 
   const domesticCost = purchaseCost + domesticShipping + labelingFee
   const platformCostRate = commission + adRate + paymentFee
-  const priceRMB = Math.round(price * R * 100) / 100
-  const agencyAmtRub = Math.min(200, Math.max(15, (price * agencyFee) / 100))
-  const agencyAmt = Math.round(agencyAmtRub * R * 100) / 100
-  const crossBorderCost = res.cost + agencyAmt
-  const platformAmt = (priceRMB * platformCostRate) / 100
-  const returnAmt = (priceRMB * returnLoss) / 100
-  const profit = Math.round((priceRMB - domesticCost - crossBorderCost - platformAmt - returnAmt) * 100) / 100
-  const profitRate = priceRMB > 0 ? Math.round((profit / priceRMB) * 1000) / 10 : 0
+  const effectiveRubPerCny = params.rubPerCny ?? rubPerCny
+  const priceCnyRaw = rubToCnyExact(price, effectiveRubPerCny)
+  const agencyAmtRub = calculateAgencyFeeRub(price, agencyConfig || { rate: agencyFee / 100 })
+  const agencyCnyRaw = rubToCnyExact(agencyAmtRub, effectiveRubPerCny)
+  const crossBorderCostRaw = res.cost + agencyCnyRaw
+  const platformAmtRaw = (priceCnyRaw * platformCostRate) / 100
+  const returnAmtRaw = (priceCnyRaw * returnLoss) / 100
+  const profitRaw = priceCnyRaw - domesticCost - crossBorderCostRaw - platformAmtRaw - returnAmtRaw
+  const agencyAmt = round2(agencyCnyRaw)
+  const crossBorderCost = round2(crossBorderCostRaw)
+  const platformAmt = round2(platformAmtRaw)
+  const returnAmt = round2(returnAmtRaw)
+  const profit = round2(profitRaw)
+  const profitRate = priceCnyRaw > 0 ? Math.round((profitRaw / priceCnyRaw) * 1000) / 10 : 0
 
   return {
     result: res,
@@ -195,13 +261,14 @@ export const calcChannelProfit = (ch, price, weight, length, width, height, para
     costBreakdown: {
       domesticCost,
       celShipping: res.cost,
-      agencyAmt: Math.round(agencyAmt * 100) / 100,
-      crossBorderCost: Math.round(crossBorderCost * 100) / 100,
-      commissionAmt: Math.round((priceRMB * commission) / 100 * 100) / 100,
-      adAmt: Math.round((priceRMB * adRate) / 100 * 100) / 100,
-      paymentAmt: Math.round((priceRMB * paymentFee) / 100 * 100) / 100,
-      platformAmt: Math.round(platformAmt * 100) / 100,
-      returnAmt: Math.round(returnAmt * 100) / 100,
+      agencyAmt,
+      agencyAmtRub,
+      crossBorderCost,
+      commissionAmt: round2((priceCnyRaw * commission) / 100),
+      adAmt: round2((priceCnyRaw * adRate) / 100),
+      paymentAmt: round2((priceCnyRaw * paymentFee) / 100),
+      platformAmt,
+      returnAmt,
     },
   }
 }

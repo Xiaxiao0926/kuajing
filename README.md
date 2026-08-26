@@ -65,7 +65,7 @@ npm start
 ### 费率配置
 - **React**：`ozon-react/src/utils/wbConfig.js`（含 2026-02-09 历史版 + 2026-07-22 0726版）
 - **Python**：`ozon-product-analyzer/wb_data/tariffs.json`（双版本已对齐）
-- **汇率**：两端统一 1¥ = 12₽（生效 2026-08-11）
+- **汇率**：两端统一 1¥ = 13₽（生效 2026-08-25）
 
 ### 测试
 ```bash

@@ -5,12 +5,13 @@
  *  - Ozon 预填只取 price_rub / weight_kg / dims / commission_rfbs（绝不取 fbs/fbo/fbp，
  *    绝不虚构 purchaseCost/domesticShipping/labelingFee/adRate/paymentFee/agencyFee/returnLoss）
  *  - resolvedConfig 不复制费率：冻结 config/ozon_channels.json 的完整渠道配置（含 source/source_date/verified_by meta）
- *  - 汇率双语义共存：rubToCny=ozon_rub_to_cny（引擎实际使用）、celRubPerCny=rub_per_cny（CEL 资费上下文存档），禁止统一
+ *  - 汇率与代理费规则随场景冻结；旧场景缺少新字段时才回退当前 settings
  *  - outputPayload 冻结核算引擎输出原文（calcChannelProfit 结果 verbatim）
  */
 import { getProject, getSnapshot } from './t6Store.js'
 import settingsData from '../../generated/settings.js'
 import channelsData from '../../generated/ozon_channels.js'
+import { calcChannelProfit, mapChannelConfig } from '../ozonEngine.js'
 
 export const OZON_CALC_VERSION = 'ozon-rfbs-single-v1'
 export const WB_CALC_VERSION = 'wb-order-v2'
@@ -52,15 +53,22 @@ export function findOzonChannelRaw(channelId) {
 }
 
 /**
- * 冻结解析配置：渠道完整配置（含 meta）+ 汇率双上下文 + 计算器版本。
+ * 冻结解析配置：渠道完整配置（含 meta）+ 汇率/代理费快照 + 计算器版本。
  * 不复制费率数值；直接引用 config 原始记录。
  */
-export function buildOzonResolvedConfig(selectedChannelId) {
+export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = settingsData) {
   const raw = findOzonChannelRaw(selectedChannelId)
   if (!raw) throw new Error(`T6_COST: 渠道 ${selectedChannelId} 不在 config/ozon_channels.json（fail-close）`)
   return {
-    rubToCny: settingsData.ozon_rub_to_cny,
-    celRubPerCny: settingsData.rub_per_cny,
+    exchange_rate: runtimeSettings.rub_per_cny,
+    currency: 'RUB/CNY',
+    calculation_version: runtimeSettings.calculation_version || 'v1.0',
+    rubPerCny: runtimeSettings.rub_per_cny,
+    agencyFee: {
+      rate: runtimeSettings.agency_fee.rate,
+      min_rub: runtimeSettings.agency_fee.min_rub,
+      max_rub: runtimeSettings.agency_fee.max_rub,
+    },
     selectedChannel: {
       ...raw,
       meta: {
@@ -92,6 +100,37 @@ export function buildOzonScenarioPayload({ project, inputPayload, selectedChanne
     resolvedConfig: buildOzonResolvedConfig(selectedChannelId),
     outputPayload: JSON.parse(JSON.stringify(outputPayload)),
   }
+}
+
+/**
+ * 使用场景冻结配置重新计算 Ozon 结果。
+ * 新场景优先使用 resolvedConfig 快照；缺少新字段的旧场景才回退当前配置。
+ */
+export function recalculateOzonScenario(scenario, currentSettings = settingsData) {
+  if (!scenario || scenario.platform !== 'OZON') throw new Error('T6_COST: 仅支持复算 Ozon 场景')
+  const cfg = scenario.resolvedConfig || {}
+  const input = scenario.inputPayload || {}
+  const rawChannel = cfg.selectedChannel
+  if (!rawChannel) throw new Error('T6_COST: 历史场景缺少冻结渠道配置，无法复算')
+
+  const exchangeRate = num(cfg.exchange_rate ?? cfg.rubPerCny ?? currentSettings.rub_per_cny)
+  if (exchangeRate === null || exchangeRate <= 0) throw new Error('T6_COST: 场景汇率无效，无法复算')
+  const agencyFee = cfg.agencyFee || currentSettings.agency_fee
+  if (!agencyFee) throw new Error('T6_COST: 场景与当前配置均缺少代理费规则，无法复算')
+
+  return calcChannelProfit(
+    mapChannelConfig(rawChannel),
+    num(input.price) ?? 0,
+    num(input.weight) ?? 0,
+    num(input.length) ?? 0,
+    num(input.width) ?? 0,
+    num(input.height) ?? 0,
+    {
+      ...input,
+      rubPerCny: exchangeRate,
+      agencyFeeConfig: JSON.parse(JSON.stringify(agencyFee)),
+    },
+  )
 }
 
 /** 数值安全取值：null/undefined/''/NaN → null（绝不 Number(null)→0） */
@@ -184,6 +223,9 @@ export function buildWbResolvedConfig({ tariff, settings }) {
   if (!tariff) throw new Error('T6_COST: WB 费率版本缺失（无法冻结）')
   if (!settings) throw new Error('T6_COST: WB 设置缺失（无法冻结）')
   return {
+    exchange_rate: settings.rubPerCny ?? settingsData.rub_per_cny,
+    currency: 'RUB/CNY',
+    calculation_version: settingsData.calculation_version || 'v1.0',
     tariff: JSON.parse(JSON.stringify(tariff)),
     settings: {
       // 进入利润公式（wbEngine calculatePlatformSettlement / calculateOperatingProfit）

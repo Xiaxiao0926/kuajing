@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Sparkles, Target, TrendingUp, Award, Download, Star } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { chartColors } from '../utils/chartConfigs'
+import { R } from '../utils/ozonEngine'
 
 export default function ExpertStrategy({ data, kpis }) {
   const blackHorseData = useMemo(() => {
@@ -85,13 +86,13 @@ export default function ExpertStrategy({ data, kpis }) {
       const avgPrice = blackHorseData.blackHorses.reduce((sum, p) => sum + p.price, 0) / blackHorseData.blackHorses.length
       recs.push({
         title: '🎯 配置建议：参考热销产品',
-        content: `热销产品平均价格 ₽${Math.round(avgPrice).toLocaleString()} (约¥${Math.round(avgPrice * 0.075).toLocaleString()})，建议新品配置：负离子+变频马达+专业级造型，定价 ₽${Math.round(avgPrice * 0.9).toLocaleString()}-${Math.round(avgPrice * 1.1).toLocaleString()}`,
+        content: `热销产品平均价格 ₽${Math.round(avgPrice).toLocaleString()} (约¥${Math.round(avgPrice * R).toLocaleString()})，建议新品配置：负离子+变频马达+专业级造型，定价 ₽${Math.round(avgPrice * 0.9).toLocaleString()}-${Math.round(avgPrice * 1.1).toLocaleString()}`,
         priority: 'high'
       })
     } else {
       recs.push({
         title: '🎯 配置建议：参考市场均价',
-        content: `市场平均价格 ₽${blackHorseData.avgPrice.toLocaleString()} (约¥${Math.round(blackHorseData.avgPrice * 0.075).toLocaleString()})，建议新品配置：负离子+变频马达+专业级造型，定价 ₽${Math.round(blackHorseData.avgPrice * 0.9).toLocaleString()}-${Math.round(blackHorseData.avgPrice * 1.2).toLocaleString()}`,
+        content: `市场平均价格 ₽${blackHorseData.avgPrice.toLocaleString()} (约¥${Math.round(blackHorseData.avgPrice * R).toLocaleString()})，建议新品配置：负离子+变频马达+专业级造型，定价 ₽${Math.round(blackHorseData.avgPrice * 0.9).toLocaleString()}-${Math.round(blackHorseData.avgPrice * 1.2).toLocaleString()}`,
         priority: 'high'
       })
     }

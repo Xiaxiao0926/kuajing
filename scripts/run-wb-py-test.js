@@ -49,6 +49,7 @@ const result = spawnSync(selected.cmd, [...selected.args, 'wb_test.py'], {
     cwd: WB_DIR,
     stdio: 'inherit',
     shell: process.platform === 'win32',
+    env: { ...process.env, PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' },
 });
 
 process.exit(result.status === null ? 1 : result.status);

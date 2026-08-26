@@ -144,7 +144,7 @@ total_logistics_cost_cny = forward_logistics_used_cny
 
 ## 9. Ozon CEL 渠道运费（rFBS 自发货）
 
-来源：`运费计算/CEL产品资费表 V5.23.xlsx`；汇率 `R = 0.09`（1₽ = ¥0.09）。[代码 ozonEngine.js]
+来源：`运费计算/CEL产品资费表 V5.23.xlsx`；汇率 `R = 0.0769`（1¥ = 13₽，1₽ = ¥0.0769）。[代码 ozonEngine.js]
 
 | 渠道组 | 时效 | 费率结构 | 限制 |
 |---|---|---|---|
@@ -161,39 +161,35 @@ total_logistics_cost_cny = forward_logistics_used_cny
 ### 9.1 单规格测算口径（`SingleTab` → `calcChannelProfit`）
 
 - 用户输入字段名为**售价（₽）**，**直接作为计算价**，不乘 0.6。
-- `calcChannelProfit(ch, price, ...)`：`priceRMB = price × R`，无任何 0.6 系数。
-- 利润 = 折后价（即输入价）×R − 国内成本(采购+国内运费+贴标) − 跨境运费(含代理费) − 平台成本(佣金+广告+支付) − 退货损失。
+- `calcChannelProfit(ch, price, ...)`：`priceRMB = price / rub_per_cny`（四舍五入保留2位）。
+- 利润 = 折后价（即输入价）折合人民币 − 国内成本(采购+国内运费+贴标) − 跨境运费(CEL+代理费折合人民币) − 平台成本(佣金+广告+支付) − 退货损失。
 
 ### 9.2 多规格定价口径（`MultiTab` → `calcRow`）
 
-- 用户输入字段名为**上架价**；`price = round2(listPrice × 0.6)` 得折后价。
-- UI 明示「上架价 × 0.6 = 折后价」。
+- 用户输入字段名为**上架价格（₽）**；显性化模型：`price = round2(listPrice × discountRate)` 得实际成交价（默认 6 折，支持自定义）。
+- UI 与数据模型显性展示「挂牌价格 → 平台折扣率 → 实际成交价」。
 - 其余成本结构与 9.1 相同。
 
-### 9.3 两者当前差异（如实记录，未统一）
+### 9.3 货物交付代理费规则（Agency Fee，卢布计价）
 
-```text
-单规格 SingleTab：输入"售价" → 不乘 0.6 → 直接计算
-多规格 MultiTab ：输入"上架价" → ×0.6 → 以折后价计算
-```
+- **业务定义**：代理费属于俄罗斯订单侧服务费用，按**卢布**独立计价，禁止提前转换为人民币上下限。
+- **计算公式**：
+  $$\text{agencyFeeRub} = \text{clamp}(\text{orderAmountRub} \times \text{rate}, \text{minRub}, \text{maxRub})$$
+  等价于：`Math.max(min_rub, Math.min(orderAmountRub * rate, max_rub))`
+- **默认配置事实源**（`config/settings.json`）：
+  `rate = 0.02` (2%), `min_rub = 15` (15 RUB), `max_rub = 200` (200 RUB)。
+- **测试基准案例**：
+  - 500 RUB $\times$ 2% = 10 RUB $\rightarrow$ **15 RUB**（保底）
+  - 2000 RUB $\times$ 2% = 40 RUB $\rightarrow$ **40 RUB**（正常）
+  - 15000 RUB $\times$ 2% = 300 RUB $\rightarrow$ **200 RUB**（封顶）
+- **折算流程**：订单金额(RUB) $\rightarrow$ 计算代理费(RUB) $\rightarrow$ 汇率折算 $\rightarrow$ 人民币跨境成本(CNY)。
 
-两者价格语义不同（一个输入成交价、一个输入挂牌价）。是否应统一口径，由需求方后续确认（TECH_DEBT TD-14），**T1 只记录不修改代码**。
+## 10. 汇率单源化体系（唯一事实源）
 
-## 10. 汇率状态（仓库事实）
-
-**仓库基线（三处一致，均为 12）**：
-
-| 位置 | 值 |
-|---|---|
-| React `DEFAULT_SETTINGS`（`wbConfig.js`） | `rubPerCny = 12`（1¥=12₽），生效 2026-08-11 |
-| Python `DEFAULT_SETTINGS`（`wb_data.py`） | `rub_per_cny = 12`，生效 2026-08-11 |
-| Python tracked `wb_data/settings.json`（仓库内） | `rub_per_cny = 12`，生效 2026-08-11 |
-
-**历史运行态观察（非仓库事实）**：
-- 2026-08-14 整改过程中，曾在本机 Python 运行态观察到 `settings.json` 值为 11.5（生效 2026-02-09）；当前 Git 仓库各分支均无法复现该状态。
-- 因此**不得将 11.5 视为仓库事实**。
-
-**T2 已解决（2026-08-14）**：配置单源化后，Python 读写均指向 `config/settings.json`（原 `wb_data/settings.json` 运行态副本已删除），React 经 generated 读同一文件——运行时副本覆盖风险在结构上消除（TECH_DEBT TD-1 关闭）。
+**全局唯一汇率配置**（`config/settings.json`）：`rub_per_cny = 13`（1¥ = 13₽，生效 2026-08-25）。
+- 人民币折算：`CNY = round2(RUB / rub_per_cny)`
+- 卢布折算：`RUB = round2(CNY × rub_per_cny)`
+- 彻底废除 `ozon_rub_to_cny` 与 `rub_to_cny` 等重复字段，保证 Ozon 与 WB 两端数学精度逐位完全一致（例如 3998 RUB / 13 = 307.54 RMB）。
 
 ## 11. 修改公式的流程（强制）
 
@@ -224,20 +220,9 @@ total_logistics_cost_cny = forward_logistics_used_cny
 
 **修改纪律**：任何权重/公式变更 = 需求方书面确认 + 更新本节与 `T4-1B-评分模型设计冻结.md` + 重跑 scoring golden/monotonicity/审计三件套 + 重跑 λ 校准验证（若涉及 demand）。
 
-## 13. 成本场景冻结规则（T6-2B，Ozon/WB 联动）
+## 13. 成本场景冻结与不可变快照保护规则（T6-2B，Ozon/WB 联动）
 
-**CostScenario（`t6.costScenario.<uuid>`）是不可变快照**：保存后不可编辑/删除；`project.costing.scenarios[]` 追加，首个场景自动设为基线（`cost_baseline_change` 日志），其后基线**仅人工** `setProjectBaselineScenario` 切换（WB 场景保存仅测算参考，绝不自动改基线）。
-
-**Ozon 预填（`buildOzonPrefill`）只取 4 项**：price←`price_rub`（SingleTab 实际售价语义，**绝不 ×0.6**）、weight←`weight_kg`、尺寸←`dims`、commission←`commission_rfbs`（rFBS 自发货；**绝不取 fbs/fbo/fbp**）。采购成本/国内段运费/贴标费/广告/支付/代理/退货损失**绝不虚构**，由用户在核算面板填写真实值。
-
-**WB 预填（`buildWbPrefill`）只取 5 项**：productName、actualWeightG=`weight_kg×1000`、尺寸、sellerRevenueRub←`price_rub`（标记"来自候选市场的参考售价"）。**WB 佣金/线路/成本假设全部用户填写**——即使候选 `commission_rfbs=99` 也绝不带入（WB 是完全独立的利润模型，禁止移植 Ozon 佣金）。
-
-**resolvedConfig 冻结规则（不复制费率）**：
-- Ozon：冻结 `config/ozon_channels.json` 完整渠道记录 + `source/source_date/verified_by` meta；汇率双语义并存且禁止统一——`rubToCny = ozon_rub_to_cny`（0.09，Ozon 引擎实际使用）、`celRubPerCny = rub_per_cny`（12，CEL 资费上下文存档）。
-- WB：冻结完整费率版本快照（tariffId/routeId/routeName/effectiveFrom/effectiveTo/weightRoundingG/尺寸重量限制/tiers/反向规则/sourceName），**不是只存 routeId**；设置子集（rubPerCny/阈值）。
-
-**outputPayload**：冻结引擎输出原文（Ozon=`calcChannelProfit` 结果；WB=`logisticsCalc/profitCalc/reverseCalcResult/breakEvenPriceRub`）。`calculatorVersion` 仅元数据（'ozon-rfbs-single-v1' / 'wb-order-v2'），**公式不变**。
-
-**跨平台比较表**：值来自各平台现有核算引擎（OZON=profitRate；WB=profitCalc.profitMargin，统一为 `profitMarginPct`），**不跨平台重新计算费用**。
-
-**Gate（COSTING 段）用真实场景**：无场景→FAIL(RED)；基线毛利率 ≥15%→PASS；<15%→WARN(YELLOW)；未设基线→FAIL。supplier/samples/compliance/listing/operations/launch 等未实现域仍 NOT_EVALUATED。
+**CostScenario（`t6.costScenario.<uuid>`）是不可变快照**：
+- 保存后不可编辑/删除；新项目读取当前配置，历史项目读取创建时快照。
+- 快照显式冻结 `exchange_rate`（如 13 或 12）、`currency: "RUB/CNY"`、`calculation_version`（如 "v1.0"）及 `agencyFee: { rate, min_rub, max_rub }` 配置。
+- 历史项目不会因后续全局汇率或费率调整而发生利润重新计算。

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Calculator, Package, DollarSign, TrendingUp, Info, Table as TableIcon, Save } from 'lucide-react'
 import { persistGet, persistSet } from '../utils/persist'
 import {
-  R, CHANNEL_GROUPS, ALL_CHANNELS,
+  R, rubPerCny, CHANNEL_GROUPS, ALL_CHANNELS,
   calcShipping, getBestShipping, calcRow, calcChannelProfit,
   PRICING_PRODUCTS, PRODUCT_COLORS, COMMISSION_TABLE,
 } from '../utils/ozonEngine'
@@ -125,9 +125,6 @@ function SingleTab({ projectContext = null }) {
   const density = length && width && height ? (weight / ((length * width * height) / 1000000)).toFixed(1) : 0
   const priceRMB = Math.round(price * R * 100) / 100
 
-  const domesticCost = purchaseCost + domesticShipping + labelingFee
-  const platformCostRate = commission + adRate + paymentFee
-
   const results = CHANNEL_GROUPS.map((cat) => ({
     ...cat,
     channels: cat.channels.map((ch) => {
@@ -233,7 +230,7 @@ function SingleTab({ projectContext = null }) {
           </div>
           <div className="flex items-center gap-1.5">
             <Info className="w-4 h-4 text-morandi-text-light" />
-            <span className="text-sm text-morandi-text-light">汇率: 1₽ = ¥{R}</span>
+            <span className="text-sm text-morandi-text-light">汇率: 1¥ = {rubPerCny}₽ (1₽ ≈ ¥{(1/rubPerCny).toFixed(4)})</span>
           </div>
         </div>
 
@@ -281,7 +278,7 @@ function SingleTab({ projectContext = null }) {
                             {isBest && <span className="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700 border border-green-200 flex-shrink-0">最优</span>}
                           </div>
                           <div className="text-xs text-morandi-text-light mt-1">
-                            {ch.rateUnit === 'per100g' ? `${ch.rate}元/KG · 100g进位` : `${ch.rate}元/KG`} + {ch.base}元/票
+                            {ch.rateUnit === 'per100g' ? `${ch.rate / 10}元/KG(${ch.rate}元/100g)` : `${ch.rate}元/KG`} + {ch.base}元/票
                             {ch.volumetric === true && <span className="ml-1 text-amber-600">· 计抛(÷{ch.volDiv})</span>}
                             {ch.volumetric === 'conditional' && <span className="ml-1 text-amber-600">· 三边和&gt;{ch.volThreshold}cm计抛(÷{ch.volDiv})</span>}
                           </div>
@@ -289,31 +286,27 @@ function SingleTab({ projectContext = null }) {
                         <div className="flex items-center gap-5 flex-shrink-0">
                           {res && (
                             <>
-                              {res.volumetricWeight !== null && (
-                                <div className="text-right">
-                                  <div className="text-xs text-morandi-text-light">体积重</div>
-                                  <div className="text-sm font-medium text-morandi-text">{res.volumetricWeight}KG</div>
-                                </div>
-                              )}
-                              <div className="text-right">
-                                <div className="text-xs text-morandi-text-light">计费重</div>
-                                <div className="text-sm font-medium text-morandi-text">{res.chargeWeight}KG</div>
-                              </div>
                               <div className="text-right">
                                 <div className="text-xs text-morandi-text-light">跨境物流</div>
                                 <div className="text-sm font-bold text-blue-600">¥{ch.costBreakdown?.crossBorderCost}</div>
                               </div>
                               <div className="text-right">
                                 <div className="text-xs text-morandi-text-light">毛利</div>
-                                <div className={`text-sm font-bold ${ch.profit >= 0 ? 'text-green-600' : 'text-red-500'}`}>¥{ch.profit}</div>
+                                <div className={`text-sm font-bold ${ch.profit >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                                  ¥{ch.profit}
+                                </div>
                               </div>
                               <div className="text-right">
                                 <div className="text-xs text-morandi-text-light">利润率</div>
-                                <div className={`text-sm font-bold ${ch.profitRate >= 0 ? 'text-green-600' : 'text-red-500'}`}>{ch.profitRate}%</div>
+                                <div className={`text-sm font-bold ${ch.profitRate >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                                  {ch.profitRate}%
+                                </div>
                               </div>
                             </>
                           )}
-                          {!isAvailable && <span className="text-xs text-gray-300">不适用</span>}
+                          {!isAvailable && (
+                            <span className="text-xs text-gray-300">不适用</span>
+                          )}
                         </div>
                       </div>
                     )
@@ -323,45 +316,13 @@ function SingleTab({ projectContext = null }) {
             )
           })}
         </div>
-
-        <div className="mt-5 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-1.5 mb-2">
-            <Info className="w-4 h-4 text-morandi-text-light" />
-            <span className="text-sm font-semibold text-morandi-text-light">rFBS自发货毛利公式</span>
-          </div>
-          <div className="text-sm text-morandi-text-light leading-relaxed space-y-1">
-            <p>• 毛利 = 售价 - 国内物流费用 - 跨境物流费用 - 平台销售成本 - 退货损失</p>
-            <p>• 国内物流 = 采购成本 + 国内段运费 + 贴标费</p>
-            <p>• 跨境物流 = 国际物流费(CEL) + 货物交付代理费({agencyFee}%售价)</p>
-            <p>• 平台成本 = 佣金({commission}%) + 广告({adRate}%) + 支付工具({paymentFee}%) = {platformCostRate}%</p>
-            <p>• 退货损失 = 预估销售额的{returnLoss}%</p>
-            <p>• Big/Premium Big计抛：体积重 = 长×宽×高 ÷ 12000；HK：三边和&gt;60cm计抛(÷6000)</p>
-          </div>
-        </div>
-
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-1.5 mb-2">
-            <Info className="w-4 h-4 text-morandi-text-light" />
-            <span className="text-sm font-semibold text-morandi-text-light">货物交付代理费备注</span>
-            <span className="text-xs px-1.5 py-0.5 rounded bg-amber-50 text-amber-600 border border-amber-200">2026.3.1 - 2026.5.3</span>
-          </div>
-          <div className="text-sm text-morandi-text-light leading-relaxed space-y-2 bg-gray-50/50 rounded-lg p-4 border border-gray-100">
-            <p className="font-medium text-morandi-text">Ozon合作配送服务的费用包括：</p>
-            <p>1. <span className="font-medium text-morandi-text">Ozon代理费</span>：占卖家个人中心价格的2%，但不少于15卢布，且不超过每个货件200卢布。</p>
-            <p>2. <span className="font-medium text-morandi-text">配送给买家的费用</span>：根据承运商设定的公式计算，计算基础是货件的实际重量或体积重量。配送方式取决于下单日期时的商品价格。配送费用从应付款项中扣除，以订单创建当日俄罗斯中央银行汇率为准折算为合同货币。</p>
-            <p>3. <span className="font-medium text-morandi-text">Ozon费用赔偿</span>（China Post to PUDO Economy / Standard渠道）：因收件人委托，Ozon将订单运往自提点的费用，该订单内每件商品售价的4-6%。</p>
-            <p>4. <span className="font-medium text-morandi-text">退回费用</span>：因取消和退货将商品退回给卖家的费用，直接支付给承运商。</p>
-          </div>
-        </div>
       </div>
     </div>
   )
 }
 
-// ===================== Tab2: 多规格对比（原 PricingCalc） =====================
 function MultiTab() {
   const [pricingData, setPricingData] = useState(() => persistGet(PRICING_KEY) || {})
-
   const savePricing = (data) => {
     setPricingData(data)
     persistSet(PRICING_KEY, data)
@@ -371,7 +332,7 @@ function MultiTab() {
     <div className="space-y-4">
       <div className="px-1">
         <h2 className="text-sm font-bold text-morandi-text">多规格定价对比</h2>
-        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润，rFBS运费自动匹配最低渠道（上架价×0.6=折后价）</p>
+        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润，rFBS运费自动匹配最低渠道（汇率 1¥ = {rubPerCny}₽）</p>
       </div>
 
       <div className="space-y-4">
@@ -384,24 +345,25 @@ function MultiTab() {
           const paymentFee = pd.paymentFee !== undefined && pd.paymentFee !== '' ? Number(pd.paymentFee) : 1
           const agencyFee = pd.agencyFee !== undefined && pd.agencyFee !== '' ? Number(pd.agencyFee) : 2
           const returnLoss = pd.returnLoss !== undefined && pd.returnLoss !== '' ? Number(pd.returnLoss) : 4
+          const discountRate = pd.discountRate !== undefined && pd.discountRate !== '' ? Number(pd.discountRate) : 0.6
 
           const updateSku = (idx, key, val) => {
             const newSkus = [...skus]
             newSkus[idx] = { ...newSkus[idx], [key]: val }
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss } })
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss, discountRate } })
           }
           const addSku = () => {
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus: [...skus, {}], commission, adRate, paymentFee, agencyFee, returnLoss } })
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus: [...skus, {}], commission, adRate, paymentFee, agencyFee, returnLoss, discountRate } })
           }
           const removeSku = (idx) => {
             const newSkus = skus.filter((_, i) => i !== idx)
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss } })
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus: newSkus, commission, adRate, paymentFee, agencyFee, returnLoss, discountRate } })
           }
           const updateCommon = (key, val) => {
-            savePricing({ ...pricingData, [product.id]: { ...pd, skus, commission, adRate, paymentFee, agencyFee, returnLoss, [key]: val } })
+            savePricing({ ...pricingData, [product.id]: { ...pd, skus, commission, adRate, paymentFee, agencyFee, returnLoss, discountRate, [key]: val } })
           }
 
-          const common = { commission, adRate, paymentFee, agencyFee, returnLoss }
+          const common = { commission, adRate, paymentFee, agencyFee, returnLoss, discountRate }
 
           return (
             <div key={product.id} className={`rounded-xl border ${pc.dot.replace('bg-', 'border-').replace(/-\d+/, '-200')} bg-white overflow-hidden`}>
@@ -424,10 +386,14 @@ function MultiTab() {
                     ['支付费', 'paymentFee', '%', paymentFee],
                     ['代理费', 'agencyFee', '%', agencyFee],
                     ['退货', 'returnLoss', '%', returnLoss],
+                    ['折扣系数', 'discountRate', '折', Math.round(discountRate * 10 * 10) / 10],
                   ].map(([label, key, unit, val]) => (
                     <div key={key} className="flex items-center gap-1">
                       <span className="text-[10px] text-morandi-text-light">{label}</span>
-                      <input type="number" value={val} onChange={(e) => updateCommon(key, e.target.value)}
+                      <input type="number" step={key === 'discountRate' ? '0.1' : '1'} value={val} onChange={(e) => {
+                        const v = e.target.value
+                        updateCommon(key, key === 'discountRate' ? (v === '' ? '' : Number(v) / 10) : v)
+                      }}
                         className="w-12 text-xs text-center border border-gray-200 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-green-200 bg-white" />
                       <span className="text-[10px] text-gray-400">{unit}</span>
                     </div>
@@ -443,8 +409,8 @@ function MultiTab() {
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-28">长×宽×高<br /><span className="text-[9px]">CM</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br /><span className="text-[9px]">₽</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">上架价格<br /><span className="text-[9px]">¥</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br /><span className="text-[9px]">₽(6折)</span></th>
-                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后价<br /><span className="text-[9px]">¥</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后成交价<br /><span className="text-[9px]">₽({Math.round(discountRate * 100)}%)</span></th>
+                        <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">折后成交价<br /><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-16">采购成本<br /><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">国内运费<br /><span className="text-[9px]">¥</span></th>
                         <th className="border border-gray-200 px-2 py-1.5 text-center text-morandi-text-light font-semibold w-14">贴标费<br /><span className="text-[9px]">¥</span></th>

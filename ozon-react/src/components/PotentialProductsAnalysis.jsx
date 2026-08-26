@@ -2,8 +2,7 @@ import { useMemo } from 'react'
 import { TrendingUp, Target, Award, Zap, Star, DollarSign, Package, Truck, MessageCircle } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ScatterChart, Scatter, Cell } from 'recharts'
 import { chartColors } from '../utils/chartConfigs'
-
-const EXCHANGE_RATE = 0.075
+import { R as EXCHANGE_RATE } from '../utils/ozonEngine'
 
 const FEATURE_KEYWORDS = [
   { keywords: ['ионизация', 'ionic', 'ион'], label: '负离子' },

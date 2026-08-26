@@ -1,6 +1,6 @@
 import { Eye, ShoppingCart, DollarSign, Package, Target, BarChart3, Truck, Percent, Crown } from 'lucide-react'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend } from 'recharts'
-import { R, fmtCNY, fmtCNYFull } from '../dictionary'
+import { R, rubPerCny, fmtCNY, fmtCNYFull } from '../dictionary'
 import { KPICard } from '../Cards'
 
 export default function HeaderOverview({ stats, data, CC, showAllSizes, setShowAllSizes, showAllMaterials, setShowAllMaterials }) {
@@ -8,7 +8,7 @@ export default function HeaderOverview({ stats, data, CC, showAllSizes, setShowA
     <>
       <div className="bg-gradient-to-r from-morandi-primary to-morandi-secondary rounded-xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">📊 Ozon电商市场深度分析</h1>
-        <p className="opacity-90">所属类目: {stats.topCategory} | 数据维度: {data.length} 个商品 | {stats.brandCount} 个品牌 | 报告日期: {new Date().toLocaleDateString('zh-CN')} | 汇率: 1₽=¥0.09</p>
+        <p className="opacity-90">所属类目: {stats.topCategory} | 数据维度: {data.length} 个商品 | {stats.brandCount} 个品牌 | 报告日期: {new Date().toLocaleDateString('zh-CN')} | 汇率: 1¥={rubPerCny}₽ (1₽≈¥{R.toFixed(4)})</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">

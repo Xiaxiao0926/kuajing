@@ -32,7 +32,7 @@ const TABS = [
  */
 export default function WBCalc({ projectContext = null }) {
   const [tab, setTab] = useState('overview')
-  // 汇率迁移：强制将旧值更新为当前默认值（1¥=12₽，2026-08-11生效）
+  // 汇率迁移：强制将旧值更新为当前默认值（1¥=13₽，2026-08-25生效）
   const [settings, setSettings] = useState(() => {
     const stored = persistGet(SETTINGS_KEY)
     if (!stored) return DEFAULT_SETTINGS
