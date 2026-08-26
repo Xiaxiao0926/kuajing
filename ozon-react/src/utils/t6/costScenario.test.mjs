@@ -339,7 +339,9 @@ console.log('C16: Ozon 利润使用全精度汇率换算——仅输出阶段四
     returnLoss: 0,
     rubPerCny: 13,
   })
-  assert(out.profit === 41.77, `Ozon 全精度利润=41.77（实际 ${out.profit}）`)
+  // V7.24 费率: express_small 50.5元/kg + 17.97元/票（V5.23 为 46.8+16.64，运费 63.44→68.47）
+  // 测试意图不变：验证全精度汇率换算，仅输出阶段四舍五入（期望值随官方资费表 V7.24 更新）
+  assert(out.profit === 36.74, `Ozon 全精度利润=36.74（实际 ${out.profit}）`)
 }
 
 console.log(`\n===== CostScenario 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)

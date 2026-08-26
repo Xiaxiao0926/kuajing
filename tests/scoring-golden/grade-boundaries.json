@@ -1,6 +1,16 @@
 {
   "id": "grade-boundaries",
   "desc": "临界 A/B（round1 后 >=80 与 <80 的相邻毛利率）→ grade 边界正确",
+  "change_log": [
+    {
+      "date": "2026-08-26",
+      "reason": "CEL 资费表 V5.23 → V7.24 费率上调，物流维度得分下降约 0.5 分，A/B 边界所需的相邻毛利率从 (49,48) 移至 (51,50)。测试意图不变：相邻毛利率跨越 80 分界。",
+      "changes": [
+        { "case": "边界上方 gross_margin", "old": 49, "new": 51, "basis": "V7.24 下 margin=51 → totalScore=80.3 (A)" },
+        { "case": "边界下方 gross_margin", "old": 48, "new": 50, "basis": "V7.24 下 margin=50 → totalScore=79.8 (B)" }
+      ]
+    }
+  ],
   "cases": [
     {
       "name": "边界上方",
@@ -15,7 +25,7 @@
         "exposure": 90000000,
         "card_visits": 3000000,
         "reviews": 90000,
-        "gross_margin": 49,
+        "gross_margin": 51,
         "commission_fbs": 12,
         "commission_fbo": 12,
         "commission_rfbs": 12,
@@ -485,7 +495,7 @@
         "exposure": 90000000,
         "card_visits": 3000000,
         "reviews": 90000,
-        "gross_margin": 48,
+        "gross_margin": 50,
         "commission_fbs": 12,
         "commission_fbo": 12,
         "commission_rfbs": 12,
