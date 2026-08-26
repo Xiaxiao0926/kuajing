@@ -6,7 +6,7 @@
     "start": "node server.js",
     "dev": "node node_modules/nodemon/bin/nodemon.js server.js --watch server.js --watch analyze_with_cleaned_data.js --watch config.js --watch market_data_processor.js",
     "sync:config": "node scripts/sync-config.js",
-    "test": "node scripts/sync-config.js && node --experimental-vm-modules ozon-react/src/utils/wbEngine.test.mjs && npm run test:scoring && npm run test:t6 && npm run test:scoring-golden && npm run test:python",
+    "test": "node scripts/sync-config.js && node --experimental-vm-modules ozon-react/src/utils/wbEngine.test.mjs && node ozon-react/src/utils/exchangeRate.test.mjs && npm run test:scoring && npm run test:t6 && npm run test:scoring-golden && npm run test:python",
     "test:scoring": "node --experimental-vm-modules ozon-react/src/utils/scoring/scoringEngine.test.mjs && node --experimental-vm-modules ozon-react/src/utils/scoring/monotonicity.test.mjs && node --experimental-vm-modules ozon-react/src/utils/scoring/scoringDataAdapter.test.mjs && node --experimental-vm-modules ozon-react/src/utils/scoring/scoringExport.test.mjs",
     "test:t6": "node --experimental-vm-modules ozon-react/src/utils/t6/t6Store.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/gateEngine.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/costScenario.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/wbScenario.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/t6UiContract.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/supplier.test.mjs",
     "test:scoring-golden": "node scripts/run-scoring-golden.js",

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { persistGet, persistSet } from '../utils/persist'
 import { Calculator, Package, DollarSign, TrendingUp, Info } from 'lucide-react'
-import { CHANNEL_GROUPS, calcChannelProfit, toCNY, rubPerCny } from '../utils/ozonEngine'
+import { CHANNEL_GROUPS, calcChannelProfit, toCNY, rubPerCny, TARIFF_VERSION } from '../utils/ozonEngine'
 
 const SHIPPING_KEY = 'shipping-calc-rfbs-v2'
 
@@ -88,7 +88,7 @@ export default function ShippingCalc() {
           <h3 className="text-base font-bold text-blue-700">运费利润计算</h3>
           <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-600 border border-blue-200">OZON rFBS 自发货</span>
         </div>
-        <span className="text-xs text-blue-500">CEL产品资费表 V5.23</span>
+        <span className="text-xs text-blue-500">CEL产品资费表 {TARIFF_VERSION}</span>
       </div>
 
       <div className="p-5">

@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Calculator, Package, DollarSign, TrendingUp, Truck, Route, Settings, ClipboardList } from 'lucide-react'
 import { persistGet, persistSet } from '../utils/persist'
 import { DEFAULT_SETTINGS, DEFAULT_TARIFFS } from '../utils/wbConfig'
+import { getRateInfo, formatRubPerCny } from '../utils/exchangeRate'
+import { useExchangeRate } from '../utils/useExchangeRate'
 import { OverviewTab } from './wbcalc/tabs/OverviewTab'
 import { CalculatorTab } from './wbcalc/tabs/CalculatorTab'
 import { SkuTab } from './wbcalc/tabs/SkuTab'
@@ -32,19 +34,33 @@ const TABS = [
  */
 export default function WBCalc({ projectContext = null }) {
   const [tab, setTab] = useState('overview')
-  // 汇率迁移：强制将旧值更新为当前默认值（1¥=13₽，2026-08-25生效）
+  // 汇率统一走 live 每日自动更新（utils/exchangeRate.js；用户全局指令：整个跨境面板统一汇率）。
+  // WB 引擎经 settings.rubPerCny 消费汇率：挂载时取当前 live 值，异步拉取完成后由 effect 同步。
+  const rateInfo = useExchangeRate()
   const [settings, setSettings] = useState(() => {
     const stored = persistGet(SETTINGS_KEY)
-    if (!stored) return DEFAULT_SETTINGS
-    // 强制覆盖汇率为最新默认值（用户全局指令：整个跨境面板统一改汇率）
+    const base = stored || DEFAULT_SETTINGS
+    const live = getRateInfo()
     const migrated = {
-      ...stored,
-      rubPerCny: DEFAULT_SETTINGS.rubPerCny,
-      exchangeRateEffectiveFrom: DEFAULT_SETTINGS.exchangeRateEffectiveFrom,
+      ...base,
+      rubPerCny: live.rubPerCny,
+      exchangeRateEffectiveFrom: live.date || base.exchangeRateEffectiveFrom,
     }
     persistSet(SETTINGS_KEY, migrated)
     return migrated
   })
+  useEffect(() => {
+    setSettings((prev) => {
+      if (prev.rubPerCny === rateInfo.rubPerCny) return prev
+      const next = {
+        ...prev,
+        rubPerCny: rateInfo.rubPerCny,
+        exchangeRateEffectiveFrom: rateInfo.date || prev.exchangeRateEffectiveFrom,
+      }
+      persistSet(SETTINGS_KEY, next)
+      return next
+    })
+  }, [rateInfo])
   const [tariffs, setTariffs] = useState(() => persistGet(TARIFFS_KEY) || DEFAULT_TARIFFS)
   const [skus, setSkus] = useState(() => persistGet(SKUS_KEY) || [])
   const [orders, setOrders] = useState(() => persistGet(ORDERS_KEY) || [])
@@ -71,7 +87,9 @@ export default function WBCalc({ projectContext = null }) {
             </div>
           </div>
           <div className="flex items-center gap-3 text-xs">
-            <span className="px-2 py-1 rounded bg-white border border-orange-200 text-orange-700">汇率 1¥ = {settings.rubPerCny}₽</span>
+            <span className="px-2 py-1 rounded bg-white border border-orange-200 text-orange-700">
+              汇率 1¥ = {formatRubPerCny(settings.rubPerCny)}₽{rateInfo.auto ? `（${rateInfo.source} ${rateInfo.date}自动更新）` : ''}
+            </span>
             <span className="px-2 py-1 rounded bg-white border border-orange-200 text-orange-700">利润率阈值 {settings.profitMarginThreshold}%</span>
           </div>
         </div>

@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { Calculator, Package, DollarSign, TrendingUp, Info, Table as TableIcon, Save } from 'lucide-react'
 import { persistGet, persistSet } from '../utils/persist'
 import {
-  R, rubPerCny, CHANNEL_GROUPS, ALL_CHANNELS,
+  R, rubPerCny, CHANNEL_GROUPS, ALL_CHANNELS, TARIFF_VERSION,
   calcShipping, getBestShipping, calcRow, calcChannelProfit,
   PRICING_PRODUCTS, PRODUCT_COLORS, COMMISSION_TABLE,
 } from '../utils/ozonEngine'
+import { useExchangeRate } from '../utils/useExchangeRate'
+import { formatRubPerCny } from '../utils/exchangeRate'
 import { mergeTrustedPrefill } from '../utils/t6/costScenarioAdapter'
 import { Plus, Trash2 } from 'lucide-react'
 import Button from './ui/Button'
@@ -27,6 +29,8 @@ const TABS = [
  */
 export default function OzonCalc({ projectContext = null }) {
   const [tab, setTab] = useState('single')
+  // 订阅每日自动汇率：更新时重渲染整棵子树，live binding 的新汇率（R/rubPerCny）随即生效
+  const rateInfo = useExchangeRate()
 
   return (
     <div className="space-y-4">
@@ -39,7 +43,10 @@ export default function OzonCalc({ projectContext = null }) {
             </div>
             <div>
               <h3 className="text-base font-bold text-blue-700">Ozon 跨境核算面板</h3>
-              <p className="text-[10px] text-blue-600">OZON rFBS 自发货 · CEL产品资费表 V5.23 · 汇率 1₽ = ¥{R}</p>
+              <p className="text-[10px] text-blue-600">
+                OZON rFBS 自发货 · CEL产品资费表 {TARIFF_VERSION} · 汇率 1¥ = {formatRubPerCny(rateInfo.rubPerCny)}₽
+                {rateInfo.auto ? `（${rateInfo.source} ${rateInfo.date}自动更新）` : '（配置值）'}
+              </p>
             </div>
           </div>
           <span className="text-xs px-2 py-1 rounded bg-white border border-blue-200 text-blue-700">融合利润测算与定价计算</span>
@@ -230,7 +237,7 @@ function SingleTab({ projectContext = null }) {
           </div>
           <div className="flex items-center gap-1.5">
             <Info className="w-4 h-4 text-morandi-text-light" />
-            <span className="text-sm text-morandi-text-light">汇率: 1¥ = {rubPerCny}₽ (1₽ ≈ ¥{(1/rubPerCny).toFixed(4)})</span>
+            <span className="text-sm text-morandi-text-light">汇率: 1¥ = {formatRubPerCny(rubPerCny)}₽ (1₽ ≈ ¥{(1 / rubPerCny).toFixed(4)})</span>
           </div>
         </div>
 
@@ -332,7 +339,7 @@ function MultiTab() {
     <div className="space-y-4">
       <div className="px-1">
         <h2 className="text-sm font-bold text-morandi-text">多规格定价对比</h2>
-        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润，rFBS运费自动匹配最低渠道（汇率 1¥ = {rubPerCny}₽）</p>
+        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润，rFBS运费自动匹配最低渠道（汇率 1¥ = {formatRubPerCny(rubPerCny)}₽）</p>
       </div>
 
       <div className="space-y-4">

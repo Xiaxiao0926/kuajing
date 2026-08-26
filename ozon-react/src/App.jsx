@@ -16,6 +16,8 @@ import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcesso
 import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
 import { getDataUrl, requiresAccessSession } from './utils/runtime.js'
 import { checkAccessSession, unlockAccess } from './utils/access.js'
+import { refreshDailyRate } from './utils/exchangeRate.js'
+import { useExchangeRate } from './utils/useExchangeRate.js'
 import { ROADMAP_PHASES, ALL_NODES } from './data/roadmap'
 // P0 hotfix：选品评分页采用静态 import（可靠性优先）。
 // T5-2 的 lazy 化在生产 WordPress 环境出现评分页白屏
@@ -63,6 +65,12 @@ function DashboardApp() {
   const [dataFormat, setDataFormat] = useState('old')
   const [autoLoaded, setAutoLoaded] = useState(false)
   const [activeNode, setActiveNode] = useState('n1')
+  // 每日汇率自动更新：挂载时刷新（当日 localStorage 缓存命中则不发请求）；
+  // 订阅后汇率变化触发整树重渲染，各面板经 live binding 立即使用新汇率。
+  useExchangeRate()
+  useEffect(() => {
+    refreshDailyRate().catch(() => {})
+  }, [])
   const [nodeStatuses, setNodeStatuses] = useState(() => {
     try {
       const saved = persistGet('roadmap-statuses')

@@ -1,7 +1,7 @@
 /**
  * Ozon rFBS 跨境核算 - 共享计算引擎
  * 抽自 ShippingCalc.jsx 与 PricingCalc.jsx，避免两份重复代码
- * 依据《CEL产品资费表 V5.23》（已按 T2-Gate0-CEL-HK核验报告.md 核验）
+ * 依据《CEL产品资费表》（版本以 config/ozon_channels.json source 字段为准，TARIFF_VERSION）
  *
  * 渠道配置唯一事实源: D:/ozon/config/ozon_channels.json
  * （经 scripts/sync-config.js 生成为 src/generated/ozon_channels.js）
@@ -11,13 +11,28 @@
 import channelsData from '../generated/ozon_channels.js'
 import settingsData from '../generated/settings.js'
 
-// 汇率单源化：唯一事实源 config/settings.json rub_per_cny。
+// 资费表版本号：从配置 source 字段（如 "CEL产品资费表 V7.24.xlsx ..."）提取，禁止在 UI 硬编码。
+const TARIFF_VERSION_MATCH = /V\d+(?:\.\d+)*/.exec(String(channelsData.source || ''))
+export const TARIFF_VERSION = TARIFF_VERSION_MATCH ? TARIFF_VERSION_MATCH[0] : String(channelsData.source || '')
+
+// 汇率单源化：兜底值来自 config/settings.json rub_per_cny（构建时固化）；
+// 运行时由 utils/exchangeRate.js 每日自动更新（setLiveRubPerCny 写入 live binding，
+// 引擎全部换算函数的默认汇率在调用时取当前值，无需逐处传参）。
 const configuredRubPerCny = Number(settingsData.rub_per_cny)
 if (!Number.isFinite(configuredRubPerCny) || configuredRubPerCny <= 0) {
   throw new Error('OZON_ENGINE: config/settings.json rub_per_cny 必须为正数')
 }
-export const rubPerCny = configuredRubPerCny
-export const R = 1 / rubPerCny
+export let rubPerCny = configuredRubPerCny
+export let R = 1 / configuredRubPerCny
+
+/** 运行时写入 live 汇率（非法值拒绝并返回 false，不改变现状） */
+export function setLiveRubPerCny(v) {
+  const n = Number(v)
+  if (!Number.isFinite(n) || n <= 0) return false
+  rubPerCny = n
+  R = 1 / n
+  return true
+}
 
 export const round2 = (value) => Math.round((Number(value) || 0) * 100) / 100
 
