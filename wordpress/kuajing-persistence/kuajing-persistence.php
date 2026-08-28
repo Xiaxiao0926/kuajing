@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.2.5
+ * Version: 0.3.0
  * Author: FYZSXNB
  */
 
@@ -11,8 +11,10 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.2.5';
+    private const VERSION = '0.3.0';
     private const TABLE_SUFFIX = 'kuajing_state';
+    private const STATE_VERSIONS_SUFFIX = 'kuajing_state_versions';
+    private const AUDIT_EVENTS_SUFFIX = 'kuajing_audit_events';
     private const VERSION_OPTION = 'fyzsxnb_kuajing_version';
     private const SECRET_OPTION = 'fyzsxnb_kuajing_access_secret';
     private const ACCESS_COOKIE = 'fyzsxnb_kuajing_access';
@@ -61,14 +63,51 @@ final class FYZSXNB_Kuajing_Dashboard {
             state_value longtext NULL,
             updated_at_ms bigint(20) unsigned NOT NULL,
             updated_at datetime NOT NULL,
+            revision bigint(20) unsigned NOT NULL DEFAULT 1,
+            updated_by_device varchar(191) NOT NULL DEFAULT '',
             PRIMARY KEY  (user_id, state_key)
         ) {$charset_collate};";
         dbDelta($sql);
+
+        $versions_table = self::state_versions_table_name();
+        $versions_sql = "CREATE TABLE {$versions_table} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            user_id bigint(20) unsigned NOT NULL,
+            state_key varchar(191) NOT NULL,
+            revision bigint(20) unsigned NOT NULL,
+            payload longtext NULL,
+            created_at datetime NOT NULL,
+            device_id varchar(191) NOT NULL DEFAULT '',
+            PRIMARY KEY  (id),
+            UNIQUE KEY state_revision (user_id, state_key, revision),
+            KEY state_lookup (user_id, state_key, revision)
+        ) {$charset_collate};";
+        dbDelta($versions_sql);
+
+        $audit_table = self::audit_events_table_name();
+        $audit_sql = "CREATE TABLE {$audit_table} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            user_id bigint(20) unsigned NOT NULL,
+            entity_type varchar(64) NOT NULL,
+            entity_id varchar(191) NOT NULL,
+            action varchar(32) NOT NULL,
+            from_revision bigint(20) unsigned NOT NULL DEFAULT 0,
+            to_revision bigint(20) unsigned NOT NULL,
+            device_id varchar(191) NOT NULL DEFAULT '',
+            created_at datetime NOT NULL,
+            metadata longtext NULL,
+            PRIMARY KEY  (id),
+            KEY audit_entity (user_id, entity_type, entity_id, created_at),
+            KEY audit_action (action, created_at)
+        ) {$charset_collate};";
+        dbDelta($audit_sql);
 
         self::ensure_access_secret();
         self::ensure_private_root();
         self::ensure_dashboard_page();
         self::migrate_shared_state();
+        self::backfill_state_safety_columns();
+        self::seed_state_history();
         self::migrate_shared_files();
         update_option(self::VERSION_OPTION, self::VERSION, false);
         do_action('litespeed_purge_url', rest_url('kuajing/v1/session'));
@@ -80,6 +119,80 @@ final class FYZSXNB_Kuajing_Dashboard {
     private static function table_name() {
         global $wpdb;
         return $wpdb->prefix . self::TABLE_SUFFIX;
+    }
+
+    private static function state_versions_table_name() {
+        global $wpdb;
+        return $wpdb->prefix . self::STATE_VERSIONS_SUFFIX;
+    }
+
+    private static function audit_events_table_name() {
+        global $wpdb;
+        return $wpdb->prefix . self::AUDIT_EVENTS_SUFFIX;
+    }
+
+    private static function backfill_state_safety_columns() {
+        global $wpdb;
+        $wpdb->query('UPDATE ' . self::table_name() . ' SET revision = 1 WHERE revision IS NULL OR revision < 1');
+        $wpdb->query("UPDATE " . self::table_name() . " SET updated_by_device = '' WHERE updated_by_device IS NULL");
+    }
+
+    private static function seed_state_history() {
+        global $wpdb;
+        $rows = $wpdb->get_results(
+            'SELECT state_key, state_value, revision, updated_at FROM ' . self::table_name() . ' WHERE user_id = 0',
+            ARRAY_A
+        );
+        foreach ((array) $rows as $row) {
+            $revision = max(1, (int) ($row['revision'] ?? 1));
+            $key = (string) $row['state_key'];
+            $history_id = $wpdb->get_var($wpdb->prepare(
+                'SELECT id FROM ' . self::state_versions_table_name() . ' WHERE user_id = %d AND state_key = %s AND revision = %d',
+                0,
+                $key,
+                $revision
+            ));
+            if (null === $history_id) {
+                $wpdb->insert(
+                    self::state_versions_table_name(),
+                    array(
+                        'user_id' => 0,
+                        'state_key' => $key,
+                        'revision' => $revision,
+                        'payload' => (string) $row['state_value'],
+                        'created_at' => $row['updated_at'],
+                        'device_id' => '',
+                    ),
+                    array('%d', '%s', '%d', '%s', '%s', '%s')
+                );
+            }
+
+            $audit_id = $wpdb->get_var($wpdb->prepare(
+                'SELECT id FROM ' . self::audit_events_table_name() . ' WHERE user_id = %d AND entity_type = %s AND entity_id = %s AND action = %s AND to_revision = %d LIMIT 1',
+                0,
+                'state',
+                $key,
+                'CREATE',
+                $revision
+            ));
+            if (null === $audit_id) {
+                $wpdb->insert(
+                    self::audit_events_table_name(),
+                    array(
+                        'user_id' => 0,
+                        'entity_type' => 'state',
+                        'entity_id' => $key,
+                        'action' => 'CREATE',
+                        'from_revision' => 0,
+                        'to_revision' => $revision,
+                        'device_id' => '',
+                        'created_at' => $row['updated_at'],
+                        'metadata' => wp_json_encode(array('source' => 'migration')),
+                    ),
+                    array('%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s')
+                );
+            }
+        }
     }
 
     private static function ensure_access_secret() {
@@ -147,15 +260,15 @@ final class FYZSXNB_Kuajing_Dashboard {
     private static function migrate_shared_state() {
         global $wpdb;
         $rows = $wpdb->get_results(
-            'SELECT state_key, state_value, updated_at_ms, updated_at FROM ' . self::table_name() . ' WHERE user_id <> 0 ORDER BY updated_at_ms ASC',
+            'SELECT state_key, state_value, updated_at_ms, updated_at, revision, updated_by_device FROM ' . self::table_name() . ' WHERE user_id <> 0 ORDER BY updated_at_ms ASC',
             ARRAY_A
         );
         foreach ((array) $rows as $row) {
-            $existing = $wpdb->get_var($wpdb->prepare(
-                'SELECT updated_at_ms FROM ' . self::table_name() . ' WHERE user_id = 0 AND state_key = %s',
+            $existing = $wpdb->get_row($wpdb->prepare(
+                'SELECT updated_at_ms, revision, updated_by_device FROM ' . self::table_name() . ' WHERE user_id = 0 AND state_key = %s',
                 $row['state_key']
-            ));
-            if (null !== $existing && (int) $existing > (int) $row['updated_at_ms']) {
+            ), ARRAY_A);
+            if (null !== $existing && (int) $existing['updated_at_ms'] >= (int) $row['updated_at_ms']) {
                 continue;
             }
             $wpdb->replace(
@@ -166,8 +279,10 @@ final class FYZSXNB_Kuajing_Dashboard {
                     'state_value' => $row['state_value'],
                     'updated_at_ms' => (int) $row['updated_at_ms'],
                     'updated_at' => $row['updated_at'],
+                    'revision' => max(1, (int) ($row['revision'] ?? 1)),
+                    'updated_by_device' => sanitize_text_field((string) ($row['updated_by_device'] ?? '')),
                 ),
-                array('%d', '%s', '%s', '%d', '%s')
+                array('%d', '%s', '%s', '%d', '%s', '%d', '%s')
             );
         }
     }
@@ -406,6 +521,22 @@ final class FYZSXNB_Kuajing_Dashboard {
             ),
         ));
 
+        register_rest_route('kuajing/v1', '/state/history', array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(__CLASS__, 'get_state_history'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
+            ),
+        ));
+
+        register_rest_route('kuajing/v1', '/state/restore', array(
+            array(
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => array(__CLASS__, 'restore_state'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
+            ),
+        ));
+
         register_rest_route('kuajing/v1', '/files/(?P<namespace>[a-z0-9_-]+)', array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -425,21 +556,139 @@ final class FYZSXNB_Kuajing_Dashboard {
         ));
     }
 
+    private static function normalize_device_id($device_id) {
+        $device_id = sanitize_text_field((string) $device_id);
+        if (strlen($device_id) > 191) {
+            $device_id = substr($device_id, 0, 191);
+        }
+        return $device_id ?: 'unknown-device';
+    }
+
+    private static function decode_state_value($encoded) {
+        $value = json_decode((string) $encoded, true);
+        return JSON_ERROR_NONE === json_last_error() ? $value : null;
+    }
+
+    private static function current_state_row($key, $for_update = false) {
+        global $wpdb;
+        $sql = 'SELECT state_key, state_value, updated_at_ms, updated_at, revision, updated_by_device FROM ' . self::table_name() . ' WHERE user_id = %d AND state_key = %s';
+        if ($for_update) {
+            $sql .= ' FOR UPDATE';
+        }
+        return $wpdb->get_row($wpdb->prepare($sql, 0, $key), ARRAY_A);
+    }
+
+    private static function state_entry_from_row($row) {
+        return array(
+            'key' => (string) $row['state_key'],
+            'value' => self::decode_state_value($row['state_value']),
+            'revision' => max(1, (int) ($row['revision'] ?? 1)),
+            'updatedAt' => (int) ($row['updated_at_ms'] ?? 0),
+            'updatedByDevice' => (string) ($row['updated_by_device'] ?? ''),
+        );
+    }
+
+    private static function revision_conflict($key, $base_revision, $row) {
+        $server_revision = $row ? max(1, (int) ($row['revision'] ?? 1)) : 0;
+        return new WP_Error(
+            'revision_conflict',
+            'State changed on the server. Reload before saving again.',
+            array(
+                'status' => 409,
+                'key' => $key,
+                'clientRevision' => (int) $base_revision,
+                'serverRevision' => $server_revision,
+                'serverValue' => $row ? self::decode_state_value($row['state_value']) : null,
+                'serverUpdatedAt' => $row ? (int) ($row['updated_at_ms'] ?? 0) : 0,
+                'serverUpdatedByDevice' => $row ? (string) ($row['updated_by_device'] ?? '') : '',
+            )
+        );
+    }
+
+    private static function database_failure() {
+        return new WP_Error('state_storage_error', 'State storage failed. No changes were committed.', array('status' => 500));
+    }
+
+    private static function write_state_row($key, $value, $revision, $updated_at_ms, $updated_at, $device_id, $current_row) {
+        global $wpdb;
+        $data = array(
+            'user_id' => 0,
+            'state_key' => $key,
+            'state_value' => wp_json_encode($value),
+            'updated_at_ms' => (int) $updated_at_ms,
+            'updated_at' => $updated_at,
+            'revision' => (int) $revision,
+            'updated_by_device' => $device_id,
+        );
+        if ($current_row) {
+            return false !== $wpdb->update(
+                self::table_name(),
+                array(
+                    'state_value' => $data['state_value'],
+                    'updated_at_ms' => $data['updated_at_ms'],
+                    'updated_at' => $data['updated_at'],
+                    'revision' => $data['revision'],
+                    'updated_by_device' => $data['updated_by_device'],
+                ),
+                array('user_id' => 0, 'state_key' => $key),
+                array('%s', '%d', '%s', '%d', '%s'),
+                array('%d', '%s')
+            );
+        }
+        return false !== $wpdb->insert(
+            self::table_name(),
+            $data,
+            array('%d', '%s', '%s', '%d', '%s', '%d', '%s')
+        );
+    }
+
+    private static function record_state_version($key, $value, $revision, $created_at, $device_id) {
+        global $wpdb;
+        return false !== $wpdb->insert(
+            self::state_versions_table_name(),
+            array(
+                'user_id' => 0,
+                'state_key' => $key,
+                'revision' => (int) $revision,
+                'payload' => wp_json_encode($value),
+                'created_at' => $created_at,
+                'device_id' => $device_id,
+            ),
+            array('%d', '%s', '%d', '%s', '%s', '%s')
+        );
+    }
+
+    private static function record_audit_event($key, $action, $from_revision, $to_revision, $device_id, $metadata = array()) {
+        global $wpdb;
+        return false !== $wpdb->insert(
+            self::audit_events_table_name(),
+            array(
+                'user_id' => 0,
+                'entity_type' => 'state',
+                'entity_id' => $key,
+                'action' => $action,
+                'from_revision' => (int) $from_revision,
+                'to_revision' => (int) $to_revision,
+                'device_id' => $device_id,
+                'created_at' => current_time('mysql', true),
+                'metadata' => wp_json_encode($metadata),
+            ),
+            array('%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s')
+        );
+    }
+
     public static function get_state() {
         global $wpdb;
         $rows = $wpdb->get_results(
             $wpdb->prepare(
-                'SELECT state_key, state_value, updated_at_ms FROM ' . self::table_name() . ' WHERE user_id = %d',
+                'SELECT state_key, state_value, updated_at_ms, updated_at, revision, updated_by_device FROM ' . self::table_name() . ' WHERE user_id = %d',
                 0
             ),
             ARRAY_A
         );
         $result = array();
         foreach ($rows as $row) {
-            $result[$row['state_key']] = array(
-                'value' => json_decode($row['state_value'], true),
-                'updatedAt' => (int) $row['updated_at_ms'],
-            );
+            $result[$row['state_key']] = self::state_entry_from_row($row);
         }
         return rest_ensure_response($result);
     }
@@ -447,33 +696,210 @@ final class FYZSXNB_Kuajing_Dashboard {
     public static function save_state(WP_REST_Request $request) {
         global $wpdb;
         $body = $request->get_json_params();
+        $body = is_array($body) ? $body : array();
         $entries = isset($body['entries']) && is_array($body['entries'])
             ? $body['entries']
-            : array(($body['key'] ?? '') => array('value' => $body['value'] ?? null));
-        $saved = 0;
+            : (array_key_exists('key', $body)
+                ? array((string) $body['key'] => array(
+                    'value' => array_key_exists('value', $body) ? $body['value'] : null,
+                    'baseRevision' => $body['baseRevision'] ?? null,
+                    'deviceId' => $body['deviceId'] ?? '',
+                ))
+                : array());
 
-        foreach ($entries as $key => $entry) {
-            $key = sanitize_text_field((string) $key);
+        $operations = array();
+        $seen_keys = array();
+        foreach ($entries as $raw_key => $entry) {
+            $key = sanitize_text_field((string) $raw_key);
             if (!$key || strlen($key) > 191) {
-                continue;
+                return new WP_Error('invalid_state_key', 'State key is invalid.', array('status' => 400));
             }
-            $value = is_array($entry) && array_key_exists('value', $entry) ? $entry['value'] : $entry;
-            $updated_at_ms = (int) floor(microtime(true) * 1000);
-            $wpdb->replace(
-                self::table_name(),
-                array(
-                    'user_id' => 0,
-                    'state_key' => $key,
-                    'state_value' => wp_json_encode($value),
-                    'updated_at_ms' => $updated_at_ms,
-                    'updated_at' => current_time('mysql', true),
-                ),
-                array('%d', '%s', '%s', '%d', '%s')
+            if (isset($seen_keys[$key])) {
+                return new WP_Error('duplicate_state_key', 'Each state key may appear only once per request.', array('status' => 400, 'key' => $key));
+            }
+            $seen_keys[$key] = true;
+            if (!is_array($entry) || !array_key_exists('value', $entry) || !array_key_exists('baseRevision', $entry)) {
+                return new WP_Error('revision_required', 'baseRevision is required for every state write.', array('status' => 400, 'key' => $key));
+            }
+            $base_revision = (string) $entry['baseRevision'];
+            if (!preg_match('/^\d+$/', $base_revision)) {
+                return new WP_Error('invalid_revision', 'baseRevision must be a non-negative integer.', array('status' => 400, 'key' => $key));
+            }
+            $operations[] = array(
+                'key' => $key,
+                'value' => $entry['value'],
+                'baseRevision' => (int) $base_revision,
+                'deviceId' => self::normalize_device_id($entry['deviceId'] ?? ''),
             );
-            $saved++;
+        }
+
+        if (count($operations) > 100) {
+            return new WP_Error('too_many_state_entries', 'Too many state entries in one request.', array('status' => 413));
+        }
+        if (!$operations) {
+            return rest_ensure_response(array('success' => true, 'saved' => array()));
+        }
+
+        if (false === $wpdb->query('START TRANSACTION')) {
+            return self::database_failure();
+        }
+
+        $current_rows = array();
+        foreach ($operations as $operation) {
+            $key = $operation['key'];
+            $current_rows[$key] = self::current_state_row($key, true);
+            $current_revision = $current_rows[$key]
+                ? max(1, (int) ($current_rows[$key]['revision'] ?? 1))
+                : 0;
+            if ($operation['baseRevision'] !== $current_revision) {
+                $wpdb->query('ROLLBACK');
+                return self::revision_conflict($key, $operation['baseRevision'], $current_rows[$key]);
+            }
+        }
+
+        $saved = array();
+        $now_ms = (int) floor(microtime(true) * 1000);
+        $now_mysql = current_time('mysql', true);
+
+        foreach ($operations as $operation) {
+            $key = $operation['key'];
+            $current = $current_rows[$key];
+            $current_revision = $current ? max(1, (int) ($current['revision'] ?? 1)) : 0;
+            $revision = $current_revision + 1;
+            $updated_at_ms = $current
+                ? max($now_ms, ((int) ($current['updated_at_ms'] ?? 0)) + 1)
+                : $now_ms;
+            if (!self::write_state_row($key, $operation['value'], $revision, $updated_at_ms, $now_mysql, $operation['deviceId'], $current)) {
+                $wpdb->query('ROLLBACK');
+                return self::database_failure();
+            }
+            if (!self::record_state_version($key, $operation['value'], $revision, $now_mysql, $operation['deviceId'])) {
+                $wpdb->query('ROLLBACK');
+                return self::database_failure();
+            }
+            if (!self::record_audit_event(
+                $key,
+                $current ? 'UPDATE' : 'CREATE',
+                $current_revision,
+                $revision,
+                $operation['deviceId']
+            )) {
+                $wpdb->query('ROLLBACK');
+                return self::database_failure();
+            }
+            $saved[$key] = array(
+                'key' => $key,
+                'value' => $operation['value'],
+                'revision' => $revision,
+                'updatedAt' => $updated_at_ms,
+                'updatedByDevice' => $operation['deviceId'],
+            );
+        }
+
+        if (false === $wpdb->query('COMMIT')) {
+            $wpdb->query('ROLLBACK');
+            return self::database_failure();
         }
 
         return rest_ensure_response(array('success' => true, 'saved' => $saved));
+    }
+
+    public static function get_state_history(WP_REST_Request $request) {
+        global $wpdb;
+        $key = sanitize_text_field((string) $request->get_param('key'));
+        $limit = (int) $request->get_param('limit');
+        $limit = $limit > 0 ? min($limit, 200) : 100;
+        if ($key) {
+            $rows = $wpdb->get_results($wpdb->prepare(
+                'SELECT state_key, revision, payload, created_at, device_id FROM ' . self::state_versions_table_name() . ' WHERE user_id = %d AND state_key = %s ORDER BY revision ASC LIMIT %d',
+                0,
+                $key,
+                $limit
+            ), ARRAY_A);
+        } else {
+            $rows = $wpdb->get_results($wpdb->prepare(
+                'SELECT state_key, revision, payload, created_at, device_id FROM ' . self::state_versions_table_name() . ' WHERE user_id = %d ORDER BY state_key ASC, revision ASC LIMIT %d',
+                0,
+                $limit
+            ), ARRAY_A);
+        }
+        $history = array();
+        foreach ((array) $rows as $row) {
+            $history[] = array(
+                'key' => (string) $row['state_key'],
+                'revision' => (int) $row['revision'],
+                'value' => self::decode_state_value($row['payload']),
+                'createdAt' => (string) $row['created_at'],
+                'deviceId' => (string) $row['device_id'],
+            );
+        }
+        return rest_ensure_response(array('history' => $history));
+    }
+
+    public static function restore_state(WP_REST_Request $request) {
+        global $wpdb;
+        $body = $request->get_json_params();
+        $body = is_array($body) ? $body : array();
+        $key = sanitize_text_field((string) ($body['key'] ?? ''));
+        if (!$key || strlen($key) > 191) {
+            return new WP_Error('invalid_state_key', 'State key is invalid.', array('status' => 400));
+        }
+        if (!array_key_exists('revision', $body) || !array_key_exists('baseRevision', $body)) {
+            return new WP_Error('revision_required', 'revision and baseRevision are required for restore.', array('status' => 400, 'key' => $key));
+        }
+        $target_revision = (string) $body['revision'];
+        $base_revision = (string) $body['baseRevision'];
+        if (!preg_match('/^\d+$/', $target_revision) || (int) $target_revision < 1 || !preg_match('/^\d+$/', $base_revision)) {
+            return new WP_Error('invalid_revision', 'revision and baseRevision must be non-negative integers.', array('status' => 400, 'key' => $key));
+        }
+        $device_id = self::normalize_device_id($body['deviceId'] ?? '');
+
+        if (false === $wpdb->query('START TRANSACTION')) {
+            return self::database_failure();
+        }
+        $current = self::current_state_row($key, true);
+        $current_revision = $current ? max(1, (int) ($current['revision'] ?? 1)) : 0;
+        if ((int) $base_revision !== $current_revision) {
+            $wpdb->query('ROLLBACK');
+            return self::revision_conflict($key, (int) $base_revision, $current);
+        }
+
+        $version = $wpdb->get_row($wpdb->prepare(
+            'SELECT payload FROM ' . self::state_versions_table_name() . ' WHERE user_id = %d AND state_key = %s AND revision = %d',
+            0,
+            $key,
+            (int) $target_revision
+        ), ARRAY_A);
+        if (!$version) {
+            $wpdb->query('ROLLBACK');
+            return new WP_Error('history_not_found', 'Requested state history revision was not found.', array('status' => 404, 'key' => $key, 'revision' => (int) $target_revision));
+        }
+        $value = self::decode_state_value($version['payload']);
+        $new_revision = $current_revision + 1;
+        $now_ms = $current ? max((int) floor(microtime(true) * 1000), ((int) ($current['updated_at_ms'] ?? 0)) + 1) : (int) floor(microtime(true) * 1000);
+        $now_mysql = current_time('mysql', true);
+        if (!self::write_state_row($key, $value, $new_revision, $now_ms, $now_mysql, $device_id, $current)
+            || !self::record_state_version($key, $value, $new_revision, $now_mysql, $device_id)
+            || !self::record_audit_event($key, 'RESTORE', $current_revision, $new_revision, $device_id, array('restoredRevision' => (int) $target_revision))) {
+            $wpdb->query('ROLLBACK');
+            return self::database_failure();
+        }
+        if (false === $wpdb->query('COMMIT')) {
+            $wpdb->query('ROLLBACK');
+            return self::database_failure();
+        }
+
+        return rest_ensure_response(array(
+            'success' => true,
+            'restored' => array(
+                'key' => $key,
+                'value' => $value,
+                'revision' => $new_revision,
+                'updatedAt' => $now_ms,
+                'updatedByDevice' => $device_id,
+            ),
+            'historyRevision' => (int) $target_revision,
+        ));
     }
 
     private static function file_response($namespace, $path) {

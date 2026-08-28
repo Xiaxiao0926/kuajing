@@ -6,6 +6,7 @@
 import { Upload, GitBranch, PanelLeft, PanelLeftClose } from 'lucide-react'
 import { useRef } from 'react'
 import { ROADMAP_PHASES } from '../../data/roadmap'
+import PersistenceStatus from './PersistenceStatus'
 
 const stripEmoji = (s) => String(s || '').replace(/^[^\u4e00-\u9fa5A-Za-z]+/, '').trim()
 
@@ -72,6 +73,7 @@ export default function WorkspaceTopbar({
       </div>
 
       <div className="ml-auto flex items-center gap-2">
+        <PersistenceStatus />
         <label className="flex h-8 cursor-pointer items-center gap-1.5 rounded-md border border-workspace-border-strong bg-workspace-surface px-3 text-[13px] font-medium text-workspace-text hover:bg-workspace-surface-subtle">
           <Upload className="h-3.5 w-3.5" />
           {loading ? '解析中…' : '更新数据'}
