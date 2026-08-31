@@ -1,16 +1,18 @@
-name: Deploy Kuajing dashboard
+name: Verify / Deploy Kuajing dashboard
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - "dev/**"
   workflow_dispatch:
 
 concurrency:
-  group: kuajing-production
+  group: kuajing-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  test-build-deploy:
+  verify:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,8 +37,8 @@ jobs:
           npm ci
           npm --prefix ozon-react ci
 
-      - name: Install deployment tools
-        run: sudo apt-get update && sudo apt-get install -y lftp php-cli
+      - name: Install PHP lint tool
+        run: sudo apt-get update && sudo apt-get install -y php-cli
 
       - name: Verify business and persistence behavior
         run: |
@@ -54,7 +56,7 @@ jobs:
       - name: Verify scoring production assets (P0 guard)
         run: node scripts/verify-scoring-build.js
 
-      - name: Stage WordPress plugin
+      - name: Stage verified WordPress package
         run: |
           rm -rf ozon-react/dist/data
           mkdir -p deploy/kuajing-persistence
@@ -62,6 +64,30 @@ jobs:
           cp wordpress/kuajing-persistence/README.md deploy/kuajing-persistence/
           cp -R ozon-react/dist deploy/kuajing-persistence/dist
           printf '%s\n' "${GITHUB_SHA}" > deploy/kuajing-persistence/DEPLOYED_COMMIT
+
+      - name: Upload verified package
+        uses: actions/upload-artifact@v4
+        with:
+          name: kuajing-production-package
+          path: deploy/kuajing-persistence
+          if-no-files-found: error
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Download verified package
+        uses: actions/download-artifact@v4
+        with:
+          name: kuajing-production-package
+          path: deploy/kuajing-persistence
+
+      - name: Install FTP deployment tool
+        run: sudo apt-get update && sudo apt-get install -y lftp
 
       - name: Deploy plugin to Hostinger
         timeout-minutes: 5

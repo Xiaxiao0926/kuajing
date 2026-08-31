@@ -5,6 +5,7 @@ let _syncPromise = null
 const serverKeys = new Set()
 const metadata = new Map()
 const pending = new Map()
+const staleLocal = new Map()
 const statusListeners = new Set()
 let flushTimer = null
 let persistenceStatus = { state: 'idle', key: null, details: null, updatedAt: 0 }
@@ -214,7 +215,16 @@ export async function syncFromServer() {
 
         const localPending = pending.get(key)
         if (localPending) {
-          pending.set(key, { ...localPending, baseRevision: entry.revision, deviceId: localPending.deviceId || getDeviceId() })
+          if (localPending.baseRevision !== entry.revision) {
+            publishStatus(PersistenceState.CONFLICT, {
+              key,
+              clientRevision: localPending.baseRevision,
+              serverRevision: entry.revision,
+              serverValue: entry.value,
+              serverUpdatedAt: entry.updatedAt,
+              serverUpdatedByDevice: entry.updatedByDevice,
+            })
+          }
           return
         }
 
@@ -222,7 +232,25 @@ export async function syncFromServer() {
         const localUpdatedAt = getLocalUpdatedAt(key)
         if (localRaw !== null && localUpdatedAt > entry.updatedAt) {
           const localValue = (() => { try { return JSON.parse(localRaw) } catch { return localRaw } })()
-          pending.set(key, { ...pendingEntry(key, localValue, localUpdatedAt), baseRevision: entry.revision })
+          staleLocal.set(key, { value: localValue, updatedAt: localUpdatedAt })
+          try {
+            if (entry.value === null) {
+              localStorage.removeItem(key)
+              localStorage.setItem(updatedKey(key), String(entry.updatedAt))
+            } else {
+              setLocalValue(key, entry.value, entry.updatedAt)
+            }
+          } catch {}
+          publishStatus(PersistenceState.CONFLICT, {
+            key,
+            clientRevision: null,
+            serverRevision: entry.revision,
+            serverValue: entry.value,
+            serverUpdatedAt: entry.updatedAt,
+            serverUpdatedByDevice: entry.updatedByDevice,
+            localOnly: true,
+            localUpdatedAt,
+          })
           return
         }
         try {
@@ -260,12 +288,14 @@ export function persistGet(key) {
 
 export function persistSet(key, value) {
   const updatedAt = Date.now()
+  staleLocal.delete(key)
   try { setLocalValue(key, value, updatedAt) } catch {}
   pending.set(key, pendingEntry(key, value, updatedAt))
   scheduleFlush()
 }
 
 export function persistRemove(key) {
+  staleLocal.delete(key)
   try { localStorage.removeItem(key) } catch {}
   try { localStorage.removeItem(updatedKey(key)) } catch {}
   pending.set(key, pendingEntry(key, null))
@@ -286,6 +316,7 @@ export async function reloadServerValue(key) {
   const response = await serverRequest()
   if (!response) return null
   const data = await response.json()
+  staleLocal.delete(key)
   const rawEntry = data?.[key]
   pending.delete(key)
   if (!rawEntry) {
@@ -361,7 +392,7 @@ export async function restoreServerValue(key, revision, baseRevision = metadataF
 }
 
 export async function copyPendingValue(key) {
-  const entry = pending.get(key)
+  const entry = pending.get(key) || staleLocal.get(key)
   if (!entry) return false
   const text = typeof entry.value === 'string' ? entry.value : JSON.stringify(entry.value, null, 2)
   if (globalThis.navigator?.clipboard?.writeText) {

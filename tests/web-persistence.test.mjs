@@ -19,6 +19,8 @@ globalThis.localStorage = new MemoryStorage()
 const requests = []
 const serverState = new Map([
   ['server-only', { value: { restored: true }, revision: 4, updatedAt: 2000, updatedByDevice: 'seed-device' }],
+  ['pending-before-sync', { value: [{ id: 'SERVER_CURRENT' }], revision: 3, updatedAt: 1000, updatedByDevice: 'server-device' }],
+  ['orders', { value: [{ id: 'SERVER_NEW' }], revision: 4, updatedAt: 1000, updatedByDevice: 'server-device' }],
 ])
 globalThis.fetch = async (url, options = {}) => {
   requests.push({ url, options })
@@ -59,13 +61,32 @@ globalThis.fetch = async (url, options = {}) => {
   })
 }
 
+localStorage.setItem('orders', JSON.stringify([{ id: 'LOCAL_OLD' }]))
+localStorage.setItem('__kuajing_updated__:orders', '9000')
 const persistence = await import('../ozon-react/src/utils/persist.js')
 
+persistence.persistSet('pending-before-sync', [{ id: 'LOCAL_EDIT' }])
+assert.equal(persistence.getPendingPersistence('pending-before-sync').baseRevision, 0)
 await persistence.syncFromServer()
 assert.deepEqual(persistence.persistGet('server-only'), { restored: true })
 assert.equal(persistence.getPersistenceMetadata('server-only').revision, 4)
+assert.deepEqual(persistence.persistGet('orders'), [{ id: 'SERVER_NEW' }])
+assert.equal(persistence.getPendingPersistence('orders'), null)
+assert.equal(persistence.getPersistenceStatus().state, 'conflict')
+assert.equal(persistence.getPersistenceStatus().details.localOnly, true)
+assert.deepEqual(await persistence.copyPendingValue('orders'), JSON.stringify([{ id: 'LOCAL_OLD' }], null, 2))
 assert.match(requests[0].url, /^https:\/\/example\.test\/wp-json\/kuajing\/v1\/state\?_=[0-9]+$/)
 assert.equal(requests[0].options.method, undefined)
+
+await persistence.flushPersistence()
+const stalePendingWrite = requests.find(request => {
+  if (request.options.method !== 'POST') return false
+  return Boolean(JSON.parse(request.options.body).entries['pending-before-sync'])
+})
+assert.ok(stalePendingWrite, 'expected the pre-sync edit to be attempted with its original base revision')
+assert.equal(JSON.parse(stalePendingWrite.options.body).entries['pending-before-sync'].baseRevision, 0)
+assert.deepEqual(serverState.get('pending-before-sync').value, [{ id: 'SERVER_CURRENT' }])
+await persistence.reloadServerValue('pending-before-sync')
 
 localStorage.setItem('legacy-local', JSON.stringify({ migrated: true }))
 assert.deepEqual(persistence.persistGet('legacy-local'), { migrated: true })
@@ -90,26 +111,27 @@ assert.equal(write.options.headers.get('X-WP-Nonce'), 'test-nonce')
 assert.equal(write.options.credentials, 'same-origin')
 const payload = JSON.parse(write.options.body)
 assert.deepEqual(payload.entries.orders.value, [{ id: 1 }])
-assert.equal(payload.entries.orders.baseRevision, 0)
+assert.equal(payload.entries.orders.baseRevision, 4)
 assert.ok(payload.entries.orders.deviceId)
-assert.equal(persistence.getPersistenceMetadata('orders').revision, 1)
+assert.equal(persistence.getPersistenceMetadata('orders').revision, 5)
 
 persistence.persistRemove('orders')
 await persistence.flushPersistence()
 const deleteWrite = requests.filter(request => request.options.method === 'POST').at(-1)
 assert.equal(JSON.parse(deleteWrite.options.body).entries.orders.value, null)
-assert.equal(JSON.parse(deleteWrite.options.body).entries.orders.baseRevision, 1)
-assert.equal(persistence.getPersistenceMetadata('orders').revision, 2)
+assert.equal(JSON.parse(deleteWrite.options.body).entries.orders.baseRevision, 5)
+assert.equal(persistence.getPersistenceMetadata('orders').revision, 6)
 
-serverState.set('orders', { value: [{ id: 99 }], revision: 3, updatedAt: 4000, updatedByDevice: 'other-device' })
+serverState.set('orders', { value: [{ id: 99 }], revision: 7, updatedAt: 4000, updatedByDevice: 'other-device' })
 persistence.persistSet('orders', [{ id: 2 }])
 await persistence.flushPersistence()
 assert.equal(persistence.getPersistenceStatus().state, 'conflict')
-assert.equal(persistence.getPersistenceStatus().details.serverRevision, 3)
-assert.equal(persistence.getPendingPersistence('orders').baseRevision, 2)
+assert.equal(persistence.getPersistenceStatus().details.serverRevision, 7)
+assert.equal(persistence.getPendingPersistence('orders').baseRevision, 6)
+assert.match(await persistence.copyPendingValue('orders'), /"id": 2/)
 await persistence.reloadServerValue('orders')
 assert.deepEqual(persistence.persistGet('orders'), [{ id: 99 }])
-assert.equal(persistence.getPersistenceMetadata('orders').revision, 3)
+assert.equal(persistence.getPersistenceMetadata('orders').revision, 7)
 assert.equal(persistence.getPendingPersistence('orders'), null)
 
 console.log('web persistence tests passed')
