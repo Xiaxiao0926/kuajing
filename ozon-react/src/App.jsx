@@ -32,6 +32,7 @@ import LoadingState from './components/ui/LoadingState'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
+const PurityPipelinePage = lazy(() => import('./components/PurityPipelinePage'))
 const OzonCalc = lazy(() => import('./components/OzonCalc'))
 const FragrancePricing = lazy(() => import('./components/FragrancePricing'))
 const ListingContent = lazy(() => import('./components/ListingContent'))
@@ -46,6 +47,7 @@ const DATA_DIR = getDataUrl().replace(/\/$/, '')
 // 页面错误边界的标题映射（仅展示用）
 function pageLabelForNode(nodeId) {
   if (nodeId === '__scoring__') return '选品评分'
+  if (nodeId === '__purity_analysis__') return '选品市场分析'
   if (nodeId === '__t6_candidates__') return '候选池'
   if (nodeId === '__t6_projects__') return 'SKU 项目'
   if (nodeId === '__t6_project_detail__') return '项目详情'
@@ -222,6 +224,13 @@ function DashboardApp() {
     if (activeNode === '__scoring__') {
       return <ProductScoringSection />
     }
+    if (activeNode === '__purity_analysis__') {
+      return (
+        <Suspense fallback={<LazyFallback />}>
+          <PurityPipelinePage data={data} />
+        </Suspense>
+      )
+    }
     if ((activeNode === '__t6_candidates__' || activeNode === '__t6_projects__' || activeNode === '__t6_project_detail__') && !serverSynced) {
       // T6-1 hardening：server sync 完成前不挂载 T6 主数据页（防止 useMemo 先读未同步的旧 localStorage）
       return <LoadingState text="正在同步项目数据…" />
@@ -357,6 +366,7 @@ function DashboardApp() {
               className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-morandi-text"
             >
               <option value="__project_flow__">项目流程总览</option>
+              <option value="__purity_analysis__">选品市场分析</option>
               {ROADMAP_PHASES.map((phase) => (
                 <optgroup key={phase.id} label={phase.title}>
                   {phase.nodes.map((node) => (

@@ -5,6 +5,24 @@
 
 ---
 
+## 2026-09-01（选品市场分析·纯度流水线，模块 2/3/4/5 一期，本地完成待部署）
+
+> 完整交接归档见《流程任务书-20260901-选品市场分析纯度流水线.md》。
+
+### feat — 纯度流水线引擎 + 「选品市场分析」页面
+- **模块链**（`ozon-react/src/utils/marketAnalysis/`）：specParser（标题→数量+单位，пар×2/мл/кг 归一，西里尔边界 `(?![а-яёa-z0-9])` 替代 `\b`，排除尺寸对/型号/词干变体陷阱）→ purityFilter（类目投票检测 + A/B/C/UNKNOWN 可配置分层，UNKNOWN 独立成桶禁止归 C）→ priceBands（标准化可比价五等分位带 × SKU占比/销量占比/销售额占比三维，A 默认/A+B 可切，C 与 UNKNOWN 排除）→ credibility（覆盖率 + mulberry32 种子化 50 SKU 抽检 + 核验准确率/异常清单）。
+- **规则引擎唯一事实源**：`config/market_analysis.json`（5 类目：发膜/护发喷雾/手套/枕头/吹风机），sync-config 新增 validateMarketAnalysis fail-close 校验。
+- **UI**：新页面 `PurityPipelinePage.jsx`（桌面侧栏与移动端「当前步骤」均可进入，懒加载 chunk 34.56 kB）；抽检核验手动保存（`purity-checks-v1`）+ 生成记录日志（`purity-sample-history-v1`）。
+- **测试**：specParser 36 + purityFilter 45 + pipeline.e2e 49（真实 xlsx 端到端 + 移动端入口契约）= 130 断言，`test:market` 入 npm test 主链；真实数据验证：发膜 380 行覆盖率 82.9%（A=296/B=9/C=10/UNKNOWN=65）、手套 1000 行覆盖率 79.8%（A=774/B=12/C=12/UNKNOWN=202）。
+
+### fix — priceBands 分箱错位（e2e 抓出）
+- 初版分箱边界取自排序数组、成员聚合切未排序数组 → 中位价/占比与价格区间错位（手套带1 区间 ₽0.5–1.0 中位却是 ₽31.2）。修复为整行排序后统一分箱；e2e 增守门断言（中位价∈区间、区间单调不重叠）；排除明细键 `A_no_price`→`no_price`。
+
+### 口径冻结（用户决策，禁止回退）
+- 三维名称固定 SKU占比/销量占比/销售额占比，无 GMV 字段禁写 GMV%；UNKNOWN 禁止自动归 C；批次摊销（模块1）二期独立进成本链。
+
+---
+
 ## 2026-08-26（CEL 资费表 V7.24 + 每日汇率自动更新，已上线 fyzsxnb.com）
 
 > 完整交接归档见《流程任务书-20260826-CEL费率V724与每日汇率自动更新.md》。

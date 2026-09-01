@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "updated_at": "2026-09-01",
+  "source": "竞品纯度规则引擎（可配置；基于 2026-05/08 真实 Ozon 热销表标题侦察校准）",
+  "notes": [
+    "分类纪律（用户冻结口径）：UNKNOWN 独立成桶，规格解析失败的商品禁止自动归入 C（禁止假精确）。",
+    "价格带三维名称固定为 SKU占比 / 销量占比 / 销售额占比，不使用 GMV%（现有数据无 GMV 字段）。",
+    "价格带进入规则：A=默认口径，A+B=可切换参考口径，C 与 UNKNOWN 一律排除。",
+    "tier_a.any 命中且 tier_a.none 未命中 → A；tier_a.none 命中（如 набор 套装）降为 B；仅 tier_b.any 命中 → B；其余已解析规格 → C。",
+    "pair_handling=convert：пар×2 折算为只（如手套）；exclude：目标按只比较而标题为双且品类不允许换算 → 默认 C 排除。",
+    "implicit_singular=true：单数名词无数量词时推断 qty=1（俄语词法推断，非默认值填充，可追溯）；复数无数量 → UNKNOWN。"
+  ],
+  "categories": {
+    "hair_mask": {
+      "label": "发膜/发用护理膏",
+      "detect_keywords": ["маска"],
+      "target_basis": "volume_ml",
+      "pair_handling": "exclude",
+      "implicit_singular": false,
+      "tier_a": { "any": ["маска"], "none": ["набор"] },
+      "tier_b": { "any": ["шампунь", "бальзам", "кондиционер", "спрей", "сыворотка", "набор", "ампул"] },
+      "normalize": { "per": 100, "label": "每100ml" }
+    },
+    "hair_spray": {
+      "label": "护发喷雾/免洗护理",
+      "detect_keywords": ["спрей"],
+      "target_basis": "volume_ml",
+      "pair_handling": "exclude",
+      "implicit_singular": false,
+      "tier_a": { "any": ["спрей"], "none": ["набор"] },
+      "tier_b": { "any": ["маска", "шампунь", "бальзам", "лосьон", "сыворотка", "набор"] },
+      "normalize": { "per": 100, "label": "每100ml" }
+    },
+    "gloves": {
+      "label": "家务/劳保手套",
+      "detect_keywords": ["перчатк"],
+      "target_basis": "pcs",
+      "pair_handling": "convert",
+      "implicit_singular": false,
+      "tier_a": { "any": ["перчатк"], "none": [] },
+      "tier_b": { "any": ["рукавиц", "варежк", "митенк"] },
+      "normalize": { "per": 100, "label": "每100只" }
+    },
+    "pillows": {
+      "label": "枕头/矫形枕",
+      "detect_keywords": ["подушк"],
+      "target_basis": "pcs",
+      "pair_handling": "exclude",
+      "implicit_singular": true,
+      "singular_forms": ["подушка", "подушку", "подушке", "подушкой"],
+      "plural_forms": ["подушки", "подушек", "подушкам"],
+      "tier_a": { "any": ["подушк"], "none": ["наволоч", "набор"] },
+      "tier_b": { "any": ["наволоч", "наматрасник", "набор"] },
+      "normalize": { "per": 100, "label": "每100只" }
+    },
+    "hair_dryer": {
+      "label": "吹风机/造型器",
+      "detect_keywords": ["фен", "стайлер", "воздуходувк", "сушилк"],
+      "target_basis": "pcs",
+      "pair_handling": "exclude",
+      "implicit_singular": true,
+      "singular_forms": ["фен", "стайлер", "сушилка", "воздуходувка", "воздуходувку"],
+      "plural_forms": ["фены", "стайлеры", "фен-стайлеры"],
+      "tier_a": { "any": ["фен", "стайлер", "сушилк"], "none": [] },
+      "tier_b": { "any": ["воздуходувк", "насадк"] },
+      "normalize": { "per": 1, "label": "每只" }
+    }
+  },
+  "sampling": { "default_size": 50, "min_share_for_detection": 0.3 }
+}

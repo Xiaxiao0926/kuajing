@@ -24,6 +24,7 @@ const SOURCES = [
   { file: 'settings.json', out: 'settings.js' },
   { file: 'ozon_channels.json', out: 'ozon_channels.js' },
   { file: 'scoring_rules.json', out: 'scoring_rules.js', frozen: true },
+  { file: 'market_analysis.json', out: 'market_analysis.js' },
 ];
 
 function fail(msg) {
@@ -105,6 +106,31 @@ function validateScoringRules(data) {
   if (Math.abs(weightSum - 100) > 1e-9) fail(`scoring_rules.json 六维权重之和必须 = 100（实际 ${weightSum}）`);
 }
 
+// 竞品纯度规则引擎：类目配置必须自洽（口径枚举、归一参数、分层关键词齐全）
+function validateMarketAnalysis(data) {
+  const BASES = ['pcs', 'volume_ml', 'weight_g'];
+  const PAIR = ['convert', 'exclude'];
+  if (!data.categories || typeof data.categories !== 'object' || Object.keys(data.categories).length === 0) {
+    fail('market_analysis.json categories 必须为非空对象');
+  }
+  for (const [key, c] of Object.entries(data.categories)) {
+    if (!c.label || typeof c.label !== 'string') fail(`market_analysis.json ${key} 缺少 label`);
+    if (!Array.isArray(c.detect_keywords) || c.detect_keywords.length === 0) fail(`${key} detect_keywords 必须为非空数组`);
+    if (!BASES.includes(c.target_basis)) fail(`${key} target_basis 必须为 ${BASES.join('/')}`);
+    if (!PAIR.includes(c.pair_handling)) fail(`${key} pair_handling 必须为 ${PAIR.join('/')}`);
+    if (!c.normalize || typeof c.normalize.per !== 'number' || c.normalize.per <= 0 || !c.normalize.label) {
+      fail(`${key} normalize 必须含正数 per 与 label`);
+    }
+    if (typeof c.implicit_singular !== 'boolean') fail(`${key} implicit_singular 必须为布尔`);
+    if (c.implicit_singular && (!Array.isArray(c.singular_forms) || c.singular_forms.length === 0)) {
+      fail(`${key} implicit_singular=true 时 singular_forms 必须为非空数组`);
+    }
+    for (const t of ['tier_a', 'tier_b']) {
+      if (!c[t] || !Array.isArray(c[t].any)) fail(`${key} ${t}.any 必须为数组`);
+    }
+  }
+}
+
 function main() {
   if (!fs.existsSync(CONFIG_DIR)) fail(`config 目录不存在: ${CONFIG_DIR}`);
   fs.mkdirSync(GENERATED_DIR, { recursive: true });
@@ -124,6 +150,7 @@ function main() {
     if (file === 'settings.json') validateSettings(data);
     if (file === 'ozon_channels.json') validateChannels(data);
     if (file === 'scoring_rules.json') validateScoringRules(data);
+    if (file === 'market_analysis.json') validateMarketAnalysis(data);
     payloads.push({ out, data, frozen });
   }
 
