@@ -63,6 +63,8 @@ jobs:
           cp wordpress/kuajing-persistence/kuajing-persistence.php deploy/kuajing-persistence/
           cp wordpress/kuajing-persistence/README.md deploy/kuajing-persistence/
           cp -R ozon-react/dist deploy/kuajing-persistence/dist
+          cp ozon-react/dist/.vite/manifest.json deploy/kuajing-persistence/dist/manifest.json
+          test -s deploy/kuajing-persistence/dist/manifest.json
           printf '%s\n' "${GITHUB_SHA}" > deploy/kuajing-persistence/DEPLOYED_COMMIT
 
       - name: Upload verified package

@@ -22,6 +22,8 @@ for (const marker of [
   assert.match(plugin, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `missing PHP contract marker: ${marker}`)
 }
 assert.doesNotMatch(plugin, /DROP\s+TABLE/i, 'state safety migration must not drop tables')
+assert.match(plugin, /dist\/manifest\.json/, 'runtime must prefer the deploy-safe visible manifest')
+assert.match(plugin, /dist\/\.vite\/manifest\.json/, 'runtime must retain compatibility with existing Vite builds')
 
 class StateSafetyModel {
   constructor() {

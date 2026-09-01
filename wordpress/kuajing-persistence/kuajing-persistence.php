@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.3.0
+ * Version: 0.3.1
  * Author: FYZSXNB
  */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.3.0';
+    private const VERSION = '0.3.1';
     private const TABLE_SUFFIX = 'kuajing_state';
     private const STATE_VERSIONS_SUFFIX = 'kuajing_state_versions';
     private const AUDIT_EVENTS_SUFFIX = 'kuajing_audit_events';
@@ -423,8 +423,15 @@ final class FYZSXNB_Kuajing_Dashboard {
             define('DONOTCACHEPAGE', true);
         }
 
-        $manifest_path = plugin_dir_path(__FILE__) . 'dist/.vite/manifest.json';
-        if (!file_exists($manifest_path)) {
+        $manifest_path = null;
+        foreach (array('dist/manifest.json', 'dist/.vite/manifest.json') as $relative_path) {
+            $candidate = plugin_dir_path(__FILE__) . $relative_path;
+            if (file_exists($candidate)) {
+                $manifest_path = $candidate;
+                break;
+            }
+        }
+        if (!$manifest_path) {
             return '<p>Kuajing dashboard assets are not deployed.</p>';
         }
 
