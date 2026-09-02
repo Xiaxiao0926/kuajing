@@ -14,6 +14,7 @@ import ProjectFlow from './components/ProjectFlow'
 import * as XLSX from 'xlsx'
 import { cleanData, addPriceCategory, calculateKPIs } from './utils/dataProcessor'
 import { syncFromServer, persistGet, persistSet, flushPersistence } from './utils/persist'
+import { flushQueuedServerFiles } from './utils/serverFiles.js'
 import { getDataUrl, requiresAccessSession } from './utils/runtime.js'
 import { checkAccessSession, unlockAccess } from './utils/access.js'
 import { refreshDailyRate } from './utils/exchangeRate.js'
@@ -97,6 +98,7 @@ function DashboardApp() {
       const saved = persistGet('roadmap-statuses')
       if (saved && Object.keys(saved).length > 0) setNodeStatuses(saved)
       setServerSynced(true)
+      flushQueuedServerFiles().catch(() => {})
     }).catch(() => setServerSynced(true))
   }, [])
 

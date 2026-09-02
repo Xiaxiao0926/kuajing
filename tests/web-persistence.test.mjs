@@ -22,6 +22,9 @@ const serverState = new Map([
   ['server-only', { value: { restored: true }, revision: 4, updatedAt: 2000, updatedByDevice: 'seed-device' }],
   ['pending-before-sync', { value: [{ id: 'SERVER_CURRENT' }], revision: 3, updatedAt: 1000, updatedByDevice: 'server-device' }],
   ['orders', { value: [{ id: 'SERVER_NEW' }], revision: 4, updatedAt: 1000, updatedByDevice: 'server-device' }],
+  ['clock-skew', { value: { source: 'SERVER' }, revision: 2, updatedAt: 1000, updatedByDevice: 'server-device' }],
+  ['offline-edit', { value: { source: 'SERVER' }, revision: 2, updatedAt: 1000, updatedByDevice: 'server-device' }],
+  ['offline-delete', { value: { source: 'SERVER' }, revision: 1, updatedAt: 1000, updatedByDevice: 'server-device' }],
 ])
 globalThis.fetch = async (url, options = {}) => {
   requests.push({ url, options })
@@ -82,6 +85,17 @@ globalThis.fetch = async (url, options = {}) => {
 
 localStorage.setItem('orders', JSON.stringify([{ id: 'LOCAL_OLD' }]))
 localStorage.setItem('__kuajing_updated__:orders', '9000')
+localStorage.setItem('clock-skew', JSON.stringify({ source: 'LOCAL_CACHE' }))
+localStorage.setItem('__kuajing_updated__:clock-skew', '9999999999999')
+localStorage.setItem('__kuajing_revision__:clock-skew', '2')
+localStorage.setItem('offline-edit', JSON.stringify({ source: 'OFFLINE_EDIT' }))
+localStorage.setItem('__kuajing_updated__:offline-edit', '9000')
+localStorage.setItem('__kuajing_revision__:offline-edit', '2')
+localStorage.setItem('__kuajing_dirty__:offline-edit', '1')
+localStorage.setItem('__kuajing_updated__:offline-delete', '9000')
+localStorage.setItem('__kuajing_revision__:offline-delete', '1')
+localStorage.setItem('__kuajing_dirty__:offline-delete', '1')
+localStorage.setItem('__kuajing_deleted__:offline-delete', '1')
 const persistence = await import('../ozon-react/src/utils/persist.js')
 
 persistence.persistSet('pending-before-sync', [{ id: 'LOCAL_EDIT' }])
@@ -89,6 +103,12 @@ assert.equal(persistence.getPendingPersistence('pending-before-sync').baseRevisi
 await persistence.syncFromServer()
 assert.deepEqual(persistence.persistGet('server-only'), { restored: true })
 assert.equal(persistence.getPersistenceMetadata('server-only').revision, 4)
+assert.deepEqual(persistence.persistGet('clock-skew'), { source: 'SERVER' }, 'clock skew without a dirty marker must not create a conflict')
+assert.equal(serverBackups.some(backup => backup.key === 'clock-skew'), false)
+assert.equal(persistence.getPendingPersistence('offline-edit').baseRevision, 2)
+assert.deepEqual(persistence.getPendingPersistence('offline-edit').value, { source: 'OFFLINE_EDIT' })
+assert.equal(persistence.getPendingPersistence('offline-delete').baseRevision, 1)
+assert.equal(persistence.getPendingPersistence('offline-delete').value, null)
 assert.deepEqual(persistence.persistGet('orders'), [{ id: 'SERVER_NEW' }])
 assert.equal(persistence.getPendingPersistence('orders'), null)
 assert.equal(persistence.getPersistenceStatus().state, 'conflict')
@@ -109,6 +129,8 @@ assert.ok(stalePendingWrite, 'expected the pre-sync edit to be attempted with it
 assert.equal(JSON.parse(stalePendingWrite.options.body).entries['pending-before-sync'].baseRevision, 0)
 assert.deepEqual(serverState.get('pending-before-sync').value, [{ id: 'SERVER_CURRENT' }])
 assert.deepEqual(serverBackups.find(backup => backup.key === 'pending-before-sync')?.value, [{ id: 'LOCAL_EDIT' }])
+assert.deepEqual(serverState.get('offline-edit').value, { source: 'OFFLINE_EDIT' }, 'dirty state must resume after reload')
+assert.equal(serverState.get('offline-delete').value, null, 'an offline deletion tombstone must resume after reload')
 await persistence.reloadServerValue('pending-before-sync')
 
 localStorage.setItem('legacy-local', JSON.stringify({ migrated: true }))
@@ -132,6 +154,7 @@ const write = requests.find(request => {
 assert.ok(write, 'expected a server persistence POST')
 assert.equal(write.options.headers.get('X-WP-Nonce'), 'test-nonce')
 assert.equal(write.options.credentials, 'same-origin')
+assert.equal(write.options.keepalive, true, 'small state writes may use keepalive')
 const payload = JSON.parse(write.options.body)
 assert.deepEqual(payload.entries.orders.value, [{ id: 1 }])
 assert.equal(payload.entries.orders.baseRevision, 4)
@@ -160,5 +183,41 @@ await persistence.reloadServerValue('orders')
 assert.deepEqual(persistence.persistGet('orders'), [{ id: 99 }])
 assert.equal(persistence.getPersistenceMetadata('orders').revision, 7)
 assert.equal(persistence.getPendingPersistence('orders'), null)
+
+const largeValue = { blob: 'x'.repeat(70000) }
+persistence.persistSet('large-state', largeValue)
+await persistence.flushPersistence()
+const largeWrite = requests.find(request => {
+  if (request.options.method !== 'POST') return false
+  return Boolean(JSON.parse(request.options.body).entries?.['large-state'])
+})
+assert.ok(largeWrite, 'expected a large state persistence POST')
+assert.equal(largeWrite.options.keepalive, false, 'large writes must avoid the browser keepalive body limit')
+assert.deepEqual(serverState.get('large-state').value, largeValue)
+
+const originalFetch = globalThis.fetch
+let releaseSameTickWrite
+let delayedSameTickWrite = false
+globalThis.fetch = async (url, options = {}) => {
+  const body = options.body ? JSON.parse(options.body) : null
+  if (body?.entries?.['same-tick'] && !delayedSameTickWrite) {
+    delayedSameTickWrite = true
+    await new Promise(resolve => { releaseSameTickWrite = resolve })
+  }
+  return originalFetch(url, options)
+}
+const fixedNow = Date.now()
+const realDateNow = Date.now
+Date.now = () => fixedNow
+persistence.persistSet('same-tick', { version: 1 })
+const firstSameTickFlush = persistence.flushPersistence()
+while (!releaseSameTickWrite) await new Promise(resolve => setTimeout(resolve, 0))
+persistence.persistSet('same-tick', { version: 2 })
+releaseSameTickWrite()
+await firstSameTickFlush
+await persistence.flushPersistence()
+Date.now = realDateNow
+assert.deepEqual(serverState.get('same-tick').value, { version: 2 }, 'an edit created while an equal-timestamp save is in flight must not be overwritten')
+assert.deepEqual(persistence.persistGet('same-tick'), { version: 2 })
 
 console.log('web persistence tests passed')

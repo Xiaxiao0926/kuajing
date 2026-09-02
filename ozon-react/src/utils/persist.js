@@ -16,8 +16,12 @@ let flushPromise = null
 let persistenceStatus = { state: 'idle', key: null, details: null, updatedAt: 0 }
 
 const UPDATED_PREFIX = '__kuajing_updated__:'
+const REVISION_PREFIX = '__kuajing_revision__:'
+const DIRTY_PREFIX = '__kuajing_dirty__:'
+const DELETED_PREFIX = '__kuajing_deleted__:'
 const DEVICE_ID_KEY = '__kuajing_device_id__'
 const RETRY_DELAY_MS = 5000
+const MAX_KEEPALIVE_BYTES = 60 * 1024
 
 export const PersistenceState = Object.freeze({
   IDLE: 'idle',
@@ -76,14 +80,72 @@ function updatedKey(key) {
   return `${UPDATED_PREFIX}${key}`
 }
 
+function revisionKey(key) {
+  return `${REVISION_PREFIX}${key}`
+}
+
+function dirtyKey(key) {
+  return `${DIRTY_PREFIX}${key}`
+}
+
+function deletedKey(key) {
+  return `${DELETED_PREFIX}${key}`
+}
+
 function getLocalUpdatedAt(key) {
   try { return Number(localStorage.getItem(updatedKey(key))) || 0 } catch { return 0 }
+}
+
+function getLocalRevision(key) {
+  try {
+    const raw = localStorage.getItem(revisionKey(key))
+    if (raw === null || !/^\d+$/.test(raw)) return null
+    return Number(raw)
+  } catch { return null }
+}
+
+function isLocalDirty(key) {
+  try { return localStorage.getItem(dirtyKey(key)) === '1' } catch { return false }
+}
+
+function isLocalDeleted(key) {
+  try { return localStorage.getItem(deletedKey(key)) === '1' } catch { return false }
 }
 
 function setLocalValue(key, value, updatedAt) {
   const str = typeof value === 'string' ? value : JSON.stringify(value)
   localStorage.setItem(key, str)
   localStorage.setItem(updatedKey(key), String(updatedAt || Date.now()))
+}
+
+function markLocalDirty(key, baseRevision, updatedAt, deleted = false) {
+  localStorage.setItem(updatedKey(key), String(updatedAt || Date.now()))
+  localStorage.setItem(revisionKey(key), String(Math.max(0, Number(baseRevision) || 0)))
+  localStorage.setItem(dirtyKey(key), '1')
+  if (deleted) localStorage.setItem(deletedKey(key), '1')
+  else localStorage.removeItem(deletedKey(key))
+}
+
+function setLocalSynced(key, value, updatedAt, revision) {
+  if (value === null) localStorage.removeItem(key)
+  else setLocalValue(key, value, updatedAt)
+  localStorage.setItem(updatedKey(key), String(updatedAt || Date.now()))
+  localStorage.setItem(revisionKey(key), String(Math.max(0, Number(revision) || 0)))
+  localStorage.removeItem(dirtyKey(key))
+  localStorage.removeItem(deletedKey(key))
+}
+
+function clearLocalState(key) {
+  localStorage.removeItem(key)
+  localStorage.removeItem(updatedKey(key))
+  localStorage.removeItem(revisionKey(key))
+  localStorage.removeItem(dirtyKey(key))
+  localStorage.removeItem(deletedKey(key))
+}
+
+function encodedBodyBytes(body) {
+  if (typeof body !== 'string') return 0
+  try { return new TextEncoder().encode(body).byteLength } catch { return body.length }
 }
 
 function normalizeServerEntry(key, entry) {
@@ -125,9 +187,12 @@ async function serverRequest(options = {}) {
   const url = method === 'GET'
     ? `${getApiBase()}${path}${query}_=${Date.now()}`
     : `${getApiBase()}${path}`
+  const keepalive = method !== 'GET'
+    && typeof options.body === 'string'
+    && encodedBodyBytes(options.body) <= MAX_KEEPALIVE_BYTES
   const response = await fetch(url, {
     credentials: 'same-origin',
-    keepalive: method !== 'GET',
+    keepalive,
     ...options,
     headers,
   })
@@ -267,15 +332,11 @@ async function flushPending() {
         staleLocal.delete(key)
 
         const newer = pending.get(key)
-        if (newer && Number(newer.updatedAt) > Number(entry.updatedAt)) {
+        if (newer) {
           pending.set(key, { ...newer, baseRevision: next.revision })
-        } else if (entry.value === null) {
-          try {
-            localStorage.removeItem(key)
-            localStorage.setItem(updatedKey(key), String(next.updatedAt))
-          } catch {}
+          try { markLocalDirty(key, next.revision, newer.updatedAt, newer.value === null) } catch {}
         } else {
-          try { setLocalValue(key, entry.value, next.updatedAt) } catch {}
+          try { setLocalSynced(key, entry.value, next.updatedAt, next.revision) } catch {}
         }
         savedKeys.push(key)
       } catch (error) {
@@ -355,11 +416,33 @@ export async function syncFromServer() {
 
         const localRaw = localStorage.getItem(key)
         const localUpdatedAt = getLocalUpdatedAt(key)
-        if (localRaw !== null && localUpdatedAt > entry.updatedAt) {
-          const localValue = (() => { try { return JSON.parse(localRaw) } catch { return localRaw } })()
-          const localEntry = {
+        const localDirty = isLocalDirty(key)
+        const localDeleted = isLocalDeleted(key)
+        const localRevision = getLocalRevision(key)
+        const hasLocalDraft = localDirty && (localRaw !== null || localDeleted)
+        if (hasLocalDraft && localRevision === entry.revision) {
+          const localValue = localDeleted
+            ? null
+            : (() => { try { return JSON.parse(localRaw) } catch { return localRaw } })()
+          pending.set(key, {
             value: localValue,
             baseRevision: entry.revision,
+            deviceId: getDeviceId(),
+            updatedAt: localUpdatedAt || Date.now(),
+          })
+          continue
+        }
+        const legacyLocalNewer = !localDirty
+          && localRevision === null
+          && localRaw !== null
+          && localUpdatedAt > entry.updatedAt
+        if (hasLocalDraft || legacyLocalNewer) {
+          const localValue = localDeleted
+            ? null
+            : (() => { try { return JSON.parse(localRaw) } catch { return localRaw } })()
+          const localEntry = {
+            value: localValue,
+            baseRevision: localRevision === null ? entry.revision : localRevision,
             deviceId: getDeviceId(),
             updatedAt: localUpdatedAt,
           }
@@ -382,25 +465,13 @@ export async function syncFromServer() {
           if (!backup) scheduleConflictBackup(key, localEntry, details)
           if (backup) {
             try {
-              if (entry.value === null) {
-                localStorage.removeItem(key)
-                localStorage.setItem(updatedKey(key), String(entry.updatedAt))
-              } else {
-                setLocalValue(key, entry.value, entry.updatedAt)
-              }
+              setLocalSynced(key, entry.value, entry.updatedAt, entry.revision)
             } catch {}
           }
           publishStatus(PersistenceState.CONFLICT, details)
           continue
         }
-        try {
-          if (entry.value === null) {
-            localStorage.removeItem(key)
-            localStorage.setItem(updatedKey(key), String(entry.updatedAt))
-          } else {
-            setLocalValue(key, entry.value, entry.updatedAt)
-          }
-        } catch {}
+        try { setLocalSynced(key, entry.value, entry.updatedAt, entry.revision) } catch {}
       }
       _synced = true
       if (pending.size) scheduleFlush()
@@ -419,7 +490,9 @@ export function persistGet(key) {
     if (raw === null) return null
     if (_synced && !serverKeys.has(key) && !pending.has(key)) {
       const value = (() => { try { return JSON.parse(raw) } catch { return raw } })()
-      pending.set(key, pendingEntry(key, value, getLocalUpdatedAt(key) || Date.now()))
+      const entry = pendingEntry(key, value, getLocalUpdatedAt(key) || Date.now())
+      pending.set(key, entry)
+      try { markLocalDirty(key, entry.baseRevision, entry.updatedAt, false) } catch {}
       scheduleFlush()
     }
     try { return JSON.parse(raw) } catch { return raw }
@@ -429,6 +502,7 @@ export function persistGet(key) {
 export function persistSet(key, value) {
   const updatedAt = Date.now()
   try { setLocalValue(key, value, updatedAt) } catch {}
+  try { markLocalDirty(key, metadataFor(key).revision, updatedAt, false) } catch {}
   const blocked = blockedConflicts.get(key)
   if (blocked) {
     const entry = {
@@ -448,15 +522,16 @@ export function persistSet(key, value) {
 }
 
 export function persistRemove(key) {
+  const updatedAt = Date.now()
   try { localStorage.removeItem(key) } catch {}
-  try { localStorage.removeItem(updatedKey(key)) } catch {}
+  try { markLocalDirty(key, metadataFor(key).revision, updatedAt, true) } catch {}
   const blocked = blockedConflicts.get(key)
   if (blocked) {
     const entry = {
       value: null,
       baseRevision: Number(blocked.serverRevision) || metadataFor(key).revision,
       deviceId: getDeviceId(),
-      updatedAt: Date.now(),
+      updatedAt,
     }
     staleLocal.set(key, entry)
     scheduleConflictBackup(key, entry, blocked)
@@ -464,7 +539,7 @@ export function persistRemove(key) {
     return
   }
   staleLocal.delete(key)
-  pending.set(key, pendingEntry(key, null))
+  pending.set(key, pendingEntry(key, null, updatedAt))
   scheduleFlush()
 }
 
@@ -490,10 +565,7 @@ export async function reloadServerValue(key) {
   if (!rawEntry) {
     serverKeys.delete(key)
     metadata.delete(key)
-    try {
-      localStorage.removeItem(key)
-      localStorage.removeItem(updatedKey(key))
-    } catch {}
+    try { clearLocalState(key) } catch {}
     publishStatus(PersistenceState.SAVED, { key, reloaded: true })
     return null
   }
@@ -504,14 +576,7 @@ export async function reloadServerValue(key) {
     updatedAt: entry.updatedAt,
     updatedByDevice: entry.updatedByDevice,
   })
-  try {
-    if (entry.value === null) {
-      localStorage.removeItem(key)
-      localStorage.setItem(updatedKey(key), String(entry.updatedAt))
-    } else {
-      setLocalValue(key, entry.value, entry.updatedAt)
-    }
-  } catch {}
+  try { setLocalSynced(key, entry.value, entry.updatedAt, entry.revision) } catch {}
   publishStatus(PersistenceState.SAVED, { key, reloaded: true, revision: entry.revision })
   return entry
 }
@@ -545,7 +610,7 @@ export async function restoreServerValue(key, revision, baseRevision = metadataF
       updatedAt: Number(restored.updatedAt) || Date.now(),
       updatedByDevice: String(restored.updatedByDevice || deviceId),
     })
-    try { setLocalValue(key, restored.value, metadata.get(key).updatedAt) } catch {}
+    try { setLocalSynced(key, restored.value, metadata.get(key).updatedAt, metadata.get(key).revision) } catch {}
     publishStatus(PersistenceState.SAVED, { key, restoredRevision: revision, revision: metadata.get(key).revision })
     return restored
   } catch (error) {

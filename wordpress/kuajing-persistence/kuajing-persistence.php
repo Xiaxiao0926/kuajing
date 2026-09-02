@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.3.2
+ * Version: 0.3.3
  * Author: FYZSXNB
  */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.3.2';
+    private const VERSION = '0.3.3';
     private const TABLE_SUFFIX = 'kuajing_state';
     private const STATE_VERSIONS_SUFFIX = 'kuajing_state_versions';
     private const STATE_BACKUPS_SUFFIX = 'kuajing_state_backups';
@@ -22,6 +22,8 @@ final class FYZSXNB_Kuajing_Dashboard {
     private const ACCESS_PASSWORD_HASH = 'b0646924cb4681e592a0e05068dfaeb40d0807466087c6c1ad5a1ac52d439e54';
     private const SESSION_TTL = 604800;
     private const MAX_FILE_SIZE = 52428800;
+    private const MAX_BACKUPS_PER_KEY = 100;
+    private const MAX_FILE_BACKUPS_PER_NAME = 20;
     private const ALLOWED_EXTENSIONS = array('xlsx', 'xls', 'csv', 'json', 'html', 'htm', 'doc', 'docx');
 
     public static function init() {
@@ -280,6 +282,41 @@ final class FYZSXNB_Kuajing_Dashboard {
             return new WP_Error('storage_unavailable', 'Unable to create private storage.', array('status' => 500));
         }
         return $directory;
+    }
+
+    private static function backup_existing_file($namespace, $path, $reason) {
+        if (!is_file($path)) {
+            return true;
+        }
+        $name = basename($path);
+        $directory = trailingslashit(self::ensure_private_root()) . 'file-backups/' . sanitize_key($namespace);
+        if (!wp_mkdir_p($directory)) {
+            return false;
+        }
+        $now = microtime(true);
+        $microseconds = (int) floor(($now - floor($now)) * 1000000);
+        $snapshot = sprintf(
+            '%s-%06d--%s--%s--%s',
+            gmdate('Ymd-His', (int) $now),
+            $microseconds,
+            substr(hash_file('sha256', $path), 0, 16),
+            sanitize_key($reason),
+            $name
+        );
+        if (!copy($path, trailingslashit($directory) . $snapshot)) {
+            return false;
+        }
+        @chmod(trailingslashit($directory) . $snapshot, 0640);
+
+        $suffix = '--' . $name;
+        $backups = array_values(array_filter((array) scandir($directory), static function($entry) use ($suffix) {
+            return strlen($entry) > strlen($suffix) && substr($entry, -strlen($suffix)) === $suffix;
+        }));
+        rsort($backups, SORT_STRING);
+        foreach (array_slice($backups, self::MAX_FILE_BACKUPS_PER_NAME) as $old_backup) {
+            @unlink(trailingslashit($directory) . $old_backup);
+        }
+        return true;
     }
 
     private static function migrate_shared_state() {
@@ -900,7 +937,8 @@ final class FYZSXNB_Kuajing_Dashboard {
             $snapshot_hash,
             current_time('mysql', true)
         );
-        if (false === $wpdb->query($sql)) {
+        $inserted = $wpdb->query($sql);
+        if (false === $inserted) {
             return self::database_failure();
         }
         $row = $wpdb->get_row($wpdb->prepare(
@@ -910,10 +948,26 @@ final class FYZSXNB_Kuajing_Dashboard {
         if (!$row) {
             return self::database_failure();
         }
-        self::record_audit_event($key, 'BACKUP', (int) $base_revision, $server_revision, $device_id, array(
-            'backupId' => (int) $row['id'],
-            'reason' => $reason,
-        ));
+        if (1 === (int) $inserted) {
+            self::record_audit_event($key, 'BACKUP', (int) $base_revision, $server_revision, $device_id, array(
+                'backupId' => (int) $row['id'],
+                'reason' => $reason,
+            ));
+            $cutoff_id = $wpdb->get_var($wpdb->prepare(
+                "SELECT id FROM {$table} WHERE user_id = %d AND state_key = %s ORDER BY id DESC LIMIT 1 OFFSET %d",
+                0,
+                $key,
+                self::MAX_BACKUPS_PER_KEY - 1
+            ));
+            if ($cutoff_id) {
+                $wpdb->query($wpdb->prepare(
+                    "DELETE FROM {$table} WHERE user_id = %d AND state_key = %s AND id < %d",
+                    0,
+                    $key,
+                    (int) $cutoff_id
+                ));
+            }
+        }
         return rest_ensure_response(array(
             'success' => true,
             'backup' => array(
@@ -1119,6 +1173,11 @@ final class FYZSXNB_Kuajing_Dashboard {
             return $directory;
         }
         $target = trailingslashit($directory) . $name;
+        if (is_file($target)
+            && hash_file('sha256', $target) !== hash_file('sha256', $files['file']['tmp_name'])
+            && !self::backup_existing_file($namespace, $target, 'overwrite')) {
+            return new WP_Error('backup_failed', 'Unable to preserve the existing file before replacement.', array('status' => 500));
+        }
         if (!move_uploaded_file($files['file']['tmp_name'], $target)) {
             return new WP_Error('upload_failed', 'Unable to store the uploaded file.', array('status' => 500));
         }
@@ -1136,7 +1195,12 @@ final class FYZSXNB_Kuajing_Dashboard {
         }
         $path = trailingslashit($directory) . $name;
         if ($name && is_file($path)) {
-            unlink($path);
+            if (!self::backup_existing_file($namespace, $path, 'delete')) {
+                return new WP_Error('backup_failed', 'Unable to preserve the file before deletion.', array('status' => 500));
+            }
+            if (!unlink($path)) {
+                return new WP_Error('delete_failed', 'Unable to delete the stored file.', array('status' => 500));
+            }
         }
         return rest_ensure_response(array('success' => true));
     }

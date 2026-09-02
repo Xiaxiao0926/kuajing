@@ -12,9 +12,14 @@ This plugin mounts the built React dashboard at a WordPress page with the
   CREATE/UPDATE/RESTORE audit events in `${table_prefix}kuajing_audit_events`.
 - Rejected concurrent edits and local-newer snapshots are stored separately in
   `${table_prefix}kuajing_state_backups`, so a conflict never destroys either
-  the accepted server value or the other endpoint's content.
+  the accepted server value or the other endpoint's content. The latest 100
+  snapshots per state key are retained.
 - Uploaded source files: `kuajing-private-data` beside `public_html` when writable.
-- Browser `localStorage` and IndexedDB remain an offline fallback.
+- Replacing or deleting a source file first creates a server-side snapshot; the
+  latest 20 snapshots are retained for each namespace and filename.
+- Browser `localStorage` and IndexedDB remain an offline fallback. Failed source
+  file uploads stay in a durable IndexedDB queue and retry after login or when
+  connectivity returns.
 
 WordPress administrators and visitors with a valid Kuajing password session can
 read and write the shared server data. Browser storage is only an offline cache.

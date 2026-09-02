@@ -6,6 +6,8 @@ const pluginPath = new URL('../wordpress/kuajing-persistence/kuajing-persistence
 const plugin = fs.readFileSync(pluginPath, 'utf8')
 const appPath = new URL('../ozon-react/src/App.jsx', import.meta.url)
 const app = fs.readFileSync(appPath, 'utf8')
+const serverFilesPath = new URL('../ozon-react/src/utils/serverFiles.js', import.meta.url)
+const serverFiles = fs.readFileSync(serverFilesPath, 'utf8')
 
 for (const marker of [
   'revision bigint(20) unsigned NOT NULL DEFAULT 1',
@@ -26,6 +28,13 @@ for (const marker of [
   "'BACKUP'",
   'snapshot_hash',
   'INSERT IGNORE INTO',
+  'MAX_BACKUPS_PER_KEY',
+  'MAX_FILE_BACKUPS_PER_NAME',
+  'DELETE FROM {$table}',
+  'backup_existing_file',
+  "'file-backups/'",
+  "'overwrite'",
+  "'delete'",
 ]) {
   assert.match(plugin, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `missing PHP contract marker: ${marker}`)
 }
@@ -34,6 +43,19 @@ assert.match(plugin, /dist\/manifest\.json/, 'runtime must prefer the deploy-saf
 assert.match(plugin, /dist\/\.vite\/manifest\.json/, 'runtime must retain compatibility with existing Vite builds')
 assert.match(app, /if \(!serverSynced\) return[\s\S]{0,200}persistSet\('roadmap-statuses'/, 'roadmap state must not write before server sync')
 assert.match(app, /if \(!serverSynced\) \{[\s\S]{0,260}正在同步服务器备份/, 'the whole workspace must stay unmounted until server sync completes')
+for (const marker of [
+  'kuajing-server-file-backups',
+  'pending-uploads',
+  'enqueueFile(namespace, file)',
+  'flushQueuedServerFiles',
+  "addEventListener('online'",
+]) {
+  assert.match(serverFiles, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `missing durable file backup marker: ${marker}`)
+}
+assert.ok(
+  serverFiles.indexOf('await enqueueFile(namespace, file)') < serverFiles.indexOf('const result = await uploadFileNow(namespace, file)'),
+  'source files must enter the durable queue before their first server upload attempt',
+)
 
 class StateSafetyModel {
   constructor() {

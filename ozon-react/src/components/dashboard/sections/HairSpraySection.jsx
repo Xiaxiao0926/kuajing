@@ -769,7 +769,6 @@ export default function HairSpraySection({ stats, data, sprayExporting, spraySto
             </div>
           </div>
         </div>
-      )}
     </>
   )
 }

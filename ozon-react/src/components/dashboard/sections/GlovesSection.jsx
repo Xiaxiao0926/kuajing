@@ -402,7 +402,6 @@ export default function GlovesSection({ stats, data, CC }) {
             </div>
           </div>
         </div>
-      )}
     </>
   )
 }

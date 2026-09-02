@@ -305,7 +305,6 @@ export default function HairMaskSection({ stats, data }) {
             </div>
           </div>
         </div>
-      )}
     </>
   )
 }
