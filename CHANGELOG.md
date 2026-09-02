@@ -5,7 +5,28 @@
 
 ---
 
-## 2026-09-01（选品市场分析·纯度流水线，模块 2/3/4/5 一期，本地完成待部署）
+## 2026-09-02（Ozon FBP 边境仓核算，一期，本地完成待部署）
+
+> 完整交接归档见《流程任务书-20260902-FBP边境仓核算.md》。
+
+### feat — FBP 边境仓核算引擎 + 独立页面
+- **新页面**「FBP 边境仓核算」（侧栏「物流与成本」组，node id `__fbp_calc__`，懒加载 chunk 96.63 kB）：与 rFBS 的 OzonCalc 并列，覆盖俄/白俄/哈萨克三国。
+- **渠道配置**：`config/ozon_fbp_channels.json` 唯一事实源，提取自 FBP 官方服务清单（版本 `HK1092026` 动态提取自 source）。142 条线路 / 7 物流商（CEL、GUOO、RETS、Ural、Ural HK、XY、ZTO）/ 11 边境仓 / 计费三模式（实重 94、体积重÷12000 46、条件体积重 2——Ural Super Express 三边和>90cm 切÷6000）。DEX 美元线路与 Smart 服务一期排除。sync-config 新增 `validateFbpChannels` fail-close 校验。
+- **引擎** `ozonFbpEngine.js`：`calcFbpShipping`（适用性六维过滤：目的国/仓库/尺寸/重量/申报价值/电池液体三态 + 计费重）、`calcStorageFee`（**90 天免仓期，其后 ¥4/m³/天**）、`calcFbpProfit`（完整利润链：国内段工厂→边境仓运费 + 3PL 国际段 + 尾程手动 + 仓租 + 代理费 + 平台费 + 退货损失）、`getBestFbpProfit`；汇率沿用 live binding `R`，代理费沿用 agency_fee（2%/15₽/200₽ 封顶）。
+- **UI**：最优线路卡（8 项成本分解）/ 全线路对比表（不可用灰显带原因，MSDS 标注）/ 参数与方案历史手动保存（`fbp-calc-params-v1` / `fbp-calc-history-v1`，保留 20 条）。
+- **测试**：`ozonFbpEngine.test.mjs` 29 用例（计费三模式、过滤、仓租边界、利润链复算、live binding），`test:fbp` 入 npm test 主链；全量回归 + 构建全绿。
+
+### fix — 开发期缺陷（已防回归）
+- **体积重单位错误**（关键）：初版把体积重结果（kg）当克用（64000cm³÷6000=10.67kg 被算作 10.67g）→ 全程 kg 口径 + 单测双断言锁定；条件体积重解析遗漏 Ural Super Express → 扩展 conditional 类型支持。
+
+### 待办（P5）
+- Ozon 尾程配送费率表到位后切自动查表（配置已预留 `last_mile` 结构，现 UI 手动输入默认 0，利润为不含尾程口径）。
+- 本次提交需一并入库 20260901 任务书 §6.5 所列部署补录（仍为本地未提交变更）。
+
+---
+
+
+## 2026-09-01（选品市场分析·纯度流水线，模块 2/3/4/5 一期，已上线 fyzsxnb.com）
 
 > 完整交接归档见《流程任务书-20260901-选品市场分析纯度流水线.md》。
 
@@ -20,6 +41,10 @@
 
 ### 口径冻结（用户决策，禁止回退）
 - 三维名称固定 SKU占比/销量占比/销售额占比，无 GMV 字段禁写 GMV%；UNKNOWN 禁止自动归 C；批次摊销（模块1）二期独立进成本链。
+
+### deploy — 上线与验收（commit `85dfa5c`，2026-09-01）
+- 提交 17 文件（+2383/−2）已推送 `origin/main`；GitHub Actions run 33478718108 → success（20260826 遗留 FTP 超时本次未复现，降级观察项）。
+- 线上验收：fyzsxnb.com/kuajing/ 「选品市场分析」正常加载，生产资源 200 无 "assets are not deployed" 回退；桌面/移动入口均存在、无横向溢出；A 默认 / A+B 切换 / C 与 UNKNOWN 排除 / 三维占比口径线上验证通过；130 项测试 + 7 份真实 Ozon 数据表回归全绿；BYD 等无关文件未混入提交。
 
 ---
 

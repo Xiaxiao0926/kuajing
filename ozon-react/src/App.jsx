@@ -34,6 +34,7 @@ import LoadingState from './components/ui/LoadingState'
 const MarketResearch = lazy(() => import('./components/MarketResearch'))
 const PurityPipelinePage = lazy(() => import('./components/PurityPipelinePage'))
 const OzonCalc = lazy(() => import('./components/OzonCalc'))
+const OzonFbpCalc = lazy(() => import('./components/OzonFbpCalc'))
 const FragrancePricing = lazy(() => import('./components/FragrancePricing'))
 const ListingContent = lazy(() => import('./components/ListingContent'))
 const WBCalc = lazy(() => import('./components/WBCalc'))
@@ -48,6 +49,7 @@ const DATA_DIR = getDataUrl().replace(/\/$/, '')
 function pageLabelForNode(nodeId) {
   if (nodeId === '__scoring__') return '选品评分'
   if (nodeId === '__purity_analysis__') return '选品市场分析'
+  if (nodeId === '__fbp_calc__') return 'FBP 边境仓核算'
   if (nodeId === '__t6_candidates__') return '候选池'
   if (nodeId === '__t6_projects__') return 'SKU 项目'
   if (nodeId === '__t6_project_detail__') return '项目详情'
@@ -306,6 +308,13 @@ function DashboardApp() {
         </NodePage>
       )
     }
+    if (activeNode === '__fbp_calc__') {
+      return (
+        <Suspense fallback={<LazyFallback />}>
+          <OzonFbpCalc />
+        </Suspense>
+      )
+    }
     if (activeNode === 'n9') {
       return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange}>
@@ -367,6 +376,7 @@ function DashboardApp() {
             >
               <option value="__project_flow__">项目流程总览</option>
               <option value="__purity_analysis__">选品市场分析</option>
+              <option value="__fbp_calc__">FBP 边境仓核算</option>
               {ROADMAP_PHASES.map((phase) => (
                 <optgroup key={phase.id} label={phase.title}>
                   {phase.nodes.map((node) => (

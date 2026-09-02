@@ -7,7 +7,7 @@
 import { useState, useRef, useEffect } from 'react'
 import {
   Upload, FileSpreadsheet, Loader2, FolderOpen, ChevronDown, ChevronRight, CheckCircle2, Info, GitBranch,
-  LayoutDashboard, Search, Target, ClipboardList, Store, Truck, FileText, Package, Factory, ShieldCheck, Wallet, Database, BarChart3,
+  LayoutDashboard, Search, Target, ClipboardList, Store, Truck, FileText, Package, Factory, ShieldCheck, Wallet, Database, BarChart3, Warehouse,
   Inbox, FolderKanban, Layers,
 } from 'lucide-react'
 import { ROADMAP_PHASES } from '../data/roadmap'
@@ -55,7 +55,10 @@ const NAV_SECTIONS = [
   },
   {
     id: 'logistics', label: '物流与成本', icon: Truck,
-    items: [{ id: 'n8', label: '物流与成本', icon: Truck }],
+    items: [
+      { id: 'n8', label: '物流与成本', icon: Truck },
+      { id: '__fbp_calc__', label: 'FBP 边境仓核算', icon: Warehouse },
+    ],
   },
   {
     id: 'compliance', label: '合规与账号', icon: ShieldCheck,

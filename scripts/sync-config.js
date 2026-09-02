@@ -23,6 +23,7 @@ const SOURCES = [
   { file: 'wb_tariffs.json', out: 'wb_tariffs.js' },
   { file: 'settings.json', out: 'settings.js' },
   { file: 'ozon_channels.json', out: 'ozon_channels.js' },
+  { file: 'ozon_fbp_channels.json', out: 'ozon_fbp_channels.js' },
   { file: 'scoring_rules.json', out: 'scoring_rules.js', frozen: true },
   { file: 'market_analysis.json', out: 'market_analysis.js' },
 ];
@@ -131,6 +132,50 @@ function validateMarketAnalysis(data) {
   }
 }
 
+// FBP 边境仓资费：渠道结构必须自洽（计费类型枚举、体积重参数、区间边界，fail-close）
+function validateFbpChannels(data) {
+  if (!data.source || !data.version) fail('ozon_fbp_channels.json 缺少 source/version');
+  const st = data.storage;
+  if (!st || typeof st.free_days !== 'number' || st.free_days < 0 || typeof st.rate_cny_per_m3_per_day !== 'number' || st.rate_cny_per_m3_per_day <= 0) {
+    fail('ozon_fbp_channels.json storage 必须含 free_days>=0 与 rate_cny_per_m3_per_day>0');
+  }
+  if (!Array.isArray(data.warehouses) || data.warehouses.length === 0) fail('ozon_fbp_channels.json warehouses 必须为非空数组');
+  for (const w of data.warehouses) {
+    if (!w.id || !w.name || !Array.isArray(w.carriers) || w.carriers.length === 0) fail(`ozon_fbp_channels.json 仓库 ${w.name || '?'} 结构不完整`);
+  }
+  if (!Array.isArray(data.groups) || data.groups.length === 0) fail('ozon_fbp_channels.json groups 必须为非空数组');
+  const CHARGE = ['actual', 'vol_6000', 'vol_12000', 'conditional'];
+  const TRISTATE = ['forbidden', 'allowed', 'msds'];
+  const DESTS = ['RU', 'BY', 'KZ'];
+  const ids = new Set();
+  for (const g of data.groups) {
+    if (!DESTS.includes(g.destination)) fail(`ozon_fbp_channels.json 分组 destination 非法: ${g.destination}`);
+    if (!g.carrier || !g.service_level || !Array.isArray(g.channels) || g.channels.length === 0) {
+      fail(`ozon_fbp_channels.json 分组 ${g.carrier || '?'}/${g.service_level || '?'} 结构不完整`);
+    }
+    for (const c of g.channels) {
+      const tag = `${g.carrier}/${c.id}`;
+      if (ids.has(c.id)) fail(`ozon_fbp_channels.json 渠道 id 重复: ${c.id}`);
+      ids.add(c.id);
+      if (typeof c.fixed_cny !== 'number' || c.fixed_cny < 0) fail(`${tag} fixed_cny 非数字`);
+      if (typeof c.rate_per_g_cny !== 'number' || c.rate_per_g_cny <= 0) fail(`${tag} rate_per_g_cny 必须为正数`);
+      for (const k of ['weight_min_g', 'weight_max_g', 'sum_max_cm', 'side_max_cm', 'price_min_rub', 'price_max_rub']) {
+        if (typeof c[k] !== 'number') fail(`${tag} ${k} 非数字`);
+      }
+      if (c.weight_min_g > c.weight_max_g) fail(`${tag} 重量区间颠倒`);
+      if (c.price_min_rub > c.price_max_rub) fail(`${tag} 申报价值区间颠倒`);
+      if (!TRISTATE.includes(c.batteries) || !TRISTATE.includes(c.liquids)) fail(`${tag} batteries/liquids 必须为 ${TRISTATE.join('/')}`);
+      if (!CHARGE.includes(c.charge_weight)) fail(`${tag} charge_weight 必须为 ${CHARGE.join('/')}`);
+      if (c.charge_weight === 'vol_6000' && c.vol_divisor !== 6000) fail(`${tag} vol_6000 类型 vol_divisor 必须 = 6000`);
+      if (c.charge_weight === 'vol_12000' && c.vol_divisor !== 12000) fail(`${tag} vol_12000 类型 vol_divisor 必须 = 12000`);
+      if (c.charge_weight === 'conditional' && (typeof c.vol_divisor !== 'number' || typeof c.vol_threshold_sum_cm !== 'number')) {
+        fail(`${tag} conditional 类型必须含 vol_divisor 与 vol_threshold_sum_cm`);
+      }
+      if (c.charge_weight === 'actual' && c.vol_divisor !== null) fail(`${tag} actual 类型 vol_divisor 必须为 null`);
+    }
+  }
+}
+
 function main() {
   if (!fs.existsSync(CONFIG_DIR)) fail(`config 目录不存在: ${CONFIG_DIR}`);
   fs.mkdirSync(GENERATED_DIR, { recursive: true });
@@ -149,6 +194,7 @@ function main() {
     if (file === 'wb_tariffs.json') validateTariffs(data);
     if (file === 'settings.json') validateSettings(data);
     if (file === 'ozon_channels.json') validateChannels(data);
+    if (file === 'ozon_fbp_channels.json') validateFbpChannels(data);
     if (file === 'scoring_rules.json') validateScoringRules(data);
     if (file === 'market_analysis.json') validateMarketAnalysis(data);
     payloads.push({ out, data, frozen });
