@@ -4,13 +4,18 @@ import crypto from 'node:crypto'
 
 const pluginPath = new URL('../wordpress/kuajing-persistence/kuajing-persistence.php', import.meta.url)
 const plugin = fs.readFileSync(pluginPath, 'utf8')
+const appPath = new URL('../ozon-react/src/App.jsx', import.meta.url)
+const app = fs.readFileSync(appPath, 'utf8')
 
 for (const marker of [
   'revision bigint(20) unsigned NOT NULL DEFAULT 1',
   'updated_by_device varchar(191) NOT NULL DEFAULT',
   'STATE_VERSIONS_SUFFIX',
+  'STATE_BACKUPS_SUFFIX',
   'AUDIT_EVENTS_SUFFIX',
   "'/state/history'",
+  "'/state/backup'",
+  "'/state/backups'",
   "'/state/restore'",
   "'status' => 409",
   "'revision_conflict'",
@@ -18,12 +23,17 @@ for (const marker of [
   'START TRANSACTION',
   'FOR UPDATE',
   "'RESTORE'",
+  "'BACKUP'",
+  'snapshot_hash',
+  'INSERT IGNORE INTO',
 ]) {
   assert.match(plugin, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `missing PHP contract marker: ${marker}`)
 }
 assert.doesNotMatch(plugin, /DROP\s+TABLE/i, 'state safety migration must not drop tables')
 assert.match(plugin, /dist\/manifest\.json/, 'runtime must prefer the deploy-safe visible manifest')
 assert.match(plugin, /dist\/\.vite\/manifest\.json/, 'runtime must retain compatibility with existing Vite builds')
+assert.match(app, /if \(!serverSynced\) return[\s\S]{0,200}persistSet\('roadmap-statuses'/, 'roadmap state must not write before server sync')
+assert.match(app, /if \(!serverSynced\) \{[\s\S]{0,260}正在同步服务器备份/, 'the whole workspace must stay unmounted until server sync completes')
 
 class StateSafetyModel {
   constructor() {

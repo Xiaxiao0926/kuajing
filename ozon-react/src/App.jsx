@@ -112,8 +112,9 @@ function DashboardApp() {
   }, [])
 
   useEffect(() => {
+    if (!serverSynced) return
     try { persistSet('roadmap-statuses', nodeStatuses) } catch {}
-  }, [nodeStatuses])
+  }, [nodeStatuses, serverSynced])
 
   const processParsedData = useCallback((parsedData) => {
     if (parsedData.length === 0) throw new Error('未能解析到有效数据')
@@ -233,10 +234,6 @@ function DashboardApp() {
         </Suspense>
       )
     }
-    if ((activeNode === '__t6_candidates__' || activeNode === '__t6_projects__' || activeNode === '__t6_project_detail__') && !serverSynced) {
-      // T6-1 hardening：server sync 完成前不挂载 T6 主数据页（防止 useMemo 先读未同步的旧 localStorage）
-      return <LoadingState text="正在同步项目数据…" />
-    }
     if (activeNode === '__t6_candidates__') {
       return <CandidatePoolPage />
     }
@@ -338,6 +335,14 @@ function DashboardApp() {
     }
     return (
       <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} />
+    )
+  }
+
+  if (!serverSynced) {
+    return (
+      <div className="fyzsxnb-workspace flex min-h-[520px] items-center justify-center bg-workspace-bg">
+        <LoadingState text="正在同步服务器备份…" />
+      </div>
     )
   }
 

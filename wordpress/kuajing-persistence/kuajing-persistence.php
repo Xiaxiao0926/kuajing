@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FYZSXNB Kuajing Dashboard
  * Description: Serves the Kuajing React dashboard and stores shared dashboard data on the WordPress server.
- * Version: 0.3.1
+ * Version: 0.3.2
  * Author: FYZSXNB
  */
 
@@ -11,9 +11,10 @@ if (!defined('ABSPATH')) {
 }
 
 final class FYZSXNB_Kuajing_Dashboard {
-    private const VERSION = '0.3.1';
+    private const VERSION = '0.3.2';
     private const TABLE_SUFFIX = 'kuajing_state';
     private const STATE_VERSIONS_SUFFIX = 'kuajing_state_versions';
+    private const STATE_BACKUPS_SUFFIX = 'kuajing_state_backups';
     private const AUDIT_EVENTS_SUFFIX = 'kuajing_audit_events';
     private const VERSION_OPTION = 'fyzsxnb_kuajing_version';
     private const SECRET_OPTION = 'fyzsxnb_kuajing_access_secret';
@@ -84,6 +85,25 @@ final class FYZSXNB_Kuajing_Dashboard {
         ) {$charset_collate};";
         dbDelta($versions_sql);
 
+        $backups_table = self::state_backups_table_name();
+        $backups_sql = "CREATE TABLE {$backups_table} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            user_id bigint(20) unsigned NOT NULL,
+            state_key varchar(191) NOT NULL,
+            payload longtext NULL,
+            base_revision bigint(20) unsigned NOT NULL DEFAULT 0,
+            server_revision bigint(20) unsigned NOT NULL DEFAULT 0,
+            client_updated_at_ms bigint(20) unsigned NOT NULL DEFAULT 0,
+            device_id varchar(191) NOT NULL DEFAULT '',
+            reason varchar(32) NOT NULL DEFAULT 'revision_conflict',
+            snapshot_hash char(64) NOT NULL,
+            created_at datetime NOT NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY snapshot_hash (snapshot_hash),
+            KEY backup_lookup (user_id, state_key, created_at)
+        ) {$charset_collate};";
+        dbDelta($backups_sql);
+
         $audit_table = self::audit_events_table_name();
         $audit_sql = "CREATE TABLE {$audit_table} (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -124,6 +144,11 @@ final class FYZSXNB_Kuajing_Dashboard {
     private static function state_versions_table_name() {
         global $wpdb;
         return $wpdb->prefix . self::STATE_VERSIONS_SUFFIX;
+    }
+
+    private static function state_backups_table_name() {
+        global $wpdb;
+        return $wpdb->prefix . self::STATE_BACKUPS_SUFFIX;
     }
 
     private static function audit_events_table_name() {
@@ -536,6 +561,22 @@ final class FYZSXNB_Kuajing_Dashboard {
             ),
         ));
 
+        register_rest_route('kuajing/v1', '/state/backup', array(
+            array(
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => array(__CLASS__, 'backup_state'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
+            ),
+        ));
+
+        register_rest_route('kuajing/v1', '/state/backups', array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(__CLASS__, 'get_state_backups'),
+                'permission_callback' => array(__CLASS__, 'can_access'),
+            ),
+        ));
+
         register_rest_route('kuajing/v1', '/state/restore', array(
             array(
                 'methods' => WP_REST_Server::CREATABLE,
@@ -809,6 +850,120 @@ final class FYZSXNB_Kuajing_Dashboard {
         }
 
         return rest_ensure_response(array('success' => true, 'saved' => $saved));
+    }
+
+    public static function backup_state(WP_REST_Request $request) {
+        global $wpdb;
+        $body = $request->get_json_params();
+        $body = is_array($body) ? $body : array();
+        $key = sanitize_text_field((string) ($body['key'] ?? ''));
+        if (!$key || strlen($key) > 191 || !array_key_exists('value', $body)) {
+            return new WP_Error('invalid_backup', 'A valid key and value are required.', array('status' => 400));
+        }
+        $base_revision = (string) ($body['baseRevision'] ?? '0');
+        $client_updated_at = (string) ($body['clientUpdatedAt'] ?? '0');
+        if (!preg_match('/^\d+$/', $base_revision) || !preg_match('/^\d+$/', $client_updated_at)) {
+            return new WP_Error('invalid_backup_revision', 'Backup revisions and timestamps must be non-negative integers.', array('status' => 400));
+        }
+        $device_id = self::normalize_device_id($body['deviceId'] ?? '');
+        $allowed_reasons = array('revision_conflict', 'local_newer', 'conflict_edit');
+        $reason = sanitize_key((string) ($body['reason'] ?? 'revision_conflict'));
+        if (!in_array($reason, $allowed_reasons, true)) {
+            $reason = 'revision_conflict';
+        }
+        $payload = wp_json_encode($body['value']);
+        if (false === $payload) {
+            return new WP_Error('invalid_backup_payload', 'Backup value could not be encoded.', array('status' => 400));
+        }
+        $current = self::current_state_row($key, false);
+        $server_revision = $current ? max(1, (int) ($current['revision'] ?? 1)) : 0;
+        $snapshot_hash = hash('sha256', implode('|', array(
+            '0',
+            $key,
+            $payload,
+            (string) ((int) $base_revision),
+            (string) ((int) $client_updated_at),
+            $device_id,
+            $reason,
+        )));
+        $table = self::state_backups_table_name();
+        $sql = $wpdb->prepare(
+            "INSERT IGNORE INTO {$table} (user_id, state_key, payload, base_revision, server_revision, client_updated_at_ms, device_id, reason, snapshot_hash, created_at) VALUES (%d, %s, %s, %d, %d, %d, %s, %s, %s, %s)",
+            0,
+            $key,
+            $payload,
+            (int) $base_revision,
+            $server_revision,
+            (int) $client_updated_at,
+            $device_id,
+            $reason,
+            $snapshot_hash,
+            current_time('mysql', true)
+        );
+        if (false === $wpdb->query($sql)) {
+            return self::database_failure();
+        }
+        $row = $wpdb->get_row($wpdb->prepare(
+            "SELECT id, state_key, base_revision, server_revision, client_updated_at_ms, device_id, reason, created_at FROM {$table} WHERE snapshot_hash = %s",
+            $snapshot_hash
+        ), ARRAY_A);
+        if (!$row) {
+            return self::database_failure();
+        }
+        self::record_audit_event($key, 'BACKUP', (int) $base_revision, $server_revision, $device_id, array(
+            'backupId' => (int) $row['id'],
+            'reason' => $reason,
+        ));
+        return rest_ensure_response(array(
+            'success' => true,
+            'backup' => array(
+                'id' => (int) $row['id'],
+                'key' => (string) $row['state_key'],
+                'baseRevision' => (int) $row['base_revision'],
+                'serverRevision' => (int) $row['server_revision'],
+                'clientUpdatedAt' => (int) $row['client_updated_at_ms'],
+                'deviceId' => (string) $row['device_id'],
+                'reason' => (string) $row['reason'],
+                'createdAt' => (string) $row['created_at'],
+            ),
+        ));
+    }
+
+    public static function get_state_backups(WP_REST_Request $request) {
+        global $wpdb;
+        $key = sanitize_text_field((string) $request->get_param('key'));
+        $limit = (int) $request->get_param('limit');
+        $limit = $limit > 0 ? min($limit, 200) : 100;
+        $table = self::state_backups_table_name();
+        if ($key) {
+            $rows = $wpdb->get_results($wpdb->prepare(
+                "SELECT id, state_key, payload, base_revision, server_revision, client_updated_at_ms, device_id, reason, created_at FROM {$table} WHERE user_id = %d AND state_key = %s ORDER BY id DESC LIMIT %d",
+                0,
+                $key,
+                $limit
+            ), ARRAY_A);
+        } else {
+            $rows = $wpdb->get_results($wpdb->prepare(
+                "SELECT id, state_key, payload, base_revision, server_revision, client_updated_at_ms, device_id, reason, created_at FROM {$table} WHERE user_id = %d ORDER BY id DESC LIMIT %d",
+                0,
+                $limit
+            ), ARRAY_A);
+        }
+        $backups = array();
+        foreach ((array) $rows as $row) {
+            $backups[] = array(
+                'id' => (int) $row['id'],
+                'key' => (string) $row['state_key'],
+                'value' => self::decode_state_value($row['payload']),
+                'baseRevision' => (int) $row['base_revision'],
+                'serverRevision' => (int) $row['server_revision'],
+                'clientUpdatedAt' => (int) $row['client_updated_at_ms'],
+                'deviceId' => (string) $row['device_id'],
+                'reason' => (string) $row['reason'],
+                'createdAt' => (string) $row['created_at'],
+            );
+        }
+        return rest_ensure_response(array('backups' => $backups));
     }
 
     public static function get_state_history(WP_REST_Request $request) {

@@ -6,12 +6,18 @@ const serverKeys = new Set()
 const metadata = new Map()
 const pending = new Map()
 const staleLocal = new Map()
+const blockedConflicts = new Map()
+const pendingConflictBackups = new Map()
 const statusListeners = new Set()
 let flushTimer = null
+let retryTimer = null
+let conflictBackupTimer = null
+let flushPromise = null
 let persistenceStatus = { state: 'idle', key: null, details: null, updatedAt: 0 }
 
 const UPDATED_PREFIX = '__kuajing_updated__:'
 const DEVICE_ID_KEY = '__kuajing_device_id__'
+const RETRY_DELAY_MS = 5000
 
 export const PersistenceState = Object.freeze({
   IDLE: 'idle',
@@ -121,6 +127,7 @@ async function serverRequest(options = {}) {
     : `${getApiBase()}${path}`
   const response = await fetch(url, {
     credentials: 'same-origin',
+    keepalive: method !== 'GET',
     ...options,
     headers,
   })
@@ -133,6 +140,92 @@ async function serverRequest(options = {}) {
     throw error
   }
   return response
+}
+
+async function backupConflictSnapshot(key, entry, details = {}, reason = 'revision_conflict') {
+  const response = await serverRequest({
+    method: 'POST',
+    path: '/state/backup',
+    body: JSON.stringify({
+      key,
+      value: entry.value,
+      baseRevision: Number(entry.baseRevision) || 0,
+      clientUpdatedAt: Number(entry.updatedAt) || Date.now(),
+      deviceId: entry.deviceId || getDeviceId(),
+      reason,
+    }),
+  })
+  if (!response) throw new Error('Server conflict backup is unavailable.')
+  const result = await response.json().catch(() => ({}))
+  if (!result.backup) throw new Error('Server did not confirm the conflict backup.')
+  return result.backup
+}
+
+function scheduleRetry() {
+  if (retryTimer || !pending.size || !canUseServerPersistence()) return
+  retryTimer = setTimeout(() => {
+    retryTimer = null
+    flushPending()
+  }, RETRY_DELAY_MS)
+}
+
+function conflictDetailsFor(key, entry, details = {}, backup = null) {
+  const serverRevision = Number(details.serverRevision)
+  if (Number.isFinite(serverRevision) && serverRevision >= 0) {
+    metadata.set(key, {
+      revision: serverRevision,
+      updatedAt: Number(details.serverUpdatedAt) || 0,
+      updatedByDevice: String(details.serverUpdatedByDevice || ''),
+    })
+    serverKeys.add(key)
+  }
+  const next = {
+    ...details,
+    key,
+    clientRevision: Number(entry.baseRevision) || 0,
+    localUpdatedAt: Number(entry.updatedAt) || Date.now(),
+    backupSaved: Boolean(backup),
+    backupPending: !backup && Boolean(details.backupPending),
+    backupId: backup?.id || null,
+  }
+  staleLocal.set(key, { ...entry, backupId: next.backupId, backupSaved: next.backupSaved })
+  blockedConflicts.set(key, next)
+  return next
+}
+
+async function flushConflictBackups() {
+  const snapshots = [...pendingConflictBackups.entries()]
+  pendingConflictBackups.clear()
+  for (const [key, snapshot] of snapshots) {
+    try {
+      const backup = await backupConflictSnapshot(key, snapshot.entry, snapshot.details, 'conflict_edit')
+      const details = conflictDetailsFor(key, snapshot.entry, snapshot.details, backup)
+      publishStatus(PersistenceState.CONFLICT, details)
+    } catch (error) {
+      pendingConflictBackups.set(key, snapshot)
+      publishStatus(PersistenceState.CONFLICT, {
+        ...snapshot.details,
+        key,
+        backupSaved: false,
+        backupError: error.message,
+      })
+    }
+  }
+  if (pendingConflictBackups.size) {
+    conflictBackupTimer = setTimeout(() => {
+      conflictBackupTimer = null
+      flushConflictBackups()
+    }, RETRY_DELAY_MS)
+  }
+}
+
+function scheduleConflictBackup(key, entry, details) {
+  pendingConflictBackups.set(key, { entry, details })
+  if (conflictBackupTimer) clearTimeout(conflictBackupTimer)
+  conflictBackupTimer = setTimeout(() => {
+    conflictBackupTimer = null
+    flushConflictBackups()
+  }, 800)
 }
 
 function setSavedMetadata(key, entry, fallback) {
@@ -151,40 +244,72 @@ function setSavedMetadata(key, entry, fallback) {
 }
 
 async function flushPending() {
+  if (flushPromise) return flushPromise
   if (!pending.size || !canUseServerPersistence()) return
-  const entries = Object.fromEntries(pending)
-  pending.clear()
-  publishStatus(PersistenceState.SAVING, { keys: Object.keys(entries) })
-  try {
-    const response = await serverRequest({
-      method: 'POST',
-      body: JSON.stringify({ entries }),
-    })
-    const result = await response.json().catch(() => ({}))
-    Object.entries(entries).forEach(([key, entry]) => {
-      const saved = result.saved && typeof result.saved === 'object' ? result.saved[key] : null
-      const next = setSavedMetadata(key, saved, entry)
-      if (entry.value === null) {
-        try {
-          localStorage.removeItem(key)
-          localStorage.setItem(updatedKey(key), String(next.updatedAt))
-        } catch {}
-      } else {
-        try { setLocalValue(key, entry.value, next.updatedAt) } catch {}
+  flushPromise = (async () => {
+    const entries = [...pending.entries()]
+    entries.forEach(([key]) => pending.delete(key))
+    publishStatus(PersistenceState.SAVING, { keys: entries.map(([key]) => key) })
+    const savedKeys = []
+    const conflicts = []
+    const errors = []
+
+    for (const [key, entry] of entries) {
+      try {
+        const response = await serverRequest({
+          method: 'POST',
+          body: JSON.stringify({ entries: { [key]: entry } }),
+        })
+        const result = await response.json().catch(() => ({}))
+        const saved = result.saved && typeof result.saved === 'object' ? result.saved[key] : null
+        const next = setSavedMetadata(key, saved, entry)
+        blockedConflicts.delete(key)
+        staleLocal.delete(key)
+
+        const newer = pending.get(key)
+        if (newer && Number(newer.updatedAt) > Number(entry.updatedAt)) {
+          pending.set(key, { ...newer, baseRevision: next.revision })
+        } else if (entry.value === null) {
+          try {
+            localStorage.removeItem(key)
+            localStorage.setItem(updatedKey(key), String(next.updatedAt))
+          } catch {}
+        } else {
+          try { setLocalValue(key, entry.value, next.updatedAt) } catch {}
+        }
+        savedKeys.push(key)
+      } catch (error) {
+        const details = error.details || {}
+        if (error.status === 409 || error instanceof PersistenceConflictError) {
+          let backup = null
+          try { backup = await backupConflictSnapshot(key, entry, details) } catch (backupError) {
+            details.backupError = backupError.message
+            details.backupPending = true
+          }
+          const conflict = conflictDetailsFor(key, entry, details, backup)
+          if (!backup) scheduleConflictBackup(key, entry, conflict)
+          conflicts.push(conflict)
+        } else {
+          if (!pending.has(key)) pending.set(key, entry)
+          errors.push({ key, message: error.message })
+          console.warn('Server persistence deferred:', error.message)
+        }
       }
-    })
-    publishStatus(PersistenceState.SAVED, { keys: Object.keys(entries) })
-  } catch (error) {
-    Object.entries(entries).forEach(([key, entry]) => {
-      if (!pending.has(key)) pending.set(key, entry)
-    })
-    const details = error.details || {}
-    if (error.status === 409 || error instanceof PersistenceConflictError) {
-      publishStatus(PersistenceState.CONFLICT, { ...details, key: details.key || Object.keys(entries)[0] })
-    } else {
-      publishStatus(PersistenceState.ERROR, { key: Object.keys(entries)[0], message: error.message })
     }
-    console.warn('Server persistence deferred:', error.message)
+
+    if (conflicts.length) {
+      publishStatus(PersistenceState.CONFLICT, conflicts.at(-1))
+    } else if (errors.length) {
+      publishStatus(PersistenceState.ERROR, errors[0])
+    } else {
+      publishStatus(PersistenceState.SAVED, { keys: savedKeys })
+    }
+    if (pending.size) scheduleRetry()
+  })()
+  try {
+    await flushPromise
+  } finally {
+    flushPromise = null
   }
 }
 
@@ -204,7 +329,7 @@ export async function syncFromServer() {
       const resp = await serverRequest()
       if (!resp) return
       const data = await resp.json()
-      Object.entries(data || {}).forEach(([key, rawEntry]) => {
+      for (const [key, rawEntry] of Object.entries(data || {})) {
         const entry = normalizeServerEntry(key, rawEntry)
         serverKeys.add(key)
         metadata.set(key, {
@@ -225,33 +350,48 @@ export async function syncFromServer() {
               serverUpdatedByDevice: entry.updatedByDevice,
             })
           }
-          return
+          continue
         }
 
         const localRaw = localStorage.getItem(key)
         const localUpdatedAt = getLocalUpdatedAt(key)
         if (localRaw !== null && localUpdatedAt > entry.updatedAt) {
           const localValue = (() => { try { return JSON.parse(localRaw) } catch { return localRaw } })()
-          staleLocal.set(key, { value: localValue, updatedAt: localUpdatedAt })
-          try {
-            if (entry.value === null) {
-              localStorage.removeItem(key)
-              localStorage.setItem(updatedKey(key), String(entry.updatedAt))
-            } else {
-              setLocalValue(key, entry.value, entry.updatedAt)
-            }
-          } catch {}
-          publishStatus(PersistenceState.CONFLICT, {
+          const localEntry = {
+            value: localValue,
+            baseRevision: entry.revision,
+            deviceId: getDeviceId(),
+            updatedAt: localUpdatedAt,
+          }
+          let backup = null
+          let backupError = ''
+          try { backup = await backupConflictSnapshot(key, localEntry, entry, 'local_newer') } catch (error) {
+            backupError = error.message
+          }
+          const details = conflictDetailsFor(key, localEntry, {
             key,
-            clientRevision: null,
             serverRevision: entry.revision,
             serverValue: entry.value,
             serverUpdatedAt: entry.updatedAt,
             serverUpdatedByDevice: entry.updatedByDevice,
             localOnly: true,
             localUpdatedAt,
-          })
-          return
+            backupError,
+            backupPending: !backup,
+          }, backup)
+          if (!backup) scheduleConflictBackup(key, localEntry, details)
+          if (backup) {
+            try {
+              if (entry.value === null) {
+                localStorage.removeItem(key)
+                localStorage.setItem(updatedKey(key), String(entry.updatedAt))
+              } else {
+                setLocalValue(key, entry.value, entry.updatedAt)
+              }
+            } catch {}
+          }
+          publishStatus(PersistenceState.CONFLICT, details)
+          continue
         }
         try {
           if (entry.value === null) {
@@ -261,7 +401,7 @@ export async function syncFromServer() {
             setLocalValue(key, entry.value, entry.updatedAt)
           }
         } catch {}
-      })
+      }
       _synced = true
       if (pending.size) scheduleFlush()
     } catch (e) {
@@ -288,16 +428,42 @@ export function persistGet(key) {
 
 export function persistSet(key, value) {
   const updatedAt = Date.now()
-  staleLocal.delete(key)
   try { setLocalValue(key, value, updatedAt) } catch {}
+  const blocked = blockedConflicts.get(key)
+  if (blocked) {
+    const entry = {
+      value,
+      baseRevision: Number(blocked.serverRevision) || metadataFor(key).revision,
+      deviceId: getDeviceId(),
+      updatedAt,
+    }
+    staleLocal.set(key, entry)
+    scheduleConflictBackup(key, entry, blocked)
+    publishStatus(PersistenceState.CONFLICT, { ...blocked, key, backupPending: true })
+    return
+  }
+  staleLocal.delete(key)
   pending.set(key, pendingEntry(key, value, updatedAt))
   scheduleFlush()
 }
 
 export function persistRemove(key) {
-  staleLocal.delete(key)
   try { localStorage.removeItem(key) } catch {}
   try { localStorage.removeItem(updatedKey(key)) } catch {}
+  const blocked = blockedConflicts.get(key)
+  if (blocked) {
+    const entry = {
+      value: null,
+      baseRevision: Number(blocked.serverRevision) || metadataFor(key).revision,
+      deviceId: getDeviceId(),
+      updatedAt: Date.now(),
+    }
+    staleLocal.set(key, entry)
+    scheduleConflictBackup(key, entry, blocked)
+    publishStatus(PersistenceState.CONFLICT, { ...blocked, key, backupPending: true })
+    return
+  }
+  staleLocal.delete(key)
   pending.set(key, pendingEntry(key, null))
   scheduleFlush()
 }
@@ -317,6 +483,8 @@ export async function reloadServerValue(key) {
   if (!response) return null
   const data = await response.json()
   staleLocal.delete(key)
+  blockedConflicts.delete(key)
+  pendingConflictBackups.delete(key)
   const rawEntry = data?.[key]
   pending.delete(key)
   if (!rawEntry) {
@@ -405,4 +573,24 @@ export async function flushPersistence() {
   if (flushTimer) clearTimeout(flushTimer)
   flushTimer = null
   await flushPending()
+  if (conflictBackupTimer) clearTimeout(conflictBackupTimer)
+  conflictBackupTimer = null
+  await flushConflictBackups()
+}
+
+export async function getStateBackups(key, limit = 100) {
+  const params = new URLSearchParams()
+  if (key) params.set('key', key)
+  if (limit) params.set('limit', String(limit))
+  const response = await serverRequest({ path: `/state/backups?${params.toString()}` })
+  if (!response) return []
+  const result = await response.json()
+  return Array.isArray(result.backups) ? result.backups : []
+}
+
+if (globalThis.addEventListener) {
+  globalThis.addEventListener('online', () => {
+    if (pending.size) scheduleFlush()
+    if (pendingConflictBackups.size) flushConflictBackups()
+  })
 }

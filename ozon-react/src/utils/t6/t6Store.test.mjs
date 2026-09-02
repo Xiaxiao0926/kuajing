@@ -260,10 +260,10 @@ console.log('I15: server sync 生命周期（false→true 后能读到同步后�
     addedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   }))
   assert(store.listCandidates().length === 1, '同步完成后再次读取可见（useMemo 生命周期已由 App 层 Gate 规避）')
-  // App 层 Gate 源码锁：T6 页面在 !serverSynced 时不挂载
+  // App 层 Gate 源码锁：整个工作区在 !serverSynced 时不挂载，覆盖 T6 和其他业务页
   const fs2 = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'App.jsx'), 'utf-8')
-  assert(fs2.includes("'__t6_candidates__' || activeNode === '__t6_projects__'") && fs2.includes('!serverSynced'), 'App.jsx 含 T6 server-sync Gate')
-  assert(fs2.includes('正在同步项目数据'), 'Gate 显示同步提示')
+  assert(fs2.includes('if (!serverSynced)') && fs2.indexOf('if (!serverSynced)') < fs2.indexOf('return (\n    <div className="fyzsxnb-workspace">'), 'App.jsx 含全工作区 server-sync Gate')
+  assert(fs2.includes('正在同步服务器备份'), 'Gate 显示服务器备份同步提示')
   // 还原主适配器供后续用例
   store._setAdapterForTests({
     get: (k) => (mem.has(k) ? JSON.parse(mem.get(k)) : null),

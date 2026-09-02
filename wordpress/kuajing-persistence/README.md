@@ -10,11 +10,14 @@ This plugin mounts the built React dashboard at a WordPress page with the
   `deviceId`; stale writes return HTTP 409 instead of overwriting newer data.
 - Full state versions are kept in `${table_prefix}kuajing_state_versions` and
   CREATE/UPDATE/RESTORE audit events in `${table_prefix}kuajing_audit_events`.
+- Rejected concurrent edits and local-newer snapshots are stored separately in
+  `${table_prefix}kuajing_state_backups`, so a conflict never destroys either
+  the accepted server value or the other endpoint's content.
 - Uploaded source files: `kuajing-private-data` beside `public_html` when writable.
 - Browser `localStorage` and IndexedDB remain an offline fallback.
 
-Only users with `manage_options` can read or write server data. Public visitors
-can open the dashboard, but their state stays in their own browser.
+WordPress administrators and visitors with a valid Kuajing password session can
+read and write the shared server data. Browser storage is only an offline cache.
 
 ## State API
 
@@ -27,6 +30,10 @@ can open the dashboard, but their state stays in their own browser.
 - `GET /wp-json/kuajing/v1/state/history?key=...` reads full versions.
 - `POST /wp-json/kuajing/v1/state/restore` restores a history revision as a
   new, conflict-protected revision.
+- `POST /wp-json/kuajing/v1/state/backup` appends a lossless snapshot of a
+  rejected or locally newer edit without changing the accepted state.
+- `GET /wp-json/kuajing/v1/state/backups?key=...` lists recoverable conflict
+  snapshots.
 
 The local browser creates a stable device ID in `localStorage`. A compatible
 client and server bundle must be switched together; production migration and

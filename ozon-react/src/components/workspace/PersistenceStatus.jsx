@@ -24,12 +24,12 @@ export default function PersistenceStatus() {
   const details = status.details || {}
   const key = details.key || details.keys?.[0]
   const label = status.state === PersistenceState.SAVING
-    ? '保存中'
+    ? '自动备份中'
     : status.state === PersistenceState.SAVED
-      ? '已保存'
+      ? '已自动备份'
       : status.state === PersistenceState.CONFLICT
-        ? '版本冲突'
-        : '保存失败'
+        ? (details.backupSaved ? '冲突副本已备份' : details.backupPending ? '正在备份冲突副本' : '版本冲突')
+        : '自动备份失败'
   const Icon = status.state === PersistenceState.SAVING
     ? Loader2
     : status.state === PersistenceState.SAVED
@@ -69,6 +69,7 @@ export default function PersistenceStatus() {
             服务器 r{details.serverRevision ?? '?'} · 我的 r{details.clientRevision ?? '?'}
             {details.serverUpdatedByDevice ? ` · ${details.serverUpdatedByDevice}` : ''}
             {serverTime(details.serverUpdatedAt) ? ` · ${serverTime(details.serverUpdatedAt)}` : ''}
+            {details.backupSaved ? ' · 本机副本已存服务器' : details.backupError ? ' · 等待自动重试' : ''}
           </span>
           <button
             type="button"
