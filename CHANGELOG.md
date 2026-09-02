@@ -5,7 +5,7 @@
 
 ---
 
-## 2026-09-02（Ozon FBP 边境仓核算，一期，本地完成待部署）
+## 2026-09-02（Ozon FBP 边境仓核算，一期，已上线 fyzsxnb.com）
 
 > 完整交接归档见《流程任务书-20260902-FBP边境仓核算.md》。
 
@@ -19,9 +19,14 @@
 ### fix — 开发期缺陷（已防回归）
 - **体积重单位错误**（关键）：初版把体积重结果（kg）当克用（64000cm³÷6000=10.67kg 被算作 10.67g）→ 全程 kg 口径 + 单测双断言锁定；条件体积重解析遗漏 Ural Super Express → 扩展 conditional 类型支持。
 
+### deploy — 上线与验收（commit `3cdd7d4`，2026-09-02）
+- 提交 15 文件（+9298/−7）已推送 `origin/main`；push run 33583013290 verify success（含 test:fbp 29 用例全链），dispatch run 33583444717 verify + deploy 双 success，FTP 上传 Hostinger 无超时复现。
+- 线上验收：fyzsxnb.com/kuajing/ 主 bundle 切换 `index-CBhzPVQY.js`（HTTP 200，含 `__fbp_calc__` 路由）；FBP chunk `OzonFbpCalc-kGfieGQk.js` HTTP 200（108KB，内含资费版本 HK1092026 与 142 线路数据）；FBP 资费 xlsx 源表入库（沿袭 CEL 资费表先例）；BYD 等无关文件未混入提交。
+
 ### 待办（P5）
 - Ozon 尾程配送费率表到位后切自动查表（配置已预留 `last_mile` 结构，现 UI 手动输入默认 0，利润为不含尾程口径）。
-- 本次提交需一并入库 20260901 任务书 §6.5 所列部署补录（仍为本地未提交变更）。
+- DEX 美元线路与逆向物流结构化计费：二期。
+- 部署记录补录（20260902 任务书 §5.1 与本条目）为本地变更，随下次 docs commit 入库。
 
 ---
 
