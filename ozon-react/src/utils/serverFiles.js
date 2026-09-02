@@ -5,9 +5,12 @@ const QUEUE_STORE = 'pending-uploads'
 const RETRY_DELAY_MS = 10000
 let queueFlushPromise = null
 let retryTimer = null
+const uploadResults = new Map()
 
-function queueId(namespace, name) {
-  return `${namespace}:${name}`
+function queueId(namespace, file) {
+  const nonce = globalThis.crypto?.randomUUID?.()
+    || `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+  return `${namespace}:${file.name}:${file.lastModified || 0}:${file.size || 0}:${nonce}`
 }
 
 function openQueueDb() {
@@ -51,8 +54,9 @@ async function queueOperation(mode, operation) {
 }
 
 function enqueueFile(namespace, file) {
+  const id = queueId(namespace, file)
   return queueOperation('readwrite', store => store.put({
-    id: queueId(namespace, file.name),
+    id,
     namespace,
     name: file.name,
     type: file.type || 'application/octet-stream',
@@ -62,12 +66,23 @@ function enqueueFile(namespace, file) {
   }))
 }
 
-function removeQueuedFile(namespace, name) {
-  return queueOperation('readwrite', store => store.delete(queueId(namespace, name)))
+function removeQueuedFile(id) {
+  return queueOperation('readwrite', store => store.delete(id))
 }
 
 function listQueuedFiles() {
   return queueOperation('readonly', store => store.getAll())
+}
+
+async function removeQueuedFiles(namespace, name) {
+  const queued = await listQueuedFiles()
+  const matches = queued.filter(record => record.namespace === namespace && record.name === name)
+  for (const record of matches) await removeQueuedFile(record.id)
+}
+
+function rememberUploadResult(id, result) {
+  uploadResults.set(id, result)
+  while (uploadResults.size > 100) uploadResults.delete(uploadResults.keys().next().value)
 }
 
 async function request(path, options = {}) {
@@ -125,6 +140,7 @@ export async function flushQueuedServerFiles() {
   if (!canUseServerPersistence() || !globalThis.indexedDB) return { uploaded: 0, pending: 0 }
   queueFlushPromise = (async () => {
     const queued = await listQueuedFiles().catch(() => [])
+    queued.sort((a, b) => Number(a.queuedAt) - Number(b.queuedAt) || String(a.id).localeCompare(String(b.id)))
     let uploaded = 0
     let pending = 0
     for (const record of queued) {
@@ -135,7 +151,8 @@ export async function flushQueuedServerFiles() {
         })
         const result = await uploadFileNow(record.namespace, file)
         if (!result?.file) throw new Error('Server did not confirm the uploaded file.')
-        await removeQueuedFile(record.namespace, record.name)
+        await removeQueuedFile(record.id)
+        rememberUploadResult(record.id, result)
         uploaded += 1
       } catch (error) {
         pending += 1
@@ -153,26 +170,32 @@ export async function flushQueuedServerFiles() {
 }
 
 export async function uploadServerFile(namespace, file) {
-  let queued = false
+  let queuedId = ''
   try {
-    await enqueueFile(namespace, file)
-    queued = true
+    queuedId = await enqueueFile(namespace, file)
   } catch (error) {
     console.warn('Could not persist the server file backup queue:', error.message)
+    return uploadFileNow(namespace, file)
   }
-  try {
-    const result = await uploadFileNow(namespace, file)
-    if (result?.file && queued) await removeQueuedFile(namespace, file.name)
-    return result
-  } catch (error) {
-    if (queued) scheduleQueueRetry()
-    throw error
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    await flushQueuedServerFiles()
+    const result = uploadResults.get(queuedId)
+    if (result?.file) {
+      uploadResults.delete(queuedId)
+      return result
+    }
+    const stillQueued = (await listQueuedFiles().catch(() => []))
+      .some(record => record.id === queuedId)
+    if (!stillQueued) break
   }
+  scheduleQueueRetry()
+  throw new Error('Source file backup is queued and will retry automatically.')
 }
 
 export async function deleteServerFile(namespace, name) {
   try {
-    await removeQueuedFile(namespace, name).catch(() => {})
+    await removeQueuedFiles(namespace, name).catch(() => {})
     const response = await request(
       `/files/${encodeURIComponent(namespace)}?name=${encodeURIComponent(name)}`,
       { method: 'DELETE' },

@@ -48,14 +48,17 @@ for (const marker of [
   'pending-uploads',
   'enqueueFile(namespace, file)',
   'flushQueuedServerFiles',
+  'removeQueuedFiles(namespace, name)',
+  'queued.sort(',
   "addEventListener('online'",
 ]) {
   assert.match(serverFiles, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `missing durable file backup marker: ${marker}`)
 }
 assert.ok(
-  serverFiles.indexOf('await enqueueFile(namespace, file)') < serverFiles.indexOf('const result = await uploadFileNow(namespace, file)'),
-  'source files must enter the durable queue before their first server upload attempt',
+  /export async function uploadServerFile[\s\S]{0,300}queuedId = await enqueueFile\(namespace, file\)[\s\S]{0,500}await flushQueuedServerFiles\(\)/.test(serverFiles),
+  'source files must enter the durable queue before the ordered upload flush',
 )
+assert.doesNotMatch(serverFiles, /queueId\(namespace,\s*name\)/, 'same-name offline files must not overwrite one another in the queue')
 
 class StateSafetyModel {
   constructor() {

@@ -18,8 +18,8 @@ This plugin mounts the built React dashboard at a WordPress page with the
 - Replacing or deleting a source file first creates a server-side snapshot; the
   latest 20 snapshots are retained for each namespace and filename.
 - Browser `localStorage` and IndexedDB remain an offline fallback. Failed source
-  file uploads stay in a durable IndexedDB queue and retry after login or when
-  connectivity returns.
+  file uploads stay as separate version records in a durable IndexedDB queue,
+  upload oldest-first, and retry after login or when connectivity returns.
 
 WordPress administrators and visitors with a valid Kuajing password session can
 read and write the shared server data. Browser storage is only an offline cache.
