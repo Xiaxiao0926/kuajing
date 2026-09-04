@@ -39,7 +39,7 @@ const OzonFbpCalc = lazy(() => import('./components/OzonFbpCalc'))
 const FragrancePricing = lazy(() => import('./components/FragrancePricing'))
 const ListingContent = lazy(() => import('./components/ListingContent'))
 const WBCalc = lazy(() => import('./components/WBCalc'))
-const DoorWindowHardwareReport = lazy(() => import('./components/reports/DoorWindowHardwareReport'))
+const MarketReportCenter = lazy(() => import('./components/reports/MarketReportCenter'))
 
 const LazyFallback = () => (
   <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
@@ -51,7 +51,7 @@ const DATA_DIR = getDataUrl().replace(/\/$/, '')
 function pageLabelForNode(nodeId) {
   if (nodeId === '__scoring__') return '选品评分'
   if (nodeId === '__purity_analysis__') return '选品市场分析'
-  if (nodeId === '__door_window_report__') return '门窗五金 TOP10'
+  if (nodeId === '__market_reports__' || nodeId === '__door_window_report__') return '市场报告中心'
   if (nodeId === '__fbp_calc__') return 'FBP 边境仓核算'
   if (nodeId === '__t6_candidates__') return '候选池'
   if (nodeId === '__t6_projects__') return 'SKU 项目'
@@ -238,10 +238,10 @@ function DashboardApp() {
         </Suspense>
       )
     }
-    if (activeNode === '__door_window_report__') {
+    if (activeNode === '__market_reports__' || activeNode === '__door_window_report__') {
       return (
         <Suspense fallback={<LazyFallback />}>
-          <DoorWindowHardwareReport />
+          <MarketReportCenter />
         </Suspense>
       )
     }
@@ -392,7 +392,7 @@ function DashboardApp() {
             >
               <option value="__project_flow__">项目流程总览</option>
               <option value="__purity_analysis__">选品市场分析</option>
-              <option value="__door_window_report__">门窗五金 TOP10</option>
+              <option value="__market_reports__">市场报告中心</option>
               <option value="__fbp_calc__">FBP 边境仓核算</option>
               {ROADMAP_PHASES.map((phase) => (
                 <optgroup key={phase.id} label={phase.title}>

@@ -29,7 +29,7 @@ const NAV_SECTIONS = [
     items: [
       { id: 'n2', label: '市场调研', icon: Search },
       { id: '__purity_analysis__', label: '选品市场分析', icon: Layers },
-      { id: '__door_window_report__', label: '门窗五金 TOP10', icon: BookOpen },
+      { id: '__market_reports__', label: '市场报告中心', icon: BookOpen },
       { id: '__scoring__', label: '选品评分', icon: Target },
       { id: 'n1', label: '立项决策', icon: ClipboardList },
     ],
