@@ -1,7 +1,11 @@
-import { useMemo, useState } from 'react'
-import { BookOpen, DoorOpen, ExternalLink, Lightbulb } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import * as XLSX from 'xlsx'
+import { BookOpen, DoorOpen, ExternalLink, Lightbulb, Loader2, RefreshCw, Upload } from 'lucide-react'
 import { getAssetUrl } from '../../utils/runtime.js'
+import { listServerFiles, uploadServerFile } from '../../utils/serverFiles.js'
+import { buildUploadedMarketReport, isUploadedMarketReport, stableMarketReportId } from '../../utils/marketReportAnalysis.js'
 import { GENERATED_MARKET_REPORTS } from '../../generated/marketReports.js'
+import UploadedMarketReport from './UploadedMarketReport.jsx'
 
 const FEATURED_REPORTS = [
   {
@@ -28,23 +32,62 @@ const FEATURED_REPORTS = [
   },
 ]
 
-const REPORTS = [...FEATURED_REPORTS, ...GENERATED_MARKET_REPORTS]
-const GROUP_ORDER = ['精选报告', '汽车生态', '家居与维修', '宠物与生活', '数码产品']
+const STATIC_REPORTS = [...FEATURED_REPORTS, ...GENERATED_MARKET_REPORTS]
+const GROUP_ORDER = ['导入报告', '精选报告', '汽车生态', '家居与维修', '宠物与生活', '数码产品']
+const SOURCE_NAMESPACE = 'market-report-sources'
+const REPORT_NAMESPACE = 'market-report-json'
+
+function parseWorkbook(arrayBuffer) {
+  const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
+  const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
+  if (!firstSheet) throw new Error('Excel 中没有可读取的工作表。')
+  return XLSX.utils.sheet_to_json(firstSheet, { defval: null })
+}
 
 export default function MarketReportCenter() {
-  const [activeReportId, setActiveReportId] = useState(REPORTS[0].id)
+  const [activeReportId, setActiveReportId] = useState(STATIC_REPORTS[0].id)
   const [activeGroup, setActiveGroup] = useState('精选报告')
-  const activeReport = REPORTS.find((report) => report.id === activeReportId) || REPORTS[0]
-  const reportUrl = getAssetUrl(activeReport.path)
+  const [uploadedReports, setUploadedReports] = useState([])
+  const [loadingUploaded, setLoadingUploaded] = useState(true)
+  const [publishing, setPublishing] = useState(false)
+  const [publishStatus, setPublishStatus] = useState(null)
+  const fileInputRef = useRef(null)
+  const reports = useMemo(() => [...uploadedReports, ...STATIC_REPORTS], [uploadedReports])
+  const activeReport = reports.find((report) => report.id === activeReportId) || reports[0]
+  const reportUrl = activeReport?.path ? getAssetUrl(activeReport.path) : ''
   const groupedReports = useMemo(() => {
-    const groups = { 精选报告: FEATURED_REPORTS }
+    const groups = { 导入报告: uploadedReports, 精选报告: FEATURED_REPORTS }
     GENERATED_MARKET_REPORTS.forEach((report) => {
       if (!groups[report.group]) groups[report.group] = []
       groups[report.group].push(report)
     })
     return groups
-  }, [])
+  }, [uploadedReports])
   const visibleReports = groupedReports[activeGroup] || []
+
+  const loadUploadedReports = useCallback(async () => {
+    setLoadingUploaded(true)
+    try {
+      const files = await listServerFiles(REPORT_NAMESPACE)
+      const loaded = await Promise.all(files
+        .filter((file) => file.name.toLowerCase().endsWith('.json') && file.downloadUrl)
+        .map(async (file) => {
+          try {
+            const response = await fetch(file.downloadUrl, { credentials: 'same-origin', cache: 'no-store' })
+            if (!response.ok) return null
+            const report = await response.json()
+            return isUploadedMarketReport(report) ? { ...report, serverDownloadUrl: file.downloadUrl } : null
+          } catch {
+            return null
+          }
+        }))
+      setUploadedReports(loaded.filter(Boolean).sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt))))
+    } finally {
+      setLoadingUploaded(false)
+    }
+  }, [])
+
+  useEffect(() => { loadUploadedReports() }, [loadUploadedReports])
 
   const selectReport = (report) => {
     setActiveReportId(report.id)
@@ -57,19 +100,84 @@ export default function MarketReportCenter() {
     if (firstReport) setActiveReportId(firstReport.id)
   }
 
+  const handleImport = async (event) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file || publishing) return
+    setPublishing(true)
+    setPublishStatus({ type: 'working', text: '正在解析 Excel…' })
+    try {
+      if (!/\.xlsx?$/iu.test(file.name)) throw new Error('目前仅支持 .xlsx 和 .xls 文件。')
+      if (file.size > 50 * 1024 * 1024) throw new Error('文件超过 50 MB，无法上传。')
+      const rawRows = parseWorkbook(await file.arrayBuffer())
+      const report = buildUploadedMarketReport(rawRows, { sourceFile: file.name })
+
+      setPublishStatus({ type: 'working', text: '正在备份原始 Excel…' })
+      const sourceResult = await uploadServerFile(SOURCE_NAMESPACE, file)
+      if (!sourceResult?.file) throw new Error('服务器未确认原始 Excel 备份。')
+
+      setPublishStatus({ type: 'working', text: '正在发布报告…' })
+      const reportFileName = `${stableMarketReportId(file.name)}.json`
+      const publishedReport = { ...report, sourceBackup: sourceResult.file.name }
+      const reportFile = new File([JSON.stringify(publishedReport)], reportFileName, { type: 'application/json' })
+      const reportResult = await uploadServerFile(REPORT_NAMESPACE, reportFile)
+      if (!reportResult?.file) throw new Error('服务器未确认报告发布。')
+
+      const readyReport = { ...publishedReport, serverDownloadUrl: reportResult.file.downloadUrl }
+      setUploadedReports((current) => [readyReport, ...current.filter((item) => item.id !== readyReport.id)])
+      setActiveGroup('导入报告')
+      setActiveReportId(readyReport.id)
+      setPublishStatus({ type: 'success', text: `“${readyReport.label}”已发布并完成服务器备份。` })
+    } catch (error) {
+      setPublishStatus({ type: 'error', text: error.message || '导入发布失败。' })
+    } finally {
+      setPublishing(false)
+    }
+  }
+
   return (
     <section className="mx-auto w-full max-w-[1600px]">
       <header className="border-b border-gray-200 pb-4">
         <p className="text-xs font-semibold text-blue-600">市场与选品</p>
         <h1 className="mt-1 text-2xl font-semibold text-morandi-text">市场报告中心</h1>
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-morandi-text-light">
-          <span>Ozon 类目深度分析与选品证据档案</span>
-          <span className="text-xs text-gray-400">共 {REPORTS.length} 份报告</span>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-morandi-text-light">
+            <span>Ozon 类目深度分析与选品证据档案</span>
+            <span className="text-xs text-gray-400">共 {reports.length} 份报告</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <input ref={fileInputRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={handleImport} />
+            <button
+              type="button"
+              onClick={loadUploadedReports}
+              disabled={loadingUploaded || publishing}
+              title="刷新服务器报告"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-morandi-text-light hover:border-blue-300 hover:text-blue-700 disabled:opacity-50"
+            >
+              <RefreshCw size={16} className={loadingUploaded ? 'animate-spin' : ''} aria-hidden="true" />
+              <span className="sr-only">刷新服务器报告</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={publishing}
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {publishing ? <Loader2 size={16} className="animate-spin" aria-hidden="true" /> : <Upload size={16} aria-hidden="true" />}
+              {publishing ? '正在发布' : '导入并发布'}
+            </button>
+          </div>
         </div>
+        <p className="mt-2 text-xs text-gray-400">浏览器本地解析，原始 Excel 与聚合报告保存到服务器私有备份；同名文件再次导入会保留旧版本。</p>
+        {publishStatus && (
+          <p className={`mt-3 text-sm ${publishStatus.type === 'error' ? 'text-red-700' : publishStatus.type === 'success' ? 'text-emerald-700' : 'text-blue-700'}`} role={publishStatus.type === 'error' ? 'alert' : 'status'}>
+            {publishStatus.text}
+          </p>
+        )}
       </header>
 
       <div className="flex gap-1 overflow-x-auto border-b border-gray-200 pt-4" role="tablist" aria-label="报告分组">
-        {GROUP_ORDER.filter((group) => groupedReports[group]?.length).map((group) => (
+        {GROUP_ORDER.filter((group) => group !== '导入报告' || loadingUploaded || groupedReports[group]?.length).filter((group) => groupedReports[group]?.length || group === '导入报告').map((group) => (
           <button
             key={group}
             type="button"
@@ -83,7 +191,7 @@ export default function MarketReportCenter() {
             }`}
           >
             {group}
-            <span className="ml-1.5 text-xs font-normal text-gray-400">{groupedReports[group].length}</span>
+            <span className="ml-1.5 text-xs font-normal text-gray-400">{groupedReports[group]?.length || 0}</span>
           </button>
         ))}
       </div>
@@ -96,12 +204,12 @@ export default function MarketReportCenter() {
           <select
             id="market-report-select"
             value={activeReport.id}
-            onChange={(event) => selectReport(REPORTS.find((report) => report.id === event.target.value) || REPORTS[0])}
+            onChange={(event) => selectReport(reports.find((report) => report.id === event.target.value) || reports[0])}
             className="h-10 w-full rounded-md border border-gray-200 bg-white px-3 text-sm text-morandi-text focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 lg:hidden"
           >
             {GROUP_ORDER.filter((group) => groupedReports[group]?.length).map((group) => (
               <optgroup key={group} label={group}>
-                {groupedReports[group].map((report) => <option key={report.id} value={report.id}>{report.label}</option>)}
+                {(groupedReports[group] || []).map((report) => <option key={report.id} value={report.id}>{report.label}</option>)}
               </optgroup>
             ))}
           </select>
@@ -141,23 +249,31 @@ export default function MarketReportCenter() {
                 数据快照 {activeReport.snapshot} · {activeReport.source} · {activeReport.sample}
               </p>
             </div>
-            <a
-              href={reportUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-3 text-sm font-medium text-morandi-text transition-colors hover:border-blue-300 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              <ExternalLink size={16} aria-hidden="true" />
-              新窗口打开
-            </a>
+            {activeReport.kind === 'uploaded' ? (
+              <span className="inline-flex h-9 shrink-0 items-center rounded-md border border-emerald-200 bg-emerald-50 px-3 text-sm font-medium text-emerald-800">服务器已发布</span>
+            ) : (
+              <a
+                href={reportUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-3 text-sm font-medium text-morandi-text transition-colors hover:border-blue-300 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                <ExternalLink size={16} aria-hidden="true" />
+                新窗口打开
+              </a>
+            )}
           </div>
 
-          <iframe
-            key={activeReport.id}
-            title={activeReport.frameTitle}
-            src={reportUrl}
-            className="h-[calc(100vh-16rem)] min-h-[680px] w-full rounded-md border border-gray-200 bg-white"
-          />
+          {activeReport.kind === 'uploaded' ? (
+            <UploadedMarketReport key={activeReport.id} report={activeReport} />
+          ) : (
+            <iframe
+              key={activeReport.id}
+              title={activeReport.frameTitle}
+              src={reportUrl}
+              className="h-[calc(100vh-16rem)] min-h-[680px] w-full rounded-md border border-gray-200 bg-white"
+            />
+          )}
         </div>
       </div>
     </section>
