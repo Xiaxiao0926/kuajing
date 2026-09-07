@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict'
 import {
   buildUploadedMarketReport,
+  getMarketImportType,
   inferMarketReportLabel,
   isUploadedMarketReport,
+  parseMarketReportJson,
   stableMarketReportId,
 } from './marketReportAnalysis.js'
 
@@ -36,6 +38,17 @@ const unsafeUrlReport = buildUploadedMarketReport([
 assert.equal(unsafeUrlReport.topProducts[0].url, '')
 
 assert.equal(inferMarketReportLabel('ozon-2026-07-23汽车清洁_清洗版.xlsx'), '汽车清洁')
+assert.equal(inferMarketReportLabel('ozon-2026-07-23汽车清洁_清洗版.csv'), '汽车清洁')
+assert.equal(inferMarketReportLabel('ozon-2026-07-23汽车清洁_清洗版.json'), '汽车清洁')
+assert.equal(getMarketImportType('data.xlsx'), 'Excel')
+assert.equal(getMarketImportType('data.CSV'), 'CSV')
+assert.equal(getMarketImportType('data.json'), 'JSON')
+assert.equal(getMarketImportType('data.txt'), null)
+assert.deepEqual(parseMarketReportJson('[{"销售额₽":100}]'), [{ '销售额₽': 100 }])
+assert.deepEqual(parseMarketReportJson('{"rows":[{"销售额₽":200}]}'), [{ '销售额₽': 200 }])
+assert.deepEqual(parseMarketReportJson('{"data":[{"销售额₽":300}]}'), [{ '销售额₽': 300 }])
+assert.throws(() => parseMarketReportJson('{"meta":{}}'), /JSON 需要是对象数组/)
+assert.throws(() => parseMarketReportJson('{broken'), /JSON 文件格式无效/)
 assert.equal(stableMarketReportId('same.xlsx'), stableMarketReportId('same.xlsx'))
 assert.notEqual(stableMarketReportId('same.xlsx'), stableMarketReportId('other.xlsx'))
 assert.throws(() => buildUploadedMarketReport([{ 产品名称: '无销售额' }]), /缺少销售额字段/)

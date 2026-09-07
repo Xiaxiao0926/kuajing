@@ -130,10 +130,38 @@ function rowModel(row) {
 
 export function inferMarketReportLabel(fileName) {
   return String(fileName || '导入数据')
-    .replace(/\.(xlsx|xls)$/iu, '')
+    .replace(/\.(xlsx|xls|csv|json)$/iu, '')
     .replace(/^ozon-\d{4}-\d{2}-\d{2}/iu, '')
     .replace(/_?清洗版$/u, '')
     .replace(/^[_\s-]+|[_\s-]+$/g, '') || '导入数据'
+}
+
+export function getMarketImportType(fileName) {
+  const extension = String(fileName || '').match(/\.([^.]+)$/u)?.[1]?.toLocaleLowerCase()
+  if (extension === 'xlsx' || extension === 'xls') return 'Excel'
+  if (extension === 'csv') return 'CSV'
+  if (extension === 'json') return 'JSON'
+  return null
+}
+
+export function parseMarketReportJson(textValue) {
+  let parsed
+  try {
+    parsed = JSON.parse(String(textValue || '').replace(/^\uFEFF/u, ''))
+  } catch {
+    throw new Error('JSON 文件格式无效。')
+  }
+  const rows = Array.isArray(parsed)
+    ? parsed
+    : Array.isArray(parsed?.rows)
+      ? parsed.rows
+      : Array.isArray(parsed?.data)
+        ? parsed.data
+        : null
+  if (!rows?.length || rows.some((row) => !row || typeof row !== 'object' || Array.isArray(row))) {
+    throw new Error('JSON 需要是对象数组，或使用 { rows: [...] } / { data: [...] }。')
+  }
+  return rows
 }
 
 export function stableMarketReportId(fileName) {
@@ -153,6 +181,7 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
   }
 
   const sourceFile = options.sourceFile || 'import.xlsx'
+  const sourceFormat = options.sourceFormat || getMarketImportType(sourceFile) || '数据文件'
   const label = options.label || inferMarketReportLabel(sourceFile)
   const snapshot = options.snapshot || sourceFile.match(/\d{4}-\d{2}-\d{2}/)?.[0] || new Date().toISOString().slice(0, 10)
   const id = options.id || stableMarketReportId(sourceFile)
@@ -200,7 +229,7 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
     title: `Ozon ${label}市场分析`,
     group: '导入报告',
     snapshot,
-    source: '用户导入 Excel',
+    source: `用户导入 ${sourceFormat}`,
     sample: `${rowCount.toLocaleString('zh-CN')} 条记录`,
     frameTitle: `Ozon ${label}市场分析报告`,
     sourceFile,

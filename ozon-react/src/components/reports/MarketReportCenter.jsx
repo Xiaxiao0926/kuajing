@@ -3,7 +3,13 @@ import * as XLSX from 'xlsx'
 import { BookOpen, DoorOpen, ExternalLink, Lightbulb, Loader2, RefreshCw, Upload } from 'lucide-react'
 import { getAssetUrl } from '../../utils/runtime.js'
 import { listServerFiles, uploadServerFile } from '../../utils/serverFiles.js'
-import { buildUploadedMarketReport, isUploadedMarketReport, stableMarketReportId } from '../../utils/marketReportAnalysis.js'
+import {
+  buildUploadedMarketReport,
+  getMarketImportType,
+  isUploadedMarketReport,
+  parseMarketReportJson,
+  stableMarketReportId,
+} from '../../utils/marketReportAnalysis.js'
 import { GENERATED_MARKET_REPORTS } from '../../generated/marketReports.js'
 import UploadedMarketReport from './UploadedMarketReport.jsx'
 
@@ -37,11 +43,16 @@ const GROUP_ORDER = ['导入报告', '精选报告', '汽车生态', '家居与�
 const SOURCE_NAMESPACE = 'market-report-sources'
 const REPORT_NAMESPACE = 'market-report-json'
 
-function parseWorkbook(arrayBuffer) {
+function parseWorkbook(arrayBuffer, fileType) {
   const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
   const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
-  if (!firstSheet) throw new Error('Excel 中没有可读取的工作表。')
+  if (!firstSheet) throw new Error(`${fileType} 中没有可读取的数据表。`)
   return XLSX.utils.sheet_to_json(firstSheet, { defval: null })
+}
+
+async function parseImportFile(file, fileType) {
+  if (fileType === 'JSON') return parseMarketReportJson(await file.text())
+  return parseWorkbook(await file.arrayBuffer(), fileType)
 }
 
 export default function MarketReportCenter() {
@@ -105,16 +116,17 @@ export default function MarketReportCenter() {
     event.target.value = ''
     if (!file || publishing) return
     setPublishing(true)
-    setPublishStatus({ type: 'working', text: '正在解析 Excel…' })
+    setPublishStatus({ type: 'working', text: '正在解析数据文件…' })
     try {
-      if (!/\.xlsx?$/iu.test(file.name)) throw new Error('目前仅支持 .xlsx 和 .xls 文件。')
+      const fileType = getMarketImportType(file.name)
+      if (!fileType) throw new Error('仅支持 .xlsx、.xls、.csv 和 .json 文件。')
       if (file.size > 50 * 1024 * 1024) throw new Error('文件超过 50 MB，无法上传。')
-      const rawRows = parseWorkbook(await file.arrayBuffer())
-      const report = buildUploadedMarketReport(rawRows, { sourceFile: file.name })
+      const rawRows = await parseImportFile(file, fileType)
+      const report = buildUploadedMarketReport(rawRows, { sourceFile: file.name, sourceFormat: fileType })
 
-      setPublishStatus({ type: 'working', text: '正在备份原始 Excel…' })
+      setPublishStatus({ type: 'working', text: `正在备份原始 ${fileType}…` })
       const sourceResult = await uploadServerFile(SOURCE_NAMESPACE, file)
-      if (!sourceResult?.file) throw new Error('服务器未确认原始 Excel 备份。')
+      if (!sourceResult?.file) throw new Error(`服务器未确认原始 ${fileType} 备份。`)
 
       setPublishStatus({ type: 'working', text: '正在发布报告…' })
       const reportFileName = `${stableMarketReportId(file.name)}.json`
@@ -146,7 +158,7 @@ export default function MarketReportCenter() {
             <span className="text-xs text-gray-400">共 {reports.length} 份报告</span>
           </div>
           <div className="flex items-center gap-2">
-            <input ref={fileInputRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={handleImport} />
+            <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.csv,.json" className="hidden" onChange={handleImport} />
             <button
               type="button"
               onClick={loadUploadedReports}
@@ -168,7 +180,7 @@ export default function MarketReportCenter() {
             </button>
           </div>
         </div>
-        <p className="mt-2 text-xs text-gray-400">浏览器本地解析，原始 Excel 与聚合报告保存到服务器私有备份；同名文件再次导入会保留旧版本。</p>
+        <p className="mt-2 text-xs text-gray-400">支持 Excel、CSV 和 JSON；浏览器本地解析，原始文件与聚合报告保存到服务器私有备份，同名文件再次导入会保留旧版本。</p>
         {publishStatus && (
           <p className={`mt-3 text-sm ${publishStatus.type === 'error' ? 'text-red-700' : publishStatus.type === 'success' ? 'text-emerald-700' : 'text-blue-700'}`} role={publishStatus.type === 'error' ? 'alert' : 'status'}>
             {publishStatus.text}
