@@ -1,0 +1,520 @@
+{
+  "id": "generated-car-accessories",
+  "label": "汽车用品",
+  "title": "Ozon 汽车用品市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23汽车用品_清洗版.xlsx",
+  "path": "reports/generated/car-accessories/index.html",
+  "frameTitle": "Ozon 汽车用品市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 438423134,
+    "totalSales": 1674184,
+    "unitRevenue": 261.87,
+    "typeCount": 38,
+    "brandCount": 241,
+    "sellerCount": 505
+  },
+  "topTypes": [
+    {
+      "name": "汽车芳香剂",
+      "rows": 287,
+      "revenue": 139991334,
+      "sales": 596398,
+      "salesRows": 281,
+      "unitRevenue": 234.73,
+      "share": 31.9
+    },
+    {
+      "name": "车载支架",
+      "rows": 191,
+      "revenue": 92460086,
+      "sales": 355064,
+      "salesRows": 188,
+      "unitRevenue": 260.4,
+      "share": 21.1
+    },
+    {
+      "name": "遮阳帘",
+      "rows": 116,
+      "revenue": 82024222,
+      "sales": 217463,
+      "salesRows": 113,
+      "unitRevenue": 377.19,
+      "share": 18.7
+    },
+    {
+      "name": "车牌架",
+      "rows": 63,
+      "revenue": 34038814,
+      "sales": 80267,
+      "salesRows": 62,
+      "unitRevenue": 424.07,
+      "share": 7.8
+    },
+    {
+      "name": "汽车枕头",
+      "rows": 19,
+      "revenue": 13621505,
+      "sales": 21353,
+      "salesRows": 19,
+      "unitRevenue": 637.92,
+      "share": 3.1
+    },
+    {
+      "name": "方向盘套",
+      "rows": 30,
+      "revenue": 12866151,
+      "sales": 26573,
+      "salesRows": 30,
+      "unitRevenue": 484.18,
+      "share": 2.9
+    },
+    {
+      "name": "汽车贴纸",
+      "rows": 68,
+      "revenue": 9265823,
+      "sales": 75709,
+      "salesRows": 68,
+      "unitRevenue": 122.39,
+      "share": 2.1
+    },
+    {
+      "name": "汽车停车牌",
+      "rows": 21,
+      "revenue": 6175468,
+      "sales": 45161,
+      "salesRows": 20,
+      "unitRevenue": 136.74,
+      "share": 1.4
+    },
+    {
+      "name": "汽车防盗器遥控器套",
+      "rows": 24,
+      "revenue": 4743536,
+      "sales": 23724,
+      "salesRows": 22,
+      "unitRevenue": 199.95,
+      "share": 1.1
+    },
+    {
+      "name": "汽车防蚊网",
+      "rows": 17,
+      "revenue": 4736494,
+      "sales": 21967,
+      "salesRows": 16,
+      "unitRevenue": 215.62,
+      "share": 1.1
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 414,
+      "revenue": 144601725,
+      "sales": 719880,
+      "salesRows": 401,
+      "unitRevenue": 200.87,
+      "share": 33
+    },
+    {
+      "name": "YCAR",
+      "rows": 17,
+      "revenue": 18274229,
+      "sales": 44865,
+      "salesRows": 17,
+      "unitRevenue": 407.32,
+      "share": 4.2
+    },
+    {
+      "name": "Aeroma",
+      "rows": 6,
+      "revenue": 16362582,
+      "sales": 61404,
+      "salesRows": 6,
+      "unitRevenue": 266.47,
+      "share": 3.7
+    },
+    {
+      "name": "EIKOSHA",
+      "rows": 18,
+      "revenue": 14354672,
+      "sales": 19637,
+      "salesRows": 18,
+      "unitRevenue": 731,
+      "share": 3.3
+    },
+    {
+      "name": "KUD SHOP",
+      "rows": 6,
+      "revenue": 9813484,
+      "sales": 24604,
+      "salesRows": 6,
+      "unitRevenue": 398.86,
+      "share": 2.2
+    },
+    {
+      "name": "АРОМАТИЗАТОР AIRUS",
+      "rows": 12,
+      "revenue": 9146040,
+      "sales": 29154,
+      "salesRows": 12,
+      "unitRevenue": 313.71,
+      "share": 2.1
+    },
+    {
+      "name": "Defender",
+      "rows": 21,
+      "revenue": 7272111,
+      "sales": 43201,
+      "salesRows": 20,
+      "unitRevenue": 168.33,
+      "share": 1.7
+    },
+    {
+      "name": "hoco",
+      "rows": 6,
+      "revenue": 5564009,
+      "sales": 5577,
+      "salesRows": 6,
+      "unitRevenue": 997.67,
+      "share": 1.3
+    },
+    {
+      "name": "Feen",
+      "rows": 6,
+      "revenue": 5224601,
+      "sales": 7097,
+      "salesRows": 6,
+      "unitRevenue": 736.17,
+      "share": 1.2
+    },
+    {
+      "name": "RCS",
+      "rows": 2,
+      "revenue": 4666203,
+      "sales": 3374,
+      "salesRows": 2,
+      "unitRevenue": 1382.99,
+      "share": 1.1
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "ВекторТех",
+      "rows": 10,
+      "revenue": 17718493,
+      "sales": 107768,
+      "salesRows": 9,
+      "unitRevenue": 164.41,
+      "share": 4
+    },
+    {
+      "name": "YCAR",
+      "rows": 15,
+      "revenue": 16535424,
+      "sales": 36196,
+      "salesRows": 15,
+      "unitRevenue": 456.83,
+      "share": 3.8
+    },
+    {
+      "name": "Namess",
+      "rows": 6,
+      "revenue": 16362582,
+      "sales": 61404,
+      "salesRows": 6,
+      "unitRevenue": 266.47,
+      "share": 3.7
+    },
+    {
+      "name": "Airus",
+      "rows": 23,
+      "revenue": 12247728,
+      "sales": 50410,
+      "salesRows": 23,
+      "unitRevenue": 242.96,
+      "share": 2.8
+    },
+    {
+      "name": "ProHouseShop",
+      "rows": 6,
+      "revenue": 9813484,
+      "sales": 24604,
+      "salesRows": 6,
+      "unitRevenue": 398.86,
+      "share": 2.2
+    },
+    {
+      "name": "Defender",
+      "rows": 21,
+      "revenue": 7272111,
+      "sales": 43201,
+      "salesRows": 20,
+      "unitRevenue": 168.33,
+      "share": 1.7
+    },
+    {
+      "name": "Royal Scent / Королевский Аромат",
+      "rows": 7,
+      "revenue": 6837496,
+      "sales": 8497,
+      "salesRows": 7,
+      "unitRevenue": 804.7,
+      "share": 1.6
+    },
+    {
+      "name": "SIA+",
+      "rows": 3,
+      "revenue": 6325224,
+      "sales": 18248,
+      "salesRows": 3,
+      "unitRevenue": 346.63,
+      "share": 1.4
+    },
+    {
+      "name": "ДМ",
+      "rows": 6,
+      "revenue": 5224601,
+      "sales": 7097,
+      "salesRows": 6,
+      "unitRevenue": 736.17,
+      "share": 1.2
+    },
+    {
+      "name": "Linyunbest",
+      "rows": 4,
+      "revenue": 4930530,
+      "sales": 25758,
+      "salesRows": 4,
+      "unitRevenue": 191.42,
+      "share": 1.1
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 481,
+      "revenue": 108549684,
+      "sales": 847387,
+      "share": 24.8
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 352,
+      "revenue": 195909264,
+      "sales": 668856,
+      "share": 44.7
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 119,
+      "revenue": 82407161,
+      "sales": 122252,
+      "share": 18.8
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 43,
+      "revenue": 45223385,
+      "sales": 33267,
+      "share": 10.3
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 5,
+      "revenue": 6333640,
+      "sales": 2422,
+      "share": 1.4
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 0,
+      "revenue": 0,
+      "sales": 0,
+      "share": 0
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Aeroma Car Air Freshener, Citrus, Berry, 7 ml",
+      "brand": "Aeroma",
+      "seller": "Namess",
+      "type": "汽车芳香剂",
+      "revenue": 10155914,
+      "sales": 40097,
+      "avgPrice": 253,
+      "url": "https://www.ozon.ru/product/2317116001"
+    },
+    {
+      "name": "Car Air Freshener, Fruit, Wood, 7.5 ml",
+      "brand": "未知/无品牌",
+      "seller": "ВекторТех",
+      "type": "汽车芳香剂",
+      "revenue": 5943250,
+      "sales": 26717,
+      "avgPrice": 222,
+      "url": "https://www.ozon.ru/product/3144295007"
+    },
+    {
+      "name": "Car Air Freshener, Wood, Sweet, 7.5 ml",
+      "brand": "未知/无品牌",
+      "seller": "ВекторТех",
+      "type": "汽车芳香剂",
+      "revenue": 4669113,
+      "sales": 20848,
+      "avgPrice": 224,
+      "url": "https://www.ozon.ru/product/3450253110"
+    },
+    {
+      "name": "Car Air Freshener, Maritime, 50 ml",
+      "brand": "未知/无品牌",
+      "seller": "currant",
+      "type": "汽车芳香剂",
+      "revenue": 4260239,
+      "sales": 12688,
+      "avgPrice": 336,
+      "url": "https://www.ozon.ru/product/1783961335"
+    },
+    {
+      "name": "Sunshade, 145 cm х 80 cm, 99% dimming",
+      "brand": "未知/无品牌",
+      "seller": "Linyunbest",
+      "type": "遮阳帘",
+      "revenue": 4210704,
+      "sales": 22316,
+      "avgPrice": 189,
+      "url": "https://www.ozon.ru/product/2559970353"
+    },
+    {
+      "name": "Car Holder, Magnetic, 2.3\"",
+      "brand": "未知/无品牌",
+      "seller": "АвтоКомфорт",
+      "type": "车载支架",
+      "revenue": 4045926,
+      "sales": 21155,
+      "avgPrice": 191,
+      "url": "https://www.ozon.ru/product/3330539877"
+    },
+    {
+      "name": "KUD SHOP Sunshade, 145 cm х 80 cm, 100% dimming",
+      "brand": "KUD SHOP",
+      "seller": "ProHouseShop",
+      "type": "遮阳帘",
+      "revenue": 3786698,
+      "sales": 8853,
+      "avgPrice": 428,
+      "url": "https://www.ozon.ru/product/2046619291"
+    },
+    {
+      "name": "KUD SHOP Sunshade, 70 cm х 140 cm, 97% dimming",
+      "brand": "KUD SHOP",
+      "seller": "ProHouseShop",
+      "type": "遮阳帘",
+      "revenue": 3714534,
+      "sales": 9973,
+      "avgPrice": 372,
+      "url": "https://www.ozon.ru/product/1635394890"
+    },
+    {
+      "name": "Пахнет и Точка Car Air Freshener, Perfume, 7 ml",
+      "brand": "Пахнет и Точка",
+      "seller": "Пахнет и Точка",
+      "type": "汽车芳香剂",
+      "revenue": 3465319,
+      "sales": 15293,
+      "avgPrice": 227,
+      "url": "https://www.ozon.ru/product/3811923293"
+    },
+    {
+      "name": "YCAR Car Holder, Gravitational, 7\"",
+      "brand": "YCAR",
+      "seller": "YCAR",
+      "type": "车载支架",
+      "revenue": 3456082,
+      "sales": 8954,
+      "avgPrice": 386,
+      "url": "https://www.ozon.ru/product/1413866576"
+    },
+    {
+      "name": "EIKOSHA Car Air Freshener, Perfume, Sweet",
+      "brand": "EIKOSHA",
+      "seller": "Royal Scent / Королевский Аромат",
+      "type": "汽车芳香剂",
+      "revenue": 3314391,
+      "sales": 3232,
+      "avgPrice": 1025,
+      "url": "https://www.ozon.ru/product/1739707194"
+    },
+    {
+      "name": "Aeroma Car Air Freshener, Berry, Wood, 7 ml",
+      "brand": "Aeroma",
+      "seller": "Namess",
+      "type": "汽车芳香剂",
+      "revenue": 3281272,
+      "sales": 12003,
+      "avgPrice": 273,
+      "url": "https://www.ozon.ru/product/2124649572"
+    },
+    {
+      "name": "Car Air Freshener, Perfume, 7.5 ml",
+      "brand": "未知/无品牌",
+      "seller": "Арома Драйв",
+      "type": "汽车芳香剂",
+      "revenue": 3223020,
+      "sales": 14127,
+      "avgPrice": 228,
+      "url": "https://www.ozon.ru/product/3513803036"
+    },
+    {
+      "name": "Raven & Bear Sunshade, 140 cm х 80 cm, 99% dimming",
+      "brand": "Raven & Bear",
+      "seller": "Raven & Bear",
+      "type": "遮阳帘",
+      "revenue": 3197374,
+      "sales": 4741,
+      "avgPrice": 674,
+      "url": "https://www.ozon.ru/product/924021416"
+    },
+    {
+      "name": "AirPoint Car Air Freshener, Perfume, Wood, 7.5 ml",
+      "brand": "AirPoint",
+      "seller": "AirPoint",
+      "type": "汽车芳香剂",
+      "revenue": 3154426,
+      "sales": 24458,
+      "avgPrice": 129,
+      "url": "https://www.ozon.ru/product/2544797643"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.9259999999999999,
+    "signRateCoverage": 97.6,
+    "stockoutMedian": 28,
+    "stockoutCoverage": 92,
+    "missedRevenue": 18366328,
+    "missedRevenueCoverage": 97.9,
+    "promoActiveShare": 99.8,
+    "promoCoverage": 100,
+    "adActiveShare": 100,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 97.9,
+    "missingSales": 21,
+    "missingAveragePrice": 0,
+    "missingBsr": 258,
+    "duplicateSku": 17,
+    "duplicateUrl": 0,
+    "uniqueSku": 983,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“汽车芳香剂”贡献 31.9% 销售额；前五品类合计 82.6%。",
+    "销售额最集中的价格带是 200–500 ₽，覆盖 352 条商品记录，贡献 44.7% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 53.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 97.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

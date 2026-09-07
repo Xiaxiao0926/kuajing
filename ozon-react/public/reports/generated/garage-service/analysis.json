@@ -1,0 +1,520 @@
+{
+  "id": "generated-garage-service",
+  "label": "车库与汽车服务",
+  "title": "Ozon 车库与汽车服务市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23车库汽车服务_清洗版.xlsx",
+  "path": "reports/generated/garage-service/index.html",
+  "frameTitle": "Ozon 车库与汽车服务市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 650688467,
+    "totalSales": 1412384,
+    "unitRevenue": 460.7,
+    "typeCount": 49,
+    "brandCount": 223,
+    "sellerCount": 627
+  },
+  "topTypes": [
+    {
+      "name": "汽车压缩机",
+      "rows": 83,
+      "revenue": 158989041,
+      "sales": 83164,
+      "salesRows": 70,
+      "unitRevenue": 1911.75,
+      "share": 24.4
+    },
+    {
+      "name": "燃油和润滑油泵",
+      "rows": 145,
+      "revenue": 121199499,
+      "sales": 210035,
+      "salesRows": 125,
+      "unitRevenue": 577.04,
+      "share": 18.6
+    },
+    {
+      "name": "汽车工具套件",
+      "rows": 39,
+      "revenue": 72184339,
+      "sales": 47223,
+      "salesRows": 39,
+      "unitRevenue": 1528.58,
+      "share": 11.1
+    },
+    {
+      "name": "工业漏斗",
+      "rows": 107,
+      "revenue": 62867689,
+      "sales": 213651,
+      "salesRows": 92,
+      "unitRevenue": 294.25,
+      "share": 9.7
+    },
+    {
+      "name": "汽车专用工具",
+      "rows": 162,
+      "revenue": 61998134,
+      "sales": 224352,
+      "salesRows": 154,
+      "unitRevenue": 276.34,
+      "share": 9.5
+    },
+    {
+      "name": "轮胎维修套件",
+      "rows": 103,
+      "revenue": 31392423,
+      "sales": 179087,
+      "salesRows": 93,
+      "unitRevenue": 175.29,
+      "share": 4.8
+    },
+    {
+      "name": "注油枪",
+      "rows": 55,
+      "revenue": 26099127,
+      "sales": 78392,
+      "salesRows": 54,
+      "unitRevenue": 332.93,
+      "share": 4
+    },
+    {
+      "name": "拉拔器",
+      "rows": 54,
+      "revenue": 19603686,
+      "sales": 51150,
+      "salesRows": 50,
+      "unitRevenue": 383.26,
+      "share": 3
+    },
+    {
+      "name": "洗车机配件",
+      "rows": 10,
+      "revenue": 10177174,
+      "sales": 26760,
+      "salesRows": 10,
+      "unitRevenue": 380.31,
+      "share": 1.6
+    },
+    {
+      "name": "润滑液注(加)油器",
+      "rows": 38,
+      "revenue": 9629987,
+      "sales": 40265,
+      "salesRows": 37,
+      "unitRevenue": 239.17,
+      "share": 1.5
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 535,
+      "revenue": 255317032,
+      "sales": 817540,
+      "salesRows": 475,
+      "unitRevenue": 312.3,
+      "share": 39.2
+    },
+    {
+      "name": "АВТОБРАТ",
+      "rows": 2,
+      "revenue": 22330509,
+      "sales": 5968,
+      "salesRows": 2,
+      "unitRevenue": 3741.71,
+      "share": 3.4
+    },
+    {
+      "name": "МАЯКАВТО всегда в помощь",
+      "rows": 23,
+      "revenue": 19264027,
+      "sales": 16677,
+      "salesRows": 23,
+      "unitRevenue": 1155.13,
+      "share": 3
+    },
+    {
+      "name": "БелАК",
+      "rows": 13,
+      "revenue": 17582187,
+      "sales": 11292,
+      "salesRows": 13,
+      "unitRevenue": 1557.05,
+      "share": 2.7
+    },
+    {
+      "name": "ASTRONAVT",
+      "rows": 2,
+      "revenue": 13510429,
+      "sales": 6335,
+      "salesRows": 2,
+      "unitRevenue": 2132.66,
+      "share": 2.1
+    },
+    {
+      "name": "ClickShop",
+      "rows": 3,
+      "revenue": 11965778,
+      "sales": 7262,
+      "salesRows": 3,
+      "unitRevenue": 1647.72,
+      "share": 1.8
+    },
+    {
+      "name": "VALORTEX",
+      "rows": 2,
+      "revenue": 10453871,
+      "sales": 1320,
+      "salesRows": 2,
+      "unitRevenue": 7919.6,
+      "share": 1.6
+    },
+    {
+      "name": "SATACR-MO",
+      "rows": 5,
+      "revenue": 9635223,
+      "sales": 3547,
+      "salesRows": 5,
+      "unitRevenue": 2716.44,
+      "share": 1.5
+    },
+    {
+      "name": "TOPAUTO",
+      "rows": 17,
+      "revenue": 9465566,
+      "sales": 39951,
+      "salesRows": 16,
+      "unitRevenue": 236.93,
+      "share": 1.5
+    },
+    {
+      "name": "Xiaomi",
+      "rows": 4,
+      "revenue": 8493345,
+      "sales": 3065,
+      "salesRows": 4,
+      "unitRevenue": 2771.08,
+      "share": 1.3
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "АВТОБРАТ",
+      "rows": 2,
+      "revenue": 22330509,
+      "sales": 5968,
+      "salesRows": 2,
+      "unitRevenue": 3741.71,
+      "share": 3.4
+    },
+    {
+      "name": "BELAK GROUP",
+      "rows": 13,
+      "revenue": 17582187,
+      "sales": 11292,
+      "salesRows": 13,
+      "unitRevenue": 1557.05,
+      "share": 2.7
+    },
+    {
+      "name": "ASTRONAVT",
+      "rows": 2,
+      "revenue": 13510429,
+      "sales": 6335,
+      "salesRows": 2,
+      "unitRevenue": 2132.66,
+      "share": 2.1
+    },
+    {
+      "name": "ClickShop",
+      "rows": 3,
+      "revenue": 11965778,
+      "sales": 7262,
+      "salesRows": 3,
+      "unitRevenue": 1647.72,
+      "share": 1.8
+    },
+    {
+      "name": "VALORTEX",
+      "rows": 2,
+      "revenue": 10453871,
+      "sales": 1320,
+      "salesRows": 2,
+      "unitRevenue": 7919.6,
+      "share": 1.6
+    },
+    {
+      "name": "YUMI",
+      "rows": 5,
+      "revenue": 9635223,
+      "sales": 3547,
+      "salesRows": 5,
+      "unitRevenue": 2716.44,
+      "share": 1.5
+    },
+    {
+      "name": "Про-Авто",
+      "rows": 10,
+      "revenue": 9245311,
+      "sales": 6997,
+      "salesRows": 10,
+      "unitRevenue": 1321.32,
+      "share": 1.4
+    },
+    {
+      "name": "ТРИТО",
+      "rows": 13,
+      "revenue": 8591518,
+      "sales": 38037,
+      "salesRows": 13,
+      "unitRevenue": 225.87,
+      "share": 1.3
+    },
+    {
+      "name": "RW",
+      "rows": 13,
+      "revenue": 8306773,
+      "sales": 53508,
+      "salesRows": 13,
+      "unitRevenue": 155.24,
+      "share": 1.3
+    },
+    {
+      "name": "vector",
+      "rows": 1,
+      "revenue": 8254430,
+      "sales": 6084,
+      "salesRows": 1,
+      "unitRevenue": 1356.74,
+      "share": 1.3
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 349,
+      "revenue": 97196363,
+      "sales": 710052,
+      "share": 14.9
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 282,
+      "revenue": 125393945,
+      "sales": 409984,
+      "share": 19.3
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 192,
+      "revenue": 112306214,
+      "sales": 133150,
+      "share": 17.3
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 118,
+      "revenue": 159920059,
+      "sales": 109437,
+      "share": 24.6
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 55,
+      "revenue": 140976215,
+      "sales": 47957,
+      "share": 21.7
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 4,
+      "revenue": 14895671,
+      "sales": 1804,
+      "share": 2.3
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "АВТОБРАТ Car Tools Kit",
+      "brand": "АВТОБРАТ",
+      "seller": "АВТОБРАТ",
+      "type": "汽车工具套件",
+      "revenue": 15291097,
+      "sales": 4073,
+      "avgPrice": 3754,
+      "url": "https://www.ozon.ru/product/541274789"
+    },
+    {
+      "name": "ASTRONAVT Car Compressor, 120 W, 35 L/min",
+      "brand": "ASTRONAVT",
+      "seller": "ASTRONAVT",
+      "type": "汽车压缩机",
+      "revenue": 10290242,
+      "sales": 4396,
+      "avgPrice": 2341,
+      "url": "https://www.ozon.ru/product/1419874008"
+    },
+    {
+      "name": "Car Compressor, 120.1 W, 35 L/min",
+      "brand": "未知/无品牌",
+      "seller": "vector",
+      "type": "汽车压缩机",
+      "revenue": 8254430,
+      "sales": 6084,
+      "avgPrice": 1357,
+      "url": "https://www.ozon.ru/product/4414860269"
+    },
+    {
+      "name": "DREAMDAY Technical Funnel",
+      "brand": "DREAMDAY",
+      "seller": "DREAMDAY",
+      "type": "工业漏斗",
+      "revenue": 7889256,
+      "sales": 18495,
+      "avgPrice": 427,
+      "url": "https://www.ozon.ru/product/1680768478"
+    },
+    {
+      "name": "SWAT Car Compressor, 60 L/min",
+      "brand": "SWAT",
+      "seller": "Аудиосистемы",
+      "type": "汽车压缩机",
+      "revenue": 7700202,
+      "sales": 4262,
+      "avgPrice": 1807,
+      "url": "https://www.ozon.ru/product/312644785"
+    },
+    {
+      "name": "Technical Funnel",
+      "brand": "未知/无品牌",
+      "seller": "Гараж 24",
+      "type": "工业漏斗",
+      "revenue": 7076633,
+      "sales": 9617,
+      "avgPrice": 736,
+      "url": "https://www.ozon.ru/product/3400303990"
+    },
+    {
+      "name": "АВТОБРАТ Car Tools Kit",
+      "brand": "АВТОБРАТ",
+      "seller": "АВТОБРАТ",
+      "type": "汽车工具套件",
+      "revenue": 7039412,
+      "sales": 1895,
+      "avgPrice": 3715,
+      "url": "https://www.ozon.ru/product/478073215"
+    },
+    {
+      "name": "ТехноЛиониум Fuel Pump",
+      "brand": "ТехноЛиониум",
+      "seller": "GoodTools",
+      "type": "燃油和润滑油泵",
+      "revenue": 5976904,
+      "sales": 2132,
+      "avgPrice": 2803,
+      "url": "https://www.ozon.ru/product/1087407539"
+    },
+    {
+      "name": "VALORTEX Car Tools Kit",
+      "brand": "VALORTEX",
+      "seller": "VALORTEX",
+      "type": "汽车工具套件",
+      "revenue": 5915066,
+      "sales": 678,
+      "avgPrice": 8724,
+      "url": "https://www.ozon.ru/product/3485288719"
+    },
+    {
+      "name": "Car Compressor, 140 W, 40 L/min",
+      "brand": "未知/无品牌",
+      "seller": "EasyShop",
+      "type": "汽车压缩机",
+      "revenue": 5763900,
+      "sales": null,
+      "avgPrice": 4331,
+      "url": "https://www.ozon.ru/product/4672051743"
+    },
+    {
+      "name": "ClickShop Car Compressor, 241 W, 85 L/min",
+      "brand": "ClickShop",
+      "seller": "ClickShop",
+      "type": "汽车压缩机",
+      "revenue": 4698924,
+      "sales": 2144,
+      "avgPrice": 2192,
+      "url": "https://www.ozon.ru/product/3469321775"
+    },
+    {
+      "name": "VALORTEX Car Tools Kit",
+      "brand": "VALORTEX",
+      "seller": "VALORTEX",
+      "type": "汽车工具套件",
+      "revenue": 4538805,
+      "sales": 642,
+      "avgPrice": 7070,
+      "url": "https://www.ozon.ru/product/4174526490"
+    },
+    {
+      "name": "ClickShop Car Compressor, 242 W, 85 L/min",
+      "brand": "ClickShop",
+      "seller": "ClickShop",
+      "type": "汽车压缩机",
+      "revenue": 4410124,
+      "sales": 2344,
+      "avgPrice": 1881,
+      "url": "https://www.ozon.ru/product/3469312339"
+    },
+    {
+      "name": "70mai Car Compressor, 119 W, 26 L/min",
+      "brand": "70mai",
+      "seller": "70mai",
+      "type": "汽车压缩机",
+      "revenue": 3980880,
+      "sales": 1434,
+      "avgPrice": 2776,
+      "url": "https://www.ozon.ru/product/196150622"
+    },
+    {
+      "name": "Autoprofi Car Compressor, 180 W, 45 L/min",
+      "brand": "Autoprofi",
+      "seller": "ТД «АВТОПРОФИ»",
+      "type": "汽车压缩机",
+      "revenue": 3965335,
+      "sales": 2861,
+      "avgPrice": 1386,
+      "url": "https://www.ozon.ru/product/901199160"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.9309999999999999,
+    "signRateCoverage": 91.6,
+    "stockoutMedian": 13,
+    "stockoutCoverage": 77.1,
+    "missedRevenue": 21453976.2,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 84.1,
+    "promoCoverage": 91.8,
+    "adActiveShare": 53.7,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "可用，需留意缺失",
+    "salesCoverage": 91.8,
+    "missingSales": 82,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 28,
+    "duplicateUrl": 0,
+    "uniqueSku": 972,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“汽车压缩机”贡献 24.4% 销售额；前五品类合计 73.3%。",
+    "销售额最集中的价格带是 1,000–2,000 ₽，覆盖 118 条商品记录，贡献 24.6% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 58.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 91.8%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

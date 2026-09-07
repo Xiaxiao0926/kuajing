@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 车体配件市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>车体配件市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">132.2 百万 ₽</span><span class="hint">约 10.2 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">189.9 千 件</span><span class="hint">覆盖 98.3% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">696 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">23</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">198 / 471</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>核心口径完整</strong><p>销售额字段用于主分析；销量缺失 17 条，均价缺失 0 条，BSR 标签缺失 0 条。SKU 重复 18 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“拖车钩”贡献 17.3% 销售额；前五品类合计 63.7%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 2,000–5,000 ₽，覆盖 101 条商品记录，贡献 28.2% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 63.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>拖车钩</td><td class="number">52</td><td class="number">22,889,520</td><td class="number">9,332</td><td class="number">17.3%</td></tr>
+    <tr><td>2</td><td>侧视镜</td><td class="number">90</td><td class="number">20,867,343</td><td class="number">11,051</td><td class="number">15.8%</td></tr>
+    <tr><td>3</td><td>挡泥板</td><td class="number">184</td><td class="number">18,319,930</td><td class="number">27,212</td><td class="number">13.9%</td></tr>
+    <tr><td>4</td><td>车门把手</td><td class="number">145</td><td class="number">11,826,285</td><td class="number">22,727</td><td class="number">8.9%</td></tr>
+    <tr><td>5</td><td>汽车翼子板</td><td class="number">26</td><td class="number">10,396,569</td><td class="number">3,099</td><td class="number">7.9%</td></tr>
+    <tr><td>6</td><td>汽车拖车钩配件</td><td class="number">116</td><td class="number">9,829,295</td><td class="number">39,271</td><td class="number">7.4%</td></tr>
+    <tr><td>7</td><td>后视镜</td><td class="number">66</td><td class="number">6,902,322</td><td class="number">15,100</td><td class="number">5.2%</td></tr>
+    <tr><td>8</td><td>保险杠</td><td class="number">23</td><td class="number">6,292,241</td><td class="number">2,446</td><td class="number">4.8%</td></tr>
+    <tr><td>9</td><td>车门锁</td><td class="number">74</td><td class="number">5,941,213</td><td class="number">11,436</td><td class="number">4.5%</td></tr>
+    <tr><td>10</td><td>车门维修套件</td><td class="number">79</td><td class="number">4,833,607</td><td class="number">11,448</td><td class="number">3.7%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">91%</div><div class="coverage">字段覆盖 97.9%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">18 天</div><div class="coverage">字段覆盖 92.5%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">72.4%</div><div class="coverage">字段覆盖 98.3%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">20.7%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3279859581" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">2,466,695</td>
+      <td class="number">524</td>
+      <td class="number">4,707</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3279858274" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">1,979,870</td>
+      <td class="number">394</td>
+      <td class="number">5,025</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2678055266" target="_blank" rel="noreferrer">Set Dead Zone Mirror</a></td>
+      <td>盲区镜</td>
+      <td>未知/无品牌</td>
+      <td class="number">1,130,769</td>
+      <td class="number">10,565</td>
+      <td class="number">107</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/476971134" target="_blank" rel="noreferrer">Automobile Plastics Factory Set Side-View Mirror</a></td>
+      <td>侧视镜</td>
+      <td>Automobile Plastics Factory</td>
+      <td class="number">1,106,330</td>
+      <td class="number">434</td>
+      <td class="number">2,549</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/476975656" target="_blank" rel="noreferrer">Automobile Plastics Factory Set Side-View Mirror</a></td>
+      <td>侧视镜</td>
+      <td>Automobile Plastics Factory</td>
+      <td class="number">1,006,779</td>
+      <td class="number">375</td>
+      <td class="number">2,685</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3301181279" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">987,228</td>
+      <td class="number">189</td>
+      <td class="number">5,223</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3536180973" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">930,989</td>
+      <td class="number">155</td>
+      <td class="number">6,006</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3555856319" target="_blank" rel="noreferrer">Set Side-View Mirror</a></td>
+      <td>侧视镜</td>
+      <td>未知/无品牌</td>
+      <td class="number">863,848</td>
+      <td class="number">269</td>
+      <td class="number">3,211</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3552674532" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">862,053</td>
+      <td class="number">98</td>
+      <td class="number">8,796</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3618783946" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">823,648</td>
+      <td class="number">144</td>
+      <td class="number">5,720</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3382527499" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">777,710</td>
+      <td class="number">151</td>
+      <td class="number">5,150</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3126588188" target="_blank" rel="noreferrer">Спец-Автопласт Car Fender</a></td>
+      <td>汽车翼子板</td>
+      <td>Спец-Автопласт</td>
+      <td class="number">770,634</td>
+      <td class="number">149</td>
+      <td class="number">5,172</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3520456699" target="_blank" rel="noreferrer">Фаркопы Урала Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Фаркопы Урала</td>
+      <td class="number">728,493</td>
+      <td class="number">111</td>
+      <td class="number">6,563</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3624337357" target="_blank" rel="noreferrer">Barracuda Tow Hitch</a></td>
+      <td>拖车钩</td>
+      <td>Barracuda</td>
+      <td class="number">716,678</td>
+      <td class="number">131</td>
+      <td class="number">5,471</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2679497881" target="_blank" rel="noreferrer">ОДО КД Car Fender</a></td>
+      <td>汽车翼子板</td>
+      <td>ОДО КД</td>
+      <td class="number">716,569</td>
+      <td class="number">296</td>
+      <td class="number">2,421</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23车体配件_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-body-parts","label":"车体配件","title":"Ozon 车体配件市场分析","group":"汽车生态","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23车体配件_清洗版.xlsx","path":"reports/generated/body-parts/index.html","frameTitle":"Ozon 车体配件市场分析报告","kpis":{"rowCount":1000,"totalRevenue":132244592,"totalSales":189922,"unitRevenue":696.31,"typeCount":23,"brandCount":198,"sellerCount":471},"topTypes":[{"name":"拖车钩","rows":52,"revenue":22889520,"sales":9332,"salesRows":51,"unitRevenue":2452.8,"share":17.3},{"name":"侧视镜","rows":90,"revenue":20867343,"sales":11051,"salesRows":89,"unitRevenue":1888.28,"share":15.8},{"name":"挡泥板","rows":184,"revenue":18319930,"sales":27212,"salesRows":183,"unitRevenue":673.23,"share":13.9},{"name":"车门把手","rows":145,"revenue":11826285,"sales":22727,"salesRows":144,"unitRevenue":520.36,"share":8.9},{"name":"汽车翼子板","rows":26,"revenue":10396569,"sales":3099,"salesRows":26,"unitRevenue":3354.81,"share":7.9},{"name":"汽车拖车钩配件","rows":116,"revenue":9829295,"sales":39271,"salesRows":115,"unitRevenue":250.29,"share":7.4},{"name":"后视镜","rows":66,"revenue":6902322,"sales":15100,"salesRows":61,"unitRevenue":457.11,"share":5.2},{"name":"保险杠","rows":23,"revenue":6292241,"sales":2446,"salesRows":23,"unitRevenue":2572.46,"share":4.8},{"name":"车门锁","rows":74,"revenue":5941213,"sales":11436,"salesRows":74,"unitRevenue":519.52,"share":4.5},{"name":"车门维修套件","rows":79,"revenue":4833607,"sales":11448,"salesRows":76,"unitRevenue":422.22,"share":3.7}],"topBrands":[{"name":"未知/无品牌","rows":413,"revenue":42265639,"sales":80493,"salesRows":399,"unitRevenue":525.08,"share":32},{"name":"Barracuda","rows":23,"revenue":15820680,"sales":10079,"salesRows":22,"unitRevenue":1569.67,"share":12},{"name":"Automobile Plastics Factory","rows":17,"revenue":7107619,"sales":2683,"salesRows":17,"unitRevenue":2649.13,"share":5.4},{"name":"REMOEM","rows":27,"revenue":4514766,"sales":3307,"salesRows":27,"unitRevenue":1365.21,"share":3.4},{"name":"Спец-Автопласт","rows":6,"revenue":3145958,"sales":608,"salesRows":6,"unitRevenue":5174.27,"share":2.4},{"name":"КУЗОВИК","rows":10,"revenue":2965132,"sales":971,"salesRows":10,"unitRevenue":3053.69,"share":2.2},{"name":"ГРАНDРИАЛ","rows":19,"revenue":2072947,"sales":2846,"salesRows":19,"unitRevenue":728.37,"share":1.6},{"name":"АВТОБЛИК","rows":22,"revenue":1892056,"sales":3298,"salesRows":22,"unitRevenue":573.7,"share":1.4},{"name":"FixAvto","rows":22,"revenue":1883818,"sales":3649,"salesRows":22,"unitRevenue":516.26,"share":1.4},{"name":"ДАСТЕР-ГАРД","rows":13,"revenue":1766050,"sales":1754,"salesRows":13,"unitRevenue":1006.87,"share":1.3}],"topSellers":[{"name":"BARRACUDA-производитель автоаксессуаров","rows":23,"revenue":15820680,"sales":10079,"salesRows":22,"unitRevenue":1569.67,"share":12},{"name":"APF (Automobile Plastics Factory)","rows":11,"revenue":5769397,"sales":2098,"salesRows":11,"unitRevenue":2749.95,"share":4.4},{"name":"REMOEM","rows":27,"revenue":4514766,"sales":3307,"salesRows":27,"unitRevenue":1365.21,"share":3.4},{"name":"КУЗОВИК","rows":11,"revenue":3374746,"sales":1087,"salesRows":11,"unitRevenue":3104.64,"share":2.6},{"name":"ООО \"ИРБИС\"","rows":6,"revenue":3145958,"sales":608,"salesRows":6,"unitRevenue":5174.27,"share":2.4},{"name":"GAZelle Mirrors","rows":4,"revenue":2422867,"sales":703,"salesRows":4,"unitRevenue":3446.47,"share":1.8},{"name":"Fix-Avto","rows":22,"revenue":1883818,"sales":3649,"salesRows":22,"unitRevenue":516.26,"share":1.4},{"name":"АВТОБЛИК 2","rows":17,"revenue":1580267,"sales":2451,"salesRows":17,"unitRevenue":644.74,"share":1.2},{"name":"Автодрайв","rows":11,"revenue":1532561,"sales":1548,"salesRows":11,"unitRevenue":990.03,"share":1.2},{"name":"DetalAuto","rows":10,"revenue":1517422,"sales":2452,"salesRows":10,"unitRevenue":618.85,"share":1.1}],"priceBands":[{"label":"<200 ₽","rows":148,"revenue":8013976,"sales":62614,"share":6.1},{"label":"200–500 ₽","rows":348,"revenue":19038282,"sales":58215,"share":14.4},{"label":"500–1,000 ₽","rows":230,"revenue":24143940,"sales":36126,"share":18.3},{"label":"1,000–2,000 ₽","rows":143,"revenue":23610459,"sales":17189,"share":17.9},{"label":"2,000–5,000 ₽","rows":101,"revenue":37329971,"sales":12395,"share":28.2},{"label":"≥5,000 ₽","rows":30,"revenue":20107964,"sales":3383,"share":15.2}],"topProducts":[{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":2466695,"sales":524,"avgPrice":4707,"url":"https://www.ozon.ru/product/3279859581"},{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":1979870,"sales":394,"avgPrice":5025,"url":"https://www.ozon.ru/product/3279858274"},{"name":"Set Dead Zone Mirror","brand":"未知/无品牌","seller":"zailushang01","type":"盲区镜","revenue":1130769,"sales":10565,"avgPrice":107,"url":"https://www.ozon.ru/product/2678055266"},{"name":"Automobile Plastics Factory Set Side-View Mirror","brand":"Automobile Plastics Factory","seller":"APF (Automobile Plastics Factory)","type":"侧视镜","revenue":1106330,"sales":434,"avgPrice":2549,"url":"https://www.ozon.ru/product/476971134"},{"name":"Automobile Plastics Factory Set Side-View Mirror","brand":"Automobile Plastics Factory","seller":"APF (Automobile Plastics Factory)","type":"侧视镜","revenue":1006779,"sales":375,"avgPrice":2685,"url":"https://www.ozon.ru/product/476975656"},{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":987228,"sales":189,"avgPrice":5223,"url":"https://www.ozon.ru/product/3301181279"},{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":930989,"sales":155,"avgPrice":6006,"url":"https://www.ozon.ru/product/3536180973"},{"name":"Set Side-View Mirror","brand":"未知/无品牌","seller":"GAZelle Mirrors","type":"侧视镜","revenue":863848,"sales":269,"avgPrice":3211,"url":"https://www.ozon.ru/product/3555856319"},{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":862053,"sales":98,"avgPrice":8796,"url":"https://www.ozon.ru/product/3552674532"},{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":823648,"sales":144,"avgPrice":5720,"url":"https://www.ozon.ru/product/3618783946"},{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":777710,"sales":151,"avgPrice":5150,"url":"https://www.ozon.ru/product/3382527499"},{"name":"Спец-Автопласт Car Fender","brand":"Спец-Автопласт","seller":"ООО \"ИРБИС\"","type":"汽车翼子板","revenue":770634,"sales":149,"avgPrice":5172,"url":"https://www.ozon.ru/product/3126588188"},{"name":"Фаркопы Урала Tow Hitch","brand":"Фаркопы Урала","seller":"AvtoGrad Plus","type":"拖车钩","revenue":728493,"sales":111,"avgPrice":6563,"url":"https://www.ozon.ru/product/3520456699"},{"name":"Barracuda Tow Hitch","brand":"Barracuda","seller":"BARRACUDA-производитель автоаксессуаров","type":"拖车钩","revenue":716678,"sales":131,"avgPrice":5471,"url":"https://www.ozon.ru/product/3624337357"},{"name":"ОДО КД Car Fender","brand":"ОДО КД","seller":"Avtozapchasti9","type":"汽车翼子板","revenue":716569,"sales":296,"avgPrice":2421,"url":"https://www.ozon.ru/product/2679497881"}],"operations":{"signRateMedian":0.91,"signRateCoverage":97.9,"stockoutMedian":18,"stockoutCoverage":92.5,"missedRevenue":6160720.7,"missedRevenueCoverage":100,"promoActiveShare":72.4,"promoCoverage":98.3,"adActiveShare":20.7,"adCoverage":100},"quality":{"level":"核心口径完整","salesCoverage":98.3,"missingSales":17,"missingAveragePrice":0,"missingBsr":0,"duplicateSku":18,"duplicateUrl":0,"uniqueSku":982,"urlCoverage":100},"insights":["头部品类“拖车钩”贡献 17.3% 销售额；前五品类合计 63.7%。","销售额最集中的价格带是 2,000–5,000 ₽，覆盖 101 条商品记录，贡献 28.2% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 63.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

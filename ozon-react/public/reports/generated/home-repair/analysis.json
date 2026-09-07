@@ -1,0 +1,520 @@
+{
+  "id": "generated-home-repair",
+  "label": "家装与修理",
+  "title": "Ozon 家装与修理市场分析",
+  "group": "家居与维修",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23家装修理_清洗版.xlsx",
+  "path": "reports/generated/home-repair/index.html",
+  "frameTitle": "Ozon 家装与修理市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 1567054396,
+    "totalSales": 6629762,
+    "unitRevenue": 236.37,
+    "typeCount": 196,
+    "brandCount": 278,
+    "sellerCount": 526
+  },
+  "topTypes": [
+    {
+      "name": "蚊帐纱网",
+      "rows": 45,
+      "revenue": 84041868,
+      "sales": 541132,
+      "salesRows": 44,
+      "unitRevenue": 155.31,
+      "share": 5.4
+    },
+    {
+      "name": "壁纸",
+      "rows": 15,
+      "revenue": 55086603,
+      "sales": 89734,
+      "salesRows": 15,
+      "unitRevenue": 613.89,
+      "share": 3.5
+    },
+    {
+      "name": "建筑胶粘剂",
+      "rows": 29,
+      "revenue": 54486518,
+      "sales": 237770,
+      "salesRows": 29,
+      "unitRevenue": 229.16,
+      "share": 3.5
+    },
+    {
+      "name": "路灯",
+      "rows": 23,
+      "revenue": 50057174,
+      "sales": 193346,
+      "salesRows": 23,
+      "unitRevenue": 258.9,
+      "share": 3.2
+    },
+    {
+      "name": "气溶胶涂料",
+      "rows": 20,
+      "revenue": 38300802,
+      "sales": 136160,
+      "salesRows": 20,
+      "unitRevenue": 281.29,
+      "share": 2.4
+    },
+    {
+      "name": "插座",
+      "rows": 23,
+      "revenue": 37899760,
+      "sales": 144075,
+      "salesRows": 23,
+      "unitRevenue": 263.06,
+      "share": 2.4
+    },
+    {
+      "name": "激光水平仪，水准仪",
+      "rows": 3,
+      "revenue": 37288249,
+      "sales": 11574,
+      "salesRows": 3,
+      "unitRevenue": 3221.73,
+      "share": 2.4
+    },
+    {
+      "name": "家用胶",
+      "rows": 23,
+      "revenue": 31551923,
+      "sales": 169581,
+      "salesRows": 22,
+      "unitRevenue": 186.06,
+      "share": 2
+    },
+    {
+      "name": "电动钻孔机器",
+      "rows": 3,
+      "revenue": 30097270,
+      "sales": 14571,
+      "salesRows": 2,
+      "unitRevenue": 2065.56,
+      "share": 1.9
+    },
+    {
+      "name": "焊丝",
+      "rows": 11,
+      "revenue": 28781345,
+      "sales": 59356,
+      "salesRows": 11,
+      "unitRevenue": 484.89,
+      "share": 1.8
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 342,
+      "revenue": 422897728,
+      "sales": 2506297,
+      "salesRows": 329,
+      "unitRevenue": 168.73,
+      "share": 27
+    },
+    {
+      "name": "DEKO",
+      "rows": 3,
+      "revenue": 44863828,
+      "sales": 17623,
+      "salesRows": 3,
+      "unitRevenue": 2545.75,
+      "share": 2.9
+    },
+    {
+      "name": "ЭРА",
+      "rows": 17,
+      "revenue": 39454775,
+      "sales": 144502,
+      "salesRows": 17,
+      "unitRevenue": 273.04,
+      "share": 2.5
+    },
+    {
+      "name": "best bro",
+      "rows": 3,
+      "revenue": 37288249,
+      "sales": 11574,
+      "salesRows": 3,
+      "unitRevenue": 3221.73,
+      "share": 2.4
+    },
+    {
+      "name": "RENOWA",
+      "rows": 11,
+      "revenue": 33602042,
+      "sales": 71396,
+      "salesRows": 11,
+      "unitRevenue": 470.64,
+      "share": 2.1
+    },
+    {
+      "name": "СтальКрепеж",
+      "rows": 19,
+      "revenue": 28115395,
+      "sales": 111810,
+      "salesRows": 17,
+      "unitRevenue": 251.46,
+      "share": 1.8
+    },
+    {
+      "name": "VIRA",
+      "rows": 16,
+      "revenue": 27695493,
+      "sales": 85728,
+      "salesRows": 16,
+      "unitRevenue": 323.06,
+      "share": 1.8
+    },
+    {
+      "name": "Теплмяг",
+      "rows": 6,
+      "revenue": 26378201,
+      "sales": 42835,
+      "salesRows": 6,
+      "unitRevenue": 615.81,
+      "share": 1.7
+    },
+    {
+      "name": "KUDO",
+      "rows": 18,
+      "revenue": 26131086,
+      "sales": 88945,
+      "salesRows": 18,
+      "unitRevenue": 293.79,
+      "share": 1.7
+    },
+    {
+      "name": "SmartBuy",
+      "rows": 27,
+      "revenue": 25980119,
+      "sales": 147077,
+      "salesRows": 27,
+      "unitRevenue": 176.64,
+      "share": 1.7
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Ozon",
+      "rows": 11,
+      "revenue": 55944527,
+      "sales": 72416,
+      "salesRows": 11,
+      "unitRevenue": 772.54,
+      "share": 3.6
+    },
+    {
+      "name": "Viratools",
+      "rows": 31,
+      "revenue": 53251060,
+      "sales": 182931,
+      "salesRows": 30,
+      "unitRevenue": 291.1,
+      "share": 3.4
+    },
+    {
+      "name": "ЭРА, официальный магазин",
+      "rows": 25,
+      "revenue": 51676525,
+      "sales": 213142,
+      "salesRows": 25,
+      "unitRevenue": 242.45,
+      "share": 3.3
+    },
+    {
+      "name": "Торговый дом «КУДО»",
+      "rows": 24,
+      "revenue": 40689492,
+      "sales": 131831,
+      "salesRows": 24,
+      "unitRevenue": 308.65,
+      "share": 2.6
+    },
+    {
+      "name": "Профессиональные инструменты Best Bro",
+      "rows": 3,
+      "revenue": 37288249,
+      "sales": 11574,
+      "salesRows": 3,
+      "unitRevenue": 3221.73,
+      "share": 2.4
+    },
+    {
+      "name": "RENOWA",
+      "rows": 11,
+      "revenue": 33602042,
+      "sales": 71396,
+      "salesRows": 11,
+      "unitRevenue": 470.64,
+      "share": 2.1
+    },
+    {
+      "name": "Теплмяг-Official Store",
+      "rows": 6,
+      "revenue": 26378201,
+      "sales": 42835,
+      "salesRows": 6,
+      "unitRevenue": 615.81,
+      "share": 1.7
+    },
+    {
+      "name": "Smartbuy",
+      "rows": 27,
+      "revenue": 25980119,
+      "sales": 147077,
+      "salesRows": 27,
+      "unitRevenue": 176.64,
+      "share": 1.7
+    },
+    {
+      "name": "Certa",
+      "rows": 7,
+      "revenue": 25335238,
+      "sales": 68808,
+      "salesRows": 7,
+      "unitRevenue": 368.2,
+      "share": 1.6
+    },
+    {
+      "name": "PROремонт",
+      "rows": 4,
+      "revenue": 21305804,
+      "sales": 32316,
+      "salesRows": 4,
+      "unitRevenue": 659.3,
+      "share": 1.4
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 556,
+      "revenue": 529823005,
+      "sales": 4177008,
+      "share": 33.8
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 331,
+      "revenue": 567430774,
+      "sales": 1991833,
+      "share": 36.2
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 69,
+      "revenue": 223024019,
+      "sales": 335030,
+      "share": 14.2
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 19,
+      "revenue": 117984698,
+      "sales": 88402,
+      "share": 7.5
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 16,
+      "revenue": 122556703,
+      "sales": 37489,
+      "share": 7.8
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 9,
+      "revenue": 6235197,
+      "sales": 0,
+      "share": 0.4
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "DEKO Electric Saw",
+      "brand": "DEKO",
+      "seller": "Ozon",
+      "type": "电锯",
+      "revenue": 20197658,
+      "sales": 5344,
+      "avgPrice": 3780,
+      "url": "https://www.ozon.ru/product/337466104"
+    },
+    {
+      "name": "DEKO Grinder",
+      "brand": "DEKO",
+      "seller": "Ozon",
+      "type": "砂磨机",
+      "revenue": 17618521,
+      "sales": 8765,
+      "avgPrice": 2010,
+      "url": "https://www.ozon.ru/product/337631138"
+    },
+    {
+      "name": "BoxBot Mini Washer",
+      "brand": "BoxBot",
+      "seller": "Яндекс Фабрика",
+      "type": "高压清洗机",
+      "revenue": 17553321,
+      "sales": 5082,
+      "avgPrice": 3454,
+      "url": "https://www.ozon.ru/product/1449141955"
+    },
+    {
+      "name": "Rebel Shop Screwdriver Drill, From the battery, 48 V, 32 Nm, 2 Batteries",
+      "brand": "Rebel Shop",
+      "seller": "Rebel Shop",
+      "type": "电动钻孔机器",
+      "revenue": 15602837,
+      "sales": 9519,
+      "avgPrice": 1639,
+      "url": "https://www.ozon.ru/product/1752072671"
+    },
+    {
+      "name": "best bro Laser Level Greenray",
+      "brand": "best bro",
+      "seller": "Профессиональные инструменты Best Bro",
+      "type": "激光水平仪，水准仪",
+      "revenue": 15031806,
+      "sales": 4771,
+      "avgPrice": 3151,
+      "url": "https://www.ozon.ru/product/2093047423"
+    },
+    {
+      "name": "best bro Laser Level Greenray",
+      "brand": "best bro",
+      "seller": "Профессиональные инструменты Best Bro",
+      "type": "激光水平仪，水准仪",
+      "revenue": 11733943,
+      "sales": 3580,
+      "avgPrice": 3278,
+      "url": "https://www.ozon.ru/product/3428013764"
+    },
+    {
+      "name": "JOY Paint Quick-drying 30°, Alkyd, Matte coating, 20 kg, grey",
+      "brand": "JOY",
+      "seller": "PROремонт",
+      "type": "涂料",
+      "revenue": 11500641,
+      "sales": 3210,
+      "avgPrice": 3583,
+      "url": "https://www.ozon.ru/product/3300322747"
+    },
+    {
+      "name": "Mosquito Net",
+      "brand": "未知/无品牌",
+      "seller": "ЭлитСтор",
+      "type": "蚊帐纱网",
+      "revenue": 11318319,
+      "sales": 116008,
+      "avgPrice": 98,
+      "url": "https://www.ozon.ru/product/3822513474"
+    },
+    {
+      "name": "Socket",
+      "brand": "未知/无品牌",
+      "seller": "Помощник для дома",
+      "type": "插座",
+      "revenue": 10655952,
+      "sales": 27556,
+      "avgPrice": 387,
+      "url": "https://www.ozon.ru/product/3742574793"
+    },
+    {
+      "name": "best bro Laser Level Greenray",
+      "brand": "best bro",
+      "seller": "Профессиональные инструменты Best Bro",
+      "type": "激光水平仪，水准仪",
+      "revenue": 10522500,
+      "sales": 3223,
+      "avgPrice": 3265,
+      "url": "https://www.ozon.ru/product/4047422908"
+    },
+    {
+      "name": "Rose Wallpaper Non-Woven Based Vinyl 10.05 m, 1.06 m",
+      "brand": "Rose",
+      "seller": "ROSE",
+      "type": "壁纸",
+      "revenue": 8704542,
+      "sales": 6607,
+      "avgPrice": 1317,
+      "url": "https://www.ozon.ru/product/1751538007"
+    },
+    {
+      "name": "Теплмяг Mixer",
+      "brand": "Теплмяг",
+      "seller": "Теплмяг-Official Store",
+      "type": "水龙头",
+      "revenue": 8260441,
+      "sales": 6925,
+      "avgPrice": 1193,
+      "url": "https://www.ozon.ru/product/2955816770"
+    },
+    {
+      "name": "KRONbuild Mounting Foam",
+      "brand": "KRONbuild",
+      "seller": "KRONbuild",
+      "type": "填充泡沫",
+      "revenue": 7950169,
+      "sales": 23961,
+      "avgPrice": 332,
+      "url": "https://www.ozon.ru/product/3243768270"
+    },
+    {
+      "name": "Теплмяг Mixer",
+      "brand": "Теплмяг",
+      "seller": "Теплмяг-Official Store",
+      "type": "水龙头",
+      "revenue": 7840855,
+      "sales": 10758,
+      "avgPrice": 729,
+      "url": "https://www.ozon.ru/product/2721828530"
+    },
+    {
+      "name": "Screwdriver Drill, From the battery, 48 V, 60 Nm, 2 Batteries",
+      "brand": "未知/无品牌",
+      "seller": "ИП Гусейнова Л. К.",
+      "type": "电动钻孔机器",
+      "revenue": 7491839,
+      "sales": 5052,
+      "avgPrice": 1483,
+      "url": "https://www.ozon.ru/product/3569103389"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.9445,
+    "signRateCoverage": 97.2,
+    "stockoutMedian": 11,
+    "stockoutCoverage": 89,
+    "missedRevenue": 6725216.7,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 86.5,
+    "promoCoverage": 98.3,
+    "adActiveShare": 57.8,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 98.3,
+    "missingSales": 17,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 17,
+    "duplicateUrl": 0,
+    "uniqueSku": 983,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“蚊帐纱网”贡献 5.4% 销售额；前五品类合计 18%。",
+    "销售额最集中的价格带是 200–500 ₽，覆盖 331 条商品记录，贡献 36.2% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 45.5% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

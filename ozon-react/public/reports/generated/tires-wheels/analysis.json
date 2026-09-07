@@ -1,0 +1,520 @@
+{
+  "id": "generated-tires-wheels",
+  "label": "轮胎与轮毂",
+  "title": "Ozon 轮胎与轮毂市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23轮胎轮毂_清洗版.xlsx",
+  "path": "reports/generated/tires-wheels/index.html",
+  "frameTitle": "Ozon 轮胎与轮毂市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 497637606,
+    "totalSales": 105849,
+    "unitRevenue": 4701.39,
+    "typeCount": 11,
+    "brandCount": 126,
+    "sellerCount": 192
+  },
+  "topTypes": [
+    {
+      "name": "乘用车轮胎",
+      "rows": 561,
+      "revenue": 360428707,
+      "sales": 70776,
+      "salesRows": 516,
+      "unitRevenue": 5092.53,
+      "share": 72.4
+    },
+    {
+      "name": "轮圈",
+      "rows": 87,
+      "revenue": 43249608,
+      "sales": 6908,
+      "salesRows": 79,
+      "unitRevenue": 6260.8,
+      "share": 8.7
+    },
+    {
+      "name": "摩托车轮胎",
+      "rows": 132,
+      "revenue": 41405620,
+      "sales": 9698,
+      "salesRows": 125,
+      "unitRevenue": 4269.5,
+      "share": 8.3
+    },
+    {
+      "name": "越野车轮胎",
+      "rows": 36,
+      "revenue": 21071896,
+      "sales": 2241,
+      "salesRows": 33,
+      "unitRevenue": 9402.9,
+      "share": 4.2
+    },
+    {
+      "name": "车轮垫片",
+      "rows": 135,
+      "revenue": 11110604,
+      "sales": 12702,
+      "salesRows": 134,
+      "unitRevenue": 874.71,
+      "share": 2.2
+    },
+    {
+      "name": "全地形车轮胎",
+      "rows": 16,
+      "revenue": 5492849,
+      "sales": 1045,
+      "salesRows": 16,
+      "unitRevenue": 5256.31,
+      "share": 1.1
+    },
+    {
+      "name": "商用车轮胎",
+      "rows": 10,
+      "revenue": 5373553,
+      "sales": 914,
+      "salesRows": 9,
+      "unitRevenue": 5879.16,
+      "share": 1.1
+    },
+    {
+      "name": "卡车轮胎",
+      "rows": 7,
+      "revenue": 3796020,
+      "sales": 392,
+      "salesRows": 6,
+      "unitRevenue": 9683.72,
+      "share": 0.8
+    },
+    {
+      "name": "园艺设备轮胎",
+      "rows": 8,
+      "revenue": 2631214,
+      "sales": 645,
+      "salesRows": 8,
+      "unitRevenue": 4079.4,
+      "share": 0.5
+    },
+    {
+      "name": "车轮总成",
+      "rows": 4,
+      "revenue": 1580013,
+      "sales": 325,
+      "salesRows": 4,
+      "unitRevenue": 4861.58,
+      "share": 0.3
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "Triangle",
+      "rows": 50,
+      "revenue": 60814494,
+      "sales": 9471,
+      "salesRows": 50,
+      "unitRevenue": 6421.13,
+      "share": 12.2
+    },
+    {
+      "name": "Sailun",
+      "rows": 70,
+      "revenue": 52648849,
+      "sales": 12619,
+      "salesRows": 68,
+      "unitRevenue": 4172.19,
+      "share": 10.6
+    },
+    {
+      "name": "Trazano",
+      "rows": 44,
+      "revenue": 39285256,
+      "sales": 9168,
+      "salesRows": 41,
+      "unitRevenue": 4285.04,
+      "share": 7.9
+    },
+    {
+      "name": "КАМА",
+      "rows": 44,
+      "revenue": 32154582,
+      "sales": 7593,
+      "salesRows": 44,
+      "unitRevenue": 4234.77,
+      "share": 6.5
+    },
+    {
+      "name": "Pirelli",
+      "rows": 43,
+      "revenue": 29928242,
+      "sales": 3921,
+      "salesRows": 41,
+      "unitRevenue": 7632.81,
+      "share": 6
+    },
+    {
+      "name": "Cordiant",
+      "rows": 54,
+      "revenue": 21363556,
+      "sales": 4327,
+      "salesRows": 48,
+      "unitRevenue": 4937.27,
+      "share": 4.3
+    },
+    {
+      "name": "MICHELIN",
+      "rows": 22,
+      "revenue": 19394742,
+      "sales": 1470,
+      "salesRows": 19,
+      "unitRevenue": 13193.7,
+      "share": 3.9
+    },
+    {
+      "name": "Viatti",
+      "rows": 30,
+      "revenue": 18481472,
+      "sales": 4080,
+      "salesRows": 30,
+      "unitRevenue": 4529.77,
+      "share": 3.7
+    },
+    {
+      "name": "ROYAL BLACK",
+      "rows": 14,
+      "revenue": 15311333,
+      "sales": 2606,
+      "salesRows": 13,
+      "unitRevenue": 5875.42,
+      "share": 3.1
+    },
+    {
+      "name": "未知/无品牌",
+      "rows": 80,
+      "revenue": 14340823,
+      "sales": 6152,
+      "salesRows": 75,
+      "unitRevenue": 2331.08,
+      "share": 2.9
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Black Dragon",
+      "rows": 95,
+      "revenue": 100720331,
+      "sales": 18813,
+      "salesRows": 91,
+      "unitRevenue": 5353.76,
+      "share": 20.2
+    },
+    {
+      "name": "Официальный магазин KAMATYRES",
+      "rows": 71,
+      "revenue": 50086588,
+      "sales": 11660,
+      "salesRows": 71,
+      "unitRevenue": 4295.59,
+      "share": 10.1
+    },
+    {
+      "name": "Шинные Решения",
+      "rows": 59,
+      "revenue": 30827665,
+      "sales": 5957,
+      "salesRows": 58,
+      "unitRevenue": 5175.03,
+      "share": 6.2
+    },
+    {
+      "name": "Римэкс",
+      "rows": 46,
+      "revenue": 27849393,
+      "sales": 3368,
+      "salesRows": 38,
+      "unitRevenue": 8268.82,
+      "share": 5.6
+    },
+    {
+      "name": "ШиноРама",
+      "rows": 36,
+      "revenue": 19452802,
+      "sales": 3515,
+      "salesRows": 31,
+      "unitRevenue": 5534.23,
+      "share": 3.9
+    },
+    {
+      "name": "ОРИОН-ТАЙР",
+      "rows": 15,
+      "revenue": 17738844,
+      "sales": 4213,
+      "salesRows": 15,
+      "unitRevenue": 4210.5,
+      "share": 3.6
+    },
+    {
+      "name": "YILIAN4",
+      "rows": 15,
+      "revenue": 16986074,
+      "sales": 1401,
+      "salesRows": 15,
+      "unitRevenue": 12124.25,
+      "share": 3.4
+    },
+    {
+      "name": "ПИН АВТО",
+      "rows": 25,
+      "revenue": 14460503,
+      "sales": 3004,
+      "salesRows": 24,
+      "unitRevenue": 4813.75,
+      "share": 2.9
+    },
+    {
+      "name": "BShina",
+      "rows": 17,
+      "revenue": 12297128,
+      "sales": 1263,
+      "salesRows": 16,
+      "unitRevenue": 9736.44,
+      "share": 2.5
+    },
+    {
+      "name": "ПРОТЕКТОР ГРУПП",
+      "rows": 12,
+      "revenue": 11163161,
+      "sales": 2969,
+      "salesRows": 12,
+      "unitRevenue": 3759.91,
+      "share": 2.2
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 65,
+      "revenue": 22062089,
+      "sales": 0,
+      "share": 4.4
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 65,
+      "revenue": 3011345,
+      "sales": 7471,
+      "share": 0.6
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 34,
+      "revenue": 2063211,
+      "sales": 3111,
+      "share": 0.4
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 35,
+      "revenue": 5976683,
+      "sales": 3525,
+      "share": 1.2
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 420,
+      "revenue": 198869889,
+      "sales": 55304,
+      "share": 40
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 381,
+      "revenue": 265654389,
+      "sales": 36438,
+      "share": 53.4
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Trazano Tire summer 185/65 R15 88H",
+      "brand": "Trazano",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 4119729,
+      "sales": 1164,
+      "avgPrice": 3539,
+      "url": "https://www.ozon.ru/product/3201385884"
+    },
+    {
+      "name": "Triangle Tire summer 225/45 R18 95Y",
+      "brand": "Triangle",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 3723754,
+      "sales": 629,
+      "avgPrice": 5920,
+      "url": "https://www.ozon.ru/product/1713206728"
+    },
+    {
+      "name": "Sailun Tire summer 195/65 R15 95H",
+      "brand": "Sailun",
+      "seller": "МАРКЕТ-МЕЛОДИЯ",
+      "type": "乘用车轮胎",
+      "revenue": 3130475,
+      "sales": 802,
+      "avgPrice": 3903,
+      "url": "https://www.ozon.ru/product/3626798464"
+    },
+    {
+      "name": "Hankook Tire summer 185/65 R15 92T",
+      "brand": "Hankook",
+      "seller": "ПИН АВТО",
+      "type": "乘用车轮胎",
+      "revenue": 3032455,
+      "sales": 686,
+      "avgPrice": 4420,
+      "url": "https://www.ozon.ru/product/1539424648"
+    },
+    {
+      "name": "Triangle Tire summer 205/50 R17 93Y",
+      "brand": "Triangle",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 3013936,
+      "sales": 576,
+      "avgPrice": 5233,
+      "url": "https://www.ozon.ru/product/1711713657"
+    },
+    {
+      "name": "Sailun Tire summer 205/55 R16 94V",
+      "brand": "Sailun",
+      "seller": "ОРИОН-ТАЙР",
+      "type": "乘用车轮胎",
+      "revenue": 2990710,
+      "sales": 696,
+      "avgPrice": 4297,
+      "url": "https://www.ozon.ru/product/3624226194"
+    },
+    {
+      "name": "Triangle Tire summer 225/40 R18 92Y",
+      "brand": "Triangle",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 2986606,
+      "sales": 535,
+      "avgPrice": 5582,
+      "url": "https://www.ozon.ru/product/1713319288"
+    },
+    {
+      "name": "Viatti Tire summer 185/65 R15 92V",
+      "brand": "Viatti",
+      "seller": "Официальный магазин KAMATYRES",
+      "type": "乘用车轮胎",
+      "revenue": 2883703,
+      "sales": 746,
+      "avgPrice": 3866,
+      "url": "https://www.ozon.ru/product/435753302"
+    },
+    {
+      "name": "ROYAL BLACK Tire winter 225/55 R19 103T",
+      "brand": "ROYAL BLACK",
+      "seller": "Римэкс",
+      "type": "乘用车轮胎",
+      "revenue": 2749517,
+      "sales": 307,
+      "avgPrice": 8956,
+      "url": "https://www.ozon.ru/product/1621899010"
+    },
+    {
+      "name": "Pirelli Tire summer 185/65 R15 92H",
+      "brand": "Pirelli",
+      "seller": "Шинные Решения",
+      "type": "乘用车轮胎",
+      "revenue": 2724808,
+      "sales": 514,
+      "avgPrice": 5301,
+      "url": "https://www.ozon.ru/product/2000035221"
+    },
+    {
+      "name": "Kumho Tire summer 205/55 R16 91H",
+      "brand": "Kumho",
+      "seller": "Ozon",
+      "type": "乘用车轮胎",
+      "revenue": 2722413,
+      "sales": 703,
+      "avgPrice": 3873,
+      "url": "https://www.ozon.ru/product/3692272527"
+    },
+    {
+      "name": "Triangle Tire summer 225/55 R17 101Y",
+      "brand": "Triangle",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 2699918,
+      "sales": 440,
+      "avgPrice": 6136,
+      "url": "https://www.ozon.ru/product/1711713670"
+    },
+    {
+      "name": "Triangle Tire summer 225/45 R17 94Y",
+      "brand": "Triangle",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 2621600,
+      "sales": 470,
+      "avgPrice": 5578,
+      "url": "https://www.ozon.ru/product/1711713592"
+    },
+    {
+      "name": "Triangle Tire summer 215/50 R17 95Y",
+      "brand": "Triangle",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 2616205,
+      "sales": 473,
+      "avgPrice": 5531,
+      "url": "https://www.ozon.ru/product/1711713655"
+    },
+    {
+      "name": "Triangle Tire summer 235/45 R18 98Y",
+      "brand": "Triangle",
+      "seller": "Black Dragon",
+      "type": "乘用车轮胎",
+      "revenue": 2594684,
+      "sales": 413,
+      "avgPrice": 6283,
+      "url": "https://www.ozon.ru/product/1713208388"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.884,
+    "signRateCoverage": 91.9,
+    "stockoutMedian": 25,
+    "stockoutCoverage": 79,
+    "missedRevenue": 51531827.4,
+    "missedRevenueCoverage": 99.9,
+    "promoActiveShare": 55,
+    "promoCoverage": 93.4,
+    "adActiveShare": 37,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "可用，需留意缺失",
+    "salesCoverage": 93.4,
+    "missingSales": 66,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 50,
+    "duplicateUrl": 0,
+    "uniqueSku": 950,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“乘用车轮胎”贡献 72.4% 销售额；前五品类合计 95.9%。",
+    "销售额最集中的价格带是 ≥5,000 ₽，覆盖 381 条商品记录，贡献 53.4% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 61% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

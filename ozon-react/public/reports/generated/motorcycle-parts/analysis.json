@@ -1,0 +1,520 @@
+{
+  "id": "generated-motorcycle-parts",
+  "label": "摩托车配件",
+  "title": "Ozon 摩托车配件市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23摩托车配件_清洗版.xlsx",
+  "path": "reports/generated/motorcycle-parts/index.html",
+  "frameTitle": "Ozon 摩托车配件市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 273605423,
+    "totalSales": 420362,
+    "unitRevenue": 650.88,
+    "typeCount": 103,
+    "brandCount": 156,
+    "sellerCount": 366
+  },
+  "topTypes": [
+    {
+      "name": "摩托车头盔",
+      "rows": 43,
+      "revenue": 43679645,
+      "sales": 17739,
+      "salesRows": 43,
+      "unitRevenue": 2462.35,
+      "share": 16
+    },
+    {
+      "name": "摩托车链条",
+      "rows": 44,
+      "revenue": 22184530,
+      "sales": 22894,
+      "salesRows": 41,
+      "unitRevenue": 969.01,
+      "share": 8.1
+    },
+    {
+      "name": "摩托车化油器",
+      "rows": 26,
+      "revenue": 19480214,
+      "sales": 10914,
+      "salesRows": 25,
+      "unitRevenue": 1784.88,
+      "share": 7.1
+    },
+    {
+      "name": "摩托车防护件",
+      "rows": 14,
+      "revenue": 9726252,
+      "sales": 4676,
+      "salesRows": 13,
+      "unitRevenue": 2080.04,
+      "share": 3.6
+    },
+    {
+      "name": "摩托车过滤器",
+      "rows": 67,
+      "revenue": 9402693,
+      "sales": 28044,
+      "salesRows": 67,
+      "unitRevenue": 335.28,
+      "share": 3.4
+    },
+    {
+      "name": "摩托车后视镜",
+      "rows": 31,
+      "revenue": 8541900,
+      "sales": 14381,
+      "salesRows": 27,
+      "unitRevenue": 593.97,
+      "share": 3.1
+    },
+    {
+      "name": "摩托车刹车片",
+      "rows": 46,
+      "revenue": 7607391,
+      "sales": 20743,
+      "salesRows": 43,
+      "unitRevenue": 366.74,
+      "share": 2.8
+    },
+    {
+      "name": "摩托车包",
+      "rows": 17,
+      "revenue": 7565323,
+      "sales": 7345,
+      "salesRows": 16,
+      "unitRevenue": 1030,
+      "share": 2.8
+    },
+    {
+      "name": "摩托车护目镜",
+      "rows": 33,
+      "revenue": 7501514,
+      "sales": 12154,
+      "salesRows": 32,
+      "unitRevenue": 617.21,
+      "share": 2.7
+    },
+    {
+      "name": "摩托车手把",
+      "rows": 24,
+      "revenue": 6251986,
+      "sales": 8381,
+      "salesRows": 22,
+      "unitRevenue": 745.97,
+      "share": 2.3
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 425,
+      "revenue": 100402924,
+      "sales": 170179,
+      "salesRows": 402,
+      "unitRevenue": 589.98,
+      "share": 36.7
+    },
+    {
+      "name": "ScooterSpares",
+      "rows": 102,
+      "revenue": 18160732,
+      "sales": 47353,
+      "salesRows": 102,
+      "unitRevenue": 383.52,
+      "share": 6.6
+    },
+    {
+      "name": "Afenita",
+      "rows": 6,
+      "revenue": 10222319,
+      "sales": 3249,
+      "salesRows": 5,
+      "unitRevenue": 3146.3,
+      "share": 3.7
+    },
+    {
+      "name": "NIBBI",
+      "rows": 5,
+      "revenue": 7702660,
+      "sales": 2002,
+      "salesRows": 5,
+      "unitRevenue": 3847.48,
+      "share": 2.8
+    },
+    {
+      "name": "YouGlow",
+      "rows": 6,
+      "revenue": 6394576,
+      "sales": 2030,
+      "salesRows": 6,
+      "unitRevenue": 3150.04,
+      "share": 2.3
+    },
+    {
+      "name": "HABCO",
+      "rows": 4,
+      "revenue": 6159053,
+      "sales": 1449,
+      "salesRows": 4,
+      "unitRevenue": 4250.55,
+      "share": 2.3
+    },
+    {
+      "name": "LS2",
+      "rows": 4,
+      "revenue": 6056021,
+      "sales": 1297,
+      "salesRows": 4,
+      "unitRevenue": 4669.25,
+      "share": 2.2
+    },
+    {
+      "name": "DioMarket",
+      "rows": 32,
+      "revenue": 5776099,
+      "sales": 11826,
+      "salesRows": 32,
+      "unitRevenue": 488.42,
+      "share": 2.1
+    },
+    {
+      "name": "GX moto",
+      "rows": 52,
+      "revenue": 5324217,
+      "sales": 27248,
+      "salesRows": 52,
+      "unitRevenue": 195.4,
+      "share": 1.9
+    },
+    {
+      "name": "OTOM",
+      "rows": 7,
+      "revenue": 4427758,
+      "sales": 2605,
+      "salesRows": 6,
+      "unitRevenue": 1699.72,
+      "share": 1.6
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Scooterspares",
+      "rows": 102,
+      "revenue": 18160732,
+      "sales": 47353,
+      "salesRows": 102,
+      "unitRevenue": 383.52,
+      "share": 6.6
+    },
+    {
+      "name": "CLS",
+      "rows": 6,
+      "revenue": 10222319,
+      "sales": 3249,
+      "salesRows": 5,
+      "unitRevenue": 3146.3,
+      "share": 3.7
+    },
+    {
+      "name": "МС-ТРЕЙД",
+      "rows": 34,
+      "revenue": 8233656,
+      "sales": 14325,
+      "salesRows": 34,
+      "unitRevenue": 574.78,
+      "share": 3
+    },
+    {
+      "name": "Мотокард",
+      "rows": 4,
+      "revenue": 7339129,
+      "sales": 1674,
+      "salesRows": 4,
+      "unitRevenue": 4384.19,
+      "share": 2.7
+    },
+    {
+      "name": "Glow",
+      "rows": 6,
+      "revenue": 6394576,
+      "sales": 2030,
+      "salesRows": 6,
+      "unitRevenue": 3150.04,
+      "share": 2.3
+    },
+    {
+      "name": "FORTVISOR.RU",
+      "rows": 4,
+      "revenue": 6159053,
+      "sales": 1449,
+      "salesRows": 4,
+      "unitRevenue": 4250.55,
+      "share": 2.3
+    },
+    {
+      "name": "DioMarket",
+      "rows": 32,
+      "revenue": 5776099,
+      "sales": 11826,
+      "salesRows": 32,
+      "unitRevenue": 488.42,
+      "share": 2.1
+    },
+    {
+      "name": "Байк Ленд",
+      "rows": 3,
+      "revenue": 5727118,
+      "sales": 829,
+      "salesRows": 3,
+      "unitRevenue": 6908.47,
+      "share": 2.1
+    },
+    {
+      "name": "ТехСад",
+      "rows": 52,
+      "revenue": 5324217,
+      "sales": 27248,
+      "salesRows": 52,
+      "unitRevenue": 195.4,
+      "share": 1.9
+    },
+    {
+      "name": "shunwei",
+      "rows": 4,
+      "revenue": 4160438,
+      "sales": 2154,
+      "salesRows": 4,
+      "unitRevenue": 1931.49,
+      "share": 1.5
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 150,
+      "revenue": 12885664,
+      "sales": 88993,
+      "share": 4.7
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 429,
+      "revenue": 57539478,
+      "sales": 170834,
+      "share": 21
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 244,
+      "revenue": 66748849,
+      "sales": 95092,
+      "share": 24.4
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 111,
+      "revenue": 57654613,
+      "sales": 41242,
+      "share": 21.1
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 57,
+      "revenue": 61944350,
+      "sales": 21399,
+      "share": 22.6
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 9,
+      "revenue": 16832469,
+      "sales": 2802,
+      "share": 6.2
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Afenita Motorcycle Helmet, L, matte black",
+      "brand": "Afenita",
+      "seller": "CLS",
+      "type": "摩托车头盔",
+      "revenue": 4849962,
+      "sales": 1786,
+      "avgPrice": 2716,
+      "url": "https://www.ozon.ru/product/3344774424"
+    },
+    {
+      "name": "NIBBI Motorcycle Carburetor",
+      "brand": "NIBBI",
+      "seller": "Мотокард",
+      "type": "摩托车化油器",
+      "revenue": 3162746,
+      "sales": 620,
+      "avgPrice": 5101,
+      "url": "https://www.ozon.ru/product/3452497096"
+    },
+    {
+      "name": "Spabigo Motorcycle Helmet, Universal, matte black",
+      "brand": "Spabigo",
+      "seller": "SPABIGO",
+      "type": "摩托车头盔",
+      "revenue": 2436036,
+      "sales": 600,
+      "avgPrice": 4060,
+      "url": "https://www.ozon.ru/product/1845159181"
+    },
+    {
+      "name": "LS2 Motorcycle Helmet, M, matte black",
+      "brand": "LS2",
+      "seller": "Байк Ленд",
+      "type": "摩托车头盔",
+      "revenue": 2286218,
+      "sales": 341,
+      "avgPrice": 6704,
+      "url": "https://www.ozon.ru/product/4016556879"
+    },
+    {
+      "name": "Motorcycle Bag, 60 L",
+      "brand": "未知/无品牌",
+      "seller": "Фабрика 365 (Fabrika 365)",
+      "type": "摩托车包",
+      "revenue": 2229263,
+      "sales": 387,
+      "avgPrice": 5760,
+      "url": "https://www.ozon.ru/product/3605693865"
+    },
+    {
+      "name": "NIBBI Motorcycle Carburetor",
+      "brand": "NIBBI",
+      "seller": "Мотокард",
+      "type": "摩托车化油器",
+      "revenue": 2079790,
+      "sales": 456,
+      "avgPrice": 4561,
+      "url": "https://www.ozon.ru/product/3452458972"
+    },
+    {
+      "name": "Motorcycle Chain",
+      "brand": "未知/无品牌",
+      "seller": "shunwei",
+      "type": "摩托车链条",
+      "revenue": 1934060,
+      "sales": 871,
+      "avgPrice": 2221,
+      "url": "https://www.ozon.ru/product/2697729486"
+    },
+    {
+      "name": "LS2 Motorcycle Helmet, M, black",
+      "brand": "LS2",
+      "seller": "Байк Ленд",
+      "type": "摩托车头盔",
+      "revenue": 1781151,
+      "sales": 247,
+      "avgPrice": 7211,
+      "url": "https://www.ozon.ru/product/4003095857"
+    },
+    {
+      "name": "HABCO Motorcycle Helmet, S, matte black",
+      "brand": "HABCO",
+      "seller": "FORTVISOR.RU",
+      "type": "摩托车头盔",
+      "revenue": 1723567,
+      "sales": 362,
+      "avgPrice": 4761,
+      "url": "https://www.ozon.ru/product/1901344508"
+    },
+    {
+      "name": "LS2 Motorcycle Helmet, L, matte black",
+      "brand": "LS2",
+      "seller": "Байк Ленд",
+      "type": "摩托车头盔",
+      "revenue": 1659749,
+      "sales": 241,
+      "avgPrice": 6887,
+      "url": "https://www.ozon.ru/product/4003089871"
+    },
+    {
+      "name": "HABCO Motorcycle Helmet, M, black & grey",
+      "brand": "HABCO",
+      "seller": "FORTVISOR.RU",
+      "type": "摩托车头盔",
+      "revenue": 1651729,
+      "sales": 427,
+      "avgPrice": 3868,
+      "url": "https://www.ozon.ru/product/3633848903"
+    },
+    {
+      "name": "YouGlow Motorcycle Helmet, M, dark grey, matte black",
+      "brand": "YouGlow",
+      "seller": "Glow",
+      "type": "摩托车头盔",
+      "revenue": 1596055,
+      "sales": 246,
+      "avgPrice": 6488,
+      "url": "https://www.ozon.ru/product/1617606210"
+    },
+    {
+      "name": "DIDvf Motorcycle Chain",
+      "brand": "DIDvf",
+      "seller": "БайкСнаб",
+      "type": "摩托车链条",
+      "revenue": 1562565,
+      "sales": 1011,
+      "avgPrice": 1546,
+      "url": "https://www.ozon.ru/product/883405186"
+    },
+    {
+      "name": "Spabigo Motorcycle Helmet, Universal, black",
+      "brand": "Spabigo",
+      "seller": "SPABIGO",
+      "type": "摩托车头盔",
+      "revenue": 1557057,
+      "sales": 546,
+      "avgPrice": 2852,
+      "url": "https://www.ozon.ru/product/1845158754"
+    },
+    {
+      "name": "Afenita Motorcycle Helmet, L, black",
+      "brand": "Afenita",
+      "seller": "CLS",
+      "type": "摩托车头盔",
+      "revenue": 1534703,
+      "sales": 439,
+      "avgPrice": 3496,
+      "url": "https://www.ozon.ru/product/4539850791"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.861,
+    "signRateCoverage": 96.8,
+    "stockoutMedian": 17,
+    "stockoutCoverage": 92.6,
+    "missedRevenue": 10529974.4,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 64.6,
+    "promoCoverage": 96.8,
+    "adActiveShare": 29.1,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 96.8,
+    "missingSales": 32,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 20,
+    "duplicateUrl": 0,
+    "uniqueSku": 980,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“摩托车头盔”贡献 16% 销售额；前五品类合计 38.2%。",
+    "销售额最集中的价格带是 500–1,000 ₽，覆盖 244 条商品记录，贡献 24.4% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 62.4% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 96.8%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

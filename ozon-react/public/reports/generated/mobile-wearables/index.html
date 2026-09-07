@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 手机、平板与智能穿戴市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>手机、平板与智能穿戴市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">2.07 十亿 ₽</span><span class="hint">约 159.2 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">486.4 千 件</span><span class="hint">覆盖 95.9% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">4,256 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">14</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">139 / 302</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>核心口径完整</strong><p>销售额字段用于主分析；销量缺失 41 条，均价缺失 0 条，BSR 标签缺失 0 条。SKU 重复 27 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“智能手机”贡献 75.6% 销售额；前五品类合计 96.5%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 ≥5,000 ₽，覆盖 233 条商品记录，贡献 85.9% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 86.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 95.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>智能手机</td><td class="number">201</td><td class="number">1,564,939,699</td><td class="number">100,573</td><td class="number">75.6%</td></tr>
+    <tr><td>2</td><td>智能手表</td><td class="number">134</td><td class="number">205,510,616</td><td class="number">59,927</td><td class="number">9.9%</td></tr>
+    <tr><td>3</td><td>平板电脑</td><td class="number">24</td><td class="number">130,562,873</td><td class="number">7,633</td><td class="number">6.3%</td></tr>
+    <tr><td>4</td><td>移动电话</td><td class="number">97</td><td class="number">58,557,420</td><td class="number">45,231</td><td class="number">2.8%</td></tr>
+    <tr><td>5</td><td>智能手表表带</td><td class="number">360</td><td class="number">38,062,723</td><td class="number">198,194</td><td class="number">1.8%</td></tr>
+    <tr><td>6</td><td>手机零件</td><td class="number">57</td><td class="number">19,674,383</td><td class="number">20,046</td><td class="number">1%</td></tr>
+    <tr><td>7</td><td>儿童智能手表</td><td class="number">17</td><td class="number">12,963,385</td><td class="number">4,850</td><td class="number">0.6%</td></tr>
+    <tr><td>8</td><td>儿童平板电脑</td><td class="number">5</td><td class="number">10,255,467</td><td class="number">540</td><td class="number">0.5%</td></tr>
+    <tr><td>9</td><td>智能继电器</td><td class="number">42</td><td class="number">9,257,815</td><td class="number">20,102</td><td class="number">0.4%</td></tr>
+    <tr><td>10</td><td>泄漏保护系统</td><td class="number">9</td><td class="number">8,156,760</td><td class="number">3,134</td><td class="number">0.4%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">88.5%</div><div class="coverage">字段覆盖 83.4%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">10 天</div><div class="coverage">字段覆盖 74.9%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">70.5%</div><div class="coverage">字段覆盖 95.9%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">50.9%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2811310229" target="_blank" rel="noreferrer">Xiaomi Smartphone Redmi 15 Rostest (EAC) 8/ 256 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Xiaomi</td>
+      <td class="number">67,737,796</td>
+      <td class="number">4,438</td>
+      <td class="number">15,263</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2747506788" target="_blank" rel="noreferrer">Xiaomi Smartphone Redmi 15C Rostest (EAC) 8/ 256 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Xiaomi</td>
+      <td class="number">39,151,866</td>
+      <td class="number">3,026</td>
+      <td class="number">12,938</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2802494726" target="_blank" rel="noreferrer">Xiaomi Smartphone Rostest (EAC) 8/ 256 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Xiaomi</td>
+      <td class="number">29,934,453</td>
+      <td class="number">2,889</td>
+      <td class="number">10,362</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4189905294" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, orange</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">29,013,527</td>
+      <td class="number">831</td>
+      <td class="number">34,914</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4189905349" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, gold</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">27,826,732</td>
+      <td class="number">707</td>
+      <td class="number">39,359</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2802485119" target="_blank" rel="noreferrer">Xiaomi Smartphone Rostest (EAC) 6/ 128 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Xiaomi</td>
+      <td class="number">24,923,305</td>
+      <td class="number">2,768</td>
+      <td class="number">9,004</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3701084224" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Lite 8/ 256 GB, gold</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">23,164,186</td>
+      <td class="number">1,070</td>
+      <td class="number">21,649</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3309150805" target="_blank" rel="noreferrer">Apple Tablet Apple iPad 11 2025, 11&quot;, 128 GB, silvery</a></td>
+      <td>平板电脑</td>
+      <td>Apple</td>
+      <td class="number">22,313,611</td>
+      <td class="number">670</td>
+      <td class="number">33,304</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3584711424" target="_blank" rel="noreferrer">Poco Smartphone Poco X8 Pro Rostest (EAC) 12/ 512 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Poco</td>
+      <td class="number">20,758,729</td>
+      <td class="number">659</td>
+      <td class="number">31,500</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4189906337" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">20,426,085</td>
+      <td class="number">528</td>
+      <td class="number">38,686</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3701083545" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Lite 8/ 256 GB, grey</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">20,339,358</td>
+      <td class="number">920</td>
+      <td class="number">22,108</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3538191814" target="_blank" rel="noreferrer">Samsung Smartphone Samsung Galaxy S26 Ultra Global 12/ 256 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Samsung</td>
+      <td class="number">20,082,785</td>
+      <td class="number">274</td>
+      <td class="number">73,295</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3701083874" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Lite 8/ 256 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">20,023,658</td>
+      <td class="number">907</td>
+      <td class="number">22,077</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4189906410" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, gold</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">19,657,028</td>
+      <td class="number">567</td>
+      <td class="number">34,668</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4200768524" target="_blank" rel="noreferrer">Honor Smartphone Honor 600 Pro Rostest (EAC) 12/ 512 GB, black</a></td>
+      <td>智能手机</td>
+      <td>Honor</td>
+      <td class="number">19,568,517</td>
+      <td class="number">290</td>
+      <td class="number">67,478</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23手机平板智能穿戴_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-mobile-wearables","label":"手机、平板与智能穿戴","title":"Ozon 手机、平板与智能穿戴市场分析","group":"数码产品","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23手机平板智能穿戴_清洗版.xlsx","path":"reports/generated/mobile-wearables/index.html","frameTitle":"Ozon 手机、平板与智能穿戴市场分析报告","kpis":{"rowCount":1000,"totalRevenue":2070073266,"totalSales":486431,"unitRevenue":4255.64,"typeCount":14,"brandCount":139,"sellerCount":302},"topTypes":[{"name":"智能手机","rows":201,"revenue":1564939699,"sales":100573,"salesRows":188,"unitRevenue":15560.24,"share":75.6},{"name":"智能手表","rows":134,"revenue":205510616,"sales":59927,"salesRows":127,"unitRevenue":3429.35,"share":9.9},{"name":"平板电脑","rows":24,"revenue":130562873,"sales":7633,"salesRows":21,"unitRevenue":17105.05,"share":6.3},{"name":"移动电话","rows":97,"revenue":58557420,"sales":45231,"salesRows":87,"unitRevenue":1294.63,"share":2.8},{"name":"智能手表表带","rows":360,"revenue":38062723,"sales":198194,"salesRows":359,"unitRevenue":192.05,"share":1.8},{"name":"手机零件","rows":57,"revenue":19674383,"sales":20046,"salesRows":57,"unitRevenue":981.46,"share":1},{"name":"儿童智能手表","rows":17,"revenue":12963385,"sales":4850,"salesRows":14,"unitRevenue":2672.86,"share":0.6},{"name":"儿童平板电脑","rows":5,"revenue":10255467,"sales":540,"salesRows":2,"unitRevenue":18991.61,"share":0.5},{"name":"智能继电器","rows":42,"revenue":9257815,"sales":20102,"salesRows":42,"unitRevenue":460.54,"share":0.4},{"name":"泄漏保护系统","rows":9,"revenue":8156760,"sales":3134,"salesRows":9,"unitRevenue":2602.67,"share":0.4}],"topBrands":[{"name":"Xiaomi","rows":55,"revenue":457613603,"sales":39691,"salesRows":55,"unitRevenue":11529.4,"share":22.1},{"name":"Honor","rows":28,"revenue":316684895,"sales":11858,"salesRows":28,"unitRevenue":26706.43,"share":15.3},{"name":"Samsung","rows":34,"revenue":281153546,"sales":17047,"salesRows":34,"unitRevenue":16492.85,"share":13.6},{"name":"Tecno","rows":33,"revenue":177838148,"sales":15389,"salesRows":30,"unitRevenue":11556.19,"share":8.6},{"name":"未知/无品牌","rows":194,"revenue":137099146,"sales":87829,"salesRows":170,"unitRevenue":1560.98,"share":6.6},{"name":"Poco","rows":14,"revenue":124335088,"sales":5611,"salesRows":14,"unitRevenue":22159.17,"share":6},{"name":"realme","rows":22,"revenue":115309152,"sales":10997,"salesRows":21,"unitRevenue":10485.51,"share":5.6},{"name":"iQOO","rows":11,"revenue":80500478,"sales":3792,"salesRows":11,"unitRevenue":21229.03,"share":3.9},{"name":"OPPO","rows":9,"revenue":47867600,"sales":3315,"salesRows":9,"unitRevenue":14439.7,"share":2.3},{"name":"Apple","rows":4,"revenue":44253887,"sales":1494,"salesRows":4,"unitRevenue":29621.08,"share":2.1}],"topSellers":[{"name":"Ozon","rows":129,"revenue":1010350190,"sales":70157,"salesRows":125,"unitRevenue":14401.27,"share":48.8},{"name":"Xiaomi Официальный Магазин","rows":18,"revenue":194135009,"sales":13770,"salesRows":18,"unitRevenue":14098.4,"share":9.4},{"name":"Дубайский Экспресс","rows":8,"revenue":96216286,"sales":2367,"salesRows":8,"unitRevenue":40649.04,"share":4.6},{"name":"ОАЭшка","rows":12,"revenue":60427176,"sales":4807,"salesRows":12,"unitRevenue":12570.66,"share":2.9},{"name":"М.Видео","rows":4,"revenue":52708475,"sales":2230,"salesRows":4,"unitRevenue":23636.09,"share":2.5},{"name":"НАДЕЖНЫЕ СМАРТФОНЫ ДУБАЙ","rows":6,"revenue":36162752,"sales":2457,"salesRows":6,"unitRevenue":14718.25,"share":1.7},{"name":"Dragon-X Store","rows":3,"revenue":30698097,"sales":1410,"salesRows":3,"unitRevenue":21771.7,"share":1.5},{"name":"GigaMarkt","rows":8,"revenue":29150873,"sales":3449,"salesRows":8,"unitRevenue":8451.98,"share":1.4},{"name":"ocean","rows":3,"revenue":27022642,"sales":4670,"salesRows":3,"unitRevenue":5786.43,"share":1.3},{"name":"OPPO","rows":4,"revenue":24891237,"sales":1456,"salesRows":4,"unitRevenue":17095.63,"share":1.2}],"priceBands":[{"label":"<200 ₽","rows":271,"revenue":21599080,"sales":153721,"share":1},{"label":"200–500 ₽","rows":210,"revenue":72358838,"sales":89525,"share":3.5},{"label":"500–1,000 ₽","rows":97,"revenue":38315314,"sales":46291,"share":1.9},{"label":"1,000–2,000 ₽","rows":119,"revenue":75910432,"sales":52334,"share":3.7},{"label":"2,000–5,000 ₽","rows":70,"revenue":83974186,"sales":28136,"share":4.1},{"label":"≥5,000 ₽","rows":233,"revenue":1777915416,"sales":116424,"share":85.9}],"topProducts":[{"name":"Xiaomi Smartphone Redmi 15 Rostest (EAC) 8/ 256 GB, black","brand":"Xiaomi","seller":"Ozon","type":"智能手机","revenue":67737796,"sales":4438,"avgPrice":15263,"url":"https://www.ozon.ru/product/2811310229"},{"name":"Xiaomi Smartphone Redmi 15C Rostest (EAC) 8/ 256 GB, black","brand":"Xiaomi","seller":"Ozon","type":"智能手机","revenue":39151866,"sales":3026,"avgPrice":12938,"url":"https://www.ozon.ru/product/2747506788"},{"name":"Xiaomi Smartphone Rostest (EAC) 8/ 256 GB, black","brand":"Xiaomi","seller":"Xiaomi Официальный Магазин","type":"智能手机","revenue":29934453,"sales":2889,"avgPrice":10362,"url":"https://www.ozon.ru/product/2802494726"},{"name":"Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, orange","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":29013527,"sales":831,"avgPrice":34914,"url":"https://www.ozon.ru/product/4189905294"},{"name":"Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, gold","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":27826732,"sales":707,"avgPrice":39359,"url":"https://www.ozon.ru/product/4189905349"},{"name":"Xiaomi Smartphone Rostest (EAC) 6/ 128 GB, black","brand":"Xiaomi","seller":"Xiaomi Официальный Магазин","type":"智能手机","revenue":24923305,"sales":2768,"avgPrice":9004,"url":"https://www.ozon.ru/product/2802485119"},{"name":"Honor Smartphone Honor 600 Lite 8/ 256 GB, gold","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":23164186,"sales":1070,"avgPrice":21649,"url":"https://www.ozon.ru/product/3701084224"},{"name":"Apple Tablet Apple iPad 11 2025, 11\", 128 GB, silvery","brand":"Apple","seller":"М.Видео","type":"平板电脑","revenue":22313611,"sales":670,"avgPrice":33304,"url":"https://www.ozon.ru/product/3309150805"},{"name":"Poco Smartphone Poco X8 Pro Rostest (EAC) 12/ 512 GB, black","brand":"Poco","seller":"Xiaomi Официальный Магазин","type":"智能手机","revenue":20758729,"sales":659,"avgPrice":31500,"url":"https://www.ozon.ru/product/3584711424"},{"name":"Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, black","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":20426085,"sales":528,"avgPrice":38686,"url":"https://www.ozon.ru/product/4189906337"},{"name":"Honor Smartphone Honor 600 Lite 8/ 256 GB, grey","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":20339358,"sales":920,"avgPrice":22108,"url":"https://www.ozon.ru/product/3701083545"},{"name":"Samsung Smartphone Samsung Galaxy S26 Ultra Global 12/ 256 GB, black","brand":"Samsung","seller":"Дубайский Экспресс","type":"智能手机","revenue":20082785,"sales":274,"avgPrice":73295,"url":"https://www.ozon.ru/product/3538191814"},{"name":"Honor Smartphone Honor 600 Lite 8/ 256 GB, black","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":20023658,"sales":907,"avgPrice":22077,"url":"https://www.ozon.ru/product/3701083874"},{"name":"Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, gold","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":19657028,"sales":567,"avgPrice":34668,"url":"https://www.ozon.ru/product/4189906410"},{"name":"Honor Smartphone Honor 600 Pro Rostest (EAC) 12/ 512 GB, black","brand":"Honor","seller":"Ozon","type":"智能手机","revenue":19568517,"sales":290,"avgPrice":67478,"url":"https://www.ozon.ru/product/4200768524"}],"operations":{"signRateMedian":0.885,"signRateCoverage":83.4,"stockoutMedian":10,"stockoutCoverage":74.9,"missedRevenue":147444122.1,"missedRevenueCoverage":99.6,"promoActiveShare":70.5,"promoCoverage":95.9,"adActiveShare":50.9,"adCoverage":100},"quality":{"level":"核心口径完整","salesCoverage":95.9,"missingSales":41,"missingAveragePrice":0,"missingBsr":0,"duplicateSku":27,"duplicateUrl":0,"uniqueSku":973,"urlCoverage":100},"insights":["头部品类“智能手机”贡献 75.6% 销售额；前五品类合计 96.5%。","销售额最集中的价格带是 ≥5,000 ₽，覆盖 233 条商品记录，贡献 85.9% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 86.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 95.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

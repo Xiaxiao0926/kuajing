@@ -1,0 +1,466 @@
+{
+  "id": "generated-truck-parts",
+  "label": "卡车配件",
+  "title": "Ozon 卡车配件市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23卡车配件_清洗版.xlsx",
+  "path": "reports/generated/truck-parts/index.html",
+  "frameTitle": "Ozon 卡车配件市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 20954438,
+    "totalSales": 17382,
+    "unitRevenue": 1205.53,
+    "typeCount": 4,
+    "brandCount": 182,
+    "sellerCount": 336
+  },
+  "topTypes": [
+    {
+      "name": "货车配件",
+      "rows": 340,
+      "revenue": 10640379,
+      "sales": 9068,
+      "salesRows": 305,
+      "unitRevenue": 1173.4,
+      "share": 50.8
+    },
+    {
+      "name": "卡车内燃机备件",
+      "rows": 630,
+      "revenue": 7976870,
+      "sales": 7627,
+      "salesRows": 492,
+      "unitRevenue": 1045.87,
+      "share": 38.1
+    },
+    {
+      "name": "车载冰箱",
+      "rows": 22,
+      "revenue": 2226255,
+      "sales": 400,
+      "salesRows": 22,
+      "unitRevenue": 5565.64,
+      "share": 10.6
+    },
+    {
+      "name": "驾驶室总成",
+      "rows": 8,
+      "revenue": 110934,
+      "sales": 287,
+      "salesRows": 7,
+      "unitRevenue": 386.53,
+      "share": 0.5
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 413,
+      "revenue": 9124826,
+      "sales": 6590,
+      "salesRows": 335,
+      "unitRevenue": 1384.65,
+      "share": 43.5
+    },
+    {
+      "name": "ТС",
+      "rows": 92,
+      "revenue": 4469203,
+      "sales": 3147,
+      "salesRows": 88,
+      "unitRevenue": 1420.15,
+      "share": 21.3
+    },
+    {
+      "name": "ТрансГарант",
+      "rows": 17,
+      "revenue": 955282,
+      "sales": 574,
+      "salesRows": 17,
+      "unitRevenue": 1664.25,
+      "share": 4.6
+    },
+    {
+      "name": "ЗАВОД ТРУД",
+      "rows": 24,
+      "revenue": 394392,
+      "sales": 1001,
+      "salesRows": 21,
+      "unitRevenue": 394,
+      "share": 1.9
+    },
+    {
+      "name": "Ming Yi",
+      "rows": 1,
+      "revenue": 365544,
+      "sales": 0,
+      "salesRows": 0,
+      "unitRevenue": null,
+      "share": 1.7
+    },
+    {
+      "name": "КамАЗ",
+      "rows": 7,
+      "revenue": 274869,
+      "sales": 89,
+      "salesRows": 7,
+      "unitRevenue": 3088.42,
+      "share": 1.3
+    },
+    {
+      "name": "СпецМаш",
+      "rows": 14,
+      "revenue": 229862,
+      "sales": 189,
+      "salesRows": 14,
+      "unitRevenue": 1216.2,
+      "share": 1.1
+    },
+    {
+      "name": "Комплект-Новация",
+      "rows": 18,
+      "revenue": 186944,
+      "sales": 187,
+      "salesRows": 16,
+      "unitRevenue": 999.7,
+      "share": 0.9
+    },
+    {
+      "name": "ГАЗ",
+      "rows": 3,
+      "revenue": 171177,
+      "sales": 22,
+      "salesRows": 3,
+      "unitRevenue": 7780.77,
+      "share": 0.8
+    },
+    {
+      "name": "BALASHOV",
+      "rows": 1,
+      "revenue": 163533,
+      "sales": 50,
+      "salesRows": 1,
+      "unitRevenue": 3270.66,
+      "share": 0.8
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "TSparts",
+      "rows": 92,
+      "revenue": 4469203,
+      "sales": 3147,
+      "salesRows": 88,
+      "unitRevenue": 1420.15,
+      "share": 21.3
+    },
+    {
+      "name": "ZhunFei",
+      "rows": 4,
+      "revenue": 1261021,
+      "sales": 104,
+      "salesRows": 4,
+      "unitRevenue": 12125.2,
+      "share": 6
+    },
+    {
+      "name": "ТрансГарант",
+      "rows": 17,
+      "revenue": 955282,
+      "sales": 574,
+      "salesRows": 17,
+      "unitRevenue": 1664.25,
+      "share": 4.6
+    },
+    {
+      "name": "Julian-6",
+      "rows": 1,
+      "revenue": 568095,
+      "sales": 33,
+      "salesRows": 1,
+      "unitRevenue": 17215,
+      "share": 2.7
+    },
+    {
+      "name": "Запчасти для мини-экскаватора Shandong",
+      "rows": 5,
+      "revenue": 406067,
+      "sales": 78,
+      "salesRows": 5,
+      "unitRevenue": 5205.99,
+      "share": 1.9
+    },
+    {
+      "name": "MingYi Игра прилива",
+      "rows": 1,
+      "revenue": 365544,
+      "sales": 0,
+      "salesRows": 0,
+      "unitRevenue": null,
+      "share": 1.7
+    },
+    {
+      "name": "Тракер",
+      "rows": 7,
+      "revenue": 363132,
+      "sales": 250,
+      "salesRows": 5,
+      "unitRevenue": 1452.53,
+      "share": 1.7
+    },
+    {
+      "name": "Kamatorgsnab",
+      "rows": 9,
+      "revenue": 297834,
+      "sales": 324,
+      "salesRows": 9,
+      "unitRevenue": 919.24,
+      "share": 1.4
+    },
+    {
+      "name": "Вселенная Запчастей",
+      "rows": 4,
+      "revenue": 284934,
+      "sales": 80,
+      "salesRows": 3,
+      "unitRevenue": 3561.68,
+      "share": 1.4
+    },
+    {
+      "name": "AvtoALL",
+      "rows": 30,
+      "revenue": 268774,
+      "sales": 291,
+      "salesRows": 25,
+      "unitRevenue": 923.62,
+      "share": 1.3
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 295,
+      "revenue": 2643106,
+      "sales": 3069,
+      "share": 12.6
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 264,
+      "revenue": 2056666,
+      "sales": 6547,
+      "share": 9.8
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 191,
+      "revenue": 2554215,
+      "sales": 3897,
+      "share": 12.2
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 111,
+      "revenue": 2467752,
+      "sales": 1707,
+      "share": 11.8
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 88,
+      "revenue": 4689313,
+      "sales": 1503,
+      "share": 22.4
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 51,
+      "revenue": 6543386,
+      "sales": 659,
+      "share": 31.2
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Refrigerated Truck/Trailer",
+      "brand": "未知/无品牌",
+      "seller": "ZhunFei",
+      "type": "车载冰箱",
+      "revenue": 572137,
+      "sales": 49,
+      "avgPrice": 11676,
+      "url": "https://www.ozon.ru/product/2111286400"
+    },
+    {
+      "name": "Fittings for Trucks",
+      "brand": "未知/无品牌",
+      "seller": "Julian-6",
+      "type": "货车配件",
+      "revenue": 568095,
+      "sales": 33,
+      "avgPrice": 17215,
+      "url": "https://www.ozon.ru/product/3584964662"
+    },
+    {
+      "name": "Refrigerated Truck/Trailer",
+      "brand": "未知/无品牌",
+      "seller": "ZhunFei",
+      "type": "车载冰箱",
+      "revenue": 421570,
+      "sales": 39,
+      "avgPrice": 10809,
+      "url": "https://www.ozon.ru/product/2188280081"
+    },
+    {
+      "name": "Ming Yi Truck Engine Spare Parts",
+      "brand": "Ming Yi",
+      "seller": "MingYi Игра прилива",
+      "type": "卡车内燃机备件",
+      "revenue": 365544,
+      "sales": null,
+      "avgPrice": 27,
+      "url": "https://www.ozon.ru/product/5024766982"
+    },
+    {
+      "name": "Truck Engine Spare Parts",
+      "brand": "未知/无品牌",
+      "seller": "Тракер",
+      "type": "卡车内燃机备件",
+      "revenue": 320028,
+      "sales": 17,
+      "avgPrice": 18825,
+      "url": "https://www.ozon.ru/product/3541707279"
+    },
+    {
+      "name": "ТС Fittings for Trucks",
+      "brand": "ТС",
+      "seller": "TSparts",
+      "type": "货车配件",
+      "revenue": 240653,
+      "sales": 17,
+      "avgPrice": 14156,
+      "url": "https://www.ozon.ru/product/2034607281"
+    },
+    {
+      "name": "Truck Engine Spare Parts",
+      "brand": "未知/无品牌",
+      "seller": "Турбореал",
+      "type": "卡车内燃机备件",
+      "revenue": 234941,
+      "sales": 10,
+      "avgPrice": 23494,
+      "url": "https://www.ozon.ru/product/1706491857"
+    },
+    {
+      "name": "ТС Fittings for Trucks",
+      "brand": "ТС",
+      "seller": "TSparts",
+      "type": "货车配件",
+      "revenue": 201600,
+      "sales": 519,
+      "avgPrice": 388,
+      "url": "https://www.ozon.ru/product/3585386382"
+    },
+    {
+      "name": "Fittings for Trucks",
+      "brand": "未知/无品牌",
+      "seller": "Вселенная Запчастей",
+      "type": "货车配件",
+      "revenue": 201553,
+      "sales": 40,
+      "avgPrice": 5039,
+      "url": "https://www.ozon.ru/product/1942795947"
+    },
+    {
+      "name": "ТС Fittings for Trucks",
+      "brand": "ТС",
+      "seller": "TSparts",
+      "type": "货车配件",
+      "revenue": 196149,
+      "sales": 45,
+      "avgPrice": 4359,
+      "url": "https://www.ozon.ru/product/2055683218"
+    },
+    {
+      "name": "ТС Fittings for Trucks",
+      "brand": "ТС",
+      "seller": "TSparts",
+      "type": "货车配件",
+      "revenue": 194829,
+      "sales": 83,
+      "avgPrice": 2347,
+      "url": "https://www.ozon.ru/product/2027950075"
+    },
+    {
+      "name": "Truck Engine Spare Parts",
+      "brand": "未知/无品牌",
+      "seller": "Агро Крым Запчасть",
+      "type": "卡车内燃机备件",
+      "revenue": 191526,
+      "sales": 8,
+      "avgPrice": 23941,
+      "url": "https://www.ozon.ru/product/2353210152"
+    },
+    {
+      "name": "Truck Engine Spare Parts",
+      "brand": "未知/无品牌",
+      "seller": "BigCar",
+      "type": "卡车内燃机备件",
+      "revenue": 177828,
+      "sales": 19,
+      "avgPrice": 9359,
+      "url": "https://www.ozon.ru/product/3824670417"
+    },
+    {
+      "name": "Fittings for Trucks",
+      "brand": "未知/无品牌",
+      "seller": "BURMARKET",
+      "type": "货车配件",
+      "revenue": 169947,
+      "sales": 8,
+      "avgPrice": 21243,
+      "url": "https://www.ozon.ru/product/3378881272"
+    },
+    {
+      "name": "BALASHOV Refrigerated Truck/Trailer",
+      "brand": "BALASHOV",
+      "seller": "Motive Living",
+      "type": "车载冰箱",
+      "revenue": 163533,
+      "sales": 50,
+      "avgPrice": 3271,
+      "url": "https://www.ozon.ru/product/3895007759"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.9309999999999999,
+    "signRateCoverage": 82.5,
+    "stockoutMedian": 26,
+    "stockoutCoverage": 76.1,
+    "missedRevenue": 3784518.9,
+    "missedRevenueCoverage": 99.9,
+    "promoActiveShare": 67.6,
+    "promoCoverage": 82.6,
+    "adActiveShare": 14.8,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "谨慎解读销量",
+    "salesCoverage": 82.6,
+    "missingSales": 174,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 12,
+    "duplicateUrl": 0,
+    "uniqueSku": 988,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“货车配件”贡献 50.8% 销售额；前五品类合计 100%。",
+    "销售额最集中的价格带是 ≥5,000 ₽，覆盖 51 条商品记录，贡献 31.2% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 78% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 82.6%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

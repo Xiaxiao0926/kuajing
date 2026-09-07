@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 汽车紧固件市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>汽车紧固件市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">197.7 百万 ₽</span><span class="hint">约 15.2 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">898.4 千 件</span><span class="hint">覆盖 98.4% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">220 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">29</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">195 / 421</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>核心口径完整</strong><p>销售额字段用于主分析；销量缺失 16 条，均价缺失 0 条，BSR 标签缺失 305 条。SKU 重复 15 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“汽车贴膜”贡献 25% 销售额；前五品类合计 66.5%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 &lt;200 ₽，覆盖 627 条商品记录，贡献 43.1% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 59.9% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 98.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>汽车贴膜</td><td class="number">121</td><td class="number">49,490,057</td><td class="number">143,413</td><td class="number">25%</td></tr>
+    <tr><td>2</td><td>汽车紧固夹</td><td class="number">262</td><td class="number">42,902,714</td><td class="number">238,801</td><td class="number">21.7%</td></tr>
+    <tr><td>3</td><td>汽车照明套件</td><td class="number">51</td><td class="number">14,397,164</td><td class="number">28,256</td><td class="number">7.3%</td></tr>
+    <tr><td>4</td><td>汽车装饰贴片</td><td class="number">90</td><td class="number">13,066,171</td><td class="number">64,145</td><td class="number">6.6%</td></tr>
+    <tr><td>5</td><td>汽车紧固件</td><td class="number">69</td><td class="number">11,554,719</td><td class="number">67,395</td><td class="number">5.8%</td></tr>
+    <tr><td>6</td><td>轮胎气门嘴帽</td><td class="number">98</td><td class="number">11,158,109</td><td class="number">117,063</td><td class="number">5.6%</td></tr>
+    <tr><td>7</td><td>汽车外部部件的保护</td><td class="number">47</td><td class="number">8,106,166</td><td class="number">33,703</td><td class="number">4.1%</td></tr>
+    <tr><td>8</td><td>汽车螺栓</td><td class="number">42</td><td class="number">7,377,287</td><td class="number">27,619</td><td class="number">3.7%</td></tr>
+    <tr><td>9</td><td>气门嘴</td><td class="number">52</td><td class="number">7,089,541</td><td class="number">62,150</td><td class="number">3.6%</td></tr>
+    <tr><td>10</td><td>汽车螺母</td><td class="number">28</td><td class="number">6,187,039</td><td class="number">18,669</td><td class="number">3.1%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">93.6%</div><div class="coverage">字段覆盖 98.2%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">28 天</div><div class="coverage">字段覆盖 96.2%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">100%</div><div class="coverage">字段覆盖 100%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">100%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1526804117" target="_blank" rel="noreferrer">MAAS Car Film 3 mх75 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>MAAS</td>
+      <td class="number">2,892,874</td>
+      <td class="number">5,258</td>
+      <td class="number">550</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3854310964" target="_blank" rel="noreferrer">Schneiden Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs</a></td>
+      <td>汽车紧固夹</td>
+      <td>Schneiden</td>
+      <td class="number">2,470,731</td>
+      <td class="number">16,217</td>
+      <td class="number">152</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/658680386" target="_blank" rel="noreferrer">Car Film 3 mх50 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>未知/无品牌</td>
+      <td class="number">2,250,909</td>
+      <td class="number">6,587</td>
+      <td class="number">342</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1544427517" target="_blank" rel="noreferrer">Sell-Ti Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs</a></td>
+      <td>汽车紧固夹</td>
+      <td>Sell-Ti</td>
+      <td class="number">2,202,118</td>
+      <td class="number">17,433</td>
+      <td class="number">126</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1783168451" target="_blank" rel="noreferrer">MTF Light Car Film 3 mх50 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>MTF Light</td>
+      <td class="number">2,066,125</td>
+      <td class="number">2,827</td>
+      <td class="number">731</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2807174920" target="_blank" rel="noreferrer">Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs</a></td>
+      <td>汽车紧固夹</td>
+      <td>未知/无品牌</td>
+      <td class="number">2,029,730</td>
+      <td class="number">15,900</td>
+      <td class="number">128</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1653759923" target="_blank" rel="noreferrer">BLAU DRIVE Car Film 1.5 mх30 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>BLAU DRIVE</td>
+      <td class="number">1,958,504</td>
+      <td class="number">1,374</td>
+      <td class="number">1,425</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2080358045" target="_blank" rel="noreferrer">Car Film 3 mх5 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>未知/无品牌</td>
+      <td class="number">1,946,939</td>
+      <td class="number">29,569</td>
+      <td class="number">66</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1783168395" target="_blank" rel="noreferrer">MTF Light Car Film 3 mх75 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>MTF Light</td>
+      <td class="number">1,911,179</td>
+      <td class="number">1,895</td>
+      <td class="number">1,009</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1503200083" target="_blank" rel="noreferrer">ELDEN LINE Car LED Backlight Kit</a></td>
+      <td>汽车照明套件</td>
+      <td>ELDEN LINE</td>
+      <td class="number">1,888,964</td>
+      <td class="number">355</td>
+      <td class="number">5,321</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1590316681" target="_blank" rel="noreferrer">IllumiCar Car LED Backlight Kit</a></td>
+      <td>汽车照明套件</td>
+      <td>IllumiCar</td>
+      <td class="number">1,591,605</td>
+      <td class="number">1,036</td>
+      <td class="number">1,536</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1631824630" target="_blank" rel="noreferrer">IllumiCar Car LED Backlight Kit</a></td>
+      <td>汽车照明套件</td>
+      <td>IllumiCar</td>
+      <td class="number">1,583,306</td>
+      <td class="number">449</td>
+      <td class="number">3,526</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1634005585" target="_blank" rel="noreferrer">Car Film 1 mх30 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>未知/无品牌</td>
+      <td class="number">1,376,125</td>
+      <td class="number">6,550</td>
+      <td class="number">210</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/631663147" target="_blank" rel="noreferrer">PrimeParts Car Mounting Clip M10 x 1.5, 10 mm, 100 pcs</a></td>
+      <td>汽车紧固夹</td>
+      <td>PrimeParts</td>
+      <td class="number">1,300,996</td>
+      <td class="number">5,850</td>
+      <td class="number">222</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3543432177" target="_blank" rel="noreferrer">Solartek Car Film 1 mх30 cm</a></td>
+      <td>汽车贴膜</td>
+      <td>Solartek</td>
+      <td class="number">1,297,097</td>
+      <td class="number">2,507</td>
+      <td class="number">517</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23汽车紧固件_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-fasteners","label":"汽车紧固件","title":"Ozon 汽车紧固件市场分析","group":"汽车生态","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23汽车紧固件_清洗版.xlsx","path":"reports/generated/fasteners/index.html","frameTitle":"Ozon 汽车紧固件市场分析报告","kpis":{"rowCount":1000,"totalRevenue":197689324,"totalSales":898404,"unitRevenue":220.05,"typeCount":29,"brandCount":195,"sellerCount":421},"topTypes":[{"name":"汽车贴膜","rows":121,"revenue":49490057,"sales":143413,"salesRows":118,"unitRevenue":345.09,"share":25},{"name":"汽车紧固夹","rows":262,"revenue":42902714,"sales":238801,"salesRows":256,"unitRevenue":179.66,"share":21.7},{"name":"汽车照明套件","rows":51,"revenue":14397164,"sales":28256,"salesRows":51,"unitRevenue":509.53,"share":7.3},{"name":"汽车装饰贴片","rows":90,"revenue":13066171,"sales":64145,"salesRows":89,"unitRevenue":203.7,"share":6.6},{"name":"汽车紧固件","rows":69,"revenue":11554719,"sales":67395,"salesRows":67,"unitRevenue":171.45,"share":5.8},{"name":"轮胎气门嘴帽","rows":98,"revenue":11158109,"sales":117063,"salesRows":95,"unitRevenue":95.32,"share":5.6},{"name":"汽车外部部件的保护","rows":47,"revenue":8106166,"sales":33703,"salesRows":47,"unitRevenue":240.52,"share":4.1},{"name":"汽车螺栓","rows":42,"revenue":7377287,"sales":27619,"salesRows":42,"unitRevenue":267.11,"share":3.7},{"name":"气门嘴","rows":52,"revenue":7089541,"sales":62150,"salesRows":51,"unitRevenue":114.07,"share":3.6},{"name":"汽车螺母","rows":28,"revenue":6187039,"sales":18669,"salesRows":28,"unitRevenue":331.41,"share":3.1}],"topBrands":[{"name":"未知/无品牌","rows":436,"revenue":69270193,"sales":411745,"salesRows":425,"unitRevenue":168.24,"share":35},{"name":"Road Pulse","rows":103,"revenue":12921842,"sales":72033,"salesRows":103,"unitRevenue":179.39,"share":6.5},{"name":"MTF Light","rows":10,"revenue":6762474,"sales":8255,"salesRows":10,"unitRevenue":819.2,"share":3.4},{"name":"MAAS","rows":5,"revenue":5653016,"sales":10818,"salesRows":5,"unitRevenue":522.56,"share":2.9},{"name":"A&V","rows":12,"revenue":5401360,"sales":8306,"salesRows":12,"unitRevenue":650.3,"share":2.7},{"name":"Best Choice","rows":31,"revenue":4738195,"sales":27073,"salesRows":31,"unitRevenue":175.02,"share":2.4},{"name":"IllumiCar","rows":4,"revenue":4493374,"sales":2362,"salesRows":4,"unitRevenue":1902.36,"share":2.3},{"name":"ROOTO","rows":11,"revenue":3524585,"sales":20073,"salesRows":11,"unitRevenue":175.59,"share":1.8},{"name":"PrimeParts","rows":7,"revenue":2949988,"sales":8873,"salesRows":7,"unitRevenue":332.47,"share":1.5},{"name":"Schneiden","rows":3,"revenue":2645000,"sales":17551,"salesRows":3,"unitRevenue":150.7,"share":1.3}],"topSellers":[{"name":"Road Pulse","rows":103,"revenue":12921842,"sales":72033,"salesRows":103,"unitRevenue":179.39,"share":6.5},{"name":"OlimpAuto","rows":9,"revenue":6517437,"sales":7956,"salesRows":9,"unitRevenue":819.19,"share":3.3},{"name":"AutoWhirl","rows":13,"revenue":5817280,"sales":8646,"salesRows":13,"unitRevenue":672.83,"share":2.9},{"name":"Robbibon","rows":4,"revenue":4938615,"sales":8693,"salesRows":4,"unitRevenue":568.11,"share":2.5},{"name":"Pro.Store","rows":31,"revenue":4738195,"sales":27073,"salesRows":31,"unitRevenue":175.02,"share":2.4},{"name":"RILI","rows":4,"revenue":4493374,"sales":2362,"salesRows":4,"unitRevenue":1902.36,"share":2.3},{"name":"Автотовары и автокосметика","rows":6,"revenue":3719099,"sales":10094,"salesRows":6,"unitRevenue":368.45,"share":1.9},{"name":"АвтоФишка","rows":11,"revenue":3524585,"sales":20073,"salesRows":11,"unitRevenue":175.59,"share":1.8},{"name":"Мир-Market","rows":5,"revenue":3087506,"sales":12692,"salesRows":5,"unitRevenue":243.26,"share":1.6},{"name":"Оптима","rows":9,"revenue":2959078,"sales":5731,"salesRows":9,"unitRevenue":516.33,"share":1.5}],"priceBands":[{"label":"<200 ₽","rows":627,"revenue":85203206,"sales":656599,"share":43.1},{"label":"200–500 ₽","rows":238,"revenue":47077501,"sales":162092,"share":23.8},{"label":"500–1,000 ₽","rows":94,"revenue":38685172,"sales":61693,"share":19.6},{"label":"1,000–2,000 ₽","rows":37,"revenue":22821686,"sales":17216,"share":11.5},{"label":"2,000–5,000 ₽","rows":3,"revenue":2012795,"sales":449,"share":1},{"label":"≥5,000 ₽","rows":1,"revenue":1888964,"sales":355,"share":1}],"topProducts":[{"name":"MAAS Car Film 3 mх75 cm","brand":"MAAS","seller":"Robbibon","type":"汽车贴膜","revenue":2892874,"sales":5258,"avgPrice":550,"url":"https://www.ozon.ru/product/1526804117"},{"name":"Schneiden Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs","brand":"Schneiden","seller":"BBStore","type":"汽车紧固夹","revenue":2470731,"sales":16217,"avgPrice":152,"url":"https://www.ozon.ru/product/3854310964"},{"name":"Car Film 3 mх50 cm","brand":"未知/无品牌","seller":"Автотовары и автокосметика","type":"汽车贴膜","revenue":2250909,"sales":6587,"avgPrice":342,"url":"https://www.ozon.ru/product/658680386"},{"name":"Sell-Ti Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs","brand":"Sell-Ti","seller":"Sell-Ti","type":"汽车紧固夹","revenue":2202118,"sales":17433,"avgPrice":126,"url":"https://www.ozon.ru/product/1544427517"},{"name":"MTF Light Car Film 3 mх50 cm","brand":"MTF Light","seller":"OlimpAuto","type":"汽车贴膜","revenue":2066125,"sales":2827,"avgPrice":731,"url":"https://www.ozon.ru/product/1783168451"},{"name":"Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs","brand":"未知/无品牌","seller":"Tech Oasis","type":"汽车紧固夹","revenue":2029730,"sales":15900,"avgPrice":128,"url":"https://www.ozon.ru/product/2807174920"},{"name":"BLAU DRIVE Car Film 1.5 mх30 cm","brand":"BLAU DRIVE","seller":"BLAU DRIVE","type":"汽车贴膜","revenue":1958504,"sales":1374,"avgPrice":1425,"url":"https://www.ozon.ru/product/1653759923"},{"name":"Car Film 3 mх5 cm","brand":"未知/无品牌","seller":"Мистир","type":"汽车贴膜","revenue":1946939,"sales":29569,"avgPrice":66,"url":"https://www.ozon.ru/product/2080358045"},{"name":"MTF Light Car Film 3 mх75 cm","brand":"MTF Light","seller":"OlimpAuto","type":"汽车贴膜","revenue":1911179,"sales":1895,"avgPrice":1009,"url":"https://www.ozon.ru/product/1783168395"},{"name":"ELDEN LINE Car LED Backlight Kit","brand":"ELDEN LINE","seller":"ELDEN LINE","type":"汽车照明套件","revenue":1888964,"sales":355,"avgPrice":5321,"url":"https://www.ozon.ru/product/1503200083"},{"name":"IllumiCar Car LED Backlight Kit","brand":"IllumiCar","seller":"RILI","type":"汽车照明套件","revenue":1591605,"sales":1036,"avgPrice":1536,"url":"https://www.ozon.ru/product/1590316681"},{"name":"IllumiCar Car LED Backlight Kit","brand":"IllumiCar","seller":"RILI","type":"汽车照明套件","revenue":1583306,"sales":449,"avgPrice":3526,"url":"https://www.ozon.ru/product/1631824630"},{"name":"Car Film 1 mх30 cm","brand":"未知/无品牌","seller":"Мир-Market","type":"汽车贴膜","revenue":1376125,"sales":6550,"avgPrice":210,"url":"https://www.ozon.ru/product/1634005585"},{"name":"PrimeParts Car Mounting Clip M10 x 1.5, 10 mm, 100 pcs","brand":"PrimeParts","seller":"A&B","type":"汽车紧固夹","revenue":1300996,"sales":5850,"avgPrice":222,"url":"https://www.ozon.ru/product/631663147"},{"name":"Solartek Car Film 1 mх30 cm","brand":"Solartek","seller":"Пленки","type":"汽车贴膜","revenue":1297097,"sales":2507,"avgPrice":517,"url":"https://www.ozon.ru/product/3543432177"}],"operations":{"signRateMedian":0.9359999999999999,"signRateCoverage":98.2,"stockoutMedian":28,"stockoutCoverage":96.2,"missedRevenue":2841293,"missedRevenueCoverage":98.4,"promoActiveShare":100,"promoCoverage":100,"adActiveShare":100,"adCoverage":100},"quality":{"level":"核心口径完整","salesCoverage":98.4,"missingSales":16,"missingAveragePrice":0,"missingBsr":305,"duplicateSku":15,"duplicateUrl":0,"uniqueSku":985,"urlCoverage":100},"insights":["头部品类“汽车贴膜”贡献 25% 销售额；前五品类合计 66.5%。","销售额最集中的价格带是 <200 ₽，覆盖 627 条商品记录，贡献 43.1% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 59.9% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 98.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

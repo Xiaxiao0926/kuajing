@@ -1,0 +1,520 @@
+{
+  "id": "generated-mobile-wearables",
+  "label": "手机、平板与智能穿戴",
+  "title": "Ozon 手机、平板与智能穿戴市场分析",
+  "group": "数码产品",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23手机平板智能穿戴_清洗版.xlsx",
+  "path": "reports/generated/mobile-wearables/index.html",
+  "frameTitle": "Ozon 手机、平板与智能穿戴市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 2070073266,
+    "totalSales": 486431,
+    "unitRevenue": 4255.64,
+    "typeCount": 14,
+    "brandCount": 139,
+    "sellerCount": 302
+  },
+  "topTypes": [
+    {
+      "name": "智能手机",
+      "rows": 201,
+      "revenue": 1564939699,
+      "sales": 100573,
+      "salesRows": 188,
+      "unitRevenue": 15560.24,
+      "share": 75.6
+    },
+    {
+      "name": "智能手表",
+      "rows": 134,
+      "revenue": 205510616,
+      "sales": 59927,
+      "salesRows": 127,
+      "unitRevenue": 3429.35,
+      "share": 9.9
+    },
+    {
+      "name": "平板电脑",
+      "rows": 24,
+      "revenue": 130562873,
+      "sales": 7633,
+      "salesRows": 21,
+      "unitRevenue": 17105.05,
+      "share": 6.3
+    },
+    {
+      "name": "移动电话",
+      "rows": 97,
+      "revenue": 58557420,
+      "sales": 45231,
+      "salesRows": 87,
+      "unitRevenue": 1294.63,
+      "share": 2.8
+    },
+    {
+      "name": "智能手表表带",
+      "rows": 360,
+      "revenue": 38062723,
+      "sales": 198194,
+      "salesRows": 359,
+      "unitRevenue": 192.05,
+      "share": 1.8
+    },
+    {
+      "name": "手机零件",
+      "rows": 57,
+      "revenue": 19674383,
+      "sales": 20046,
+      "salesRows": 57,
+      "unitRevenue": 981.46,
+      "share": 1
+    },
+    {
+      "name": "儿童智能手表",
+      "rows": 17,
+      "revenue": 12963385,
+      "sales": 4850,
+      "salesRows": 14,
+      "unitRevenue": 2672.86,
+      "share": 0.6
+    },
+    {
+      "name": "儿童平板电脑",
+      "rows": 5,
+      "revenue": 10255467,
+      "sales": 540,
+      "salesRows": 2,
+      "unitRevenue": 18991.61,
+      "share": 0.5
+    },
+    {
+      "name": "智能继电器",
+      "rows": 42,
+      "revenue": 9257815,
+      "sales": 20102,
+      "salesRows": 42,
+      "unitRevenue": 460.54,
+      "share": 0.4
+    },
+    {
+      "name": "泄漏保护系统",
+      "rows": 9,
+      "revenue": 8156760,
+      "sales": 3134,
+      "salesRows": 9,
+      "unitRevenue": 2602.67,
+      "share": 0.4
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "Xiaomi",
+      "rows": 55,
+      "revenue": 457613603,
+      "sales": 39691,
+      "salesRows": 55,
+      "unitRevenue": 11529.4,
+      "share": 22.1
+    },
+    {
+      "name": "Honor",
+      "rows": 28,
+      "revenue": 316684895,
+      "sales": 11858,
+      "salesRows": 28,
+      "unitRevenue": 26706.43,
+      "share": 15.3
+    },
+    {
+      "name": "Samsung",
+      "rows": 34,
+      "revenue": 281153546,
+      "sales": 17047,
+      "salesRows": 34,
+      "unitRevenue": 16492.85,
+      "share": 13.6
+    },
+    {
+      "name": "Tecno",
+      "rows": 33,
+      "revenue": 177838148,
+      "sales": 15389,
+      "salesRows": 30,
+      "unitRevenue": 11556.19,
+      "share": 8.6
+    },
+    {
+      "name": "未知/无品牌",
+      "rows": 194,
+      "revenue": 137099146,
+      "sales": 87829,
+      "salesRows": 170,
+      "unitRevenue": 1560.98,
+      "share": 6.6
+    },
+    {
+      "name": "Poco",
+      "rows": 14,
+      "revenue": 124335088,
+      "sales": 5611,
+      "salesRows": 14,
+      "unitRevenue": 22159.17,
+      "share": 6
+    },
+    {
+      "name": "realme",
+      "rows": 22,
+      "revenue": 115309152,
+      "sales": 10997,
+      "salesRows": 21,
+      "unitRevenue": 10485.51,
+      "share": 5.6
+    },
+    {
+      "name": "iQOO",
+      "rows": 11,
+      "revenue": 80500478,
+      "sales": 3792,
+      "salesRows": 11,
+      "unitRevenue": 21229.03,
+      "share": 3.9
+    },
+    {
+      "name": "OPPO",
+      "rows": 9,
+      "revenue": 47867600,
+      "sales": 3315,
+      "salesRows": 9,
+      "unitRevenue": 14439.7,
+      "share": 2.3
+    },
+    {
+      "name": "Apple",
+      "rows": 4,
+      "revenue": 44253887,
+      "sales": 1494,
+      "salesRows": 4,
+      "unitRevenue": 29621.08,
+      "share": 2.1
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Ozon",
+      "rows": 129,
+      "revenue": 1010350190,
+      "sales": 70157,
+      "salesRows": 125,
+      "unitRevenue": 14401.27,
+      "share": 48.8
+    },
+    {
+      "name": "Xiaomi Официальный Магазин",
+      "rows": 18,
+      "revenue": 194135009,
+      "sales": 13770,
+      "salesRows": 18,
+      "unitRevenue": 14098.4,
+      "share": 9.4
+    },
+    {
+      "name": "Дубайский Экспресс",
+      "rows": 8,
+      "revenue": 96216286,
+      "sales": 2367,
+      "salesRows": 8,
+      "unitRevenue": 40649.04,
+      "share": 4.6
+    },
+    {
+      "name": "ОАЭшка",
+      "rows": 12,
+      "revenue": 60427176,
+      "sales": 4807,
+      "salesRows": 12,
+      "unitRevenue": 12570.66,
+      "share": 2.9
+    },
+    {
+      "name": "М.Видео",
+      "rows": 4,
+      "revenue": 52708475,
+      "sales": 2230,
+      "salesRows": 4,
+      "unitRevenue": 23636.09,
+      "share": 2.5
+    },
+    {
+      "name": "НАДЕЖНЫЕ СМАРТФОНЫ ДУБАЙ",
+      "rows": 6,
+      "revenue": 36162752,
+      "sales": 2457,
+      "salesRows": 6,
+      "unitRevenue": 14718.25,
+      "share": 1.7
+    },
+    {
+      "name": "Dragon-X Store",
+      "rows": 3,
+      "revenue": 30698097,
+      "sales": 1410,
+      "salesRows": 3,
+      "unitRevenue": 21771.7,
+      "share": 1.5
+    },
+    {
+      "name": "GigaMarkt",
+      "rows": 8,
+      "revenue": 29150873,
+      "sales": 3449,
+      "salesRows": 8,
+      "unitRevenue": 8451.98,
+      "share": 1.4
+    },
+    {
+      "name": "ocean",
+      "rows": 3,
+      "revenue": 27022642,
+      "sales": 4670,
+      "salesRows": 3,
+      "unitRevenue": 5786.43,
+      "share": 1.3
+    },
+    {
+      "name": "OPPO",
+      "rows": 4,
+      "revenue": 24891237,
+      "sales": 1456,
+      "salesRows": 4,
+      "unitRevenue": 17095.63,
+      "share": 1.2
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 271,
+      "revenue": 21599080,
+      "sales": 153721,
+      "share": 1
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 210,
+      "revenue": 72358838,
+      "sales": 89525,
+      "share": 3.5
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 97,
+      "revenue": 38315314,
+      "sales": 46291,
+      "share": 1.9
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 119,
+      "revenue": 75910432,
+      "sales": 52334,
+      "share": 3.7
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 70,
+      "revenue": 83974186,
+      "sales": 28136,
+      "share": 4.1
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 233,
+      "revenue": 1777915416,
+      "sales": 116424,
+      "share": 85.9
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Xiaomi Smartphone Redmi 15 Rostest (EAC) 8/ 256 GB, black",
+      "brand": "Xiaomi",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 67737796,
+      "sales": 4438,
+      "avgPrice": 15263,
+      "url": "https://www.ozon.ru/product/2811310229"
+    },
+    {
+      "name": "Xiaomi Smartphone Redmi 15C Rostest (EAC) 8/ 256 GB, black",
+      "brand": "Xiaomi",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 39151866,
+      "sales": 3026,
+      "avgPrice": 12938,
+      "url": "https://www.ozon.ru/product/2747506788"
+    },
+    {
+      "name": "Xiaomi Smartphone Rostest (EAC) 8/ 256 GB, black",
+      "brand": "Xiaomi",
+      "seller": "Xiaomi Официальный Магазин",
+      "type": "智能手机",
+      "revenue": 29934453,
+      "sales": 2889,
+      "avgPrice": 10362,
+      "url": "https://www.ozon.ru/product/2802494726"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, orange",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 29013527,
+      "sales": 831,
+      "avgPrice": 34914,
+      "url": "https://www.ozon.ru/product/4189905294"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, gold",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 27826732,
+      "sales": 707,
+      "avgPrice": 39359,
+      "url": "https://www.ozon.ru/product/4189905349"
+    },
+    {
+      "name": "Xiaomi Smartphone Rostest (EAC) 6/ 128 GB, black",
+      "brand": "Xiaomi",
+      "seller": "Xiaomi Официальный Магазин",
+      "type": "智能手机",
+      "revenue": 24923305,
+      "sales": 2768,
+      "avgPrice": 9004,
+      "url": "https://www.ozon.ru/product/2802485119"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Lite 8/ 256 GB, gold",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 23164186,
+      "sales": 1070,
+      "avgPrice": 21649,
+      "url": "https://www.ozon.ru/product/3701084224"
+    },
+    {
+      "name": "Apple Tablet Apple iPad 11 2025, 11\", 128 GB, silvery",
+      "brand": "Apple",
+      "seller": "М.Видео",
+      "type": "平板电脑",
+      "revenue": 22313611,
+      "sales": 670,
+      "avgPrice": 33304,
+      "url": "https://www.ozon.ru/product/3309150805"
+    },
+    {
+      "name": "Poco Smartphone Poco X8 Pro Rostest (EAC) 12/ 512 GB, black",
+      "brand": "Poco",
+      "seller": "Xiaomi Официальный Магазин",
+      "type": "智能手机",
+      "revenue": 20758729,
+      "sales": 659,
+      "avgPrice": 31500,
+      "url": "https://www.ozon.ru/product/3584711424"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, black",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 20426085,
+      "sales": 528,
+      "avgPrice": 38686,
+      "url": "https://www.ozon.ru/product/4189906337"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Lite 8/ 256 GB, grey",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 20339358,
+      "sales": 920,
+      "avgPrice": 22108,
+      "url": "https://www.ozon.ru/product/3701083545"
+    },
+    {
+      "name": "Samsung Smartphone Samsung Galaxy S26 Ultra Global 12/ 256 GB, black",
+      "brand": "Samsung",
+      "seller": "Дубайский Экспресс",
+      "type": "智能手机",
+      "revenue": 20082785,
+      "sales": 274,
+      "avgPrice": 73295,
+      "url": "https://www.ozon.ru/product/3538191814"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Lite 8/ 256 GB, black",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 20023658,
+      "sales": 907,
+      "avgPrice": 22077,
+      "url": "https://www.ozon.ru/product/3701083874"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, gold",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 19657028,
+      "sales": 567,
+      "avgPrice": 34668,
+      "url": "https://www.ozon.ru/product/4189906410"
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Pro Rostest (EAC) 12/ 512 GB, black",
+      "brand": "Honor",
+      "seller": "Ozon",
+      "type": "智能手机",
+      "revenue": 19568517,
+      "sales": 290,
+      "avgPrice": 67478,
+      "url": "https://www.ozon.ru/product/4200768524"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.885,
+    "signRateCoverage": 83.4,
+    "stockoutMedian": 10,
+    "stockoutCoverage": 74.9,
+    "missedRevenue": 147444122.1,
+    "missedRevenueCoverage": 99.6,
+    "promoActiveShare": 70.5,
+    "promoCoverage": 95.9,
+    "adActiveShare": 50.9,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 95.9,
+    "missingSales": 41,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 27,
+    "duplicateUrl": 0,
+    "uniqueSku": 973,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“智能手机”贡献 75.6% 销售额；前五品类合计 96.5%。",
+    "销售额最集中的价格带是 ≥5,000 ₽，覆盖 233 条商品记录，贡献 85.9% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 86.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 95.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

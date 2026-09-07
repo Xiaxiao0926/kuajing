@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 汽车用品市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>汽车用品市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">438.4 百万 ₽</span><span class="hint">约 33.7 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">1.67 百万 件</span><span class="hint">覆盖 97.9% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">262 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">38</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">241 / 505</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>核心口径完整</strong><p>销售额字段用于主分析；销量缺失 21 条，均价缺失 0 条，BSR 标签缺失 258 条。SKU 重复 17 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“汽车芳香剂”贡献 31.9% 销售额；前五品类合计 82.6%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 200–500 ₽，覆盖 352 条商品记录，贡献 44.7% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 53.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 97.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>汽车芳香剂</td><td class="number">287</td><td class="number">139,991,334</td><td class="number">596,398</td><td class="number">31.9%</td></tr>
+    <tr><td>2</td><td>车载支架</td><td class="number">191</td><td class="number">92,460,086</td><td class="number">355,064</td><td class="number">21.1%</td></tr>
+    <tr><td>3</td><td>遮阳帘</td><td class="number">116</td><td class="number">82,024,222</td><td class="number">217,463</td><td class="number">18.7%</td></tr>
+    <tr><td>4</td><td>车牌架</td><td class="number">63</td><td class="number">34,038,814</td><td class="number">80,267</td><td class="number">7.8%</td></tr>
+    <tr><td>5</td><td>汽车枕头</td><td class="number">19</td><td class="number">13,621,505</td><td class="number">21,353</td><td class="number">3.1%</td></tr>
+    <tr><td>6</td><td>方向盘套</td><td class="number">30</td><td class="number">12,866,151</td><td class="number">26,573</td><td class="number">2.9%</td></tr>
+    <tr><td>7</td><td>汽车贴纸</td><td class="number">68</td><td class="number">9,265,823</td><td class="number">75,709</td><td class="number">2.1%</td></tr>
+    <tr><td>8</td><td>汽车停车牌</td><td class="number">21</td><td class="number">6,175,468</td><td class="number">45,161</td><td class="number">1.4%</td></tr>
+    <tr><td>9</td><td>汽车防盗器遥控器套</td><td class="number">24</td><td class="number">4,743,536</td><td class="number">23,724</td><td class="number">1.1%</td></tr>
+    <tr><td>10</td><td>汽车防蚊网</td><td class="number">17</td><td class="number">4,736,494</td><td class="number">21,967</td><td class="number">1.1%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">92.6%</div><div class="coverage">字段覆盖 97.6%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">28 天</div><div class="coverage">字段覆盖 92%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">99.8%</div><div class="coverage">字段覆盖 100%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">100%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2317116001" target="_blank" rel="noreferrer">Aeroma Car Air Freshener, Citrus, Berry, 7 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>Aeroma</td>
+      <td class="number">10,155,914</td>
+      <td class="number">40,097</td>
+      <td class="number">253</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3144295007" target="_blank" rel="noreferrer">Car Air Freshener, Fruit, Wood, 7.5 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>未知/无品牌</td>
+      <td class="number">5,943,250</td>
+      <td class="number">26,717</td>
+      <td class="number">222</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3450253110" target="_blank" rel="noreferrer">Car Air Freshener, Wood, Sweet, 7.5 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>未知/无品牌</td>
+      <td class="number">4,669,113</td>
+      <td class="number">20,848</td>
+      <td class="number">224</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1783961335" target="_blank" rel="noreferrer">Car Air Freshener, Maritime, 50 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>未知/无品牌</td>
+      <td class="number">4,260,239</td>
+      <td class="number">12,688</td>
+      <td class="number">336</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2559970353" target="_blank" rel="noreferrer">Sunshade, 145 cm х 80 cm, 99% dimming</a></td>
+      <td>遮阳帘</td>
+      <td>未知/无品牌</td>
+      <td class="number">4,210,704</td>
+      <td class="number">22,316</td>
+      <td class="number">189</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3330539877" target="_blank" rel="noreferrer">Car Holder, Magnetic, 2.3&quot;</a></td>
+      <td>车载支架</td>
+      <td>未知/无品牌</td>
+      <td class="number">4,045,926</td>
+      <td class="number">21,155</td>
+      <td class="number">191</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2046619291" target="_blank" rel="noreferrer">KUD SHOP Sunshade, 145 cm х 80 cm, 100% dimming</a></td>
+      <td>遮阳帘</td>
+      <td>KUD SHOP</td>
+      <td class="number">3,786,698</td>
+      <td class="number">8,853</td>
+      <td class="number">428</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1635394890" target="_blank" rel="noreferrer">KUD SHOP Sunshade, 70 cm х 140 cm, 97% dimming</a></td>
+      <td>遮阳帘</td>
+      <td>KUD SHOP</td>
+      <td class="number">3,714,534</td>
+      <td class="number">9,973</td>
+      <td class="number">372</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3811923293" target="_blank" rel="noreferrer">Пахнет и Точка Car Air Freshener, Perfume, 7 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>Пахнет и Точка</td>
+      <td class="number">3,465,319</td>
+      <td class="number">15,293</td>
+      <td class="number">227</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1413866576" target="_blank" rel="noreferrer">YCAR Car Holder, Gravitational, 7&quot;</a></td>
+      <td>车载支架</td>
+      <td>YCAR</td>
+      <td class="number">3,456,082</td>
+      <td class="number">8,954</td>
+      <td class="number">386</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1739707194" target="_blank" rel="noreferrer">EIKOSHA Car Air Freshener, Perfume, Sweet</a></td>
+      <td>汽车芳香剂</td>
+      <td>EIKOSHA</td>
+      <td class="number">3,314,391</td>
+      <td class="number">3,232</td>
+      <td class="number">1,025</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2124649572" target="_blank" rel="noreferrer">Aeroma Car Air Freshener, Berry, Wood, 7 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>Aeroma</td>
+      <td class="number">3,281,272</td>
+      <td class="number">12,003</td>
+      <td class="number">273</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3513803036" target="_blank" rel="noreferrer">Car Air Freshener, Perfume, 7.5 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>未知/无品牌</td>
+      <td class="number">3,223,020</td>
+      <td class="number">14,127</td>
+      <td class="number">228</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/924021416" target="_blank" rel="noreferrer">Raven &amp; Bear Sunshade, 140 cm х 80 cm, 99% dimming</a></td>
+      <td>遮阳帘</td>
+      <td>Raven &amp; Bear</td>
+      <td class="number">3,197,374</td>
+      <td class="number">4,741</td>
+      <td class="number">674</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2544797643" target="_blank" rel="noreferrer">AirPoint Car Air Freshener, Perfume, Wood, 7.5 ml</a></td>
+      <td>汽车芳香剂</td>
+      <td>AirPoint</td>
+      <td class="number">3,154,426</td>
+      <td class="number">24,458</td>
+      <td class="number">129</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23汽车用品_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-car-accessories","label":"汽车用品","title":"Ozon 汽车用品市场分析","group":"汽车生态","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23汽车用品_清洗版.xlsx","path":"reports/generated/car-accessories/index.html","frameTitle":"Ozon 汽车用品市场分析报告","kpis":{"rowCount":1000,"totalRevenue":438423134,"totalSales":1674184,"unitRevenue":261.87,"typeCount":38,"brandCount":241,"sellerCount":505},"topTypes":[{"name":"汽车芳香剂","rows":287,"revenue":139991334,"sales":596398,"salesRows":281,"unitRevenue":234.73,"share":31.9},{"name":"车载支架","rows":191,"revenue":92460086,"sales":355064,"salesRows":188,"unitRevenue":260.4,"share":21.1},{"name":"遮阳帘","rows":116,"revenue":82024222,"sales":217463,"salesRows":113,"unitRevenue":377.19,"share":18.7},{"name":"车牌架","rows":63,"revenue":34038814,"sales":80267,"salesRows":62,"unitRevenue":424.07,"share":7.8},{"name":"汽车枕头","rows":19,"revenue":13621505,"sales":21353,"salesRows":19,"unitRevenue":637.92,"share":3.1},{"name":"方向盘套","rows":30,"revenue":12866151,"sales":26573,"salesRows":30,"unitRevenue":484.18,"share":2.9},{"name":"汽车贴纸","rows":68,"revenue":9265823,"sales":75709,"salesRows":68,"unitRevenue":122.39,"share":2.1},{"name":"汽车停车牌","rows":21,"revenue":6175468,"sales":45161,"salesRows":20,"unitRevenue":136.74,"share":1.4},{"name":"汽车防盗器遥控器套","rows":24,"revenue":4743536,"sales":23724,"salesRows":22,"unitRevenue":199.95,"share":1.1},{"name":"汽车防蚊网","rows":17,"revenue":4736494,"sales":21967,"salesRows":16,"unitRevenue":215.62,"share":1.1}],"topBrands":[{"name":"未知/无品牌","rows":414,"revenue":144601725,"sales":719880,"salesRows":401,"unitRevenue":200.87,"share":33},{"name":"YCAR","rows":17,"revenue":18274229,"sales":44865,"salesRows":17,"unitRevenue":407.32,"share":4.2},{"name":"Aeroma","rows":6,"revenue":16362582,"sales":61404,"salesRows":6,"unitRevenue":266.47,"share":3.7},{"name":"EIKOSHA","rows":18,"revenue":14354672,"sales":19637,"salesRows":18,"unitRevenue":731,"share":3.3},{"name":"KUD SHOP","rows":6,"revenue":9813484,"sales":24604,"salesRows":6,"unitRevenue":398.86,"share":2.2},{"name":"АРОМАТИЗАТОР AIRUS","rows":12,"revenue":9146040,"sales":29154,"salesRows":12,"unitRevenue":313.71,"share":2.1},{"name":"Defender","rows":21,"revenue":7272111,"sales":43201,"salesRows":20,"unitRevenue":168.33,"share":1.7},{"name":"hoco","rows":6,"revenue":5564009,"sales":5577,"salesRows":6,"unitRevenue":997.67,"share":1.3},{"name":"Feen","rows":6,"revenue":5224601,"sales":7097,"salesRows":6,"unitRevenue":736.17,"share":1.2},{"name":"RCS","rows":2,"revenue":4666203,"sales":3374,"salesRows":2,"unitRevenue":1382.99,"share":1.1}],"topSellers":[{"name":"ВекторТех","rows":10,"revenue":17718493,"sales":107768,"salesRows":9,"unitRevenue":164.41,"share":4},{"name":"YCAR","rows":15,"revenue":16535424,"sales":36196,"salesRows":15,"unitRevenue":456.83,"share":3.8},{"name":"Namess","rows":6,"revenue":16362582,"sales":61404,"salesRows":6,"unitRevenue":266.47,"share":3.7},{"name":"Airus","rows":23,"revenue":12247728,"sales":50410,"salesRows":23,"unitRevenue":242.96,"share":2.8},{"name":"ProHouseShop","rows":6,"revenue":9813484,"sales":24604,"salesRows":6,"unitRevenue":398.86,"share":2.2},{"name":"Defender","rows":21,"revenue":7272111,"sales":43201,"salesRows":20,"unitRevenue":168.33,"share":1.7},{"name":"Royal Scent / Королевский Аромат","rows":7,"revenue":6837496,"sales":8497,"salesRows":7,"unitRevenue":804.7,"share":1.6},{"name":"SIA+","rows":3,"revenue":6325224,"sales":18248,"salesRows":3,"unitRevenue":346.63,"share":1.4},{"name":"ДМ","rows":6,"revenue":5224601,"sales":7097,"salesRows":6,"unitRevenue":736.17,"share":1.2},{"name":"Linyunbest","rows":4,"revenue":4930530,"sales":25758,"salesRows":4,"unitRevenue":191.42,"share":1.1}],"priceBands":[{"label":"<200 ₽","rows":481,"revenue":108549684,"sales":847387,"share":24.8},{"label":"200–500 ₽","rows":352,"revenue":195909264,"sales":668856,"share":44.7},{"label":"500–1,000 ₽","rows":119,"revenue":82407161,"sales":122252,"share":18.8},{"label":"1,000–2,000 ₽","rows":43,"revenue":45223385,"sales":33267,"share":10.3},{"label":"2,000–5,000 ₽","rows":5,"revenue":6333640,"sales":2422,"share":1.4},{"label":"≥5,000 ₽","rows":0,"revenue":0,"sales":0,"share":0}],"topProducts":[{"name":"Aeroma Car Air Freshener, Citrus, Berry, 7 ml","brand":"Aeroma","seller":"Namess","type":"汽车芳香剂","revenue":10155914,"sales":40097,"avgPrice":253,"url":"https://www.ozon.ru/product/2317116001"},{"name":"Car Air Freshener, Fruit, Wood, 7.5 ml","brand":"未知/无品牌","seller":"ВекторТех","type":"汽车芳香剂","revenue":5943250,"sales":26717,"avgPrice":222,"url":"https://www.ozon.ru/product/3144295007"},{"name":"Car Air Freshener, Wood, Sweet, 7.5 ml","brand":"未知/无品牌","seller":"ВекторТех","type":"汽车芳香剂","revenue":4669113,"sales":20848,"avgPrice":224,"url":"https://www.ozon.ru/product/3450253110"},{"name":"Car Air Freshener, Maritime, 50 ml","brand":"未知/无品牌","seller":"currant","type":"汽车芳香剂","revenue":4260239,"sales":12688,"avgPrice":336,"url":"https://www.ozon.ru/product/1783961335"},{"name":"Sunshade, 145 cm х 80 cm, 99% dimming","brand":"未知/无品牌","seller":"Linyunbest","type":"遮阳帘","revenue":4210704,"sales":22316,"avgPrice":189,"url":"https://www.ozon.ru/product/2559970353"},{"name":"Car Holder, Magnetic, 2.3\"","brand":"未知/无品牌","seller":"АвтоКомфорт","type":"车载支架","revenue":4045926,"sales":21155,"avgPrice":191,"url":"https://www.ozon.ru/product/3330539877"},{"name":"KUD SHOP Sunshade, 145 cm х 80 cm, 100% dimming","brand":"KUD SHOP","seller":"ProHouseShop","type":"遮阳帘","revenue":3786698,"sales":8853,"avgPrice":428,"url":"https://www.ozon.ru/product/2046619291"},{"name":"KUD SHOP Sunshade, 70 cm х 140 cm, 97% dimming","brand":"KUD SHOP","seller":"ProHouseShop","type":"遮阳帘","revenue":3714534,"sales":9973,"avgPrice":372,"url":"https://www.ozon.ru/product/1635394890"},{"name":"Пахнет и Точка Car Air Freshener, Perfume, 7 ml","brand":"Пахнет и Точка","seller":"Пахнет и Точка","type":"汽车芳香剂","revenue":3465319,"sales":15293,"avgPrice":227,"url":"https://www.ozon.ru/product/3811923293"},{"name":"YCAR Car Holder, Gravitational, 7\"","brand":"YCAR","seller":"YCAR","type":"车载支架","revenue":3456082,"sales":8954,"avgPrice":386,"url":"https://www.ozon.ru/product/1413866576"},{"name":"EIKOSHA Car Air Freshener, Perfume, Sweet","brand":"EIKOSHA","seller":"Royal Scent / Королевский Аромат","type":"汽车芳香剂","revenue":3314391,"sales":3232,"avgPrice":1025,"url":"https://www.ozon.ru/product/1739707194"},{"name":"Aeroma Car Air Freshener, Berry, Wood, 7 ml","brand":"Aeroma","seller":"Namess","type":"汽车芳香剂","revenue":3281272,"sales":12003,"avgPrice":273,"url":"https://www.ozon.ru/product/2124649572"},{"name":"Car Air Freshener, Perfume, 7.5 ml","brand":"未知/无品牌","seller":"Арома Драйв","type":"汽车芳香剂","revenue":3223020,"sales":14127,"avgPrice":228,"url":"https://www.ozon.ru/product/3513803036"},{"name":"Raven & Bear Sunshade, 140 cm х 80 cm, 99% dimming","brand":"Raven & Bear","seller":"Raven & Bear","type":"遮阳帘","revenue":3197374,"sales":4741,"avgPrice":674,"url":"https://www.ozon.ru/product/924021416"},{"name":"AirPoint Car Air Freshener, Perfume, Wood, 7.5 ml","brand":"AirPoint","seller":"AirPoint","type":"汽车芳香剂","revenue":3154426,"sales":24458,"avgPrice":129,"url":"https://www.ozon.ru/product/2544797643"}],"operations":{"signRateMedian":0.9259999999999999,"signRateCoverage":97.6,"stockoutMedian":28,"stockoutCoverage":92,"missedRevenue":18366328,"missedRevenueCoverage":97.9,"promoActiveShare":99.8,"promoCoverage":100,"adActiveShare":100,"adCoverage":100},"quality":{"level":"核心口径完整","salesCoverage":97.9,"missingSales":21,"missingAveragePrice":0,"missingBsr":258,"duplicateSku":17,"duplicateUrl":0,"uniqueSku":983,"urlCoverage":100},"insights":["头部品类“汽车芳香剂”贡献 31.9% 销售额；前五品类合计 82.6%。","销售额最集中的价格带是 200–500 ₽，覆盖 352 条商品记录，贡献 44.7% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 53.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 97.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

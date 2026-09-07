@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 家具市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>家具市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-22</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">1.51 十亿 ₽</span><span class="hint">约 115.8 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">1.15 百万 件</span><span class="hint">覆盖 97.7% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">1,309 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">84</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">238 / 409</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>核心口径完整</strong><p>销售额字段用于主分析；销量缺失 23 条，均价缺失 0 条，BSR 标签缺失 0 条。SKU 重复 20 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“床垫”贡献 33.2% 销售额；前五品类合计 58.5%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 ≥5,000 ₽，覆盖 92 条商品记录，贡献 49.7% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 54.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 97.7%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>床垫</td><td class="number">59</td><td class="number">499,684,198</td><td class="number">57,989</td><td class="number">33.2%</td></tr>
+    <tr><td>2</td><td>货架</td><td class="number">51</td><td class="number">151,883,679</td><td class="number">61,021</td><td class="number">10.1%</td></tr>
+    <tr><td>3</td><td>办公室扶手椅</td><td class="number">20</td><td class="number">91,869,036</td><td class="number">17,396</td><td class="number">6.1%</td></tr>
+    <tr><td>4</td><td>置物架</td><td class="number">119</td><td class="number">78,709,978</td><td class="number">131,468</td><td class="number">5.2%</td></tr>
+    <tr><td>5</td><td>游戏椅</td><td class="number">8</td><td class="number">57,859,901</td><td class="number">8,518</td><td class="number">3.8%</td></tr>
+    <tr><td>6</td><td>折叠床</td><td class="number">7</td><td class="number">50,295,438</td><td class="number">15,476</td><td class="number">3.3%</td></tr>
+    <tr><td>7</td><td>鞋架</td><td class="number">39</td><td class="number">41,595,576</td><td class="number">51,340</td><td class="number">2.8%</td></tr>
+    <tr><td>8</td><td>躺椅</td><td class="number">9</td><td class="number">41,188,900</td><td class="number">8,904</td><td class="number">2.7%</td></tr>
+    <tr><td>9</td><td>吊床</td><td class="number">29</td><td class="number">27,957,471</td><td class="number">32,245</td><td class="number">1.9%</td></tr>
+    <tr><td>10</td><td>电脑桌</td><td class="number">5</td><td class="number">23,848,587</td><td class="number">4,655</td><td class="number">1.6%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">91%</div><div class="coverage">字段覆盖 96.7%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">12 天</div><div class="coverage">字段覆盖 93.8%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">87.7%</div><div class="coverage">字段覆盖 97.7%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">63.2%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/624078645" target="_blank" rel="noreferrer">FStore Mattress, Independent springs, 160 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>FStore</td>
+      <td class="number">43,602,574</td>
+      <td class="number">3,340</td>
+      <td class="number">13,055</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/656762826" target="_blank" rel="noreferrer">HYPNOZ Mattress, Independent springs, 160 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>HYPNOZ</td>
+      <td class="number">25,653,423</td>
+      <td class="number">2,839</td>
+      <td class="number">9,036</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1673606683" target="_blank" rel="noreferrer">ASKONA Mattress, With zone spring unit, 160 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>ASKONA</td>
+      <td class="number">24,767,413</td>
+      <td class="number">1,500</td>
+      <td class="number">16,512</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3232293240" target="_blank" rel="noreferrer">HELE Office Armchair</a></td>
+      <td>办公室扶手椅</td>
+      <td>HELE</td>
+      <td class="number">23,849,666</td>
+      <td class="number">2,267</td>
+      <td class="number">10,520</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1605911372" target="_blank" rel="noreferrer">GMMWCB Gaming Chair</a></td>
+      <td>游戏椅</td>
+      <td>GMMWCB</td>
+      <td class="number">21,790,769</td>
+      <td class="number">2,944</td>
+      <td class="number">7,402</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3211083438" target="_blank" rel="noreferrer">UTOPIA Mattress, Independent springs, 90 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>UTOPIA</td>
+      <td class="number">20,989,433</td>
+      <td class="number">4,040</td>
+      <td class="number">5,195</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1784895850" target="_blank" rel="noreferrer">UTOPIA Mattress, Independent springs, 160 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>UTOPIA</td>
+      <td class="number">18,573,306</td>
+      <td class="number">2,353</td>
+      <td class="number">7,893</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1856494532" target="_blank" rel="noreferrer">HOMSLY Garden Furniture Set, 4 persons</a></td>
+      <td>花园家具套装</td>
+      <td>HOMSLY</td>
+      <td class="number">18,072,569</td>
+      <td class="number">1,297</td>
+      <td class="number">13,934</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3482410034" target="_blank" rel="noreferrer">WOWSLEEP Mattress, Independent springs, 160 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>WOWSLEEP</td>
+      <td class="number">17,756,424</td>
+      <td class="number">1,375</td>
+      <td class="number">12,914</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3048199240" target="_blank" rel="noreferrer">FStore Mattress, Independent springs, 160 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>FStore</td>
+      <td class="number">16,923,218</td>
+      <td class="number">1,434</td>
+      <td class="number">11,801</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3048199971" target="_blank" rel="noreferrer">FStore Mattress, Independent springs, 180 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>FStore</td>
+      <td class="number">14,380,694</td>
+      <td class="number">977</td>
+      <td class="number">14,719</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1673605810" target="_blank" rel="noreferrer">ASKONA Mattress, With zone spring unit, 140 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>ASKONA</td>
+      <td class="number">13,825,730</td>
+      <td class="number">973</td>
+      <td class="number">14,209</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2805867707" target="_blank" rel="noreferrer">HELE Office Armchair</a></td>
+      <td>办公室扶手椅</td>
+      <td>HELE</td>
+      <td class="number">13,376,029</td>
+      <td class="number">1,746</td>
+      <td class="number">7,661</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3889180651" target="_blank" rel="noreferrer">Weissgauff Mattress, Independent springs, 160 х 200 cm</a></td>
+      <td>床垫</td>
+      <td>Weissgauff</td>
+      <td class="number">13,107,345</td>
+      <td class="number">1,253</td>
+      <td class="number">10,461</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4292063882" target="_blank" rel="noreferrer">Сot</a></td>
+      <td>折叠床</td>
+      <td>未知/无品牌</td>
+      <td class="number">12,922,886</td>
+      <td class="number">5,418</td>
+      <td class="number">2,385</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-22家具_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-furniture","label":"家具","title":"Ozon 家具市场分析","group":"家居与维修","snapshot":"2026-07-22","sourceFile":"ozon-2026-07-22家具_清洗版.xlsx","path":"reports/generated/furniture/index.html","frameTitle":"Ozon 家具市场分析报告","kpis":{"rowCount":1000,"totalRevenue":1505399946,"totalSales":1150413,"unitRevenue":1308.57,"typeCount":84,"brandCount":238,"sellerCount":409},"topTypes":[{"name":"床垫","rows":59,"revenue":499684198,"sales":57989,"salesRows":59,"unitRevenue":8616.88,"share":33.2},{"name":"货架","rows":51,"revenue":151883679,"sales":61021,"salesRows":51,"unitRevenue":2489.04,"share":10.1},{"name":"办公室扶手椅","rows":20,"revenue":91869036,"sales":17396,"salesRows":17,"unitRevenue":5281.04,"share":6.1},{"name":"置物架","rows":119,"revenue":78709978,"sales":131468,"salesRows":116,"unitRevenue":598.7,"share":5.2},{"name":"游戏椅","rows":8,"revenue":57859901,"sales":8518,"salesRows":8,"unitRevenue":6792.66,"share":3.8},{"name":"折叠床","rows":7,"revenue":50295438,"sales":15476,"salesRows":7,"unitRevenue":3249.9,"share":3.3},{"name":"鞋架","rows":39,"revenue":41595576,"sales":51340,"salesRows":38,"unitRevenue":810.2,"share":2.8},{"name":"躺椅","rows":9,"revenue":41188900,"sales":8904,"salesRows":9,"unitRevenue":4625.89,"share":2.7},{"name":"吊床","rows":29,"revenue":27957471,"sales":32245,"salesRows":27,"unitRevenue":867.03,"share":1.9},{"name":"电脑桌","rows":5,"revenue":23848587,"sales":4655,"salesRows":5,"unitRevenue":5123.22,"share":1.6}],"topBrands":[{"name":"未知/无品牌","rows":324,"revenue":232989446,"sales":365916,"salesRows":309,"unitRevenue":636.73,"share":15.5},{"name":"FStore","rows":10,"revenue":128447862,"sales":11246,"salesRows":10,"unitRevenue":11421.65,"share":8.5},{"name":"GASTRORAG","rows":22,"revenue":89193272,"sales":35287,"salesRows":22,"unitRevenue":2527.65,"share":5.9},{"name":"UTOPIA","rows":9,"revenue":81272105,"sales":13610,"salesRows":9,"unitRevenue":5971.5,"share":5.4},{"name":"HELE","rows":7,"revenue":66884084,"sales":8219,"salesRows":7,"unitRevenue":8137.74,"share":4.4},{"name":"ASKONA","rows":4,"revenue":54078667,"sales":3818,"salesRows":4,"unitRevenue":14164.13,"share":3.6},{"name":"AMI MEBEL","rows":13,"revenue":48438210,"sales":8695,"salesRows":13,"unitRevenue":5570.81,"share":3.2},{"name":"GMMWCB","rows":4,"revenue":39785893,"sales":6236,"salesRows":4,"unitRevenue":6380.03,"share":2.6},{"name":"WOWSLEEP","rows":5,"revenue":39272627,"sales":4007,"salesRows":5,"unitRevenue":9801,"share":2.6},{"name":"HYPNOZ","rows":3,"revenue":35804442,"sales":4078,"salesRows":3,"unitRevenue":8779.9,"share":2.4}],"topSellers":[{"name":"Dream Store","rows":10,"revenue":128447862,"sales":11246,"salesRows":10,"unitRevenue":11421.65,"share":8.5},{"name":"HYPNOZ","rows":12,"revenue":117076547,"sales":17688,"salesRows":12,"unitRevenue":6618.98,"share":7.8},{"name":"Официальный магазин GASTRORAG & GEMLUX","rows":23,"revenue":90195652,"sales":36122,"salesRows":23,"unitRevenue":2496.97,"share":6},{"name":"HELE","rows":7,"revenue":66884084,"sales":8219,"salesRows":7,"unitRevenue":8137.74,"share":4.4},{"name":"ASKONA Официальный магазин","rows":4,"revenue":54078667,"sales":3818,"salesRows":4,"unitRevenue":14164.13,"share":3.6},{"name":"WOWSLEEP","rows":5,"revenue":39272627,"sales":4007,"salesRows":5,"unitRevenue":9801,"share":2.6},{"name":"Ami","rows":7,"revenue":35655035,"sales":5033,"salesRows":7,"unitRevenue":7084.25,"share":2.4},{"name":"Weissgauff","rows":4,"revenue":35225218,"sales":4032,"salesRows":4,"unitRevenue":8736.41,"share":2.3},{"name":"Яндекс Фабрика","rows":4,"revenue":33540834,"sales":8924,"salesRows":4,"unitRevenue":3758.5,"share":2.2},{"name":"gmmwcb","rows":2,"revenue":29269811,"sales":3951,"salesRows":2,"unitRevenue":7408.2,"share":1.9}],"priceBands":[{"label":"<200 ₽","rows":316,"revenue":61640626,"sales":457028,"share":4.1},{"label":"200–500 ₽","rows":204,"revenue":60343002,"sales":209740,"share":4},{"label":"500–1,000 ₽","rows":162,"revenue":131935115,"sales":186776,"share":8.8},{"label":"1,000–2,000 ₽","rows":102,"revenue":120869642,"sales":83031,"share":8},{"label":"2,000–5,000 ₽","rows":124,"revenue":382519378,"sales":124397,"share":25.4},{"label":"≥5,000 ₽","rows":92,"revenue":748092183,"sales":89441,"share":49.7}],"topProducts":[{"name":"FStore Mattress, Independent springs, 160 х 200 cm","brand":"FStore","seller":"Dream Store","type":"床垫","revenue":43602574,"sales":3340,"avgPrice":13055,"url":"https://www.ozon.ru/product/624078645"},{"name":"HYPNOZ Mattress, Independent springs, 160 х 200 cm","brand":"HYPNOZ","seller":"HYPNOZ","type":"床垫","revenue":25653423,"sales":2839,"avgPrice":9036,"url":"https://www.ozon.ru/product/656762826"},{"name":"ASKONA Mattress, With zone spring unit, 160 х 200 cm","brand":"ASKONA","seller":"ASKONA Официальный магазин","type":"床垫","revenue":24767413,"sales":1500,"avgPrice":16512,"url":"https://www.ozon.ru/product/1673606683"},{"name":"HELE Office Armchair","brand":"HELE","seller":"HELE","type":"办公室扶手椅","revenue":23849666,"sales":2267,"avgPrice":10520,"url":"https://www.ozon.ru/product/3232293240"},{"name":"GMMWCB Gaming Chair","brand":"GMMWCB","seller":"gmmwcb","type":"游戏椅","revenue":21790769,"sales":2944,"avgPrice":7402,"url":"https://www.ozon.ru/product/1605911372"},{"name":"UTOPIA Mattress, Independent springs, 90 х 200 cm","brand":"UTOPIA","seller":"HYPNOZ","type":"床垫","revenue":20989433,"sales":4040,"avgPrice":5195,"url":"https://www.ozon.ru/product/3211083438"},{"name":"UTOPIA Mattress, Independent springs, 160 х 200 cm","brand":"UTOPIA","seller":"HYPNOZ","type":"床垫","revenue":18573306,"sales":2353,"avgPrice":7893,"url":"https://www.ozon.ru/product/1784895850"},{"name":"HOMSLY Garden Furniture Set, 4 persons","brand":"HOMSLY","seller":"Яндекс Фабрика","type":"花园家具套装","revenue":18072569,"sales":1297,"avgPrice":13934,"url":"https://www.ozon.ru/product/1856494532"},{"name":"WOWSLEEP Mattress, Independent springs, 160 х 200 cm","brand":"WOWSLEEP","seller":"WOWSLEEP","type":"床垫","revenue":17756424,"sales":1375,"avgPrice":12914,"url":"https://www.ozon.ru/product/3482410034"},{"name":"FStore Mattress, Independent springs, 160 х 200 cm","brand":"FStore","seller":"Dream Store","type":"床垫","revenue":16923218,"sales":1434,"avgPrice":11801,"url":"https://www.ozon.ru/product/3048199240"},{"name":"FStore Mattress, Independent springs, 180 х 200 cm","brand":"FStore","seller":"Dream Store","type":"床垫","revenue":14380694,"sales":977,"avgPrice":14719,"url":"https://www.ozon.ru/product/3048199971"},{"name":"ASKONA Mattress, With zone spring unit, 140 х 200 cm","brand":"ASKONA","seller":"ASKONA Официальный магазин","type":"床垫","revenue":13825730,"sales":973,"avgPrice":14209,"url":"https://www.ozon.ru/product/1673605810"},{"name":"HELE Office Armchair","brand":"HELE","seller":"HELE","type":"办公室扶手椅","revenue":13376029,"sales":1746,"avgPrice":7661,"url":"https://www.ozon.ru/product/2805867707"},{"name":"Weissgauff Mattress, Independent springs, 160 х 200 cm","brand":"Weissgauff","seller":"Weissgauff","type":"床垫","revenue":13107345,"sales":1253,"avgPrice":10461,"url":"https://www.ozon.ru/product/3889180651"},{"name":"Сot","brand":"未知/无品牌","seller":"Bluetop","type":"折叠床","revenue":12922886,"sales":5418,"avgPrice":2385,"url":"https://www.ozon.ru/product/4292063882"}],"operations":{"signRateMedian":0.91,"signRateCoverage":96.7,"stockoutMedian":12,"stockoutCoverage":93.8,"missedRevenue":21948281.1,"missedRevenueCoverage":100,"promoActiveShare":87.7,"promoCoverage":97.7,"adActiveShare":63.2,"adCoverage":100},"quality":{"level":"核心口径完整","salesCoverage":97.7,"missingSales":23,"missingAveragePrice":0,"missingBsr":0,"duplicateSku":20,"duplicateUrl":0,"uniqueSku":980,"urlCoverage":100},"insights":["头部品类“床垫”贡献 33.2% 销售额；前五品类合计 58.5%。","销售额最集中的价格带是 ≥5,000 ₽，覆盖 92 条商品记录，贡献 49.7% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 54.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 97.7%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

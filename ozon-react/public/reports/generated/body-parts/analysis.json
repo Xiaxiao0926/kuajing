@@ -1,0 +1,520 @@
+{
+  "id": "generated-body-parts",
+  "label": "车体配件",
+  "title": "Ozon 车体配件市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23车体配件_清洗版.xlsx",
+  "path": "reports/generated/body-parts/index.html",
+  "frameTitle": "Ozon 车体配件市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 132244592,
+    "totalSales": 189922,
+    "unitRevenue": 696.31,
+    "typeCount": 23,
+    "brandCount": 198,
+    "sellerCount": 471
+  },
+  "topTypes": [
+    {
+      "name": "拖车钩",
+      "rows": 52,
+      "revenue": 22889520,
+      "sales": 9332,
+      "salesRows": 51,
+      "unitRevenue": 2452.8,
+      "share": 17.3
+    },
+    {
+      "name": "侧视镜",
+      "rows": 90,
+      "revenue": 20867343,
+      "sales": 11051,
+      "salesRows": 89,
+      "unitRevenue": 1888.28,
+      "share": 15.8
+    },
+    {
+      "name": "挡泥板",
+      "rows": 184,
+      "revenue": 18319930,
+      "sales": 27212,
+      "salesRows": 183,
+      "unitRevenue": 673.23,
+      "share": 13.9
+    },
+    {
+      "name": "车门把手",
+      "rows": 145,
+      "revenue": 11826285,
+      "sales": 22727,
+      "salesRows": 144,
+      "unitRevenue": 520.36,
+      "share": 8.9
+    },
+    {
+      "name": "汽车翼子板",
+      "rows": 26,
+      "revenue": 10396569,
+      "sales": 3099,
+      "salesRows": 26,
+      "unitRevenue": 3354.81,
+      "share": 7.9
+    },
+    {
+      "name": "汽车拖车钩配件",
+      "rows": 116,
+      "revenue": 9829295,
+      "sales": 39271,
+      "salesRows": 115,
+      "unitRevenue": 250.29,
+      "share": 7.4
+    },
+    {
+      "name": "后视镜",
+      "rows": 66,
+      "revenue": 6902322,
+      "sales": 15100,
+      "salesRows": 61,
+      "unitRevenue": 457.11,
+      "share": 5.2
+    },
+    {
+      "name": "保险杠",
+      "rows": 23,
+      "revenue": 6292241,
+      "sales": 2446,
+      "salesRows": 23,
+      "unitRevenue": 2572.46,
+      "share": 4.8
+    },
+    {
+      "name": "车门锁",
+      "rows": 74,
+      "revenue": 5941213,
+      "sales": 11436,
+      "salesRows": 74,
+      "unitRevenue": 519.52,
+      "share": 4.5
+    },
+    {
+      "name": "车门维修套件",
+      "rows": 79,
+      "revenue": 4833607,
+      "sales": 11448,
+      "salesRows": 76,
+      "unitRevenue": 422.22,
+      "share": 3.7
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 413,
+      "revenue": 42265639,
+      "sales": 80493,
+      "salesRows": 399,
+      "unitRevenue": 525.08,
+      "share": 32
+    },
+    {
+      "name": "Barracuda",
+      "rows": 23,
+      "revenue": 15820680,
+      "sales": 10079,
+      "salesRows": 22,
+      "unitRevenue": 1569.67,
+      "share": 12
+    },
+    {
+      "name": "Automobile Plastics Factory",
+      "rows": 17,
+      "revenue": 7107619,
+      "sales": 2683,
+      "salesRows": 17,
+      "unitRevenue": 2649.13,
+      "share": 5.4
+    },
+    {
+      "name": "REMOEM",
+      "rows": 27,
+      "revenue": 4514766,
+      "sales": 3307,
+      "salesRows": 27,
+      "unitRevenue": 1365.21,
+      "share": 3.4
+    },
+    {
+      "name": "Спец-Автопласт",
+      "rows": 6,
+      "revenue": 3145958,
+      "sales": 608,
+      "salesRows": 6,
+      "unitRevenue": 5174.27,
+      "share": 2.4
+    },
+    {
+      "name": "КУЗОВИК",
+      "rows": 10,
+      "revenue": 2965132,
+      "sales": 971,
+      "salesRows": 10,
+      "unitRevenue": 3053.69,
+      "share": 2.2
+    },
+    {
+      "name": "ГРАНDРИАЛ",
+      "rows": 19,
+      "revenue": 2072947,
+      "sales": 2846,
+      "salesRows": 19,
+      "unitRevenue": 728.37,
+      "share": 1.6
+    },
+    {
+      "name": "АВТОБЛИК",
+      "rows": 22,
+      "revenue": 1892056,
+      "sales": 3298,
+      "salesRows": 22,
+      "unitRevenue": 573.7,
+      "share": 1.4
+    },
+    {
+      "name": "FixAvto",
+      "rows": 22,
+      "revenue": 1883818,
+      "sales": 3649,
+      "salesRows": 22,
+      "unitRevenue": 516.26,
+      "share": 1.4
+    },
+    {
+      "name": "ДАСТЕР-ГАРД",
+      "rows": 13,
+      "revenue": 1766050,
+      "sales": 1754,
+      "salesRows": 13,
+      "unitRevenue": 1006.87,
+      "share": 1.3
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "BARRACUDA-производитель автоаксессуаров",
+      "rows": 23,
+      "revenue": 15820680,
+      "sales": 10079,
+      "salesRows": 22,
+      "unitRevenue": 1569.67,
+      "share": 12
+    },
+    {
+      "name": "APF (Automobile Plastics Factory)",
+      "rows": 11,
+      "revenue": 5769397,
+      "sales": 2098,
+      "salesRows": 11,
+      "unitRevenue": 2749.95,
+      "share": 4.4
+    },
+    {
+      "name": "REMOEM",
+      "rows": 27,
+      "revenue": 4514766,
+      "sales": 3307,
+      "salesRows": 27,
+      "unitRevenue": 1365.21,
+      "share": 3.4
+    },
+    {
+      "name": "КУЗОВИК",
+      "rows": 11,
+      "revenue": 3374746,
+      "sales": 1087,
+      "salesRows": 11,
+      "unitRevenue": 3104.64,
+      "share": 2.6
+    },
+    {
+      "name": "ООО \"ИРБИС\"",
+      "rows": 6,
+      "revenue": 3145958,
+      "sales": 608,
+      "salesRows": 6,
+      "unitRevenue": 5174.27,
+      "share": 2.4
+    },
+    {
+      "name": "GAZelle Mirrors",
+      "rows": 4,
+      "revenue": 2422867,
+      "sales": 703,
+      "salesRows": 4,
+      "unitRevenue": 3446.47,
+      "share": 1.8
+    },
+    {
+      "name": "Fix-Avto",
+      "rows": 22,
+      "revenue": 1883818,
+      "sales": 3649,
+      "salesRows": 22,
+      "unitRevenue": 516.26,
+      "share": 1.4
+    },
+    {
+      "name": "АВТОБЛИК 2",
+      "rows": 17,
+      "revenue": 1580267,
+      "sales": 2451,
+      "salesRows": 17,
+      "unitRevenue": 644.74,
+      "share": 1.2
+    },
+    {
+      "name": "Автодрайв",
+      "rows": 11,
+      "revenue": 1532561,
+      "sales": 1548,
+      "salesRows": 11,
+      "unitRevenue": 990.03,
+      "share": 1.2
+    },
+    {
+      "name": "DetalAuto",
+      "rows": 10,
+      "revenue": 1517422,
+      "sales": 2452,
+      "salesRows": 10,
+      "unitRevenue": 618.85,
+      "share": 1.1
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 148,
+      "revenue": 8013976,
+      "sales": 62614,
+      "share": 6.1
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 348,
+      "revenue": 19038282,
+      "sales": 58215,
+      "share": 14.4
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 230,
+      "revenue": 24143940,
+      "sales": 36126,
+      "share": 18.3
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 143,
+      "revenue": 23610459,
+      "sales": 17189,
+      "share": 17.9
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 101,
+      "revenue": 37329971,
+      "sales": 12395,
+      "share": 28.2
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 30,
+      "revenue": 20107964,
+      "sales": 3383,
+      "share": 15.2
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 2466695,
+      "sales": 524,
+      "avgPrice": 4707,
+      "url": "https://www.ozon.ru/product/3279859581"
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 1979870,
+      "sales": 394,
+      "avgPrice": 5025,
+      "url": "https://www.ozon.ru/product/3279858274"
+    },
+    {
+      "name": "Set Dead Zone Mirror",
+      "brand": "未知/无品牌",
+      "seller": "zailushang01",
+      "type": "盲区镜",
+      "revenue": 1130769,
+      "sales": 10565,
+      "avgPrice": 107,
+      "url": "https://www.ozon.ru/product/2678055266"
+    },
+    {
+      "name": "Automobile Plastics Factory Set Side-View Mirror",
+      "brand": "Automobile Plastics Factory",
+      "seller": "APF (Automobile Plastics Factory)",
+      "type": "侧视镜",
+      "revenue": 1106330,
+      "sales": 434,
+      "avgPrice": 2549,
+      "url": "https://www.ozon.ru/product/476971134"
+    },
+    {
+      "name": "Automobile Plastics Factory Set Side-View Mirror",
+      "brand": "Automobile Plastics Factory",
+      "seller": "APF (Automobile Plastics Factory)",
+      "type": "侧视镜",
+      "revenue": 1006779,
+      "sales": 375,
+      "avgPrice": 2685,
+      "url": "https://www.ozon.ru/product/476975656"
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 987228,
+      "sales": 189,
+      "avgPrice": 5223,
+      "url": "https://www.ozon.ru/product/3301181279"
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 930989,
+      "sales": 155,
+      "avgPrice": 6006,
+      "url": "https://www.ozon.ru/product/3536180973"
+    },
+    {
+      "name": "Set Side-View Mirror",
+      "brand": "未知/无品牌",
+      "seller": "GAZelle Mirrors",
+      "type": "侧视镜",
+      "revenue": 863848,
+      "sales": 269,
+      "avgPrice": 3211,
+      "url": "https://www.ozon.ru/product/3555856319"
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 862053,
+      "sales": 98,
+      "avgPrice": 8796,
+      "url": "https://www.ozon.ru/product/3552674532"
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 823648,
+      "sales": 144,
+      "avgPrice": 5720,
+      "url": "https://www.ozon.ru/product/3618783946"
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 777710,
+      "sales": 151,
+      "avgPrice": 5150,
+      "url": "https://www.ozon.ru/product/3382527499"
+    },
+    {
+      "name": "Спец-Автопласт Car Fender",
+      "brand": "Спец-Автопласт",
+      "seller": "ООО \"ИРБИС\"",
+      "type": "汽车翼子板",
+      "revenue": 770634,
+      "sales": 149,
+      "avgPrice": 5172,
+      "url": "https://www.ozon.ru/product/3126588188"
+    },
+    {
+      "name": "Фаркопы Урала Tow Hitch",
+      "brand": "Фаркопы Урала",
+      "seller": "AvtoGrad Plus",
+      "type": "拖车钩",
+      "revenue": 728493,
+      "sales": 111,
+      "avgPrice": 6563,
+      "url": "https://www.ozon.ru/product/3520456699"
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "brand": "Barracuda",
+      "seller": "BARRACUDA-производитель автоаксессуаров",
+      "type": "拖车钩",
+      "revenue": 716678,
+      "sales": 131,
+      "avgPrice": 5471,
+      "url": "https://www.ozon.ru/product/3624337357"
+    },
+    {
+      "name": "ОДО КД Car Fender",
+      "brand": "ОДО КД",
+      "seller": "Avtozapchasti9",
+      "type": "汽车翼子板",
+      "revenue": 716569,
+      "sales": 296,
+      "avgPrice": 2421,
+      "url": "https://www.ozon.ru/product/2679497881"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.91,
+    "signRateCoverage": 97.9,
+    "stockoutMedian": 18,
+    "stockoutCoverage": 92.5,
+    "missedRevenue": 6160720.7,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 72.4,
+    "promoCoverage": 98.3,
+    "adActiveShare": 20.7,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 98.3,
+    "missingSales": 17,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 18,
+    "duplicateUrl": 0,
+    "uniqueSku": 982,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“拖车钩”贡献 17.3% 销售额；前五品类合计 63.7%。",
+    "销售额最集中的价格带是 2,000–5,000 ₽，覆盖 101 条商品记录，贡献 28.2% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 63.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

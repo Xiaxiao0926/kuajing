@@ -1,0 +1,520 @@
+{
+  "id": "generated-passenger-car-parts",
+  "label": "乘用车配件",
+  "title": "Ozon 乘用车配件市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23乘用车配件_清洗版.xlsx",
+  "path": "reports/generated/passenger-car-parts/index.html",
+  "frameTitle": "Ozon 乘用车配件市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 473900177,
+    "totalSales": 871639,
+    "unitRevenue": 543.69,
+    "typeCount": 86,
+    "brandCount": 262,
+    "sellerCount": 459
+  },
+  "topTypes": [
+    {
+      "name": "车灯",
+      "rows": 223,
+      "revenue": 90308874,
+      "sales": 181496,
+      "salesRows": 210,
+      "unitRevenue": 497.58,
+      "share": 19.1
+    },
+    {
+      "name": "汽车逆变器",
+      "rows": 18,
+      "revenue": 57039580,
+      "sales": 11070,
+      "salesRows": 18,
+      "unitRevenue": 5152.63,
+      "share": 12
+    },
+    {
+      "name": "火花塞",
+      "rows": 80,
+      "revenue": 34879784,
+      "sales": 88515,
+      "salesRows": 80,
+      "unitRevenue": 394.06,
+      "share": 7.4
+    },
+    {
+      "name": "刹车片",
+      "rows": 44,
+      "revenue": 30766669,
+      "sales": 36389,
+      "salesRows": 44,
+      "unitRevenue": 845.49,
+      "share": 6.5
+    },
+    {
+      "name": "汽车传感器",
+      "rows": 42,
+      "revenue": 21973724,
+      "sales": 32600,
+      "salesRows": 42,
+      "unitRevenue": 674.04,
+      "share": 4.6
+    },
+    {
+      "name": "汽车软管",
+      "rows": 72,
+      "revenue": 19489710,
+      "sales": 64424,
+      "salesRows": 71,
+      "unitRevenue": 302.52,
+      "share": 4.1
+    },
+    {
+      "name": "汽车大灯",
+      "rows": 47,
+      "revenue": 17116974,
+      "sales": 30362,
+      "salesRows": 45,
+      "unitRevenue": 563.76,
+      "share": 3.6
+    },
+    {
+      "name": "燃油泵",
+      "rows": 35,
+      "revenue": 16809634,
+      "sales": 34243,
+      "salesRows": 32,
+      "unitRevenue": 490.89,
+      "share": 3.5
+    },
+    {
+      "name": "点火线圈",
+      "rows": 23,
+      "revenue": 13854745,
+      "sales": 16309,
+      "salesRows": 23,
+      "unitRevenue": 849.52,
+      "share": 2.9
+    },
+    {
+      "name": "制动盘",
+      "rows": 7,
+      "revenue": 12598853,
+      "sales": 4432,
+      "salesRows": 7,
+      "unitRevenue": 2842.7,
+      "share": 2.7
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 270,
+      "revenue": 85083035,
+      "sales": 241726,
+      "salesRows": 259,
+      "unitRevenue": 351.98,
+      "share": 18
+    },
+    {
+      "name": "ANENJI",
+      "rows": 3,
+      "revenue": 32074787,
+      "sales": 1794,
+      "salesRows": 3,
+      "unitRevenue": 17878.92,
+      "share": 6.8
+    },
+    {
+      "name": "HOFER",
+      "rows": 28,
+      "revenue": 16619791,
+      "sales": 22841,
+      "salesRows": 27,
+      "unitRevenue": 727.63,
+      "share": 3.5
+    },
+    {
+      "name": "RUYCH",
+      "rows": 7,
+      "revenue": 13193525,
+      "sales": 7839,
+      "salesRows": 7,
+      "unitRevenue": 1683.06,
+      "share": 2.8
+    },
+    {
+      "name": "DMAF",
+      "rows": 19,
+      "revenue": 13142892,
+      "sales": 12032,
+      "salesRows": 19,
+      "unitRevenue": 1092.33,
+      "share": 2.8
+    },
+    {
+      "name": "Мавико",
+      "rows": 10,
+      "revenue": 12213895,
+      "sales": 7727,
+      "salesRows": 10,
+      "unitRevenue": 1580.68,
+      "share": 2.6
+    },
+    {
+      "name": "NGK",
+      "rows": 16,
+      "revenue": 10281626,
+      "sales": 15278,
+      "salesRows": 16,
+      "unitRevenue": 672.97,
+      "share": 2.2
+    },
+    {
+      "name": "Dagger",
+      "rows": 1,
+      "revenue": 9994881,
+      "sales": 512,
+      "salesRows": 1,
+      "unitRevenue": 19521.25,
+      "share": 2.1
+    },
+    {
+      "name": "OSRAM",
+      "rows": 21,
+      "revenue": 9255948,
+      "sales": 25141,
+      "salesRows": 21,
+      "unitRevenue": 368.16,
+      "share": 2
+    },
+    {
+      "name": "АТС",
+      "rows": 5,
+      "revenue": 7937312,
+      "sales": 2879,
+      "salesRows": 5,
+      "unitRevenue": 2756.97,
+      "share": 1.7
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Флагманский магазин ANENJI",
+      "rows": 2,
+      "revenue": 24101016,
+      "sales": 1314,
+      "salesRows": 2,
+      "unitRevenue": 18341.72,
+      "share": 5.1
+    },
+    {
+      "name": "avto-zone",
+      "rows": 26,
+      "revenue": 15756650,
+      "sales": 27719,
+      "salesRows": 26,
+      "unitRevenue": 568.44,
+      "share": 3.3
+    },
+    {
+      "name": "МАВИКО: российский производитель запчастей с 2012 года",
+      "rows": 14,
+      "revenue": 14542892,
+      "sales": 10923,
+      "salesRows": 14,
+      "unitRevenue": 1331.4,
+      "share": 3.1
+    },
+    {
+      "name": "AMA LAB",
+      "rows": 7,
+      "revenue": 13193525,
+      "sales": 7839,
+      "salesRows": 7,
+      "unitRevenue": 1683.06,
+      "share": 2.8
+    },
+    {
+      "name": "KobParts",
+      "rows": 15,
+      "revenue": 12231448,
+      "sales": 8163,
+      "salesRows": 15,
+      "unitRevenue": 1498.4,
+      "share": 2.6
+    },
+    {
+      "name": "ПРИОРИТЕТ-ТРАНС",
+      "rows": 1,
+      "revenue": 9994881,
+      "sales": 512,
+      "salesRows": 1,
+      "unitRevenue": 19521.25,
+      "share": 2.1
+    },
+    {
+      "name": "ANENJI",
+      "rows": 1,
+      "revenue": 7973771,
+      "sales": 480,
+      "salesRows": 1,
+      "unitRevenue": 16612.02,
+      "share": 1.7
+    },
+    {
+      "name": "Lumentix",
+      "rows": 24,
+      "revenue": 7558968,
+      "sales": 22589,
+      "salesRows": 24,
+      "unitRevenue": 334.63,
+      "share": 1.6
+    },
+    {
+      "name": "СВЕТ-АВТО",
+      "rows": 12,
+      "revenue": 6645475,
+      "sales": 16298,
+      "salesRows": 12,
+      "unitRevenue": 407.75,
+      "share": 1.4
+    },
+    {
+      "name": "LITEC",
+      "rows": 10,
+      "revenue": 6616753,
+      "sales": 3634,
+      "salesRows": 6,
+      "unitRevenue": 1820.79,
+      "share": 1.4
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 250,
+      "revenue": 37701474,
+      "sales": 279127,
+      "share": 8
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 385,
+      "revenue": 104723169,
+      "sales": 334404,
+      "share": 22.1
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 224,
+      "revenue": 115830178,
+      "sales": 161428,
+      "share": 24.4
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 101,
+      "revenue": 98619835,
+      "sales": 73472,
+      "share": 20.8
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 29,
+      "revenue": 47494342,
+      "sales": 15970,
+      "share": 10
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 11,
+      "revenue": 69531179,
+      "sales": 7238,
+      "share": 14.7
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "ANENJI Automotive Inverter, 6200W",
+      "brand": "ANENJI",
+      "seller": "Флагманский магазин ANENJI",
+      "type": "汽车逆变器",
+      "revenue": 13563810,
+      "sales": 680,
+      "avgPrice": 19947,
+      "url": "https://www.ozon.ru/product/2794970818"
+    },
+    {
+      "name": "ANENJI Automotive Inverter, 4200W",
+      "brand": "ANENJI",
+      "seller": "Флагманский магазин ANENJI",
+      "type": "汽车逆变器",
+      "revenue": 10537206,
+      "sales": 634,
+      "avgPrice": 16620,
+      "url": "https://www.ozon.ru/product/2792839506"
+    },
+    {
+      "name": "Dagger Driveshaft",
+      "brand": "Dagger",
+      "seller": "ПРИОРИТЕТ-ТРАНС",
+      "type": "传动轴",
+      "revenue": 9994881,
+      "sales": 512,
+      "avgPrice": 19521,
+      "url": "https://www.ozon.ru/product/1966654633"
+    },
+    {
+      "name": "ANENJI Automotive Inverter",
+      "brand": "ANENJI",
+      "seller": "ANENJI",
+      "type": "汽车逆变器",
+      "revenue": 7973771,
+      "sales": 480,
+      "avgPrice": 16612,
+      "url": "https://www.ozon.ru/product/3007953972"
+    },
+    {
+      "name": "Autonomous Diesel Heater, 8000W",
+      "brand": "未知/无品牌",
+      "seller": "Peppa Pig's shop",
+      "type": "驻车柴油加热器",
+      "revenue": 5828827,
+      "sales": 1029,
+      "avgPrice": 5665,
+      "url": "https://www.ozon.ru/product/3012706171"
+    },
+    {
+      "name": "ОБОРОТЫ Automotive Inverter, 220V, 3000W",
+      "brand": "ОБОРОТЫ",
+      "seller": "Super SALE",
+      "type": "汽车逆变器",
+      "revenue": 4584475,
+      "sales": 871,
+      "avgPrice": 5263,
+      "url": "https://www.ozon.ru/product/1355324597"
+    },
+    {
+      "name": "CoolQueen Automotive Inverter, 3600W",
+      "brand": "CoolQueen",
+      "seller": "Boutique tools",
+      "type": "汽车逆变器",
+      "revenue": 3944932,
+      "sales": 661,
+      "avgPrice": 5968,
+      "url": "https://www.ozon.ru/product/3574675785"
+    },
+    {
+      "name": "CoolQueen Automotive Inverter, 3000W",
+      "brand": "CoolQueen",
+      "seller": "BESTB",
+      "type": "汽车逆变器",
+      "revenue": 3691109,
+      "sales": 630,
+      "avgPrice": 5859,
+      "url": "https://www.ozon.ru/product/2804925000"
+    },
+    {
+      "name": "Мавико Brake Disc",
+      "brand": "Мавико",
+      "seller": "МАВИКО: российский производитель запчастей с 2012 года",
+      "type": "制动盘",
+      "revenue": 3615450,
+      "sales": 803,
+      "avgPrice": 4502,
+      "url": "https://www.ozon.ru/product/1283206141"
+    },
+    {
+      "name": "Autonomous Diesel Heater, 8000W",
+      "brand": "未知/无品牌",
+      "seller": "Уютный Ковчег",
+      "type": "驻车柴油加热器",
+      "revenue": 3532159,
+      "sales": 638,
+      "avgPrice": 5536,
+      "url": "https://www.ozon.ru/product/3199584348"
+    },
+    {
+      "name": "DLED Car Lamp H4, H4 Long, 2 pcs",
+      "brand": "DLED",
+      "seller": "ДЛЕД",
+      "type": "车灯",
+      "revenue": 3498829,
+      "sales": 3309,
+      "avgPrice": 1057,
+      "url": "https://www.ozon.ru/product/193411037"
+    },
+    {
+      "name": "Gates Spare Parts for Car Timing Belt, 5 pcs",
+      "brand": "Gates",
+      "seller": "ВС-АВТО",
+      "type": "汽车配气机构配件",
+      "revenue": 3450274,
+      "sales": 639,
+      "avgPrice": 5399,
+      "url": "https://www.ozon.ru/product/1167942489"
+    },
+    {
+      "name": "RUYCH Car Lamp H7, 2 pcs",
+      "brand": "RUYCH",
+      "seller": "AMA LAB",
+      "type": "车灯",
+      "revenue": 3080198,
+      "sales": 1562,
+      "avgPrice": 1972,
+      "url": "https://www.ozon.ru/product/1254123065"
+    },
+    {
+      "name": "Cswur Automotive Inverter, 2600W",
+      "brand": "Cswur",
+      "seller": "Martin Morning",
+      "type": "汽车逆变器",
+      "revenue": 3074923,
+      "sales": 851,
+      "avgPrice": 3613,
+      "url": "https://www.ozon.ru/product/3658820287"
+    },
+    {
+      "name": "Car Lamp H4, 2 pcs",
+      "brand": "未知/无品牌",
+      "seller": "AutoLedLens",
+      "type": "车灯",
+      "revenue": 3067850,
+      "sales": 1246,
+      "avgPrice": 2462,
+      "url": "https://www.ozon.ru/product/2019324821"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.91,
+    "signRateCoverage": 97.4,
+    "stockoutMedian": 9,
+    "stockoutCoverage": 95.1,
+    "missedRevenue": 9052839.3,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 84.4,
+    "promoCoverage": 97.5,
+    "adActiveShare": 36,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 97.5,
+    "missingSales": 25,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 14,
+    "duplicateUrl": 0,
+    "uniqueSku": 986,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“车灯”贡献 19.1% 销售额；前五品类合计 49.6%。",
+    "销售额最集中的价格带是 500–1,000 ₽，覆盖 224 条商品记录，贡献 24.4% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 44.3% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 97.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

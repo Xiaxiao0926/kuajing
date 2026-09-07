@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 汽车电子市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>汽车电子市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">56.7 百万 ₽</span><span class="hint">约 4.4 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">60.3 千 件</span><span class="hint">覆盖 91.5% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">941 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">10</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">151 / 533</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>可用，需留意缺失</strong><p>销售额字段用于主分析；销量缺失 85 条，均价缺失 0 条，BSR 标签缺失 512 条。SKU 重复 48 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“车载风扇”贡献 50.6% 销售额；前五品类合计 93.9%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 1,000–2,000 ₽，覆盖 184 条商品记录，贡献 34% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 67.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 91.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>车载风扇</td><td class="number">286</td><td class="number">28,719,606</td><td class="number">32,413</td><td class="number">50.6%</td></tr>
+    <tr><td>2</td><td>汽车行驶记录仪</td><td class="number">154</td><td class="number">9,983,000</td><td class="number">3,488</td><td class="number">17.6%</td></tr>
+    <tr><td>3</td><td>停车传感器</td><td class="number">249</td><td class="number">7,997,624</td><td class="number">8,443</td><td class="number">14.1%</td></tr>
+    <tr><td>4</td><td>汽车冰箱配件</td><td class="number">48</td><td class="number">4,631,054</td><td class="number">2,470</td><td class="number">8.2%</td></tr>
+    <tr><td>5</td><td>酒精测试仪配件</td><td class="number">64</td><td class="number">1,929,004</td><td class="number">1,637</td><td class="number">3.4%</td></tr>
+    <tr><td>6</td><td>点烟器插座延长线</td><td class="number">120</td><td class="number">1,917,061</td><td class="number">8,444</td><td class="number">3.4%</td></tr>
+    <tr><td>7</td><td>行驶记录仪记录纸</td><td class="number">37</td><td class="number">1,201,903</td><td class="number">2,613</td><td class="number">2.1%</td></tr>
+    <tr><td>8</td><td>倒车雷达配件</td><td class="number">30</td><td class="number">202,877</td><td class="number">577</td><td class="number">0.4%</td></tr>
+    <tr><td>9</td><td>汽车空气净化器</td><td class="number">11</td><td class="number">114,548</td><td class="number">179</td><td class="number">0.2%</td></tr>
+    <tr><td>10</td><td>汽车加湿器</td><td class="number">1</td><td class="number">6,782</td><td class="number">15</td><td class="number">0%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">90.4%</div><div class="coverage">字段覆盖 91.5%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">28 天</div><div class="coverage">字段覆盖 70.5%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">97.4%</div><div class="coverage">字段覆盖 100%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">100%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1506496610" target="_blank" rel="noreferrer">Prooofi Distribution Car Fan, 10 W</a></td>
+      <td>车载风扇</td>
+      <td>Prooofi Distribution</td>
+      <td class="number">2,143,284</td>
+      <td class="number">1,886</td>
+      <td class="number">1,136</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4554085023" target="_blank" rel="noreferrer">Car Fan, 20 W</a></td>
+      <td>车载风扇</td>
+      <td>未知/无品牌</td>
+      <td class="number">1,900,665</td>
+      <td class="number">1,839</td>
+      <td class="number">1,034</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2017533562" target="_blank" rel="noreferrer">PKBFLOW Car Fan, 12 W</a></td>
+      <td>车载风扇</td>
+      <td>PKBFLOW</td>
+      <td class="number">1,169,470</td>
+      <td class="number">834</td>
+      <td class="number">1,402</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1235471824" target="_blank" rel="noreferrer">Prooofi Distribution Car Fan, 10.1 W</a></td>
+      <td>车载风扇</td>
+      <td>Prooofi Distribution</td>
+      <td class="number">1,018,954</td>
+      <td class="number">1,024</td>
+      <td class="number">995</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3543671617" target="_blank" rel="noreferrer">AVS Car Fan, 10 W</a></td>
+      <td>车载风扇</td>
+      <td>AVS</td>
+      <td class="number">938,114</td>
+      <td class="number">1,273</td>
+      <td class="number">737</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3543696515" target="_blank" rel="noreferrer">AVS Car Fan, 14 W</a></td>
+      <td>车载风扇</td>
+      <td>AVS</td>
+      <td class="number">882,872</td>
+      <td class="number">1,126</td>
+      <td class="number">784</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/992571851" target="_blank" rel="noreferrer">Podofo Distribution Car Fan, 10.1 W</a></td>
+      <td>车载风扇</td>
+      <td>Podofo Distribution</td>
+      <td class="number">869,260</td>
+      <td class="number">812</td>
+      <td class="number">1,071</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2046747138" target="_blank" rel="noreferrer">TAKARA Car Fan, 24 W</a></td>
+      <td>车载风扇</td>
+      <td>TAKARA</td>
+      <td class="number">735,520</td>
+      <td class="number">416</td>
+      <td class="number">1,768</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/594310892" target="_blank" rel="noreferrer">AVS Car Fan</a></td>
+      <td>车载风扇</td>
+      <td>AVS</td>
+      <td class="number">726,198</td>
+      <td class="number">768</td>
+      <td class="number">946</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4257675848" target="_blank" rel="noreferrer">АвтоХит Car Fan, 15 W</a></td>
+      <td>车载风扇</td>
+      <td>АвтоХит</td>
+      <td class="number">706,445</td>
+      <td class="number">556</td>
+      <td class="number">1,271</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/542869122" target="_blank" rel="noreferrer">TIME SHOP Parking Sensor, sensors: 4</a></td>
+      <td>停车传感器</td>
+      <td>TIME SHOP</td>
+      <td class="number">662,806</td>
+      <td class="number">531</td>
+      <td class="number">1,248</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3898048439" target="_blank" rel="noreferrer">AUTOTREND Car Fan</a></td>
+      <td>车载风扇</td>
+      <td>AUTOTREND</td>
+      <td class="number">642,907</td>
+      <td class="number">1,588</td>
+      <td class="number">405</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1235471875" target="_blank" rel="noreferrer">Prooofi Distribution Car Fan, 10.8 W</a></td>
+      <td>车载风扇</td>
+      <td>Prooofi Distribution</td>
+      <td class="number">608,323</td>
+      <td class="number">592</td>
+      <td class="number">1,028</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2068324552" target="_blank" rel="noreferrer">MakDen Auto Cigarette Lighter Socket Extension Cable, 10 cm</a></td>
+      <td>点烟器插座延长线</td>
+      <td>MakDen Auto</td>
+      <td class="number">528,960</td>
+      <td class="number">2,793</td>
+      <td class="number">189</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4586804347" target="_blank" rel="noreferrer">Car Fan</a></td>
+      <td>车载风扇</td>
+      <td>未知/无品牌</td>
+      <td class="number">471,059</td>
+      <td class="number">914</td>
+      <td class="number">515</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23汽车电子_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-car-electronics","label":"汽车电子","title":"Ozon 汽车电子市场分析","group":"汽车生态","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23汽车电子_清洗版.xlsx","path":"reports/generated/car-electronics/index.html","frameTitle":"Ozon 汽车电子市场分析报告","kpis":{"rowCount":1000,"totalRevenue":56703459,"totalSales":60279,"unitRevenue":940.68,"typeCount":10,"brandCount":151,"sellerCount":533},"topTypes":[{"name":"车载风扇","rows":286,"revenue":28719606,"sales":32413,"salesRows":256,"unitRevenue":886.05,"share":50.6},{"name":"汽车行驶记录仪","rows":154,"revenue":9983000,"sales":3488,"salesRows":139,"unitRevenue":2862.1,"share":17.6},{"name":"停车传感器","rows":249,"revenue":7997624,"sales":8443,"salesRows":240,"unitRevenue":947.25,"share":14.1},{"name":"汽车冰箱配件","rows":48,"revenue":4631054,"sales":2470,"salesRows":44,"unitRevenue":1874.92,"share":8.2},{"name":"酒精测试仪配件","rows":64,"revenue":1929004,"sales":1637,"salesRows":55,"unitRevenue":1178.38,"share":3.4},{"name":"点烟器插座延长线","rows":120,"revenue":1917061,"sales":8444,"salesRows":109,"unitRevenue":227.03,"share":3.4},{"name":"行驶记录仪记录纸","rows":37,"revenue":1201903,"sales":2613,"salesRows":35,"unitRevenue":459.97,"share":2.1},{"name":"倒车雷达配件","rows":30,"revenue":202877,"sales":577,"salesRows":27,"unitRevenue":351.61,"share":0.4},{"name":"汽车空气净化器","rows":11,"revenue":114548,"sales":179,"salesRows":9,"unitRevenue":639.93,"share":0.2},{"name":"汽车加湿器","rows":1,"revenue":6782,"sales":15,"salesRows":1,"unitRevenue":452.13,"share":0}],"topBrands":[{"name":"未知/无品牌","rows":545,"revenue":19445226,"sales":21154,"salesRows":473,"unitRevenue":919.22,"share":34.3},{"name":"PKBFLOW","rows":19,"revenue":4653090,"sales":4719,"salesRows":19,"unitRevenue":986.03,"share":8.2},{"name":"Prooofi Distribution","rows":6,"revenue":3817670,"sales":3533,"salesRows":6,"unitRevenue":1080.57,"share":6.7},{"name":"AVS","rows":19,"revenue":3385247,"sales":4896,"salesRows":19,"unitRevenue":691.43,"share":6},{"name":"AT","rows":16,"revenue":1473766,"sales":1263,"salesRows":14,"unitRevenue":1166.88,"share":2.6},{"name":"TIME SHOP","rows":9,"revenue":1274064,"sales":984,"salesRows":9,"unitRevenue":1294.78,"share":2.2},{"name":"ЛЕДОХОД","rows":7,"revenue":1233955,"sales":380,"salesRows":7,"unitRevenue":3247.25,"share":2.2},{"name":"ELIXGO","rows":49,"revenue":1087641,"sales":1265,"salesRows":49,"unitRevenue":859.8,"share":1.9},{"name":"Alpicool","rows":10,"revenue":1007677,"sales":409,"salesRows":10,"unitRevenue":2463.76,"share":1.8},{"name":"Podofo Distribution","rows":2,"revenue":993410,"sales":944,"salesRows":2,"unitRevenue":1052.34,"share":1.8}],"topSellers":[{"name":"AVS - Официальный магазин","rows":14,"revenue":3202916,"sales":4654,"salesRows":14,"unitRevenue":688.21,"share":5.6},{"name":"Peony Shop","rows":7,"revenue":2704307,"sales":1990,"salesRows":7,"unitRevenue":1358.95,"share":4.8},{"name":"ELECTRO MAG","rows":4,"revenue":2620687,"sales":2560,"salesRows":4,"unitRevenue":1023.71,"share":4.6},{"name":"Профи Маркет - Интернет магазин","rows":2,"revenue":2160464,"sales":1895,"salesRows":2,"unitRevenue":1140.09,"share":3.8},{"name":"ИНСТРУМЕНТАРИЙ","rows":1,"revenue":1900665,"sales":1839,"salesRows":1,"unitRevenue":1033.53,"share":3.4},{"name":"AT","rows":15,"revenue":1462774,"sales":1250,"salesRows":13,"unitRevenue":1170.22,"share":2.6},{"name":"TIME SHOP","rows":9,"revenue":1274064,"sales":984,"salesRows":9,"unitRevenue":1294.78,"share":2.2},{"name":"shiwuershi","rows":5,"revenue":1235961,"sales":241,"salesRows":5,"unitRevenue":5128.47,"share":2.2},{"name":"ЛЕДОХОД","rows":7,"revenue":1233955,"sales":380,"salesRows":7,"unitRevenue":3247.25,"share":2.2},{"name":"HEAT Store","rows":6,"revenue":1125414,"sales":1830,"salesRows":6,"unitRevenue":614.98,"share":2}],"priceBands":[{"label":"<200 ₽","rows":174,"revenue":3067719,"sales":8960,"share":5.4},{"label":"200–500 ₽","rows":211,"revenue":4858484,"sales":13242,"share":8.6},{"label":"500–1,000 ₽","rows":273,"revenue":14144277,"sales":18709,"share":24.9},{"label":"1,000–2,000 ₽","rows":184,"revenue":19299798,"sales":15507,"share":34},{"label":"2,000–5,000 ₽","rows":129,"revenue":11065383,"sales":3224,"share":19.5},{"label":"≥5,000 ₽","rows":29,"revenue":4267798,"sales":637,"share":7.5}],"topProducts":[{"name":"Prooofi Distribution Car Fan, 10 W","brand":"Prooofi Distribution","seller":"Профи Маркет - Интернет магазин","type":"车载风扇","revenue":2143284,"sales":1886,"avgPrice":1136,"url":"https://www.ozon.ru/product/1506496610"},{"name":"Car Fan, 20 W","brand":"未知/无品牌","seller":"ИНСТРУМЕНТАРИЙ","type":"车载风扇","revenue":1900665,"sales":1839,"avgPrice":1034,"url":"https://www.ozon.ru/product/4554085023"},{"name":"PKBFLOW Car Fan, 12 W","brand":"PKBFLOW","seller":"Peony Shop","type":"车载风扇","revenue":1169470,"sales":834,"avgPrice":1402,"url":"https://www.ozon.ru/product/2017533562"},{"name":"Prooofi Distribution Car Fan, 10.1 W","brand":"Prooofi Distribution","seller":"ELECTRO MAG","type":"车载风扇","revenue":1018954,"sales":1024,"avgPrice":995,"url":"https://www.ozon.ru/product/1235471824"},{"name":"AVS Car Fan, 10 W","brand":"AVS","seller":"AVS - Официальный магазин","type":"车载风扇","revenue":938114,"sales":1273,"avgPrice":737,"url":"https://www.ozon.ru/product/3543671617"},{"name":"AVS Car Fan, 14 W","brand":"AVS","seller":"AVS - Официальный магазин","type":"车载风扇","revenue":882872,"sales":1126,"avgPrice":784,"url":"https://www.ozon.ru/product/3543696515"},{"name":"Podofo Distribution Car Fan, 10.1 W","brand":"Podofo Distribution","seller":"ELECTRO MAG","type":"车载风扇","revenue":869260,"sales":812,"avgPrice":1071,"url":"https://www.ozon.ru/product/992571851"},{"name":"TAKARA Car Fan, 24 W","brand":"TAKARA","seller":"TAKARA","type":"车载风扇","revenue":735520,"sales":416,"avgPrice":1768,"url":"https://www.ozon.ru/product/2046747138"},{"name":"AVS Car Fan","brand":"AVS","seller":"AVS - Официальный магазин","type":"车载风扇","revenue":726198,"sales":768,"avgPrice":946,"url":"https://www.ozon.ru/product/594310892"},{"name":"АвтоХит Car Fan, 15 W","brand":"АвтоХит","seller":"PrimeHunt","type":"车载风扇","revenue":706445,"sales":556,"avgPrice":1271,"url":"https://www.ozon.ru/product/4257675848"},{"name":"TIME SHOP Parking Sensor, sensors: 4","brand":"TIME SHOP","seller":"TIME SHOP","type":"停车传感器","revenue":662806,"sales":531,"avgPrice":1248,"url":"https://www.ozon.ru/product/542869122"},{"name":"AUTOTREND Car Fan","brand":"AUTOTREND","seller":"AutoTrend","type":"车载风扇","revenue":642907,"sales":1588,"avgPrice":405,"url":"https://www.ozon.ru/product/3898048439"},{"name":"Prooofi Distribution Car Fan, 10.8 W","brand":"Prooofi Distribution","seller":"ELECTRO MAG","type":"车载风扇","revenue":608323,"sales":592,"avgPrice":1028,"url":"https://www.ozon.ru/product/1235471875"},{"name":"MakDen Auto Cigarette Lighter Socket Extension Cable, 10 cm","brand":"MakDen Auto","seller":"Makden Auto","type":"点烟器插座延长线","revenue":528960,"sales":2793,"avgPrice":189,"url":"https://www.ozon.ru/product/2068324552"},{"name":"Car Fan","brand":"未知/无品牌","seller":"АРОМАТЫ ВОСТОКА","type":"车载风扇","revenue":471059,"sales":914,"avgPrice":515,"url":"https://www.ozon.ru/product/4586804347"}],"operations":{"signRateMedian":0.904,"signRateCoverage":91.5,"stockoutMedian":28,"stockoutCoverage":70.5,"missedRevenue":9876913,"missedRevenueCoverage":91.5,"promoActiveShare":97.4,"promoCoverage":100,"adActiveShare":100,"adCoverage":100},"quality":{"level":"可用，需留意缺失","salesCoverage":91.5,"missingSales":85,"missingAveragePrice":0,"missingBsr":512,"duplicateSku":48,"duplicateUrl":0,"uniqueSku":952,"urlCoverage":100},"insights":["头部品类“车载风扇”贡献 50.6% 销售额；前五品类合计 93.9%。","销售额最集中的价格带是 1,000–2,000 ₽，覆盖 184 条商品记录，贡献 34% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 67.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 91.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

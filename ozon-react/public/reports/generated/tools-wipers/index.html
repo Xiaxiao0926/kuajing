@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 汽车工具与雨刮市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>汽车工具与雨刮市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">1.25 十亿 ₽</span><span class="hint">约 96.2 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">754.6 千 件</span><span class="hint">覆盖 79.1% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">1,657 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">14</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">162 / 491</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>谨慎解读销量</strong><p>销售额字段用于主分析；销量缺失 209 条，均价缺失 0 条，BSR 标签缺失 390 条。SKU 重复 27 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“燃油桶”贡献 82.8% 销售额；前五品类合计 98.1%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 2,000–5,000 ₽，覆盖 170 条商品记录，贡献 46.8% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 77.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 79.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>燃油桶</td><td class="number">547</td><td class="number">1,035,440,280</td><td class="number">484,653</td><td class="number">82.8%</td></tr>
+    <tr><td>2</td><td>汽车千斤顶</td><td class="number">89</td><td class="number">124,538,614</td><td class="number">57,203</td><td class="number">10%</td></tr>
+    <tr><td>3</td><td>雨刮片</td><td class="number">166</td><td class="number">31,977,994</td><td class="number">68,724</td><td class="number">2.6%</td></tr>
+    <tr><td>4</td><td>牵引绳</td><td class="number">46</td><td class="number">17,815,174</td><td class="number">24,715</td><td class="number">1.4%</td></tr>
+    <tr><td>5</td><td>千斤顶配件</td><td class="number">37</td><td class="number">16,574,049</td><td class="number">18,584</td><td class="number">1.3%</td></tr>
+    <tr><td>6</td><td>应急包</td><td class="number">25</td><td class="number">8,891,927</td><td class="number">13,473</td><td class="number">0.7%</td></tr>
+    <tr><td>7</td><td>雨刮器胶条</td><td class="number">38</td><td class="number">5,566,382</td><td class="number">29,664</td><td class="number">0.4%</td></tr>
+    <tr><td>8</td><td>止退器</td><td class="number">19</td><td class="number">5,062,808</td><td class="number">33,490</td><td class="number">0.4%</td></tr>
+    <tr><td>9</td><td>三角警示牌</td><td class="number">16</td><td class="number">3,571,513</td><td class="number">17,775</td><td class="number">0.3%</td></tr>
+    <tr><td>10</td><td>雨刮臂适配器</td><td class="number">9</td><td class="number">505,655</td><td class="number">4,362</td><td class="number">0%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">90.4%</div><div class="coverage">字段覆盖 77.1%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">28 天</div><div class="coverage">字段覆盖 87.1%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">93.7%</div><div class="coverage">字段覆盖 100%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">100%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2796005351" target="_blank" rel="noreferrer">3TON Fuel &amp; Oil Canister, 20 L</a></td>
+      <td>燃油桶</td>
+      <td>3TON</td>
+      <td class="number">73,986,457</td>
+      <td class="number">18,879</td>
+      <td class="number">3,919</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2796006506" target="_blank" rel="noreferrer">3TON Fuel &amp; Oil Canister, 20.001 L</a></td>
+      <td>燃油桶</td>
+      <td>3TON</td>
+      <td class="number">62,890,765</td>
+      <td class="number">16,030</td>
+      <td class="number">3,923</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2973133514" target="_blank" rel="noreferrer">3TON Fuel &amp; Oil Canister, 20.003 L</a></td>
+      <td>燃油桶</td>
+      <td>3TON</td>
+      <td class="number">42,015,043</td>
+      <td class="number">11,215</td>
+      <td class="number">3,746</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2796005716" target="_blank" rel="noreferrer">3TON Fuel &amp; Oil Canister, 10.002 L</a></td>
+      <td>燃油桶</td>
+      <td>3TON</td>
+      <td class="number">29,368,625</td>
+      <td class="number">15,982</td>
+      <td class="number">1,838</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2796005546" target="_blank" rel="noreferrer">3TON Fuel &amp; Oil Canister, 10.001 L</a></td>
+      <td>燃油桶</td>
+      <td>3TON</td>
+      <td class="number">26,321,930</td>
+      <td class="number">14,543</td>
+      <td class="number">1,810</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1937659012" target="_blank" rel="noreferrer">Демидовский Fuel &amp; Oil Canister, 20 L</a></td>
+      <td>燃油桶</td>
+      <td>Демидовский</td>
+      <td class="number">25,369,465</td>
+      <td class="number">3,402</td>
+      <td class="number">7,457</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4800895273" target="_blank" rel="noreferrer">ТрансГрупп Fuel &amp; Oil Canister, 30 L</a></td>
+      <td>燃油桶</td>
+      <td>ТрансГрупп</td>
+      <td class="number">23,491,575</td>
+      <td class="number">8,288</td>
+      <td class="number">2,834</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/348517326" target="_blank" rel="noreferrer">Stels Car Jack Rolling, load up to 3 t</a></td>
+      <td>汽车千斤顶</td>
+      <td>Stels</td>
+      <td class="number">23,174,222</td>
+      <td class="number">2,339</td>
+      <td class="number">9,908</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4731031918" target="_blank" rel="noreferrer">НЕ ТРЕСНЕТ Fuel &amp; Oil Canister, 30 L</a></td>
+      <td>燃油桶</td>
+      <td>НЕ ТРЕСНЕТ</td>
+      <td class="number">18,411,457</td>
+      <td class="number">6,694</td>
+      <td class="number">2,750</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4730996186" target="_blank" rel="noreferrer">НЕ ТРЕСНЕТ Fuel &amp; Oil Canister, 20 L</a></td>
+      <td>燃油桶</td>
+      <td>НЕ ТРЕСНЕТ</td>
+      <td class="number">18,349,235</td>
+      <td class="number">8,749</td>
+      <td class="number">2,097</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4797843944" target="_blank" rel="noreferrer">Rekidel Fuel &amp; Oil Canister, 20 L</a></td>
+      <td>燃油桶</td>
+      <td>Rekidel</td>
+      <td class="number">17,754,872</td>
+      <td class="number">—</td>
+      <td class="number">6,969</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4800861765" target="_blank" rel="noreferrer">ТрансГрупп Fuel &amp; Oil Canister, 20 L</a></td>
+      <td>燃油桶</td>
+      <td>ТрансГрупп</td>
+      <td class="number">17,316,054</td>
+      <td class="number">7,714</td>
+      <td class="number">2,245</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4731414697" target="_blank" rel="noreferrer">Fuel &amp; Oil Canister, 20 L</a></td>
+      <td>燃油桶</td>
+      <td>未知/无品牌</td>
+      <td class="number">17,182,921</td>
+      <td class="number">2,702</td>
+      <td class="number">6,359</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4797844273" target="_blank" rel="noreferrer">Rekidel Fuel &amp; Oil Canister, 30 L</a></td>
+      <td>燃油桶</td>
+      <td>Rekidel</td>
+      <td class="number">16,236,934</td>
+      <td class="number">—</td>
+      <td class="number">5,476</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2762859471" target="_blank" rel="noreferrer">3TON Fuel &amp; Oil Canister, 5 L</a></td>
+      <td>燃油桶</td>
+      <td>3TON</td>
+      <td class="number">14,870,192</td>
+      <td class="number">27,473</td>
+      <td class="number">541</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23汽车工具和雨刮_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-tools-wipers","label":"汽车工具与雨刮","title":"Ozon 汽车工具与雨刮市场分析","group":"汽车生态","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23汽车工具和雨刮_清洗版.xlsx","path":"reports/generated/tools-wipers/index.html","frameTitle":"Ozon 汽车工具与雨刮市场分析报告","kpis":{"rowCount":1000,"totalRevenue":1250686412,"totalSales":754626,"unitRevenue":1657.36,"typeCount":14,"brandCount":162,"sellerCount":491},"topTypes":[{"name":"燃油桶","rows":547,"revenue":1035440280,"sales":484653,"salesRows":349,"unitRevenue":2136.46,"share":82.8},{"name":"汽车千斤顶","rows":89,"revenue":124538614,"sales":57203,"salesRows":88,"unitRevenue":2177.13,"share":10},{"name":"雨刮片","rows":166,"revenue":31977994,"sales":68724,"salesRows":162,"unitRevenue":465.31,"share":2.6},{"name":"牵引绳","rows":46,"revenue":17815174,"sales":24715,"salesRows":46,"unitRevenue":720.82,"share":1.4},{"name":"千斤顶配件","rows":37,"revenue":16574049,"sales":18584,"salesRows":37,"unitRevenue":891.85,"share":1.3},{"name":"应急包","rows":25,"revenue":8891927,"sales":13473,"salesRows":21,"unitRevenue":659.98,"share":0.7},{"name":"雨刮器胶条","rows":38,"revenue":5566382,"sales":29664,"salesRows":38,"unitRevenue":187.65,"share":0.4},{"name":"止退器","rows":19,"revenue":5062808,"sales":33490,"salesRows":19,"unitRevenue":151.17,"share":0.4},{"name":"三角警示牌","rows":16,"revenue":3571513,"sales":17775,"salesRows":15,"unitRevenue":200.93,"share":0.3},{"name":"雨刮臂适配器","rows":9,"revenue":505655,"sales":4362,"salesRows":8,"unitRevenue":115.92,"share":0}],"topBrands":[{"name":"未知/无品牌","rows":449,"revenue":417458995,"sales":237076,"salesRows":279,"unitRevenue":1760.87,"share":33.4},{"name":"3TON","rows":23,"revenue":303652207,"sales":157710,"salesRows":20,"unitRevenue":1925.38,"share":24.3},{"name":"Rekidel","rows":4,"revenue":51392224,"sales":2809,"salesRows":1,"unitRevenue":18295.56,"share":4.1},{"name":"ТрансГрупп","rows":5,"revenue":42751656,"sales":16764,"salesRows":3,"unitRevenue":2550.21,"share":3.4},{"name":"НЕ ТРЕСНЕТ","rows":2,"revenue":36760692,"sales":15443,"salesRows":2,"unitRevenue":2380.41,"share":2.9},{"name":"Stels","rows":7,"revenue":30260089,"sales":6074,"salesRows":7,"unitRevenue":4981.9,"share":2.4},{"name":"Демидовский","rows":3,"revenue":28984395,"sales":5128,"salesRows":3,"unitRevenue":5652.18,"share":2.3},{"name":"ART-RIDER","rows":10,"revenue":27432191,"sales":8786,"salesRows":10,"unitRevenue":3122.26,"share":2.2},{"name":"Vixen","rows":4,"revenue":17251241,"sales":4766,"salesRows":4,"unitRevenue":3619.65,"share":1.4},{"name":"МАЯКАВТО всегда в помощь","rows":22,"revenue":15607597,"sales":10220,"salesRows":22,"unitRevenue":1527.16,"share":1.2}],"topSellers":[{"name":"АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ","rows":11,"revenue":287367659,"sales":149565,"salesRows":11,"unitRevenue":1921.36,"share":23},{"name":"WT VACUUM CLEANER Official Store","rows":4,"revenue":51392224,"sales":2809,"salesRows":1,"unitRevenue":18295.56,"share":4.1},{"name":"АО \"ТРАНСГРУПП\"","rows":3,"revenue":41804882,"sales":16764,"salesRows":3,"unitRevenue":2493.73,"share":3.3},{"name":"ООО \"НЕТРЕС\"","rows":2,"revenue":36760692,"sales":15443,"salesRows":2,"unitRevenue":2380.41,"share":2.9},{"name":"МИР ИНСТРУМЕНТА","rows":8,"revenue":29807667,"sales":4887,"salesRows":8,"unitRevenue":6099.38,"share":2.4},{"name":"SCOVO - магазин производителя","rows":3,"revenue":28984395,"sales":5128,"salesRows":3,"unitRevenue":5652.18,"share":2.3},{"name":"Бочка 2","rows":3,"revenue":24425496,"sales":3065,"salesRows":2,"unitRevenue":7969.17,"share":2},{"name":"ART Group","rows":3,"revenue":22384317,"sales":6556,"salesRows":3,"unitRevenue":3414.33,"share":1.8},{"name":"Полевой клуб","rows":10,"revenue":17293447,"sales":0,"salesRows":0,"unitRevenue":null,"share":1.4},{"name":"VIXEN","rows":4,"revenue":17251241,"sales":4766,"salesRows":4,"unitRevenue":3619.65,"share":1.4}],"priceBands":[{"label":"<200 ₽","rows":130,"revenue":23226856,"sales":152413,"share":1.9},{"label":"200–500 ₽","rows":369,"revenue":123663331,"sales":169234,"share":9.9},{"label":"500–1,000 ₽","rows":139,"revenue":104368814,"sales":112229,"share":8.3},{"label":"1,000–2,000 ₽","rows":167,"revenue":253271783,"sales":128954,"share":20.3},{"label":"2,000–5,000 ₽","rows":170,"revenue":585145104,"sales":175125,"share":46.8},{"label":"≥5,000 ₽","rows":25,"revenue":161010524,"sales":16671,"share":12.9}],"topProducts":[{"name":"3TON Fuel & Oil Canister, 20 L","brand":"3TON","seller":"АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ","type":"燃油桶","revenue":73986457,"sales":18879,"avgPrice":3919,"url":"https://www.ozon.ru/product/2796005351"},{"name":"3TON Fuel & Oil Canister, 20.001 L","brand":"3TON","seller":"АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ","type":"燃油桶","revenue":62890765,"sales":16030,"avgPrice":3923,"url":"https://www.ozon.ru/product/2796006506"},{"name":"3TON Fuel & Oil Canister, 20.003 L","brand":"3TON","seller":"АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ","type":"燃油桶","revenue":42015043,"sales":11215,"avgPrice":3746,"url":"https://www.ozon.ru/product/2973133514"},{"name":"3TON Fuel & Oil Canister, 10.002 L","brand":"3TON","seller":"АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ","type":"燃油桶","revenue":29368625,"sales":15982,"avgPrice":1838,"url":"https://www.ozon.ru/product/2796005716"},{"name":"3TON Fuel & Oil Canister, 10.001 L","brand":"3TON","seller":"АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ","type":"燃油桶","revenue":26321930,"sales":14543,"avgPrice":1810,"url":"https://www.ozon.ru/product/2796005546"},{"name":"Демидовский Fuel & Oil Canister, 20 L","brand":"Демидовский","seller":"SCOVO - магазин производителя","type":"燃油桶","revenue":25369465,"sales":3402,"avgPrice":7457,"url":"https://www.ozon.ru/product/1937659012"},{"name":"ТрансГрупп Fuel & Oil Canister, 30 L","brand":"ТрансГрупп","seller":"АО \"ТРАНСГРУПП\"","type":"燃油桶","revenue":23491575,"sales":8288,"avgPrice":2834,"url":"https://www.ozon.ru/product/4800895273"},{"name":"Stels Car Jack Rolling, load up to 3 t","brand":"Stels","seller":"МИР ИНСТРУМЕНТА","type":"汽车千斤顶","revenue":23174222,"sales":2339,"avgPrice":9908,"url":"https://www.ozon.ru/product/348517326"},{"name":"НЕ ТРЕСНЕТ Fuel & Oil Canister, 30 L","brand":"НЕ ТРЕСНЕТ","seller":"ООО \"НЕТРЕС\"","type":"燃油桶","revenue":18411457,"sales":6694,"avgPrice":2750,"url":"https://www.ozon.ru/product/4731031918"},{"name":"НЕ ТРЕСНЕТ Fuel & Oil Canister, 20 L","brand":"НЕ ТРЕСНЕТ","seller":"ООО \"НЕТРЕС\"","type":"燃油桶","revenue":18349235,"sales":8749,"avgPrice":2097,"url":"https://www.ozon.ru/product/4730996186"},{"name":"Rekidel Fuel & Oil Canister, 20 L","brand":"Rekidel","seller":"WT VACUUM CLEANER Official Store","type":"燃油桶","revenue":17754872,"sales":null,"avgPrice":6969,"url":"https://www.ozon.ru/product/4797843944"},{"name":"ТрансГрупп Fuel & Oil Canister, 20 L","brand":"ТрансГрупп","seller":"АО \"ТРАНСГРУПП\"","type":"燃油桶","revenue":17316054,"sales":7714,"avgPrice":2245,"url":"https://www.ozon.ru/product/4800861765"},{"name":"Fuel & Oil Canister, 20 L","brand":"未知/无品牌","seller":"Бочка 2","type":"燃油桶","revenue":17182921,"sales":2702,"avgPrice":6359,"url":"https://www.ozon.ru/product/4731414697"},{"name":"Rekidel Fuel & Oil Canister, 30 L","brand":"Rekidel","seller":"WT VACUUM CLEANER Official Store","type":"燃油桶","revenue":16236934,"sales":null,"avgPrice":5476,"url":"https://www.ozon.ru/product/4797844273"},{"name":"3TON Fuel & Oil Canister, 5 L","brand":"3TON","seller":"АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ","type":"燃油桶","revenue":14870192,"sales":27473,"avgPrice":541,"url":"https://www.ozon.ru/product/2762859471"}],"operations":{"signRateMedian":0.904,"signRateCoverage":77.1,"stockoutMedian":28,"stockoutCoverage":87.1,"missedRevenue":126598505,"missedRevenueCoverage":79.1,"promoActiveShare":93.7,"promoCoverage":100,"adActiveShare":100,"adCoverage":100},"quality":{"level":"谨慎解读销量","salesCoverage":79.1,"missingSales":209,"missingAveragePrice":0,"missingBsr":390,"duplicateSku":27,"duplicateUrl":0,"uniqueSku":973,"urlCoverage":100},"insights":["头部品类“燃油桶”贡献 82.8% 销售额；前五品类合计 98.1%。","销售额最集中的价格带是 2,000–5,000 ₽，覆盖 170 条商品记录，贡献 46.8% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 77.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 79.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

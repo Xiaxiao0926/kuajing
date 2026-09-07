@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 汽车电池市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>汽车电池市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">327.4 百万 ₽</span><span class="hint">约 25.2 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">149.4 千 件</span><span class="hint">覆盖 95.2% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">2,191 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">4</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">213 / 405</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>核心口径完整</strong><p>销售额字段用于主分析；销量缺失 48 条，均价缺失 0 条，BSR 标签缺失 625 条。SKU 重复 80 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“启动充电装置”贡献 52.9% 销售额；前五品类合计 100%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 2,000–5,000 ₽，覆盖 320 条商品记录，贡献 40.1% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 49.3% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 95.2%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>启动充电装置</td><td class="number">296</td><td class="number">173,145,200</td><td class="number">43,770</td><td class="number">52.9%</td></tr>
+    <tr><td>2</td><td>汽车电瓶充电器</td><td class="number">311</td><td class="number">90,034,766</td><td class="number">65,231</td><td class="number">27.5%</td></tr>
+    <tr><td>3</td><td>摩托车电池</td><td class="number">247</td><td class="number">58,156,455</td><td class="number">27,716</td><td class="number">17.8%</td></tr>
+    <tr><td>4</td><td>蓄电池配件</td><td class="number">146</td><td class="number">6,096,994</td><td class="number">12,710</td><td class="number">1.9%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">88%</div><div class="coverage">字段覆盖 95%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">28 天</div><div class="coverage">字段覆盖 94%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">98.1%</div><div class="coverage">字段覆盖 100%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">100%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2624473133" target="_blank" rel="noreferrer">Battery Charger, 28000 А•h, max 1200 A, 180 mm</a></td>
+      <td>启动充电装置</td>
+      <td>未知/无品牌</td>
+      <td class="number">7,946,228</td>
+      <td class="number">2,531</td>
+      <td class="number">3,140</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1313519767" target="_blank" rel="noreferrer">Battery Charger, 29800 А•h, max 2000 A, 170 mm</a></td>
+      <td>启动充电装置</td>
+      <td>未知/无品牌</td>
+      <td class="number">5,912,638</td>
+      <td class="number">2,003</td>
+      <td class="number">2,952</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1067074809" target="_blank" rel="noreferrer">Hauzone Battery Charger, max 6 A, 154 mm</a></td>
+      <td>汽车电瓶充电器</td>
+      <td>Hauzone</td>
+      <td class="number">5,497,227</td>
+      <td class="number">3,912</td>
+      <td class="number">1,405</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1660288459" target="_blank" rel="noreferrer">GREEN KEEPER Battery Charger, 16000 А•h, max 2000 A, 170 mm</a></td>
+      <td>启动充电装置</td>
+      <td>GREEN KEEPER</td>
+      <td class="number">4,941,891</td>
+      <td class="number">449</td>
+      <td class="number">11,006</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/4575343246" target="_blank" rel="noreferrer">Battery Charger, 28000 А•h, max 600 A, 170 mm</a></td>
+      <td>启动充电装置</td>
+      <td>未知/无品牌</td>
+      <td class="number">4,865,151</td>
+      <td class="number">—</td>
+      <td class="number">1,861</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3583351484" target="_blank" rel="noreferrer">BILDR Battery Charger, 3 А•h, max 15 A, 195 mm</a></td>
+      <td>汽车电瓶充电器</td>
+      <td>BILDR</td>
+      <td class="number">4,079,669</td>
+      <td class="number">1,163</td>
+      <td class="number">3,508</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3278699310" target="_blank" rel="noreferrer">ZarGrad Battery Charger, 252 mm</a></td>
+      <td>启动充电装置</td>
+      <td>ZarGrad</td>
+      <td class="number">3,634,772</td>
+      <td class="number">832</td>
+      <td class="number">4,369</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3424320452" target="_blank" rel="noreferrer">70mai Battery Charger, 10400 А•h, max 1000 A</a></td>
+      <td>启动充电装置</td>
+      <td>70mai</td>
+      <td class="number">3,584,377</td>
+      <td class="number">696</td>
+      <td class="number">5,150</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1674113201" target="_blank" rel="noreferrer">DEKKERS Battery Charger, 22200 А•h, max 2000 A, 150 mm</a></td>
+      <td>启动充电装置</td>
+      <td>DEKKERS</td>
+      <td class="number">3,570,101</td>
+      <td class="number">683</td>
+      <td class="number">5,227</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2388788054" target="_blank" rel="noreferrer">Battery Charger, 27000 А•h, 255 mm</a></td>
+      <td>启动充电装置</td>
+      <td>未知/无品牌</td>
+      <td class="number">3,556,805</td>
+      <td class="number">327</td>
+      <td class="number">10,877</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3550118959" target="_blank" rel="noreferrer">Battery Charger, 10000 А•h, max 1500 A, 150 mm</a></td>
+      <td>启动充电装置</td>
+      <td>未知/无品牌</td>
+      <td class="number">3,463,151</td>
+      <td class="number">901</td>
+      <td class="number">3,844</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3758309034" target="_blank" rel="noreferrer">Battery Charger, 8000 А•h, 300 mm</a></td>
+      <td>启动充电装置</td>
+      <td>未知/无品牌</td>
+      <td class="number">3,437,215</td>
+      <td class="number">1,891</td>
+      <td class="number">1,818</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/231109759" target="_blank" rel="noreferrer">Даджет Battery Charger, 8000 А•h, max 400 A, 200 mm</a></td>
+      <td>启动充电装置</td>
+      <td>Даджет</td>
+      <td class="number">2,959,626</td>
+      <td class="number">1,531</td>
+      <td class="number">1,933</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3497654924" target="_blank" rel="noreferrer">Wellzoller Battery Charger, 20000 А•h, max 2500 A</a></td>
+      <td>启动充电装置</td>
+      <td>Wellzoller</td>
+      <td class="number">2,566,686</td>
+      <td class="number">395</td>
+      <td class="number">6,498</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1805716357" target="_blank" rel="noreferrer">CHOPPER Motorcycle Battery, 4 А•h, Reverse (-/+)</a></td>
+      <td>摩托车电池</td>
+      <td>CHOPPER</td>
+      <td class="number">2,478,567</td>
+      <td class="number">2,195</td>
+      <td class="number">1,129</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23汽车电池_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-car-batteries","label":"汽车电池","title":"Ozon 汽车电池市场分析","group":"汽车生态","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23汽车电池_清洗版.xlsx","path":"reports/generated/car-batteries/index.html","frameTitle":"Ozon 汽车电池市场分析报告","kpis":{"rowCount":1000,"totalRevenue":327433415,"totalSales":149427,"unitRevenue":2191.26,"typeCount":4,"brandCount":213,"sellerCount":405},"topTypes":[{"name":"启动充电装置","rows":296,"revenue":173145200,"sales":43770,"salesRows":269,"unitRevenue":3955.8,"share":52.9},{"name":"汽车电瓶充电器","rows":311,"revenue":90034766,"sales":65231,"salesRows":304,"unitRevenue":1380.25,"share":27.5},{"name":"摩托车电池","rows":247,"revenue":58156455,"sales":27716,"salesRows":240,"unitRevenue":2098.3,"share":17.8},{"name":"蓄电池配件","rows":146,"revenue":6096994,"sales":12710,"salesRows":139,"unitRevenue":479.7,"share":1.9}],"topBrands":[{"name":"未知/无品牌","rows":269,"revenue":75416697,"sales":35931,"salesRows":244,"unitRevenue":2098.93,"share":23},{"name":"CHOPPER","rows":24,"revenue":16967503,"sales":15410,"salesRows":21,"unitRevenue":1101.07,"share":5.2},{"name":"Hauzone","rows":12,"revenue":15647545,"sales":9490,"salesRows":12,"unitRevenue":1648.85,"share":4.8},{"name":"Delta Battery","rows":69,"revenue":13286892,"sales":6336,"salesRows":69,"unitRevenue":2097.05,"share":4.1},{"name":"BILDR","rows":5,"revenue":8943245,"sales":2638,"salesRows":5,"unitRevenue":3390.16,"share":2.7},{"name":"DEKKERS","rows":6,"revenue":7385082,"sales":2533,"salesRows":6,"unitRevenue":2915.55,"share":2.3},{"name":"CARDALE","rows":13,"revenue":6587454,"sales":4393,"salesRows":13,"unitRevenue":1499.53,"share":2},{"name":"ВЫМПЕЛ","rows":13,"revenue":5842433,"sales":1313,"salesRows":13,"unitRevenue":4449.68,"share":1.8},{"name":"Даджет","rows":3,"revenue":5807731,"sales":2638,"salesRows":3,"unitRevenue":2201.57,"share":1.8},{"name":"TORADO","rows":4,"revenue":5560725,"sales":1421,"salesRows":4,"unitRevenue":3913.25,"share":1.7}],"topSellers":[{"name":"Бэнг Компани Бэттери","rows":28,"revenue":17703341,"sales":15892,"salesRows":25,"unitRevenue":1113.98,"share":5.4},{"name":"Hauzone","rows":11,"revenue":15605426,"sales":9422,"salesRows":11,"unitRevenue":1656.28,"share":4.8},{"name":"Пуск","rows":4,"revenue":13021785,"sales":4044,"salesRows":4,"unitRevenue":3220.03,"share":4},{"name":"BILDR","rows":5,"revenue":8943245,"sales":2638,"salesRows":5,"unitRevenue":3390.16,"share":2.7},{"name":"SHTERN","rows":4,"revenue":8273845,"sales":1107,"salesRows":4,"unitRevenue":7474.11,"share":2.5},{"name":"DEKKERS","rows":6,"revenue":7385082,"sales":2533,"salesRows":6,"unitRevenue":2915.55,"share":2.3},{"name":"Recam","rows":4,"revenue":6653700,"sales":2358,"salesRows":4,"unitRevenue":2821.76,"share":2},{"name":"CARDALE","rows":13,"revenue":6587454,"sales":4393,"salesRows":13,"unitRevenue":1499.53,"share":2},{"name":"VICAR","rows":13,"revenue":5842433,"sales":1313,"salesRows":13,"unitRevenue":4449.68,"share":1.8},{"name":"Даджет","rows":3,"revenue":5807731,"sales":2638,"salesRows":3,"unitRevenue":2201.57,"share":1.8}],"priceBands":[{"label":"<200 ₽","rows":78,"revenue":4691001,"sales":6830,"share":1.4},{"label":"200–500 ₽","rows":95,"revenue":6821398,"sales":12489,"share":2.1},{"label":"500–1,000 ₽","rows":117,"revenue":18565710,"sales":24995,"share":5.7},{"label":"1,000–2,000 ₽","rows":273,"revenue":80790429,"sales":52307,"share":24.7},{"label":"2,000–5,000 ₽","rows":320,"revenue":131378229,"sales":41596,"share":40.1},{"label":"≥5,000 ₽","rows":117,"revenue":85186648,"sales":11210,"share":26}],"topProducts":[{"name":"Battery Charger, 28000 А•h, max 1200 A, 180 mm","brand":"未知/无品牌","seller":"Пуск","type":"启动充电装置","revenue":7946228,"sales":2531,"avgPrice":3140,"url":"https://www.ozon.ru/product/2624473133"},{"name":"Battery Charger, 29800 А•h, max 2000 A, 170 mm","brand":"未知/无品牌","seller":"Recam","type":"启动充电装置","revenue":5912638,"sales":2003,"avgPrice":2952,"url":"https://www.ozon.ru/product/1313519767"},{"name":"Hauzone Battery Charger, max 6 A, 154 mm","brand":"Hauzone","seller":"Hauzone","type":"汽车电瓶充电器","revenue":5497227,"sales":3912,"avgPrice":1405,"url":"https://www.ozon.ru/product/1067074809"},{"name":"GREEN KEEPER Battery Charger, 16000 А•h, max 2000 A, 170 mm","brand":"GREEN KEEPER","seller":"GreenKeeperRussia","type":"启动充电装置","revenue":4941891,"sales":449,"avgPrice":11006,"url":"https://www.ozon.ru/product/1660288459"},{"name":"Battery Charger, 28000 А•h, max 600 A, 170 mm","brand":"未知/无品牌","seller":"nova","type":"启动充电装置","revenue":4865151,"sales":null,"avgPrice":1861,"url":"https://www.ozon.ru/product/4575343246"},{"name":"BILDR Battery Charger, 3 А•h, max 15 A, 195 mm","brand":"BILDR","seller":"BILDR","type":"汽车电瓶充电器","revenue":4079669,"sales":1163,"avgPrice":3508,"url":"https://www.ozon.ru/product/3583351484"},{"name":"ZarGrad Battery Charger, 252 mm","brand":"ZarGrad","seller":"ZarGrad магазин","type":"启动充电装置","revenue":3634772,"sales":832,"avgPrice":4369,"url":"https://www.ozon.ru/product/3278699310"},{"name":"70mai Battery Charger, 10400 А•h, max 1000 A","brand":"70mai","seller":"70mai","type":"启动充电装置","revenue":3584377,"sales":696,"avgPrice":5150,"url":"https://www.ozon.ru/product/3424320452"},{"name":"DEKKERS Battery Charger, 22200 А•h, max 2000 A, 150 mm","brand":"DEKKERS","seller":"DEKKERS","type":"启动充电装置","revenue":3570101,"sales":683,"avgPrice":5227,"url":"https://www.ozon.ru/product/1674113201"},{"name":"Battery Charger, 27000 А•h, 255 mm","brand":"未知/无品牌","seller":"SHTERN","type":"启动充电装置","revenue":3556805,"sales":327,"avgPrice":10877,"url":"https://www.ozon.ru/product/2388788054"},{"name":"Battery Charger, 10000 А•h, max 1500 A, 150 mm","brand":"未知/无品牌","seller":"AVRORA","type":"启动充电装置","revenue":3463151,"sales":901,"avgPrice":3844,"url":"https://www.ozon.ru/product/3550118959"},{"name":"Battery Charger, 8000 А•h, 300 mm","brand":"未知/无品牌","seller":"POWKIT","type":"启动充电装置","revenue":3437215,"sales":1891,"avgPrice":1818,"url":"https://www.ozon.ru/product/3758309034"},{"name":"Даджет Battery Charger, 8000 А•h, max 400 A, 200 mm","brand":"Даджет","seller":"Даджет","type":"启动充电装置","revenue":2959626,"sales":1531,"avgPrice":1933,"url":"https://www.ozon.ru/product/231109759"},{"name":"Wellzoller Battery Charger, 20000 А•h, max 2500 A","brand":"Wellzoller","seller":"Wellzoller","type":"启动充电装置","revenue":2566686,"sales":395,"avgPrice":6498,"url":"https://www.ozon.ru/product/3497654924"},{"name":"CHOPPER Motorcycle Battery, 4 А•h, Reverse (-/+)","brand":"CHOPPER","seller":"Бэнг Компани Бэттери","type":"摩托车电池","revenue":2478567,"sales":2195,"avgPrice":1129,"url":"https://www.ozon.ru/product/1805716357"}],"operations":{"signRateMedian":0.88,"signRateCoverage":95,"stockoutMedian":28,"stockoutCoverage":94,"missedRevenue":25875081,"missedRevenueCoverage":95.2,"promoActiveShare":98.1,"promoCoverage":100,"adActiveShare":100,"adCoverage":100},"quality":{"level":"核心口径完整","salesCoverage":95.2,"missingSales":48,"missingAveragePrice":0,"missingBsr":625,"duplicateSku":80,"duplicateUrl":0,"uniqueSku":920,"urlCoverage":100},"insights":["头部品类“启动充电装置”贡献 52.9% 销售额；前五品类合计 100%。","销售额最集中的价格带是 2,000–5,000 ₽，覆盖 320 条商品记录，贡献 40.1% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 49.3% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 95.2%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

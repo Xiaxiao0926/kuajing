@@ -1,0 +1,520 @@
+{
+  "id": "generated-fasteners",
+  "label": "汽车紧固件",
+  "title": "Ozon 汽车紧固件市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23汽车紧固件_清洗版.xlsx",
+  "path": "reports/generated/fasteners/index.html",
+  "frameTitle": "Ozon 汽车紧固件市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 197689324,
+    "totalSales": 898404,
+    "unitRevenue": 220.05,
+    "typeCount": 29,
+    "brandCount": 195,
+    "sellerCount": 421
+  },
+  "topTypes": [
+    {
+      "name": "汽车贴膜",
+      "rows": 121,
+      "revenue": 49490057,
+      "sales": 143413,
+      "salesRows": 118,
+      "unitRevenue": 345.09,
+      "share": 25
+    },
+    {
+      "name": "汽车紧固夹",
+      "rows": 262,
+      "revenue": 42902714,
+      "sales": 238801,
+      "salesRows": 256,
+      "unitRevenue": 179.66,
+      "share": 21.7
+    },
+    {
+      "name": "汽车照明套件",
+      "rows": 51,
+      "revenue": 14397164,
+      "sales": 28256,
+      "salesRows": 51,
+      "unitRevenue": 509.53,
+      "share": 7.3
+    },
+    {
+      "name": "汽车装饰贴片",
+      "rows": 90,
+      "revenue": 13066171,
+      "sales": 64145,
+      "salesRows": 89,
+      "unitRevenue": 203.7,
+      "share": 6.6
+    },
+    {
+      "name": "汽车紧固件",
+      "rows": 69,
+      "revenue": 11554719,
+      "sales": 67395,
+      "salesRows": 67,
+      "unitRevenue": 171.45,
+      "share": 5.8
+    },
+    {
+      "name": "轮胎气门嘴帽",
+      "rows": 98,
+      "revenue": 11158109,
+      "sales": 117063,
+      "salesRows": 95,
+      "unitRevenue": 95.32,
+      "share": 5.6
+    },
+    {
+      "name": "汽车外部部件的保护",
+      "rows": 47,
+      "revenue": 8106166,
+      "sales": 33703,
+      "salesRows": 47,
+      "unitRevenue": 240.52,
+      "share": 4.1
+    },
+    {
+      "name": "汽车螺栓",
+      "rows": 42,
+      "revenue": 7377287,
+      "sales": 27619,
+      "salesRows": 42,
+      "unitRevenue": 267.11,
+      "share": 3.7
+    },
+    {
+      "name": "气门嘴",
+      "rows": 52,
+      "revenue": 7089541,
+      "sales": 62150,
+      "salesRows": 51,
+      "unitRevenue": 114.07,
+      "share": 3.6
+    },
+    {
+      "name": "汽车螺母",
+      "rows": 28,
+      "revenue": 6187039,
+      "sales": 18669,
+      "salesRows": 28,
+      "unitRevenue": 331.41,
+      "share": 3.1
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 436,
+      "revenue": 69270193,
+      "sales": 411745,
+      "salesRows": 425,
+      "unitRevenue": 168.24,
+      "share": 35
+    },
+    {
+      "name": "Road Pulse",
+      "rows": 103,
+      "revenue": 12921842,
+      "sales": 72033,
+      "salesRows": 103,
+      "unitRevenue": 179.39,
+      "share": 6.5
+    },
+    {
+      "name": "MTF Light",
+      "rows": 10,
+      "revenue": 6762474,
+      "sales": 8255,
+      "salesRows": 10,
+      "unitRevenue": 819.2,
+      "share": 3.4
+    },
+    {
+      "name": "MAAS",
+      "rows": 5,
+      "revenue": 5653016,
+      "sales": 10818,
+      "salesRows": 5,
+      "unitRevenue": 522.56,
+      "share": 2.9
+    },
+    {
+      "name": "A&V",
+      "rows": 12,
+      "revenue": 5401360,
+      "sales": 8306,
+      "salesRows": 12,
+      "unitRevenue": 650.3,
+      "share": 2.7
+    },
+    {
+      "name": "Best Choice",
+      "rows": 31,
+      "revenue": 4738195,
+      "sales": 27073,
+      "salesRows": 31,
+      "unitRevenue": 175.02,
+      "share": 2.4
+    },
+    {
+      "name": "IllumiCar",
+      "rows": 4,
+      "revenue": 4493374,
+      "sales": 2362,
+      "salesRows": 4,
+      "unitRevenue": 1902.36,
+      "share": 2.3
+    },
+    {
+      "name": "ROOTO",
+      "rows": 11,
+      "revenue": 3524585,
+      "sales": 20073,
+      "salesRows": 11,
+      "unitRevenue": 175.59,
+      "share": 1.8
+    },
+    {
+      "name": "PrimeParts",
+      "rows": 7,
+      "revenue": 2949988,
+      "sales": 8873,
+      "salesRows": 7,
+      "unitRevenue": 332.47,
+      "share": 1.5
+    },
+    {
+      "name": "Schneiden",
+      "rows": 3,
+      "revenue": 2645000,
+      "sales": 17551,
+      "salesRows": 3,
+      "unitRevenue": 150.7,
+      "share": 1.3
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Road Pulse",
+      "rows": 103,
+      "revenue": 12921842,
+      "sales": 72033,
+      "salesRows": 103,
+      "unitRevenue": 179.39,
+      "share": 6.5
+    },
+    {
+      "name": "OlimpAuto",
+      "rows": 9,
+      "revenue": 6517437,
+      "sales": 7956,
+      "salesRows": 9,
+      "unitRevenue": 819.19,
+      "share": 3.3
+    },
+    {
+      "name": "AutoWhirl",
+      "rows": 13,
+      "revenue": 5817280,
+      "sales": 8646,
+      "salesRows": 13,
+      "unitRevenue": 672.83,
+      "share": 2.9
+    },
+    {
+      "name": "Robbibon",
+      "rows": 4,
+      "revenue": 4938615,
+      "sales": 8693,
+      "salesRows": 4,
+      "unitRevenue": 568.11,
+      "share": 2.5
+    },
+    {
+      "name": "Pro.Store",
+      "rows": 31,
+      "revenue": 4738195,
+      "sales": 27073,
+      "salesRows": 31,
+      "unitRevenue": 175.02,
+      "share": 2.4
+    },
+    {
+      "name": "RILI",
+      "rows": 4,
+      "revenue": 4493374,
+      "sales": 2362,
+      "salesRows": 4,
+      "unitRevenue": 1902.36,
+      "share": 2.3
+    },
+    {
+      "name": "Автотовары и автокосметика",
+      "rows": 6,
+      "revenue": 3719099,
+      "sales": 10094,
+      "salesRows": 6,
+      "unitRevenue": 368.45,
+      "share": 1.9
+    },
+    {
+      "name": "АвтоФишка",
+      "rows": 11,
+      "revenue": 3524585,
+      "sales": 20073,
+      "salesRows": 11,
+      "unitRevenue": 175.59,
+      "share": 1.8
+    },
+    {
+      "name": "Мир-Market",
+      "rows": 5,
+      "revenue": 3087506,
+      "sales": 12692,
+      "salesRows": 5,
+      "unitRevenue": 243.26,
+      "share": 1.6
+    },
+    {
+      "name": "Оптима",
+      "rows": 9,
+      "revenue": 2959078,
+      "sales": 5731,
+      "salesRows": 9,
+      "unitRevenue": 516.33,
+      "share": 1.5
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 627,
+      "revenue": 85203206,
+      "sales": 656599,
+      "share": 43.1
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 238,
+      "revenue": 47077501,
+      "sales": 162092,
+      "share": 23.8
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 94,
+      "revenue": 38685172,
+      "sales": 61693,
+      "share": 19.6
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 37,
+      "revenue": 22821686,
+      "sales": 17216,
+      "share": 11.5
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 3,
+      "revenue": 2012795,
+      "sales": 449,
+      "share": 1
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 1,
+      "revenue": 1888964,
+      "sales": 355,
+      "share": 1
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "MAAS Car Film 3 mх75 cm",
+      "brand": "MAAS",
+      "seller": "Robbibon",
+      "type": "汽车贴膜",
+      "revenue": 2892874,
+      "sales": 5258,
+      "avgPrice": 550,
+      "url": "https://www.ozon.ru/product/1526804117"
+    },
+    {
+      "name": "Schneiden Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs",
+      "brand": "Schneiden",
+      "seller": "BBStore",
+      "type": "汽车紧固夹",
+      "revenue": 2470731,
+      "sales": 16217,
+      "avgPrice": 152,
+      "url": "https://www.ozon.ru/product/3854310964"
+    },
+    {
+      "name": "Car Film 3 mх50 cm",
+      "brand": "未知/无品牌",
+      "seller": "Автотовары и автокосметика",
+      "type": "汽车贴膜",
+      "revenue": 2250909,
+      "sales": 6587,
+      "avgPrice": 342,
+      "url": "https://www.ozon.ru/product/658680386"
+    },
+    {
+      "name": "Sell-Ti Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs",
+      "brand": "Sell-Ti",
+      "seller": "Sell-Ti",
+      "type": "汽车紧固夹",
+      "revenue": 2202118,
+      "sales": 17433,
+      "avgPrice": 126,
+      "url": "https://www.ozon.ru/product/1544427517"
+    },
+    {
+      "name": "MTF Light Car Film 3 mх50 cm",
+      "brand": "MTF Light",
+      "seller": "OlimpAuto",
+      "type": "汽车贴膜",
+      "revenue": 2066125,
+      "sales": 2827,
+      "avgPrice": 731,
+      "url": "https://www.ozon.ru/product/1783168451"
+    },
+    {
+      "name": "Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs",
+      "brand": "未知/无品牌",
+      "seller": "Tech Oasis",
+      "type": "汽车紧固夹",
+      "revenue": 2029730,
+      "sales": 15900,
+      "avgPrice": 128,
+      "url": "https://www.ozon.ru/product/2807174920"
+    },
+    {
+      "name": "BLAU DRIVE Car Film 1.5 mх30 cm",
+      "brand": "BLAU DRIVE",
+      "seller": "BLAU DRIVE",
+      "type": "汽车贴膜",
+      "revenue": 1958504,
+      "sales": 1374,
+      "avgPrice": 1425,
+      "url": "https://www.ozon.ru/product/1653759923"
+    },
+    {
+      "name": "Car Film 3 mх5 cm",
+      "brand": "未知/无品牌",
+      "seller": "Мистир",
+      "type": "汽车贴膜",
+      "revenue": 1946939,
+      "sales": 29569,
+      "avgPrice": 66,
+      "url": "https://www.ozon.ru/product/2080358045"
+    },
+    {
+      "name": "MTF Light Car Film 3 mх75 cm",
+      "brand": "MTF Light",
+      "seller": "OlimpAuto",
+      "type": "汽车贴膜",
+      "revenue": 1911179,
+      "sales": 1895,
+      "avgPrice": 1009,
+      "url": "https://www.ozon.ru/product/1783168395"
+    },
+    {
+      "name": "ELDEN LINE Car LED Backlight Kit",
+      "brand": "ELDEN LINE",
+      "seller": "ELDEN LINE",
+      "type": "汽车照明套件",
+      "revenue": 1888964,
+      "sales": 355,
+      "avgPrice": 5321,
+      "url": "https://www.ozon.ru/product/1503200083"
+    },
+    {
+      "name": "IllumiCar Car LED Backlight Kit",
+      "brand": "IllumiCar",
+      "seller": "RILI",
+      "type": "汽车照明套件",
+      "revenue": 1591605,
+      "sales": 1036,
+      "avgPrice": 1536,
+      "url": "https://www.ozon.ru/product/1590316681"
+    },
+    {
+      "name": "IllumiCar Car LED Backlight Kit",
+      "brand": "IllumiCar",
+      "seller": "RILI",
+      "type": "汽车照明套件",
+      "revenue": 1583306,
+      "sales": 449,
+      "avgPrice": 3526,
+      "url": "https://www.ozon.ru/product/1631824630"
+    },
+    {
+      "name": "Car Film 1 mх30 cm",
+      "brand": "未知/无品牌",
+      "seller": "Мир-Market",
+      "type": "汽车贴膜",
+      "revenue": 1376125,
+      "sales": 6550,
+      "avgPrice": 210,
+      "url": "https://www.ozon.ru/product/1634005585"
+    },
+    {
+      "name": "PrimeParts Car Mounting Clip M10 x 1.5, 10 mm, 100 pcs",
+      "brand": "PrimeParts",
+      "seller": "A&B",
+      "type": "汽车紧固夹",
+      "revenue": 1300996,
+      "sales": 5850,
+      "avgPrice": 222,
+      "url": "https://www.ozon.ru/product/631663147"
+    },
+    {
+      "name": "Solartek Car Film 1 mх30 cm",
+      "brand": "Solartek",
+      "seller": "Пленки",
+      "type": "汽车贴膜",
+      "revenue": 1297097,
+      "sales": 2507,
+      "avgPrice": 517,
+      "url": "https://www.ozon.ru/product/3543432177"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.9359999999999999,
+    "signRateCoverage": 98.2,
+    "stockoutMedian": 28,
+    "stockoutCoverage": 96.2,
+    "missedRevenue": 2841293,
+    "missedRevenueCoverage": 98.4,
+    "promoActiveShare": 100,
+    "promoCoverage": 100,
+    "adActiveShare": 100,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 98.4,
+    "missingSales": 16,
+    "missingAveragePrice": 0,
+    "missingBsr": 305,
+    "duplicateSku": 15,
+    "duplicateUrl": 0,
+    "uniqueSku": 985,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“汽车贴膜”贡献 25% 销售额；前五品类合计 66.5%。",
+    "销售额最集中的价格带是 <200 ₽，覆盖 627 条商品记录，贡献 43.1% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 59.9% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 98.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

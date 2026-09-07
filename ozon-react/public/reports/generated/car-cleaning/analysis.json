@@ -1,0 +1,511 @@
+{
+  "id": "generated-car-cleaning",
+  "label": "汽车清洁",
+  "title": "Ozon 汽车清洁市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23汽车清洁_清洗版.xlsx",
+  "path": "reports/generated/car-cleaning/index.html",
+  "frameTitle": "Ozon 汽车清洁市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 162756185,
+    "totalSales": 617135,
+    "unitRevenue": 263.73,
+    "typeCount": 9,
+    "brandCount": 210,
+    "sellerCount": 529
+  },
+  "topTypes": [
+    {
+      "name": "擦车布",
+      "rows": 384,
+      "revenue": 86765997,
+      "sales": 269400,
+      "salesRows": 373,
+      "unitRevenue": 322.07,
+      "share": 53.3
+    },
+    {
+      "name": "汽车刷子",
+      "rows": 206,
+      "revenue": 26351067,
+      "sales": 81700,
+      "salesRows": 192,
+      "unitRevenue": 322.53,
+      "share": 16.2
+    },
+    {
+      "name": "汽车海绵",
+      "rows": 154,
+      "revenue": 19052910,
+      "sales": 100207,
+      "salesRows": 150,
+      "unitRevenue": 190.14,
+      "share": 11.7
+    },
+    {
+      "name": "汽车细节刷",
+      "rows": 111,
+      "revenue": 15784289,
+      "sales": 100455,
+      "salesRows": 105,
+      "unitRevenue": 157.13,
+      "share": 9.7
+    },
+    {
+      "name": "洗车刮水板",
+      "rows": 72,
+      "revenue": 6920831,
+      "sales": 28903,
+      "salesRows": 69,
+      "unitRevenue": 239.45,
+      "share": 4.3
+    },
+    {
+      "name": "汽车专用湿纸巾",
+      "rows": 17,
+      "revenue": 3836558,
+      "sales": 16739,
+      "salesRows": 17,
+      "unitRevenue": 229.2,
+      "share": 2.4
+    },
+    {
+      "name": "洗车手套",
+      "rows": 42,
+      "revenue": 3505627,
+      "sales": 16096,
+      "salesRows": 40,
+      "unitRevenue": 217.79,
+      "share": 2.2
+    },
+    {
+      "name": "汽车刮刀",
+      "rows": 12,
+      "revenue": 445692,
+      "sales": 3166,
+      "salesRows": 12,
+      "unitRevenue": 140.77,
+      "share": 0.3
+    },
+    {
+      "name": "未分类",
+      "rows": 2,
+      "revenue": 93214,
+      "sales": 469,
+      "salesRows": 2,
+      "unitRevenue": 198.75,
+      "share": 0.1
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 408,
+      "revenue": 36859181,
+      "sales": 185874,
+      "salesRows": 379,
+      "unitRevenue": 198.3,
+      "share": 22.6
+    },
+    {
+      "name": "Ultragloss",
+      "rows": 9,
+      "revenue": 16101455,
+      "sales": 39134,
+      "salesRows": 8,
+      "unitRevenue": 411.44,
+      "share": 9.9
+    },
+    {
+      "name": "AutoForce",
+      "rows": 4,
+      "revenue": 12667382,
+      "sales": 21084,
+      "salesRows": 3,
+      "unitRevenue": 600.81,
+      "share": 7.8
+    },
+    {
+      "name": "Detail",
+      "rows": 23,
+      "revenue": 12166961,
+      "sales": 26637,
+      "salesRows": 21,
+      "unitRevenue": 456.77,
+      "share": 7.5
+    },
+    {
+      "name": "Shine Systems",
+      "rows": 31,
+      "revenue": 4126632,
+      "sales": 16330,
+      "salesRows": 31,
+      "unitRevenue": 252.7,
+      "share": 2.5
+    },
+    {
+      "name": "AVS",
+      "rows": 19,
+      "revenue": 4041489,
+      "sales": 17885,
+      "salesRows": 19,
+      "unitRevenue": 225.97,
+      "share": 2.5
+    },
+    {
+      "name": "Top Gear",
+      "rows": 16,
+      "revenue": 3919598,
+      "sales": 16027,
+      "salesRows": 16,
+      "unitRevenue": 244.56,
+      "share": 2.4
+    },
+    {
+      "name": "Braucher",
+      "rows": 2,
+      "revenue": 3862737,
+      "sales": 11449,
+      "salesRows": 2,
+      "unitRevenue": 337.39,
+      "share": 2.4
+    },
+    {
+      "name": "Pure Finish",
+      "rows": 4,
+      "revenue": 3614844,
+      "sales": 12454,
+      "salesRows": 4,
+      "unitRevenue": 290.26,
+      "share": 2.2
+    },
+    {
+      "name": "Touchless",
+      "rows": 26,
+      "revenue": 3346809,
+      "sales": 8978,
+      "salesRows": 26,
+      "unitRevenue": 372.78,
+      "share": 2.1
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "RD-SHOP",
+      "rows": 7,
+      "revenue": 13019654,
+      "sales": 31097,
+      "salesRows": 6,
+      "unitRevenue": 418.68,
+      "share": 8
+    },
+    {
+      "name": "AutoForce",
+      "rows": 4,
+      "revenue": 12667382,
+      "sales": 21084,
+      "salesRows": 3,
+      "unitRevenue": 600.81,
+      "share": 7.8
+    },
+    {
+      "name": "Ozon",
+      "rows": 26,
+      "revenue": 9458400,
+      "sales": 27333,
+      "salesRows": 24,
+      "unitRevenue": 346.04,
+      "share": 5.8
+    },
+    {
+      "name": "GRASS - завод производитель",
+      "rows": 8,
+      "revenue": 5461343,
+      "sales": 13277,
+      "salesRows": 8,
+      "unitRevenue": 411.34,
+      "share": 3.4
+    },
+    {
+      "name": "Shine Systems - завод производитель",
+      "rows": 29,
+      "revenue": 4068376,
+      "sales": 16138,
+      "salesRows": 29,
+      "unitRevenue": 252.1,
+      "share": 2.5
+    },
+    {
+      "name": "AVS - Официальный магазин",
+      "rows": 15,
+      "revenue": 3906297,
+      "sales": 17084,
+      "salesRows": 15,
+      "unitRevenue": 228.65,
+      "share": 2.4
+    },
+    {
+      "name": "PetPaw",
+      "rows": 3,
+      "revenue": 3895020,
+      "sales": 11541,
+      "salesRows": 3,
+      "unitRevenue": 337.49,
+      "share": 2.4
+    },
+    {
+      "name": "ZaRi",
+      "rows": 4,
+      "revenue": 3614844,
+      "sales": 12454,
+      "salesRows": 4,
+      "unitRevenue": 290.26,
+      "share": 2.2
+    },
+    {
+      "name": "Touchless",
+      "rows": 26,
+      "revenue": 3346809,
+      "sales": 8978,
+      "salesRows": 26,
+      "unitRevenue": 372.78,
+      "share": 2.1
+    },
+    {
+      "name": "Авангард Маркет",
+      "rows": 5,
+      "revenue": 3131950,
+      "sales": 12955,
+      "salesRows": 5,
+      "unitRevenue": 241.76,
+      "share": 1.9
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 452,
+      "revenue": 43492337,
+      "sales": 323423,
+      "share": 26.7
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 413,
+      "revenue": 75497069,
+      "sales": 234202,
+      "share": 46.4
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 100,
+      "revenue": 34618518,
+      "sales": 53323,
+      "share": 21.3
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 32,
+      "revenue": 8201064,
+      "sales": 5961,
+      "share": 5
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 3,
+      "revenue": 947197,
+      "sales": 226,
+      "share": 0.6
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 0,
+      "revenue": 0,
+      "sales": 0,
+      "share": 0
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "AutoForce Car Cloth, 1 pcs",
+      "brand": "AutoForce",
+      "seller": "AutoForce",
+      "type": "擦车布",
+      "revenue": 9647538,
+      "sales": 14704,
+      "avgPrice": 656,
+      "url": "https://www.ozon.ru/product/1028774336"
+    },
+    {
+      "name": "Ultragloss Car Cloth, 2 pcs",
+      "brand": "Ultragloss",
+      "seller": "RD-SHOP",
+      "type": "擦车布",
+      "revenue": 4133436,
+      "sales": 7434,
+      "avgPrice": 556,
+      "url": "https://www.ozon.ru/product/1849498945"
+    },
+    {
+      "name": "МЛ Текс Car Cloth, 3 pcs",
+      "brand": "МЛ Текс",
+      "seller": "Digital Market",
+      "type": "擦车布",
+      "revenue": 2628666,
+      "sales": 5923,
+      "avgPrice": 444,
+      "url": "https://www.ozon.ru/product/1270124471"
+    },
+    {
+      "name": "Ultragloss Car Cloth, 1 pcs",
+      "brand": "Ultragloss",
+      "seller": "RD-SHOP",
+      "type": "擦车布",
+      "revenue": 2239033,
+      "sales": 6226,
+      "avgPrice": 360,
+      "url": "https://www.ozon.ru/product/2819421565"
+    },
+    {
+      "name": "Ultragloss Car Cloth, 2 pcs",
+      "brand": "Ultragloss",
+      "seller": "Ultragloss Market",
+      "type": "擦车布",
+      "revenue": 2197459,
+      "sales": 6619,
+      "avgPrice": 332,
+      "url": "https://www.ozon.ru/product/2086953385"
+    },
+    {
+      "name": "Ultragloss Car Cloth, 1 pcs",
+      "brand": "Ultragloss",
+      "seller": "RD-SHOP",
+      "type": "擦车布",
+      "revenue": 2194921,
+      "sales": 5506,
+      "avgPrice": 399,
+      "url": "https://www.ozon.ru/product/1855718345"
+    },
+    {
+      "name": "Braucher Car Cloth, 4 pcs",
+      "brand": "Braucher",
+      "seller": "PetPaw",
+      "type": "擦车布",
+      "revenue": 2090745,
+      "sales": 7695,
+      "avgPrice": 272,
+      "url": "https://www.ozon.ru/product/1554738129"
+    },
+    {
+      "name": "Braucher Car Cloth, 10 pcs",
+      "brand": "Braucher",
+      "seller": "PetPaw",
+      "type": "擦车布",
+      "revenue": 1771992,
+      "sales": 3754,
+      "avgPrice": 472,
+      "url": "https://www.ozon.ru/product/3518031663"
+    },
+    {
+      "name": "Ultragloss Car Cloth, 1 pcs",
+      "brand": "Ultragloss",
+      "seller": "RD-SHOP",
+      "type": "擦车布",
+      "revenue": 1714907,
+      "sales": 2803,
+      "avgPrice": 612,
+      "url": "https://www.ozon.ru/product/3145494309"
+    },
+    {
+      "name": "AutoForce Car Cloth, 1 pcs",
+      "brand": "AutoForce",
+      "seller": "AutoForce",
+      "type": "擦车布",
+      "revenue": 1553262,
+      "sales": 3333,
+      "avgPrice": 466,
+      "url": "https://www.ozon.ru/product/1028780787"
+    },
+    {
+      "name": "Ultragloss Car Cloth, 2 pcs",
+      "brand": "Ultragloss",
+      "seller": "RD-SHOP",
+      "type": "擦车布",
+      "revenue": 1534020,
+      "sales": 3963,
+      "avgPrice": 387,
+      "url": "https://www.ozon.ru/product/2819388930"
+    },
+    {
+      "name": "Detail Car Cloth, 1 pcs",
+      "brand": "Detail",
+      "seller": "GRASS - завод производитель",
+      "type": "擦车布",
+      "revenue": 1396872,
+      "sales": 3093,
+      "avgPrice": 452,
+      "url": "https://www.ozon.ru/product/1606541126"
+    },
+    {
+      "name": "Detail Car Cloth, 1 pcs",
+      "brand": "Detail",
+      "seller": "Ozon",
+      "type": "擦车布",
+      "revenue": 1339703,
+      "sales": 1900,
+      "avgPrice": 705,
+      "url": "https://www.ozon.ru/product/239596129"
+    },
+    {
+      "name": "AutoForce Auto Detailing Brush, 3 pcs",
+      "brand": "AutoForce",
+      "seller": "AutoForce",
+      "type": "汽车细节刷",
+      "revenue": 1135127,
+      "sales": 3047,
+      "avgPrice": 373,
+      "url": "https://www.ozon.ru/product/1652943118"
+    },
+    {
+      "name": "Pure Finish Car Cloth, 1 pcs",
+      "brand": "Pure Finish",
+      "seller": "ZaRi",
+      "type": "擦车布",
+      "revenue": 1128455,
+      "sales": 4605,
+      "avgPrice": 245,
+      "url": "https://www.ozon.ru/product/4320397804"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.9359999999999999,
+    "signRateCoverage": 93.6,
+    "stockoutMedian": 28,
+    "stockoutCoverage": 83.9,
+    "missedRevenue": 2973087,
+    "missedRevenueCoverage": 96,
+    "promoActiveShare": 99,
+    "promoCoverage": 100,
+    "adActiveShare": 100,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 96,
+    "missingSales": 40,
+    "missingAveragePrice": 0,
+    "missingBsr": 741,
+    "duplicateSku": 18,
+    "duplicateUrl": 0,
+    "uniqueSku": 980,
+    "urlCoverage": 99.8
+  },
+  "insights": [
+    "头部品类“擦车布”贡献 53.3% 销售额；前五品类合计 95.2%。",
+    "销售额最集中的价格带是 200–500 ₽，覆盖 413 条商品记录，贡献 46.4% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 61.9% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 96%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

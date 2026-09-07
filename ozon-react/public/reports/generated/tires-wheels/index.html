@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 轮胎与轮毂市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>轮胎与轮毂市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-23</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">497.6 百万 ₽</span><span class="hint">约 38.3 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">105.8 千 件</span><span class="hint">覆盖 93.4% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">4,701 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">11</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">126 / 192</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>可用，需留意缺失</strong><p>销售额字段用于主分析；销量缺失 66 条，均价缺失 0 条，BSR 标签缺失 0 条。SKU 重复 50 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“乘用车轮胎”贡献 72.4% 销售额；前五品类合计 95.9%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 ≥5,000 ₽，覆盖 381 条商品记录，贡献 53.4% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 61% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>乘用车轮胎</td><td class="number">561</td><td class="number">360,428,707</td><td class="number">70,776</td><td class="number">72.4%</td></tr>
+    <tr><td>2</td><td>轮圈</td><td class="number">87</td><td class="number">43,249,608</td><td class="number">6,908</td><td class="number">8.7%</td></tr>
+    <tr><td>3</td><td>摩托车轮胎</td><td class="number">132</td><td class="number">41,405,620</td><td class="number">9,698</td><td class="number">8.3%</td></tr>
+    <tr><td>4</td><td>越野车轮胎</td><td class="number">36</td><td class="number">21,071,896</td><td class="number">2,241</td><td class="number">4.2%</td></tr>
+    <tr><td>5</td><td>车轮垫片</td><td class="number">135</td><td class="number">11,110,604</td><td class="number">12,702</td><td class="number">2.2%</td></tr>
+    <tr><td>6</td><td>全地形车轮胎</td><td class="number">16</td><td class="number">5,492,849</td><td class="number">1,045</td><td class="number">1.1%</td></tr>
+    <tr><td>7</td><td>商用车轮胎</td><td class="number">10</td><td class="number">5,373,553</td><td class="number">914</td><td class="number">1.1%</td></tr>
+    <tr><td>8</td><td>卡车轮胎</td><td class="number">7</td><td class="number">3,796,020</td><td class="number">392</td><td class="number">0.8%</td></tr>
+    <tr><td>9</td><td>园艺设备轮胎</td><td class="number">8</td><td class="number">2,631,214</td><td class="number">645</td><td class="number">0.5%</td></tr>
+    <tr><td>10</td><td>车轮总成</td><td class="number">4</td><td class="number">1,580,013</td><td class="number">325</td><td class="number">0.3%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">88.4%</div><div class="coverage">字段覆盖 91.9%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">25 天</div><div class="coverage">字段覆盖 79%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">55%</div><div class="coverage">字段覆盖 93.4%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">37%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3201385884" target="_blank" rel="noreferrer">Trazano Tire summer 185/65 R15 88H</a></td>
+      <td>乘用车轮胎</td>
+      <td>Trazano</td>
+      <td class="number">4,119,729</td>
+      <td class="number">1,164</td>
+      <td class="number">3,539</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1713206728" target="_blank" rel="noreferrer">Triangle Tire summer 225/45 R18 95Y</a></td>
+      <td>乘用车轮胎</td>
+      <td>Triangle</td>
+      <td class="number">3,723,754</td>
+      <td class="number">629</td>
+      <td class="number">5,920</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3626798464" target="_blank" rel="noreferrer">Sailun Tire summer 195/65 R15 95H</a></td>
+      <td>乘用车轮胎</td>
+      <td>Sailun</td>
+      <td class="number">3,130,475</td>
+      <td class="number">802</td>
+      <td class="number">3,903</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1539424648" target="_blank" rel="noreferrer">Hankook Tire summer 185/65 R15 92T</a></td>
+      <td>乘用车轮胎</td>
+      <td>Hankook</td>
+      <td class="number">3,032,455</td>
+      <td class="number">686</td>
+      <td class="number">4,420</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1711713657" target="_blank" rel="noreferrer">Triangle Tire summer 205/50 R17 93Y</a></td>
+      <td>乘用车轮胎</td>
+      <td>Triangle</td>
+      <td class="number">3,013,936</td>
+      <td class="number">576</td>
+      <td class="number">5,233</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3624226194" target="_blank" rel="noreferrer">Sailun Tire summer 205/55 R16 94V</a></td>
+      <td>乘用车轮胎</td>
+      <td>Sailun</td>
+      <td class="number">2,990,710</td>
+      <td class="number">696</td>
+      <td class="number">4,297</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1713319288" target="_blank" rel="noreferrer">Triangle Tire summer 225/40 R18 92Y</a></td>
+      <td>乘用车轮胎</td>
+      <td>Triangle</td>
+      <td class="number">2,986,606</td>
+      <td class="number">535</td>
+      <td class="number">5,582</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/435753302" target="_blank" rel="noreferrer">Viatti Tire summer 185/65 R15 92V</a></td>
+      <td>乘用车轮胎</td>
+      <td>Viatti</td>
+      <td class="number">2,883,703</td>
+      <td class="number">746</td>
+      <td class="number">3,866</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1621899010" target="_blank" rel="noreferrer">ROYAL BLACK Tire winter 225/55 R19 103T</a></td>
+      <td>乘用车轮胎</td>
+      <td>ROYAL BLACK</td>
+      <td class="number">2,749,517</td>
+      <td class="number">307</td>
+      <td class="number">8,956</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/2000035221" target="_blank" rel="noreferrer">Pirelli Tire summer 185/65 R15 92H</a></td>
+      <td>乘用车轮胎</td>
+      <td>Pirelli</td>
+      <td class="number">2,724,808</td>
+      <td class="number">514</td>
+      <td class="number">5,301</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/3692272527" target="_blank" rel="noreferrer">Kumho Tire summer 205/55 R16 91H</a></td>
+      <td>乘用车轮胎</td>
+      <td>Kumho</td>
+      <td class="number">2,722,413</td>
+      <td class="number">703</td>
+      <td class="number">3,873</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1711713670" target="_blank" rel="noreferrer">Triangle Tire summer 225/55 R17 101Y</a></td>
+      <td>乘用车轮胎</td>
+      <td>Triangle</td>
+      <td class="number">2,699,918</td>
+      <td class="number">440</td>
+      <td class="number">6,136</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1711713592" target="_blank" rel="noreferrer">Triangle Tire summer 225/45 R17 94Y</a></td>
+      <td>乘用车轮胎</td>
+      <td>Triangle</td>
+      <td class="number">2,621,600</td>
+      <td class="number">470</td>
+      <td class="number">5,578</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1711713655" target="_blank" rel="noreferrer">Triangle Tire summer 215/50 R17 95Y</a></td>
+      <td>乘用车轮胎</td>
+      <td>Triangle</td>
+      <td class="number">2,616,205</td>
+      <td class="number">473</td>
+      <td class="number">5,531</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1713208388" target="_blank" rel="noreferrer">Triangle Tire summer 235/45 R18 98Y</a></td>
+      <td>乘用车轮胎</td>
+      <td>Triangle</td>
+      <td class="number">2,594,684</td>
+      <td class="number">413</td>
+      <td class="number">6,283</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-23轮胎轮毂_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-tires-wheels","label":"轮胎与轮毂","title":"Ozon 轮胎与轮毂市场分析","group":"汽车生态","snapshot":"2026-07-23","sourceFile":"ozon-2026-07-23轮胎轮毂_清洗版.xlsx","path":"reports/generated/tires-wheels/index.html","frameTitle":"Ozon 轮胎与轮毂市场分析报告","kpis":{"rowCount":1000,"totalRevenue":497637606,"totalSales":105849,"unitRevenue":4701.39,"typeCount":11,"brandCount":126,"sellerCount":192},"topTypes":[{"name":"乘用车轮胎","rows":561,"revenue":360428707,"sales":70776,"salesRows":516,"unitRevenue":5092.53,"share":72.4},{"name":"轮圈","rows":87,"revenue":43249608,"sales":6908,"salesRows":79,"unitRevenue":6260.8,"share":8.7},{"name":"摩托车轮胎","rows":132,"revenue":41405620,"sales":9698,"salesRows":125,"unitRevenue":4269.5,"share":8.3},{"name":"越野车轮胎","rows":36,"revenue":21071896,"sales":2241,"salesRows":33,"unitRevenue":9402.9,"share":4.2},{"name":"车轮垫片","rows":135,"revenue":11110604,"sales":12702,"salesRows":134,"unitRevenue":874.71,"share":2.2},{"name":"全地形车轮胎","rows":16,"revenue":5492849,"sales":1045,"salesRows":16,"unitRevenue":5256.31,"share":1.1},{"name":"商用车轮胎","rows":10,"revenue":5373553,"sales":914,"salesRows":9,"unitRevenue":5879.16,"share":1.1},{"name":"卡车轮胎","rows":7,"revenue":3796020,"sales":392,"salesRows":6,"unitRevenue":9683.72,"share":0.8},{"name":"园艺设备轮胎","rows":8,"revenue":2631214,"sales":645,"salesRows":8,"unitRevenue":4079.4,"share":0.5},{"name":"车轮总成","rows":4,"revenue":1580013,"sales":325,"salesRows":4,"unitRevenue":4861.58,"share":0.3}],"topBrands":[{"name":"Triangle","rows":50,"revenue":60814494,"sales":9471,"salesRows":50,"unitRevenue":6421.13,"share":12.2},{"name":"Sailun","rows":70,"revenue":52648849,"sales":12619,"salesRows":68,"unitRevenue":4172.19,"share":10.6},{"name":"Trazano","rows":44,"revenue":39285256,"sales":9168,"salesRows":41,"unitRevenue":4285.04,"share":7.9},{"name":"КАМА","rows":44,"revenue":32154582,"sales":7593,"salesRows":44,"unitRevenue":4234.77,"share":6.5},{"name":"Pirelli","rows":43,"revenue":29928242,"sales":3921,"salesRows":41,"unitRevenue":7632.81,"share":6},{"name":"Cordiant","rows":54,"revenue":21363556,"sales":4327,"salesRows":48,"unitRevenue":4937.27,"share":4.3},{"name":"MICHELIN","rows":22,"revenue":19394742,"sales":1470,"salesRows":19,"unitRevenue":13193.7,"share":3.9},{"name":"Viatti","rows":30,"revenue":18481472,"sales":4080,"salesRows":30,"unitRevenue":4529.77,"share":3.7},{"name":"ROYAL BLACK","rows":14,"revenue":15311333,"sales":2606,"salesRows":13,"unitRevenue":5875.42,"share":3.1},{"name":"未知/无品牌","rows":80,"revenue":14340823,"sales":6152,"salesRows":75,"unitRevenue":2331.08,"share":2.9}],"topSellers":[{"name":"Black Dragon","rows":95,"revenue":100720331,"sales":18813,"salesRows":91,"unitRevenue":5353.76,"share":20.2},{"name":"Официальный магазин KAMATYRES","rows":71,"revenue":50086588,"sales":11660,"salesRows":71,"unitRevenue":4295.59,"share":10.1},{"name":"Шинные Решения","rows":59,"revenue":30827665,"sales":5957,"salesRows":58,"unitRevenue":5175.03,"share":6.2},{"name":"Римэкс","rows":46,"revenue":27849393,"sales":3368,"salesRows":38,"unitRevenue":8268.82,"share":5.6},{"name":"ШиноРама","rows":36,"revenue":19452802,"sales":3515,"salesRows":31,"unitRevenue":5534.23,"share":3.9},{"name":"ОРИОН-ТАЙР","rows":15,"revenue":17738844,"sales":4213,"salesRows":15,"unitRevenue":4210.5,"share":3.6},{"name":"YILIAN4","rows":15,"revenue":16986074,"sales":1401,"salesRows":15,"unitRevenue":12124.25,"share":3.4},{"name":"ПИН АВТО","rows":25,"revenue":14460503,"sales":3004,"salesRows":24,"unitRevenue":4813.75,"share":2.9},{"name":"BShina","rows":17,"revenue":12297128,"sales":1263,"salesRows":16,"unitRevenue":9736.44,"share":2.5},{"name":"ПРОТЕКТОР ГРУПП","rows":12,"revenue":11163161,"sales":2969,"salesRows":12,"unitRevenue":3759.91,"share":2.2}],"priceBands":[{"label":"<200 ₽","rows":65,"revenue":22062089,"sales":0,"share":4.4},{"label":"200–500 ₽","rows":65,"revenue":3011345,"sales":7471,"share":0.6},{"label":"500–1,000 ₽","rows":34,"revenue":2063211,"sales":3111,"share":0.4},{"label":"1,000–2,000 ₽","rows":35,"revenue":5976683,"sales":3525,"share":1.2},{"label":"2,000–5,000 ₽","rows":420,"revenue":198869889,"sales":55304,"share":40},{"label":"≥5,000 ₽","rows":381,"revenue":265654389,"sales":36438,"share":53.4}],"topProducts":[{"name":"Trazano Tire summer 185/65 R15 88H","brand":"Trazano","seller":"Black Dragon","type":"乘用车轮胎","revenue":4119729,"sales":1164,"avgPrice":3539,"url":"https://www.ozon.ru/product/3201385884"},{"name":"Triangle Tire summer 225/45 R18 95Y","brand":"Triangle","seller":"Black Dragon","type":"乘用车轮胎","revenue":3723754,"sales":629,"avgPrice":5920,"url":"https://www.ozon.ru/product/1713206728"},{"name":"Sailun Tire summer 195/65 R15 95H","brand":"Sailun","seller":"МАРКЕТ-МЕЛОДИЯ","type":"乘用车轮胎","revenue":3130475,"sales":802,"avgPrice":3903,"url":"https://www.ozon.ru/product/3626798464"},{"name":"Hankook Tire summer 185/65 R15 92T","brand":"Hankook","seller":"ПИН АВТО","type":"乘用车轮胎","revenue":3032455,"sales":686,"avgPrice":4420,"url":"https://www.ozon.ru/product/1539424648"},{"name":"Triangle Tire summer 205/50 R17 93Y","brand":"Triangle","seller":"Black Dragon","type":"乘用车轮胎","revenue":3013936,"sales":576,"avgPrice":5233,"url":"https://www.ozon.ru/product/1711713657"},{"name":"Sailun Tire summer 205/55 R16 94V","brand":"Sailun","seller":"ОРИОН-ТАЙР","type":"乘用车轮胎","revenue":2990710,"sales":696,"avgPrice":4297,"url":"https://www.ozon.ru/product/3624226194"},{"name":"Triangle Tire summer 225/40 R18 92Y","brand":"Triangle","seller":"Black Dragon","type":"乘用车轮胎","revenue":2986606,"sales":535,"avgPrice":5582,"url":"https://www.ozon.ru/product/1713319288"},{"name":"Viatti Tire summer 185/65 R15 92V","brand":"Viatti","seller":"Официальный магазин KAMATYRES","type":"乘用车轮胎","revenue":2883703,"sales":746,"avgPrice":3866,"url":"https://www.ozon.ru/product/435753302"},{"name":"ROYAL BLACK Tire winter 225/55 R19 103T","brand":"ROYAL BLACK","seller":"Римэкс","type":"乘用车轮胎","revenue":2749517,"sales":307,"avgPrice":8956,"url":"https://www.ozon.ru/product/1621899010"},{"name":"Pirelli Tire summer 185/65 R15 92H","brand":"Pirelli","seller":"Шинные Решения","type":"乘用车轮胎","revenue":2724808,"sales":514,"avgPrice":5301,"url":"https://www.ozon.ru/product/2000035221"},{"name":"Kumho Tire summer 205/55 R16 91H","brand":"Kumho","seller":"Ozon","type":"乘用车轮胎","revenue":2722413,"sales":703,"avgPrice":3873,"url":"https://www.ozon.ru/product/3692272527"},{"name":"Triangle Tire summer 225/55 R17 101Y","brand":"Triangle","seller":"Black Dragon","type":"乘用车轮胎","revenue":2699918,"sales":440,"avgPrice":6136,"url":"https://www.ozon.ru/product/1711713670"},{"name":"Triangle Tire summer 225/45 R17 94Y","brand":"Triangle","seller":"Black Dragon","type":"乘用车轮胎","revenue":2621600,"sales":470,"avgPrice":5578,"url":"https://www.ozon.ru/product/1711713592"},{"name":"Triangle Tire summer 215/50 R17 95Y","brand":"Triangle","seller":"Black Dragon","type":"乘用车轮胎","revenue":2616205,"sales":473,"avgPrice":5531,"url":"https://www.ozon.ru/product/1711713655"},{"name":"Triangle Tire summer 235/45 R18 98Y","brand":"Triangle","seller":"Black Dragon","type":"乘用车轮胎","revenue":2594684,"sales":413,"avgPrice":6283,"url":"https://www.ozon.ru/product/1713208388"}],"operations":{"signRateMedian":0.884,"signRateCoverage":91.9,"stockoutMedian":25,"stockoutCoverage":79,"missedRevenue":51531827.4,"missedRevenueCoverage":99.9,"promoActiveShare":55,"promoCoverage":93.4,"adActiveShare":37,"adCoverage":100},"quality":{"level":"可用，需留意缺失","salesCoverage":93.4,"missingSales":66,"missingAveragePrice":0,"missingBsr":0,"duplicateSku":50,"duplicateUrl":0,"uniqueSku":950,"urlCoverage":100},"insights":["头部品类“乘用车轮胎”贡献 72.4% 销售额；前五品类合计 95.9%。","销售额最集中的价格带是 ≥5,000 ₽，覆盖 381 条商品记录，贡献 53.4% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 61% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

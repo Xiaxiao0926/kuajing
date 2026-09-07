@@ -1,0 +1,520 @@
+{
+  "id": "generated-automotive",
+  "label": "汽车综合",
+  "title": "Ozon 汽车综合市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-22",
+  "sourceFile": "ozon-2026-07-22汽车_清洗版.xlsx",
+  "path": "reports/generated/automotive/index.html",
+  "frameTitle": "Ozon 汽车综合市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 2164069784,
+    "totalSales": 5191588,
+    "unitRevenue": 416.84,
+    "typeCount": 148,
+    "brandCount": 273,
+    "sellerCount": 502
+  },
+  "topTypes": [
+    {
+      "name": "燃油桶",
+      "rows": 51,
+      "revenue": 583578399,
+      "sales": 300290,
+      "salesRows": 40,
+      "unitRevenue": 1943.38,
+      "share": 27
+    },
+    {
+      "name": "发动机油",
+      "rows": 43,
+      "revenue": 226208528,
+      "sales": 190823,
+      "salesRows": 43,
+      "unitRevenue": 1185.44,
+      "share": 10.5
+    },
+    {
+      "name": "汽车芳香剂",
+      "rows": 49,
+      "revenue": 74389210,
+      "sales": 366391,
+      "salesRows": 49,
+      "unitRevenue": 203.03,
+      "share": 3.4
+    },
+    {
+      "name": "汽车添加剂",
+      "rows": 22,
+      "revenue": 72829146,
+      "sales": 109073,
+      "salesRows": 22,
+      "unitRevenue": 667.71,
+      "share": 3.4
+    },
+    {
+      "name": "汽车洗车液",
+      "rows": 19,
+      "revenue": 59521660,
+      "sales": 109523,
+      "salesRows": 19,
+      "unitRevenue": 543.46,
+      "share": 2.8
+    },
+    {
+      "name": "汽车抛光蜡",
+      "rows": 35,
+      "revenue": 57355128,
+      "sales": 196290,
+      "salesRows": 35,
+      "unitRevenue": 292.2,
+      "share": 2.7
+    },
+    {
+      "name": "汽车润滑剂",
+      "rows": 44,
+      "revenue": 50942699,
+      "sales": 194155,
+      "salesRows": 43,
+      "unitRevenue": 262.38,
+      "share": 2.4
+    },
+    {
+      "name": "擦车布",
+      "rows": 29,
+      "revenue": 45349219,
+      "sales": 141512,
+      "salesRows": 29,
+      "unitRevenue": 320.46,
+      "share": 2.1
+    },
+    {
+      "name": "工业漏斗",
+      "rows": 28,
+      "revenue": 42959181,
+      "sales": 150511,
+      "salesRows": 27,
+      "unitRevenue": 285.42,
+      "share": 2
+    },
+    {
+      "name": "汽车压缩机",
+      "rows": 7,
+      "revenue": 42358072,
+      "sales": 23093,
+      "salesRows": 6,
+      "unitRevenue": 1834.24,
+      "share": 2
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 280,
+      "revenue": 381695928,
+      "sales": 1517915,
+      "salesRows": 267,
+      "unitRevenue": 251.46,
+      "share": 17.6
+    },
+    {
+      "name": "3TON",
+      "rows": 30,
+      "revenue": 320585188,
+      "sales": 284455,
+      "salesRows": 30,
+      "unitRevenue": 1127.02,
+      "share": 14.8
+    },
+    {
+      "name": "Grass",
+      "rows": 54,
+      "revenue": 122890502,
+      "sales": 322465,
+      "salesRows": 54,
+      "unitRevenue": 381.1,
+      "share": 5.7
+    },
+    {
+      "name": "LAVR",
+      "rows": 37,
+      "revenue": 64841887,
+      "sales": 180933,
+      "salesRows": 37,
+      "unitRevenue": 358.38,
+      "share": 3
+    },
+    {
+      "name": "ВМПАВТО",
+      "rows": 29,
+      "revenue": 64548060,
+      "sales": 141243,
+      "salesRows": 29,
+      "unitRevenue": 457,
+      "share": 3
+    },
+    {
+      "name": "ЛУКОЙЛ (LUKOIL)",
+      "rows": 10,
+      "revenue": 55728865,
+      "sales": 35622,
+      "salesRows": 10,
+      "unitRevenue": 1564.45,
+      "share": 2.6
+    },
+    {
+      "name": "Rekidel",
+      "rows": 4,
+      "revenue": 50362828,
+      "sales": 2793,
+      "salesRows": 1,
+      "unitRevenue": 18031.8,
+      "share": 2.3
+    },
+    {
+      "name": "SINTEC",
+      "rows": 8,
+      "revenue": 47420651,
+      "sales": 49132,
+      "salesRows": 8,
+      "unitRevenue": 965.17,
+      "share": 2.2
+    },
+    {
+      "name": "ТрансГрупп",
+      "rows": 2,
+      "revenue": 40789313,
+      "sales": 16062,
+      "salesRows": 2,
+      "unitRevenue": 2539.49,
+      "share": 1.9
+    },
+    {
+      "name": "Detail",
+      "rows": 23,
+      "revenue": 38260870,
+      "sales": 94485,
+      "salesRows": 23,
+      "unitRevenue": 404.94,
+      "share": 1.8
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ",
+      "rows": 10,
+      "revenue": 284563668,
+      "sales": 149783,
+      "salesRows": 10,
+      "unitRevenue": 1899.84,
+      "share": 13.1
+    },
+    {
+      "name": "Ozon",
+      "rows": 54,
+      "revenue": 160818285,
+      "sales": 309652,
+      "salesRows": 54,
+      "unitRevenue": 519.35,
+      "share": 7.4
+    },
+    {
+      "name": "ЮПЕК ДЕЛИВЕРИ - официальный магазин",
+      "rows": 10,
+      "revenue": 76801786,
+      "sales": 62343,
+      "salesRows": 10,
+      "unitRevenue": 1231.92,
+      "share": 3.5
+    },
+    {
+      "name": "LAVR chemical company",
+      "rows": 41,
+      "revenue": 68360441,
+      "sales": 194260,
+      "salesRows": 41,
+      "unitRevenue": 351.9,
+      "share": 3.2
+    },
+    {
+      "name": "GRASS - завод производитель",
+      "rows": 34,
+      "revenue": 64670187,
+      "sales": 154202,
+      "salesRows": 34,
+      "unitRevenue": 419.39,
+      "share": 3
+    },
+    {
+      "name": "Торговый дом «КУДО»",
+      "rows": 35,
+      "revenue": 56211263,
+      "sales": 181092,
+      "salesRows": 35,
+      "unitRevenue": 310.4,
+      "share": 2.6
+    },
+    {
+      "name": "WT VACUUM CLEANER Official Store",
+      "rows": 4,
+      "revenue": 50362828,
+      "sales": 2793,
+      "salesRows": 1,
+      "unitRevenue": 18031.8,
+      "share": 2.3
+    },
+    {
+      "name": "ВМПАВТО",
+      "rows": 17,
+      "revenue": 41075016,
+      "sales": 71402,
+      "salesRows": 17,
+      "unitRevenue": 575.26,
+      "share": 1.9
+    },
+    {
+      "name": "АО \"ТРАНСГРУПП\"",
+      "rows": 2,
+      "revenue": 40789313,
+      "sales": 16062,
+      "salesRows": 2,
+      "unitRevenue": 2539.49,
+      "share": 1.9
+    },
+    {
+      "name": "ООО \"НЕТРЕС\"",
+      "rows": 2,
+      "revenue": 38198752,
+      "sales": 16279,
+      "salesRows": 2,
+      "unitRevenue": 2346.5,
+      "share": 1.8
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 395,
+      "revenue": 288886654,
+      "sales": 2152226,
+      "share": 13.3
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 419,
+      "revenue": 661725548,
+      "sales": 2195443,
+      "share": 30.6
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 94,
+      "revenue": 315320878,
+      "sales": 485435,
+      "share": 14.6
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 38,
+      "revenue": 281906282,
+      "sales": 191834,
+      "share": 13
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 46,
+      "revenue": 527350039,
+      "sales": 160535,
+      "share": 24.4
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 8,
+      "revenue": 88880383,
+      "sales": 6115,
+      "share": 4.1
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "3TON Fuel & Oil Canister, 20 L",
+      "brand": "3TON",
+      "seller": "АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ",
+      "type": "燃油桶",
+      "revenue": 74731071,
+      "sales": 19116,
+      "avgPrice": 3909,
+      "url": "https://www.ozon.ru/product/2796005351"
+    },
+    {
+      "name": "3TON Fuel & Oil Canister, 20.001 L",
+      "brand": "3TON",
+      "seller": "АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ",
+      "type": "燃油桶",
+      "revenue": 63474546,
+      "sales": 16208,
+      "avgPrice": 3916,
+      "url": "https://www.ozon.ru/product/2796006506"
+    },
+    {
+      "name": "3TON Fuel & Oil Canister, 20.003 L",
+      "brand": "3TON",
+      "seller": "АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ",
+      "type": "燃油桶",
+      "revenue": 41957912,
+      "sales": 11218,
+      "avgPrice": 3740,
+      "url": "https://www.ozon.ru/product/2973133514"
+    },
+    {
+      "name": "3TON Fuel & Oil Canister, 10.002 L",
+      "brand": "3TON",
+      "seller": "АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ",
+      "type": "燃油桶",
+      "revenue": 29480108,
+      "sales": 15983,
+      "avgPrice": 1844,
+      "url": "https://www.ozon.ru/product/2796005716"
+    },
+    {
+      "name": "3TON Fuel & Oil Canister, 10.001 L",
+      "brand": "3TON",
+      "seller": "АВТОХИМИЯ ОТ ПРОИЗВОДИТЕЛЯ",
+      "type": "燃油桶",
+      "revenue": 27066836,
+      "sales": 14909,
+      "avgPrice": 1815,
+      "url": "https://www.ozon.ru/product/2796005546"
+    },
+    {
+      "name": "Демидовский Fuel & Oil Canister, 20 L",
+      "brand": "Демидовский",
+      "seller": "SCOVO - магазин производителя",
+      "type": "燃油桶",
+      "revenue": 23482287,
+      "sales": 3138,
+      "avgPrice": 7483,
+      "url": "https://www.ozon.ru/product/1937659012"
+    },
+    {
+      "name": "ТрансГрупп Fuel & Oil Canister, 30 L",
+      "brand": "ТрансГрупп",
+      "seller": "АО \"ТРАНСГРУПП\"",
+      "type": "燃油桶",
+      "revenue": 23306334,
+      "sales": 8234,
+      "avgPrice": 2831,
+      "url": "https://www.ozon.ru/product/4800895273"
+    },
+    {
+      "name": "НЕ ТРЕСНЕТ Fuel & Oil Canister, 20 L",
+      "brand": "НЕ ТРЕСНЕТ",
+      "seller": "ООО \"НЕТРЕС\"",
+      "type": "燃油桶",
+      "revenue": 19287378,
+      "sales": 9341,
+      "avgPrice": 2065,
+      "url": "https://www.ozon.ru/product/4730996186"
+    },
+    {
+      "name": "НЕ ТРЕСНЕТ Fuel & Oil Canister, 30 L",
+      "brand": "НЕ ТРЕСНЕТ",
+      "seller": "ООО \"НЕТРЕС\"",
+      "type": "燃油桶",
+      "revenue": 18911374,
+      "sales": 6938,
+      "avgPrice": 2726,
+      "url": "https://www.ozon.ru/product/4731031918"
+    },
+    {
+      "name": "SINTEC 5W-40 Engine Oil, Synthetic, 4 L",
+      "brand": "SINTEC",
+      "seller": "ЮПЕК ДЕЛИВЕРИ - официальный магазин",
+      "type": "发动机油",
+      "revenue": 18607686,
+      "sales": 11993,
+      "avgPrice": 1552,
+      "url": "https://www.ozon.ru/product/893929319"
+    },
+    {
+      "name": "Fuel & Oil Canister, 20 L",
+      "brand": "未知/无品牌",
+      "seller": "Бочка 2",
+      "type": "燃油桶",
+      "revenue": 18433267,
+      "sales": 2977,
+      "avgPrice": 6192,
+      "url": "https://www.ozon.ru/product/4731414697"
+    },
+    {
+      "name": "Rekidel Fuel & Oil Canister, 20 L",
+      "brand": "Rekidel",
+      "seller": "WT VACUUM CLEANER Official Store",
+      "type": "燃油桶",
+      "revenue": 17529322,
+      "sales": null,
+      "avgPrice": 6901,
+      "url": "https://www.ozon.ru/product/4797843944"
+    },
+    {
+      "name": "ТрансГрупп Fuel & Oil Canister, 20 L",
+      "brand": "ТрансГрупп",
+      "seller": "АО \"ТРАНСГРУПП\"",
+      "type": "燃油桶",
+      "revenue": 17482979,
+      "sales": 7828,
+      "avgPrice": 2233,
+      "url": "https://www.ozon.ru/product/4800861765"
+    },
+    {
+      "name": "Rekidel Fuel & Oil Canister, 30 L",
+      "brand": "Rekidel",
+      "seller": "WT VACUUM CLEANER Official Store",
+      "type": "燃油桶",
+      "revenue": 16096891,
+      "sales": null,
+      "avgPrice": 5439,
+      "url": "https://www.ozon.ru/product/4797844273"
+    },
+    {
+      "name": "АВТОБРАТ Car Tools Kit",
+      "brand": "АВТОБРАТ",
+      "seller": "АВТОБРАТ",
+      "type": "汽车工具套件",
+      "revenue": 15351249,
+      "sales": 4097,
+      "avgPrice": 3747,
+      "url": "https://www.ozon.ru/product/541274789"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.936,
+    "signRateCoverage": 92.5,
+    "stockoutMedian": 13,
+    "stockoutCoverage": 86.4,
+    "missedRevenue": 58239698.61,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 82.9,
+    "promoCoverage": 99.6,
+    "adActiveShare": 57.5,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 97.9,
+    "missingSales": 21,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 36,
+    "duplicateUrl": 0,
+    "uniqueSku": 964,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“燃油桶”贡献 27% 销售额；前五品类合计 47%。",
+    "销售额最集中的价格带是 200–500 ₽，覆盖 419 条商品记录，贡献 30.6% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 54.9% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 97.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

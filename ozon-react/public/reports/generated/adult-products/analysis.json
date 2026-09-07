@@ -1,0 +1,520 @@
+{
+  "id": "generated-adult-products",
+  "label": "成人用品",
+  "title": "Ozon 成人用品市场分析",
+  "group": "宠物与生活",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23成人用品_清洗版.xlsx",
+  "path": "reports/generated/adult-products/index.html",
+  "frameTitle": "Ozon 成人用品市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 398333622,
+    "totalSales": 443616,
+    "unitRevenue": 897.92,
+    "typeCount": 37,
+    "brandCount": 209,
+    "sellerCount": 350
+  },
+  "topTypes": [
+    {
+      "name": "振动器",
+      "rows": 182,
+      "revenue": 119663725,
+      "sales": 97612,
+      "salesRows": 172,
+      "unitRevenue": 1225.91,
+      "share": 30
+    },
+    {
+      "name": "飞机杯",
+      "rows": 98,
+      "revenue": 80638936,
+      "sales": 46293,
+      "salesRows": 90,
+      "unitRevenue": 1741.93,
+      "share": 20.2
+    },
+    {
+      "name": "催情产品",
+      "rows": 148,
+      "revenue": 40992481,
+      "sales": 59171,
+      "salesRows": 122,
+      "unitRevenue": 692.78,
+      "share": 10.3
+    },
+    {
+      "name": "假阳具",
+      "rows": 75,
+      "revenue": 26301213,
+      "sales": 35596,
+      "salesRows": 72,
+      "unitRevenue": 738.88,
+      "share": 6.6
+    },
+    {
+      "name": "肛门塞",
+      "rows": 78,
+      "revenue": 20377269,
+      "sales": 37292,
+      "salesRows": 76,
+      "unitRevenue": 546.42,
+      "share": 5.1
+    },
+    {
+      "name": "前列腺按摩器",
+      "rows": 17,
+      "revenue": 12120068,
+      "sales": 8220,
+      "salesRows": 17,
+      "unitRevenue": 1474.46,
+      "share": 3
+    },
+    {
+      "name": "情趣喷嘴、延长杆",
+      "rows": 47,
+      "revenue": 10598587,
+      "sales": 16106,
+      "salesRows": 45,
+      "unitRevenue": 658.05,
+      "share": 2.7
+    },
+    {
+      "name": "延长器",
+      "rows": 28,
+      "revenue": 8986187,
+      "sales": 12252,
+      "salesRows": 23,
+      "unitRevenue": 733.45,
+      "share": 2.3
+    },
+    {
+      "name": "振动蛋",
+      "rows": 22,
+      "revenue": 8920639,
+      "sales": 12723,
+      "salesRows": 21,
+      "unitRevenue": 701.14,
+      "share": 2.2
+    },
+    {
+      "name": "私处护理霜",
+      "rows": 34,
+      "revenue": 7162120,
+      "sales": 13302,
+      "salesRows": 31,
+      "unitRevenue": 538.42,
+      "share": 1.8
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 311,
+      "revenue": 94461958,
+      "sales": 122190,
+      "salesRows": 277,
+      "unitRevenue": 773.07,
+      "share": 23.7
+    },
+    {
+      "name": "POSY",
+      "rows": 10,
+      "revenue": 20168857,
+      "sales": 6064,
+      "salesRows": 10,
+      "unitRevenue": 3326,
+      "share": 5.1
+    },
+    {
+      "name": "Satisfyer",
+      "rows": 10,
+      "revenue": 18589658,
+      "sales": 7945,
+      "salesRows": 10,
+      "unitRevenue": 2339.79,
+      "share": 4.7
+    },
+    {
+      "name": "Private Secrets",
+      "rows": 11,
+      "revenue": 18027623,
+      "sales": 13114,
+      "salesRows": 11,
+      "unitRevenue": 1374.69,
+      "share": 4.5
+    },
+    {
+      "name": "Mystic Muse",
+      "rows": 12,
+      "revenue": 15890736,
+      "sales": 6443,
+      "salesRows": 9,
+      "unitRevenue": 2466.36,
+      "share": 4
+    },
+    {
+      "name": "Wicked Games",
+      "rows": 9,
+      "revenue": 13414547,
+      "sales": 10668,
+      "salesRows": 9,
+      "unitRevenue": 1257.46,
+      "share": 3.4
+    },
+    {
+      "name": "SeekHeart",
+      "rows": 15,
+      "revenue": 11132562,
+      "sales": 6945,
+      "salesRows": 15,
+      "unitRevenue": 1602.96,
+      "share": 2.8
+    },
+    {
+      "name": "ilo",
+      "rows": 10,
+      "revenue": 10252227,
+      "sales": 8812,
+      "salesRows": 10,
+      "unitRevenue": 1163.44,
+      "share": 2.6
+    },
+    {
+      "name": "JAZZER",
+      "rows": 11,
+      "revenue": 9702758,
+      "sales": 3971,
+      "salesRows": 10,
+      "unitRevenue": 2443.4,
+      "share": 2.4
+    },
+    {
+      "name": "SimpaTiamo",
+      "rows": 38,
+      "revenue": 8404340,
+      "sales": 17724,
+      "salesRows": 38,
+      "unitRevenue": 474.18,
+      "share": 2.1
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "POSY",
+      "rows": 11,
+      "revenue": 21460796,
+      "sales": 6423,
+      "salesRows": 11,
+      "unitRevenue": 3341.24,
+      "share": 5.4
+    },
+    {
+      "name": "Private Secrets",
+      "rows": 11,
+      "revenue": 18027623,
+      "sales": 13114,
+      "salesRows": 11,
+      "unitRevenue": 1374.69,
+      "share": 4.5
+    },
+    {
+      "name": "Satisfyer",
+      "rows": 8,
+      "revenue": 16017416,
+      "sales": 6640,
+      "salesRows": 8,
+      "unitRevenue": 2412.26,
+      "share": 4
+    },
+    {
+      "name": "Mystic Muse",
+      "rows": 12,
+      "revenue": 15890736,
+      "sales": 6443,
+      "salesRows": 9,
+      "unitRevenue": 2466.36,
+      "share": 4
+    },
+    {
+      "name": "Wicked Games",
+      "rows": 8,
+      "revenue": 12860398,
+      "sales": 9893,
+      "salesRows": 8,
+      "unitRevenue": 1299.95,
+      "share": 3.2
+    },
+    {
+      "name": "SeekHeart Official",
+      "rows": 16,
+      "revenue": 11649491,
+      "sales": 7381,
+      "salesRows": 16,
+      "unitRevenue": 1578.31,
+      "share": 2.9
+    },
+    {
+      "name": "ilo",
+      "rows": 10,
+      "revenue": 10252227,
+      "sales": 8812,
+      "salesRows": 10,
+      "unitRevenue": 1163.44,
+      "share": 2.6
+    },
+    {
+      "name": "JAZZER",
+      "rows": 11,
+      "revenue": 9702758,
+      "sales": 3971,
+      "salesRows": 10,
+      "unitRevenue": 2443.4,
+      "share": 2.4
+    },
+    {
+      "name": "Sex 4 You",
+      "rows": 7,
+      "revenue": 8552019,
+      "sales": 6149,
+      "salesRows": 7,
+      "unitRevenue": 1390.8,
+      "share": 2.1
+    },
+    {
+      "name": "ИП Смирницкая А. Д.",
+      "rows": 2,
+      "revenue": 6984392,
+      "sales": 463,
+      "salesRows": 2,
+      "unitRevenue": 15085.08,
+      "share": 1.8
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 88,
+      "revenue": 8244158,
+      "sales": 36498,
+      "share": 2.1
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 346,
+      "revenue": 60150045,
+      "sales": 137193,
+      "share": 15.1
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 335,
+      "revenue": 115281059,
+      "sales": 154131,
+      "share": 28.9
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 149,
+      "revenue": 109190242,
+      "sales": 82732,
+      "share": 27.4
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 76,
+      "revenue": 92761795,
+      "sales": 31659,
+      "share": 23.3
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 6,
+      "revenue": 12706323,
+      "sales": 1403,
+      "share": 3.2
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Satisfyer Vibrator",
+      "brand": "Satisfyer",
+      "seller": "Satisfyer",
+      "type": "振动器",
+      "revenue": 8182121,
+      "sales": 3021,
+      "avgPrice": 2708,
+      "url": "https://www.ozon.ru/product/1661718352"
+    },
+    {
+      "name": "Wicked Games Vibrator",
+      "brand": "Wicked Games",
+      "seller": "Wicked Games",
+      "type": "振动器",
+      "revenue": 8094667,
+      "sales": 5624,
+      "avgPrice": 1439,
+      "url": "https://www.ozon.ru/product/976734881"
+    },
+    {
+      "name": "POSY Masturbator",
+      "brand": "POSY",
+      "seller": "POSY",
+      "type": "飞机杯",
+      "revenue": 5789042,
+      "sales": 1299,
+      "avgPrice": 4457,
+      "url": "https://www.ozon.ru/product/4686889910"
+    },
+    {
+      "name": "Private Secrets Masturbator",
+      "brand": "Private Secrets",
+      "seller": "Private Secrets",
+      "type": "飞机杯",
+      "revenue": 4790374,
+      "sales": 2161,
+      "avgPrice": 2217,
+      "url": "https://www.ozon.ru/product/1852568191"
+    },
+    {
+      "name": "kGoal Kegel Simulator",
+      "brand": "kGoal",
+      "seller": "ИП Смирницкая А. Д.",
+      "type": "凯格尔训练器",
+      "revenue": 4281098,
+      "sales": 270,
+      "avgPrice": 15856,
+      "url": "https://www.ozon.ru/product/4234322603"
+    },
+    {
+      "name": "POSY Masturbator",
+      "brand": "POSY",
+      "seller": "POSY",
+      "type": "飞机杯",
+      "revenue": 3637538,
+      "sales": 1226,
+      "avgPrice": 2967,
+      "url": "https://www.ozon.ru/product/4582177188"
+    },
+    {
+      "name": "Mystic Muse Masturbator",
+      "brand": "Mystic Muse",
+      "seller": "Mystic Muse",
+      "type": "飞机杯",
+      "revenue": 3584571,
+      "sales": 833,
+      "avgPrice": 4303,
+      "url": "https://www.ozon.ru/product/3726503912"
+    },
+    {
+      "name": "Mystic Muse Vibrator",
+      "brand": "Mystic Muse",
+      "seller": "Mystic Muse",
+      "type": "振动器",
+      "revenue": 3111838,
+      "sales": 2428,
+      "avgPrice": 1282,
+      "url": "https://www.ozon.ru/product/1620063199"
+    },
+    {
+      "name": "Private Secrets Masturbator",
+      "brand": "Private Secrets",
+      "seller": "Private Secrets",
+      "type": "飞机杯",
+      "revenue": 3087083,
+      "sales": 840,
+      "avgPrice": 3675,
+      "url": "https://www.ozon.ru/product/4383119031"
+    },
+    {
+      "name": "Private Secrets Masturbator",
+      "brand": "Private Secrets",
+      "seller": "Private Secrets",
+      "type": "飞机杯",
+      "revenue": 3073232,
+      "sales": 3356,
+      "avgPrice": 916,
+      "url": "https://www.ozon.ru/product/1735536922"
+    },
+    {
+      "name": "Wicked Games Vibrating Egg",
+      "brand": "Wicked Games",
+      "seller": "Wicked Games",
+      "type": "振动蛋",
+      "revenue": 3072726,
+      "sales": 2805,
+      "avgPrice": 1095,
+      "url": "https://www.ozon.ru/product/1225340882"
+    },
+    {
+      "name": "POSY Masturbator",
+      "brand": "POSY",
+      "seller": "POSY",
+      "type": "飞机杯",
+      "revenue": 2922461,
+      "sales": 1497,
+      "avgPrice": 1952,
+      "url": "https://www.ozon.ru/product/4582326039"
+    },
+    {
+      "name": "TONIS Kegel Simulator",
+      "brand": "TONIS",
+      "seller": "ИП Смирницкая А. Д.",
+      "type": "凯格尔训练器",
+      "revenue": 2703294,
+      "sales": 193,
+      "avgPrice": 14007,
+      "url": "https://www.ozon.ru/product/1567924457"
+    },
+    {
+      "name": "JAZZER Vibrator",
+      "brand": "JAZZER",
+      "seller": "JAZZER",
+      "type": "振动器",
+      "revenue": 2688239,
+      "sales": 915,
+      "avgPrice": 2938,
+      "url": "https://www.ozon.ru/product/1066374574"
+    },
+    {
+      "name": "ilo Vibrator",
+      "brand": "ilo",
+      "seller": "ilo",
+      "type": "振动器",
+      "revenue": 2619604,
+      "sales": 2168,
+      "avgPrice": 1208,
+      "url": "https://www.ozon.ru/product/4292987468"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.8535,
+    "signRateCoverage": 93.4,
+    "stockoutMedian": 11,
+    "stockoutCoverage": 93.2,
+    "missedRevenue": 5860414.8,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 88.7,
+    "promoCoverage": 93.4,
+    "adActiveShare": 76.1,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "可用，需留意缺失",
+    "salesCoverage": 93.4,
+    "missingSales": 66,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 9,
+    "duplicateUrl": 0,
+    "uniqueSku": 991,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“振动器”贡献 30% 销售额；前五品类合计 72.3%。",
+    "销售额最集中的价格带是 500–1,000 ₽，覆盖 335 条商品记录，贡献 28.9% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 55.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

@@ -1,0 +1,466 @@
+{
+  "id": "generated-car-batteries",
+  "label": "汽车电池",
+  "title": "Ozon 汽车电池市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23汽车电池_清洗版.xlsx",
+  "path": "reports/generated/car-batteries/index.html",
+  "frameTitle": "Ozon 汽车电池市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 327433415,
+    "totalSales": 149427,
+    "unitRevenue": 2191.26,
+    "typeCount": 4,
+    "brandCount": 213,
+    "sellerCount": 405
+  },
+  "topTypes": [
+    {
+      "name": "启动充电装置",
+      "rows": 296,
+      "revenue": 173145200,
+      "sales": 43770,
+      "salesRows": 269,
+      "unitRevenue": 3955.8,
+      "share": 52.9
+    },
+    {
+      "name": "汽车电瓶充电器",
+      "rows": 311,
+      "revenue": 90034766,
+      "sales": 65231,
+      "salesRows": 304,
+      "unitRevenue": 1380.25,
+      "share": 27.5
+    },
+    {
+      "name": "摩托车电池",
+      "rows": 247,
+      "revenue": 58156455,
+      "sales": 27716,
+      "salesRows": 240,
+      "unitRevenue": 2098.3,
+      "share": 17.8
+    },
+    {
+      "name": "蓄电池配件",
+      "rows": 146,
+      "revenue": 6096994,
+      "sales": 12710,
+      "salesRows": 139,
+      "unitRevenue": 479.7,
+      "share": 1.9
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 269,
+      "revenue": 75416697,
+      "sales": 35931,
+      "salesRows": 244,
+      "unitRevenue": 2098.93,
+      "share": 23
+    },
+    {
+      "name": "CHOPPER",
+      "rows": 24,
+      "revenue": 16967503,
+      "sales": 15410,
+      "salesRows": 21,
+      "unitRevenue": 1101.07,
+      "share": 5.2
+    },
+    {
+      "name": "Hauzone",
+      "rows": 12,
+      "revenue": 15647545,
+      "sales": 9490,
+      "salesRows": 12,
+      "unitRevenue": 1648.85,
+      "share": 4.8
+    },
+    {
+      "name": "Delta Battery",
+      "rows": 69,
+      "revenue": 13286892,
+      "sales": 6336,
+      "salesRows": 69,
+      "unitRevenue": 2097.05,
+      "share": 4.1
+    },
+    {
+      "name": "BILDR",
+      "rows": 5,
+      "revenue": 8943245,
+      "sales": 2638,
+      "salesRows": 5,
+      "unitRevenue": 3390.16,
+      "share": 2.7
+    },
+    {
+      "name": "DEKKERS",
+      "rows": 6,
+      "revenue": 7385082,
+      "sales": 2533,
+      "salesRows": 6,
+      "unitRevenue": 2915.55,
+      "share": 2.3
+    },
+    {
+      "name": "CARDALE",
+      "rows": 13,
+      "revenue": 6587454,
+      "sales": 4393,
+      "salesRows": 13,
+      "unitRevenue": 1499.53,
+      "share": 2
+    },
+    {
+      "name": "ВЫМПЕЛ",
+      "rows": 13,
+      "revenue": 5842433,
+      "sales": 1313,
+      "salesRows": 13,
+      "unitRevenue": 4449.68,
+      "share": 1.8
+    },
+    {
+      "name": "Даджет",
+      "rows": 3,
+      "revenue": 5807731,
+      "sales": 2638,
+      "salesRows": 3,
+      "unitRevenue": 2201.57,
+      "share": 1.8
+    },
+    {
+      "name": "TORADO",
+      "rows": 4,
+      "revenue": 5560725,
+      "sales": 1421,
+      "salesRows": 4,
+      "unitRevenue": 3913.25,
+      "share": 1.7
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Бэнг Компани Бэттери",
+      "rows": 28,
+      "revenue": 17703341,
+      "sales": 15892,
+      "salesRows": 25,
+      "unitRevenue": 1113.98,
+      "share": 5.4
+    },
+    {
+      "name": "Hauzone",
+      "rows": 11,
+      "revenue": 15605426,
+      "sales": 9422,
+      "salesRows": 11,
+      "unitRevenue": 1656.28,
+      "share": 4.8
+    },
+    {
+      "name": "Пуск",
+      "rows": 4,
+      "revenue": 13021785,
+      "sales": 4044,
+      "salesRows": 4,
+      "unitRevenue": 3220.03,
+      "share": 4
+    },
+    {
+      "name": "BILDR",
+      "rows": 5,
+      "revenue": 8943245,
+      "sales": 2638,
+      "salesRows": 5,
+      "unitRevenue": 3390.16,
+      "share": 2.7
+    },
+    {
+      "name": "SHTERN",
+      "rows": 4,
+      "revenue": 8273845,
+      "sales": 1107,
+      "salesRows": 4,
+      "unitRevenue": 7474.11,
+      "share": 2.5
+    },
+    {
+      "name": "DEKKERS",
+      "rows": 6,
+      "revenue": 7385082,
+      "sales": 2533,
+      "salesRows": 6,
+      "unitRevenue": 2915.55,
+      "share": 2.3
+    },
+    {
+      "name": "Recam",
+      "rows": 4,
+      "revenue": 6653700,
+      "sales": 2358,
+      "salesRows": 4,
+      "unitRevenue": 2821.76,
+      "share": 2
+    },
+    {
+      "name": "CARDALE",
+      "rows": 13,
+      "revenue": 6587454,
+      "sales": 4393,
+      "salesRows": 13,
+      "unitRevenue": 1499.53,
+      "share": 2
+    },
+    {
+      "name": "VICAR",
+      "rows": 13,
+      "revenue": 5842433,
+      "sales": 1313,
+      "salesRows": 13,
+      "unitRevenue": 4449.68,
+      "share": 1.8
+    },
+    {
+      "name": "Даджет",
+      "rows": 3,
+      "revenue": 5807731,
+      "sales": 2638,
+      "salesRows": 3,
+      "unitRevenue": 2201.57,
+      "share": 1.8
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 78,
+      "revenue": 4691001,
+      "sales": 6830,
+      "share": 1.4
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 95,
+      "revenue": 6821398,
+      "sales": 12489,
+      "share": 2.1
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 117,
+      "revenue": 18565710,
+      "sales": 24995,
+      "share": 5.7
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 273,
+      "revenue": 80790429,
+      "sales": 52307,
+      "share": 24.7
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 320,
+      "revenue": 131378229,
+      "sales": 41596,
+      "share": 40.1
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 117,
+      "revenue": 85186648,
+      "sales": 11210,
+      "share": 26
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Battery Charger, 28000 А•h, max 1200 A, 180 mm",
+      "brand": "未知/无品牌",
+      "seller": "Пуск",
+      "type": "启动充电装置",
+      "revenue": 7946228,
+      "sales": 2531,
+      "avgPrice": 3140,
+      "url": "https://www.ozon.ru/product/2624473133"
+    },
+    {
+      "name": "Battery Charger, 29800 А•h, max 2000 A, 170 mm",
+      "brand": "未知/无品牌",
+      "seller": "Recam",
+      "type": "启动充电装置",
+      "revenue": 5912638,
+      "sales": 2003,
+      "avgPrice": 2952,
+      "url": "https://www.ozon.ru/product/1313519767"
+    },
+    {
+      "name": "Hauzone Battery Charger, max 6 A, 154 mm",
+      "brand": "Hauzone",
+      "seller": "Hauzone",
+      "type": "汽车电瓶充电器",
+      "revenue": 5497227,
+      "sales": 3912,
+      "avgPrice": 1405,
+      "url": "https://www.ozon.ru/product/1067074809"
+    },
+    {
+      "name": "GREEN KEEPER Battery Charger, 16000 А•h, max 2000 A, 170 mm",
+      "brand": "GREEN KEEPER",
+      "seller": "GreenKeeperRussia",
+      "type": "启动充电装置",
+      "revenue": 4941891,
+      "sales": 449,
+      "avgPrice": 11006,
+      "url": "https://www.ozon.ru/product/1660288459"
+    },
+    {
+      "name": "Battery Charger, 28000 А•h, max 600 A, 170 mm",
+      "brand": "未知/无品牌",
+      "seller": "nova",
+      "type": "启动充电装置",
+      "revenue": 4865151,
+      "sales": null,
+      "avgPrice": 1861,
+      "url": "https://www.ozon.ru/product/4575343246"
+    },
+    {
+      "name": "BILDR Battery Charger, 3 А•h, max 15 A, 195 mm",
+      "brand": "BILDR",
+      "seller": "BILDR",
+      "type": "汽车电瓶充电器",
+      "revenue": 4079669,
+      "sales": 1163,
+      "avgPrice": 3508,
+      "url": "https://www.ozon.ru/product/3583351484"
+    },
+    {
+      "name": "ZarGrad Battery Charger, 252 mm",
+      "brand": "ZarGrad",
+      "seller": "ZarGrad магазин",
+      "type": "启动充电装置",
+      "revenue": 3634772,
+      "sales": 832,
+      "avgPrice": 4369,
+      "url": "https://www.ozon.ru/product/3278699310"
+    },
+    {
+      "name": "70mai Battery Charger, 10400 А•h, max 1000 A",
+      "brand": "70mai",
+      "seller": "70mai",
+      "type": "启动充电装置",
+      "revenue": 3584377,
+      "sales": 696,
+      "avgPrice": 5150,
+      "url": "https://www.ozon.ru/product/3424320452"
+    },
+    {
+      "name": "DEKKERS Battery Charger, 22200 А•h, max 2000 A, 150 mm",
+      "brand": "DEKKERS",
+      "seller": "DEKKERS",
+      "type": "启动充电装置",
+      "revenue": 3570101,
+      "sales": 683,
+      "avgPrice": 5227,
+      "url": "https://www.ozon.ru/product/1674113201"
+    },
+    {
+      "name": "Battery Charger, 27000 А•h, 255 mm",
+      "brand": "未知/无品牌",
+      "seller": "SHTERN",
+      "type": "启动充电装置",
+      "revenue": 3556805,
+      "sales": 327,
+      "avgPrice": 10877,
+      "url": "https://www.ozon.ru/product/2388788054"
+    },
+    {
+      "name": "Battery Charger, 10000 А•h, max 1500 A, 150 mm",
+      "brand": "未知/无品牌",
+      "seller": "AVRORA",
+      "type": "启动充电装置",
+      "revenue": 3463151,
+      "sales": 901,
+      "avgPrice": 3844,
+      "url": "https://www.ozon.ru/product/3550118959"
+    },
+    {
+      "name": "Battery Charger, 8000 А•h, 300 mm",
+      "brand": "未知/无品牌",
+      "seller": "POWKIT",
+      "type": "启动充电装置",
+      "revenue": 3437215,
+      "sales": 1891,
+      "avgPrice": 1818,
+      "url": "https://www.ozon.ru/product/3758309034"
+    },
+    {
+      "name": "Даджет Battery Charger, 8000 А•h, max 400 A, 200 mm",
+      "brand": "Даджет",
+      "seller": "Даджет",
+      "type": "启动充电装置",
+      "revenue": 2959626,
+      "sales": 1531,
+      "avgPrice": 1933,
+      "url": "https://www.ozon.ru/product/231109759"
+    },
+    {
+      "name": "Wellzoller Battery Charger, 20000 А•h, max 2500 A",
+      "brand": "Wellzoller",
+      "seller": "Wellzoller",
+      "type": "启动充电装置",
+      "revenue": 2566686,
+      "sales": 395,
+      "avgPrice": 6498,
+      "url": "https://www.ozon.ru/product/3497654924"
+    },
+    {
+      "name": "CHOPPER Motorcycle Battery, 4 А•h, Reverse (-/+)",
+      "brand": "CHOPPER",
+      "seller": "Бэнг Компани Бэттери",
+      "type": "摩托车电池",
+      "revenue": 2478567,
+      "sales": 2195,
+      "avgPrice": 1129,
+      "url": "https://www.ozon.ru/product/1805716357"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.88,
+    "signRateCoverage": 95,
+    "stockoutMedian": 28,
+    "stockoutCoverage": 94,
+    "missedRevenue": 25875081,
+    "missedRevenueCoverage": 95.2,
+    "promoActiveShare": 98.1,
+    "promoCoverage": 100,
+    "adActiveShare": 100,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 95.2,
+    "missingSales": 48,
+    "missingAveragePrice": 0,
+    "missingBsr": 625,
+    "duplicateSku": 80,
+    "duplicateUrl": 0,
+    "uniqueSku": 920,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“启动充电装置”贡献 52.9% 销售额；前五品类合计 100%。",
+    "销售额最集中的价格带是 2,000–5,000 ₽，覆盖 320 条商品记录，贡献 40.1% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 49.3% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 95.2%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

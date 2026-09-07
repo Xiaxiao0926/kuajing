@@ -1,0 +1,520 @@
+{
+  "id": "generated-car-security",
+  "label": "汽车防盗",
+  "title": "Ozon 汽车防盗市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23汽车防盗_清洗版.xlsx",
+  "path": "reports/generated/car-security/index.html",
+  "frameTitle": "Ozon 汽车防盗市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 103417151,
+    "totalSales": 72510,
+    "unitRevenue": 1426.25,
+    "typeCount": 10,
+    "brandCount": 103,
+    "sellerCount": 288
+  },
+  "topTypes": [
+    {
+      "name": "汽车防盗器",
+      "rows": 219,
+      "revenue": 60114739,
+      "sales": 11130,
+      "salesRows": 208,
+      "unitRevenue": 5401.14,
+      "share": 58.1
+    },
+    {
+      "name": "汽车遥控钥匙",
+      "rows": 317,
+      "revenue": 28011332,
+      "sales": 22790,
+      "salesRows": 304,
+      "unitRevenue": 1229.11,
+      "share": 27.1
+    },
+    {
+      "name": "汽车防盗器遥控器配件",
+      "rows": 310,
+      "revenue": 6843237,
+      "sales": 25540,
+      "salesRows": 303,
+      "unitRevenue": 267.94,
+      "share": 6.6
+    },
+    {
+      "name": "防盗装置",
+      "rows": 101,
+      "revenue": 6377404,
+      "sales": 10889,
+      "salesRows": 100,
+      "unitRevenue": 585.67,
+      "share": 6.2
+    },
+    {
+      "name": "刹车盘锁",
+      "rows": 38,
+      "revenue": 1274352,
+      "sales": 1741,
+      "salesRows": 36,
+      "unitRevenue": 731.97,
+      "share": 1.2
+    },
+    {
+      "name": "转向轴锁",
+      "rows": 7,
+      "revenue": 457446,
+      "sales": 191,
+      "salesRows": 7,
+      "unitRevenue": 2395.01,
+      "share": 0.4
+    },
+    {
+      "name": "自动播放",
+      "rows": 3,
+      "revenue": 216429,
+      "sales": 77,
+      "salesRows": 3,
+      "unitRevenue": 2810.77,
+      "share": 0.2
+    },
+    {
+      "name": "踏板锁",
+      "rows": 2,
+      "revenue": 71086,
+      "sales": 73,
+      "salesRows": 2,
+      "unitRevenue": 973.78,
+      "share": 0.1
+    },
+    {
+      "name": "防盗链",
+      "rows": 2,
+      "revenue": 46433,
+      "sales": 79,
+      "salesRows": 2,
+      "unitRevenue": 587.76,
+      "share": 0
+    },
+    {
+      "name": "防盗拉线",
+      "rows": 1,
+      "revenue": 4693,
+      "sales": 0,
+      "salesRows": 0,
+      "unitRevenue": null,
+      "share": 0
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "StarLine",
+      "rows": 119,
+      "revenue": 54389589,
+      "sales": 8840,
+      "salesRows": 118,
+      "unitRevenue": 6152.67,
+      "share": 52.6
+    },
+    {
+      "name": "未知/无品牌",
+      "rows": 353,
+      "revenue": 16409759,
+      "sales": 22959,
+      "salesRows": 323,
+      "unitRevenue": 714.74,
+      "share": 15.9
+    },
+    {
+      "name": "NFLH",
+      "rows": 114,
+      "revenue": 8303731,
+      "sales": 12343,
+      "salesRows": 114,
+      "unitRevenue": 672.75,
+      "share": 8
+    },
+    {
+      "name": "Pandora",
+      "rows": 31,
+      "revenue": 3942606,
+      "sales": 2024,
+      "salesRows": 31,
+      "unitRevenue": 1947.93,
+      "share": 3.8
+    },
+    {
+      "name": "SmartElectronics",
+      "rows": 4,
+      "revenue": 2276877,
+      "sales": 575,
+      "salesRows": 4,
+      "unitRevenue": 3959.79,
+      "share": 2.2
+    },
+    {
+      "name": "CarPrime",
+      "rows": 43,
+      "revenue": 2237174,
+      "sales": 6973,
+      "salesRows": 42,
+      "unitRevenue": 320.83,
+      "share": 2.2
+    },
+    {
+      "name": "MONGOOSE",
+      "rows": 21,
+      "revenue": 1304039,
+      "sales": 1329,
+      "salesRows": 19,
+      "unitRevenue": 981.22,
+      "share": 1.3
+    },
+    {
+      "name": "Scher-Khan",
+      "rows": 43,
+      "revenue": 1172148,
+      "sales": 1370,
+      "salesRows": 43,
+      "unitRevenue": 855.58,
+      "share": 1.1
+    },
+    {
+      "name": "CENTURION",
+      "rows": 11,
+      "revenue": 1087945,
+      "sales": 423,
+      "salesRows": 11,
+      "unitRevenue": 2571.97,
+      "share": 1.1
+    },
+    {
+      "name": "Caracsel",
+      "rows": 33,
+      "revenue": 892041,
+      "sales": 1775,
+      "salesRows": 33,
+      "unitRevenue": 502.56,
+      "share": 0.9
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "SL-Store",
+      "rows": 47,
+      "revenue": 38503701,
+      "sales": 5066,
+      "salesRows": 46,
+      "unitRevenue": 7600.41,
+      "share": 37.2
+    },
+    {
+      "name": "Carprime",
+      "rows": 95,
+      "revenue": 8699123,
+      "sales": 15174,
+      "salesRows": 94,
+      "unitRevenue": 573.29,
+      "share": 8.4
+    },
+    {
+      "name": "#1 Дилер",
+      "rows": 20,
+      "revenue": 6846873,
+      "sales": 905,
+      "salesRows": 20,
+      "unitRevenue": 7565.61,
+      "share": 6.6
+    },
+    {
+      "name": "STARLINE (Производитель НПО СтарЛайн)",
+      "rows": 18,
+      "revenue": 5687655,
+      "sales": 719,
+      "salesRows": 18,
+      "unitRevenue": 7910.51,
+      "share": 5.5
+    },
+    {
+      "name": "Лев Кинга",
+      "rows": 25,
+      "revenue": 3284610,
+      "sales": 4066,
+      "salesRows": 25,
+      "unitRevenue": 807.82,
+      "share": 3.2
+    },
+    {
+      "name": "АксэссАвто",
+      "rows": 19,
+      "revenue": 2207370,
+      "sales": 2605,
+      "salesRows": 17,
+      "unitRevenue": 847.36,
+      "share": 2.1
+    },
+    {
+      "name": "ПАНДОРА КТ-ПРОМ",
+      "rows": 7,
+      "revenue": 1889173,
+      "sales": 496,
+      "salesRows": 7,
+      "unitRevenue": 3808.82,
+      "share": 1.8
+    },
+    {
+      "name": "Ozon",
+      "rows": 10,
+      "revenue": 1782617,
+      "sales": 704,
+      "salesRows": 10,
+      "unitRevenue": 2532.13,
+      "share": 1.7
+    },
+    {
+      "name": "MAK-ON",
+      "rows": 50,
+      "revenue": 1668697,
+      "sales": 1954,
+      "salesRows": 50,
+      "unitRevenue": 853.99,
+      "share": 1.6
+    },
+    {
+      "name": "Kuzya Avto - Tuning",
+      "rows": 41,
+      "revenue": 1342476,
+      "sales": 3558,
+      "salesRows": 41,
+      "unitRevenue": 377.31,
+      "share": 1.3
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 128,
+      "revenue": 2394100,
+      "sales": 9138,
+      "share": 2.3
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 310,
+      "revenue": 7770010,
+      "sales": 28470,
+      "share": 7.5
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 200,
+      "revenue": 9730988,
+      "sales": 13781,
+      "share": 9.4
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 185,
+      "revenue": 16907569,
+      "sales": 13023,
+      "share": 16.3
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 92,
+      "revenue": 14249632,
+      "sales": 4331,
+      "share": 13.8
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 85,
+      "revenue": 52364852,
+      "sales": 3767,
+      "share": 50.6
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 7224728,
+      "sales": 619,
+      "avgPrice": 11672,
+      "url": "https://www.ozon.ru/product/4399384316"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 2867813,
+      "sales": 140,
+      "avgPrice": 20484,
+      "url": "https://www.ozon.ru/product/201163689"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 2769950,
+      "sales": 154,
+      "avgPrice": 17987,
+      "url": "https://www.ozon.ru/product/211052475"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 2076654,
+      "sales": 101,
+      "avgPrice": 20561,
+      "url": "https://www.ozon.ru/product/211675317"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 1891525,
+      "sales": 97,
+      "avgPrice": 19500,
+      "url": "https://www.ozon.ru/product/590080253"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 1619521,
+      "sales": 58,
+      "avgPrice": 27923,
+      "url": "https://www.ozon.ru/product/1083821212"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 1607601,
+      "sales": 90,
+      "avgPrice": 17862,
+      "url": "https://www.ozon.ru/product/3553339723"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "#1 Дилер",
+      "type": "汽车防盗器",
+      "revenue": 1424479,
+      "sales": 124,
+      "avgPrice": 11488,
+      "url": "https://www.ozon.ru/product/1634806239"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 1195439,
+      "sales": 47,
+      "avgPrice": 25435,
+      "url": "https://www.ozon.ru/product/201322757"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 1193735,
+      "sales": 46,
+      "avgPrice": 25951,
+      "url": "https://www.ozon.ru/product/1656225663"
+    },
+    {
+      "name": "StarLine Car Alarm Remote Control Key",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车遥控钥匙",
+      "revenue": 1146875,
+      "sales": 234,
+      "avgPrice": 4901,
+      "url": "https://www.ozon.ru/product/1771378975"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "SL-Store",
+      "type": "汽车防盗器",
+      "revenue": 1128789,
+      "sales": 42,
+      "avgPrice": 26876,
+      "url": "https://www.ozon.ru/product/4075066979"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "#1 Дилер",
+      "type": "汽车防盗器",
+      "revenue": 1089173,
+      "sales": 83,
+      "avgPrice": 13123,
+      "url": "https://www.ozon.ru/product/1634804190"
+    },
+    {
+      "name": "SmartElectronics Car Alarm",
+      "brand": "SmartElectronics",
+      "seller": "GadgetWise",
+      "type": "汽车防盗器",
+      "revenue": 992477,
+      "sales": 222,
+      "avgPrice": 4471,
+      "url": "https://www.ozon.ru/product/3045441137"
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "brand": "StarLine",
+      "seller": "STARLINE (Производитель НПО СтарЛайн)",
+      "type": "汽车防盗器",
+      "revenue": 961163,
+      "sales": 59,
+      "avgPrice": 16291,
+      "url": "https://www.ozon.ru/product/3538733070"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.9059999999999999,
+    "signRateCoverage": 95.5,
+    "stockoutMedian": 18,
+    "stockoutCoverage": 88.3,
+    "missedRevenue": 5601017.1,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 67.8,
+    "promoCoverage": 96.5,
+    "adActiveShare": 13.1,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 96.5,
+    "missingSales": 35,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 41,
+    "duplicateUrl": 0,
+    "uniqueSku": 959,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“汽车防盗器”贡献 58.1% 销售额；前五品类合计 99.2%。",
+    "销售额最集中的价格带是 ≥5,000 ₽，覆盖 85 条商品记录，贡献 50.6% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 89% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 96.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

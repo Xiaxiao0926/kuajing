@@ -1,0 +1,520 @@
+{
+  "id": "generated-pet-products",
+  "label": "宠物用品",
+  "title": "Ozon 宠物用品市场分析",
+  "group": "宠物与生活",
+  "snapshot": "2026-07-22",
+  "sourceFile": "ozon-2026-07-22宠物用品_清洗版.xlsx",
+  "path": "reports/generated/pet-products/index.html",
+  "frameTitle": "Ozon 宠物用品市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 1285153357,
+    "totalSales": 3264672,
+    "unitRevenue": 393.65,
+    "typeCount": 71,
+    "brandCount": 257,
+    "sellerCount": 424
+  },
+  "topTypes": [
+    {
+      "name": "猫砂",
+      "rows": 199,
+      "revenue": 646029035,
+      "sales": 925585,
+      "salesRows": 198,
+      "unitRevenue": 697.97,
+      "share": 50.3
+    },
+    {
+      "name": "一次性宠物尿垫",
+      "rows": 34,
+      "revenue": 72665705,
+      "sales": 144421,
+      "salesRows": 34,
+      "unitRevenue": 503.15,
+      "share": 5.7
+    },
+    {
+      "name": "宠物玩具",
+      "rows": 146,
+      "revenue": 66117647,
+      "sales": 404098,
+      "salesRows": 143,
+      "unitRevenue": 163.62,
+      "share": 5.1
+    },
+    {
+      "name": "动物梳子",
+      "rows": 64,
+      "revenue": 52978295,
+      "sales": 327378,
+      "salesRows": 61,
+      "unitRevenue": 161.83,
+      "share": 4.1
+    },
+    {
+      "name": "宠物抗寄生虫药",
+      "rows": 42,
+      "revenue": 36870529,
+      "sales": 187984,
+      "salesRows": 41,
+      "unitRevenue": 196.14,
+      "share": 2.9
+    },
+    {
+      "name": "猫抓柱",
+      "rows": 35,
+      "revenue": 31484220,
+      "sales": 108786,
+      "salesRows": 34,
+      "unitRevenue": 289.41,
+      "share": 2.4
+    },
+    {
+      "name": "宠物厕所",
+      "rows": 26,
+      "revenue": 30943451,
+      "sales": 59259,
+      "salesRows": 26,
+      "unitRevenue": 522.17,
+      "share": 2.4
+    },
+    {
+      "name": "驱虫器",
+      "rows": 27,
+      "revenue": 27270304,
+      "sales": 85678,
+      "salesRows": 25,
+      "unitRevenue": 318.29,
+      "share": 2.1
+    },
+    {
+      "name": "饲料添加剂",
+      "rows": 30,
+      "revenue": 26133376,
+      "sales": 64431,
+      "salesRows": 30,
+      "unitRevenue": 405.6,
+      "share": 2
+    },
+    {
+      "name": "动物洗发水",
+      "rows": 30,
+      "revenue": 23194819,
+      "sales": 67512,
+      "salesRows": 30,
+      "unitRevenue": 343.57,
+      "share": 1.8
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "PET PRIDE",
+      "rows": 36,
+      "revenue": 181584735,
+      "sales": 320434,
+      "salesRows": 36,
+      "unitRevenue": 566.68,
+      "share": 14.1
+    },
+    {
+      "name": "未知/无品牌",
+      "rows": 268,
+      "revenue": 176601350,
+      "sales": 801532,
+      "salesRows": 259,
+      "unitRevenue": 220.33,
+      "share": 13.7
+    },
+    {
+      "name": "Pi-Pi-Bent",
+      "rows": 11,
+      "revenue": 116137457,
+      "sales": 159306,
+      "salesRows": 11,
+      "unitRevenue": 729.02,
+      "share": 9
+    },
+    {
+      "name": "Cat Step",
+      "rows": 21,
+      "revenue": 81163765,
+      "sales": 79944,
+      "salesRows": 21,
+      "unitRevenue": 1015.26,
+      "share": 6.3
+    },
+    {
+      "name": "Барсик",
+      "rows": 12,
+      "revenue": 62561570,
+      "sales": 51059,
+      "salesRows": 12,
+      "unitRevenue": 1225.28,
+      "share": 4.9
+    },
+    {
+      "name": "Spets",
+      "rows": 42,
+      "revenue": 44414941,
+      "sales": 94259,
+      "salesRows": 42,
+      "unitRevenue": 471.2,
+      "share": 3.5
+    },
+    {
+      "name": "Возьми и сэкономь",
+      "rows": 10,
+      "revenue": 37437398,
+      "sales": 66420,
+      "salesRows": 10,
+      "unitRevenue": 563.65,
+      "share": 2.9
+    },
+    {
+      "name": "Homecat",
+      "rows": 15,
+      "revenue": 29570310,
+      "sales": 39773,
+      "salesRows": 15,
+      "unitRevenue": 743.48,
+      "share": 2.3
+    },
+    {
+      "name": "Cliny",
+      "rows": 16,
+      "revenue": 23035666,
+      "sales": 54343,
+      "salesRows": 16,
+      "unitRevenue": 423.89,
+      "share": 1.8
+    },
+    {
+      "name": "Котяра",
+      "rows": 3,
+      "revenue": 21228994,
+      "sales": 40920,
+      "salesRows": 3,
+      "unitRevenue": 518.79,
+      "share": 1.7
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "Ozon",
+      "rows": 145,
+      "revenue": 582279547,
+      "sales": 860849,
+      "salesRows": 145,
+      "unitRevenue": 676.4,
+      "share": 45.3
+    },
+    {
+      "name": "Spets",
+      "rows": 38,
+      "revenue": 40999354,
+      "sales": 88547,
+      "salesRows": 38,
+      "unitRevenue": 463.02,
+      "share": 3.2
+    },
+    {
+      "name": "Patron Pets",
+      "rows": 7,
+      "revenue": 22339875,
+      "sales": 18019,
+      "salesRows": 7,
+      "unitRevenue": 1239.8,
+      "share": 1.7
+    },
+    {
+      "name": "qeep",
+      "rows": 9,
+      "revenue": 20470285,
+      "sales": 31130,
+      "salesRows": 9,
+      "unitRevenue": 657.57,
+      "share": 1.6
+    },
+    {
+      "name": "Cat Pellets",
+      "rows": 8,
+      "revenue": 16581024,
+      "sales": 20568,
+      "salesRows": 8,
+      "unitRevenue": 806.16,
+      "share": 1.3
+    },
+    {
+      "name": "VEDA - Официальный магазин",
+      "rows": 20,
+      "revenue": 15925676,
+      "sales": 53612,
+      "salesRows": 20,
+      "unitRevenue": 297.05,
+      "share": 1.2
+    },
+    {
+      "name": "Neoterica GmbH",
+      "rows": 16,
+      "revenue": 15709142,
+      "sales": 53026,
+      "salesRows": 16,
+      "unitRevenue": 296.25,
+      "share": 1.2
+    },
+    {
+      "name": "HitStore",
+      "rows": 12,
+      "revenue": 15402978,
+      "sales": 92280,
+      "salesRows": 12,
+      "unitRevenue": 166.92,
+      "share": 1.2
+    },
+    {
+      "name": "БОТАНИКФОКС",
+      "rows": 13,
+      "revenue": 13868649,
+      "sales": 73860,
+      "salesRows": 13,
+      "unitRevenue": 187.77,
+      "share": 1.1
+    },
+    {
+      "name": "E-COSMETIC",
+      "rows": 18,
+      "revenue": 12941936,
+      "sales": 39580,
+      "salesRows": 18,
+      "unitRevenue": 326.98,
+      "share": 1
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 368,
+      "revenue": 178236851,
+      "sales": 1276093,
+      "share": 13.9
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 354,
+      "revenue": 341254928,
+      "sales": 1067308,
+      "share": 26.6
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 182,
+      "revenue": 472218841,
+      "sales": 717769,
+      "share": 36.7
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 80,
+      "revenue": 244215639,
+      "sales": 185624,
+      "share": 19
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 15,
+      "revenue": 48379165,
+      "sales": 17878,
+      "share": 3.8
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 1,
+      "revenue": 847933,
+      "sales": 0,
+      "share": 0.1
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Pi-Pi-Bent Filler Cuccumping Clay 10000 g",
+      "brand": "Pi-Pi-Bent",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 35471953,
+      "sales": 46873,
+      "avgPrice": 757,
+      "url": "https://www.ozon.ru/product/166124353"
+    },
+    {
+      "name": "PET PRIDE Filler Cuccumping Clay 9000 g",
+      "brand": "PET PRIDE",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 33179490,
+      "sales": 66047,
+      "avgPrice": 502,
+      "url": "https://www.ozon.ru/product/1094209982"
+    },
+    {
+      "name": "Pi-Pi-Bent Filler Cuccumping Clay 15000 g",
+      "brand": "Pi-Pi-Bent",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 32663166,
+      "sales": 32877,
+      "avgPrice": 993,
+      "url": "https://www.ozon.ru/product/142701653"
+    },
+    {
+      "name": "Барсик Filler Cuccumping Soy 8200 g",
+      "brand": "Барсик",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 22269159,
+      "sales": 17579,
+      "avgPrice": 1267,
+      "url": "https://www.ozon.ru/product/1090796576"
+    },
+    {
+      "name": "Pi-Pi-Bent Filler Cuccumping Clay 10000 g",
+      "brand": "Pi-Pi-Bent",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 22006408,
+      "sales": 28976,
+      "avgPrice": 759,
+      "url": "https://www.ozon.ru/product/7353497"
+    },
+    {
+      "name": "PET PRIDE Filler Cuccumping Clay 9000 g",
+      "brand": "PET PRIDE",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 21634709,
+      "sales": 43358,
+      "avgPrice": 499,
+      "url": "https://www.ozon.ru/product/1094209972"
+    },
+    {
+      "name": "Котяра Filler Cuccumping Clay 8000 g",
+      "brand": "Котяра",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 12000754,
+      "sales": 23883,
+      "avgPrice": 502,
+      "url": "https://www.ozon.ru/product/636784395"
+    },
+    {
+      "name": "Cat Step Filler Cuccumping Soy 5400 g",
+      "brand": "Cat Step",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 11960254,
+      "sales": 7368,
+      "avgPrice": 1623,
+      "url": "https://www.ozon.ru/product/149648777"
+    },
+    {
+      "name": "PET PRIDE Filler Absorbent Wood 20000 g",
+      "brand": "PET PRIDE",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 11629730,
+      "sales": 15178,
+      "avgPrice": 766,
+      "url": "https://www.ozon.ru/product/713490452"
+    },
+    {
+      "name": "PET PRIDE Filler Cuccumping Plant-Based 5000 g",
+      "brand": "PET PRIDE",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 11135973,
+      "sales": 11252,
+      "avgPrice": 990,
+      "url": "https://www.ozon.ru/product/1124516183"
+    },
+    {
+      "name": "PET PRIDE Filler Absorbent Silica Gel 6400 g",
+      "brand": "PET PRIDE",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 9953147,
+      "sales": 7412,
+      "avgPrice": 1343,
+      "url": "https://www.ozon.ru/product/866942289"
+    },
+    {
+      "name": "PET PRIDE Filler Cuccumping Clay 10000 g",
+      "brand": "PET PRIDE",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 9851901,
+      "sales": 19032,
+      "avgPrice": 518,
+      "url": "https://www.ozon.ru/product/736634149"
+    },
+    {
+      "name": "Возьми и сэкономь Disposable Pet Diaper 30 pcs",
+      "brand": "Возьми и сэкономь",
+      "seller": "Ozon",
+      "type": "一次性宠物尿垫",
+      "revenue": 9608113,
+      "sales": 17125,
+      "avgPrice": 561,
+      "url": "https://www.ozon.ru/product/1359865401"
+    },
+    {
+      "name": "Cat Step Filler Cuccumping Soy 2700 g",
+      "brand": "Cat Step",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 9203369,
+      "sales": 12258,
+      "avgPrice": 751,
+      "url": "https://www.ozon.ru/product/148544751"
+    },
+    {
+      "name": "PET PRIDE Filler Absorbent Silica Gel 3200 g",
+      "brand": "PET PRIDE",
+      "seller": "Ozon",
+      "type": "猫砂",
+      "revenue": 9112272,
+      "sales": 12959,
+      "avgPrice": 703,
+      "url": "https://www.ozon.ru/product/866942238"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.941,
+    "signRateCoverage": 83.6,
+    "stockoutMedian": 11,
+    "stockoutCoverage": 76.7,
+    "missedRevenue": 4622387.2,
+    "missedRevenueCoverage": 100,
+    "promoActiveShare": 73.4,
+    "promoCoverage": 98.1,
+    "adActiveShare": 54.7,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "核心口径完整",
+    "salesCoverage": 98.1,
+    "missingSales": 19,
+    "missingAveragePrice": 0,
+    "missingBsr": 0,
+    "duplicateSku": 17,
+    "duplicateUrl": 0,
+    "uniqueSku": 983,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“猫砂”贡献 50.3% 销售额；前五品类合计 68.1%。",
+    "销售额最集中的价格带是 500–1,000 ₽，覆盖 182 条商品记录，贡献 36.7% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 60.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 98.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}

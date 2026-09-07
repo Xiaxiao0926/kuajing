@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ozon 宠物用品市场分析</title>
+  <style>
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    @font-face{font-family:InstrumentSans;src:url('../../_shared/fonts/InstrumentSans-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+    @font-face{font-family:InstrumentSerif;src:url('../../_shared/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+    :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+    .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
+  </style>
+</head>
+<body>
+  <header class="cover"><div class="wrap">
+    <div class="eyebrow">Ozon BSR1000 · 类目结构报告</div>
+    <h1>宠物用品市场分析</h1>
+    <p>以清洗后的商品级记录观察类目规模、价格结构、品牌与卖家集中度。销售额为核心排序口径；报告不把榜单样本外推为 Ozon 全站市场规模。</p>
+    <div class="rate">主货币：俄罗斯卢布 · 人民币仅按内部估算 1 CNY = 13 RUB 换算</div>
+    <div class="meta"><span>数据快照：2026-07-22</span><span>记录：1,000 条</span><span>来源：用户提供的 Ozon 清洗表</span></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="kpis">
+      <div class="kpi"><span class="label">样本销售额</span><span class="value">1.29 十亿 ₽</span><span class="hint">约 98.9 百万元人民币</span></div>
+      <div class="kpi"><span class="label">已记录销量</span><span class="value">3.26 百万 件</span><span class="hint">覆盖 98.1% 商品记录</span></div>
+      <div class="kpi"><span class="label">销售额 / 已记录销量</span><span class="value">394 ₽</span><span class="hint">统计比值，不等同商品标价</span></div>
+      <div class="kpi"><span class="label">产品类型</span><span class="value">71</span><span class="hint">按清洗表“产品类型”字段</span></div>
+      <div class="kpi"><span class="label">品牌 / 卖家</span><span class="value">257 / 424</span><span class="hint">排除未知桶后的去重数</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="quality"><strong>核心口径完整</strong><p>销售额字段用于主分析；销量缺失 19 条，均价缺失 0 条，BSR 标签缺失 0 条。SKU 重复 17 条，但产品链接重复 0 条，因此按商品记录保留，不擅自去重。</p></div>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">01</span><h2>先看结论</h2></div>
+      <p class="lead">这些结论直接来自当前 1,000 条左右的榜单样本，用于形成采购假设与进一步调研优先级，不构成利润承诺。</p>
+      <div class="insights"><div class="insight"><b>01</b>头部品类“猫砂”贡献 50.3% 销售额；前五品类合计 68.1%。</div><div class="insight"><b>02</b>销售额最集中的价格带是 500–1,000 ₽，覆盖 182 条商品记录，贡献 36.7% 销售额。</div><div class="insight"><b>03</b>前十品牌（含未知/无品牌桶）合计贡献 60.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。</div><div class="insight"><b>04</b>销量字段覆盖率为 98.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">02</span><h2>市场结构</h2></div>
+      <p class="lead">从产品类型、成交价格带、品牌和卖家四个维度交叉观察。图表中的销售额均为样本汇总，不代表平台完整类目规模。</p>
+      <div class="charts">
+        <div class="chart wide"><h3>头部产品类型：销售额与样本份额</h3><div id="chart-types" class="chart-box"></div></div>
+        <div class="chart"><h3>价格带结构</h3><div id="chart-bands" class="chart-box"></div></div>
+        <div class="chart"><h3>头部品牌销售额</h3><div id="chart-brands" class="chart-box"></div></div>
+        <div class="chart wide"><h3>头部卖家销售额</h3><div id="chart-sellers" class="chart-box"></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>
+    <tr><td>1</td><td>猫砂</td><td class="number">199</td><td class="number">646,029,035</td><td class="number">925,585</td><td class="number">50.3%</td></tr>
+    <tr><td>2</td><td>一次性宠物尿垫</td><td class="number">34</td><td class="number">72,665,705</td><td class="number">144,421</td><td class="number">5.7%</td></tr>
+    <tr><td>3</td><td>宠物玩具</td><td class="number">146</td><td class="number">66,117,647</td><td class="number">404,098</td><td class="number">5.1%</td></tr>
+    <tr><td>4</td><td>动物梳子</td><td class="number">64</td><td class="number">52,978,295</td><td class="number">327,378</td><td class="number">4.1%</td></tr>
+    <tr><td>5</td><td>宠物抗寄生虫药</td><td class="number">42</td><td class="number">36,870,529</td><td class="number">187,984</td><td class="number">2.9%</td></tr>
+    <tr><td>6</td><td>猫抓柱</td><td class="number">35</td><td class="number">31,484,220</td><td class="number">108,786</td><td class="number">2.4%</td></tr>
+    <tr><td>7</td><td>宠物厕所</td><td class="number">26</td><td class="number">30,943,451</td><td class="number">59,259</td><td class="number">2.4%</td></tr>
+    <tr><td>8</td><td>驱虫器</td><td class="number">27</td><td class="number">27,270,304</td><td class="number">85,678</td><td class="number">2.1%</td></tr>
+    <tr><td>9</td><td>饲料添加剂</td><td class="number">30</td><td class="number">26,133,376</td><td class="number">64,431</td><td class="number">2%</td></tr>
+    <tr><td>10</td><td>动物洗发水</td><td class="number">30</td><td class="number">23,194,819</td><td class="number">67,512</td><td class="number">1.8%</td></tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
+      <div class="ops">
+        <div class="op"><div class="label">签收率中位数</div><div class="value">94.1%</div><div class="coverage">字段覆盖 83.6%</div></div>
+        <div class="op"><div class="label">无库存天数中位数</div><div class="value">11 天</div><div class="coverage">字段覆盖 76.7%</div></div>
+        <div class="op"><div class="label">有促销记录占比</div><div class="value">73.4%</div><div class="coverage">字段覆盖 98.1%</div></div>
+        <div class="op"><div class="label">有推广记录占比</div><div class="value">54.7%</div><div class="coverage">字段覆盖 100%</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>
+    <tr>
+      <td>1</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/166124353" target="_blank" rel="noreferrer">Pi-Pi-Bent Filler Cuccumping Clay 10000 g</a></td>
+      <td>猫砂</td>
+      <td>Pi-Pi-Bent</td>
+      <td class="number">35,471,953</td>
+      <td class="number">46,873</td>
+      <td class="number">757</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1094209982" target="_blank" rel="noreferrer">PET PRIDE Filler Cuccumping Clay 9000 g</a></td>
+      <td>猫砂</td>
+      <td>PET PRIDE</td>
+      <td class="number">33,179,490</td>
+      <td class="number">66,047</td>
+      <td class="number">502</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/142701653" target="_blank" rel="noreferrer">Pi-Pi-Bent Filler Cuccumping Clay 15000 g</a></td>
+      <td>猫砂</td>
+      <td>Pi-Pi-Bent</td>
+      <td class="number">32,663,166</td>
+      <td class="number">32,877</td>
+      <td class="number">993</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1090796576" target="_blank" rel="noreferrer">Барсик Filler Cuccumping Soy 8200 g</a></td>
+      <td>猫砂</td>
+      <td>Барсик</td>
+      <td class="number">22,269,159</td>
+      <td class="number">17,579</td>
+      <td class="number">1,267</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/7353497" target="_blank" rel="noreferrer">Pi-Pi-Bent Filler Cuccumping Clay 10000 g</a></td>
+      <td>猫砂</td>
+      <td>Pi-Pi-Bent</td>
+      <td class="number">22,006,408</td>
+      <td class="number">28,976</td>
+      <td class="number">759</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1094209972" target="_blank" rel="noreferrer">PET PRIDE Filler Cuccumping Clay 9000 g</a></td>
+      <td>猫砂</td>
+      <td>PET PRIDE</td>
+      <td class="number">21,634,709</td>
+      <td class="number">43,358</td>
+      <td class="number">499</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/636784395" target="_blank" rel="noreferrer">Котяра Filler Cuccumping Clay 8000 g</a></td>
+      <td>猫砂</td>
+      <td>Котяра</td>
+      <td class="number">12,000,754</td>
+      <td class="number">23,883</td>
+      <td class="number">502</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/149648777" target="_blank" rel="noreferrer">Cat Step Filler Cuccumping Soy 5400 g</a></td>
+      <td>猫砂</td>
+      <td>Cat Step</td>
+      <td class="number">11,960,254</td>
+      <td class="number">7,368</td>
+      <td class="number">1,623</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/713490452" target="_blank" rel="noreferrer">PET PRIDE Filler Absorbent Wood 20000 g</a></td>
+      <td>猫砂</td>
+      <td>PET PRIDE</td>
+      <td class="number">11,629,730</td>
+      <td class="number">15,178</td>
+      <td class="number">766</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1124516183" target="_blank" rel="noreferrer">PET PRIDE Filler Cuccumping Plant-Based 5000 g</a></td>
+      <td>猫砂</td>
+      <td>PET PRIDE</td>
+      <td class="number">11,135,973</td>
+      <td class="number">11,252</td>
+      <td class="number">990</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/866942289" target="_blank" rel="noreferrer">PET PRIDE Filler Absorbent Silica Gel 6400 g</a></td>
+      <td>猫砂</td>
+      <td>PET PRIDE</td>
+      <td class="number">9,953,147</td>
+      <td class="number">7,412</td>
+      <td class="number">1,343</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/736634149" target="_blank" rel="noreferrer">PET PRIDE Filler Cuccumping Clay 10000 g</a></td>
+      <td>猫砂</td>
+      <td>PET PRIDE</td>
+      <td class="number">9,851,901</td>
+      <td class="number">19,032</td>
+      <td class="number">518</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/1359865401" target="_blank" rel="noreferrer">Возьми и сэкономь Disposable Pet Diaper 30 pcs</a></td>
+      <td>一次性宠物尿垫</td>
+      <td>Возьми и сэкономь</td>
+      <td class="number">9,608,113</td>
+      <td class="number">17,125</td>
+      <td class="number">561</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/148544751" target="_blank" rel="noreferrer">Cat Step Filler Cuccumping Soy 2700 g</a></td>
+      <td>猫砂</td>
+      <td>Cat Step</td>
+      <td class="number">9,203,369</td>
+      <td class="number">12,258</td>
+      <td class="number">751</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td class="product-name"><a href="https://www.ozon.ru/product/866942238" target="_blank" rel="noreferrer">PET PRIDE Filler Absorbent Silica Gel 3200 g</a></td>
+      <td>猫砂</td>
+      <td>PET PRIDE</td>
+      <td class="number">9,112,272</td>
+      <td class="number">12,959</td>
+      <td class="number">703</td>
+    </tr></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="notes"><ul>
+        <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
+        <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
+        <li>销售额、销量和均价属于市场信号；利润判断仍需补齐采购价、包装尺寸、渠道费率、退货、税费和汇率。</li>
+        <li>建议从头部类型中挑 3–5 个具体规格，再核验俄罗斯评论痛点、中国货源、认证要求和物流可行性。</li>
+      </ul></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>ozon-2026-07-22宠物用品_清洗版.xlsx</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 2026-09-07。</p></div></footer>
+  <script>window.REPORT_DATA={"id":"generated-pet-products","label":"宠物用品","title":"Ozon 宠物用品市场分析","group":"宠物与生活","snapshot":"2026-07-22","sourceFile":"ozon-2026-07-22宠物用品_清洗版.xlsx","path":"reports/generated/pet-products/index.html","frameTitle":"Ozon 宠物用品市场分析报告","kpis":{"rowCount":1000,"totalRevenue":1285153357,"totalSales":3264672,"unitRevenue":393.65,"typeCount":71,"brandCount":257,"sellerCount":424},"topTypes":[{"name":"猫砂","rows":199,"revenue":646029035,"sales":925585,"salesRows":198,"unitRevenue":697.97,"share":50.3},{"name":"一次性宠物尿垫","rows":34,"revenue":72665705,"sales":144421,"salesRows":34,"unitRevenue":503.15,"share":5.7},{"name":"宠物玩具","rows":146,"revenue":66117647,"sales":404098,"salesRows":143,"unitRevenue":163.62,"share":5.1},{"name":"动物梳子","rows":64,"revenue":52978295,"sales":327378,"salesRows":61,"unitRevenue":161.83,"share":4.1},{"name":"宠物抗寄生虫药","rows":42,"revenue":36870529,"sales":187984,"salesRows":41,"unitRevenue":196.14,"share":2.9},{"name":"猫抓柱","rows":35,"revenue":31484220,"sales":108786,"salesRows":34,"unitRevenue":289.41,"share":2.4},{"name":"宠物厕所","rows":26,"revenue":30943451,"sales":59259,"salesRows":26,"unitRevenue":522.17,"share":2.4},{"name":"驱虫器","rows":27,"revenue":27270304,"sales":85678,"salesRows":25,"unitRevenue":318.29,"share":2.1},{"name":"饲料添加剂","rows":30,"revenue":26133376,"sales":64431,"salesRows":30,"unitRevenue":405.6,"share":2},{"name":"动物洗发水","rows":30,"revenue":23194819,"sales":67512,"salesRows":30,"unitRevenue":343.57,"share":1.8}],"topBrands":[{"name":"PET PRIDE","rows":36,"revenue":181584735,"sales":320434,"salesRows":36,"unitRevenue":566.68,"share":14.1},{"name":"未知/无品牌","rows":268,"revenue":176601350,"sales":801532,"salesRows":259,"unitRevenue":220.33,"share":13.7},{"name":"Pi-Pi-Bent","rows":11,"revenue":116137457,"sales":159306,"salesRows":11,"unitRevenue":729.02,"share":9},{"name":"Cat Step","rows":21,"revenue":81163765,"sales":79944,"salesRows":21,"unitRevenue":1015.26,"share":6.3},{"name":"Барсик","rows":12,"revenue":62561570,"sales":51059,"salesRows":12,"unitRevenue":1225.28,"share":4.9},{"name":"Spets","rows":42,"revenue":44414941,"sales":94259,"salesRows":42,"unitRevenue":471.2,"share":3.5},{"name":"Возьми и сэкономь","rows":10,"revenue":37437398,"sales":66420,"salesRows":10,"unitRevenue":563.65,"share":2.9},{"name":"Homecat","rows":15,"revenue":29570310,"sales":39773,"salesRows":15,"unitRevenue":743.48,"share":2.3},{"name":"Cliny","rows":16,"revenue":23035666,"sales":54343,"salesRows":16,"unitRevenue":423.89,"share":1.8},{"name":"Котяра","rows":3,"revenue":21228994,"sales":40920,"salesRows":3,"unitRevenue":518.79,"share":1.7}],"topSellers":[{"name":"Ozon","rows":145,"revenue":582279547,"sales":860849,"salesRows":145,"unitRevenue":676.4,"share":45.3},{"name":"Spets","rows":38,"revenue":40999354,"sales":88547,"salesRows":38,"unitRevenue":463.02,"share":3.2},{"name":"Patron Pets","rows":7,"revenue":22339875,"sales":18019,"salesRows":7,"unitRevenue":1239.8,"share":1.7},{"name":"qeep","rows":9,"revenue":20470285,"sales":31130,"salesRows":9,"unitRevenue":657.57,"share":1.6},{"name":"Cat Pellets","rows":8,"revenue":16581024,"sales":20568,"salesRows":8,"unitRevenue":806.16,"share":1.3},{"name":"VEDA - Официальный магазин","rows":20,"revenue":15925676,"sales":53612,"salesRows":20,"unitRevenue":297.05,"share":1.2},{"name":"Neoterica GmbH","rows":16,"revenue":15709142,"sales":53026,"salesRows":16,"unitRevenue":296.25,"share":1.2},{"name":"HitStore","rows":12,"revenue":15402978,"sales":92280,"salesRows":12,"unitRevenue":166.92,"share":1.2},{"name":"БОТАНИКФОКС","rows":13,"revenue":13868649,"sales":73860,"salesRows":13,"unitRevenue":187.77,"share":1.1},{"name":"E-COSMETIC","rows":18,"revenue":12941936,"sales":39580,"salesRows":18,"unitRevenue":326.98,"share":1}],"priceBands":[{"label":"<200 ₽","rows":368,"revenue":178236851,"sales":1276093,"share":13.9},{"label":"200–500 ₽","rows":354,"revenue":341254928,"sales":1067308,"share":26.6},{"label":"500–1,000 ₽","rows":182,"revenue":472218841,"sales":717769,"share":36.7},{"label":"1,000–2,000 ₽","rows":80,"revenue":244215639,"sales":185624,"share":19},{"label":"2,000–5,000 ₽","rows":15,"revenue":48379165,"sales":17878,"share":3.8},{"label":"≥5,000 ₽","rows":1,"revenue":847933,"sales":0,"share":0.1}],"topProducts":[{"name":"Pi-Pi-Bent Filler Cuccumping Clay 10000 g","brand":"Pi-Pi-Bent","seller":"Ozon","type":"猫砂","revenue":35471953,"sales":46873,"avgPrice":757,"url":"https://www.ozon.ru/product/166124353"},{"name":"PET PRIDE Filler Cuccumping Clay 9000 g","brand":"PET PRIDE","seller":"Ozon","type":"猫砂","revenue":33179490,"sales":66047,"avgPrice":502,"url":"https://www.ozon.ru/product/1094209982"},{"name":"Pi-Pi-Bent Filler Cuccumping Clay 15000 g","brand":"Pi-Pi-Bent","seller":"Ozon","type":"猫砂","revenue":32663166,"sales":32877,"avgPrice":993,"url":"https://www.ozon.ru/product/142701653"},{"name":"Барсик Filler Cuccumping Soy 8200 g","brand":"Барсик","seller":"Ozon","type":"猫砂","revenue":22269159,"sales":17579,"avgPrice":1267,"url":"https://www.ozon.ru/product/1090796576"},{"name":"Pi-Pi-Bent Filler Cuccumping Clay 10000 g","brand":"Pi-Pi-Bent","seller":"Ozon","type":"猫砂","revenue":22006408,"sales":28976,"avgPrice":759,"url":"https://www.ozon.ru/product/7353497"},{"name":"PET PRIDE Filler Cuccumping Clay 9000 g","brand":"PET PRIDE","seller":"Ozon","type":"猫砂","revenue":21634709,"sales":43358,"avgPrice":499,"url":"https://www.ozon.ru/product/1094209972"},{"name":"Котяра Filler Cuccumping Clay 8000 g","brand":"Котяра","seller":"Ozon","type":"猫砂","revenue":12000754,"sales":23883,"avgPrice":502,"url":"https://www.ozon.ru/product/636784395"},{"name":"Cat Step Filler Cuccumping Soy 5400 g","brand":"Cat Step","seller":"Ozon","type":"猫砂","revenue":11960254,"sales":7368,"avgPrice":1623,"url":"https://www.ozon.ru/product/149648777"},{"name":"PET PRIDE Filler Absorbent Wood 20000 g","brand":"PET PRIDE","seller":"Ozon","type":"猫砂","revenue":11629730,"sales":15178,"avgPrice":766,"url":"https://www.ozon.ru/product/713490452"},{"name":"PET PRIDE Filler Cuccumping Plant-Based 5000 g","brand":"PET PRIDE","seller":"Ozon","type":"猫砂","revenue":11135973,"sales":11252,"avgPrice":990,"url":"https://www.ozon.ru/product/1124516183"},{"name":"PET PRIDE Filler Absorbent Silica Gel 6400 g","brand":"PET PRIDE","seller":"Ozon","type":"猫砂","revenue":9953147,"sales":7412,"avgPrice":1343,"url":"https://www.ozon.ru/product/866942289"},{"name":"PET PRIDE Filler Cuccumping Clay 10000 g","brand":"PET PRIDE","seller":"Ozon","type":"猫砂","revenue":9851901,"sales":19032,"avgPrice":518,"url":"https://www.ozon.ru/product/736634149"},{"name":"Возьми и сэкономь Disposable Pet Diaper 30 pcs","brand":"Возьми и сэкономь","seller":"Ozon","type":"一次性宠物尿垫","revenue":9608113,"sales":17125,"avgPrice":561,"url":"https://www.ozon.ru/product/1359865401"},{"name":"Cat Step Filler Cuccumping Soy 2700 g","brand":"Cat Step","seller":"Ozon","type":"猫砂","revenue":9203369,"sales":12258,"avgPrice":751,"url":"https://www.ozon.ru/product/148544751"},{"name":"PET PRIDE Filler Absorbent Silica Gel 3200 g","brand":"PET PRIDE","seller":"Ozon","type":"猫砂","revenue":9112272,"sales":12959,"avgPrice":703,"url":"https://www.ozon.ru/product/866942238"}],"operations":{"signRateMedian":0.941,"signRateCoverage":83.6,"stockoutMedian":11,"stockoutCoverage":76.7,"missedRevenue":4622387.2,"missedRevenueCoverage":100,"promoActiveShare":73.4,"promoCoverage":98.1,"adActiveShare":54.7,"adCoverage":100},"quality":{"level":"核心口径完整","salesCoverage":98.1,"missingSales":19,"missingAveragePrice":0,"missingBsr":0,"duplicateSku":17,"duplicateUrl":0,"uniqueSku":983,"urlCoverage":100},"insights":["头部品类“猫砂”贡献 50.3% 销售额；前五品类合计 68.1%。","销售额最集中的价格带是 500–1,000 ₽，覆盖 182 条商品记录，贡献 36.7% 销售额。","前十品牌（含未知/无品牌桶）合计贡献 60.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。","销量字段覆盖率为 98.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"]}</script>
+  <script src="../../_shared/js/echarts.min.js"></script>
+  <script src="../../_shared/js/generated-market-report.js"></script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+{
+  "id": "generated-car-electronics",
+  "label": "汽车电子",
+  "title": "Ozon 汽车电子市场分析",
+  "group": "汽车生态",
+  "snapshot": "2026-07-23",
+  "sourceFile": "ozon-2026-07-23汽车电子_清洗版.xlsx",
+  "path": "reports/generated/car-electronics/index.html",
+  "frameTitle": "Ozon 汽车电子市场分析报告",
+  "kpis": {
+    "rowCount": 1000,
+    "totalRevenue": 56703459,
+    "totalSales": 60279,
+    "unitRevenue": 940.68,
+    "typeCount": 10,
+    "brandCount": 151,
+    "sellerCount": 533
+  },
+  "topTypes": [
+    {
+      "name": "车载风扇",
+      "rows": 286,
+      "revenue": 28719606,
+      "sales": 32413,
+      "salesRows": 256,
+      "unitRevenue": 886.05,
+      "share": 50.6
+    },
+    {
+      "name": "汽车行驶记录仪",
+      "rows": 154,
+      "revenue": 9983000,
+      "sales": 3488,
+      "salesRows": 139,
+      "unitRevenue": 2862.1,
+      "share": 17.6
+    },
+    {
+      "name": "停车传感器",
+      "rows": 249,
+      "revenue": 7997624,
+      "sales": 8443,
+      "salesRows": 240,
+      "unitRevenue": 947.25,
+      "share": 14.1
+    },
+    {
+      "name": "汽车冰箱配件",
+      "rows": 48,
+      "revenue": 4631054,
+      "sales": 2470,
+      "salesRows": 44,
+      "unitRevenue": 1874.92,
+      "share": 8.2
+    },
+    {
+      "name": "酒精测试仪配件",
+      "rows": 64,
+      "revenue": 1929004,
+      "sales": 1637,
+      "salesRows": 55,
+      "unitRevenue": 1178.38,
+      "share": 3.4
+    },
+    {
+      "name": "点烟器插座延长线",
+      "rows": 120,
+      "revenue": 1917061,
+      "sales": 8444,
+      "salesRows": 109,
+      "unitRevenue": 227.03,
+      "share": 3.4
+    },
+    {
+      "name": "行驶记录仪记录纸",
+      "rows": 37,
+      "revenue": 1201903,
+      "sales": 2613,
+      "salesRows": 35,
+      "unitRevenue": 459.97,
+      "share": 2.1
+    },
+    {
+      "name": "倒车雷达配件",
+      "rows": 30,
+      "revenue": 202877,
+      "sales": 577,
+      "salesRows": 27,
+      "unitRevenue": 351.61,
+      "share": 0.4
+    },
+    {
+      "name": "汽车空气净化器",
+      "rows": 11,
+      "revenue": 114548,
+      "sales": 179,
+      "salesRows": 9,
+      "unitRevenue": 639.93,
+      "share": 0.2
+    },
+    {
+      "name": "汽车加湿器",
+      "rows": 1,
+      "revenue": 6782,
+      "sales": 15,
+      "salesRows": 1,
+      "unitRevenue": 452.13,
+      "share": 0
+    }
+  ],
+  "topBrands": [
+    {
+      "name": "未知/无品牌",
+      "rows": 545,
+      "revenue": 19445226,
+      "sales": 21154,
+      "salesRows": 473,
+      "unitRevenue": 919.22,
+      "share": 34.3
+    },
+    {
+      "name": "PKBFLOW",
+      "rows": 19,
+      "revenue": 4653090,
+      "sales": 4719,
+      "salesRows": 19,
+      "unitRevenue": 986.03,
+      "share": 8.2
+    },
+    {
+      "name": "Prooofi Distribution",
+      "rows": 6,
+      "revenue": 3817670,
+      "sales": 3533,
+      "salesRows": 6,
+      "unitRevenue": 1080.57,
+      "share": 6.7
+    },
+    {
+      "name": "AVS",
+      "rows": 19,
+      "revenue": 3385247,
+      "sales": 4896,
+      "salesRows": 19,
+      "unitRevenue": 691.43,
+      "share": 6
+    },
+    {
+      "name": "AT",
+      "rows": 16,
+      "revenue": 1473766,
+      "sales": 1263,
+      "salesRows": 14,
+      "unitRevenue": 1166.88,
+      "share": 2.6
+    },
+    {
+      "name": "TIME SHOP",
+      "rows": 9,
+      "revenue": 1274064,
+      "sales": 984,
+      "salesRows": 9,
+      "unitRevenue": 1294.78,
+      "share": 2.2
+    },
+    {
+      "name": "ЛЕДОХОД",
+      "rows": 7,
+      "revenue": 1233955,
+      "sales": 380,
+      "salesRows": 7,
+      "unitRevenue": 3247.25,
+      "share": 2.2
+    },
+    {
+      "name": "ELIXGO",
+      "rows": 49,
+      "revenue": 1087641,
+      "sales": 1265,
+      "salesRows": 49,
+      "unitRevenue": 859.8,
+      "share": 1.9
+    },
+    {
+      "name": "Alpicool",
+      "rows": 10,
+      "revenue": 1007677,
+      "sales": 409,
+      "salesRows": 10,
+      "unitRevenue": 2463.76,
+      "share": 1.8
+    },
+    {
+      "name": "Podofo Distribution",
+      "rows": 2,
+      "revenue": 993410,
+      "sales": 944,
+      "salesRows": 2,
+      "unitRevenue": 1052.34,
+      "share": 1.8
+    }
+  ],
+  "topSellers": [
+    {
+      "name": "AVS - Официальный магазин",
+      "rows": 14,
+      "revenue": 3202916,
+      "sales": 4654,
+      "salesRows": 14,
+      "unitRevenue": 688.21,
+      "share": 5.6
+    },
+    {
+      "name": "Peony Shop",
+      "rows": 7,
+      "revenue": 2704307,
+      "sales": 1990,
+      "salesRows": 7,
+      "unitRevenue": 1358.95,
+      "share": 4.8
+    },
+    {
+      "name": "ELECTRO MAG",
+      "rows": 4,
+      "revenue": 2620687,
+      "sales": 2560,
+      "salesRows": 4,
+      "unitRevenue": 1023.71,
+      "share": 4.6
+    },
+    {
+      "name": "Профи Маркет - Интернет магазин",
+      "rows": 2,
+      "revenue": 2160464,
+      "sales": 1895,
+      "salesRows": 2,
+      "unitRevenue": 1140.09,
+      "share": 3.8
+    },
+    {
+      "name": "ИНСТРУМЕНТАРИЙ",
+      "rows": 1,
+      "revenue": 1900665,
+      "sales": 1839,
+      "salesRows": 1,
+      "unitRevenue": 1033.53,
+      "share": 3.4
+    },
+    {
+      "name": "AT",
+      "rows": 15,
+      "revenue": 1462774,
+      "sales": 1250,
+      "salesRows": 13,
+      "unitRevenue": 1170.22,
+      "share": 2.6
+    },
+    {
+      "name": "TIME SHOP",
+      "rows": 9,
+      "revenue": 1274064,
+      "sales": 984,
+      "salesRows": 9,
+      "unitRevenue": 1294.78,
+      "share": 2.2
+    },
+    {
+      "name": "shiwuershi",
+      "rows": 5,
+      "revenue": 1235961,
+      "sales": 241,
+      "salesRows": 5,
+      "unitRevenue": 5128.47,
+      "share": 2.2
+    },
+    {
+      "name": "ЛЕДОХОД",
+      "rows": 7,
+      "revenue": 1233955,
+      "sales": 380,
+      "salesRows": 7,
+      "unitRevenue": 3247.25,
+      "share": 2.2
+    },
+    {
+      "name": "HEAT Store",
+      "rows": 6,
+      "revenue": 1125414,
+      "sales": 1830,
+      "salesRows": 6,
+      "unitRevenue": 614.98,
+      "share": 2
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "<200 ₽",
+      "rows": 174,
+      "revenue": 3067719,
+      "sales": 8960,
+      "share": 5.4
+    },
+    {
+      "label": "200–500 ₽",
+      "rows": 211,
+      "revenue": 4858484,
+      "sales": 13242,
+      "share": 8.6
+    },
+    {
+      "label": "500–1,000 ₽",
+      "rows": 273,
+      "revenue": 14144277,
+      "sales": 18709,
+      "share": 24.9
+    },
+    {
+      "label": "1,000–2,000 ₽",
+      "rows": 184,
+      "revenue": 19299798,
+      "sales": 15507,
+      "share": 34
+    },
+    {
+      "label": "2,000–5,000 ₽",
+      "rows": 129,
+      "revenue": 11065383,
+      "sales": 3224,
+      "share": 19.5
+    },
+    {
+      "label": "≥5,000 ₽",
+      "rows": 29,
+      "revenue": 4267798,
+      "sales": 637,
+      "share": 7.5
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Prooofi Distribution Car Fan, 10 W",
+      "brand": "Prooofi Distribution",
+      "seller": "Профи Маркет - Интернет магазин",
+      "type": "车载风扇",
+      "revenue": 2143284,
+      "sales": 1886,
+      "avgPrice": 1136,
+      "url": "https://www.ozon.ru/product/1506496610"
+    },
+    {
+      "name": "Car Fan, 20 W",
+      "brand": "未知/无品牌",
+      "seller": "ИНСТРУМЕНТАРИЙ",
+      "type": "车载风扇",
+      "revenue": 1900665,
+      "sales": 1839,
+      "avgPrice": 1034,
+      "url": "https://www.ozon.ru/product/4554085023"
+    },
+    {
+      "name": "PKBFLOW Car Fan, 12 W",
+      "brand": "PKBFLOW",
+      "seller": "Peony Shop",
+      "type": "车载风扇",
+      "revenue": 1169470,
+      "sales": 834,
+      "avgPrice": 1402,
+      "url": "https://www.ozon.ru/product/2017533562"
+    },
+    {
+      "name": "Prooofi Distribution Car Fan, 10.1 W",
+      "brand": "Prooofi Distribution",
+      "seller": "ELECTRO MAG",
+      "type": "车载风扇",
+      "revenue": 1018954,
+      "sales": 1024,
+      "avgPrice": 995,
+      "url": "https://www.ozon.ru/product/1235471824"
+    },
+    {
+      "name": "AVS Car Fan, 10 W",
+      "brand": "AVS",
+      "seller": "AVS - Официальный магазин",
+      "type": "车载风扇",
+      "revenue": 938114,
+      "sales": 1273,
+      "avgPrice": 737,
+      "url": "https://www.ozon.ru/product/3543671617"
+    },
+    {
+      "name": "AVS Car Fan, 14 W",
+      "brand": "AVS",
+      "seller": "AVS - Официальный магазин",
+      "type": "车载风扇",
+      "revenue": 882872,
+      "sales": 1126,
+      "avgPrice": 784,
+      "url": "https://www.ozon.ru/product/3543696515"
+    },
+    {
+      "name": "Podofo Distribution Car Fan, 10.1 W",
+      "brand": "Podofo Distribution",
+      "seller": "ELECTRO MAG",
+      "type": "车载风扇",
+      "revenue": 869260,
+      "sales": 812,
+      "avgPrice": 1071,
+      "url": "https://www.ozon.ru/product/992571851"
+    },
+    {
+      "name": "TAKARA Car Fan, 24 W",
+      "brand": "TAKARA",
+      "seller": "TAKARA",
+      "type": "车载风扇",
+      "revenue": 735520,
+      "sales": 416,
+      "avgPrice": 1768,
+      "url": "https://www.ozon.ru/product/2046747138"
+    },
+    {
+      "name": "AVS Car Fan",
+      "brand": "AVS",
+      "seller": "AVS - Официальный магазин",
+      "type": "车载风扇",
+      "revenue": 726198,
+      "sales": 768,
+      "avgPrice": 946,
+      "url": "https://www.ozon.ru/product/594310892"
+    },
+    {
+      "name": "АвтоХит Car Fan, 15 W",
+      "brand": "АвтоХит",
+      "seller": "PrimeHunt",
+      "type": "车载风扇",
+      "revenue": 706445,
+      "sales": 556,
+      "avgPrice": 1271,
+      "url": "https://www.ozon.ru/product/4257675848"
+    },
+    {
+      "name": "TIME SHOP Parking Sensor, sensors: 4",
+      "brand": "TIME SHOP",
+      "seller": "TIME SHOP",
+      "type": "停车传感器",
+      "revenue": 662806,
+      "sales": 531,
+      "avgPrice": 1248,
+      "url": "https://www.ozon.ru/product/542869122"
+    },
+    {
+      "name": "AUTOTREND Car Fan",
+      "brand": "AUTOTREND",
+      "seller": "AutoTrend",
+      "type": "车载风扇",
+      "revenue": 642907,
+      "sales": 1588,
+      "avgPrice": 405,
+      "url": "https://www.ozon.ru/product/3898048439"
+    },
+    {
+      "name": "Prooofi Distribution Car Fan, 10.8 W",
+      "brand": "Prooofi Distribution",
+      "seller": "ELECTRO MAG",
+      "type": "车载风扇",
+      "revenue": 608323,
+      "sales": 592,
+      "avgPrice": 1028,
+      "url": "https://www.ozon.ru/product/1235471875"
+    },
+    {
+      "name": "MakDen Auto Cigarette Lighter Socket Extension Cable, 10 cm",
+      "brand": "MakDen Auto",
+      "seller": "Makden Auto",
+      "type": "点烟器插座延长线",
+      "revenue": 528960,
+      "sales": 2793,
+      "avgPrice": 189,
+      "url": "https://www.ozon.ru/product/2068324552"
+    },
+    {
+      "name": "Car Fan",
+      "brand": "未知/无品牌",
+      "seller": "АРОМАТЫ ВОСТОКА",
+      "type": "车载风扇",
+      "revenue": 471059,
+      "sales": 914,
+      "avgPrice": 515,
+      "url": "https://www.ozon.ru/product/4586804347"
+    }
+  ],
+  "operations": {
+    "signRateMedian": 0.904,
+    "signRateCoverage": 91.5,
+    "stockoutMedian": 28,
+    "stockoutCoverage": 70.5,
+    "missedRevenue": 9876913,
+    "missedRevenueCoverage": 91.5,
+    "promoActiveShare": 97.4,
+    "promoCoverage": 100,
+    "adActiveShare": 100,
+    "adCoverage": 100
+  },
+  "quality": {
+    "level": "可用，需留意缺失",
+    "salesCoverage": 91.5,
+    "missingSales": 85,
+    "missingAveragePrice": 0,
+    "missingBsr": 512,
+    "duplicateSku": 48,
+    "duplicateUrl": 0,
+    "uniqueSku": 952,
+    "urlCoverage": 100
+  },
+  "insights": [
+    "头部品类“车载风扇”贡献 50.6% 销售额；前五品类合计 93.9%。",
+    "销售额最集中的价格带是 1,000–2,000 ₽，覆盖 184 条商品记录，贡献 34% 销售额。",
+    "前十品牌（含未知/无品牌桶）合计贡献 67.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
+    "销量字段覆盖率为 91.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
+  ]
+}
