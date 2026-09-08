@@ -392,6 +392,9 @@ function DashboardApp() {
             >
               <option value="__project_flow__">项目流程总览</option>
               <option value="__purity_analysis__">选品市场分析</option>
+              <option value="__scoring__">选品评分</option>
+              <option value="__t6_candidates__">候选池</option>
+              <option value="__t6_projects__">SKU 项目</option>
               <option value="__market_reports__">市场报告中心</option>
               <option value="__fbp_calc__">FBP 边境仓核算</option>
               {ROADMAP_PHASES.map((phase) => (

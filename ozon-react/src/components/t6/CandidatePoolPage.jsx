@@ -21,6 +21,7 @@ import EmptyState from '../ui/EmptyState'
 import ScoreCell from '../scoring/ScoreCell'
 import DecisionBadge from '../scoring/DecisionBadge'
 import ContextBadge from '../scoring/ContextBadge'
+import FactoryTrialCandidatesSection from './FactoryTrialCandidatesSection'
 
 const BIZ_STATUS = [['观察', '观察'], ['待调研', '待调研'], ['待立项', '待立项'], ['暂缓', '暂缓'], ['淘汰', '淘汰']]
 
@@ -114,10 +115,15 @@ export default function CandidatePoolPage() {
     <div className="space-y-4">
       <PageHeader
         title="候选池"
-        subtitle="从 1000 个候选里选什么——人工业务状态与模型评分并列展示"
+        subtitle="工厂试卖候选与市场评分候选分层展示，证据不混用"
         actions={notice ? <span className="text-xs text-workspace-text-secondary">{notice}</span> : undefined}
       />
       {loadError && <div className="rounded-lg bg-workspace-danger-soft px-4 py-3 text-sm text-workspace-danger">{loadError}</div>}
+      <FactoryTrialCandidatesSection />
+      <div>
+        <h3 className="text-base font-semibold text-workspace-text">正式评分候选</h3>
+        <p className="mt-1 text-xs text-workspace-text-secondary">来自市场评分数据，可生成不可变快照并创建SKU项目。</p>
+      </div>
       <Surface>
         {candidates.length === 0 ? (
           <EmptyState title="候选池为空" description="到「选品评分」页点击 [加入候选]，商品会出现在这里" />

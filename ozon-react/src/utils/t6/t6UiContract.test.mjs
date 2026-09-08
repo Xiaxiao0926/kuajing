@@ -177,5 +177,13 @@ console.log('UI-5: 保存前人工确认 Gate 源码契约（Ozon/WB 未确认�
   assert(wb.includes('mergeTrustedPrefill(defaults, projectContext.prefill)'), 'CalculatorTab 用 mergeTrustedPrefill')
 }
 
+console.log('UI-6: 窄屏导航可达选品评分、候选池与 SKU 项目')
+{
+  const app = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'App.jsx'), 'utf-8')
+  assert(app.includes('<option value="__scoring__">选品评分</option>'), '窄屏下拉包含选品评分')
+  assert(app.includes('<option value="__t6_candidates__">候选池</option>'), '窄屏下拉包含候选池')
+  assert(app.includes('<option value="__t6_projects__">SKU 项目</option>'), '窄屏下拉包含 SKU 项目')
+}
+
 console.log(`\n===== T6 UI 契约测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)
 if (fail > 0) process.exit(1)
