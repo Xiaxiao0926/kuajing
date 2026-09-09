@@ -26,6 +26,25 @@ const PRICE_BANDS = [
   { label: '≥5,000 ₽', min: 5000, max: Infinity },
 ]
 
+const RAW_OZON_SELECTOR_FIELDS = {
+  image: 'sc5140-a src',
+  url: 'ld9-z3 href',
+  name: 'ld9-z3',
+  brand: 'ld9-z5',
+  seller: 'ld9-z5 (2)',
+  sku: 'ld9-z7 (3)',
+  type: 'ld9-a0a',
+  bsr: 'rc8134-a0',
+  revenue: 'ld9-de9',
+  sales: 'ld9-de9 (2)',
+  avgPrice: 'ld9-de9 (3)',
+  signRate: 'ct5140-a0 (2)',
+  missedRevenue: 'ld9-de9 (4)',
+  stockoutDays: 'ct5140-a0 (3)',
+  promoDays: 'ct5140-a0 (11)',
+  adDays: 'ct5140-a0 (12)',
+}
+
 function valueFrom(row, aliases) {
   for (const key of aliases) {
     const value = row[key]
@@ -41,8 +60,23 @@ function numeric(value) {
     .replace(/[\s\u00a0₽%]/g, '')
     .replace(',', '.')
     .replace(/[^0-9.+-]/g, '')
+  if (!normalized || normalized === '-' || normalized === '+' || normalized === '.') return null
   const parsed = Number(normalized)
   return Number.isFinite(parsed) ? parsed : null
+}
+
+function rawWindowCount(value) {
+  const matched = String(value ?? '').match(/中的(\d+)/u)
+  return matched ? Number(matched[1]) : numeric(value)
+}
+
+function rawRatio(value) {
+  const parsed = numeric(value)
+  if (parsed === null) return null
+  if (parsed <= 1) return parsed
+  // SheetJS parses comma-decimal percentages such as "94,5%" as 9.45.
+  if (parsed <= 10) return parsed / 10
+  return parsed / 100
 }
 
 function text(value, fallback = '未知') {
@@ -128,6 +162,35 @@ function rowModel(row) {
   }
 }
 
+export function normalizeMarketReportRows(rawRows) {
+  if (!Array.isArray(rawRows) || !rawRows.length) return rawRows
+  const headers = new Set(Object.keys(rawRows[0] || {}))
+  const isRawOzonExport = headers.has(RAW_OZON_SELECTOR_FIELDS.image)
+    && headers.has(RAW_OZON_SELECTOR_FIELDS.url)
+    && headers.has(RAW_OZON_SELECTOR_FIELDS.revenue)
+    && headers.has(RAW_OZON_SELECTOR_FIELDS.type)
+  if (!isRawOzonExport) return rawRows
+
+  return rawRows.map((row) => ({
+    产品图片: row[RAW_OZON_SELECTOR_FIELDS.image],
+    产品链接: row[RAW_OZON_SELECTOR_FIELDS.url],
+    产品名称: row[RAW_OZON_SELECTOR_FIELDS.name],
+    品牌名: row[RAW_OZON_SELECTOR_FIELDS.brand],
+    卖家名称: row[RAW_OZON_SELECTOR_FIELDS.seller],
+    SKU: String(row[RAW_OZON_SELECTOR_FIELDS.sku] || '').replace(/^货号:\s*/u, ''),
+    产品类型: row[RAW_OZON_SELECTOR_FIELDS.type],
+    BSR标签: row[RAW_OZON_SELECTOR_FIELDS.bsr],
+    '销售额(₽)': row[RAW_OZON_SELECTOR_FIELDS.revenue],
+    '销量(件)': row[RAW_OZON_SELECTOR_FIELDS.sales],
+    '平均售价(₽)': row[RAW_OZON_SELECTOR_FIELDS.avgPrice],
+    '签收率(%)': rawRatio(row[RAW_OZON_SELECTOR_FIELDS.signRate]),
+    '错失销售额(₽)': row[RAW_OZON_SELECTOR_FIELDS.missedRevenue],
+    '无库存天数(近28天)': rawWindowCount(row[RAW_OZON_SELECTOR_FIELDS.stockoutDays]),
+    '促销天数(近28天)': rawWindowCount(row[RAW_OZON_SELECTOR_FIELDS.promoDays]),
+    '推广天数(近28天)': rawWindowCount(row[RAW_OZON_SELECTOR_FIELDS.adDays]),
+  }))
+}
+
 export function inferMarketReportLabel(fileName) {
   return String(fileName || '导入数据')
     .replace(/\.(xlsx|xls|csv|json)$/iu, '')
@@ -175,7 +238,8 @@ export function stableMarketReportId(fileName) {
 
 export function buildUploadedMarketReport(rawRows, options = {}) {
   if (!Array.isArray(rawRows) || rawRows.length === 0) throw new Error('工作表中没有可分析的数据行。')
-  const headers = new Set(Object.keys(rawRows[0] || {}))
+  const normalizedRows = normalizeMarketReportRows(rawRows)
+  const headers = new Set(Object.keys(normalizedRows[0] || {}))
   if (!FIELD_ALIASES.revenue.some((header) => headers.has(header))) {
     throw new Error('缺少销售额字段，需要“销售额(₽)”或“销售额₽”。')
   }
@@ -185,7 +249,7 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
   const label = options.label || inferMarketReportLabel(sourceFile)
   const snapshot = options.snapshot || sourceFile.match(/\d{4}-\d{2}-\d{2}/)?.[0] || new Date().toISOString().slice(0, 10)
   const id = options.id || stableMarketReportId(sourceFile)
-  const rows = rawRows.map(rowModel)
+  const rows = normalizedRows.map(rowModel)
   const rowCount = rows.length
   const totalRevenue = rows.reduce((sum, row) => sum + (row.revenue || 0), 0)
   const revenueRows = rows.filter((row) => row.revenue !== null)

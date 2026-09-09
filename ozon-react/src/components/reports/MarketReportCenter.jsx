@@ -11,6 +11,7 @@ import {
   stableMarketReportId,
 } from '../../utils/marketReportAnalysis.js'
 import { GENERATED_MARKET_REPORTS } from '../../generated/marketReports.js'
+import { RECENT_MARKET_REPORTS } from '../../generated/recentMarketReports.js'
 import UploadedMarketReport from './UploadedMarketReport.jsx'
 
 const FEATURED_REPORTS = [
@@ -38,7 +39,7 @@ const FEATURED_REPORTS = [
   },
 ]
 
-const STATIC_REPORTS = [...FEATURED_REPORTS, ...GENERATED_MARKET_REPORTS]
+const STATIC_REPORTS = [...FEATURED_REPORTS, ...RECENT_MARKET_REPORTS, ...GENERATED_MARKET_REPORTS]
 const GROUP_ORDER = ['导入报告', '精选报告', '汽车生态', '家居与维修', '宠物与生活', '数码产品']
 const SOURCE_NAMESPACE = 'market-report-sources'
 const REPORT_NAMESPACE = 'market-report-json'
@@ -68,7 +69,7 @@ export default function MarketReportCenter() {
   const reportUrl = activeReport?.path ? getAssetUrl(activeReport.path) : ''
   const groupedReports = useMemo(() => {
     const groups = { 导入报告: uploadedReports, 精选报告: FEATURED_REPORTS }
-    GENERATED_MARKET_REPORTS.forEach((report) => {
+    ;[...RECENT_MARKET_REPORTS, ...GENERATED_MARKET_REPORTS].forEach((report) => {
       if (!groups[report.group]) groups[report.group] = []
       groups[report.group].push(report)
     })
@@ -261,8 +262,8 @@ export default function MarketReportCenter() {
                 数据快照 {activeReport.snapshot} · {activeReport.source} · {activeReport.sample}
               </p>
             </div>
-            {activeReport.kind === 'uploaded' ? (
-              <span className="inline-flex h-9 shrink-0 items-center rounded-md border border-emerald-200 bg-emerald-50 px-3 text-sm font-medium text-emerald-800">服务器已发布</span>
+            {activeReport.kind === 'uploaded' || activeReport.kind === 'embedded' ? (
+              <span className="inline-flex h-9 shrink-0 items-center rounded-md border border-emerald-200 bg-emerald-50 px-3 text-sm font-medium text-emerald-800">{activeReport.kind === 'uploaded' ? '服务器已发布' : '随网站发布'}</span>
             ) : (
               <a
                 href={reportUrl}
@@ -276,7 +277,7 @@ export default function MarketReportCenter() {
             )}
           </div>
 
-          {activeReport.kind === 'uploaded' ? (
+          {activeReport.kind === 'uploaded' || activeReport.kind === 'embedded' ? (
             <UploadedMarketReport key={activeReport.id} report={activeReport} />
           ) : (
             <iframe

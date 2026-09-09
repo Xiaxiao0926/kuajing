@@ -85,6 +85,20 @@ export default function UploadedMarketReport({ report }) {
           </div>
         </section>
 
+        {report.recommendations?.length ? (
+          <section className="mt-8 border-y border-gray-200 py-6">
+            <h4 className="text-lg font-semibold text-morandi-text">给国内工厂的测试建议</h4>
+            <ol className="mt-3 grid gap-3 lg:grid-cols-3">
+              {report.recommendations.map((item, index) => (
+                <li key={item} className="flex gap-3 border-l-2 border-emerald-600 bg-gray-50 px-4 py-3 text-sm leading-6 text-morandi-text">
+                  <span className="font-semibold tabular-nums text-emerald-700">{index + 1}</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
+
         <section className="mt-8 grid gap-5 xl:grid-cols-2">
           <div className="border border-gray-200 p-4">
             <h4 className="mb-4 text-sm font-semibold text-morandi-text">头部产品类型</h4>
@@ -147,7 +161,7 @@ export default function UploadedMarketReport({ report }) {
         </section>
 
         <footer className="mt-8 border-t border-gray-200 pt-4 text-xs leading-5 text-morandi-text-light">
-          原始 Excel 与本报告 JSON 均保存于服务器私有目录。榜单样本适合比较内部结构；利润决策仍需补齐采购价、物流、退货、税费、合规与实时汇率。
+          {report.persistenceNote || '原始数据与本报告 JSON 均保存于服务器私有目录。榜单样本适合比较内部结构；利润决策仍需补齐采购价、物流、退货、税费、合规与实时汇率。'}
         </footer>
       </div>
     </article>

@@ -4,6 +4,7 @@ import {
   getMarketImportType,
   inferMarketReportLabel,
   isUploadedMarketReport,
+  normalizeMarketReportRows,
   parseMarketReportJson,
   stableMarketReportId,
 } from './marketReportAnalysis.js'
@@ -52,5 +53,37 @@ assert.throws(() => parseMarketReportJson('{broken'), /JSON 文件格式无效/)
 assert.equal(stableMarketReportId('same.xlsx'), stableMarketReportId('same.xlsx'))
 assert.notEqual(stableMarketReportId('same.xlsx'), stableMarketReportId('other.xlsx'))
 assert.throws(() => buildUploadedMarketReport([{ 产品名称: '无销售额' }]), /缺少销售额字段/)
+
+const rawOzonRows = [{
+  'sc5140-a src': 'https://example.com/image.jpg',
+  'ld9-z3 href': 'https://www.ozon.ru/product/123',
+  'ld9-z3': 'Test Hinge',
+  'ld9-z5': 'Test Brand',
+  'ld9-z5 (2)': 'Test Seller',
+  'ld9-z7 (3)': '货号: 123',
+  'ld9-a0a': '家具合页',
+  'rc8134-a0': '销售领导者',
+  'ld9-de9': '3 502 773 ₽',
+  'ld9-de9 (2)': '22 152',
+  'ld9-de9 (3)': '158 ₽',
+  'ct5140-a0 (2)': 9.45,
+  'ld9-de9 (4)': '0 ₽',
+  'ct5140-a0 (3)': '28中的11',
+  'ct5140-a0 (11)': '28中的28',
+  'ct5140-a0 (12)': '28中的12',
+}]
+const normalizedRaw = normalizeMarketReportRows(rawOzonRows)
+assert.equal(normalizedRaw[0]['销售额(₽)'], '3 502 773 ₽')
+assert.equal(normalizedRaw[0]['签收率(%)'], 0.945)
+assert.equal(normalizedRaw[0]['无库存天数(近28天)'], 11)
+const rawReport = buildUploadedMarketReport(rawOzonRows, { sourceFile: 'ozon-2026-09-08.csv', label: '家具合页' })
+assert.equal(rawReport.kpis.totalRevenue, 3502773)
+assert.equal(rawReport.operations.signRateMedian, 0.945)
+assert.equal(rawReport.operations.stockoutMedian, 11)
+const rawMissingSalesReport = buildUploadedMarketReport([
+  { ...rawOzonRows[0], 'ld9-de9 (2)': '—' },
+], { sourceFile: 'raw.csv', label: '原始数据' })
+assert.equal(rawMissingSalesReport.quality.missingSales, 1)
+assert.equal(rawMissingSalesReport.quality.salesCoverage, 0)
 
 console.log('uploaded market report analysis tests passed')

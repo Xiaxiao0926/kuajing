@@ -7,6 +7,7 @@ const sidebar = read('../ozon-react/src/components/Sidebar.jsx')
 const reportPage = read('../ozon-react/src/components/reports/MarketReportCenter.jsx')
 const uploadedReport = read('../ozon-react/src/components/reports/UploadedMarketReport.jsx')
 const reportAnalysis = read('../ozon-react/src/utils/marketReportAnalysis.js')
+const recentReports = read('../ozon-react/src/generated/recentMarketReports.js')
 const doorWindowHtml = read('../ozon-react/public/reports/doors-windows-top10/ozon-doors-windows-top10.html')
 const lightingHtml = read('../ozon-react/public/reports/ozon-lighting-deep-analysis/index.html')
 
@@ -22,10 +23,19 @@ assert.match(reportPage, /uploadServerFile\(REPORT_NAMESPACE, reportFile\)/, 'Ge
 assert.match(reportPage, /listServerFiles\(REPORT_NAMESPACE\)/, 'Published reports must reload from shared server storage')
 assert.match(reportPage, /accept="\.xlsx,\.xls,\.csv,\.json"/, 'Report center must accept Excel, CSV, and JSON imports')
 assert.match(reportPage, /parseMarketReportJson/, 'Report center must parse JSON row datasets')
+assert.match(reportPage, /RECENT_MARKET_REPORTS/, 'Report center must include recent raw Ozon analyses')
 assert.match(reportPage, /导入并发布/, 'Report center must expose the data publication command')
 assert.match(uploadedReport, /服务器私有目录/, 'Uploaded report must state its persistence boundary')
 assert.match(reportAnalysis, /销售额\(₽\)/, 'Report analysis must support normalized revenue headers')
 assert.match(reportAnalysis, /销售额₽/, 'Report analysis must support legacy revenue headers')
+assert.match(reportAnalysis, /normalizeMarketReportRows/, 'Report analysis must normalize raw Ozon selector exports')
+for (const reportId of [
+  'recent-furniture-hinges-2026-09-08',
+  'recent-furniture-legs-casters-2026-09-07',
+  'recent-furniture-hardware-overview-2026-09-07',
+]) {
+  assert.match(recentReports, new RegExp(reportId), `missing recent report: ${reportId}`)
+}
 
 for (const asset of [
   '../ozon-react/public/reports/doors-windows-top10/assets/charts.js',
