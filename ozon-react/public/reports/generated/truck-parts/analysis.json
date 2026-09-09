@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-truck-parts",
   "label": "卡车配件",
   "title": "Ozon 卡车配件市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23卡车配件_清洗版.xlsx",
-  "path": "reports/generated/truck-parts/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 卡车配件市场分析报告",
+  "sourceFile": "ozon-2026-07-23卡车配件_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:36.316Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 20954438,
@@ -291,7 +295,10 @@
       "revenue": 572137,
       "sales": 49,
       "avgPrice": 11676,
-      "url": "https://www.ozon.ru/product/2111286400"
+      "url": "https://www.ozon.ru/product/2111286400",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/7538483589.jpg",
+      "listingDate": "2025-05-08",
+      "ageDays": 441
     },
     {
       "name": "Fittings for Trucks",
@@ -301,7 +308,10 @@
       "revenue": 568095,
       "sales": 33,
       "avgPrice": 17215,
-      "url": "https://www.ozon.ru/product/3584964662"
+      "url": "https://www.ozon.ru/product/3584964662",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/11887525910.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141
     },
     {
       "name": "Refrigerated Truck/Trailer",
@@ -311,7 +321,10 @@
       "revenue": 421570,
       "sales": 39,
       "avgPrice": 10809,
-      "url": "https://www.ozon.ru/product/2188280081"
+      "url": "https://www.ozon.ru/product/2188280081",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/7597013369.jpg",
+      "listingDate": "2025-05-26",
+      "ageDays": 423
     },
     {
       "name": "Ming Yi Truck Engine Spare Parts",
@@ -321,7 +334,10 @@
       "revenue": 365544,
       "sales": null,
       "avgPrice": 27,
-      "url": "https://www.ozon.ru/product/5024766982"
+      "url": "https://www.ozon.ru/product/5024766982",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/12478336135.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Truck Engine Spare Parts",
@@ -331,7 +347,10 @@
       "revenue": 320028,
       "sales": 17,
       "avgPrice": 18825,
-      "url": "https://www.ozon.ru/product/3541707279"
+      "url": "https://www.ozon.ru/product/3541707279",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/9096339034.jpg",
+      "listingDate": "2026-02-18",
+      "ageDays": 155
     },
     {
       "name": "ТС Fittings for Trucks",
@@ -341,7 +360,10 @@
       "revenue": 240653,
       "sales": 17,
       "avgPrice": 14156,
-      "url": "https://www.ozon.ru/product/2034607281"
+      "url": "https://www.ozon.ru/product/2034607281",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/7715846741.jpg",
+      "listingDate": "2025-04-15",
+      "ageDays": 464
     },
     {
       "name": "Truck Engine Spare Parts",
@@ -351,7 +373,10 @@
       "revenue": 234941,
       "sales": 10,
       "avgPrice": 23494,
-      "url": "https://www.ozon.ru/product/1706491857"
+      "url": "https://www.ozon.ru/product/1706491857",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/7142253717.jpg",
+      "listingDate": "2024-09-26",
+      "ageDays": 665
     },
     {
       "name": "ТС Fittings for Trucks",
@@ -361,7 +386,10 @@
       "revenue": 201600,
       "sales": 519,
       "avgPrice": 388,
-      "url": "https://www.ozon.ru/product/3585386382"
+      "url": "https://www.ozon.ru/product/3585386382",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/9184914118.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141
     },
     {
       "name": "Fittings for Trucks",
@@ -371,7 +399,10 @@
       "revenue": 201553,
       "sales": 40,
       "avgPrice": 5039,
-      "url": "https://www.ozon.ru/product/1942795947"
+      "url": "https://www.ozon.ru/product/1942795947",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/7390145463.jpg",
+      "listingDate": "2025-03-15",
+      "ageDays": 495
     },
     {
       "name": "ТС Fittings for Trucks",
@@ -381,7 +412,10 @@
       "revenue": 196149,
       "sales": 45,
       "avgPrice": 4359,
-      "url": "https://www.ozon.ru/product/2055683218"
+      "url": "https://www.ozon.ru/product/2055683218",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/7758555720.jpg",
+      "listingDate": "2025-04-21",
+      "ageDays": 458
     },
     {
       "name": "ТС Fittings for Trucks",
@@ -391,7 +425,10 @@
       "revenue": 194829,
       "sales": 83,
       "avgPrice": 2347,
-      "url": "https://www.ozon.ru/product/2027950075"
+      "url": "https://www.ozon.ru/product/2027950075",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/7715855851.jpg",
+      "listingDate": "2025-04-13",
+      "ageDays": 466
     },
     {
       "name": "Truck Engine Spare Parts",
@@ -401,7 +438,10 @@
       "revenue": 191526,
       "sales": 8,
       "avgPrice": 23941,
-      "url": "https://www.ozon.ru/product/2353210152"
+      "url": "https://www.ozon.ru/product/2353210152",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/7647348428.jpg",
+      "listingDate": "2025-06-24",
+      "ageDays": 394
     },
     {
       "name": "Truck Engine Spare Parts",
@@ -411,7 +451,10 @@
       "revenue": 177828,
       "sales": 19,
       "avgPrice": 9359,
-      "url": "https://www.ozon.ru/product/3824670417"
+      "url": "https://www.ozon.ru/product/3824670417",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/9606898306.jpg",
+      "listingDate": "2026-04-02",
+      "ageDays": 112
     },
     {
       "name": "Fittings for Trucks",
@@ -421,7 +464,10 @@
       "revenue": 169947,
       "sales": 8,
       "avgPrice": 21243,
-      "url": "https://www.ozon.ru/product/3378881272"
+      "url": "https://www.ozon.ru/product/3378881272",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/8781937636.jpg",
+      "listingDate": "2026-01-13",
+      "ageDays": 191
     },
     {
       "name": "BALASHOV Refrigerated Truck/Trailer",
@@ -431,7 +477,305 @@
       "revenue": 163533,
       "sales": 50,
       "avgPrice": 3271,
-      "url": "https://www.ozon.ru/product/3895007759"
+      "url": "https://www.ozon.ru/product/3895007759",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/9717677983.jpg",
+      "listingDate": "2026-04-10",
+      "ageDays": 104
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.024,
+      "revenueGrowthCoverage": 82.6,
+      "impressions": 6829878,
+      "visits": 265412,
+      "visitRate": 0.0389,
+      "orderConversionMedian": 0.0042,
+      "orderConversionCoverage": 100,
+      "cartAddMedian": 0.0943,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 26,
+      "stockoutCoverage": 76.1,
+      "missedRevenue": 3784518.9,
+      "missedRevenueCoverage": 99.9,
+      "inventoryCoverMedian": 14.5,
+      "inventoryCoverCoverage": 41.7
+    },
+    "marketing": {
+      "discountMedian": 0.07145,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.20915,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0,
+      "adRoiCoverage": 82.6,
+      "promoActiveShare": 67.6,
+      "adActiveShare": 14.8
+    },
+    "fulfillment": {
+      "signRateMedian": 0.9309999999999999,
+      "signRateCoverage": 82.5,
+      "fboShare": 43.2,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.5,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 82.6,
+      "freshCount": 196,
+      "freshRevenueShare": 27.3,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“货车配件”拆出 2–3 个明确规格，并优先覆盖 ≥5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 50.8%",
+        "≥5,000 ₽ 贡献 31.2% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 82.6%",
+        "180 天内新品 196 个",
+        "新品销售额占样本 27.3%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 76.1%",
+        "缺货天数中位数 26 天",
+        "库存覆盖字段 41.7%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 100%",
+        "下单转化率中位数 0.4%",
+        "访问率 3.89%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Fittings for Trucks",
+      "type": "货车配件",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3584964662",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/11887525910.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141,
+      "revenue": 568095,
+      "sales": 33,
+      "avgPrice": 17215,
+      "revenueGrowth": 0.08,
+      "orderConv": 0.0011,
+      "cartAdd": 0.0747,
+      "stockoutDays": null,
+      "adRoi": 0
+    },
+    {
+      "name": "Truck Engine Spare Parts",
+      "type": "卡车内燃机备件",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3541707279",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/9096339034.jpg",
+      "listingDate": "2026-02-18",
+      "ageDays": 155,
+      "revenue": 320028,
+      "sales": 17,
+      "avgPrice": 18825,
+      "revenueGrowth": -0.27,
+      "orderConv": 0.0009,
+      "cartAdd": 0.0707,
+      "stockoutDays": 26,
+      "adRoi": 0
+    },
+    {
+      "name": "ТС Fittings for Trucks",
+      "type": "货车配件",
+      "brand": "ТС",
+      "url": "https://www.ozon.ru/product/3585386382",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/9184914118.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141,
+      "revenue": 201600,
+      "sales": 519,
+      "avgPrice": 388,
+      "revenueGrowth": -0.1,
+      "orderConv": 0.0163,
+      "cartAdd": 0.1376,
+      "stockoutDays": 13,
+      "adRoi": 0.013
+    },
+    {
+      "name": "Truck Engine Spare Parts",
+      "type": "卡车内燃机备件",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3824670417",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/9606898306.jpg",
+      "listingDate": "2026-04-02",
+      "ageDays": 112,
+      "revenue": 177828,
+      "sales": 19,
+      "avgPrice": 9359,
+      "revenueGrowth": 0.1635,
+      "orderConv": 0.008,
+      "cartAdd": 0.1271,
+      "stockoutDays": 27,
+      "adRoi": 0
+    },
+    {
+      "name": "BALASHOV Refrigerated Truck/Trailer",
+      "type": "车载冰箱",
+      "brand": "BALASHOV",
+      "url": "https://www.ozon.ru/product/3895007759",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/9717677983.jpg",
+      "listingDate": "2026-04-10",
+      "ageDays": 104,
+      "revenue": 163533,
+      "sales": 50,
+      "avgPrice": 3271,
+      "revenueGrowth": 0.0576,
+      "orderConv": 0.0018,
+      "cartAdd": 0.1035,
+      "stockoutDays": 28,
+      "adRoi": 0.002
+    },
+    {
+      "name": "ТрансГарант Fittings for Trucks",
+      "type": "货车配件",
+      "brand": "ТрансГарант",
+      "url": "https://www.ozon.ru/product/3469660628",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/8951399426.jpg",
+      "listingDate": "2026-01-29",
+      "ageDays": 175,
+      "revenue": 136560,
+      "sales": 13,
+      "avgPrice": 10505,
+      "revenueGrowth": 0.16,
+      "orderConv": 0.004500000000000001,
+      "cartAdd": 0.1111,
+      "stockoutDays": 25,
+      "adRoi": 0
+    },
+    {
+      "name": "ГАЗ Fittings for Trucks",
+      "type": "货车配件",
+      "brand": "ГАЗ",
+      "url": "https://www.ozon.ru/product/4417678539",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-n/7570499747.jpg",
+      "listingDate": "2026-05-23",
+      "ageDays": 61,
+      "revenue": 131504,
+      "sales": 8,
+      "avgPrice": 16438,
+      "revenueGrowth": 0.0634,
+      "orderConv": 0.0014,
+      "cartAdd": 0.0554,
+      "stockoutDays": 24,
+      "adRoi": 0
+    },
+    {
+      "name": "Fittings for Trucks",
+      "type": "货车配件",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4285472560",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/10427057009.jpg",
+      "listingDate": "2026-05-13",
+      "ageDays": 71,
+      "revenue": 128599,
+      "sales": 22,
+      "avgPrice": 5845,
+      "revenueGrowth": -0.22,
+      "orderConv": 0.0004,
+      "cartAdd": 0.0395,
+      "stockoutDays": null,
+      "adRoi": 0.039
+    },
+    {
+      "name": "ТС Fittings for Trucks",
+      "type": "货车配件",
+      "brand": "ТС",
+      "url": "https://www.ozon.ru/product/3810421576",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9585523187.jpg",
+      "listingDate": "2026-04-01",
+      "ageDays": 113,
+      "revenue": 128432,
+      "sales": 42,
+      "avgPrice": 3058,
+      "revenueGrowth": 0.28,
+      "orderConv": 0.0054,
+      "cartAdd": 0.1383,
+      "stockoutDays": 2,
+      "adRoi": 0
+    },
+    {
+      "name": "Refrigerated Truck/Trailer",
+      "type": "车载冰箱",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3589578457",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/9192726641.jpg",
+      "listingDate": "2026-03-05",
+      "ageDays": 140,
+      "revenue": 118946,
+      "sales": 40,
+      "avgPrice": 2974,
+      "revenueGrowth": 0.63,
+      "orderConv": 0.0007000000000000001,
+      "cartAdd": 0.067,
+      "stockoutDays": 28,
+      "adRoi": 0.193
+    },
+    {
+      "name": "Fittings for Trucks",
+      "type": "货车配件",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4564043252",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/12597893615.jpg",
+      "listingDate": "2026-06-03",
+      "ageDays": 50,
+      "revenue": 116855,
+      "sales": 8,
+      "avgPrice": 14607,
+      "revenueGrowth": 0.0342,
+      "orderConv": 0.0034,
+      "cartAdd": 0.0374,
+      "stockoutDays": null,
+      "adRoi": 0.003
+    },
+    {
+      "name": "Refrigerated Truck/Trailer",
+      "type": "车载冰箱",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4287354560",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/7958321243.jpg",
+      "listingDate": "2026-05-13",
+      "ageDays": 71,
+      "revenue": 114522,
+      "sales": 8,
+      "avgPrice": 14315,
+      "revenueGrowth": 0.06570000000000001,
+      "orderConv": 0.0004,
+      "cartAdd": 0.0966,
+      "stockoutDays": null,
+      "adRoi": 0.3779999999999999
     }
   ],
   "operations": {
@@ -439,8 +783,6 @@
     "signRateCoverage": 82.5,
     "stockoutMedian": 26,
     "stockoutCoverage": 76.1,
-    "missedRevenue": 3784518.9,
-    "missedRevenueCoverage": 99.9,
     "promoActiveShare": 67.6,
     "promoCoverage": 82.6,
     "adActiveShare": 14.8,
@@ -455,12 +797,34 @@
     "duplicateSku": 12,
     "duplicateUrl": 0,
     "uniqueSku": 988,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 82.6,
+      "impressions": 82.6,
+      "visits": 100,
+      "orderConv": 100,
+      "cartAdd": 100,
+      "stock": 81,
+      "dailySales": 53,
+      "missedRevenue": 99.9,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 82.6,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 82.6
+    },
+    "listingDateCoverage": 82.6,
+    "freshProductCount": 196,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“货车配件”贡献 50.8% 销售额；前五品类合计 100%。",
     "销售额最集中的价格带是 ≥5,000 ₽，覆盖 51 条商品记录，贡献 31.2% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 78% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 82.6%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 82.6%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 82.6%；其中 180 天内新品 196 个，贡献 27.3% 样本销售额。"
+  ],
+  "path": "reports/generated/truck-parts/index.html"
 }

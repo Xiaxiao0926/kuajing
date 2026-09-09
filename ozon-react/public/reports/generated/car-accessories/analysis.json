@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-car-accessories",
   "label": "汽车用品",
   "title": "Ozon 汽车用品市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23汽车用品_清洗版.xlsx",
-  "path": "reports/generated/car-accessories/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车用品市场分析报告",
+  "sourceFile": "ozon-2026-07-23汽车用品_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:37.540Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 438423134,
@@ -345,7 +349,10 @@
       "revenue": 10155914,
       "sales": 40097,
       "avgPrice": 253,
-      "url": "https://www.ozon.ru/product/2317116001"
+      "url": "https://www.ozon.ru/product/2317116001",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/11559213157.jpg",
+      "listingDate": "2025-06-18",
+      "ageDays": 400
     },
     {
       "name": "Car Air Freshener, Fruit, Wood, 7.5 ml",
@@ -355,7 +362,10 @@
       "revenue": 5943250,
       "sales": 26717,
       "avgPrice": 222,
-      "url": "https://www.ozon.ru/product/3144295007"
+      "url": "https://www.ozon.ru/product/3144295007",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/11010629312.jpg",
+      "listingDate": "2025-11-23",
+      "ageDays": 242
     },
     {
       "name": "Car Air Freshener, Wood, Sweet, 7.5 ml",
@@ -365,7 +375,10 @@
       "revenue": 4669113,
       "sales": 20848,
       "avgPrice": 224,
-      "url": "https://www.ozon.ru/product/3450253110"
+      "url": "https://www.ozon.ru/product/3450253110",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/10925083438.jpg",
+      "listingDate": "2026-01-26",
+      "ageDays": 178
     },
     {
       "name": "Car Air Freshener, Maritime, 50 ml",
@@ -375,7 +388,10 @@
       "revenue": 4260239,
       "sales": 12688,
       "avgPrice": 336,
-      "url": "https://www.ozon.ru/product/1783961335"
+      "url": "https://www.ozon.ru/product/1783961335",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/9483124431.jpg",
+      "listingDate": "2024-12-12",
+      "ageDays": 588
     },
     {
       "name": "Sunshade, 145 cm х 80 cm, 99% dimming",
@@ -385,7 +401,10 @@
       "revenue": 4210704,
       "sales": 22316,
       "avgPrice": 189,
-      "url": "https://www.ozon.ru/product/2559970353"
+      "url": "https://www.ozon.ru/product/2559970353",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/9897712574.jpg",
+      "listingDate": "2025-07-28",
+      "ageDays": 360
     },
     {
       "name": "Car Holder, Magnetic, 2.3\"",
@@ -395,7 +414,10 @@
       "revenue": 4045926,
       "sales": 21155,
       "avgPrice": 191,
-      "url": "https://www.ozon.ru/product/3330539877"
+      "url": "https://www.ozon.ru/product/3330539877",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/11509552650.jpg",
+      "listingDate": "2026-01-05",
+      "ageDays": 199
     },
     {
       "name": "KUD SHOP Sunshade, 145 cm х 80 cm, 100% dimming",
@@ -405,7 +427,10 @@
       "revenue": 3786698,
       "sales": 8853,
       "avgPrice": 428,
-      "url": "https://www.ozon.ru/product/2046619291"
+      "url": "https://www.ozon.ru/product/2046619291",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/10088901844.jpg",
+      "listingDate": "2025-04-18",
+      "ageDays": 461
     },
     {
       "name": "KUD SHOP Sunshade, 70 cm х 140 cm, 97% dimming",
@@ -415,7 +440,10 @@
       "revenue": 3714534,
       "sales": 9973,
       "avgPrice": 372,
-      "url": "https://www.ozon.ru/product/1635394890"
+      "url": "https://www.ozon.ru/product/1635394890",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/10195796500.jpg",
+      "listingDate": "2024-07-22",
+      "ageDays": 731
     },
     {
       "name": "Пахнет и Точка Car Air Freshener, Perfume, 7 ml",
@@ -425,7 +453,10 @@
       "revenue": 3465319,
       "sales": 15293,
       "avgPrice": 227,
-      "url": "https://www.ozon.ru/product/3811923293"
+      "url": "https://www.ozon.ru/product/3811923293",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/11324990606.jpg",
+      "listingDate": "2026-04-01",
+      "ageDays": 113
     },
     {
       "name": "YCAR Car Holder, Gravitational, 7\"",
@@ -435,7 +466,10 @@
       "revenue": 3456082,
       "sales": 8954,
       "avgPrice": 386,
-      "url": "https://www.ozon.ru/product/1413866576"
+      "url": "https://www.ozon.ru/product/1413866576",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/11269697956.jpg",
+      "listingDate": "2024-02-02",
+      "ageDays": 902
     },
     {
       "name": "EIKOSHA Car Air Freshener, Perfume, Sweet",
@@ -445,7 +479,10 @@
       "revenue": 3314391,
       "sales": 3232,
       "avgPrice": 1025,
-      "url": "https://www.ozon.ru/product/1739707194"
+      "url": "https://www.ozon.ru/product/1739707194",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/10319997528.jpg",
+      "listingDate": "2024-10-24",
+      "ageDays": 637
     },
     {
       "name": "Aeroma Car Air Freshener, Berry, Wood, 7 ml",
@@ -455,7 +492,10 @@
       "revenue": 3281272,
       "sales": 12003,
       "avgPrice": 273,
-      "url": "https://www.ozon.ru/product/2124649572"
+      "url": "https://www.ozon.ru/product/2124649572",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/11689203034.jpg",
+      "listingDate": "2025-05-12",
+      "ageDays": 437
     },
     {
       "name": "Car Air Freshener, Perfume, 7.5 ml",
@@ -465,7 +505,10 @@
       "revenue": 3223020,
       "sales": 14127,
       "avgPrice": 228,
-      "url": "https://www.ozon.ru/product/3513803036"
+      "url": "https://www.ozon.ru/product/3513803036",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/10393948791.jpg",
+      "listingDate": "2026-02-08",
+      "ageDays": 165
     },
     {
       "name": "Raven & Bear Sunshade, 140 cm х 80 cm, 99% dimming",
@@ -475,7 +518,10 @@
       "revenue": 3197374,
       "sales": 4741,
       "avgPrice": 674,
-      "url": "https://www.ozon.ru/product/924021416"
+      "url": "https://www.ozon.ru/product/924021416",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/7440589860.jpg",
+      "listingDate": "2023-04-05",
+      "ageDays": 1205
     },
     {
       "name": "AirPoint Car Air Freshener, Perfume, Wood, 7.5 ml",
@@ -485,7 +531,305 @@
       "revenue": 3154426,
       "sales": 24458,
       "avgPrice": 129,
-      "url": "https://www.ozon.ru/product/2544797643"
+      "url": "https://www.ozon.ru/product/2544797643",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/9739857016.jpg",
+      "listingDate": "2025-07-25",
+      "ageDays": 363
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": null,
+      "revenueGrowthCoverage": 0,
+      "impressions": 810900264,
+      "visits": 25525688,
+      "visitRate": 0.0315,
+      "orderConversionMedian": 0.23,
+      "orderConversionCoverage": 98.5,
+      "cartAddMedian": 0.1286,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 28,
+      "stockoutCoverage": 92,
+      "missedRevenue": 18366328,
+      "missedRevenueCoverage": 97.9,
+      "inventoryCoverMedian": null,
+      "inventoryCoverCoverage": 0
+    },
+    "marketing": {
+      "discountMedian": 0.26735,
+      "discountCoverage": 100,
+      "promoShareMedian": 1,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.114,
+      "adRoiCoverage": 97.9,
+      "promoActiveShare": 99.8,
+      "adActiveShare": 100
+    },
+    "fulfillment": {
+      "signRateMedian": 0.9259999999999999,
+      "signRateCoverage": 97.6,
+      "fboShare": 90,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.4,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 97.6,
+      "freshCount": 330,
+      "freshRevenueShare": 29.4,
+      "futureDateCount": 2,
+      "outlierDateCount": 12
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“汽车芳香剂”拆出 2–3 个明确规格，并优先覆盖 200–500 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 31.9%",
+        "200–500 ₽ 贡献 44.7% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 97.6%",
+        "180 天内新品 330 个",
+        "新品销售额占样本 29.4%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 92%",
+        "缺货天数中位数 28 天",
+        "库存覆盖字段 0%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 98.5%",
+        "下单转化率中位数 23%",
+        "访问率 3.15%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Car Air Freshener, Wood, Sweet, 7.5 ml",
+      "type": "汽车芳香剂",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3450253110",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/10925083438.jpg",
+      "listingDate": "2026-01-26",
+      "ageDays": 178,
+      "revenue": 4669113,
+      "sales": 20848,
+      "avgPrice": 224,
+      "revenueGrowth": null,
+      "orderConv": 0.26,
+      "cartAdd": 0.1549,
+      "stockoutDays": 28,
+      "adRoi": 0.034
+    },
+    {
+      "name": "Пахнет и Точка Car Air Freshener, Perfume, 7 ml",
+      "type": "汽车芳香剂",
+      "brand": "Пахнет и Точка",
+      "url": "https://www.ozon.ru/product/3811923293",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/11324990606.jpg",
+      "listingDate": "2026-04-01",
+      "ageDays": 113,
+      "revenue": 3465319,
+      "sales": 15293,
+      "avgPrice": 227,
+      "revenueGrowth": null,
+      "orderConv": 0.37,
+      "cartAdd": 0.1664,
+      "stockoutDays": 28,
+      "adRoi": 0.162
+    },
+    {
+      "name": "Car Air Freshener, Perfume, 7.5 ml",
+      "type": "汽车芳香剂",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3513803036",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/10393948791.jpg",
+      "listingDate": "2026-02-08",
+      "ageDays": 165,
+      "revenue": 3223020,
+      "sales": 14127,
+      "avgPrice": 228,
+      "revenueGrowth": null,
+      "orderConv": 0.18,
+      "cartAdd": 0.2519,
+      "stockoutDays": 28,
+      "adRoi": 0.043
+    },
+    {
+      "name": "А27 Sunshade, 140 cm х 77 cm, 99% dimming",
+      "type": "遮阳帘",
+      "brand": "А27",
+      "url": "https://www.ozon.ru/product/3673841952",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/11951319688.jpg",
+      "listingDate": "2026-03-17",
+      "ageDays": 128,
+      "revenue": 2685781,
+      "sales": 3000,
+      "avgPrice": 895,
+      "revenueGrowth": null,
+      "orderConv": 0.18,
+      "cartAdd": 0.241,
+      "stockoutDays": 28,
+      "adRoi": 0.035
+    },
+    {
+      "name": "UdobnoPro Sunshade, 145 cm х 80 cm, 100% dimming",
+      "type": "遮阳帘",
+      "brand": "UdobnoPro",
+      "url": "https://www.ozon.ru/product/3866215350",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/12797792995.jpg",
+      "listingDate": "2026-04-07",
+      "ageDays": 107,
+      "revenue": 2439071,
+      "sales": 6474,
+      "avgPrice": 377,
+      "revenueGrowth": null,
+      "orderConv": 0.55,
+      "cartAdd": 0.1338,
+      "stockoutDays": 28,
+      "adRoi": 0.218
+    },
+    {
+      "name": "Car Air Freshener, Fruit, Wood, 7.5 ml",
+      "type": "汽车芳香剂",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3556787944",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/10981758466.jpg",
+      "listingDate": "2026-02-25",
+      "ageDays": 148,
+      "revenue": 1965500,
+      "sales": 8816,
+      "avgPrice": 223,
+      "revenueGrowth": null,
+      "orderConv": 0.25,
+      "cartAdd": 0.1171,
+      "stockoutDays": 28,
+      "adRoi": 0.04099999999999999
+    },
+    {
+      "name": "GURCOSER Car Air Freshener, Fresh, 50 ml",
+      "type": "汽车芳香剂",
+      "brand": "GURCOSER",
+      "url": "https://www.ozon.ru/product/4529366299",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/11313109716.jpg",
+      "listingDate": "2026-06-01",
+      "ageDays": 52,
+      "revenue": 1640909,
+      "sales": 1678,
+      "avgPrice": 978,
+      "revenueGrowth": null,
+      "orderConv": 0.28,
+      "cartAdd": 0.1915,
+      "stockoutDays": 28,
+      "adRoi": 0.08800000000000001
+    },
+    {
+      "name": "Simple Needs Sunshade, 80 cm х 142 cm, 100% dimming",
+      "type": "遮阳帘",
+      "brand": "Simple Needs",
+      "url": "https://www.ozon.ru/product/4281792601",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/10902215775.jpg",
+      "listingDate": "2026-05-12",
+      "ageDays": 72,
+      "revenue": 1622696,
+      "sales": 3195,
+      "avgPrice": 508,
+      "revenueGrowth": null,
+      "orderConv": 0.15,
+      "cartAdd": 0.1036,
+      "stockoutDays": 28,
+      "adRoi": 0.099
+    },
+    {
+      "name": "Car Pillow On the seat, Polyurethane foam, 1 pcs",
+      "type": "汽车枕头",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4611894883",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/11272124909.jpg",
+      "listingDate": "2026-06-06",
+      "ageDays": 47,
+      "revenue": 1568226,
+      "sales": 2039,
+      "avgPrice": 769,
+      "revenueGrowth": null,
+      "orderConv": 0.16,
+      "cartAdd": 0.1188,
+      "stockoutDays": 28,
+      "adRoi": 0.106
+    },
+    {
+      "name": "Aeroma Car Air Freshener, Berry, Wood, 7 ml",
+      "type": "汽车芳香剂",
+      "brand": "Aeroma",
+      "url": "https://www.ozon.ru/product/3882083395",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/10561978077.jpg",
+      "listingDate": "2026-04-08",
+      "ageDays": 106,
+      "revenue": 1563124,
+      "sales": 4806,
+      "avgPrice": 325,
+      "revenueGrowth": null,
+      "orderConv": 0.2,
+      "cartAdd": 0.0746,
+      "stockoutDays": 28,
+      "adRoi": 0.106
+    },
+    {
+      "name": "АРОМАТИЗАТОР AIRUS Car Air Freshener, Perfume, 7 ml",
+      "type": "汽车芳香剂",
+      "brand": "АРОМАТИЗАТОР AIRUS",
+      "url": "https://www.ozon.ru/product/3624601567",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/12433659890.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 1456560,
+      "sales": 5010,
+      "avgPrice": 291,
+      "revenueGrowth": null,
+      "orderConv": 0.11,
+      "cartAdd": 0.163,
+      "stockoutDays": 28,
+      "adRoi": 0.168
+    },
+    {
+      "name": "IV GENIUS Sunshade, 150 cm х 80 cm, 100% dimming",
+      "type": "遮阳帘",
+      "brand": "IV GENIUS",
+      "url": "https://www.ozon.ru/product/3672870673",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/9539003223.jpg",
+      "listingDate": "2026-03-17",
+      "ageDays": 128,
+      "revenue": 1417620,
+      "sales": 3586,
+      "avgPrice": 395,
+      "revenueGrowth": null,
+      "orderConv": 0.14,
+      "cartAdd": 0.1602,
+      "stockoutDays": 28,
+      "adRoi": 0.158
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 97.6,
     "stockoutMedian": 28,
     "stockoutCoverage": 92,
-    "missedRevenue": 18366328,
-    "missedRevenueCoverage": 97.9,
     "promoActiveShare": 99.8,
     "promoCoverage": 100,
     "adActiveShare": 100,
@@ -509,12 +851,34 @@
     "duplicateSku": 17,
     "duplicateUrl": 0,
     "uniqueSku": 983,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 0,
+      "impressions": 97.9,
+      "visits": 100,
+      "orderConv": 98.5,
+      "cartAdd": 100,
+      "stock": 100,
+      "dailySales": 0,
+      "missedRevenue": 97.9,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 97.9,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 97.6
+    },
+    "listingDateCoverage": 97.6,
+    "freshProductCount": 330,
+    "futureListingDateCount": 2,
+    "outlierListingDateCount": 12
   },
   "insights": [
     "头部品类“汽车芳香剂”贡献 31.9% 销售额；前五品类合计 82.6%。",
     "销售额最集中的价格带是 200–500 ₽，覆盖 352 条商品记录，贡献 44.7% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 53.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 97.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 97.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 97.6%；其中 180 天内新品 330 个，贡献 29.4% 样本销售额。"
+  ],
+  "path": "reports/generated/car-accessories/index.html"
 }

@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-tires-wheels",
   "label": "轮胎与轮毂",
   "title": "Ozon 轮胎与轮毂市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23轮胎轮毂_清洗版.xlsx",
-  "path": "reports/generated/tires-wheels/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 轮胎与轮毂市场分析报告",
+  "sourceFile": "ozon-2026-07-23轮胎轮毂_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:36.447Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 497637606,
@@ -345,7 +349,10 @@
       "revenue": 4119729,
       "sales": 1164,
       "avgPrice": 3539,
-      "url": "https://www.ozon.ru/product/3201385884"
+      "url": "https://www.ozon.ru/product/3201385884",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/8476381342.jpg",
+      "listingDate": "2025-12-05",
+      "ageDays": 230
     },
     {
       "name": "Triangle Tire summer 225/45 R18 95Y",
@@ -355,7 +362,10 @@
       "revenue": 3723754,
       "sales": 629,
       "avgPrice": 5920,
-      "url": "https://www.ozon.ru/product/1713206728"
+      "url": "https://www.ozon.ru/product/1713206728",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7819830745.jpg",
+      "listingDate": "2024-10-03",
+      "ageDays": 658
     },
     {
       "name": "Sailun Tire summer 195/65 R15 95H",
@@ -365,7 +375,10 @@
       "revenue": 3130475,
       "sales": 802,
       "avgPrice": 3903,
-      "url": "https://www.ozon.ru/product/3626798464"
+      "url": "https://www.ozon.ru/product/3626798464",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9398343203.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134
     },
     {
       "name": "Hankook Tire summer 185/65 R15 92T",
@@ -375,7 +388,10 @@
       "revenue": 3032455,
       "sales": 686,
       "avgPrice": 4420,
-      "url": "https://www.ozon.ru/product/1539424648"
+      "url": "https://www.ozon.ru/product/1539424648",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/10467750750.jpg",
+      "listingDate": "2024-04-09",
+      "ageDays": 835
     },
     {
       "name": "Triangle Tire summer 205/50 R17 93Y",
@@ -385,7 +401,10 @@
       "revenue": 3013936,
       "sales": 576,
       "avgPrice": 5233,
-      "url": "https://www.ozon.ru/product/1711713657"
+      "url": "https://www.ozon.ru/product/1711713657",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7819830745.jpg",
+      "listingDate": "2024-10-01",
+      "ageDays": 660
     },
     {
       "name": "Sailun Tire summer 205/55 R16 94V",
@@ -395,7 +414,10 @@
       "revenue": 2990710,
       "sales": 696,
       "avgPrice": 4297,
-      "url": "https://www.ozon.ru/product/3624226194"
+      "url": "https://www.ozon.ru/product/3624226194",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9398343203.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134
     },
     {
       "name": "Triangle Tire summer 225/40 R18 92Y",
@@ -405,7 +427,10 @@
       "revenue": 2986606,
       "sales": 535,
       "avgPrice": 5582,
-      "url": "https://www.ozon.ru/product/1713319288"
+      "url": "https://www.ozon.ru/product/1713319288",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7819830745.jpg",
+      "listingDate": "2024-10-03",
+      "ageDays": 658
     },
     {
       "name": "Viatti Tire summer 185/65 R15 92V",
@@ -415,7 +440,10 @@
       "revenue": 2883703,
       "sales": 746,
       "avgPrice": 3866,
-      "url": "https://www.ozon.ru/product/435753302"
+      "url": "https://www.ozon.ru/product/435753302",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/7473048819.jpg",
+      "listingDate": "2021-12-19",
+      "ageDays": 1677
     },
     {
       "name": "ROYAL BLACK Tire winter 225/55 R19 103T",
@@ -425,7 +453,10 @@
       "revenue": 2749517,
       "sales": 307,
       "avgPrice": 8956,
-      "url": "https://www.ozon.ru/product/1621899010"
+      "url": "https://www.ozon.ru/product/1621899010",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/12057150049.jpg",
+      "listingDate": "2024-07-06",
+      "ageDays": 747
     },
     {
       "name": "Pirelli Tire summer 185/65 R15 92H",
@@ -435,7 +466,10 @@
       "revenue": 2724808,
       "sales": 514,
       "avgPrice": 5301,
-      "url": "https://www.ozon.ru/product/2000035221"
+      "url": "https://www.ozon.ru/product/2000035221",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/9143542723.jpg",
+      "listingDate": "2025-04-04",
+      "ageDays": 475
     },
     {
       "name": "Kumho Tire summer 205/55 R16 91H",
@@ -445,7 +479,10 @@
       "revenue": 2722413,
       "sales": 703,
       "avgPrice": 3873,
-      "url": "https://www.ozon.ru/product/3692272527"
+      "url": "https://www.ozon.ru/product/3692272527",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/9623265511.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Triangle Tire summer 225/55 R17 101Y",
@@ -455,7 +492,10 @@
       "revenue": 2699918,
       "sales": 440,
       "avgPrice": 6136,
-      "url": "https://www.ozon.ru/product/1711713670"
+      "url": "https://www.ozon.ru/product/1711713670",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7819830745.jpg",
+      "listingDate": "2024-10-01",
+      "ageDays": 660
     },
     {
       "name": "Triangle Tire summer 225/45 R17 94Y",
@@ -465,7 +505,10 @@
       "revenue": 2621600,
       "sales": 470,
       "avgPrice": 5578,
-      "url": "https://www.ozon.ru/product/1711713592"
+      "url": "https://www.ozon.ru/product/1711713592",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7819830745.jpg",
+      "listingDate": "2024-10-01",
+      "ageDays": 660
     },
     {
       "name": "Triangle Tire summer 215/50 R17 95Y",
@@ -475,7 +518,10 @@
       "revenue": 2616205,
       "sales": 473,
       "avgPrice": 5531,
-      "url": "https://www.ozon.ru/product/1711713655"
+      "url": "https://www.ozon.ru/product/1711713655",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7819830745.jpg",
+      "listingDate": "2024-10-01",
+      "ageDays": 660
     },
     {
       "name": "Triangle Tire summer 235/45 R18 98Y",
@@ -485,7 +531,305 @@
       "revenue": 2594684,
       "sales": 413,
       "avgPrice": 6283,
-      "url": "https://www.ozon.ru/product/1713208388"
+      "url": "https://www.ozon.ru/product/1713208388",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7819830745.jpg",
+      "listingDate": "2024-10-03",
+      "ageDays": 658
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.0222,
+      "revenueGrowthCoverage": 93.4,
+      "impressions": 54000440,
+      "visits": 2391387,
+      "visitRate": 0.0443,
+      "orderConversionMedian": 0.0023,
+      "orderConversionCoverage": 100,
+      "cartAddMedian": 0.09705,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 25,
+      "stockoutCoverage": 79,
+      "missedRevenue": 51531827.4,
+      "missedRevenueCoverage": 99.9,
+      "inventoryCoverMedian": 23.583333333333336,
+      "inventoryCoverCoverage": 71.4
+    },
+    "marketing": {
+      "discountMedian": 0,
+      "discountCoverage": 100,
+      "promoShareMedian": 0,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.012,
+      "adRoiCoverage": 93.4,
+      "promoActiveShare": 55,
+      "adActiveShare": 37
+    },
+    "fulfillment": {
+      "signRateMedian": 0.884,
+      "signRateCoverage": 91.9,
+      "fboShare": 47.2,
+      "deliveryCoverage": 100,
+      "volumeMedian": 66.95,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 91.9,
+      "freshCount": 213,
+      "freshRevenueShare": 22.7,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“乘用车轮胎”拆出 2–3 个明确规格，并优先覆盖 ≥5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 72.4%",
+        "≥5,000 ₽ 贡献 53.4% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 91.9%",
+        "180 天内新品 213 个",
+        "新品销售额占样本 22.7%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 79%",
+        "缺货天数中位数 25 天",
+        "库存覆盖字段 71.4%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 100%",
+        "下单转化率中位数 0.2%",
+        "访问率 4.43%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Sailun Tire summer 195/65 R15 95H",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3626798464",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9398343203.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 3130475,
+      "sales": 802,
+      "avgPrice": 3903,
+      "revenueGrowth": 0.51,
+      "orderConv": 0.004699999999999999,
+      "cartAdd": 0.1457,
+      "stockoutDays": 27,
+      "adRoi": 0.009000000000000001
+    },
+    {
+      "name": "Sailun Tire summer 205/55 R16 94V",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3624226194",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9398343203.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 2990710,
+      "sales": 696,
+      "avgPrice": 4297,
+      "revenueGrowth": 0.15,
+      "orderConv": 0.004500000000000001,
+      "cartAdd": 0.1339,
+      "stockoutDays": 27,
+      "adRoi": 0.006
+    },
+    {
+      "name": "Sailun Tire summer 185/65 R15 92T",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3624265699",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9398343203.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 2575621,
+      "sales": 651,
+      "avgPrice": 3956,
+      "revenueGrowth": 0.0173,
+      "orderConv": 0.0044,
+      "cartAdd": 0.1418,
+      "stockoutDays": 27,
+      "adRoi": 0.008
+    },
+    {
+      "name": "Trazano Tire summer 205/55 R16 91V",
+      "type": "乘用车轮胎",
+      "brand": "Trazano",
+      "url": "https://www.ozon.ru/product/3640917406",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/8476381342.jpg",
+      "listingDate": "2026-03-13",
+      "ageDays": 132,
+      "revenue": 2477715,
+      "sales": 655,
+      "avgPrice": 3783,
+      "revenueGrowth": 0.46,
+      "orderConv": 0.0022,
+      "cartAdd": 0.1051,
+      "stockoutDays": 25,
+      "adRoi": 0.038
+    },
+    {
+      "name": "Sailun Tire summer 215/65 R16 102V",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3624268145",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/9579811530.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 2320309,
+      "sales": 419,
+      "avgPrice": 5538,
+      "revenueGrowth": 0.0421,
+      "orderConv": 0.0046,
+      "cartAdd": 0.135,
+      "stockoutDays": 27,
+      "adRoi": 0.006
+    },
+    {
+      "name": "Sailun Tire summer 205/60 R16 96V",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3626800632",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/9399482861.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 1988382,
+      "sales": 429,
+      "avgPrice": 4635,
+      "revenueGrowth": 0.43,
+      "orderConv": 0.004500000000000001,
+      "cartAdd": 0.1468,
+      "stockoutDays": 27,
+      "adRoi": 0.006999999999999999
+    },
+    {
+      "name": "Sailun Tire summer 175/65 R14 86T",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3624320239",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/9579985604.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 1984133,
+      "sales": 626,
+      "avgPrice": 3170,
+      "revenueGrowth": 0.0124,
+      "orderConv": 0.004699999999999999,
+      "cartAdd": 0.1578,
+      "stockoutDays": 27,
+      "adRoi": 0.006999999999999999
+    },
+    {
+      "name": "Sailun Tire summer 185/65 R15 92T",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3623254324",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/9239492199.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 1817735,
+      "sales": 469,
+      "avgPrice": 3876,
+      "revenueGrowth": 0.1732,
+      "orderConv": 0.0049,
+      "cartAdd": 0.1893,
+      "stockoutDays": 27,
+      "adRoi": 0.006999999999999999
+    },
+    {
+      "name": "Sailun Tire summer 205/55 R16 94V",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3623308436",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/9239478957.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 1545263,
+      "sales": 365,
+      "avgPrice": 4234,
+      "revenueGrowth": 0.91,
+      "orderConv": 0.0037,
+      "cartAdd": 0.1399,
+      "stockoutDays": 27,
+      "adRoi": 0.009000000000000001
+    },
+    {
+      "name": "Sailun Tire summer 175/65 R14 86T",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3623177313",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-f/6243925935.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 1465689,
+      "sales": 457,
+      "avgPrice": 3207,
+      "revenueGrowth": 0.1616,
+      "orderConv": 0.0031,
+      "cartAdd": 0.1326,
+      "stockoutDays": 27,
+      "adRoi": 0.039
+    },
+    {
+      "name": "Triangle Tire summer 205/55 R16 91V",
+      "type": "乘用车轮胎",
+      "brand": "Triangle",
+      "url": "https://www.ozon.ru/product/3552914077",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/12376552133.jpg",
+      "listingDate": "2026-02-24",
+      "ageDays": 149,
+      "revenue": 1465236,
+      "sales": 299,
+      "avgPrice": 4900,
+      "revenueGrowth": 0.09,
+      "orderConv": 0.0007000000000000001,
+      "cartAdd": 0.0478,
+      "stockoutDays": 24,
+      "adRoi": 0.064
+    },
+    {
+      "name": "Sailun Tire summer 205/60 R16 96V",
+      "type": "乘用车轮胎",
+      "brand": "Sailun",
+      "url": "https://www.ozon.ru/product/3596543402",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/9206257414.jpg",
+      "listingDate": "2026-03-06",
+      "ageDays": 139,
+      "revenue": 1410862,
+      "sales": 331,
+      "avgPrice": 4262,
+      "revenueGrowth": 0.171,
+      "orderConv": 0.004099999999999999,
+      "cartAdd": 0.1276,
+      "stockoutDays": 26,
+      "adRoi": 0.036
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 91.9,
     "stockoutMedian": 25,
     "stockoutCoverage": 79,
-    "missedRevenue": 51531827.4,
-    "missedRevenueCoverage": 99.9,
     "promoActiveShare": 55,
     "promoCoverage": 93.4,
     "adActiveShare": 37,
@@ -509,12 +851,34 @@
     "duplicateSku": 50,
     "duplicateUrl": 0,
     "uniqueSku": 950,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 93.4,
+      "impressions": 93.4,
+      "visits": 100,
+      "orderConv": 100,
+      "cartAdd": 100,
+      "stock": 71.6,
+      "dailySales": 85.2,
+      "missedRevenue": 99.9,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 93.4,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 91.9
+    },
+    "listingDateCoverage": 91.9,
+    "freshProductCount": 213,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“乘用车轮胎”贡献 72.4% 销售额；前五品类合计 95.9%。",
     "销售额最集中的价格带是 ≥5,000 ₽，覆盖 381 条商品记录，贡献 53.4% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 61% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 91.9%；其中 180 天内新品 213 个，贡献 22.7% 样本销售额。"
+  ],
+  "path": "reports/generated/tires-wheels/index.html"
 }

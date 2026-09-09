@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-motorcycle-parts",
   "label": "摩托车配件",
   "title": "Ozon 摩托车配件市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23摩托车配件_清洗版.xlsx",
-  "path": "reports/generated/motorcycle-parts/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 摩托车配件市场分析报告",
+  "sourceFile": "ozon-2026-07-23摩托车配件_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:36.605Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 273605423,
@@ -345,7 +349,10 @@
       "revenue": 4849962,
       "sales": 1786,
       "avgPrice": 2716,
-      "url": "https://www.ozon.ru/product/3344774424"
+      "url": "https://www.ozon.ru/product/3344774424",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/9168662754.jpg",
+      "listingDate": "2026-01-07",
+      "ageDays": 197
     },
     {
       "name": "NIBBI Motorcycle Carburetor",
@@ -355,7 +362,10 @@
       "revenue": 3162746,
       "sales": 620,
       "avgPrice": 5101,
-      "url": "https://www.ozon.ru/product/3452497096"
+      "url": "https://www.ozon.ru/product/3452497096",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/8782154223.jpg",
+      "listingDate": "2026-01-26",
+      "ageDays": 178
     },
     {
       "name": "Spabigo Motorcycle Helmet, Universal, matte black",
@@ -365,7 +375,10 @@
       "revenue": 2436036,
       "sales": 600,
       "avgPrice": 4060,
-      "url": "https://www.ozon.ru/product/1845159181"
+      "url": "https://www.ozon.ru/product/1845159181",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/7697235849.jpg",
+      "listingDate": "2025-01-23",
+      "ageDays": 546
     },
     {
       "name": "LS2 Motorcycle Helmet, M, matte black",
@@ -375,7 +388,10 @@
       "revenue": 2286218,
       "sales": 341,
       "avgPrice": 6704,
-      "url": "https://www.ozon.ru/product/4016556879"
+      "url": "https://www.ozon.ru/product/4016556879",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/10057063180.jpg",
+      "listingDate": "2026-04-20",
+      "ageDays": 94
     },
     {
       "name": "Motorcycle Bag, 60 L",
@@ -385,7 +401,10 @@
       "revenue": 2229263,
       "sales": 387,
       "avgPrice": 5760,
-      "url": "https://www.ozon.ru/product/3605693865"
+      "url": "https://www.ozon.ru/product/3605693865",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/12429032642.jpg",
+      "listingDate": "2026-03-08",
+      "ageDays": 137
     },
     {
       "name": "NIBBI Motorcycle Carburetor",
@@ -395,7 +414,10 @@
       "revenue": 2079790,
       "sales": 456,
       "avgPrice": 4561,
-      "url": "https://www.ozon.ru/product/3452458972"
+      "url": "https://www.ozon.ru/product/3452458972",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-n/10138466255.jpg",
+      "listingDate": "2026-01-26",
+      "ageDays": 178
     },
     {
       "name": "Motorcycle Chain",
@@ -405,7 +427,10 @@
       "revenue": 1934060,
       "sales": 871,
       "avgPrice": 2221,
-      "url": "https://www.ozon.ru/product/2697729486"
+      "url": "https://www.ozon.ru/product/2697729486",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-w/7974080960.jpg",
+      "listingDate": "2025-08-17",
+      "ageDays": 340
     },
     {
       "name": "LS2 Motorcycle Helmet, M, black",
@@ -415,7 +440,10 @@
       "revenue": 1781151,
       "sales": 247,
       "avgPrice": 7211,
-      "url": "https://www.ozon.ru/product/4003095857"
+      "url": "https://www.ozon.ru/product/4003095857",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-w/10057063748.jpg",
+      "listingDate": "2026-04-19",
+      "ageDays": 95
     },
     {
       "name": "HABCO Motorcycle Helmet, S, matte black",
@@ -425,7 +453,10 @@
       "revenue": 1723567,
       "sales": 362,
       "avgPrice": 4761,
-      "url": "https://www.ozon.ru/product/1901344508"
+      "url": "https://www.ozon.ru/product/1901344508",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/10081053414.jpg",
+      "listingDate": "2025-02-26",
+      "ageDays": 512
     },
     {
       "name": "LS2 Motorcycle Helmet, L, matte black",
@@ -435,7 +466,10 @@
       "revenue": 1659749,
       "sales": 241,
       "avgPrice": 6887,
-      "url": "https://www.ozon.ru/product/4003089871"
+      "url": "https://www.ozon.ru/product/4003089871",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/10057063180.jpg",
+      "listingDate": "2026-04-19",
+      "ageDays": 95
     },
     {
       "name": "HABCO Motorcycle Helmet, M, black & grey",
@@ -445,7 +479,10 @@
       "revenue": 1651729,
       "sales": 427,
       "avgPrice": 3868,
-      "url": "https://www.ozon.ru/product/3633848903"
+      "url": "https://www.ozon.ru/product/3633848903",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/10425926230.jpg",
+      "listingDate": "2026-03-12",
+      "ageDays": 133
     },
     {
       "name": "YouGlow Motorcycle Helmet, M, dark grey, matte black",
@@ -455,7 +492,10 @@
       "revenue": 1596055,
       "sales": 246,
       "avgPrice": 6488,
-      "url": "https://www.ozon.ru/product/1617606210"
+      "url": "https://www.ozon.ru/product/1617606210",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/7335600715.jpg",
+      "listingDate": "2024-07-01",
+      "ageDays": 752
     },
     {
       "name": "DIDvf Motorcycle Chain",
@@ -465,7 +505,10 @@
       "revenue": 1562565,
       "sales": 1011,
       "avgPrice": 1546,
-      "url": "https://www.ozon.ru/product/883405186"
+      "url": "https://www.ozon.ru/product/883405186",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/8156232278.jpg",
+      "listingDate": "2023-03-05",
+      "ageDays": 1236
     },
     {
       "name": "Spabigo Motorcycle Helmet, Universal, black",
@@ -475,7 +518,10 @@
       "revenue": 1557057,
       "sales": 546,
       "avgPrice": 2852,
-      "url": "https://www.ozon.ru/product/1845158754"
+      "url": "https://www.ozon.ru/product/1845158754",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/7337507333.jpg",
+      "listingDate": "2025-01-23",
+      "ageDays": 546
     },
     {
       "name": "Afenita Motorcycle Helmet, L, black",
@@ -485,7 +531,305 @@
       "revenue": 1534703,
       "sales": 439,
       "avgPrice": 3496,
-      "url": "https://www.ozon.ru/product/4539850791"
+      "url": "https://www.ozon.ru/product/4539850791",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/11377673393.jpg",
+      "listingDate": "2026-06-02",
+      "ageDays": 51
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.06,
+      "revenueGrowthCoverage": 96.8,
+      "impressions": 163903040,
+      "visits": 6140534,
+      "visitRate": 0.0375,
+      "orderConversionMedian": 0.0036,
+      "orderConversionCoverage": 99.6,
+      "cartAddMedian": 0.13595000000000002,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 17,
+      "stockoutCoverage": 92.6,
+      "missedRevenue": 10529974.4,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 16.666666666666668,
+      "inventoryCoverCoverage": 91
+    },
+    "marketing": {
+      "discountMedian": 0.08904999999999999,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.62805,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0,
+      "adRoiCoverage": 96.8,
+      "promoActiveShare": 64.6,
+      "adActiveShare": 29.1
+    },
+    "fulfillment": {
+      "signRateMedian": 0.861,
+      "signRateCoverage": 96.8,
+      "fboShare": 91.7,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.5,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 96.8,
+      "freshCount": 235,
+      "freshRevenueShare": 25.9,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“摩托车头盔”拆出 2–3 个明确规格，并优先覆盖 500–1,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 16%",
+        "500–1,000 ₽ 贡献 24.4% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 96.8%",
+        "180 天内新品 235 个",
+        "新品销售额占样本 25.9%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 92.6%",
+        "缺货天数中位数 17 天",
+        "库存覆盖字段 91%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 99.6%",
+        "下单转化率中位数 0.4%",
+        "访问率 3.75%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "NIBBI Motorcycle Carburetor",
+      "type": "摩托车化油器",
+      "brand": "NIBBI",
+      "url": "https://www.ozon.ru/product/3452497096",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/8782154223.jpg",
+      "listingDate": "2026-01-26",
+      "ageDays": 178,
+      "revenue": 3162746,
+      "sales": 620,
+      "avgPrice": 5101,
+      "revenueGrowth": 0.28,
+      "orderConv": 0.0017,
+      "cartAdd": 0.0527,
+      "stockoutDays": 3,
+      "adRoi": 0.04099999999999999
+    },
+    {
+      "name": "LS2 Motorcycle Helmet, M, matte black",
+      "type": "摩托车头盔",
+      "brand": "LS2",
+      "url": "https://www.ozon.ru/product/4016556879",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/10057063180.jpg",
+      "listingDate": "2026-04-20",
+      "ageDays": 94,
+      "revenue": 2286218,
+      "sales": 341,
+      "avgPrice": 6704,
+      "revenueGrowth": -0.17,
+      "orderConv": 0.0011,
+      "cartAdd": 0.0471,
+      "stockoutDays": 26,
+      "adRoi": 0.059
+    },
+    {
+      "name": "Motorcycle Bag, 60 L",
+      "type": "摩托车包",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3605693865",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/12429032642.jpg",
+      "listingDate": "2026-03-08",
+      "ageDays": 137,
+      "revenue": 2229263,
+      "sales": 387,
+      "avgPrice": 5760,
+      "revenueGrowth": -0.13,
+      "orderConv": 0.0011,
+      "cartAdd": 0.0755,
+      "stockoutDays": 28,
+      "adRoi": 0.009000000000000001
+    },
+    {
+      "name": "NIBBI Motorcycle Carburetor",
+      "type": "摩托车化油器",
+      "brand": "NIBBI",
+      "url": "https://www.ozon.ru/product/3452458972",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-n/10138466255.jpg",
+      "listingDate": "2026-01-26",
+      "ageDays": 178,
+      "revenue": 2079790,
+      "sales": 456,
+      "avgPrice": 4561,
+      "revenueGrowth": 0.11,
+      "orderConv": 0.0012,
+      "cartAdd": 0.0612,
+      "stockoutDays": 6,
+      "adRoi": 0.042
+    },
+    {
+      "name": "LS2 Motorcycle Helmet, M, black",
+      "type": "摩托车头盔",
+      "brand": "LS2",
+      "url": "https://www.ozon.ru/product/4003095857",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-w/10057063748.jpg",
+      "listingDate": "2026-04-19",
+      "ageDays": 95,
+      "revenue": 1781151,
+      "sales": 247,
+      "avgPrice": 7211,
+      "revenueGrowth": 0.042199999999999994,
+      "orderConv": 0.0014,
+      "cartAdd": 0.0532,
+      "stockoutDays": 22,
+      "adRoi": 0.058
+    },
+    {
+      "name": "LS2 Motorcycle Helmet, L, matte black",
+      "type": "摩托车头盔",
+      "brand": "LS2",
+      "url": "https://www.ozon.ru/product/4003089871",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/10057063180.jpg",
+      "listingDate": "2026-04-19",
+      "ageDays": 95,
+      "revenue": 1659749,
+      "sales": 241,
+      "avgPrice": 6887,
+      "revenueGrowth": -0.16,
+      "orderConv": 0.0012,
+      "cartAdd": 0.0452,
+      "stockoutDays": 23,
+      "adRoi": 0.03
+    },
+    {
+      "name": "HABCO Motorcycle Helmet, M, black & grey",
+      "type": "摩托车头盔",
+      "brand": "HABCO",
+      "url": "https://www.ozon.ru/product/3633848903",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/10425926230.jpg",
+      "listingDate": "2026-03-12",
+      "ageDays": 133,
+      "revenue": 1651729,
+      "sales": 427,
+      "avgPrice": 3868,
+      "revenueGrowth": 0.41,
+      "orderConv": 0.001,
+      "cartAdd": 0.0653,
+      "stockoutDays": 17,
+      "adRoi": 0.077
+    },
+    {
+      "name": "Afenita Motorcycle Helmet, L, black",
+      "type": "摩托车头盔",
+      "brand": "Afenita",
+      "url": "https://www.ozon.ru/product/4539850791",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/11377673393.jpg",
+      "listingDate": "2026-06-02",
+      "ageDays": 51,
+      "revenue": 1534703,
+      "sales": 439,
+      "avgPrice": 3496,
+      "revenueGrowth": 0.327,
+      "orderConv": 0.0011,
+      "cartAdd": 0.0624,
+      "stockoutDays": 4,
+      "adRoi": 0.012
+    },
+    {
+      "name": "Afenita Motorcycle Helmet, L, matte black",
+      "type": "摩托车头盔",
+      "brand": "Afenita",
+      "url": "https://www.ozon.ru/product/4389075133",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/11211121027.jpg",
+      "listingDate": "2026-05-21",
+      "ageDays": 63,
+      "revenue": 1437147,
+      "sales": 443,
+      "avgPrice": 3244,
+      "revenueGrowth": 0.016399999999999998,
+      "orderConv": 0.0009,
+      "cartAdd": 0.0674,
+      "stockoutDays": 7,
+      "adRoi": 0.013
+    },
+    {
+      "name": "HABCO Motorcycle Helmet, L, matte black",
+      "type": "摩托车头盔",
+      "brand": "HABCO",
+      "url": "https://www.ozon.ru/product/3632994995",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/10080603341.jpg",
+      "listingDate": "2026-03-12",
+      "ageDays": 133,
+      "revenue": 1427636,
+      "sales": 301,
+      "avgPrice": 4743,
+      "revenueGrowth": 0.15,
+      "orderConv": 0.0008,
+      "cartAdd": 0.0759,
+      "stockoutDays": 19,
+      "adRoi": 0.045
+    },
+    {
+      "name": "OTOM Motorcycle Chain",
+      "type": "摩托车链条",
+      "brand": "OTOM",
+      "url": "https://www.ozon.ru/product/4705152813",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/9601035591.jpg",
+      "listingDate": "2026-06-12",
+      "ageDays": 41,
+      "revenue": 1383238,
+      "sales": 805,
+      "avgPrice": 1718,
+      "revenueGrowth": 0.7811,
+      "orderConv": 0.0031,
+      "cartAdd": 0.0667,
+      "stockoutDays": 15,
+      "adRoi": 0.128
+    },
+    {
+      "name": "HABCO Motorcycle Helmet, S, black & grey",
+      "type": "摩托车头盔",
+      "brand": "HABCO",
+      "url": "https://www.ozon.ru/product/3633519681",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/10425939510.jpg",
+      "listingDate": "2026-03-12",
+      "ageDays": 133,
+      "revenue": 1356121,
+      "sales": 359,
+      "avgPrice": 3777,
+      "revenueGrowth": 0.65,
+      "orderConv": 0.001,
+      "cartAdd": 0.06570000000000001,
+      "stockoutDays": 16,
+      "adRoi": 0.094
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 96.8,
     "stockoutMedian": 17,
     "stockoutCoverage": 92.6,
-    "missedRevenue": 10529974.4,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 64.6,
     "promoCoverage": 96.8,
     "adActiveShare": 29.1,
@@ -509,12 +851,34 @@
     "duplicateSku": 20,
     "duplicateUrl": 0,
     "uniqueSku": 980,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 96.8,
+      "impressions": 96.8,
+      "visits": 100,
+      "orderConv": 99.6,
+      "cartAdd": 100,
+      "stock": 91.2,
+      "dailySales": 95.6,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 96.8,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 96.8
+    },
+    "listingDateCoverage": 96.8,
+    "freshProductCount": 235,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“摩托车头盔”贡献 16% 销售额；前五品类合计 38.2%。",
     "销售额最集中的价格带是 500–1,000 ₽，覆盖 244 条商品记录，贡献 24.4% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 62.4% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 96.8%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 96.8%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 96.8%；其中 180 天内新品 235 个，贡献 25.9% 样本销售额。"
+  ],
+  "path": "reports/generated/motorcycle-parts/index.html"
 }

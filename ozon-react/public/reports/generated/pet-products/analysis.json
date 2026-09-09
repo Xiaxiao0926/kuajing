@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-pet-products",
   "label": "宠物用品",
   "title": "Ozon 宠物用品市场分析",
   "group": "宠物与生活",
   "snapshot": "2026-07-22",
-  "sourceFile": "ozon-2026-07-22宠物用品_清洗版.xlsx",
-  "path": "reports/generated/pet-products/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 宠物用品市场分析报告",
+  "sourceFile": "ozon-2026-07-22宠物用品_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:35.119Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 1285153357,
@@ -345,7 +349,10 @@
       "revenue": 35471953,
       "sales": 46873,
       "avgPrice": 757,
-      "url": "https://www.ozon.ru/product/166124353"
+      "url": "https://www.ozon.ru/product/166124353",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/7359825611.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "PET PRIDE Filler Cuccumping Clay 9000 g",
@@ -355,7 +362,10 @@
       "revenue": 33179490,
       "sales": 66047,
       "avgPrice": 502,
-      "url": "https://www.ozon.ru/product/1094209982"
+      "url": "https://www.ozon.ru/product/1094209982",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/10137038890.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Pi-Pi-Bent Filler Cuccumping Clay 15000 g",
@@ -365,7 +375,10 @@
       "revenue": 32663166,
       "sales": 32877,
       "avgPrice": 993,
-      "url": "https://www.ozon.ru/product/142701653"
+      "url": "https://www.ozon.ru/product/142701653",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/8197130442.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Барсик Filler Cuccumping Soy 8200 g",
@@ -375,7 +388,10 @@
       "revenue": 22269159,
       "sales": 17579,
       "avgPrice": 1267,
-      "url": "https://www.ozon.ru/product/1090796576"
+      "url": "https://www.ozon.ru/product/1090796576",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/12358085345.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Pi-Pi-Bent Filler Cuccumping Clay 10000 g",
@@ -385,7 +401,10 @@
       "revenue": 22006408,
       "sales": 28976,
       "avgPrice": 759,
-      "url": "https://www.ozon.ru/product/7353497"
+      "url": "https://www.ozon.ru/product/7353497",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/7358417660.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "PET PRIDE Filler Cuccumping Clay 9000 g",
@@ -395,7 +414,10 @@
       "revenue": 21634709,
       "sales": 43358,
       "avgPrice": 499,
-      "url": "https://www.ozon.ru/product/1094209972"
+      "url": "https://www.ozon.ru/product/1094209972",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/10137038602.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Котяра Filler Cuccumping Clay 8000 g",
@@ -405,7 +427,10 @@
       "revenue": 12000754,
       "sales": 23883,
       "avgPrice": 502,
-      "url": "https://www.ozon.ru/product/636784395"
+      "url": "https://www.ozon.ru/product/636784395",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/9203731190.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Cat Step Filler Cuccumping Soy 5400 g",
@@ -415,7 +440,10 @@
       "revenue": 11960254,
       "sales": 7368,
       "avgPrice": 1623,
-      "url": "https://www.ozon.ru/product/149648777"
+      "url": "https://www.ozon.ru/product/149648777",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/7350658328.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "PET PRIDE Filler Absorbent Wood 20000 g",
@@ -425,7 +453,10 @@
       "revenue": 11629730,
       "sales": 15178,
       "avgPrice": 766,
-      "url": "https://www.ozon.ru/product/713490452"
+      "url": "https://www.ozon.ru/product/713490452",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/10137038937.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "PET PRIDE Filler Cuccumping Plant-Based 5000 g",
@@ -435,7 +466,10 @@
       "revenue": 11135973,
       "sales": 11252,
       "avgPrice": 990,
-      "url": "https://www.ozon.ru/product/1124516183"
+      "url": "https://www.ozon.ru/product/1124516183",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/10411060554.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "PET PRIDE Filler Absorbent Silica Gel 6400 g",
@@ -445,7 +479,10 @@
       "revenue": 9953147,
       "sales": 7412,
       "avgPrice": 1343,
-      "url": "https://www.ozon.ru/product/866942289"
+      "url": "https://www.ozon.ru/product/866942289",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/10137038730.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "PET PRIDE Filler Cuccumping Clay 10000 g",
@@ -455,7 +492,10 @@
       "revenue": 9851901,
       "sales": 19032,
       "avgPrice": 518,
-      "url": "https://www.ozon.ru/product/736634149"
+      "url": "https://www.ozon.ru/product/736634149",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/10137038802.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Возьми и сэкономь Disposable Pet Diaper 30 pcs",
@@ -465,7 +505,10 @@
       "revenue": 9608113,
       "sales": 17125,
       "avgPrice": 561,
-      "url": "https://www.ozon.ru/product/1359865401"
+      "url": "https://www.ozon.ru/product/1359865401",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/8277861670.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Cat Step Filler Cuccumping Soy 2700 g",
@@ -475,7 +518,10 @@
       "revenue": 9203369,
       "sales": 12258,
       "avgPrice": 751,
-      "url": "https://www.ozon.ru/product/148544751"
+      "url": "https://www.ozon.ru/product/148544751",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/7350379666.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "PET PRIDE Filler Absorbent Silica Gel 3200 g",
@@ -485,7 +531,305 @@
       "revenue": 9112272,
       "sales": 12959,
       "avgPrice": 703,
-      "url": "https://www.ozon.ru/product/866942238"
+      "url": "https://www.ozon.ru/product/866942238",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/10137038746.jpg",
+      "listingDate": null,
+      "ageDays": null
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.08,
+      "revenueGrowthCoverage": 98.1,
+      "impressions": 963773300,
+      "visits": 32139084,
+      "visitRate": 0.0333,
+      "orderConversionMedian": 0.0036,
+      "orderConversionCoverage": 98.3,
+      "cartAddMedian": 0.16665,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 11,
+      "stockoutCoverage": 76.7,
+      "missedRevenue": 4622387.2,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 26.565160567587753,
+      "inventoryCoverCoverage": 76.4
+    },
+    "marketing": {
+      "discountMedian": 0.19435000000000002,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.9178,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.103,
+      "adRoiCoverage": 98.1,
+      "promoActiveShare": 73.4,
+      "adActiveShare": 54.7
+    },
+    "fulfillment": {
+      "signRateMedian": 0.941,
+      "signRateCoverage": 83.6,
+      "fboShare": 91.1,
+      "deliveryCoverage": 100,
+      "volumeMedian": 1,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 83.6,
+      "freshCount": 195,
+      "freshRevenueShare": 11.3,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“猫砂”拆出 2–3 个明确规格，并优先覆盖 500–1,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 50.3%",
+        "500–1,000 ₽ 贡献 36.7% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 83.6%",
+        "180 天内新品 195 个",
+        "新品销售额占样本 11.3%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 76.7%",
+        "缺货天数中位数 11 天",
+        "库存覆盖字段 76.4%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 98.3%",
+        "下单转化率中位数 0.4%",
+        "访问率 3.33%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Odor Neutralizer",
+      "type": "异味中和剂",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3992034080",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/8777429212.jpg",
+      "listingDate": "2026-04-18",
+      "ageDays": 95,
+      "revenue": 4981184,
+      "sales": 31508,
+      "avgPrice": 158,
+      "revenueGrowth": 0.0223,
+      "orderConv": 0.0035,
+      "cartAdd": 0.1789,
+      "stockoutDays": null,
+      "adRoi": 0.004
+    },
+    {
+      "name": "YOUKU Pet Toilet closed Retractable pallet",
+      "type": "宠物厕所",
+      "brand": "YOUKU",
+      "url": "https://www.ozon.ru/product/3958604998",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/8944393368.jpg",
+      "listingDate": "2026-04-15",
+      "ageDays": 98,
+      "revenue": 3599832,
+      "sales": 1739,
+      "avgPrice": 2070,
+      "revenueGrowth": -0.19,
+      "orderConv": 0.0009,
+      "cartAdd": 0.0834,
+      "stockoutDays": 16,
+      "adRoi": 0.214
+    },
+    {
+      "name": "Cat Pellets Filler Cuccumping Soy, Plant-Based 8000 g",
+      "type": "猫砂",
+      "brand": "Cat Pellets",
+      "url": "https://www.ozon.ru/product/3879795535",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/10086436383.jpg",
+      "listingDate": "2026-04-08",
+      "ageDays": 105,
+      "revenue": 3541025,
+      "sales": 2987,
+      "avgPrice": 1185,
+      "revenueGrowth": -0.11,
+      "orderConv": 0.0052,
+      "cartAdd": 0.1192,
+      "stockoutDays": 6,
+      "adRoi": 0.058
+    },
+    {
+      "name": "Pethub Disposable Pet Diaper 50 pcs",
+      "type": "一次性宠物尿垫",
+      "brand": "Pethub",
+      "url": "https://www.ozon.ru/product/3555568687",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/7358289137.jpg",
+      "listingDate": "2026-02-25",
+      "ageDays": 147,
+      "revenue": 3341361,
+      "sales": 4592,
+      "avgPrice": 728,
+      "revenueGrowth": -0.02,
+      "orderConv": 0.0054,
+      "cartAdd": 0.1285,
+      "stockoutDays": 16,
+      "adRoi": 0.061
+    },
+    {
+      "name": "Pest Repeller",
+      "type": "驱虫器",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4147595617",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/10190202618.jpg",
+      "listingDate": "2026-05-01",
+      "ageDays": 82,
+      "revenue": 3269059,
+      "sales": 16017,
+      "avgPrice": 204,
+      "revenueGrowth": 0.36,
+      "orderConv": 0.0031,
+      "cartAdd": 0.1591,
+      "stockoutDays": 10,
+      "adRoi": 0.069
+    },
+    {
+      "name": "Pest Repeller",
+      "type": "驱虫器",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3731700113",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/7025810262.jpg",
+      "listingDate": "2026-03-24",
+      "ageDays": 120,
+      "revenue": 3043591,
+      "sales": 15797,
+      "avgPrice": 193,
+      "revenueGrowth": 0.48,
+      "orderConv": 0.0017,
+      "cartAdd": 0.1156,
+      "stockoutDays": 10,
+      "adRoi": 0.138
+    },
+    {
+      "name": "Pet Toy Flirt pole",
+      "type": "宠物玩具",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4103025323",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/11268344561.jpg",
+      "listingDate": "2026-04-27",
+      "ageDays": 86,
+      "revenue": 2857556,
+      "sales": 4603,
+      "avgPrice": 621,
+      "revenueGrowth": 0.67,
+      "orderConv": 0.0007000000000000001,
+      "cartAdd": 0.1117,
+      "stockoutDays": 23,
+      "adRoi": 0.267
+    },
+    {
+      "name": "Cat Scratching Post board",
+      "type": "猫抓柱",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4115949014",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/10912085512.jpg",
+      "listingDate": "2026-04-28",
+      "ageDays": 85,
+      "revenue": 2787029,
+      "sales": 9201,
+      "avgPrice": 303,
+      "revenueGrowth": 0.0925,
+      "orderConv": 0.0046,
+      "cartAdd": 0.2189,
+      "stockoutDays": null,
+      "adRoi": 0.002
+    },
+    {
+      "name": "Filler Cuccumping Plant-Based, Soy 15000 g",
+      "type": "猫砂",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3528552957",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/11185165183.jpg",
+      "listingDate": "2026-02-12",
+      "ageDays": 160,
+      "revenue": 2770260,
+      "sales": 1326,
+      "avgPrice": 2089,
+      "revenueGrowth": 0.41,
+      "orderConv": 0.0023,
+      "cartAdd": 0.09630000000000001,
+      "stockoutDays": 3,
+      "adRoi": 0.025
+    },
+    {
+      "name": "Filler Absorbent Wood 7000 g",
+      "type": "猫砂",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3488021752",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/8992729271.jpg",
+      "listingDate": "2026-02-02",
+      "ageDays": 170,
+      "revenue": 2552440,
+      "sales": 9444,
+      "avgPrice": 270,
+      "revenueGrowth": -0.27,
+      "orderConv": 0.0097,
+      "cartAdd": 0.1961,
+      "stockoutDays": 27,
+      "adRoi": 0
+    },
+    {
+      "name": "POZOAMIS-15P Pet Toothbrush",
+      "type": "宠物牙刷",
+      "brand": "POZOAMIS-15P",
+      "url": "https://www.ozon.ru/product/3941102889",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-w/11198709284.jpg",
+      "listingDate": "2026-04-14",
+      "ageDays": 99,
+      "revenue": 2228413,
+      "sales": 4070,
+      "avgPrice": 548,
+      "revenueGrowth": 0.0278,
+      "orderConv": 0.0012,
+      "cartAdd": 0.1992,
+      "stockoutDays": null,
+      "adRoi": 0.174
+    },
+    {
+      "name": "Pet Bandage",
+      "type": "宠物绷带",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3541046580",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/11870416458.jpg",
+      "listingDate": "2026-02-18",
+      "ageDays": 154,
+      "revenue": 2225209,
+      "sales": 25347,
+      "avgPrice": 88,
+      "revenueGrowth": 0.0144,
+      "orderConv": 0.002,
+      "cartAdd": 0.1841,
+      "stockoutDays": null,
+      "adRoi": 0.001
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 83.6,
     "stockoutMedian": 11,
     "stockoutCoverage": 76.7,
-    "missedRevenue": 4622387.2,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 73.4,
     "promoCoverage": 98.1,
     "adActiveShare": 54.7,
@@ -509,12 +851,34 @@
     "duplicateSku": 17,
     "duplicateUrl": 0,
     "uniqueSku": 983,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 98.1,
+      "impressions": 98.1,
+      "visits": 100,
+      "orderConv": 98.3,
+      "cartAdd": 100,
+      "stock": 76.4,
+      "dailySales": 78.6,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 98.1,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 83.6
+    },
+    "listingDateCoverage": 83.6,
+    "freshProductCount": 195,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“猫砂”贡献 50.3% 销售额；前五品类合计 68.1%。",
     "销售额最集中的价格带是 500–1,000 ₽，覆盖 182 条商品记录，贡献 36.7% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 60.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 98.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 98.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 83.6%；其中 180 天内新品 195 个，贡献 11.3% 样本销售额。"
+  ],
+  "path": "reports/generated/pet-products/index.html"
 }

@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-garage-service",
   "label": "车库与汽车服务",
   "title": "Ozon 车库与汽车服务市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23车库汽车服务_清洗版.xlsx",
-  "path": "reports/generated/garage-service/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 车库与汽车服务市场分析报告",
+  "sourceFile": "ozon-2026-07-23车库汽车服务_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:35.568Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 650688467,
@@ -345,7 +349,10 @@
       "revenue": 15291097,
       "sales": 4073,
       "avgPrice": 3754,
-      "url": "https://www.ozon.ru/product/541274789"
+      "url": "https://www.ozon.ru/product/541274789",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/9163957540.jpg",
+      "listingDate": "2022-04-01",
+      "ageDays": 1574
     },
     {
       "name": "ASTRONAVT Car Compressor, 120 W, 35 L/min",
@@ -355,7 +362,10 @@
       "revenue": 10290242,
       "sales": 4396,
       "avgPrice": 2341,
-      "url": "https://www.ozon.ru/product/1419874008"
+      "url": "https://www.ozon.ru/product/1419874008",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/7518403282.jpg",
+      "listingDate": "2024-02-10",
+      "ageDays": 894
     },
     {
       "name": "Car Compressor, 120.1 W, 35 L/min",
@@ -365,7 +375,10 @@
       "revenue": 8254430,
       "sales": 6084,
       "avgPrice": 1357,
-      "url": "https://www.ozon.ru/product/4414860269"
+      "url": "https://www.ozon.ru/product/4414860269",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/12671865516.jpg",
+      "listingDate": "2026-05-23",
+      "ageDays": 61
     },
     {
       "name": "DREAMDAY Technical Funnel",
@@ -375,7 +388,10 @@
       "revenue": 7889256,
       "sales": 18495,
       "avgPrice": 427,
-      "url": "https://www.ozon.ru/product/1680768478"
+      "url": "https://www.ozon.ru/product/1680768478",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-n/7207517687.jpg",
+      "listingDate": "2024-09-04",
+      "ageDays": 687
     },
     {
       "name": "SWAT Car Compressor, 60 L/min",
@@ -385,7 +401,10 @@
       "revenue": 7700202,
       "sales": 4262,
       "avgPrice": 1807,
-      "url": "https://www.ozon.ru/product/312644785"
+      "url": "https://www.ozon.ru/product/312644785",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/11172704010.jpg",
+      "listingDate": "2021-09-01",
+      "ageDays": 1786
     },
     {
       "name": "Technical Funnel",
@@ -395,7 +414,10 @@
       "revenue": 7076633,
       "sales": 9617,
       "avgPrice": 736,
-      "url": "https://www.ozon.ru/product/3400303990"
+      "url": "https://www.ozon.ru/product/3400303990",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/8856623794.jpg",
+      "listingDate": "2026-01-17",
+      "ageDays": 187
     },
     {
       "name": "АВТОБРАТ Car Tools Kit",
@@ -405,7 +427,10 @@
       "revenue": 7039412,
       "sales": 1895,
       "avgPrice": 3715,
-      "url": "https://www.ozon.ru/product/478073215"
+      "url": "https://www.ozon.ru/product/478073215",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9164288351.jpg",
+      "listingDate": "2022-01-26",
+      "ageDays": 1639
     },
     {
       "name": "ТехноЛиониум Fuel Pump",
@@ -415,7 +440,10 @@
       "revenue": 5976904,
       "sales": 2132,
       "avgPrice": 2803,
-      "url": "https://www.ozon.ru/product/1087407539"
+      "url": "https://www.ozon.ru/product/1087407539",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/9040830691.jpg",
+      "listingDate": "2023-07-19",
+      "ageDays": 1100
     },
     {
       "name": "VALORTEX Car Tools Kit",
@@ -425,7 +453,10 @@
       "revenue": 5915066,
       "sales": 678,
       "avgPrice": 8724,
-      "url": "https://www.ozon.ru/product/3485288719"
+      "url": "https://www.ozon.ru/product/3485288719",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/11426322304.jpg",
+      "listingDate": "2026-02-02",
+      "ageDays": 171
     },
     {
       "name": "Car Compressor, 140 W, 40 L/min",
@@ -435,7 +466,10 @@
       "revenue": 5763900,
       "sales": null,
       "avgPrice": 4331,
-      "url": "https://www.ozon.ru/product/4672051743"
+      "url": "https://www.ozon.ru/product/4672051743",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/8158845856.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "ClickShop Car Compressor, 241 W, 85 L/min",
@@ -445,7 +479,10 @@
       "revenue": 4698924,
       "sales": 2144,
       "avgPrice": 2192,
-      "url": "https://www.ozon.ru/product/3469321775"
+      "url": "https://www.ozon.ru/product/3469321775",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/10830493666.jpg",
+      "listingDate": "2026-01-29",
+      "ageDays": 175
     },
     {
       "name": "VALORTEX Car Tools Kit",
@@ -455,7 +492,10 @@
       "revenue": 4538805,
       "sales": 642,
       "avgPrice": 7070,
-      "url": "https://www.ozon.ru/product/4174526490"
+      "url": "https://www.ozon.ru/product/4174526490",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/10217349886.jpg",
+      "listingDate": "2026-05-04",
+      "ageDays": 80
     },
     {
       "name": "ClickShop Car Compressor, 242 W, 85 L/min",
@@ -465,7 +505,10 @@
       "revenue": 4410124,
       "sales": 2344,
       "avgPrice": 1881,
-      "url": "https://www.ozon.ru/product/3469312339"
+      "url": "https://www.ozon.ru/product/3469312339",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/10830745013.jpg",
+      "listingDate": "2026-01-29",
+      "ageDays": 175
     },
     {
       "name": "70mai Car Compressor, 119 W, 26 L/min",
@@ -475,7 +518,10 @@
       "revenue": 3980880,
       "sales": 1434,
       "avgPrice": 2776,
-      "url": "https://www.ozon.ru/product/196150622"
+      "url": "https://www.ozon.ru/product/196150622",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/12353337646.jpg",
+      "listingDate": "2020-09-22",
+      "ageDays": 2130
     },
     {
       "name": "Autoprofi Car Compressor, 180 W, 45 L/min",
@@ -485,7 +531,305 @@
       "revenue": 3965335,
       "sales": 2861,
       "avgPrice": 1386,
-      "url": "https://www.ozon.ru/product/901199160"
+      "url": "https://www.ozon.ru/product/901199160",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/8368740438.jpg",
+      "listingDate": "2023-03-20",
+      "ageDays": 1221
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.045450000000000004,
+      "revenueGrowthCoverage": 91.8,
+      "impressions": 696110541,
+      "visits": 19263844,
+      "visitRate": 0.0277,
+      "orderConversionMedian": 0.0022,
+      "orderConversionCoverage": 95.6,
+      "cartAddMedian": 0.1482,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 13,
+      "stockoutCoverage": 77.1,
+      "missedRevenue": 21453976.2,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 21.5625,
+      "inventoryCoverCoverage": 77.5
+    },
+    "marketing": {
+      "discountMedian": 0.1997,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.99065,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.0675,
+      "adRoiCoverage": 91.8,
+      "promoActiveShare": 84.1,
+      "adActiveShare": 53.7
+    },
+    "fulfillment": {
+      "signRateMedian": 0.9309999999999999,
+      "signRateCoverage": 91.6,
+      "fboShare": 76.7,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.9,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 91.6,
+      "freshCount": 305,
+      "freshRevenueShare": 31.9,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“汽车压缩机”拆出 2–3 个明确规格，并优先覆盖 1,000–2,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 24.4%",
+        "1,000–2,000 ₽ 贡献 24.6% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 91.6%",
+        "180 天内新品 305 个",
+        "新品销售额占样本 31.9%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 77.1%",
+        "缺货天数中位数 13 天",
+        "库存覆盖字段 77.5%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 95.6%",
+        "下单转化率中位数 0.2%",
+        "访问率 2.77%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Car Compressor, 120.1 W, 35 L/min",
+      "type": "汽车压缩机",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4414860269",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/12671865516.jpg",
+      "listingDate": "2026-05-23",
+      "ageDays": 61,
+      "revenue": 8254430,
+      "sales": 6084,
+      "avgPrice": 1357,
+      "revenueGrowth": 15145.7329,
+      "orderConv": 0.001,
+      "cartAdd": 0.1428,
+      "stockoutDays": 13,
+      "adRoi": 0.099
+    },
+    {
+      "name": "VALORTEX Car Tools Kit",
+      "type": "汽车工具套件",
+      "brand": "VALORTEX",
+      "url": "https://www.ozon.ru/product/3485288719",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/11426322304.jpg",
+      "listingDate": "2026-02-02",
+      "ageDays": 171,
+      "revenue": 5915066,
+      "sales": 678,
+      "avgPrice": 8724,
+      "revenueGrowth": 0.07,
+      "orderConv": 0.0008,
+      "cartAdd": 0.08560000000000001,
+      "stockoutDays": 7,
+      "adRoi": 0.104
+    },
+    {
+      "name": "ClickShop Car Compressor, 241 W, 85 L/min",
+      "type": "汽车压缩机",
+      "brand": "ClickShop",
+      "url": "https://www.ozon.ru/product/3469321775",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/10830493666.jpg",
+      "listingDate": "2026-01-29",
+      "ageDays": 175,
+      "revenue": 4698924,
+      "sales": 2144,
+      "avgPrice": 2192,
+      "revenueGrowth": 0.28,
+      "orderConv": 0.0012,
+      "cartAdd": 0.1035,
+      "stockoutDays": 9,
+      "adRoi": 0.071
+    },
+    {
+      "name": "VALORTEX Car Tools Kit",
+      "type": "汽车工具套件",
+      "brand": "VALORTEX",
+      "url": "https://www.ozon.ru/product/4174526490",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/10217349886.jpg",
+      "listingDate": "2026-05-04",
+      "ageDays": 80,
+      "revenue": 4538805,
+      "sales": 642,
+      "avgPrice": 7070,
+      "revenueGrowth": -0.07,
+      "orderConv": 0.0007000000000000001,
+      "cartAdd": 0.0959,
+      "stockoutDays": 7,
+      "adRoi": 0.123
+    },
+    {
+      "name": "ClickShop Car Compressor, 242 W, 85 L/min",
+      "type": "汽车压缩机",
+      "brand": "ClickShop",
+      "url": "https://www.ozon.ru/product/3469312339",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/10830745013.jpg",
+      "listingDate": "2026-01-29",
+      "ageDays": 175,
+      "revenue": 4410124,
+      "sales": 2344,
+      "avgPrice": 1881,
+      "revenueGrowth": 0.52,
+      "orderConv": 0.0014,
+      "cartAdd": 0.113,
+      "stockoutDays": 10,
+      "adRoi": 0.075
+    },
+    {
+      "name": "Xiaomi Car Compressor, 10 W, 18 L/min",
+      "type": "汽车压缩机",
+      "brand": "Xiaomi",
+      "url": "https://www.ozon.ru/product/3570750986",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/9689333293.jpg",
+      "listingDate": "2026-03-01",
+      "ageDays": 144,
+      "revenue": 3964889,
+      "sales": 1429,
+      "avgPrice": 2775,
+      "revenueGrowth": 0.0161,
+      "orderConv": 0.0012,
+      "cartAdd": 0.1025,
+      "stockoutDays": 14,
+      "adRoi": 0.055
+    },
+    {
+      "name": "ShigaWay Glass Repair Kit",
+      "type": "玻璃维修套件",
+      "brand": "ShigaWay",
+      "url": "https://www.ozon.ru/product/4249474526",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/12316897986.jpg",
+      "listingDate": "2026-05-09",
+      "ageDays": 75,
+      "revenue": 3669819,
+      "sales": 18952,
+      "avgPrice": 194,
+      "revenueGrowth": -0.1,
+      "orderConv": 0.0019,
+      "cartAdd": 0.1773,
+      "stockoutDays": 8,
+      "adRoi": 0.181
+    },
+    {
+      "name": "Technical Funnel",
+      "type": "工业漏斗",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4495812353",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/11048967736.jpg",
+      "listingDate": "2026-05-29",
+      "ageDays": 55,
+      "revenue": 3614742,
+      "sales": 13361,
+      "avgPrice": 271,
+      "revenueGrowth": 0.16570000000000001,
+      "orderConv": 0.007800000000000001,
+      "cartAdd": 0.2242,
+      "stockoutDays": 20,
+      "adRoi": 0.005
+    },
+    {
+      "name": "Car Compressor, 70 W",
+      "type": "汽车压缩机",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4483412174",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/8295486225.jpg",
+      "listingDate": "2026-05-28",
+      "ageDays": 56,
+      "revenue": 3267476,
+      "sales": 2522,
+      "avgPrice": 1296,
+      "revenueGrowth": 0.22390000000000002,
+      "orderConv": 0.0026,
+      "cartAdd": 0.1414,
+      "stockoutDays": 16,
+      "adRoi": 0.116
+    },
+    {
+      "name": "Fuel Pump",
+      "type": "燃油和润滑油泵",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4126036910",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/7920595761.jpg",
+      "listingDate": "2026-04-29",
+      "ageDays": 85,
+      "revenue": 3179478,
+      "sales": 1577,
+      "avgPrice": 2016,
+      "revenueGrowth": 0.45,
+      "orderConv": 0.0022,
+      "cartAdd": 0.1262,
+      "stockoutDays": 22,
+      "adRoi": 0.05
+    },
+    {
+      "name": "ClickShop Car Compressor, 180 W, 35 L/min",
+      "type": "汽车压缩机",
+      "brand": "ClickShop",
+      "url": "https://www.ozon.ru/product/3469342184",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/10830952601.jpg",
+      "listingDate": "2026-01-29",
+      "ageDays": 175,
+      "revenue": 2856730,
+      "sales": 2774,
+      "avgPrice": 1030,
+      "revenueGrowth": 0.33,
+      "orderConv": 0.0011,
+      "cartAdd": 0.1166,
+      "stockoutDays": 9,
+      "adRoi": 0.114
+    },
+    {
+      "name": "Car Compressor, 120 W, 50 L/min",
+      "type": "汽车压缩机",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3495219201",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/7459106269.jpg",
+      "listingDate": "2026-02-04",
+      "ageDays": 169,
+      "revenue": 2824385,
+      "sales": 1778,
+      "avgPrice": 1589,
+      "revenueGrowth": 0.1,
+      "orderConv": 0.0012,
+      "cartAdd": 0.1344,
+      "stockoutDays": 7,
+      "adRoi": 0.14
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 91.6,
     "stockoutMedian": 13,
     "stockoutCoverage": 77.1,
-    "missedRevenue": 21453976.2,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 84.1,
     "promoCoverage": 91.8,
     "adActiveShare": 53.7,
@@ -509,12 +851,34 @@
     "duplicateSku": 28,
     "duplicateUrl": 0,
     "uniqueSku": 972,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 91.8,
+      "impressions": 91.8,
+      "visits": 100,
+      "orderConv": 95.6,
+      "cartAdd": 100,
+      "stock": 77.7,
+      "dailySales": 85.1,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 91.8,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 91.6
+    },
+    "listingDateCoverage": 91.6,
+    "freshProductCount": 305,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“汽车压缩机”贡献 24.4% 销售额；前五品类合计 73.3%。",
     "销售额最集中的价格带是 1,000–2,000 ₽，覆盖 118 条商品记录，贡献 24.6% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 58.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 91.8%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 91.8%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 91.6%；其中 180 天内新品 305 个，贡献 31.9% 样本销售额。"
+  ],
+  "path": "reports/generated/garage-service/index.html"
 }

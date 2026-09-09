@@ -67,19 +67,42 @@ const rawOzonRows = [{
   'ld9-de9 (2)': '22 152',
   'ld9-de9 (3)': '158 ₽',
   'ct5140-a0 (2)': 9.45,
+  'ld9-ac1': '12,5%',
   'ld9-de9 (4)': '0 ₽',
   'ct5140-a0 (3)': '28中的11',
+  'ld9-de9 (5)': '125 099 ₽',
+  'ld9-de9 (6)': '791',
+  'ct5140-a0 (4)': '2 500',
+  'ld9-de9 (7)': 'FBO',
+  'ct5140-a0 (5)': '0,12',
+  'ld9-de9 (8)': '100 000',
+  'ld9-de9 (9)': '20 000',
+  'ct5140-a0 (6)': '5 000',
+  'ld9-de9 (10)': '0,3%',
+  'ct5140-a0 (7)': '1,5%',
+  'ct5140-a0 (8)': '8,4%',
+  'ct5140-a0 (9)': '15%',
+  'ct5140-a0 (10)': '33%',
   'ct5140-a0 (11)': '28中的28',
   'ct5140-a0 (12)': '28中的12',
+  'ct5140-a0 (13)': '10,1%',
+  'ld9-de9 (11)': '01.06.2026',
 }]
 const normalizedRaw = normalizeMarketReportRows(rawOzonRows)
 assert.equal(normalizedRaw[0]['销售额(₽)'], '3 502 773 ₽')
 assert.equal(normalizedRaw[0]['签收率(%)'], 0.945)
 assert.equal(normalizedRaw[0]['无库存天数(近28天)'], 11)
+assert.equal(normalizedRaw[0]['下单转化率(%)'], 0.003)
 const rawReport = buildUploadedMarketReport(rawOzonRows, { sourceFile: 'ozon-2026-09-08.csv', label: '家具合页' })
 assert.equal(rawReport.kpis.totalRevenue, 3502773)
 assert.equal(rawReport.operations.signRateMedian, 0.945)
 assert.equal(rawReport.operations.stockoutMedian, 11)
+assert.equal(rawReport.marketDimensions.demand.orderConversionMedian, 0.003)
+assert.equal(rawReport.marketDimensions.newness.freshCount, 1)
+assert.equal(rawReport.marketDimensions.newness.listingDateCoverage, 100)
+assert.equal(rawReport.newProducts[0].ageDays, 99)
+assert.equal(rawReport.newProducts[0].url, 'https://www.ozon.ru/product/123')
+assert.ok(rawReport.recommendations.every((item) => item.evidence.length > 0))
 const rawMissingSalesReport = buildUploadedMarketReport([
   { ...rawOzonRows[0], 'ld9-de9 (2)': '—' },
 ], { sourceFile: 'raw.csv', label: '原始数据' })

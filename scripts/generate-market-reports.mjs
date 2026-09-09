@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as XLSX from '../ozon-react/node_modules/xlsx/xlsx.mjs'
+import { buildUploadedMarketReport } from '../ozon-react/src/utils/marketReportAnalysis.js'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SOURCE_DIR = path.join(ROOT, '市场分析', '市场bsr')
@@ -292,6 +293,10 @@ function escapeHtml(value) {
 
 function htmlFor(analysis) {
   const dataJson = JSON.stringify(analysis).replaceAll('</script', '<\\/script')
+  const recommendationRows = analysis.recommendations.map((item) => `
+    <div class="recommendation"><div><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.confidence)}置信度</span></div><p>${escapeHtml(item.recommendation)}</p><small>数据依据：${item.evidence.map(escapeHtml).join(' · ')}</small></div>`).join('')
+  const newProductRows = analysis.newProducts.map((item, index) => `
+    <tr><td>${index + 1}</td><td class="product-name"><a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">${escapeHtml(item.name)}</a></td><td>${escapeHtml(item.type)}</td><td class="number">${item.ageDays} 天</td><td class="number">${item.revenue === null ? '—' : formatRub(item.revenue)}</td><td class="number">${item.sales === null ? '—' : formatRub(item.sales)}</td><td class="number">${item.avgPrice === null ? '—' : formatRub(item.avgPrice)}</td></tr>`).join('')
   const productRows = analysis.topProducts.map((item, index) => `
     <tr>
       <td>${index + 1}</td>
@@ -323,7 +328,7 @@ function htmlFor(analysis) {
     main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
     .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
     .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
-    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.recommendations{display:grid;gap:10px}.recommendation{background:#fff;border-left:3px solid var(--teal);padding:15px 17px}.recommendation>div{display:flex;justify-content:space-between;gap:12px}.recommendation span{font-size:11px;color:var(--teal);white-space:nowrap}.recommendation p{margin:7px 0;font-size:14px}.recommendation small{color:var(--muted)}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
     footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
     @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
@@ -370,13 +375,25 @@ function htmlFor(analysis) {
     </section>
 
     <section class="section">
-      <div class="section-head"><span class="section-no">03</span><h2>头部类型明细</h2></div>
+      <div class="section-head"><span class="section-no">03</span><h2>有数据支撑的选品建议</h2></div>
+      <p class="lead">建议由当前样本自动生成。覆盖率不足的指标会降低置信度，不把曝光、断货或新品身份单独当作需求证明。</p>
+      <div class="recommendations">${recommendationRows}</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">04</span><h2>上架 180 天内新品链接</h2></div>
+      <p class="lead">相对于 ${analysis.snapshot} 快照计算；有效日期覆盖 ${analysis.quality.listingDateCoverage}%，共识别 ${analysis.quality.freshProductCount} 个新品。未来日期、异常旧日期和缺失日期均不进入清单。</p>
+      ${newProductRows ? `<div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th class="number">已上架</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>${newProductRows}</tbody></table></div>` : '<div class="notes">当前没有同时满足有效日期、180 天窗口和有效商品链接的记录。</div>'}
+    </section>
+
+    <section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>头部类型明细</h2></div>
       <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
       <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>${typeRows}</tbody></table></div>
     </section>
 
     <section class="section">
-      <div class="section-head"><span class="section-no">04</span><h2>运营信号</h2></div>
+      <div class="section-head"><span class="section-no">06</span><h2>运营信号</h2></div>
       <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
       <div class="ops">
         <div class="op"><div class="label">签收率中位数</div><div class="value">${analysis.operations.signRateMedian === null ? '—' : `${round(analysis.operations.signRateMedian * 100, 1)}%`}</div><div class="coverage">字段覆盖 ${analysis.operations.signRateCoverage}%</div></div>
@@ -387,13 +404,13 @@ function htmlFor(analysis) {
     </section>
 
     <section class="section">
-      <div class="section-head"><span class="section-no">05</span><h2>头部商品观察</h2></div>
+      <div class="section-head"><span class="section-no">07</span><h2>头部商品观察</h2></div>
       <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
       <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>${productRows}</tbody></table></div>
     </section>
 
     <section class="section">
-      <div class="section-head"><span class="section-no">06</span><h2>使用边界与下一步</h2></div>
+      <div class="section-head"><span class="section-no">08</span><h2>使用边界与下一步</h2></div>
       <div class="notes"><ul>
         <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
         <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
@@ -423,6 +440,16 @@ function catalogSource(analyses) {
     path: analysis.path,
     frameTitle: analysis.frameTitle,
     quality: analysis.quality.level,
+    decisionBrief: {
+      id: analysis.id,
+      label: analysis.label,
+      snapshot: analysis.snapshot,
+      kpis: analysis.kpis,
+      marketDimensions: analysis.marketDimensions,
+      recommendations: analysis.recommendations,
+      newProducts: analysis.newProducts,
+      quality: analysis.quality,
+    },
   }))
   return `// Generated by scripts/generate-market-reports.mjs. Do not edit manually.\nexport const GENERATED_MARKET_REPORTS = ${JSON.stringify(records, null, 2)}\n`
 }
@@ -437,7 +464,19 @@ for (const report of REPORTS) {
   const workbook = XLSX.read(fs.readFileSync(sourcePath), { type: 'buffer', cellDates: false })
   const sheet = workbook.Sheets[workbook.SheetNames[0]]
   const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: null })
-  const analysis = buildAnalysis(report, rawRows)
+  const analysis = {
+    ...buildUploadedMarketReport(rawRows, {
+      id: `generated-${report.slug}`,
+      label: report.label,
+      snapshot: report.snapshot,
+      sourceFile: report.file,
+      sourceFormat: 'Excel',
+    }),
+    kind: 'generated',
+    group: report.group,
+    path: `reports/generated/${report.slug}/index.html`,
+    frameTitle: `Ozon ${report.label}市场分析报告`,
+  }
   const reportDir = path.join(OUTPUT_DIR, report.slug)
   fs.mkdirSync(reportDir, { recursive: true })
   fs.writeFileSync(path.join(reportDir, 'index.html'), htmlFor(analysis), 'utf8')

@@ -1,3 +1,5 @@
+import MarketDecisionBrief from './MarketDecisionBrief.jsx'
+
 const number = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 })
 
 function formatRub(value) {
@@ -85,19 +87,7 @@ export default function UploadedMarketReport({ report }) {
           </div>
         </section>
 
-        {report.recommendations?.length ? (
-          <section className="mt-8 border-y border-gray-200 py-6">
-            <h4 className="text-lg font-semibold text-morandi-text">给国内工厂的测试建议</h4>
-            <ol className="mt-3 grid gap-3 lg:grid-cols-3">
-              {report.recommendations.map((item, index) => (
-                <li key={item} className="flex gap-3 border-l-2 border-emerald-600 bg-gray-50 px-4 py-3 text-sm leading-6 text-morandi-text">
-                  <span className="font-semibold tabular-nums text-emerald-700">{index + 1}</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ol>
-          </section>
-        ) : null}
+        <div className="mt-8"><MarketDecisionBrief brief={report} /></div>
 
         <section className="mt-8 grid gap-5 xl:grid-cols-2">
           <div className="border border-gray-200 p-4">

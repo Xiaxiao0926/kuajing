@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-car-batteries",
   "label": "汽车电池",
   "title": "Ozon 汽车电池市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23汽车电池_清洗版.xlsx",
-  "path": "reports/generated/car-batteries/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车电池市场分析报告",
+  "sourceFile": "ozon-2026-07-23汽车电池_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:36.764Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 327433415,
@@ -291,7 +295,10 @@
       "revenue": 7946228,
       "sales": 2531,
       "avgPrice": 3140,
-      "url": "https://www.ozon.ru/product/2624473133"
+      "url": "https://www.ozon.ru/product/2624473133",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/8544915591.jpg",
+      "listingDate": "2025-08-06",
+      "ageDays": 351
     },
     {
       "name": "Battery Charger, 29800 А•h, max 2000 A, 170 mm",
@@ -301,7 +308,10 @@
       "revenue": 5912638,
       "sales": 2003,
       "avgPrice": 2952,
-      "url": "https://www.ozon.ru/product/1313519767"
+      "url": "https://www.ozon.ru/product/1313519767",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/7709516854.jpg",
+      "listingDate": "2023-11-28",
+      "ageDays": 968
     },
     {
       "name": "Hauzone Battery Charger, max 6 A, 154 mm",
@@ -311,7 +321,10 @@
       "revenue": 5497227,
       "sales": 3912,
       "avgPrice": 1405,
-      "url": "https://www.ozon.ru/product/1067074809"
+      "url": "https://www.ozon.ru/product/1067074809",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/9618163359.jpg",
+      "listingDate": "2023-07-06",
+      "ageDays": 1113
     },
     {
       "name": "GREEN KEEPER Battery Charger, 16000 А•h, max 2000 A, 170 mm",
@@ -321,7 +334,10 @@
       "revenue": 4941891,
       "sales": 449,
       "avgPrice": 11006,
-      "url": "https://www.ozon.ru/product/1660288459"
+      "url": "https://www.ozon.ru/product/1660288459",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/12181644345.jpg",
+      "listingDate": "2024-08-16",
+      "ageDays": 706
     },
     {
       "name": "Battery Charger, 28000 А•h, max 600 A, 170 mm",
@@ -331,7 +347,10 @@
       "revenue": 4865151,
       "sales": null,
       "avgPrice": 1861,
-      "url": "https://www.ozon.ru/product/4575343246"
+      "url": "https://www.ozon.ru/product/4575343246",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/9079098806.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "BILDR Battery Charger, 3 А•h, max 15 A, 195 mm",
@@ -341,7 +360,10 @@
       "revenue": 4079669,
       "sales": 1163,
       "avgPrice": 3508,
-      "url": "https://www.ozon.ru/product/3583351484"
+      "url": "https://www.ozon.ru/product/3583351484",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9543375623.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141
     },
     {
       "name": "ZarGrad Battery Charger, 252 mm",
@@ -351,7 +373,10 @@
       "revenue": 3634772,
       "sales": 832,
       "avgPrice": 4369,
-      "url": "https://www.ozon.ru/product/3278699310"
+      "url": "https://www.ozon.ru/product/3278699310",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/12627101744.jpg",
+      "listingDate": "2025-12-24",
+      "ageDays": 211
     },
     {
       "name": "70mai Battery Charger, 10400 А•h, max 1000 A",
@@ -361,7 +386,10 @@
       "revenue": 3584377,
       "sales": 696,
       "avgPrice": 5150,
-      "url": "https://www.ozon.ru/product/3424320452"
+      "url": "https://www.ozon.ru/product/3424320452",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/12352822570.jpg",
+      "listingDate": "2026-01-21",
+      "ageDays": 183
     },
     {
       "name": "DEKKERS Battery Charger, 22200 А•h, max 2000 A, 150 mm",
@@ -371,7 +399,10 @@
       "revenue": 3570101,
       "sales": 683,
       "avgPrice": 5227,
-      "url": "https://www.ozon.ru/product/1674113201"
+      "url": "https://www.ozon.ru/product/1674113201",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/9100438249.jpg",
+      "listingDate": "2024-08-29",
+      "ageDays": 693
     },
     {
       "name": "Battery Charger, 27000 А•h, 255 mm",
@@ -381,7 +412,10 @@
       "revenue": 3556805,
       "sales": 327,
       "avgPrice": 10877,
-      "url": "https://www.ozon.ru/product/2388788054"
+      "url": "https://www.ozon.ru/product/2388788054",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/8523782820.jpg",
+      "listingDate": "2025-07-01",
+      "ageDays": 387
     },
     {
       "name": "Battery Charger, 10000 А•h, max 1500 A, 150 mm",
@@ -391,7 +425,10 @@
       "revenue": 3463151,
       "sales": 901,
       "avgPrice": 3844,
-      "url": "https://www.ozon.ru/product/3550118959"
+      "url": "https://www.ozon.ru/product/3550118959",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/11112447851.jpg",
+      "listingDate": "2026-02-23",
+      "ageDays": 150
     },
     {
       "name": "Battery Charger, 8000 А•h, 300 mm",
@@ -401,7 +438,10 @@
       "revenue": 3437215,
       "sales": 1891,
       "avgPrice": 1818,
-      "url": "https://www.ozon.ru/product/3758309034"
+      "url": "https://www.ozon.ru/product/3758309034",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/11279948006.jpg",
+      "listingDate": "2026-03-27",
+      "ageDays": 118
     },
     {
       "name": "Даджет Battery Charger, 8000 А•h, max 400 A, 200 mm",
@@ -411,7 +451,10 @@
       "revenue": 2959626,
       "sales": 1531,
       "avgPrice": 1933,
-      "url": "https://www.ozon.ru/product/231109759"
+      "url": "https://www.ozon.ru/product/231109759",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/8415521317.jpg",
+      "listingDate": "2021-02-17",
+      "ageDays": 1982
     },
     {
       "name": "Wellzoller Battery Charger, 20000 А•h, max 2500 A",
@@ -421,7 +464,10 @@
       "revenue": 2566686,
       "sales": 395,
       "avgPrice": 6498,
-      "url": "https://www.ozon.ru/product/3497654924"
+      "url": "https://www.ozon.ru/product/3497654924",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/7488780424.jpg",
+      "listingDate": "2026-02-04",
+      "ageDays": 169
     },
     {
       "name": "CHOPPER Motorcycle Battery, 4 А•h, Reverse (-/+)",
@@ -431,7 +477,305 @@
       "revenue": 2478567,
       "sales": 2195,
       "avgPrice": 1129,
-      "url": "https://www.ozon.ru/product/1805716357"
+      "url": "https://www.ozon.ru/product/1805716357",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/7228983016.jpg",
+      "listingDate": "2024-12-27",
+      "ageDays": 573
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": null,
+      "revenueGrowthCoverage": 0,
+      "impressions": 122543520,
+      "visits": 5799726,
+      "visitRate": 0.0473,
+      "orderConversionMedian": 0.13,
+      "orderConversionCoverage": 99.6,
+      "cartAddMedian": 0.08034999999999999,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 28,
+      "stockoutCoverage": 94,
+      "missedRevenue": 25875081,
+      "missedRevenueCoverage": 95.2,
+      "inventoryCoverMedian": null,
+      "inventoryCoverCoverage": 0
+    },
+    "marketing": {
+      "discountMedian": 0.10769999999999999,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.7292000000000001,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.0625,
+      "adRoiCoverage": 95.2,
+      "promoActiveShare": 98.1,
+      "adActiveShare": 100
+    },
+    "fulfillment": {
+      "signRateMedian": 0.88,
+      "signRateCoverage": 95,
+      "fboShare": 64.1,
+      "deliveryCoverage": 100,
+      "volumeMedian": 2.2,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 95,
+      "freshCount": 191,
+      "freshRevenueShare": 20.5,
+      "futureDateCount": 1,
+      "outlierDateCount": 37
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“启动充电装置”拆出 2–3 个明确规格，并优先覆盖 2,000–5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 52.9%",
+        "2,000–5,000 ₽ 贡献 40.1% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 95%",
+        "180 天内新品 191 个",
+        "新品销售额占样本 20.5%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 94%",
+        "缺货天数中位数 28 天",
+        "库存覆盖字段 0%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 99.6%",
+        "下单转化率中位数 13%",
+        "访问率 4.73%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "BILDR Battery Charger, 3 А•h, max 15 A, 195 mm",
+      "type": "汽车电瓶充电器",
+      "brand": "BILDR",
+      "url": "https://www.ozon.ru/product/3583351484",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9543375623.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141,
+      "revenue": 4079669,
+      "sales": 1163,
+      "avgPrice": 3508,
+      "revenueGrowth": null,
+      "orderConv": 0.09,
+      "cartAdd": 0.09519999999999999,
+      "stockoutDays": 28,
+      "adRoi": 0.079
+    },
+    {
+      "name": "Battery Charger, 10000 А•h, max 1500 A, 150 mm",
+      "type": "启动充电装置",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3550118959",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/11112447851.jpg",
+      "listingDate": "2026-02-23",
+      "ageDays": 150,
+      "revenue": 3463151,
+      "sales": 901,
+      "avgPrice": 3844,
+      "revenueGrowth": null,
+      "orderConv": 0.07,
+      "cartAdd": 0.1125,
+      "stockoutDays": 28,
+      "adRoi": 0.143
+    },
+    {
+      "name": "Battery Charger, 8000 А•h, 300 mm",
+      "type": "启动充电装置",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3758309034",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/11279948006.jpg",
+      "listingDate": "2026-03-27",
+      "ageDays": 118,
+      "revenue": 3437215,
+      "sales": 1891,
+      "avgPrice": 1818,
+      "revenueGrowth": null,
+      "orderConv": 0.13,
+      "cartAdd": 0.1519,
+      "stockoutDays": 28,
+      "adRoi": 0.039
+    },
+    {
+      "name": "Wellzoller Battery Charger, 20000 А•h, max 2500 A",
+      "type": "启动充电装置",
+      "brand": "Wellzoller",
+      "url": "https://www.ozon.ru/product/3497654924",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/7488780424.jpg",
+      "listingDate": "2026-02-04",
+      "ageDays": 169,
+      "revenue": 2566686,
+      "sales": 395,
+      "avgPrice": 6498,
+      "revenueGrowth": null,
+      "orderConv": 0.08,
+      "cartAdd": 0.1021,
+      "stockoutDays": 28,
+      "adRoi": 0.179
+    },
+    {
+      "name": "TORADO Battery Charger, 49000 А•h, max 3000 A, 220 mm",
+      "type": "启动充电装置",
+      "brand": "TORADO",
+      "url": "https://www.ozon.ru/product/4463208777",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/12302818898.jpg",
+      "listingDate": "2026-05-27",
+      "ageDays": 57,
+      "revenue": 2169854,
+      "sales": 473,
+      "avgPrice": 4587,
+      "revenueGrowth": null,
+      "orderConv": 0.06,
+      "cartAdd": 0.1102,
+      "stockoutDays": 28,
+      "adRoi": 0.067
+    },
+    {
+      "name": "Turbii Battery Charger, 27000 А•h, max 8000 A",
+      "type": "启动充电装置",
+      "brand": "Turbii",
+      "url": "https://www.ozon.ru/product/3525123434",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/9066859150.jpg",
+      "listingDate": "2026-02-11",
+      "ageDays": 162,
+      "revenue": 2092635,
+      "sales": 216,
+      "avgPrice": 9688,
+      "revenueGrowth": null,
+      "orderConv": 0.06,
+      "cartAdd": 0.0708,
+      "stockoutDays": 28,
+      "adRoi": 0.06
+    },
+    {
+      "name": "BILDR Battery Charger, 23800 А•h, max 3000 A",
+      "type": "启动充电装置",
+      "brand": "BILDR",
+      "url": "https://www.ozon.ru/product/3516285058",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/9553273075.jpg",
+      "listingDate": "2026-02-09",
+      "ageDays": 164,
+      "revenue": 2081308,
+      "sales": 422,
+      "avgPrice": 4932,
+      "revenueGrowth": null,
+      "orderConv": 0.12,
+      "cartAdd": 0.09699999999999999,
+      "stockoutDays": 28,
+      "adRoi": 0.152
+    },
+    {
+      "name": "Xiaomi Battery Charger, 10400 А•h, max 1000 A, 138 mm",
+      "type": "启动充电装置",
+      "brand": "Xiaomi",
+      "url": "https://www.ozon.ru/product/3618957956",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/11710323293.jpg",
+      "listingDate": "2026-03-10",
+      "ageDays": 135,
+      "revenue": 1615670,
+      "sales": 446,
+      "avgPrice": 3623,
+      "revenueGrowth": null,
+      "orderConv": 0.16,
+      "cartAdd": 0.0958,
+      "stockoutDays": 28,
+      "adRoi": 0.023
+    },
+    {
+      "name": "TORADO Battery Charger, 82000 А•h, 195 mm",
+      "type": "启动充电装置",
+      "brand": "TORADO",
+      "url": "https://www.ozon.ru/product/4779910826",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/12093889381.jpg",
+      "listingDate": "2026-06-17",
+      "ageDays": 36,
+      "revenue": 1609138,
+      "sales": 412,
+      "avgPrice": 3906,
+      "revenueGrowth": null,
+      "orderConv": 0.09,
+      "cartAdd": 0.113,
+      "stockoutDays": 28,
+      "adRoi": 0.081
+    },
+    {
+      "name": "TORADO Battery Charger, 49000 А•h, max 3000 A, 180 mm",
+      "type": "启动充电装置",
+      "brand": "TORADO",
+      "url": "https://www.ozon.ru/product/4551417914",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/11610566709.jpg",
+      "listingDate": "2026-06-02",
+      "ageDays": 51,
+      "revenue": 1590514,
+      "sales": 469,
+      "avgPrice": 3391,
+      "revenueGrowth": null,
+      "orderConv": 0.07,
+      "cartAdd": 0.1076,
+      "stockoutDays": 28,
+      "adRoi": 0.076
+    },
+    {
+      "name": "DEKKERS Battery Charger, 26800 А•h, max 4000 A, 220 mm",
+      "type": "启动充电装置",
+      "brand": "DEKKERS",
+      "url": "https://www.ozon.ru/product/3669451270",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/9598415870.jpg",
+      "listingDate": "2026-03-17",
+      "ageDays": 128,
+      "revenue": 1152752,
+      "sales": 165,
+      "avgPrice": 6986,
+      "revenueGrowth": null,
+      "orderConv": 0.07,
+      "cartAdd": 0.0704,
+      "stockoutDays": 28,
+      "adRoi": 0.053
+    },
+    {
+      "name": "Vaonfirst Battery Charger, 16000 А•h",
+      "type": "启动充电装置",
+      "brand": "Vaonfirst",
+      "url": "https://www.ozon.ru/product/3812056333",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/11371990000.jpg",
+      "listingDate": "2026-04-01",
+      "ageDays": 113,
+      "revenue": 1140212,
+      "sales": 149,
+      "avgPrice": 7652,
+      "revenueGrowth": null,
+      "orderConv": 0.11,
+      "cartAdd": 0.05429999999999999,
+      "stockoutDays": 28,
+      "adRoi": 0.1
     }
   ],
   "operations": {
@@ -439,8 +783,6 @@
     "signRateCoverage": 95,
     "stockoutMedian": 28,
     "stockoutCoverage": 94,
-    "missedRevenue": 25875081,
-    "missedRevenueCoverage": 95.2,
     "promoActiveShare": 98.1,
     "promoCoverage": 100,
     "adActiveShare": 100,
@@ -455,12 +797,34 @@
     "duplicateSku": 80,
     "duplicateUrl": 0,
     "uniqueSku": 920,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 0,
+      "impressions": 95.2,
+      "visits": 100,
+      "orderConv": 99.6,
+      "cartAdd": 100,
+      "stock": 100,
+      "dailySales": 0,
+      "missedRevenue": 95.2,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 95.2,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 95
+    },
+    "listingDateCoverage": 95,
+    "freshProductCount": 191,
+    "futureListingDateCount": 1,
+    "outlierListingDateCount": 37
   },
   "insights": [
     "头部品类“启动充电装置”贡献 52.9% 销售额；前五品类合计 100%。",
     "销售额最集中的价格带是 2,000–5,000 ₽，覆盖 320 条商品记录，贡献 40.1% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 49.3% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 95.2%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 95.2%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 95%；其中 180 天内新品 191 个，贡献 20.5% 样本销售额。"
+  ],
+  "path": "reports/generated/car-batteries/index.html"
 }

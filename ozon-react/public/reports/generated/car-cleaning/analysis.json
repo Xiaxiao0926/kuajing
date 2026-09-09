@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-car-cleaning",
   "label": "汽车清洁",
   "title": "Ozon 汽车清洁市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23汽车清洁_清洗版.xlsx",
-  "path": "reports/generated/car-cleaning/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车清洁市场分析报告",
+  "sourceFile": "ozon-2026-07-23汽车清洁_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:37.415Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 162756185,
@@ -336,7 +340,10 @@
       "revenue": 9647538,
       "sales": 14704,
       "avgPrice": 656,
-      "url": "https://www.ozon.ru/product/1028774336"
+      "url": "https://www.ozon.ru/product/1028774336",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/10344328370.jpg",
+      "listingDate": "2023-06-12",
+      "ageDays": 1137
     },
     {
       "name": "Ultragloss Car Cloth, 2 pcs",
@@ -346,7 +353,10 @@
       "revenue": 4133436,
       "sales": 7434,
       "avgPrice": 556,
-      "url": "https://www.ozon.ru/product/1849498945"
+      "url": "https://www.ozon.ru/product/1849498945",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/11179258674.jpg",
+      "listingDate": "2025-01-27",
+      "ageDays": 542
     },
     {
       "name": "МЛ Текс Car Cloth, 3 pcs",
@@ -356,7 +366,10 @@
       "revenue": 2628666,
       "sales": 5923,
       "avgPrice": 444,
-      "url": "https://www.ozon.ru/product/1270124471"
+      "url": "https://www.ozon.ru/product/1270124471",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/7786145094.jpg",
+      "listingDate": "2023-11-01",
+      "ageDays": 995
     },
     {
       "name": "Ultragloss Car Cloth, 1 pcs",
@@ -366,7 +379,10 @@
       "revenue": 2239033,
       "sales": 6226,
       "avgPrice": 360,
-      "url": "https://www.ozon.ru/product/2819421565"
+      "url": "https://www.ozon.ru/product/2819421565",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/10275499201.jpg",
+      "listingDate": "2025-09-07",
+      "ageDays": 319
     },
     {
       "name": "Ultragloss Car Cloth, 2 pcs",
@@ -376,7 +392,10 @@
       "revenue": 2197459,
       "sales": 6619,
       "avgPrice": 332,
-      "url": "https://www.ozon.ru/product/2086953385"
+      "url": "https://www.ozon.ru/product/2086953385",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/7510391489.jpg",
+      "listingDate": "2025-04-29",
+      "ageDays": 450
     },
     {
       "name": "Ultragloss Car Cloth, 1 pcs",
@@ -386,7 +405,10 @@
       "revenue": 2194921,
       "sales": 5506,
       "avgPrice": 399,
-      "url": "https://www.ozon.ru/product/1855718345"
+      "url": "https://www.ozon.ru/product/1855718345",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/10549481196.jpg",
+      "listingDate": "2025-02-03",
+      "ageDays": 535
     },
     {
       "name": "Braucher Car Cloth, 4 pcs",
@@ -396,7 +418,10 @@
       "revenue": 2090745,
       "sales": 7695,
       "avgPrice": 272,
-      "url": "https://www.ozon.ru/product/1554738129"
+      "url": "https://www.ozon.ru/product/1554738129",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/9001034013.jpg",
+      "listingDate": "2024-04-22",
+      "ageDays": 822
     },
     {
       "name": "Braucher Car Cloth, 10 pcs",
@@ -406,7 +431,10 @@
       "revenue": 1771992,
       "sales": 3754,
       "avgPrice": 472,
-      "url": "https://www.ozon.ru/product/3518031663"
+      "url": "https://www.ozon.ru/product/3518031663",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/10021042241.jpg",
+      "listingDate": "2026-02-09",
+      "ageDays": 164
     },
     {
       "name": "Ultragloss Car Cloth, 1 pcs",
@@ -416,7 +444,10 @@
       "revenue": 1714907,
       "sales": 2803,
       "avgPrice": 612,
-      "url": "https://www.ozon.ru/product/3145494309"
+      "url": "https://www.ozon.ru/product/3145494309",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/10275485181.jpg",
+      "listingDate": "2025-11-23",
+      "ageDays": 242
     },
     {
       "name": "AutoForce Car Cloth, 1 pcs",
@@ -426,7 +457,10 @@
       "revenue": 1553262,
       "sales": 3333,
       "avgPrice": 466,
-      "url": "https://www.ozon.ru/product/1028780787"
+      "url": "https://www.ozon.ru/product/1028780787",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/8478975752.jpg",
+      "listingDate": "2023-06-12",
+      "ageDays": 1137
     },
     {
       "name": "Ultragloss Car Cloth, 2 pcs",
@@ -436,7 +470,10 @@
       "revenue": 1534020,
       "sales": 3963,
       "avgPrice": 387,
-      "url": "https://www.ozon.ru/product/2819388930"
+      "url": "https://www.ozon.ru/product/2819388930",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/7979256797.jpg",
+      "listingDate": "2025-09-07",
+      "ageDays": 319
     },
     {
       "name": "Detail Car Cloth, 1 pcs",
@@ -446,7 +483,10 @@
       "revenue": 1396872,
       "sales": 3093,
       "avgPrice": 452,
-      "url": "https://www.ozon.ru/product/1606541126"
+      "url": "https://www.ozon.ru/product/1606541126",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/12688981276.jpg",
+      "listingDate": "2024-06-17",
+      "ageDays": 766
     },
     {
       "name": "Detail Car Cloth, 1 pcs",
@@ -456,7 +496,10 @@
       "revenue": 1339703,
       "sales": 1900,
       "avgPrice": 705,
-      "url": "https://www.ozon.ru/product/239596129"
+      "url": "https://www.ozon.ru/product/239596129",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/9386445172.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "AutoForce Auto Detailing Brush, 3 pcs",
@@ -466,7 +509,10 @@
       "revenue": 1135127,
       "sales": 3047,
       "avgPrice": 373,
-      "url": "https://www.ozon.ru/product/1652943118"
+      "url": "https://www.ozon.ru/product/1652943118",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/7872156723.jpg",
+      "listingDate": "2024-08-08",
+      "ageDays": 714
     },
     {
       "name": "Pure Finish Car Cloth, 1 pcs",
@@ -476,7 +522,305 @@
       "revenue": 1128455,
       "sales": 4605,
       "avgPrice": 245,
-      "url": "https://www.ozon.ru/product/4320397804"
+      "url": "https://www.ozon.ru/product/4320397804",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/10524406970.jpg",
+      "listingDate": "2026-05-15",
+      "ageDays": 69
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": null,
+      "revenueGrowthCoverage": 0,
+      "impressions": 249441123,
+      "visits": 6259713,
+      "visitRate": 0.0251,
+      "orderConversionMedian": 0.25,
+      "orderConversionCoverage": 99.5,
+      "cartAddMedian": 0.14505,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 28,
+      "stockoutCoverage": 83.9,
+      "missedRevenue": 2973087,
+      "missedRevenueCoverage": 96,
+      "inventoryCoverMedian": null,
+      "inventoryCoverCoverage": 0
+    },
+    "marketing": {
+      "discountMedian": 0.1997,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.9015,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.1095,
+      "adRoiCoverage": 96,
+      "promoActiveShare": 99,
+      "adActiveShare": 100
+    },
+    "fulfillment": {
+      "signRateMedian": 0.9359999999999999,
+      "signRateCoverage": 93.6,
+      "fboShare": 81.8,
+      "deliveryCoverage": 100,
+      "volumeMedian": 1,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 93.6,
+      "freshCount": 320,
+      "freshRevenueShare": 21,
+      "futureDateCount": 0,
+      "outlierDateCount": 21
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“擦车布”拆出 2–3 个明确规格，并优先覆盖 200–500 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 53.3%",
+        "200–500 ₽ 贡献 46.4% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 93.6%",
+        "180 天内新品 320 个",
+        "新品销售额占样本 21%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 83.9%",
+        "缺货天数中位数 28 天",
+        "库存覆盖字段 0%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 99.5%",
+        "下单转化率中位数 25%",
+        "访问率 2.51%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Braucher Car Cloth, 10 pcs",
+      "type": "擦车布",
+      "brand": "Braucher",
+      "url": "https://www.ozon.ru/product/3518031663",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/10021042241.jpg",
+      "listingDate": "2026-02-09",
+      "ageDays": 164,
+      "revenue": 1771992,
+      "sales": 3754,
+      "avgPrice": 472,
+      "revenueGrowth": null,
+      "orderConv": 0.24,
+      "cartAdd": 0.1951,
+      "stockoutDays": 28,
+      "adRoi": 0.073
+    },
+    {
+      "name": "Pure Finish Car Cloth, 1 pcs",
+      "type": "擦车布",
+      "brand": "Pure Finish",
+      "url": "https://www.ozon.ru/product/4320397804",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/10524406970.jpg",
+      "listingDate": "2026-05-15",
+      "ageDays": 69,
+      "revenue": 1128455,
+      "sales": 4605,
+      "avgPrice": 245,
+      "revenueGrowth": null,
+      "orderConv": 0.5,
+      "cartAdd": 0.1509,
+      "stockoutDays": 28,
+      "adRoi": 0.114
+    },
+    {
+      "name": "RoyalStore Auto Detailing Brush, 2 pcs",
+      "type": "汽车细节刷",
+      "brand": "RoyalStore",
+      "url": "https://www.ozon.ru/product/4404150390",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/10965687794.jpg",
+      "listingDate": "2026-05-22",
+      "ageDays": 62,
+      "revenue": 1125833,
+      "sales": 9477,
+      "avgPrice": 119,
+      "revenueGrowth": null,
+      "orderConv": 0.13,
+      "cartAdd": 0.2305,
+      "stockoutDays": 28,
+      "adRoi": 0.307
+    },
+    {
+      "name": "Car Brush, 42 cm lenght",
+      "type": "汽车刷子",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3881002231",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/11084062771.jpg",
+      "listingDate": "2026-04-08",
+      "ageDays": 106,
+      "revenue": 1125482,
+      "sales": 2327,
+      "avgPrice": 484,
+      "revenueGrowth": null,
+      "orderConv": 0.38,
+      "cartAdd": 0.1694,
+      "stockoutDays": 28,
+      "adRoi": 0.033
+    },
+    {
+      "name": "Ultragloss Car Cloth, 1 pcs",
+      "type": "擦车布",
+      "brand": "Ultragloss",
+      "url": "https://www.ozon.ru/product/3902324781",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/9847232112.jpg",
+      "listingDate": "2026-04-10",
+      "ageDays": 104,
+      "revenue": 970812,
+      "sales": 5165,
+      "avgPrice": 188,
+      "revenueGrowth": null,
+      "orderConv": 0.27,
+      "cartAdd": 0.1451,
+      "stockoutDays": 28,
+      "adRoi": 0.045
+    },
+    {
+      "name": "Car Brush, 21 cm lenght",
+      "type": "汽车刷子",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3778214704",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/11724979971.jpg",
+      "listingDate": "2026-03-29",
+      "ageDays": 116,
+      "revenue": 774058,
+      "sales": 4596,
+      "avgPrice": 168,
+      "revenueGrowth": null,
+      "orderConv": 0.2,
+      "cartAdd": 0.2169,
+      "stockoutDays": 28,
+      "adRoi": 0.21
+    },
+    {
+      "name": "Car Brush, 102 cm lenght",
+      "type": "汽车刷子",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4141283014",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/11113844964.jpg",
+      "listingDate": "2026-04-30",
+      "ageDays": 84,
+      "revenue": 768549,
+      "sales": 918,
+      "avgPrice": 837,
+      "revenueGrowth": null,
+      "orderConv": 0.29,
+      "cartAdd": 0.1564,
+      "stockoutDays": 28,
+      "adRoi": 0.06
+    },
+    {
+      "name": "Car Cloth, 3 pcs",
+      "type": "擦车布",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4725628792",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/11631670133.jpg",
+      "listingDate": "2026-06-14",
+      "ageDays": 39,
+      "revenue": 728062,
+      "sales": 2120,
+      "avgPrice": 343,
+      "revenueGrowth": null,
+      "orderConv": 0.17,
+      "cartAdd": 0.1265,
+      "stockoutDays": 28,
+      "adRoi": 0.29
+    },
+    {
+      "name": "Хонкава Car Cloth, 1 pcs",
+      "type": "擦车布",
+      "brand": "Хонкава",
+      "url": "https://www.ozon.ru/product/3589274509",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/7485073441.jpg",
+      "listingDate": "2026-03-05",
+      "ageDays": 140,
+      "revenue": 719550,
+      "sales": 2697,
+      "avgPrice": 267,
+      "revenueGrowth": null,
+      "orderConv": 0.12,
+      "cartAdd": 0.1931,
+      "stockoutDays": 28,
+      "adRoi": 0.15
+    },
+    {
+      "name": "Best Choice Auto Detailing Brush, 1 pcs",
+      "type": "汽车细节刷",
+      "brand": "Best Choice",
+      "url": "https://www.ozon.ru/product/3530655758",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9091891583.jpg",
+      "listingDate": "2026-02-13",
+      "ageDays": 160,
+      "revenue": 673849,
+      "sales": 10963,
+      "avgPrice": 61,
+      "revenueGrowth": null,
+      "orderConv": 0.26,
+      "cartAdd": 0.2587,
+      "stockoutDays": 28,
+      "adRoi": 0.159
+    },
+    {
+      "name": "AVS Car Cloth, 1 pcs",
+      "type": "擦车布",
+      "brand": "AVS",
+      "url": "https://www.ozon.ru/product/3514619867",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/8162827026.jpg",
+      "listingDate": "2026-02-08",
+      "ageDays": 165,
+      "revenue": 594789,
+      "sales": 3203,
+      "avgPrice": 186,
+      "revenueGrowth": null,
+      "orderConv": 0.39,
+      "cartAdd": 0.2971,
+      "stockoutDays": 28,
+      "adRoi": 0.07400000000000001
+    },
+    {
+      "name": "Top Gear Car Wet Wipes, 90 pcs",
+      "type": "汽车专用湿纸巾",
+      "brand": "Top Gear",
+      "url": "https://www.ozon.ru/product/3600335719",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-w/9555991124.jpg",
+      "listingDate": "2026-03-07",
+      "ageDays": 138,
+      "revenue": 551490,
+      "sales": 2100,
+      "avgPrice": 263,
+      "revenueGrowth": null,
+      "orderConv": 0.9,
+      "cartAdd": 0.1772,
+      "stockoutDays": 28,
+      "adRoi": 0.033
     }
   ],
   "operations": {
@@ -484,8 +828,6 @@
     "signRateCoverage": 93.6,
     "stockoutMedian": 28,
     "stockoutCoverage": 83.9,
-    "missedRevenue": 2973087,
-    "missedRevenueCoverage": 96,
     "promoActiveShare": 99,
     "promoCoverage": 100,
     "adActiveShare": 100,
@@ -500,12 +842,34 @@
     "duplicateSku": 18,
     "duplicateUrl": 0,
     "uniqueSku": 980,
-    "urlCoverage": 99.8
+    "urlCoverage": 99.8,
+    "fieldCoverage": {
+      "revenueGrowth": 0,
+      "impressions": 96,
+      "visits": 100,
+      "orderConv": 99.5,
+      "cartAdd": 100,
+      "stock": 100,
+      "dailySales": 0,
+      "missedRevenue": 96,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 96,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 93.6
+    },
+    "listingDateCoverage": 93.6,
+    "freshProductCount": 320,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 21
   },
   "insights": [
     "头部品类“擦车布”贡献 53.3% 销售额；前五品类合计 95.2%。",
     "销售额最集中的价格带是 200–500 ₽，覆盖 413 条商品记录，贡献 46.4% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 61.9% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 96%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 96%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 93.6%；其中 180 天内新品 320 个，贡献 21% 样本销售额。"
+  ],
+  "path": "reports/generated/car-cleaning/index.html"
 }

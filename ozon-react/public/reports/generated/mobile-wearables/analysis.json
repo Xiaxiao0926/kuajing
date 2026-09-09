@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-mobile-wearables",
   "label": "手机、平板与智能穿戴",
   "title": "Ozon 手机、平板与智能穿戴市场分析",
   "group": "数码产品",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23手机平板智能穿戴_清洗版.xlsx",
-  "path": "reports/generated/mobile-wearables/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 手机、平板与智能穿戴市场分析报告",
+  "sourceFile": "ozon-2026-07-23手机平板智能穿戴_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:37.668Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 2070073266,
@@ -345,7 +349,10 @@
       "revenue": 67737796,
       "sales": 4438,
       "avgPrice": 15263,
-      "url": "https://www.ozon.ru/product/2811310229"
+      "url": "https://www.ozon.ru/product/2811310229",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/8376454785.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Xiaomi Smartphone Redmi 15C Rostest (EAC) 8/ 256 GB, black",
@@ -355,7 +362,10 @@
       "revenue": 39151866,
       "sales": 3026,
       "avgPrice": 12938,
-      "url": "https://www.ozon.ru/product/2747506788"
+      "url": "https://www.ozon.ru/product/2747506788",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/7902742030.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Xiaomi Smartphone Rostest (EAC) 8/ 256 GB, black",
@@ -365,7 +375,10 @@
       "revenue": 29934453,
       "sales": 2889,
       "avgPrice": 10362,
-      "url": "https://www.ozon.ru/product/2802494726"
+      "url": "https://www.ozon.ru/product/2802494726",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/12822420010.jpg",
+      "listingDate": "2025-09-04",
+      "ageDays": 322
     },
     {
       "name": "Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, orange",
@@ -375,7 +388,10 @@
       "revenue": 29013527,
       "sales": 831,
       "avgPrice": 34914,
-      "url": "https://www.ozon.ru/product/4189905294"
+      "url": "https://www.ozon.ru/product/4189905294",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/10885342760.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, gold",
@@ -385,7 +401,10 @@
       "revenue": 27826732,
       "sales": 707,
       "avgPrice": 39359,
-      "url": "https://www.ozon.ru/product/4189905349"
+      "url": "https://www.ozon.ru/product/4189905349",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/10885353247.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Xiaomi Smartphone Rostest (EAC) 6/ 128 GB, black",
@@ -395,7 +414,10 @@
       "revenue": 24923305,
       "sales": 2768,
       "avgPrice": 9004,
-      "url": "https://www.ozon.ru/product/2802485119"
+      "url": "https://www.ozon.ru/product/2802485119",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/12822420010.jpg",
+      "listingDate": "2025-09-04",
+      "ageDays": 322
     },
     {
       "name": "Honor Smartphone Honor 600 Lite 8/ 256 GB, gold",
@@ -405,7 +427,10 @@
       "revenue": 23164186,
       "sales": 1070,
       "avgPrice": 21649,
-      "url": "https://www.ozon.ru/product/3701084224"
+      "url": "https://www.ozon.ru/product/3701084224",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/11014254414.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Apple Tablet Apple iPad 11 2025, 11\", 128 GB, silvery",
@@ -415,7 +440,10 @@
       "revenue": 22313611,
       "sales": 670,
       "avgPrice": 33304,
-      "url": "https://www.ozon.ru/product/3309150805"
+      "url": "https://www.ozon.ru/product/3309150805",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/10028410213.jpg",
+      "listingDate": "2025-12-30",
+      "ageDays": 205
     },
     {
       "name": "Poco Smartphone Poco X8 Pro Rostest (EAC) 12/ 512 GB, black",
@@ -425,7 +453,10 @@
       "revenue": 20758729,
       "sales": 659,
       "avgPrice": 31500,
-      "url": "https://www.ozon.ru/product/3584711424"
+      "url": "https://www.ozon.ru/product/3584711424",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/12824252257.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141
     },
     {
       "name": "Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, black",
@@ -435,7 +466,10 @@
       "revenue": 20426085,
       "sales": 528,
       "avgPrice": 38686,
-      "url": "https://www.ozon.ru/product/4189906337"
+      "url": "https://www.ozon.ru/product/4189906337",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/10885357143.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Honor Smartphone Honor 600 Lite 8/ 256 GB, grey",
@@ -445,7 +479,10 @@
       "revenue": 20339358,
       "sales": 920,
       "avgPrice": 22108,
-      "url": "https://www.ozon.ru/product/3701083545"
+      "url": "https://www.ozon.ru/product/3701083545",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/11014254153.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Samsung Smartphone Samsung Galaxy S26 Ultra Global 12/ 256 GB, black",
@@ -455,7 +492,10 @@
       "revenue": 20082785,
       "sales": 274,
       "avgPrice": 73295,
-      "url": "https://www.ozon.ru/product/3538191814"
+      "url": "https://www.ozon.ru/product/3538191814",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/10368626840.jpg",
+      "listingDate": "2026-02-17",
+      "ageDays": 156
     },
     {
       "name": "Honor Smartphone Honor 600 Lite 8/ 256 GB, black",
@@ -465,7 +505,10 @@
       "revenue": 20023658,
       "sales": 907,
       "avgPrice": 22077,
-      "url": "https://www.ozon.ru/product/3701083874"
+      "url": "https://www.ozon.ru/product/3701083874",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/11014254299.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Honor Smartphone Honor 600 Rostest (EAC) 8/ 256 GB, gold",
@@ -475,7 +518,10 @@
       "revenue": 19657028,
       "sales": 567,
       "avgPrice": 34668,
-      "url": "https://www.ozon.ru/product/4189906410"
+      "url": "https://www.ozon.ru/product/4189906410",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/10885368502.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "Honor Smartphone Honor 600 Pro Rostest (EAC) 12/ 512 GB, black",
@@ -485,7 +531,305 @@
       "revenue": 19568517,
       "sales": 290,
       "avgPrice": 67478,
-      "url": "https://www.ozon.ru/product/4200768524"
+      "url": "https://www.ozon.ru/product/4200768524",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/10885552166.jpg",
+      "listingDate": null,
+      "ageDays": null
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.05,
+      "revenueGrowthCoverage": 95.9,
+      "impressions": 448844283,
+      "visits": 25060876,
+      "visitRate": 0.0558,
+      "orderConversionMedian": 0.0019,
+      "orderConversionCoverage": 97.7,
+      "cartAddMedian": 0.0902,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 10,
+      "stockoutCoverage": 74.9,
+      "missedRevenue": 147444122.1,
+      "missedRevenueCoverage": 99.6,
+      "inventoryCoverMedian": 27.575,
+      "inventoryCoverCoverage": 70.8
+    },
+    "marketing": {
+      "discountMedian": 0.10305,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.8689499999999999,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.08,
+      "adRoiCoverage": 95.9,
+      "promoActiveShare": 70.5,
+      "adActiveShare": 50.9
+    },
+    "fulfillment": {
+      "signRateMedian": 0.885,
+      "signRateCoverage": 83.4,
+      "fboShare": 86.5,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.5,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 83.4,
+      "freshCount": 183,
+      "freshRevenueShare": 17.2,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“智能手机”拆出 2–3 个明确规格，并优先覆盖 ≥5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 75.6%",
+        "≥5,000 ₽ 贡献 85.9% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 83.4%",
+        "180 天内新品 183 个",
+        "新品销售额占样本 17.2%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 74.9%",
+        "缺货天数中位数 10 天",
+        "库存覆盖字段 70.8%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 97.7%",
+        "下单转化率中位数 0.2%",
+        "访问率 5.58%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Poco Smartphone Poco X8 Pro Rostest (EAC) 12/ 512 GB, black",
+      "type": "智能手机",
+      "brand": "Poco",
+      "url": "https://www.ozon.ru/product/3584711424",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/12824252257.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141,
+      "revenue": 20758729,
+      "sales": 659,
+      "avgPrice": 31500,
+      "revenueGrowth": -0.37,
+      "orderConv": 0.0002,
+      "cartAdd": 0.0527,
+      "stockoutDays": 26,
+      "adRoi": 0.028
+    },
+    {
+      "name": "Samsung Smartphone Samsung Galaxy S26 Ultra Global 12/ 256 GB, black",
+      "type": "智能手机",
+      "brand": "Samsung",
+      "url": "https://www.ozon.ru/product/3538191814",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/10368626840.jpg",
+      "listingDate": "2026-02-17",
+      "ageDays": 156,
+      "revenue": 20082785,
+      "sales": 274,
+      "avgPrice": 73295,
+      "revenueGrowth": 0.87,
+      "orderConv": 0.0001,
+      "cartAdd": 0.06860000000000001,
+      "stockoutDays": 28,
+      "adRoi": 0.123
+    },
+    {
+      "name": "Poco Smartphone Poco X8 Pro Max EU 12/ 512 GB, orange",
+      "type": "智能手机",
+      "brand": "Poco",
+      "url": "https://www.ozon.ru/product/3874414682",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9919119527.jpg",
+      "listingDate": "2026-04-08",
+      "ageDays": 106,
+      "revenue": 14871065,
+      "sales": 441,
+      "avgPrice": 33721,
+      "revenueGrowth": -0.36,
+      "orderConv": 0.0006,
+      "cartAdd": 0.0575,
+      "stockoutDays": 28,
+      "adRoi": 0
+    },
+    {
+      "name": "Samsung Smartphone Samsung Galaxy S25 FE 8/ 512 GB, black",
+      "type": "智能手机",
+      "brand": "Samsung",
+      "url": "https://www.ozon.ru/product/3974747711",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/10109264127.jpg",
+      "listingDate": "2026-04-16",
+      "ageDays": 98,
+      "revenue": 14295221,
+      "sales": 287,
+      "avgPrice": 49809,
+      "revenueGrowth": 0.15,
+      "orderConv": 0.0002,
+      "cartAdd": 0.0548,
+      "stockoutDays": 15,
+      "adRoi": 0.02
+    },
+    {
+      "name": "Samsung Smartphone Samsung Galaxy S26 Global 12/ 256 GB, black",
+      "type": "智能手机",
+      "brand": "Samsung",
+      "url": "https://www.ozon.ru/product/3555507925",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/9133790208.jpg",
+      "listingDate": "2026-02-25",
+      "ageDays": 148,
+      "revenue": 13759767,
+      "sales": 269,
+      "avgPrice": 51152,
+      "revenueGrowth": 0.0106,
+      "orderConv": 0.0002,
+      "cartAdd": 0.0635,
+      "stockoutDays": null,
+      "adRoi": 0.058
+    },
+    {
+      "name": "Xiaomi Tablet, 11.2\", 512 GB, grey",
+      "type": "平板电脑",
+      "brand": "Xiaomi",
+      "url": "https://www.ozon.ru/product/4490469202",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/12826744594.jpg",
+      "listingDate": "2026-05-29",
+      "ageDays": 55,
+      "revenue": 11622066,
+      "sales": 257,
+      "avgPrice": 45222,
+      "revenueGrowth": 0.0699,
+      "orderConv": 0.0004,
+      "cartAdd": 0.06150000000000001,
+      "stockoutDays": 22,
+      "adRoi": 0.008
+    },
+    {
+      "name": "HUAWEI Smartphone Huawei Nova 15 Max Rostest (EAC) 8/ 256 GB, black",
+      "type": "智能手机",
+      "brand": "HUAWEI",
+      "url": "https://www.ozon.ru/product/4406066715",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-n/11056023347.jpg",
+      "listingDate": "2026-05-22",
+      "ageDays": 62,
+      "revenue": 11588016,
+      "sales": 574,
+      "avgPrice": 20188,
+      "revenueGrowth": 0.78,
+      "orderConv": 0.0004,
+      "cartAdd": 0.0405,
+      "stockoutDays": 27,
+      "adRoi": 0.05400000000000001
+    },
+    {
+      "name": "Xiaomi Smartphone Rostest (EAC) 12/ 256 GB, black",
+      "type": "智能手机",
+      "brand": "Xiaomi",
+      "url": "https://www.ozon.ru/product/4241157652",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/10910766205.jpg",
+      "listingDate": "2026-05-09",
+      "ageDays": 75,
+      "revenue": 11073075,
+      "sales": 241,
+      "avgPrice": 45946,
+      "revenueGrowth": -0.23,
+      "orderConv": 0.0001,
+      "cartAdd": 0.0323,
+      "stockoutDays": 20,
+      "adRoi": 0.058
+    },
+    {
+      "name": "Poco Smartphone Poco X8 Pro Max Rostest (EAC) 12/ 256 GB, black",
+      "type": "智能手机",
+      "brand": "Poco",
+      "url": "https://www.ozon.ru/product/3590352346",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/12824437324.jpg",
+      "listingDate": "2026-03-05",
+      "ageDays": 140,
+      "revenue": 9989946,
+      "sales": 287,
+      "avgPrice": 34808,
+      "revenueGrowth": -0.27,
+      "orderConv": 0.0003,
+      "cartAdd": 0.053,
+      "stockoutDays": 27,
+      "adRoi": 0
+    },
+    {
+      "name": "Honor Smartphone Honor 600 Rostest (EAC) 12/ 256 GB, black",
+      "type": "智能手机",
+      "brand": "Honor",
+      "url": "https://www.ozon.ru/product/4031840744",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/12787557319.jpg",
+      "listingDate": "2026-04-21",
+      "ageDays": 93,
+      "revenue": 9295960,
+      "sales": 240,
+      "avgPrice": 38733,
+      "revenueGrowth": -0.05,
+      "orderConv": 0.0003,
+      "cartAdd": 0.0434,
+      "stockoutDays": 22,
+      "adRoi": 0
+    },
+    {
+      "name": "Samsung Smartphone Samsung Galaxy A57 12/ 512 GB, blue",
+      "type": "智能手机",
+      "brand": "Samsung",
+      "url": "https://www.ozon.ru/product/3788405701",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/11027530575.jpg",
+      "listingDate": "2026-03-30",
+      "ageDays": 115,
+      "revenue": 9086845,
+      "sales": 307,
+      "avgPrice": 29599,
+      "revenueGrowth": 0.0166,
+      "orderConv": 0.0015,
+      "cartAdd": 0.08900000000000001,
+      "stockoutDays": null,
+      "adRoi": 0.016
+    },
+    {
+      "name": "Poco Smartphone Poco X8 Pro Max Rostest (EAC) 12/ 256 GB, white",
+      "type": "智能手机",
+      "brand": "Poco",
+      "url": "https://www.ozon.ru/product/3590355149",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/12824405811.jpg",
+      "listingDate": "2026-03-05",
+      "ageDays": 140,
+      "revenue": 9078425,
+      "sales": 261,
+      "avgPrice": 34783,
+      "revenueGrowth": -0.13,
+      "orderConv": 0.0004,
+      "cartAdd": 0.0426,
+      "stockoutDays": 27,
+      "adRoi": 0.04
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 83.4,
     "stockoutMedian": 10,
     "stockoutCoverage": 74.9,
-    "missedRevenue": 147444122.1,
-    "missedRevenueCoverage": 99.6,
     "promoActiveShare": 70.5,
     "promoCoverage": 95.9,
     "adActiveShare": 50.9,
@@ -509,12 +851,34 @@
     "duplicateSku": 27,
     "duplicateUrl": 0,
     "uniqueSku": 973,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 95.9,
+      "impressions": 95.9,
+      "visits": 99.5,
+      "orderConv": 97.7,
+      "cartAdd": 100,
+      "stock": 71.8,
+      "dailySales": 78,
+      "missedRevenue": 99.6,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 95.9,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 83.4
+    },
+    "listingDateCoverage": 83.4,
+    "freshProductCount": 183,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“智能手机”贡献 75.6% 销售额；前五品类合计 96.5%。",
     "销售额最集中的价格带是 ≥5,000 ₽，覆盖 233 条商品记录，贡献 85.9% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 86.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 95.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 95.9%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 83.4%；其中 180 天内新品 183 个，贡献 17.2% 样本销售额。"
+  ],
+  "path": "reports/generated/mobile-wearables/index.html"
 }

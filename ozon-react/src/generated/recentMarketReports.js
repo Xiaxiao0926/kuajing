@@ -279,7 +279,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 4297477,
         "sales": 22125,
         "avgPrice": 194,
-        "url": "https://www.ozon.ru/product/2043355652"
+        "url": "https://www.ozon.ru/product/2043355652",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-6/wc50_q90/13903425402.jpg",
+        "listingDate": "2025-04-17",
+        "ageDays": 509
       },
       {
         "name": "Amix Furniture Hinge",
@@ -289,7 +292,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 3502773,
         "sales": 22152,
         "avgPrice": 158,
-        "url": "https://www.ozon.ru/product/1771210972"
+        "url": "https://www.ozon.ru/product/1771210972",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-s/wc50_q90/8804815984.jpg",
+        "listingDate": "2024-11-29",
+        "ageDays": 648
       },
       {
         "name": "Furniture Hinge",
@@ -299,7 +305,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 2546426,
         "sales": 13871,
         "avgPrice": 184,
-        "url": "https://www.ozon.ru/product/3116744759"
+        "url": "https://www.ozon.ru/product/3116744759",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-5/wc50_q90/10844272301.jpg",
+        "listingDate": "2025-11-17",
+        "ageDays": 295
       },
       {
         "name": "Palidore Door Hinge",
@@ -309,7 +318,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1236261,
         "sales": 1468,
         "avgPrice": 842,
-        "url": "https://www.ozon.ru/product/3103265658"
+        "url": "https://www.ozon.ru/product/3103265658",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-2/wc50_q90/8599412774.jpg",
+        "listingDate": "2025-11-13",
+        "ageDays": 299
       },
       {
         "name": "Furniture Hinge",
@@ -319,7 +331,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1036919,
         "sales": 6592,
         "avgPrice": 157,
-        "url": "https://www.ozon.ru/product/3891125770"
+        "url": "https://www.ozon.ru/product/3891125770",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-3/wc50_q90/9711561927.jpg",
+        "listingDate": "2026-09-03",
+        "ageDays": 4
       },
       {
         "name": "DVoN Furniture Hinge, 11 cm",
@@ -329,7 +344,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 933941,
         "sales": 2258,
         "avgPrice": 414,
-        "url": "https://www.ozon.ru/product/935749904"
+        "url": "https://www.ozon.ru/product/935749904",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-g/wc50_q90/10761857260.jpg",
+        "listingDate": "2023-04-13",
+        "ageDays": 1244
       },
       {
         "name": "Loomedge Furniture Hinge, 125 cm",
@@ -339,7 +357,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 858753,
         "sales": 4781,
         "avgPrice": 180,
-        "url": "https://www.ozon.ru/product/3590084476"
+        "url": "https://www.ozon.ru/product/3590084476",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-4/wc50_q90/9367753072.jpg",
+        "listingDate": "2026-05-02",
+        "ageDays": 128
       },
       {
         "name": "ФурнитурОк Furniture Hinge",
@@ -349,7 +370,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 829897,
         "sales": 4096,
         "avgPrice": 203,
-        "url": "https://www.ozon.ru/product/475476569"
+        "url": "https://www.ozon.ru/product/475476569",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-z/wc50_q90/7967206907.jpg",
+        "listingDate": "2022-01-24",
+        "ageDays": 1688
       },
       {
         "name": "Palidore Door Hinge",
@@ -359,7 +383,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 725979,
         "sales": 2036,
         "avgPrice": 357,
-        "url": "https://www.ozon.ru/product/3065951258"
+        "url": "https://www.ozon.ru/product/3065951258",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-g/wc50_q90/8599447312.jpg",
+        "listingDate": "2025-05-10",
+        "ageDays": 485
       },
       {
         "name": "MFK Furniture Hinge, 12 cm",
@@ -369,7 +396,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 677062,
         "sales": 2167,
         "avgPrice": 312,
-        "url": "https://www.ozon.ru/product/564880709"
+        "url": "https://www.ozon.ru/product/564880709",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-8/wc50_q90/10677431744.jpg",
+        "listingDate": "2022-04-22",
+        "ageDays": 1600
       },
       {
         "name": "Furniture Hinge",
@@ -379,7 +409,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 649559,
         "sales": 2877,
         "avgPrice": 226,
-        "url": "https://www.ozon.ru/product/442996523"
+        "url": "https://www.ozon.ru/product/442996523",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-6/wc50_q90/6342950874.jpg",
+        "listingDate": "2021-12-24",
+        "ageDays": 1719
       },
       {
         "name": "Elementis Door Hinge",
@@ -389,7 +422,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 635613,
         "sales": 326,
         "avgPrice": 1950,
-        "url": "https://www.ozon.ru/product/1402798772"
+        "url": "https://www.ozon.ru/product/1402798772",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-h/wc50_q90/7423391537.jpg",
+        "listingDate": "2024-01-25",
+        "ageDays": 957
       },
       {
         "name": "Door Hinge",
@@ -399,7 +435,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 625448,
         "sales": 2435,
         "avgPrice": 257,
-        "url": "https://www.ozon.ru/product/3942302716"
+        "url": "https://www.ozon.ru/product/3942302716",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-v/wc50_q90/9798774367.jpg",
+        "listingDate": "2026-04-14",
+        "ageDays": 147
       },
       {
         "name": "Amix Furniture Hinge",
@@ -409,7 +448,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 623514,
         "sales": 569,
         "avgPrice": 1096,
-        "url": "https://www.ozon.ru/product/1772411571"
+        "url": "https://www.ozon.ru/product/1772411571",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-2/wc50_q90/8804815778.jpg",
+        "listingDate": "2024-11-30",
+        "ageDays": 647
       },
       {
         "name": "ДоброДом Furniture Hinge",
@@ -419,11 +461,309 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 601946,
         "sales": 3695,
         "avgPrice": 163,
-        "url": "https://www.ozon.ru/product/3150968972"
+        "url": "https://www.ozon.ru/product/3150968972",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-k/wc50_q90/9867762560.jpg",
+        "listingDate": "2025-11-25",
+        "ageDays": 287
+      }
+    ],
+    "marketDimensions": {
+      "demand": {
+        "revenueGrowthMedian": 0.04665,
+        "revenueGrowthCoverage": 96.8,
+        "impressions": 85593009,
+        "visits": 3230646,
+        "visitRate": 0.0377,
+        "orderConversionMedian": 0.0045000000000000005,
+        "orderConversionCoverage": 99,
+        "cartAddMedian": 0.1186,
+        "cartAddCoverage": 100
+      },
+      "supply": {
+        "stockoutMedian": 21,
+        "stockoutCoverage": 97.7,
+        "missedRevenue": 2331738,
+        "missedRevenueCoverage": 100,
+        "inventoryCoverMedian": 22.8,
+        "inventoryCoverCoverage": 97.5
+      },
+      "marketing": {
+        "discountMedian": 0,
+        "discountCoverage": 100,
+        "promoShareMedian": 0.6149500000000001,
+        "promoShareCoverage": 100,
+        "adRoiMedian": 0.043,
+        "adRoiCoverage": 100,
+        "promoActiveShare": 75.3,
+        "adActiveShare": 39.8
+      },
+      "fulfillment": {
+        "signRateMedian": 0.902,
+        "signRateCoverage": 100,
+        "fboShare": 87,
+        "deliveryCoverage": 100,
+        "volumeMedian": 0.3,
+        "volumeCoverage": 100
+      },
+      "newness": {
+        "windowDays": 180,
+        "listingDateCoverage": 93.7,
+        "freshCount": 153,
+        "freshRevenueShare": 14.6,
+        "futureDateCount": 31,
+        "outlierDateCount": 3
+      }
+    },
+    "recommendations": [
+      {
+        "title": "先从头部需求与主价格带建立首测组",
+        "recommendation": "围绕“家具合页”拆出 2–3 个明确规格，并优先覆盖 200–500 ₽ 主成交带；每个规格只做小批量对标测试。",
+        "evidence": [
+          "头部类型销售额占比 58.1%",
+          "200–500 ₽ 贡献 32.1% 样本销售额",
+          "样本 1000 条"
+        ],
+        "confidence": "高"
+      },
+      {
+        "title": "用 180 天新品验证增长方向",
+        "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+        "evidence": [
+          "有效上架日期覆盖 93.7%",
+          "180 天内新品 153 个",
+          "新品销售额占样本 14.6%"
+        ],
+        "confidence": "高"
+      },
+      {
+        "title": "把供给缺口转化为备货验证",
+        "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+        "evidence": [
+          "缺货天数字段覆盖 97.7%",
+          "缺货天数中位数 21 天",
+          "库存覆盖字段 97.5%"
+        ],
+        "confidence": "中"
+      },
+      {
+        "title": "用漏斗数据筛掉“有曝光没成交”商品",
+        "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+        "evidence": [
+          "下单转化率覆盖 99%",
+          "下单转化率中位数 0.5%",
+          "访问率 3.77%"
+        ],
+        "confidence": "中"
+      }
+    ],
+    "newProducts": [
+      {
+        "name": "Furniture Hinge",
+        "type": "家具合页",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/3891125770",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-3/wc50_q90/9711561927.jpg",
+        "listingDate": "2026-09-03",
+        "ageDays": 4,
+        "revenue": 1036919,
+        "sales": 6592,
+        "avgPrice": 157,
+        "revenueGrowth": -0.4,
+        "orderConv": 0.0028000000000000004,
+        "cartAdd": 0.2304,
+        "stockoutDays": 14,
+        "adRoi": 0.07400000000000001
+      },
+      {
+        "name": "Loomedge Furniture Hinge, 125 cm",
+        "type": "家具合页",
+        "brand": "Loomedge",
+        "url": "https://www.ozon.ru/product/3590084476",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-4/wc50_q90/9367753072.jpg",
+        "listingDate": "2026-05-02",
+        "ageDays": 128,
+        "revenue": 858753,
+        "sales": 4781,
+        "avgPrice": 180,
+        "revenueGrowth": 0.72,
+        "orderConv": 0.0045000000000000005,
+        "cartAdd": 0.20149999999999998,
+        "stockoutDays": 8,
+        "adRoi": 0.19399999999999998
+      },
+      {
+        "name": "Door Hinge",
+        "type": "门合页",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/3942302716",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-v/wc50_q90/9798774367.jpg",
+        "listingDate": "2026-04-14",
+        "ageDays": 147,
+        "revenue": 625448,
+        "sales": 2435,
+        "avgPrice": 257,
+        "revenueGrowth": 0.01,
+        "orderConv": 0.0039000000000000003,
+        "cartAdd": 0.1575,
+        "stockoutDays": 15,
+        "adRoi": 0.047
+      },
+      {
+        "name": "Фьюри Furniture Hinge",
+        "type": "家具合页",
+        "brand": "Фьюри",
+        "url": "https://www.ozon.ru/product/3516024462",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-6/wc50_q90/9608982414.jpg",
+        "listingDate": "2026-09-01",
+        "ageDays": 6,
+        "revenue": 574417,
+        "sales": 1334,
+        "avgPrice": 431,
+        "revenueGrowth": -0.09,
+        "orderConv": 0.0034000000000000002,
+        "cartAdd": 0.078,
+        "stockoutDays": 22,
+        "adRoi": 0.043
+      },
+      {
+        "name": "Qheich Furniture Hinge, 12 cm",
+        "type": "家具合页",
+        "brand": "Qheich",
+        "url": "https://www.ozon.ru/product/3973863170",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-a/wc50_q90/12635833906.jpg",
+        "listingDate": "2026-04-16",
+        "ageDays": 145,
+        "revenue": 552355,
+        "sales": 2613,
+        "avgPrice": 211,
+        "revenueGrowth": 0.0154,
+        "orderConv": 0.006,
+        "cartAdd": 0.1449,
+        "stockoutDays": 2,
+        "adRoi": 0.1
+      },
+      {
+        "name": "PUNTO Door Hinge",
+        "type": "门合页",
+        "brand": "PUNTO",
+        "url": "https://www.ozon.ru/product/4329677825",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-h/wc50_q90/10597149809.jpg",
+        "listingDate": "2026-05-16",
+        "ageDays": 115,
+        "revenue": 416928,
+        "sales": 1910,
+        "avgPrice": 218,
+        "revenueGrowth": 0.06,
+        "orderConv": 0.012,
+        "cartAdd": 0.172,
+        "stockoutDays": 8,
+        "adRoi": 0.051
+      },
+      {
+        "name": "МЕБИСЭТ Furniture Hinge",
+        "type": "家具合页",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/3681121757",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-6/wc50_q90/10693981446.jpg",
+        "listingDate": "2026-03-18",
+        "ageDays": 174,
+        "revenue": 374265,
+        "sales": 2065,
+        "avgPrice": 181,
+        "revenueGrowth": -0.09,
+        "orderConv": 0.0022,
+        "cartAdd": 0.2588,
+        "stockoutDays": 11,
+        "adRoi": 0.17600000000000002
+      },
+      {
+        "name": "PUNTO Door Hinge",
+        "type": "门合页",
+        "brand": "PUNTO",
+        "url": "https://www.ozon.ru/product/4518892075",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-a/wc50_q90/10987391818.jpg",
+        "listingDate": "2026-05-31",
+        "ageDays": 100,
+        "revenue": 297217,
+        "sales": 1364,
+        "avgPrice": 218,
+        "revenueGrowth": 0.03,
+        "orderConv": 0.0096,
+        "cartAdd": 0.1477,
+        "stockoutDays": 6,
+        "adRoi": 0.061
+      },
+      {
+        "name": "MARLOK Door Hinge",
+        "type": "门合页",
+        "brand": "MARLOK",
+        "url": "https://www.ozon.ru/product/4068181575",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-u/wc50_q90/10020117486.jpg",
+        "listingDate": "2026-04-24",
+        "ageDays": 137,
+        "revenue": 266193,
+        "sales": 137,
+        "avgPrice": 1943,
+        "revenueGrowth": 0.0163,
+        "orderConv": 0.0051,
+        "cartAdd": 0.1398,
+        "stockoutDays": 26,
+        "adRoi": 0
+      },
+      {
+        "name": "Инталика Furniture Hinge, 14.7 cm",
+        "type": "家具合页",
+        "brand": "Инталика",
+        "url": "https://www.ozon.ru/product/3517701364",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-e/wc50_q90/9162725702.jpg",
+        "listingDate": "2026-09-01",
+        "ageDays": 6,
+        "revenue": 234379,
+        "sales": 1123,
+        "avgPrice": 209,
+        "revenueGrowth": -0.14,
+        "orderConv": 0.0073,
+        "cartAdd": 0.1371,
+        "stockoutDays": 26,
+        "adRoi": 0.098
+      },
+      {
+        "name": "Furniture Hinge",
+        "type": "家具合页",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/3953799935",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-o/wc50_q90/9816406584.jpg",
+        "listingDate": "2026-04-15",
+        "ageDays": 146,
+        "revenue": 230024,
+        "sales": 102,
+        "avgPrice": 2255,
+        "revenueGrowth": 0.9,
+        "orderConv": 0.0026,
+        "cartAdd": 0.0601,
+        "stockoutDays": 25,
+        "adRoi": 0
+      },
+      {
+        "name": "Тундра Door Hinge",
+        "type": "门合页",
+        "brand": "Тундра",
+        "url": "https://www.ozon.ru/product/4972393141",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-b/wc50_q90/13681185527.jpg",
+        "listingDate": "2026-06-06",
+        "ageDays": 93,
+        "revenue": 224050,
+        "sales": 1545,
+        "avgPrice": 145,
+        "revenueGrowth": 0.63,
+        "orderConv": 0.0018,
+        "cartAdd": 0.12210000000000001,
+        "stockoutDays": 27,
+        "adRoi": 0.228
       }
     ],
     "operations": {
-      "signRateMedian": 0.9019999999999999,
+      "signRateMedian": 0.902,
       "signRateCoverage": 100,
       "stockoutMedian": 21,
       "stockoutCoverage": 97.7,
@@ -441,7 +781,27 @@ export const RECENT_MARKET_REPORTS = [
       "duplicateSku": 10,
       "duplicateUrl": 0,
       "uniqueSku": 990,
-      "urlCoverage": 100
+      "urlCoverage": 100,
+      "fieldCoverage": {
+        "revenueGrowth": 96.8,
+        "impressions": 96.8,
+        "visits": 100,
+        "orderConv": 99,
+        "cartAdd": 100,
+        "stock": 100,
+        "dailySales": 100,
+        "missedRevenue": 100,
+        "discount": 100,
+        "promoShare": 100,
+        "adRoi": 100,
+        "delivery": 100,
+        "volume": 100,
+        "listingDate": 93.7
+      },
+      "listingDateCoverage": 93.7,
+      "freshProductCount": 153,
+      "futureListingDateCount": 31,
+      "outlierListingDateCount": 3
     },
     "insights": [
       "头部产品类型“家具合页”贡献 58.1% 样本销售额；前五类型合计 100%。",
@@ -451,11 +811,6 @@ export const RECENT_MARKET_REPORTS = [
       "与 9 月 7 日家具五金综合样本共有 90 个商品链接；两份数据覆盖范围不同，应分别看作专项样本与综合样本，而不是重复报告。"
     ],
     "sourceHash": "43de447e1ec003548b6735d3b3923dd74f5a0724c5ff4aa48a3196a02c72643a",
-    "recommendations": [
-      "首轮把家具合页与门合页拆成两个测试组，分别按基础款、缓冲款和重载/特殊尺寸款建立规格梯度。",
-      "优先核验材质、表面处理、孔距、开合角度和单包数量；低客单商品应先测算多件装与跨境运费。",
-      "高缺货天数只能视为供给波动线索，需结合评价、在售状态和中国工厂交期二次确认后再备货。"
-    ],
     "persistenceNote": "源 CSV 保留在用户提供的本地数据文件中；网站只发布聚合指标、类目榜单和对标商品，不公开完整原始明细。"
   },
   {
@@ -737,7 +1092,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1599601,
         "sales": 555,
         "avgPrice": 2882,
-        "url": "https://www.ozon.ru/product/3423801652"
+        "url": "https://www.ozon.ru/product/3423801652",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-l/wc50_q90/8982378345.jpg",
+        "listingDate": "2026-01-21",
+        "ageDays": 229
       },
       {
         "name": "Gemlux Furniture Leg",
@@ -747,7 +1105,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1493804,
         "sales": 1198,
         "avgPrice": 1247,
-        "url": "https://www.ozon.ru/product/1422935268"
+        "url": "https://www.ozon.ru/product/1422935268",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-9/wc50_q90/8000409357.jpg",
+        "listingDate": "2024-02-15",
+        "ageDays": 935
       },
       {
         "name": "Amix Furniture Leg",
@@ -757,7 +1118,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1491237,
         "sales": 1251,
         "avgPrice": 1192,
-        "url": "https://www.ozon.ru/product/1447533704"
+        "url": "https://www.ozon.ru/product/1447533704",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-d/wc50_q90/7238526961.jpg",
+        "listingDate": "2024-03-02",
+        "ageDays": 918
       },
       {
         "name": "Amix Furniture Leg",
@@ -767,7 +1131,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1414664,
         "sales": 932,
         "avgPrice": 1518,
-        "url": "https://www.ozon.ru/product/1282960863"
+        "url": "https://www.ozon.ru/product/1282960863",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-d/wc50_q90/7238504857.jpg",
+        "listingDate": "2023-09-10",
+        "ageDays": 1092
       },
       {
         "name": "Dream Renovation Furniture Wheel, 20 cm",
@@ -777,7 +1144,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1313046,
         "sales": 836,
         "avgPrice": 1571,
-        "url": "https://www.ozon.ru/product/1670642089"
+        "url": "https://www.ozon.ru/product/1670642089",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-8/wc50_q90/7833292136.jpg",
+        "listingDate": "2024-08-26",
+        "ageDays": 742
       },
       {
         "name": "Loomedge Furniture Leg",
@@ -787,7 +1157,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1221255,
         "sales": 932,
         "avgPrice": 1310,
-        "url": "https://www.ozon.ru/product/3033881660"
+        "url": "https://www.ozon.ru/product/3033881660",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-x/wc50_q90/7352735973.jpg",
+        "listingDate": "2025-10-28",
+        "ageDays": 314
       },
       {
         "name": "Gemlux Furniture Leg",
@@ -797,7 +1170,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1202550,
         "sales": 1080,
         "avgPrice": 1113,
-        "url": "https://www.ozon.ru/product/1422940605"
+        "url": "https://www.ozon.ru/product/1422940605",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-s/wc50_q90/8000428744.jpg",
+        "listingDate": "2024-02-15",
+        "ageDays": 935
       },
       {
         "name": "Dream Renovation Furniture Wheel, 20 cm",
@@ -807,7 +1183,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1020776,
         "sales": 750,
         "avgPrice": 1361,
-        "url": "https://www.ozon.ru/product/1670641989"
+        "url": "https://www.ozon.ru/product/1670641989",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-z/wc50_q90/7200221867.jpg",
+        "listingDate": "2024-08-26",
+        "ageDays": 742
       },
       {
         "name": "Loomedge Furniture Leg",
@@ -817,7 +1196,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 859818,
         "sales": 702,
         "avgPrice": 1225,
-        "url": "https://www.ozon.ru/product/3033881525"
+        "url": "https://www.ozon.ru/product/3033881525",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-x/wc50_q90/10031200665.jpg",
+        "listingDate": "2025-10-28",
+        "ageDays": 314
       },
       {
         "name": "Furniture Leg, 72 cm",
@@ -827,7 +1209,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 852458,
         "sales": 356,
         "avgPrice": 2395,
-        "url": "https://www.ozon.ru/product/4192375799"
+        "url": "https://www.ozon.ru/product/4192375799",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-i/wc50_q90/10248529338.jpg",
+        "listingDate": "2026-05-04",
+        "ageDays": 125
       },
       {
         "name": "IRONTEK Furniture Leg, 73 cm",
@@ -837,7 +1222,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 824976,
         "sales": 426,
         "avgPrice": 1937,
-        "url": "https://www.ozon.ru/product/3356526096"
+        "url": "https://www.ozon.ru/product/3356526096",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-b/wc50_q90/9161356403.jpg",
+        "listingDate": "2026-08-31",
+        "ageDays": 6
       },
       {
         "name": "Omaeon Furniture Wheel",
@@ -847,7 +1235,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 776811,
         "sales": 561,
         "avgPrice": 1385,
-        "url": "https://www.ozon.ru/product/1428804291"
+        "url": "https://www.ozon.ru/product/1428804291",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-s/wc50_q90/8448834376.jpg",
+        "listingDate": "2024-02-20",
+        "ageDays": 930
       },
       {
         "name": "Gemlux Furniture Leg",
@@ -857,7 +1248,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 698102,
         "sales": 614,
         "avgPrice": 1137,
-        "url": "https://www.ozon.ru/product/1422940092"
+        "url": "https://www.ozon.ru/product/1422940092",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-n/wc50_q90/8000417147.jpg",
+        "listingDate": "2024-02-15",
+        "ageDays": 935
       },
       {
         "name": "Dream Renovation Furniture Wheel, 11 cm",
@@ -867,7 +1261,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 667519,
         "sales": 1225,
         "avgPrice": 545,
-        "url": "https://www.ozon.ru/product/2638348067"
+        "url": "https://www.ozon.ru/product/2638348067",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-f/wc50_q90/7959613839.jpg",
+        "listingDate": "2025-08-07",
+        "ageDays": 395
       },
       {
         "name": "Riva Furniture Leg, 70 cm",
@@ -877,11 +1274,309 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 646531,
         "sales": 289,
         "avgPrice": 2237,
-        "url": "https://www.ozon.ru/product/4978972208"
+        "url": "https://www.ozon.ru/product/4978972208",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-e/wc50_q90/12249041882.jpg",
+        "listingDate": "2026-06-06",
+        "ageDays": 92
+      }
+    ],
+    "marketDimensions": {
+      "demand": {
+        "revenueGrowthMedian": 0.10135,
+        "revenueGrowthCoverage": 97.2,
+        "impressions": 71661490,
+        "visits": 3245222,
+        "visitRate": 0.0453,
+        "orderConversionMedian": 0.0032,
+        "orderConversionCoverage": 98.2,
+        "cartAddMedian": 0.11599999999999999,
+        "cartAddCoverage": 100
+      },
+      "supply": {
+        "stockoutMedian": 19,
+        "stockoutCoverage": 95.7,
+        "missedRevenue": 1806488,
+        "missedRevenueCoverage": 100,
+        "inventoryCoverMedian": 20.333333333333332,
+        "inventoryCoverCoverage": 95.7
+      },
+      "marketing": {
+        "discountMedian": 0.14475,
+        "discountCoverage": 100,
+        "promoShareMedian": 1,
+        "promoShareCoverage": 100,
+        "adRoiMedian": 0.046,
+        "adRoiCoverage": 100,
+        "promoActiveShare": 81.3,
+        "adActiveShare": 41.1
+      },
+      "fulfillment": {
+        "signRateMedian": 0.888,
+        "signRateCoverage": 99.9,
+        "fboShare": 89.4,
+        "deliveryCoverage": 100,
+        "volumeMedian": 0.9,
+        "volumeCoverage": 100
+      },
+      "newness": {
+        "windowDays": 180,
+        "listingDateCoverage": 95.2,
+        "freshCount": 159,
+        "freshRevenueShare": 16.7,
+        "futureDateCount": 20,
+        "outlierDateCount": 6
+      }
+    },
+    "recommendations": [
+      {
+        "title": "先从头部需求与主价格带建立首测组",
+        "recommendation": "围绕“家具支脚”拆出 2–3 个明确规格，并优先覆盖 1,000–2,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+        "evidence": [
+          "头部类型销售额占比 64.5%",
+          "1,000–2,000 ₽ 贡献 29.5% 样本销售额",
+          "样本 1000 条"
+        ],
+        "confidence": "高"
+      },
+      {
+        "title": "用 180 天新品验证增长方向",
+        "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+        "evidence": [
+          "有效上架日期覆盖 95.2%",
+          "180 天内新品 159 个",
+          "新品销售额占样本 16.7%"
+        ],
+        "confidence": "高"
+      },
+      {
+        "title": "把供给缺口转化为备货验证",
+        "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+        "evidence": [
+          "缺货天数字段覆盖 95.7%",
+          "缺货天数中位数 19 天",
+          "库存覆盖字段 95.7%"
+        ],
+        "confidence": "中"
+      },
+      {
+        "title": "用漏斗数据筛掉“有曝光没成交”商品",
+        "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+        "evidence": [
+          "下单转化率覆盖 98.2%",
+          "下单转化率中位数 0.3%",
+          "访问率 4.53%"
+        ],
+        "confidence": "中"
+      }
+    ],
+    "newProducts": [
+      {
+        "name": "Furniture Leg, 72 cm",
+        "type": "家具支脚",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/4192375799",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-i/wc50_q90/10248529338.jpg",
+        "listingDate": "2026-05-04",
+        "ageDays": 125,
+        "revenue": 852458,
+        "sales": 356,
+        "avgPrice": 2395,
+        "revenueGrowth": 0.0279,
+        "orderConv": 0.0011,
+        "cartAdd": 0.111,
+        "stockoutDays": 25,
+        "adRoi": 0.07200000000000001
+      },
+      {
+        "name": "IRONTEK Furniture Leg, 73 cm",
+        "type": "家具支脚",
+        "brand": "IRONTEK",
+        "url": "https://www.ozon.ru/product/3356526096",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-b/wc50_q90/9161356403.jpg",
+        "listingDate": "2026-08-31",
+        "ageDays": 6,
+        "revenue": 824976,
+        "sales": 426,
+        "avgPrice": 1937,
+        "revenueGrowth": -0.04,
+        "orderConv": 0.0011,
+        "cartAdd": 0.1016,
+        "stockoutDays": 9,
+        "adRoi": 0.068
+      },
+      {
+        "name": "Riva Furniture Leg, 70 cm",
+        "type": "家具支脚",
+        "brand": "Riva",
+        "url": "https://www.ozon.ru/product/4978972208",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-e/wc50_q90/12249041882.jpg",
+        "listingDate": "2026-06-06",
+        "ageDays": 92,
+        "revenue": 646531,
+        "sales": 289,
+        "avgPrice": 2237,
+        "revenueGrowth": 0.53,
+        "orderConv": 0.002,
+        "cartAdd": 0.0794,
+        "stockoutDays": 27,
+        "adRoi": 0.084
+      },
+      {
+        "name": "Русский Стул Furniture Leg",
+        "type": "家具支脚",
+        "brand": "Русский Стул",
+        "url": "https://www.ozon.ru/product/3801776191",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-8/wc50_q90/9572418008.jpg",
+        "listingDate": "2026-03-31",
+        "ageDays": 160,
+        "revenue": 626677,
+        "sales": 118,
+        "avgPrice": 5311,
+        "revenueGrowth": 0.0226,
+        "orderConv": 0.0009,
+        "cartAdd": 0.07980000000000001,
+        "stockoutDays": 27,
+        "adRoi": 0.099
+      },
+      {
+        "name": "MZO Furniture Leg, 40 cm",
+        "type": "家具支脚",
+        "brand": "MZO",
+        "url": "https://www.ozon.ru/product/3590176381",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-r/wc50_q90/9263544903.jpg",
+        "listingDate": "2026-05-02",
+        "ageDays": 127,
+        "revenue": 490474,
+        "sales": 261,
+        "avgPrice": 1879,
+        "revenueGrowth": -0.13,
+        "orderConv": 0.0007000000000000001,
+        "cartAdd": 0.1232,
+        "stockoutDays": 11,
+        "adRoi": 0.084
+      },
+      {
+        "name": "Massagecomplekt Furniture Leg, 41 cm",
+        "type": "家具支脚",
+        "brand": "Massagecomplekt",
+        "url": "https://www.ozon.ru/product/4203238535",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-g/wc50_q90/10492898416.jpg",
+        "listingDate": "2026-06-04",
+        "ageDays": 94,
+        "revenue": 460595,
+        "sales": 239,
+        "avgPrice": 1927,
+        "revenueGrowth": 0.2,
+        "orderConv": 0.002,
+        "cartAdd": 0.09230000000000001,
+        "stockoutDays": 27,
+        "adRoi": 0.02
+      },
+      {
+        "name": "MZO Furniture Leg, 74 cm",
+        "type": "家具支脚",
+        "brand": "MZO",
+        "url": "https://www.ozon.ru/product/3590189633",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-3/wc50_q90/9336514647.jpg",
+        "listingDate": "2026-05-02",
+        "ageDays": 127,
+        "revenue": 356104,
+        "sales": 134,
+        "avgPrice": 2657,
+        "revenueGrowth": -0.14,
+        "orderConv": 0.0005,
+        "cartAdd": 0.1079,
+        "stockoutDays": 17,
+        "adRoi": 0.08
+      },
+      {
+        "name": "Dream Renovation Furniture Wheel, 29 cm",
+        "type": "家具轮子",
+        "brand": "Dream Renovation",
+        "url": "https://www.ozon.ru/product/4833921045",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-1/wc50_q90/11914602913.jpg",
+        "listingDate": "2026-06-23",
+        "ageDays": 76,
+        "revenue": 350790,
+        "sales": 1648,
+        "avgPrice": 213,
+        "revenueGrowth": 0.1,
+        "orderConv": 0.0070999999999999995,
+        "cartAdd": 0.14529999999999998,
+        "stockoutDays": 22,
+        "adRoi": 0.047
+      },
+      {
+        "name": "Furniture Wheel, 0.85 cm",
+        "type": "家具轮子",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/5013524257",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-k/wc50_q90/12963409832.jpg",
+        "listingDate": "2026-09-06",
+        "ageDays": 0,
+        "revenue": 322104,
+        "sales": 264,
+        "avgPrice": 1220,
+        "revenueGrowth": 0.039,
+        "orderConv": 0.0070999999999999995,
+        "cartAdd": 0.0974,
+        "stockoutDays": 10,
+        "adRoi": 0.013999999999999999
+      },
+      {
+        "name": "Art Chairs Furniture Leg",
+        "type": "家具支脚",
+        "brand": "Art Chairs",
+        "url": "https://www.ozon.ru/product/3736218027",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-x/wc50_q90/9465196713.jpg",
+        "listingDate": "2026-03-24",
+        "ageDays": 167,
+        "revenue": 311769,
+        "sales": 58,
+        "avgPrice": 5375,
+        "revenueGrowth": 0.07,
+        "orderConv": 0.0004,
+        "cartAdd": 0.06509999999999999,
+        "stockoutDays": 27,
+        "adRoi": 0.086
+      },
+      {
+        "name": "Furniture Wheel",
+        "type": "家具轮子",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/4407438436",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-4/wc50_q90/11024378284.jpg",
+        "listingDate": "2026-05-22",
+        "ageDays": 108,
+        "revenue": 303659,
+        "sales": 362,
+        "avgPrice": 839,
+        "revenueGrowth": 0.0113,
+        "orderConv": 0.0038,
+        "cartAdd": 0.0907,
+        "stockoutDays": 4,
+        "adRoi": 0.084
+      },
+      {
+        "name": "Furniture Leg, 10 cm",
+        "type": "家具支脚",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/4756865584",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-1/wc50_q90/12377469205.jpg",
+        "listingDate": "2026-06-16",
+        "ageDays": 83,
+        "revenue": 280633,
+        "sales": 1925,
+        "avgPrice": 146,
+        "revenueGrowth": 0.89,
+        "orderConv": 0.0038,
+        "cartAdd": 0.1722,
+        "stockoutDays": 14,
+        "adRoi": 0.33
       }
     ],
     "operations": {
-      "signRateMedian": 0.8880000000000001,
+      "signRateMedian": 0.888,
       "signRateCoverage": 99.9,
       "stockoutMedian": 19,
       "stockoutCoverage": 95.7,
@@ -899,7 +1594,27 @@ export const RECENT_MARKET_REPORTS = [
       "duplicateSku": 3,
       "duplicateUrl": 0,
       "uniqueSku": 997,
-      "urlCoverage": 100
+      "urlCoverage": 100,
+      "fieldCoverage": {
+        "revenueGrowth": 97.2,
+        "impressions": 97.2,
+        "visits": 100,
+        "orderConv": 98.2,
+        "cartAdd": 100,
+        "stock": 100,
+        "dailySales": 100,
+        "missedRevenue": 100,
+        "discount": 100,
+        "promoShare": 100,
+        "adRoi": 100,
+        "delivery": 100,
+        "volume": 100,
+        "listingDate": 95.2
+      },
+      "listingDateCoverage": 95.2,
+      "freshProductCount": 159,
+      "futureListingDateCount": 20,
+      "outlierListingDateCount": 6
     },
     "insights": [
       "头部产品类型“家具支脚”贡献 64.5% 样本销售额；前五类型合计 100%。",
@@ -908,11 +1623,6 @@ export const RECENT_MARKET_REPORTS = [
       "销量字段覆盖率 97.2%；SKU 重复 3 条、商品链接重复 0 条，未对缺失值作推算。"
     ],
     "sourceHash": "44cf50af2debda708bdc1591e51b33a3d43e9e7bec9710f693daba815d20a0fa",
-    "recommendations": [
-      "家具支脚与脚轮应分开立项，支脚按高度/承重/安装方式，脚轮按直径/材质/刹车结构建立对标表。",
-      "1,000–2,000 ₽ 价格带贡献最高，适合优先寻找成套、重载或功能型产品，而不是只比最低单价。",
-      "上架前补齐包装体积、单套重量和安装配件清单，避免高件均收入被跨境物流与缺件售后吞噬。"
-    ],
     "persistenceNote": "源 CSV 保留在用户提供的本地数据文件中；网站只发布聚合指标、类目榜单和对标商品，不公开完整原始明细。"
   },
   {
@@ -1266,7 +1976,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 4328798,
         "sales": 22276,
         "avgPrice": 194,
-        "url": "https://www.ozon.ru/product/2043355652"
+        "url": "https://www.ozon.ru/product/2043355652",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-6/wc50_q90/13903425402.jpg",
+        "listingDate": "2025-04-17",
+        "ageDays": 508
       },
       {
         "name": "Amix Furniture Hinge",
@@ -1276,7 +1989,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 3471277,
         "sales": 21896,
         "avgPrice": 159,
-        "url": "https://www.ozon.ru/product/1771210972"
+        "url": "https://www.ozon.ru/product/1771210972",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-s/wc50_q90/8804815984.jpg",
+        "listingDate": "2024-11-29",
+        "ageDays": 647
       },
       {
         "name": "ДАНА Table Top, Chipboard, HPL plastic, 600 х 2000 х 38 mm",
@@ -1286,7 +2002,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 3196720,
         "sales": 455,
         "avgPrice": 7026,
-        "url": "https://www.ozon.ru/product/3134828199"
+        "url": "https://www.ozon.ru/product/3134828199",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-o/wc50_q90/8370085380.jpg",
+        "listingDate": "2025-11-20",
+        "ageDays": 291
       },
       {
         "name": "Furniture Hinge",
@@ -1296,7 +2015,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 2583082,
         "sales": 14114,
         "avgPrice": 183,
-        "url": "https://www.ozon.ru/product/3116744759"
+        "url": "https://www.ozon.ru/product/3116744759",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-5/wc50_q90/10844272301.jpg",
+        "listingDate": "2025-11-17",
+        "ageDays": 294
       },
       {
         "name": "LUXGOAT Countertop Skirting Board, 500 cm",
@@ -1306,7 +2028,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1928677,
         "sales": 9591,
         "avgPrice": 201,
-        "url": "https://www.ozon.ru/product/3465464948"
+        "url": "https://www.ozon.ru/product/3465464948",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-i/wc50_q90/9259102962.jpg",
+        "listingDate": "2026-01-29",
+        "ageDays": 221
       },
       {
         "name": "AUSBERG Furniture Moving Kit, 36 cm",
@@ -1316,7 +2041,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1838204,
         "sales": 1143,
         "avgPrice": 1608,
-        "url": "https://www.ozon.ru/product/1173506677"
+        "url": "https://www.ozon.ru/product/1173506677",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-2/wc50_q90/14037431582.jpg",
+        "listingDate": "2023-05-08",
+        "ageDays": 1217
       },
       {
         "name": "Amix Guides",
@@ -1326,7 +2054,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1785378,
         "sales": 10909,
         "avgPrice": 164,
-        "url": "https://www.ozon.ru/product/1471942498"
+        "url": "https://www.ozon.ru/product/1471942498",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-j/wc50_q90/7242913639.jpg",
+        "listingDate": "2024-03-14",
+        "ageDays": 907
       },
       {
         "name": "IRONTEK Furniture Leg, 75 cm",
@@ -1336,7 +2067,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1599601,
         "sales": 555,
         "avgPrice": 2882,
-        "url": "https://www.ozon.ru/product/3423801652"
+        "url": "https://www.ozon.ru/product/3423801652",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-l/wc50_q90/8982378345.jpg",
+        "listingDate": "2026-01-21",
+        "ageDays": 229
       },
       {
         "name": "Gemlux Furniture Leg",
@@ -1346,7 +2080,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1493804,
         "sales": 1198,
         "avgPrice": 1247,
-        "url": "https://www.ozon.ru/product/1422935268"
+        "url": "https://www.ozon.ru/product/1422935268",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-9/wc50_q90/8000409357.jpg",
+        "listingDate": "2024-02-15",
+        "ageDays": 935
       },
       {
         "name": "Amix Furniture Leg",
@@ -1356,7 +2093,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1491237,
         "sales": 1251,
         "avgPrice": 1192,
-        "url": "https://www.ozon.ru/product/1447533704"
+        "url": "https://www.ozon.ru/product/1447533704",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-d/wc50_q90/7238526961.jpg",
+        "listingDate": "2024-03-02",
+        "ageDays": 918
       },
       {
         "name": "Cappio Furniture Handle",
@@ -1366,7 +2106,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1461332,
         "sales": 3911,
         "avgPrice": 374,
-        "url": "https://www.ozon.ru/product/2202393013"
+        "url": "https://www.ozon.ru/product/2202393013",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-x/wc50_q90/14583002865.jpg",
+        "listingDate": "2025-05-28",
+        "ageDays": 467
       },
       {
         "name": "Amix Furniture Leg",
@@ -1376,7 +2119,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1414664,
         "sales": 932,
         "avgPrice": 1518,
-        "url": "https://www.ozon.ru/product/1282960863"
+        "url": "https://www.ozon.ru/product/1282960863",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-d/wc50_q90/7238504857.jpg",
+        "listingDate": "2023-09-10",
+        "ageDays": 1092
       },
       {
         "name": "Cappio Furniture Handle",
@@ -1386,7 +2132,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1360295,
         "sales": 3269,
         "avgPrice": 416,
-        "url": "https://www.ozon.ru/product/2202398120"
+        "url": "https://www.ozon.ru/product/2202398120",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-i/wc50_q90/14583166902.jpg",
+        "listingDate": "2025-05-28",
+        "ageDays": 467
       },
       {
         "name": "Furniture Moving Kit",
@@ -1396,7 +2145,10 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1332569,
         "sales": 659,
         "avgPrice": 2022,
-        "url": "https://www.ozon.ru/product/4718480483"
+        "url": "https://www.ozon.ru/product/4718480483",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-n/wc50_q90/8141061479.jpg",
+        "listingDate": "2026-06-13",
+        "ageDays": 86
       },
       {
         "name": "Dream Renovation Furniture Wheel, 20 cm",
@@ -1406,11 +2158,309 @@ export const RECENT_MARKET_REPORTS = [
         "revenue": 1313046,
         "sales": 836,
         "avgPrice": 1571,
-        "url": "https://www.ozon.ru/product/1670642089"
+        "url": "https://www.ozon.ru/product/1670642089",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-8/wc50_q90/7833292136.jpg",
+        "listingDate": "2024-08-26",
+        "ageDays": 742
+      }
+    ],
+    "marketDimensions": {
+      "demand": {
+        "revenueGrowthMedian": 0.11,
+        "revenueGrowthCoverage": 97.8,
+        "impressions": 271362929,
+        "visits": 9499017,
+        "visitRate": 0.035,
+        "orderConversionMedian": 0.0044,
+        "orderConversionCoverage": 98,
+        "cartAddMedian": 0.157,
+        "cartAddCoverage": 100
+      },
+      "supply": {
+        "stockoutMedian": 12,
+        "stockoutCoverage": 99,
+        "missedRevenue": 1771375,
+        "missedRevenueCoverage": 100,
+        "inventoryCoverMedian": 16.666666666666668,
+        "inventoryCoverCoverage": 98.9
+      },
+      "marketing": {
+        "discountMedian": 0.1926,
+        "discountCoverage": 100,
+        "promoShareMedian": 0.9883,
+        "promoShareCoverage": 100,
+        "adRoiMedian": 0.08900000000000001,
+        "adRoiCoverage": 100,
+        "promoActiveShare": 87.1,
+        "adActiveShare": 58.6
+      },
+      "fulfillment": {
+        "signRateMedian": 0.9159999999999999,
+        "signRateCoverage": 100,
+        "fboShare": 95.9,
+        "deliveryCoverage": 100,
+        "volumeMedian": 0.4,
+        "volumeCoverage": 100
+      },
+      "newness": {
+        "windowDays": 180,
+        "listingDateCoverage": 95.5,
+        "freshCount": 193,
+        "freshRevenueShare": 15.4,
+        "futureDateCount": 23,
+        "outlierDateCount": 6
+      }
+    },
+    "recommendations": [
+      {
+        "title": "先从头部需求与主价格带建立首测组",
+        "recommendation": "围绕“家具合页”拆出 2–3 个明确规格，并优先覆盖 <200 ₽ 主成交带；每个规格只做小批量对标测试。",
+        "evidence": [
+          "头部类型销售额占比 13.2%",
+          "<200 ₽ 贡献 42.6% 样本销售额",
+          "样本 1000 条"
+        ],
+        "confidence": "高"
+      },
+      {
+        "title": "用 180 天新品验证增长方向",
+        "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+        "evidence": [
+          "有效上架日期覆盖 95.5%",
+          "180 天内新品 193 个",
+          "新品销售额占样本 15.4%"
+        ],
+        "confidence": "高"
+      },
+      {
+        "title": "把供给缺口转化为备货验证",
+        "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+        "evidence": [
+          "缺货天数字段覆盖 99%",
+          "缺货天数中位数 12 天",
+          "库存覆盖字段 98.9%"
+        ],
+        "confidence": "中"
+      },
+      {
+        "title": "用漏斗数据筛掉“有曝光没成交”商品",
+        "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+        "evidence": [
+          "下单转化率覆盖 98%",
+          "下单转化率中位数 0.4%",
+          "访问率 3.5%"
+        ],
+        "confidence": "中"
+      }
+    ],
+    "newProducts": [
+      {
+        "name": "Furniture Moving Kit",
+        "type": "家具搬运工具套装",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/4718480483",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-n/wc50_q90/8141061479.jpg",
+        "listingDate": "2026-06-13",
+        "ageDays": 86,
+        "revenue": 1332569,
+        "sales": 659,
+        "avgPrice": 2022,
+        "revenueGrowth": -0.22,
+        "orderConv": 0.0019,
+        "cartAdd": 0.1246,
+        "stockoutDays": 4,
+        "adRoi": 0.052000000000000005
+      },
+      {
+        "name": "Furniture Fittings Set",
+        "type": "家具五金配件套装",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/3601694565",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-n/wc50_q90/9216653855.jpg",
+        "listingDate": "2026-07-02",
+        "ageDays": 66,
+        "revenue": 1126704,
+        "sales": 15704,
+        "avgPrice": 72,
+        "revenueGrowth": 0.032400000000000005,
+        "orderConv": 0.0026,
+        "cartAdd": 0.21760000000000002,
+        "stockoutDays": 10,
+        "adRoi": 0.198
+      },
+      {
+        "name": "Furniture Hinge",
+        "type": "家具合页",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/3891125770",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-3/wc50_q90/9711561927.jpg",
+        "listingDate": "2026-09-03",
+        "ageDays": 3,
+        "revenue": 1054793,
+        "sales": 6710,
+        "avgPrice": 157,
+        "revenueGrowth": -0.38,
+        "orderConv": 0.0028000000000000004,
+        "cartAdd": 0.2306,
+        "stockoutDays": 14,
+        "adRoi": 0.076
+      },
+      {
+        "name": "IRONTEK Shelf Bracket, 50 kg, 2 pcs",
+        "type": "搁板架",
+        "brand": "IRONTEK",
+        "url": "https://www.ozon.ru/product/4365743051",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-s/wc50_q90/10894280104.jpg",
+        "listingDate": "2026-05-19",
+        "ageDays": 111,
+        "revenue": 1022447,
+        "sales": 4636,
+        "avgPrice": 221,
+        "revenueGrowth": 0.12,
+        "orderConv": 0.0049,
+        "cartAdd": 0.1744,
+        "stockoutDays": 7,
+        "adRoi": 0.042
+      },
+      {
+        "name": "Loomedge Furniture Hinge, 125 cm",
+        "type": "家具合页",
+        "brand": "Loomedge",
+        "url": "https://www.ozon.ru/product/3590084476",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-4/wc50_q90/9367753072.jpg",
+        "listingDate": "2026-05-02",
+        "ageDays": 127,
+        "revenue": 875792,
+        "sales": 4891,
+        "avgPrice": 179,
+        "revenueGrowth": 0.82,
+        "orderConv": 0.0046,
+        "cartAdd": 0.20190000000000002,
+        "stockoutDays": 7,
+        "adRoi": 0.191
+      },
+      {
+        "name": "IRONTEK Furniture Leg, 73 cm",
+        "type": "家具支脚",
+        "brand": "IRONTEK",
+        "url": "https://www.ozon.ru/product/3356526096",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-b/wc50_q90/9161356403.jpg",
+        "listingDate": "2026-08-31",
+        "ageDays": 6,
+        "revenue": 824976,
+        "sales": 426,
+        "avgPrice": 1937,
+        "revenueGrowth": -0.04,
+        "orderConv": 0.0011,
+        "cartAdd": 0.1016,
+        "stockoutDays": 9,
+        "adRoi": 0.068
+      },
+      {
+        "name": "IRONTEK Shelf Bracket, 50 kg, 2 pcs",
+        "type": "搁板架",
+        "brand": "IRONTEK",
+        "url": "https://www.ozon.ru/product/4391260718",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-0/wc50_q90/10894282452.jpg",
+        "listingDate": "2026-05-21",
+        "ageDays": 109,
+        "revenue": 653490,
+        "sales": 2967,
+        "avgPrice": 220,
+        "revenueGrowth": 0.72,
+        "orderConv": 0.0072,
+        "cartAdd": 0.1961,
+        "stockoutDays": 6,
+        "adRoi": 0.018000000000000002
+      },
+      {
+        "name": "Фьюри Furniture Hinge",
+        "type": "家具合页",
+        "brand": "Фьюри",
+        "url": "https://www.ozon.ru/product/3516024462",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-6/wc50_q90/9608982414.jpg",
+        "listingDate": "2026-09-01",
+        "ageDays": 5,
+        "revenue": 559599,
+        "sales": 1302,
+        "avgPrice": 430,
+        "revenueGrowth": -0.13,
+        "orderConv": 0.0034000000000000002,
+        "cartAdd": 0.0783,
+        "stockoutDays": 22,
+        "adRoi": 0.043
+      },
+      {
+        "name": "Qheich Furniture Hinge, 12 cm",
+        "type": "家具合页",
+        "brand": "Qheich",
+        "url": "https://www.ozon.ru/product/3973863170",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-a/wc50_q90/12635833906.jpg",
+        "listingDate": "2026-04-16",
+        "ageDays": 144,
+        "revenue": 558498,
+        "sales": 2647,
+        "avgPrice": 211,
+        "revenueGrowth": 0.0173,
+        "orderConv": 0.006,
+        "cartAdd": 0.1456,
+        "stockoutDays": 8,
+        "adRoi": 0.10300000000000001
+      },
+      {
+        "name": "DVoN Guides",
+        "type": "导轨",
+        "brand": "DVoN",
+        "url": "https://www.ozon.ru/product/4137485938",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-c/wc50_q90/12240062940.jpg",
+        "listingDate": "2026-04-30",
+        "ageDays": 130,
+        "revenue": 534397,
+        "sales": 2966,
+        "avgPrice": 180,
+        "revenueGrowth": -0.36,
+        "orderConv": 0.0131,
+        "cartAdd": 0.14800000000000002,
+        "stockoutDays": 1,
+        "adRoi": 0.127
+      },
+      {
+        "name": "Furniture Angle Bracket",
+        "type": "家具角码",
+        "brand": "未知/无品牌",
+        "url": "https://www.ozon.ru/product/3764608749",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-w/wc50_q90/13132013360.jpg",
+        "listingDate": "2026-03-27",
+        "ageDays": 164,
+        "revenue": 526436,
+        "sales": 3421,
+        "avgPrice": 154,
+        "revenueGrowth": 0.12,
+        "orderConv": 0.0051,
+        "cartAdd": 0.1843,
+        "stockoutDays": 6,
+        "adRoi": 0.136
+      },
+      {
+        "name": "DVoN Guides",
+        "type": "导轨",
+        "brand": "DVoN",
+        "url": "https://www.ozon.ru/product/4853825707",
+        "image": "https://ir-20.ozone.ru/s3/multimedia-1-t/wc50_q90/11874530621.jpg",
+        "listingDate": "2026-06-25",
+        "ageDays": 74,
+        "revenue": 524557,
+        "sales": 3034,
+        "avgPrice": 173,
+        "revenueGrowth": 0.53,
+        "orderConv": 0.0144,
+        "cartAdd": 0.1653,
+        "stockoutDays": 1,
+        "adRoi": 0.125
       }
     ],
     "operations": {
-      "signRateMedian": 0.916,
+      "signRateMedian": 0.9159999999999999,
       "signRateCoverage": 100,
       "stockoutMedian": 12,
       "stockoutCoverage": 99,
@@ -1428,7 +2478,27 @@ export const RECENT_MARKET_REPORTS = [
       "duplicateSku": 5,
       "duplicateUrl": 0,
       "uniqueSku": 995,
-      "urlCoverage": 100
+      "urlCoverage": 100,
+      "fieldCoverage": {
+        "revenueGrowth": 97.8,
+        "impressions": 97.8,
+        "visits": 100,
+        "orderConv": 98,
+        "cartAdd": 100,
+        "stock": 100,
+        "dailySales": 100,
+        "missedRevenue": 100,
+        "discount": 100,
+        "promoShare": 100,
+        "adRoi": 100,
+        "delivery": 100,
+        "volume": 100,
+        "listingDate": 95.5
+      },
+      "listingDateCoverage": 95.5,
+      "freshProductCount": 193,
+      "futureListingDateCount": 23,
+      "outlierListingDateCount": 6
     },
     "insights": [
       "头部产品类型“家具合页”贡献 13.2% 样本销售额；前五类型合计 53.5%。",
@@ -1438,11 +2508,6 @@ export const RECENT_MARKET_REPORTS = [
       "与 9 月 8 日合页专项样本共有 90 个商品链接；综合样本适合找方向，专项样本适合继续拆规格与竞品。"
     ],
     "sourceHash": "dac9726537ebba1f4c163979c717c4b8592584b703cbaf0199d71c51fe3b6e90",
-    "recommendations": [
-      "先从合页、导轨、把手、保护贴和支脚五个头部方向各选 2–3 个规格，不建议一次铺满全部子类目。",
-      "低于 500 ₽ 的商品贡献较高，优先设计多件装、组合装和维修套装，提高订单价值并降低单件物流占比。",
-      "无品牌样本较多，适合中国供应链切入，但必须以尺寸兼容、材料说明、安装图和稳定交期建立差异。"
-    ],
     "persistenceNote": "源 CSV 保留在用户提供的本地数据文件中；网站只发布聚合指标、类目榜单和对标商品，不公开完整原始明细。"
   }
 ]

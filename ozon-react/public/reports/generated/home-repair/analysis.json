@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-home-repair",
   "label": "家装与修理",
   "title": "Ozon 家装与修理市场分析",
   "group": "家居与维修",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23家装修理_清洗版.xlsx",
-  "path": "reports/generated/home-repair/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 家装与修理市场分析报告",
+  "sourceFile": "ozon-2026-07-23家装修理_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:36.154Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 1567054396,
@@ -345,7 +349,10 @@
       "revenue": 20197658,
       "sales": 5344,
       "avgPrice": 3780,
-      "url": "https://www.ozon.ru/product/337466104"
+      "url": "https://www.ozon.ru/product/337466104",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/8422746001.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "DEKO Grinder",
@@ -355,7 +362,10 @@
       "revenue": 17618521,
       "sales": 8765,
       "avgPrice": 2010,
-      "url": "https://www.ozon.ru/product/337631138"
+      "url": "https://www.ozon.ru/product/337631138",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/7350679016.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "BoxBot Mini Washer",
@@ -365,7 +375,10 @@
       "revenue": 17553321,
       "sales": 5082,
       "avgPrice": 3454,
-      "url": "https://www.ozon.ru/product/1449141955"
+      "url": "https://www.ozon.ru/product/1449141955",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/6941232010.jpg",
+      "listingDate": "2024-03-04",
+      "ageDays": 871
     },
     {
       "name": "Rebel Shop Screwdriver Drill, From the battery, 48 V, 32 Nm, 2 Batteries",
@@ -375,7 +388,10 @@
       "revenue": 15602837,
       "sales": 9519,
       "avgPrice": 1639,
-      "url": "https://www.ozon.ru/product/1752072671"
+      "url": "https://www.ozon.ru/product/1752072671",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/12846218926.jpg",
+      "listingDate": "2024-11-07",
+      "ageDays": 623
     },
     {
       "name": "best bro Laser Level Greenray",
@@ -385,7 +401,10 @@
       "revenue": 15031806,
       "sales": 4771,
       "avgPrice": 3151,
-      "url": "https://www.ozon.ru/product/2093047423"
+      "url": "https://www.ozon.ru/product/2093047423",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/12020763422.jpg",
+      "listingDate": "2025-05-02",
+      "ageDays": 447
     },
     {
       "name": "best bro Laser Level Greenray",
@@ -395,7 +414,10 @@
       "revenue": 11733943,
       "sales": 3580,
       "avgPrice": 3278,
-      "url": "https://www.ozon.ru/product/3428013764"
+      "url": "https://www.ozon.ru/product/3428013764",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/9006869558.jpg",
+      "listingDate": "2026-01-22",
+      "ageDays": 182
     },
     {
       "name": "JOY Paint Quick-drying 30°, Alkyd, Matte coating, 20 kg, grey",
@@ -405,7 +427,10 @@
       "revenue": 11500641,
       "sales": 3210,
       "avgPrice": 3583,
-      "url": "https://www.ozon.ru/product/3300322747"
+      "url": "https://www.ozon.ru/product/3300322747",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/8516546645.jpg",
+      "listingDate": "2025-12-29",
+      "ageDays": 206
     },
     {
       "name": "Mosquito Net",
@@ -415,7 +440,10 @@
       "revenue": 11318319,
       "sales": 116008,
       "avgPrice": 98,
-      "url": "https://www.ozon.ru/product/3822513474"
+      "url": "https://www.ozon.ru/product/3822513474",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/9617306478.jpg",
+      "listingDate": "2026-04-02",
+      "ageDays": 112
     },
     {
       "name": "Socket",
@@ -425,7 +453,10 @@
       "revenue": 10655952,
       "sales": 27556,
       "avgPrice": 387,
-      "url": "https://www.ozon.ru/product/3742574793"
+      "url": "https://www.ozon.ru/product/3742574793",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/12440059821.jpg",
+      "listingDate": "2026-03-25",
+      "ageDays": 120
     },
     {
       "name": "best bro Laser Level Greenray",
@@ -435,7 +466,10 @@
       "revenue": 10522500,
       "sales": 3223,
       "avgPrice": 3265,
-      "url": "https://www.ozon.ru/product/4047422908"
+      "url": "https://www.ozon.ru/product/4047422908",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/10224482766.jpg",
+      "listingDate": "2026-04-22",
+      "ageDays": 92
     },
     {
       "name": "Rose Wallpaper Non-Woven Based Vinyl 10.05 m, 1.06 m",
@@ -445,7 +479,10 @@
       "revenue": 8704542,
       "sales": 6607,
       "avgPrice": 1317,
-      "url": "https://www.ozon.ru/product/1751538007"
+      "url": "https://www.ozon.ru/product/1751538007",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/11176910270.jpg",
+      "listingDate": "2024-11-07",
+      "ageDays": 623
     },
     {
       "name": "Теплмяг Mixer",
@@ -455,7 +492,10 @@
       "revenue": 8260441,
       "sales": 6925,
       "avgPrice": 1193,
-      "url": "https://www.ozon.ru/product/2955816770"
+      "url": "https://www.ozon.ru/product/2955816770",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/12194334119.jpg",
+      "listingDate": "2025-10-11",
+      "ageDays": 285
     },
     {
       "name": "KRONbuild Mounting Foam",
@@ -465,7 +505,10 @@
       "revenue": 7950169,
       "sales": 23961,
       "avgPrice": 332,
-      "url": "https://www.ozon.ru/product/3243768270"
+      "url": "https://www.ozon.ru/product/3243768270",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/8547624122.jpg",
+      "listingDate": "2025-12-16",
+      "ageDays": 219
     },
     {
       "name": "Теплмяг Mixer",
@@ -475,7 +518,10 @@
       "revenue": 7840855,
       "sales": 10758,
       "avgPrice": 729,
-      "url": "https://www.ozon.ru/product/2721828530"
+      "url": "https://www.ozon.ru/product/2721828530",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/12063510556.jpg",
+      "listingDate": "2025-08-21",
+      "ageDays": 336
     },
     {
       "name": "Screwdriver Drill, From the battery, 48 V, 60 Nm, 2 Batteries",
@@ -485,7 +531,305 @@
       "revenue": 7491839,
       "sales": 5052,
       "avgPrice": 1483,
-      "url": "https://www.ozon.ru/product/3569103389"
+      "url": "https://www.ozon.ru/product/3569103389",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/10896614658.jpg",
+      "listingDate": "2026-02-28",
+      "ageDays": 145
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.0435,
+      "revenueGrowthCoverage": 98.3,
+      "impressions": 2390888102,
+      "visits": 61673997,
+      "visitRate": 0.0258,
+      "orderConversionMedian": 0.0037,
+      "orderConversionCoverage": 98.5,
+      "cartAddMedian": 0.17570000000000002,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 11,
+      "stockoutCoverage": 89,
+      "missedRevenue": 6725216.7,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 22.622054747054747,
+      "inventoryCoverCoverage": 89.4
+    },
+    "marketing": {
+      "discountMedian": 0.23815,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.9998999999999999,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.114,
+      "adRoiCoverage": 98.3,
+      "promoActiveShare": 86.5,
+      "adActiveShare": 57.8
+    },
+    "fulfillment": {
+      "signRateMedian": 0.9445,
+      "signRateCoverage": 97.2,
+      "fboShare": 89.8,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.6,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 97.2,
+      "freshCount": 277,
+      "freshRevenueShare": 24.9,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“蚊帐纱网”拆出 2–3 个明确规格，并优先覆盖 200–500 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 5.4%",
+        "200–500 ₽ 贡献 36.2% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 97.2%",
+        "180 天内新品 277 个",
+        "新品销售额占样本 24.9%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 89%",
+        "缺货天数中位数 11 天",
+        "库存覆盖字段 89.4%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 98.5%",
+        "下单转化率中位数 0.4%",
+        "访问率 2.58%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Mosquito Net",
+      "type": "蚊帐纱网",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3822513474",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/9617306478.jpg",
+      "listingDate": "2026-04-02",
+      "ageDays": 112,
+      "revenue": 11318319,
+      "sales": 116008,
+      "avgPrice": 98,
+      "revenueGrowth": -0.37,
+      "orderConv": 0.0036,
+      "cartAdd": 0.1858,
+      "stockoutDays": 10,
+      "adRoi": 0.249
+    },
+    {
+      "name": "Socket",
+      "type": "插座",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3742574793",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/12440059821.jpg",
+      "listingDate": "2026-03-25",
+      "ageDays": 120,
+      "revenue": 10655952,
+      "sales": 27556,
+      "avgPrice": 387,
+      "revenueGrowth": 0.24,
+      "orderConv": 0.0022,
+      "cartAdd": 0.2745,
+      "stockoutDays": null,
+      "adRoi": 0.024
+    },
+    {
+      "name": "best bro Laser Level Greenray",
+      "type": "激光水平仪，水准仪",
+      "brand": "best bro",
+      "url": "https://www.ozon.ru/product/4047422908",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/10224482766.jpg",
+      "listingDate": "2026-04-22",
+      "ageDays": 92,
+      "revenue": 10522500,
+      "sales": 3223,
+      "avgPrice": 3265,
+      "revenueGrowth": 0.0196,
+      "orderConv": 0.0019,
+      "cartAdd": 0.0796,
+      "stockoutDays": 5,
+      "adRoi": 0.17
+    },
+    {
+      "name": "Screwdriver Drill, From the battery, 48 V, 60 Nm, 2 Batteries",
+      "type": "电动钻孔机器",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3569103389",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/10896614658.jpg",
+      "listingDate": "2026-02-28",
+      "ageDays": 145,
+      "revenue": 7491839,
+      "sales": 5052,
+      "avgPrice": 1483,
+      "revenueGrowth": 0.61,
+      "orderConv": 0.0015,
+      "cartAdd": 0.1349,
+      "stockoutDays": 14,
+      "adRoi": 0.12
+    },
+    {
+      "name": "NETFNET Key",
+      "type": "扳手",
+      "brand": "NETFNET",
+      "url": "https://www.ozon.ru/product/3958818660",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/10052864534.jpg",
+      "listingDate": "2026-04-15",
+      "ageDays": 99,
+      "revenue": 7160062,
+      "sales": 70266,
+      "avgPrice": 102,
+      "revenueGrowth": 0.0166,
+      "orderConv": 0.0032,
+      "cartAdd": 0.2312,
+      "stockoutDays": 11,
+      "adRoi": 0.002
+    },
+    {
+      "name": "WOZOBUY Crimping Pliers",
+      "type": "压接钳",
+      "brand": "WOZOBUY",
+      "url": "https://www.ozon.ru/product/4449668542",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/8852745569.jpg",
+      "listingDate": "2026-05-26",
+      "ageDays": 58,
+      "revenue": 6485204,
+      "sales": 10310,
+      "avgPrice": 629,
+      "revenueGrowth": 0.030600000000000002,
+      "orderConv": 0.001,
+      "cartAdd": 0.09820000000000001,
+      "stockoutDays": 13,
+      "adRoi": 0.063
+    },
+    {
+      "name": "Street Lamp",
+      "type": "路灯",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3803980388",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/9073729171.jpg",
+      "listingDate": "2026-03-31",
+      "ageDays": 114,
+      "revenue": 5475383,
+      "sales": 26465,
+      "avgPrice": 207,
+      "revenueGrowth": 0.05,
+      "orderConv": 0.0021,
+      "cartAdd": 0.1931,
+      "stockoutDays": 18,
+      "adRoi": 0.144
+    },
+    {
+      "name": "RAGE Bat",
+      "type": "批头",
+      "brand": "RAGE",
+      "url": "https://www.ozon.ru/product/4101885191",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/12789909242.jpg",
+      "listingDate": "2026-04-27",
+      "ageDays": 87,
+      "revenue": 5439884,
+      "sales": 36008,
+      "avgPrice": 151,
+      "revenueGrowth": 0.011000000000000001,
+      "orderConv": 0.0013,
+      "cartAdd": 0.1947,
+      "stockoutDays": 16,
+      "adRoi": 0.301
+    },
+    {
+      "name": "Mosquito Net",
+      "type": "蚊帐纱网",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3764851665",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/9510582686.jpg",
+      "listingDate": "2026-03-27",
+      "ageDays": 118,
+      "revenue": 5255932,
+      "sales": 10485,
+      "avgPrice": 501,
+      "revenueGrowth": 0.55,
+      "orderConv": 0.0011,
+      "cartAdd": 0.1319,
+      "stockoutDays": null,
+      "adRoi": 0
+    },
+    {
+      "name": "Vira Axe",
+      "type": "斧子",
+      "brand": "VIRA",
+      "url": "https://www.ozon.ru/product/4058898566",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/10468638917.jpg",
+      "listingDate": "2026-04-23",
+      "ageDays": 91,
+      "revenue": 4253445,
+      "sales": 8332,
+      "avgPrice": 510,
+      "revenueGrowth": 0.022000000000000002,
+      "orderConv": 0.002,
+      "cartAdd": 0.1501,
+      "stockoutDays": 15,
+      "adRoi": 0.126
+    },
+    {
+      "name": "Circuit Breaker 40A 1",
+      "type": "断路器",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3745685361",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/9480791900.jpg",
+      "listingDate": "2026-03-25",
+      "ageDays": 120,
+      "revenue": 4252824,
+      "sales": 14926,
+      "avgPrice": 285,
+      "revenueGrowth": 0.0409,
+      "orderConv": 0.0021,
+      "cartAdd": 0.1574,
+      "stockoutDays": null,
+      "adRoi": 0.006999999999999999
+    },
+    {
+      "name": "Street Lamp",
+      "type": "路灯",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3900231440",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/9745504159.jpg",
+      "listingDate": "2026-04-10",
+      "ageDays": 104,
+      "revenue": 4171428,
+      "sales": 20082,
+      "avgPrice": 208,
+      "revenueGrowth": -0.11,
+      "orderConv": 0.0046,
+      "cartAdd": 0.1918,
+      "stockoutDays": 5,
+      "adRoi": 0.03
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 97.2,
     "stockoutMedian": 11,
     "stockoutCoverage": 89,
-    "missedRevenue": 6725216.7,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 86.5,
     "promoCoverage": 98.3,
     "adActiveShare": 57.8,
@@ -509,12 +851,34 @@
     "duplicateSku": 17,
     "duplicateUrl": 0,
     "uniqueSku": 983,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 98.3,
+      "impressions": 98.3,
+      "visits": 100,
+      "orderConv": 98.5,
+      "cartAdd": 100,
+      "stock": 89.5,
+      "dailySales": 90.6,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 98.3,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 97.2
+    },
+    "listingDateCoverage": 97.2,
+    "freshProductCount": 277,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“蚊帐纱网”贡献 5.4% 销售额；前五品类合计 18%。",
     "销售额最集中的价格带是 200–500 ₽，覆盖 331 条商品记录，贡献 36.2% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 45.5% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 97.2%；其中 180 天内新品 277 个，贡献 24.9% 样本销售额。"
+  ],
+  "path": "reports/generated/home-repair/index.html"
 }

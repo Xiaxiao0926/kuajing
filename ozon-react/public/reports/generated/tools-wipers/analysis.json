@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-tools-wipers",
   "label": "汽车工具与雨刮",
   "title": "Ozon 汽车工具与雨刮市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23汽车工具和雨刮_清洗版.xlsx",
-  "path": "reports/generated/tools-wipers/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车工具与雨刮市场分析报告",
+  "sourceFile": "ozon-2026-07-23汽车工具和雨刮_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:37.171Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 1250686412,
@@ -345,7 +349,10 @@
       "revenue": 73986457,
       "sales": 18879,
       "avgPrice": 3919,
-      "url": "https://www.ozon.ru/product/2796005351"
+      "url": "https://www.ozon.ru/product/2796005351",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/8323128452.jpg",
+      "listingDate": "2025-09-02",
+      "ageDays": 324
     },
     {
       "name": "3TON Fuel & Oil Canister, 20.001 L",
@@ -355,7 +362,10 @@
       "revenue": 62890765,
       "sales": 16030,
       "avgPrice": 3923,
-      "url": "https://www.ozon.ru/product/2796006506"
+      "url": "https://www.ozon.ru/product/2796006506",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/8323270382.jpg",
+      "listingDate": "2025-09-02",
+      "ageDays": 324
     },
     {
       "name": "3TON Fuel & Oil Canister, 20.003 L",
@@ -365,7 +375,10 @@
       "revenue": 42015043,
       "sales": 11215,
       "avgPrice": 3746,
-      "url": "https://www.ozon.ru/product/2973133514"
+      "url": "https://www.ozon.ru/product/2973133514",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/8324028022.jpg",
+      "listingDate": "2025-10-15",
+      "ageDays": 281
     },
     {
       "name": "3TON Fuel & Oil Canister, 10.002 L",
@@ -375,7 +388,10 @@
       "revenue": 29368625,
       "sales": 15982,
       "avgPrice": 1838,
-      "url": "https://www.ozon.ru/product/2796005716"
+      "url": "https://www.ozon.ru/product/2796005716",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/8323191595.jpg",
+      "listingDate": "2025-09-02",
+      "ageDays": 324
     },
     {
       "name": "3TON Fuel & Oil Canister, 10.001 L",
@@ -385,7 +401,10 @@
       "revenue": 26321930,
       "sales": 14543,
       "avgPrice": 1810,
-      "url": "https://www.ozon.ru/product/2796005546"
+      "url": "https://www.ozon.ru/product/2796005546",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/8323111258.jpg",
+      "listingDate": "2025-09-02",
+      "ageDays": 324
     },
     {
       "name": "Демидовский Fuel & Oil Canister, 20 L",
@@ -395,7 +414,10 @@
       "revenue": 25369465,
       "sales": 3402,
       "avgPrice": 7457,
-      "url": "https://www.ozon.ru/product/1937659012"
+      "url": "https://www.ozon.ru/product/1937659012",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/7459652429.jpg",
+      "listingDate": "2025-03-13",
+      "ageDays": 497
     },
     {
       "name": "ТрансГрупп Fuel & Oil Canister, 30 L",
@@ -405,7 +427,10 @@
       "revenue": 23491575,
       "sales": 8288,
       "avgPrice": 2834,
-      "url": "https://www.ozon.ru/product/4800895273"
+      "url": "https://www.ozon.ru/product/4800895273",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/11716121810.jpg",
+      "listingDate": "2026-06-19",
+      "ageDays": 34
     },
     {
       "name": "Stels Car Jack Rolling, load up to 3 t",
@@ -415,7 +440,10 @@
       "revenue": 23174222,
       "sales": 2339,
       "avgPrice": 9908,
-      "url": "https://www.ozon.ru/product/348517326"
+      "url": "https://www.ozon.ru/product/348517326",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/11704901761.jpg",
+      "listingDate": "2021-10-12",
+      "ageDays": 1745
     },
     {
       "name": "НЕ ТРЕСНЕТ Fuel & Oil Canister, 30 L",
@@ -425,7 +453,10 @@
       "revenue": 18411457,
       "sales": 6694,
       "avgPrice": 2750,
-      "url": "https://www.ozon.ru/product/4731031918"
+      "url": "https://www.ozon.ru/product/4731031918",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/11525491518.jpg",
+      "listingDate": "2026-06-14",
+      "ageDays": 39
     },
     {
       "name": "НЕ ТРЕСНЕТ Fuel & Oil Canister, 20 L",
@@ -435,7 +466,10 @@
       "revenue": 18349235,
       "sales": 8749,
       "avgPrice": 2097,
-      "url": "https://www.ozon.ru/product/4730996186"
+      "url": "https://www.ozon.ru/product/4730996186",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/11525374898.jpg",
+      "listingDate": "2026-06-14",
+      "ageDays": 39
     },
     {
       "name": "Rekidel Fuel & Oil Canister, 20 L",
@@ -445,7 +479,10 @@
       "revenue": 17754872,
       "sales": null,
       "avgPrice": 6969,
-      "url": "https://www.ozon.ru/product/4797843944"
+      "url": "https://www.ozon.ru/product/4797843944",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/12522955510.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "ТрансГрупп Fuel & Oil Canister, 20 L",
@@ -455,7 +492,10 @@
       "revenue": 17316054,
       "sales": 7714,
       "avgPrice": 2245,
-      "url": "https://www.ozon.ru/product/4800861765"
+      "url": "https://www.ozon.ru/product/4800861765",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/11716065641.jpg",
+      "listingDate": "2026-06-19",
+      "ageDays": 34
     },
     {
       "name": "Fuel & Oil Canister, 20 L",
@@ -465,7 +505,10 @@
       "revenue": 17182921,
       "sales": 2702,
       "avgPrice": 6359,
-      "url": "https://www.ozon.ru/product/4731414697"
+      "url": "https://www.ozon.ru/product/4731414697",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/11526652087.jpg",
+      "listingDate": "2026-06-14",
+      "ageDays": 39
     },
     {
       "name": "Rekidel Fuel & Oil Canister, 30 L",
@@ -475,7 +518,10 @@
       "revenue": 16236934,
       "sales": null,
       "avgPrice": 5476,
-      "url": "https://www.ozon.ru/product/4797844273"
+      "url": "https://www.ozon.ru/product/4797844273",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/12522773468.jpg",
+      "listingDate": null,
+      "ageDays": null
     },
     {
       "name": "3TON Fuel & Oil Canister, 5 L",
@@ -485,7 +531,305 @@
       "revenue": 14870192,
       "sales": 27473,
       "avgPrice": 541,
-      "url": "https://www.ozon.ru/product/2762859471"
+      "url": "https://www.ozon.ru/product/2762859471",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/12240282126.jpg",
+      "listingDate": "2025-08-27",
+      "ageDays": 330
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": null,
+      "revenueGrowthCoverage": 0,
+      "impressions": 330507647,
+      "visits": 15251218,
+      "visitRate": 0.0461,
+      "orderConversionMedian": 0.25,
+      "orderConversionCoverage": 89.8,
+      "cartAddMedian": 0.13005,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 28,
+      "stockoutCoverage": 87.1,
+      "missedRevenue": 126598505,
+      "missedRevenueCoverage": 79.1,
+      "inventoryCoverMedian": null,
+      "inventoryCoverCoverage": 0
+    },
+    "marketing": {
+      "discountMedian": 0.1283,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.5395,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.06,
+      "adRoiCoverage": 79.1,
+      "promoActiveShare": 93.7,
+      "adActiveShare": 100
+    },
+    "fulfillment": {
+      "signRateMedian": 0.904,
+      "signRateCoverage": 77.1,
+      "fboShare": 66.8,
+      "deliveryCoverage": 100,
+      "volumeMedian": 3.6,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 77.1,
+      "freshCount": 260,
+      "freshRevenueShare": 28.5,
+      "futureDateCount": 3,
+      "outlierDateCount": 188
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“燃油桶”拆出 2–3 个明确规格，并优先覆盖 2,000–5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 82.8%",
+        "2,000–5,000 ₽ 贡献 46.8% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 77.1%",
+        "180 天内新品 260 个",
+        "新品销售额占样本 28.5%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 87.1%",
+        "缺货天数中位数 28 天",
+        "库存覆盖字段 0%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 89.8%",
+        "下单转化率中位数 25%",
+        "访问率 4.61%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "ТрансГрупп Fuel & Oil Canister, 30 L",
+      "type": "燃油桶",
+      "brand": "ТрансГрупп",
+      "url": "https://www.ozon.ru/product/4800895273",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/11716121810.jpg",
+      "listingDate": "2026-06-19",
+      "ageDays": 34,
+      "revenue": 23491575,
+      "sales": 8288,
+      "avgPrice": 2834,
+      "revenueGrowth": null,
+      "orderConv": 0.34,
+      "cartAdd": 0.084,
+      "stockoutDays": 28,
+      "adRoi": 0.044
+    },
+    {
+      "name": "НЕ ТРЕСНЕТ Fuel & Oil Canister, 30 L",
+      "type": "燃油桶",
+      "brand": "НЕ ТРЕСНЕТ",
+      "url": "https://www.ozon.ru/product/4731031918",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/11525491518.jpg",
+      "listingDate": "2026-06-14",
+      "ageDays": 39,
+      "revenue": 18411457,
+      "sales": 6694,
+      "avgPrice": 2750,
+      "revenueGrowth": null,
+      "orderConv": 0.33,
+      "cartAdd": 0.08039999999999999,
+      "stockoutDays": 28,
+      "adRoi": 0.044
+    },
+    {
+      "name": "НЕ ТРЕСНЕТ Fuel & Oil Canister, 20 L",
+      "type": "燃油桶",
+      "brand": "НЕ ТРЕСНЕТ",
+      "url": "https://www.ozon.ru/product/4730996186",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/11525374898.jpg",
+      "listingDate": "2026-06-14",
+      "ageDays": 39,
+      "revenue": 18349235,
+      "sales": 8749,
+      "avgPrice": 2097,
+      "revenueGrowth": null,
+      "orderConv": 0.2,
+      "cartAdd": 0.0664,
+      "stockoutDays": 28,
+      "adRoi": 0.04
+    },
+    {
+      "name": "ТрансГрупп Fuel & Oil Canister, 20 L",
+      "type": "燃油桶",
+      "brand": "ТрансГрупп",
+      "url": "https://www.ozon.ru/product/4800861765",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/11716065641.jpg",
+      "listingDate": "2026-06-19",
+      "ageDays": 34,
+      "revenue": 17316054,
+      "sales": 7714,
+      "avgPrice": 2245,
+      "revenueGrowth": null,
+      "orderConv": 0.25,
+      "cartAdd": 0.0702,
+      "stockoutDays": 28,
+      "adRoi": 0.03700000000000001
+    },
+    {
+      "name": "Fuel & Oil Canister, 20 L",
+      "type": "燃油桶",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4731414697",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/11526652087.jpg",
+      "listingDate": "2026-06-14",
+      "ageDays": 39,
+      "revenue": 17182921,
+      "sales": 2702,
+      "avgPrice": 6359,
+      "revenueGrowth": null,
+      "orderConv": 0.28,
+      "cartAdd": 0.0683,
+      "stockoutDays": 28,
+      "adRoi": 0
+    },
+    {
+      "name": "Fuel & Oil Canister, 20 L",
+      "type": "燃油桶",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4786351303",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/11862568063.jpg",
+      "listingDate": "2026-06-18",
+      "ageDays": 35,
+      "revenue": 14213936,
+      "sales": 5760,
+      "avgPrice": 2468,
+      "revenueGrowth": null,
+      "orderConv": 0.56,
+      "cartAdd": 0.1109,
+      "stockoutDays": null,
+      "adRoi": 0.021
+    },
+    {
+      "name": "Fuel & Oil Canister, 20 L",
+      "type": "燃油桶",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4757957918",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/11983385947.jpg",
+      "listingDate": "2026-06-16",
+      "ageDays": 37,
+      "revenue": 12712057,
+      "sales": 8487,
+      "avgPrice": 1498,
+      "revenueGrowth": null,
+      "orderConv": 0.22,
+      "cartAdd": 0.1102,
+      "stockoutDays": 28,
+      "adRoi": 0.1
+    },
+    {
+      "name": "ART-RIDER Fuel & Oil Canister, 20.13 L",
+      "type": "燃油桶",
+      "brand": "ART-RIDER",
+      "url": "https://www.ozon.ru/product/4790399197",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/11687694897.jpg",
+      "listingDate": "2026-06-18",
+      "ageDays": 35,
+      "revenue": 10897759,
+      "sales": 3204,
+      "avgPrice": 3401,
+      "revenueGrowth": null,
+      "orderConv": 0.15,
+      "cartAdd": 0.04769999999999999,
+      "stockoutDays": 28,
+      "adRoi": 0.031
+    },
+    {
+      "name": "ART-RIDER Fuel & Oil Canister, 20.14 L",
+      "type": "燃油桶",
+      "brand": "ART-RIDER",
+      "url": "https://www.ozon.ru/product/4790570812",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/11689046308.jpg",
+      "listingDate": "2026-06-18",
+      "ageDays": 35,
+      "revenue": 10488041,
+      "sales": 3069,
+      "avgPrice": 3417,
+      "revenueGrowth": null,
+      "orderConv": 0.11,
+      "cartAdd": 0.0491,
+      "stockoutDays": 28,
+      "adRoi": 0.033
+    },
+    {
+      "name": "Fuel & Oil Canister, 20,0 L",
+      "type": "燃油桶",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4719382324",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/12184797717.jpg",
+      "listingDate": "2026-06-13",
+      "ageDays": 40,
+      "revenue": 9931841,
+      "sales": 2528,
+      "avgPrice": 3929,
+      "revenueGrowth": null,
+      "orderConv": 0.2,
+      "cartAdd": 0.0645,
+      "stockoutDays": 28,
+      "adRoi": 0.096
+    },
+    {
+      "name": "ART-LEV Fuel & Oil Canister, 20 L",
+      "type": "燃油桶",
+      "brand": "ART-LEV",
+      "url": "https://www.ozon.ru/product/4815083568",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/11759038490.jpg",
+      "listingDate": "2026-06-21",
+      "ageDays": 32,
+      "revenue": 8130680,
+      "sales": 3456,
+      "avgPrice": 2353,
+      "revenueGrowth": null,
+      "orderConv": 0.23,
+      "cartAdd": 0.08460000000000001,
+      "stockoutDays": 28,
+      "adRoi": 0
+    },
+    {
+      "name": "Rekidel Fuel & Oil Canister, 20 L",
+      "type": "燃油桶",
+      "brand": "Rekidel",
+      "url": "https://www.ozon.ru/product/4811368296",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/11488308790.jpg",
+      "listingDate": "2026-06-21",
+      "ageDays": 32,
+      "revenue": 7508250,
+      "sales": 2809,
+      "avgPrice": 2673,
+      "revenueGrowth": null,
+      "orderConv": 0.09,
+      "cartAdd": 0.0802,
+      "stockoutDays": null,
+      "adRoi": 0.121
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 77.1,
     "stockoutMedian": 28,
     "stockoutCoverage": 87.1,
-    "missedRevenue": 126598505,
-    "missedRevenueCoverage": 79.1,
     "promoActiveShare": 93.7,
     "promoCoverage": 100,
     "adActiveShare": 100,
@@ -509,12 +851,34 @@
     "duplicateSku": 27,
     "duplicateUrl": 0,
     "uniqueSku": 973,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 0,
+      "impressions": 79.1,
+      "visits": 100,
+      "orderConv": 89.8,
+      "cartAdd": 100,
+      "stock": 100,
+      "dailySales": 0,
+      "missedRevenue": 79.1,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 79.1,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 77.1
+    },
+    "listingDateCoverage": 77.1,
+    "freshProductCount": 260,
+    "futureListingDateCount": 3,
+    "outlierListingDateCount": 188
   },
   "insights": [
     "头部品类“燃油桶”贡献 82.8% 销售额；前五品类合计 98.1%。",
     "销售额最集中的价格带是 2,000–5,000 ₽，覆盖 170 条商品记录，贡献 46.8% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 77.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 79.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 79.1%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 77.1%；其中 180 天内新品 260 个，贡献 28.5% 样本销售额。"
+  ],
+  "path": "reports/generated/tools-wipers/index.html"
 }

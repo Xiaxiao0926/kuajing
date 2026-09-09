@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-adult-products",
   "label": "成人用品",
   "title": "Ozon 成人用品市场分析",
   "group": "宠物与生活",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23成人用品_清洗版.xlsx",
-  "path": "reports/generated/adult-products/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 成人用品市场分析报告",
+  "sourceFile": "ozon-2026-07-23成人用品_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:35.877Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 398333622,
@@ -345,7 +349,10 @@
       "revenue": 8182121,
       "sales": 3021,
       "avgPrice": 2708,
-      "url": "https://www.ozon.ru/product/1661718352"
+      "url": "https://www.ozon.ru/product/1661718352",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/7432020214.jpg",
+      "listingDate": "2024-08-18",
+      "ageDays": 704
     },
     {
       "name": "Wicked Games Vibrator",
@@ -355,7 +362,10 @@
       "revenue": 8094667,
       "sales": 5624,
       "avgPrice": 1439,
-      "url": "https://www.ozon.ru/product/976734881"
+      "url": "https://www.ozon.ru/product/976734881",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/9122789513.jpg",
+      "listingDate": "2023-05-11",
+      "ageDays": 1169
     },
     {
       "name": "POSY Masturbator",
@@ -365,7 +375,10 @@
       "revenue": 5789042,
       "sales": 1299,
       "avgPrice": 4457,
-      "url": "https://www.ozon.ru/product/4686889910"
+      "url": "https://www.ozon.ru/product/4686889910",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/12755577968.jpg",
+      "listingDate": "2026-06-11",
+      "ageDays": 42
     },
     {
       "name": "Private Secrets Masturbator",
@@ -375,7 +388,10 @@
       "revenue": 4790374,
       "sales": 2161,
       "avgPrice": 2217,
-      "url": "https://www.ozon.ru/product/1852568191"
+      "url": "https://www.ozon.ru/product/1852568191",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/10788571120.jpg",
+      "listingDate": "2025-01-31",
+      "ageDays": 538
     },
     {
       "name": "kGoal Kegel Simulator",
@@ -385,7 +401,10 @@
       "revenue": 4281098,
       "sales": 270,
       "avgPrice": 15856,
-      "url": "https://www.ozon.ru/product/4234322603"
+      "url": "https://www.ozon.ru/product/4234322603",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/7572695562.jpg",
+      "listingDate": "2026-05-08",
+      "ageDays": 76
     },
     {
       "name": "POSY Masturbator",
@@ -395,7 +414,10 @@
       "revenue": 3637538,
       "sales": 1226,
       "avgPrice": 2967,
-      "url": "https://www.ozon.ru/product/4582177188"
+      "url": "https://www.ozon.ru/product/4582177188",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/11933781558.jpg",
+      "listingDate": "2026-06-04",
+      "ageDays": 49
     },
     {
       "name": "Mystic Muse Masturbator",
@@ -405,7 +427,10 @@
       "revenue": 3584571,
       "sales": 833,
       "avgPrice": 4303,
-      "url": "https://www.ozon.ru/product/3726503912"
+      "url": "https://www.ozon.ru/product/3726503912",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9654714803.jpg",
+      "listingDate": "2026-03-23",
+      "ageDays": 122
     },
     {
       "name": "Mystic Muse Vibrator",
@@ -415,7 +440,10 @@
       "revenue": 3111838,
       "sales": 2428,
       "avgPrice": 1282,
-      "url": "https://www.ozon.ru/product/1620063199"
+      "url": "https://www.ozon.ru/product/1620063199",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/12250044831.jpg",
+      "listingDate": "2024-07-03",
+      "ageDays": 750
     },
     {
       "name": "Private Secrets Masturbator",
@@ -425,7 +453,10 @@
       "revenue": 3087083,
       "sales": 840,
       "avgPrice": 3675,
-      "url": "https://www.ozon.ru/product/4383119031"
+      "url": "https://www.ozon.ru/product/4383119031",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/11084678104.jpg",
+      "listingDate": "2026-05-20",
+      "ageDays": 64
     },
     {
       "name": "Private Secrets Masturbator",
@@ -435,7 +466,10 @@
       "revenue": 3073232,
       "sales": 3356,
       "avgPrice": 916,
-      "url": "https://www.ozon.ru/product/1735536922"
+      "url": "https://www.ozon.ru/product/1735536922",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/10431194434.jpg",
+      "listingDate": "2024-10-21",
+      "ageDays": 640
     },
     {
       "name": "Wicked Games Vibrating Egg",
@@ -445,7 +479,10 @@
       "revenue": 3072726,
       "sales": 2805,
       "avgPrice": 1095,
-      "url": "https://www.ozon.ru/product/1225340882"
+      "url": "https://www.ozon.ru/product/1225340882",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/8241574839.jpg",
+      "listingDate": "2023-10-06",
+      "ageDays": 1021
     },
     {
       "name": "POSY Masturbator",
@@ -455,7 +492,10 @@
       "revenue": 2922461,
       "sales": 1497,
       "avgPrice": 1952,
-      "url": "https://www.ozon.ru/product/4582326039"
+      "url": "https://www.ozon.ru/product/4582326039",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/7843754808.jpg",
+      "listingDate": "2026-06-04",
+      "ageDays": 49
     },
     {
       "name": "TONIS Kegel Simulator",
@@ -465,7 +505,10 @@
       "revenue": 2703294,
       "sales": 193,
       "avgPrice": 14007,
-      "url": "https://www.ozon.ru/product/1567924457"
+      "url": "https://www.ozon.ru/product/1567924457",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/8085544849.jpg",
+      "listingDate": "2024-05-07",
+      "ageDays": 807
     },
     {
       "name": "JAZZER Vibrator",
@@ -475,7 +518,10 @@
       "revenue": 2688239,
       "sales": 915,
       "avgPrice": 2938,
-      "url": "https://www.ozon.ru/product/1066374574"
+      "url": "https://www.ozon.ru/product/1066374574",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9011097191.jpg",
+      "listingDate": "2023-07-06",
+      "ageDays": 1113
     },
     {
       "name": "ilo Vibrator",
@@ -485,7 +531,305 @@
       "revenue": 2619604,
       "sales": 2168,
       "avgPrice": 1208,
-      "url": "https://www.ozon.ru/product/4292987468"
+      "url": "https://www.ozon.ru/product/4292987468",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/10443096417.jpg",
+      "listingDate": "2026-05-13",
+      "ageDays": 71
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.07805000000000001,
+      "revenueGrowthCoverage": 93.4,
+      "impressions": 251106580,
+      "visits": 13300185,
+      "visitRate": 0.053,
+      "orderConversionMedian": 0.0018,
+      "orderConversionCoverage": 98.2,
+      "cartAddMedian": 0.0766,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 11,
+      "stockoutCoverage": 93.2,
+      "missedRevenue": 5860414.8,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 25.666666666666668,
+      "inventoryCoverCoverage": 95.8
+    },
+    "marketing": {
+      "discountMedian": 0.2918,
+      "discountCoverage": 100,
+      "promoShareMedian": 1,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.133,
+      "adRoiCoverage": 93.4,
+      "promoActiveShare": 88.7,
+      "adActiveShare": 76.1
+    },
+    "fulfillment": {
+      "signRateMedian": 0.8535,
+      "signRateCoverage": 93.4,
+      "fboShare": 92.9,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.6,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 93.4,
+      "freshCount": 297,
+      "freshRevenueShare": 33.9,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“振动器”拆出 2–3 个明确规格，并优先覆盖 500–1,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 30%",
+        "500–1,000 ₽ 贡献 28.9% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 93.4%",
+        "180 天内新品 297 个",
+        "新品销售额占样本 33.9%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 93.2%",
+        "缺货天数中位数 11 天",
+        "库存覆盖字段 95.8%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 98.2%",
+        "下单转化率中位数 0.2%",
+        "访问率 5.3%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "POSY Masturbator",
+      "type": "飞机杯",
+      "brand": "POSY",
+      "url": "https://www.ozon.ru/product/4686889910",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/12755577968.jpg",
+      "listingDate": "2026-06-11",
+      "ageDays": 42,
+      "revenue": 5789042,
+      "sales": 1299,
+      "avgPrice": 4457,
+      "revenueGrowth": 0.8898,
+      "orderConv": 0.0009,
+      "cartAdd": 0.0397,
+      "stockoutDays": 9,
+      "adRoi": 0.198
+    },
+    {
+      "name": "kGoal Kegel Simulator",
+      "type": "凯格尔训练器",
+      "brand": "kGoal",
+      "url": "https://www.ozon.ru/product/4234322603",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/7572695562.jpg",
+      "listingDate": "2026-05-08",
+      "ageDays": 76,
+      "revenue": 4281098,
+      "sales": 270,
+      "avgPrice": 15856,
+      "revenueGrowth": 0.016,
+      "orderConv": 0.0037,
+      "cartAdd": 0.085,
+      "stockoutDays": 11,
+      "adRoi": 0
+    },
+    {
+      "name": "POSY Masturbator",
+      "type": "飞机杯",
+      "brand": "POSY",
+      "url": "https://www.ozon.ru/product/4582177188",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/11933781558.jpg",
+      "listingDate": "2026-06-04",
+      "ageDays": 49,
+      "revenue": 3637538,
+      "sales": 1226,
+      "avgPrice": 2967,
+      "revenueGrowth": 0.3807,
+      "orderConv": 0.0013,
+      "cartAdd": 0.0476,
+      "stockoutDays": 6,
+      "adRoi": 0.158
+    },
+    {
+      "name": "Mystic Muse Masturbator",
+      "type": "飞机杯",
+      "brand": "Mystic Muse",
+      "url": "https://www.ozon.ru/product/3726503912",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9654714803.jpg",
+      "listingDate": "2026-03-23",
+      "ageDays": 122,
+      "revenue": 3584571,
+      "sales": 833,
+      "avgPrice": 4303,
+      "revenueGrowth": 0.07,
+      "orderConv": 0.0005,
+      "cartAdd": 0.0359,
+      "stockoutDays": 8,
+      "adRoi": 0.18
+    },
+    {
+      "name": "Private Secrets Masturbator",
+      "type": "飞机杯",
+      "brand": "Private Secrets",
+      "url": "https://www.ozon.ru/product/4383119031",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/11084678104.jpg",
+      "listingDate": "2026-05-20",
+      "ageDays": 64,
+      "revenue": 3087083,
+      "sales": 840,
+      "avgPrice": 3675,
+      "revenueGrowth": 0.1,
+      "orderConv": 0.0006,
+      "cartAdd": 0.0292,
+      "stockoutDays": 8,
+      "adRoi": 0.273
+    },
+    {
+      "name": "POSY Masturbator",
+      "type": "飞机杯",
+      "brand": "POSY",
+      "url": "https://www.ozon.ru/product/4582326039",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/7843754808.jpg",
+      "listingDate": "2026-06-04",
+      "ageDays": 49,
+      "revenue": 2922461,
+      "sales": 1497,
+      "avgPrice": 1952,
+      "revenueGrowth": 0.3307,
+      "orderConv": 0.0017,
+      "cartAdd": 0.0658,
+      "stockoutDays": 3,
+      "adRoi": 0.146
+    },
+    {
+      "name": "ilo Vibrator",
+      "type": "振动器",
+      "brand": "ilo",
+      "url": "https://www.ozon.ru/product/4292987468",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/10443096417.jpg",
+      "listingDate": "2026-05-13",
+      "ageDays": 71,
+      "revenue": 2619604,
+      "sales": 2168,
+      "avgPrice": 1208,
+      "revenueGrowth": 0.49,
+      "orderConv": 0.0024,
+      "cartAdd": 0.09369999999999999,
+      "stockoutDays": 11,
+      "adRoi": 0.189
+    },
+    {
+      "name": "Prostate Massager",
+      "type": "前列腺按摩器",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4484657066",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/12556754927.jpg",
+      "listingDate": "2026-05-28",
+      "ageDays": 56,
+      "revenue": 2560033,
+      "sales": 1335,
+      "avgPrice": 1918,
+      "revenueGrowth": 0.0684,
+      "orderConv": 0.0018,
+      "cartAdd": 0.0694,
+      "stockoutDays": 7,
+      "adRoi": 0.122
+    },
+    {
+      "name": "POSY Masturbator",
+      "type": "飞机杯",
+      "brand": "POSY",
+      "url": "https://www.ozon.ru/product/3585208057",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/9511991202.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141,
+      "revenue": 2237396,
+      "sales": 538,
+      "avgPrice": 4159,
+      "revenueGrowth": 0.01,
+      "orderConv": 0.001,
+      "cartAdd": 0.0353,
+      "stockoutDays": 6,
+      "adRoi": 0.168
+    },
+    {
+      "name": "elimur Vibrator",
+      "type": "振动器",
+      "brand": "elimur",
+      "url": "https://www.ozon.ru/product/3499356164",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/12791462682.jpg",
+      "listingDate": "2026-02-05",
+      "ageDays": 168,
+      "revenue": 2034824,
+      "sales": 1415,
+      "avgPrice": 1438,
+      "revenueGrowth": -0.5,
+      "orderConv": 0.0017,
+      "cartAdd": 0.0545,
+      "stockoutDays": 8,
+      "adRoi": 0.18
+    },
+    {
+      "name": "G&K Band Sex Machine",
+      "type": "性爱机器",
+      "brand": "G&K Band",
+      "url": "https://www.ozon.ru/product/4128433557",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/10302892387.jpg",
+      "listingDate": "2026-04-29",
+      "ageDays": 85,
+      "revenue": 1860169,
+      "sales": 399,
+      "avgPrice": 4662,
+      "revenueGrowth": 0.15,
+      "orderConv": 0.0007000000000000001,
+      "cartAdd": 0.0344,
+      "stockoutDays": 18,
+      "adRoi": 0.064
+    },
+    {
+      "name": "ilo Vibrator",
+      "type": "振动器",
+      "brand": "ilo",
+      "url": "https://www.ozon.ru/product/3805377762",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-w/11223415436.jpg",
+      "listingDate": "2026-04-01",
+      "ageDays": 113,
+      "revenue": 1752852,
+      "sales": 1282,
+      "avgPrice": 1367,
+      "revenueGrowth": -0.27,
+      "orderConv": 0.0011,
+      "cartAdd": 0.0649,
+      "stockoutDays": 7,
+      "adRoi": 0.3
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 93.4,
     "stockoutMedian": 11,
     "stockoutCoverage": 93.2,
-    "missedRevenue": 5860414.8,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 88.7,
     "promoCoverage": 93.4,
     "adActiveShare": 76.1,
@@ -509,12 +851,34 @@
     "duplicateSku": 9,
     "duplicateUrl": 0,
     "uniqueSku": 991,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 93.4,
+      "impressions": 93.4,
+      "visits": 100,
+      "orderConv": 98.2,
+      "cartAdd": 100,
+      "stock": 96.1,
+      "dailySales": 99.5,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 93.4,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 93.4
+    },
+    "listingDateCoverage": 93.4,
+    "freshProductCount": 297,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“振动器”贡献 30% 销售额；前五品类合计 72.3%。",
     "销售额最集中的价格带是 500–1,000 ₽，覆盖 335 条商品记录，贡献 28.9% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 55.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 93.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 93.4%；其中 180 天内新品 297 个，贡献 33.9% 样本销售额。"
+  ],
+  "path": "reports/generated/adult-products/index.html"
 }

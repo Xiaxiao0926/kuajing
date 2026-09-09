@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-body-parts",
   "label": "车体配件",
   "title": "Ozon 车体配件市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23车体配件_清洗版.xlsx",
-  "path": "reports/generated/body-parts/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 车体配件市场分析报告",
+  "sourceFile": "ozon-2026-07-23车体配件_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:35.706Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 132244592,
@@ -345,7 +349,10 @@
       "revenue": 2466695,
       "sales": 524,
       "avgPrice": 4707,
-      "url": "https://www.ozon.ru/product/3279859581"
+      "url": "https://www.ozon.ru/product/3279859581",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/9560944066.jpg",
+      "listingDate": "2025-12-24",
+      "ageDays": 211
     },
     {
       "name": "Barracuda Tow Hitch",
@@ -355,7 +362,10 @@
       "revenue": 1979870,
       "sales": 394,
       "avgPrice": 5025,
-      "url": "https://www.ozon.ru/product/3279858274"
+      "url": "https://www.ozon.ru/product/3279858274",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/10702770993.jpg",
+      "listingDate": "2025-12-24",
+      "ageDays": 211
     },
     {
       "name": "Set Dead Zone Mirror",
@@ -365,7 +375,10 @@
       "revenue": 1130769,
       "sales": 10565,
       "avgPrice": 107,
-      "url": "https://www.ozon.ru/product/2678055266"
+      "url": "https://www.ozon.ru/product/2678055266",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/7820063378.jpg",
+      "listingDate": "2025-08-14",
+      "ageDays": 343
     },
     {
       "name": "Automobile Plastics Factory Set Side-View Mirror",
@@ -375,7 +388,10 @@
       "revenue": 1106330,
       "sales": 434,
       "avgPrice": 2549,
-      "url": "https://www.ozon.ru/product/476971134"
+      "url": "https://www.ozon.ru/product/476971134",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/7581242599.jpg",
+      "listingDate": "2022-01-25",
+      "ageDays": 1640
     },
     {
       "name": "Automobile Plastics Factory Set Side-View Mirror",
@@ -385,7 +401,10 @@
       "revenue": 1006779,
       "sales": 375,
       "avgPrice": 2685,
-      "url": "https://www.ozon.ru/product/476975656"
+      "url": "https://www.ozon.ru/product/476975656",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/7579020098.jpg",
+      "listingDate": "2022-01-25",
+      "ageDays": 1640
     },
     {
       "name": "Barracuda Tow Hitch",
@@ -395,7 +414,10 @@
       "revenue": 987228,
       "sales": 189,
       "avgPrice": 5223,
-      "url": "https://www.ozon.ru/product/3301181279"
+      "url": "https://www.ozon.ru/product/3301181279",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-w/9076871624.jpg",
+      "listingDate": "2025-12-29",
+      "ageDays": 206
     },
     {
       "name": "Barracuda Tow Hitch",
@@ -405,7 +427,10 @@
       "revenue": 930989,
       "sales": 155,
       "avgPrice": 6006,
-      "url": "https://www.ozon.ru/product/3536180973"
+      "url": "https://www.ozon.ru/product/3536180973",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/11863374757.jpg",
+      "listingDate": "2026-02-16",
+      "ageDays": 157
     },
     {
       "name": "Set Side-View Mirror",
@@ -415,7 +440,10 @@
       "revenue": 863848,
       "sales": 269,
       "avgPrice": 3211,
-      "url": "https://www.ozon.ru/product/3555856319"
+      "url": "https://www.ozon.ru/product/3555856319",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/9127359005.jpg",
+      "listingDate": "2026-02-25",
+      "ageDays": 148
     },
     {
       "name": "Barracuda Tow Hitch",
@@ -425,7 +453,10 @@
       "revenue": 862053,
       "sales": 98,
       "avgPrice": 8796,
-      "url": "https://www.ozon.ru/product/3552674532"
+      "url": "https://www.ozon.ru/product/3552674532",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/9121138911.jpg",
+      "listingDate": "2026-02-24",
+      "ageDays": 149
     },
     {
       "name": "Barracuda Tow Hitch",
@@ -435,7 +466,10 @@
       "revenue": 823648,
       "sales": 144,
       "avgPrice": 5720,
-      "url": "https://www.ozon.ru/product/3618783946"
+      "url": "https://www.ozon.ru/product/3618783946",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9251344942.jpg",
+      "listingDate": "2026-03-10",
+      "ageDays": 135
     },
     {
       "name": "Barracuda Tow Hitch",
@@ -445,7 +479,10 @@
       "revenue": 777710,
       "sales": 151,
       "avgPrice": 5150,
-      "url": "https://www.ozon.ru/product/3382527499"
+      "url": "https://www.ozon.ru/product/3382527499",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/9094933357.jpg",
+      "listingDate": "2026-01-14",
+      "ageDays": 190
     },
     {
       "name": "Спец-Автопласт Car Fender",
@@ -455,7 +492,10 @@
       "revenue": 770634,
       "sales": 149,
       "avgPrice": 5172,
-      "url": "https://www.ozon.ru/product/3126588188"
+      "url": "https://www.ozon.ru/product/3126588188",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/8357512508.jpg",
+      "listingDate": "2025-11-19",
+      "ageDays": 246
     },
     {
       "name": "Фаркопы Урала Tow Hitch",
@@ -465,7 +505,10 @@
       "revenue": 728493,
       "sales": 111,
       "avgPrice": 6563,
-      "url": "https://www.ozon.ru/product/3520456699"
+      "url": "https://www.ozon.ru/product/3520456699",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/9076859188.jpg",
+      "listingDate": "2026-02-10",
+      "ageDays": 163
     },
     {
       "name": "Barracuda Tow Hitch",
@@ -475,7 +518,10 @@
       "revenue": 716678,
       "sales": 131,
       "avgPrice": 5471,
-      "url": "https://www.ozon.ru/product/3624337357"
+      "url": "https://www.ozon.ru/product/3624337357",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/9259828519.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134
     },
     {
       "name": "ОДО КД Car Fender",
@@ -485,7 +531,305 @@
       "revenue": 716569,
       "sales": 296,
       "avgPrice": 2421,
-      "url": "https://www.ozon.ru/product/2679497881"
+      "url": "https://www.ozon.ru/product/2679497881",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/7814111904.jpg",
+      "listingDate": "2025-08-14",
+      "ageDays": 343
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.03,
+      "revenueGrowthCoverage": 98.3,
+      "impressions": 81159584,
+      "visits": 2633680,
+      "visitRate": 0.0325,
+      "orderConversionMedian": 0.0027,
+      "orderConversionCoverage": 99.9,
+      "cartAddMedian": 0.12585000000000002,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 18,
+      "stockoutCoverage": 92.5,
+      "missedRevenue": 6160720.7,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 28.23611111111111,
+      "inventoryCoverCoverage": 88.6
+    },
+    "marketing": {
+      "discountMedian": 0.0741,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.49995,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.001,
+      "adRoiCoverage": 98.3,
+      "promoActiveShare": 72.4,
+      "adActiveShare": 20.7
+    },
+    "fulfillment": {
+      "signRateMedian": 0.91,
+      "signRateCoverage": 97.9,
+      "fboShare": 87.5,
+      "deliveryCoverage": 100,
+      "volumeMedian": 1.3,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 97.9,
+      "freshCount": 180,
+      "freshRevenueShare": 19.4,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“拖车钩”拆出 2–3 个明确规格，并优先覆盖 2,000–5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 17.3%",
+        "2,000–5,000 ₽ 贡献 28.2% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 97.9%",
+        "180 天内新品 180 个",
+        "新品销售额占样本 19.4%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 92.5%",
+        "缺货天数中位数 18 天",
+        "库存覆盖字段 88.6%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 99.9%",
+        "下单转化率中位数 0.3%",
+        "访问率 3.25%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Barracuda Tow Hitch",
+      "type": "拖车钩",
+      "brand": "Barracuda",
+      "url": "https://www.ozon.ru/product/3536180973",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/11863374757.jpg",
+      "listingDate": "2026-02-16",
+      "ageDays": 157,
+      "revenue": 930989,
+      "sales": 155,
+      "avgPrice": 6006,
+      "revenueGrowth": 0.31,
+      "orderConv": 0.002,
+      "cartAdd": 0.0944,
+      "stockoutDays": 23,
+      "adRoi": 0
+    },
+    {
+      "name": "Set Side-View Mirror",
+      "type": "侧视镜",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3555856319",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/9127359005.jpg",
+      "listingDate": "2026-02-25",
+      "ageDays": 148,
+      "revenue": 863848,
+      "sales": 269,
+      "avgPrice": 3211,
+      "revenueGrowth": 0.0138,
+      "orderConv": 0.004099999999999999,
+      "cartAdd": 0.1454,
+      "stockoutDays": 21,
+      "adRoi": 0
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "type": "拖车钩",
+      "brand": "Barracuda",
+      "url": "https://www.ozon.ru/product/3552674532",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/9121138911.jpg",
+      "listingDate": "2026-02-24",
+      "ageDays": 149,
+      "revenue": 862053,
+      "sales": 98,
+      "avgPrice": 8796,
+      "revenueGrowth": 0,
+      "orderConv": 0.0027,
+      "cartAdd": 0.1057,
+      "stockoutDays": 27,
+      "adRoi": 0
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "type": "拖车钩",
+      "brand": "Barracuda",
+      "url": "https://www.ozon.ru/product/3618783946",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9251344942.jpg",
+      "listingDate": "2026-03-10",
+      "ageDays": 135,
+      "revenue": 823648,
+      "sales": 144,
+      "avgPrice": 5720,
+      "revenueGrowth": 0.65,
+      "orderConv": 0.0022,
+      "cartAdd": 0.1122,
+      "stockoutDays": 24,
+      "adRoi": 0.006999999999999999
+    },
+    {
+      "name": "Фаркопы Урала Tow Hitch",
+      "type": "拖车钩",
+      "brand": "Фаркопы Урала",
+      "url": "https://www.ozon.ru/product/3520456699",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/9076859188.jpg",
+      "listingDate": "2026-02-10",
+      "ageDays": 163,
+      "revenue": 728493,
+      "sales": 111,
+      "avgPrice": 6563,
+      "revenueGrowth": 0.57,
+      "orderConv": 0.002,
+      "cartAdd": 0.09949999999999999,
+      "stockoutDays": 27,
+      "adRoi": 0.052
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "type": "拖车钩",
+      "brand": "Barracuda",
+      "url": "https://www.ozon.ru/product/3624337357",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-v/9259828519.jpg",
+      "listingDate": "2026-03-11",
+      "ageDays": 134,
+      "revenue": 716678,
+      "sales": 131,
+      "avgPrice": 5471,
+      "revenueGrowth": 0.0915,
+      "orderConv": 0.0023,
+      "cartAdd": 0.1149,
+      "stockoutDays": 27,
+      "adRoi": 0
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "type": "拖车钩",
+      "brand": "Barracuda",
+      "url": "https://www.ozon.ru/product/3618783409",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/9251502198.jpg",
+      "listingDate": "2026-03-10",
+      "ageDays": 135,
+      "revenue": 666653,
+      "sales": 98,
+      "avgPrice": 6803,
+      "revenueGrowth": -0.4,
+      "orderConv": 0.0021,
+      "cartAdd": 0.0729,
+      "stockoutDays": 13,
+      "adRoi": 0
+    },
+    {
+      "name": "Set Side-View Mirror",
+      "type": "侧视镜",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3541068785",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/9100379269.jpg",
+      "listingDate": "2026-02-18",
+      "ageDays": 155,
+      "revenue": 597790,
+      "sales": 161,
+      "avgPrice": 3713,
+      "revenueGrowth": 0.27,
+      "orderConv": 0.0027,
+      "cartAdd": 0.1038,
+      "stockoutDays": 13,
+      "adRoi": 0
+    },
+    {
+      "name": "Set Side-View Mirror",
+      "type": "侧视镜",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3539520362",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/9100354732.jpg",
+      "listingDate": "2026-02-17",
+      "ageDays": 156,
+      "revenue": 560614,
+      "sales": 150,
+      "avgPrice": 3737,
+      "revenueGrowth": 0.011000000000000001,
+      "orderConv": 0.0034,
+      "cartAdd": 0.1262,
+      "stockoutDays": 26,
+      "adRoi": 0
+    },
+    {
+      "name": "UAZ-PARTS Set Side-View Mirror",
+      "type": "侧视镜",
+      "brand": "UAZ-PARTS",
+      "url": "https://www.ozon.ru/product/3539129846",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/9249192372.jpg",
+      "listingDate": "2026-02-17",
+      "ageDays": 156,
+      "revenue": 546550,
+      "sales": 93,
+      "avgPrice": 5877,
+      "revenueGrowth": 0.53,
+      "orderConv": 0.004500000000000001,
+      "cartAdd": 0.1238,
+      "stockoutDays": 27,
+      "adRoi": 0
+    },
+    {
+      "name": "Barracuda Tow Hitch",
+      "type": "拖车钩",
+      "brand": "Barracuda",
+      "url": "https://www.ozon.ru/product/3538747075",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/9090958147.jpg",
+      "listingDate": "2026-02-17",
+      "ageDays": 156,
+      "revenue": 508835,
+      "sales": 84,
+      "avgPrice": 6058,
+      "revenueGrowth": -0.18,
+      "orderConv": 0.0032,
+      "cartAdd": 0.1169,
+      "stockoutDays": 26,
+      "adRoi": 0
+    },
+    {
+      "name": "Bumper",
+      "type": "保险杠",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3967831943",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/12543485105.jpg",
+      "listingDate": "2026-04-16",
+      "ageDays": 98,
+      "revenue": 500474,
+      "sales": 108,
+      "avgPrice": 4634,
+      "revenueGrowth": -0.02,
+      "orderConv": 0.0013,
+      "cartAdd": 0.1039,
+      "stockoutDays": 27,
+      "adRoi": 0.005
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 97.9,
     "stockoutMedian": 18,
     "stockoutCoverage": 92.5,
-    "missedRevenue": 6160720.7,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 72.4,
     "promoCoverage": 98.3,
     "adActiveShare": 20.7,
@@ -509,12 +851,34 @@
     "duplicateSku": 18,
     "duplicateUrl": 0,
     "uniqueSku": 982,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 98.3,
+      "impressions": 98.3,
+      "visits": 100,
+      "orderConv": 99.9,
+      "cartAdd": 100,
+      "stock": 88.8,
+      "dailySales": 94,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 98.3,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 97.9
+    },
+    "listingDateCoverage": 97.9,
+    "freshProductCount": 180,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“拖车钩”贡献 17.3% 销售额；前五品类合计 63.7%。",
     "销售额最集中的价格带是 2,000–5,000 ₽，覆盖 101 条商品记录，贡献 28.2% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 63.1% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 98.3%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 97.9%；其中 180 天内新品 180 个，贡献 19.4% 样本销售额。"
+  ],
+  "path": "reports/generated/body-parts/index.html"
 }

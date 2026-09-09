@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-car-electronics",
   "label": "汽车电子",
   "title": "Ozon 汽车电子市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23汽车电子_清洗版.xlsx",
-  "path": "reports/generated/car-electronics/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车电子市场分析报告",
+  "sourceFile": "ozon-2026-07-23汽车电子_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:36.886Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 56703459,
@@ -345,7 +349,10 @@
       "revenue": 2143284,
       "sales": 1886,
       "avgPrice": 1136,
-      "url": "https://www.ozon.ru/product/1506496610"
+      "url": "https://www.ozon.ru/product/1506496610",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/9851057689.jpg",
+      "listingDate": "2024-03-27",
+      "ageDays": 848
     },
     {
       "name": "Car Fan, 20 W",
@@ -355,7 +362,10 @@
       "revenue": 1900665,
       "sales": 1839,
       "avgPrice": 1034,
-      "url": "https://www.ozon.ru/product/4554085023"
+      "url": "https://www.ozon.ru/product/4554085023",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/11070837899.jpg",
+      "listingDate": "2026-06-02",
+      "ageDays": 51
     },
     {
       "name": "PKBFLOW Car Fan, 12 W",
@@ -365,7 +375,10 @@
       "revenue": 1169470,
       "sales": 834,
       "avgPrice": 1402,
-      "url": "https://www.ozon.ru/product/2017533562"
+      "url": "https://www.ozon.ru/product/2017533562",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/10632492937.jpg",
+      "listingDate": "2025-04-10",
+      "ageDays": 469
     },
     {
       "name": "Prooofi Distribution Car Fan, 10.1 W",
@@ -375,7 +388,10 @@
       "revenue": 1018954,
       "sales": 1024,
       "avgPrice": 995,
-      "url": "https://www.ozon.ru/product/1235471824"
+      "url": "https://www.ozon.ru/product/1235471824",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/10419038892.jpg",
+      "listingDate": "2023-10-11",
+      "ageDays": 1016
     },
     {
       "name": "AVS Car Fan, 10 W",
@@ -385,7 +401,10 @@
       "revenue": 938114,
       "sales": 1273,
       "avgPrice": 737,
-      "url": "https://www.ozon.ru/product/3543671617"
+      "url": "https://www.ozon.ru/product/3543671617",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/9101351955.jpg",
+      "listingDate": "2026-02-19",
+      "ageDays": 154
     },
     {
       "name": "AVS Car Fan, 14 W",
@@ -395,7 +414,10 @@
       "revenue": 882872,
       "sales": 1126,
       "avgPrice": 784,
-      "url": "https://www.ozon.ru/product/3543696515"
+      "url": "https://www.ozon.ru/product/3543696515",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9101412718.jpg",
+      "listingDate": "2026-02-19",
+      "ageDays": 154
     },
     {
       "name": "Podofo Distribution Car Fan, 10.1 W",
@@ -405,7 +427,10 @@
       "revenue": 869260,
       "sales": 812,
       "avgPrice": 1071,
-      "url": "https://www.ozon.ru/product/992571851"
+      "url": "https://www.ozon.ru/product/992571851",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/10227070430.jpg",
+      "listingDate": "2023-05-22",
+      "ageDays": 1158
     },
     {
       "name": "TAKARA Car Fan, 24 W",
@@ -415,7 +440,10 @@
       "revenue": 735520,
       "sales": 416,
       "avgPrice": 1768,
-      "url": "https://www.ozon.ru/product/2046747138"
+      "url": "https://www.ozon.ru/product/2046747138",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/10324821841.jpg",
+      "listingDate": "2025-04-18",
+      "ageDays": 461
     },
     {
       "name": "AVS Car Fan",
@@ -425,7 +453,10 @@
       "revenue": 726198,
       "sales": 768,
       "avgPrice": 946,
-      "url": "https://www.ozon.ru/product/594310892"
+      "url": "https://www.ozon.ru/product/594310892",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/7666614373.jpg",
+      "listingDate": "2022-05-23",
+      "ageDays": 1522
     },
     {
       "name": "АвтоХит Car Fan, 15 W",
@@ -435,7 +466,10 @@
       "revenue": 706445,
       "sales": 556,
       "avgPrice": 1271,
-      "url": "https://www.ozon.ru/product/4257675848"
+      "url": "https://www.ozon.ru/product/4257675848",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/12075287010.jpg",
+      "listingDate": "2026-05-10",
+      "ageDays": 74
     },
     {
       "name": "TIME SHOP Parking Sensor, sensors: 4",
@@ -445,7 +479,10 @@
       "revenue": 662806,
       "sales": 531,
       "avgPrice": 1248,
-      "url": "https://www.ozon.ru/product/542869122"
+      "url": "https://www.ozon.ru/product/542869122",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/7011602256.jpg",
+      "listingDate": "2022-04-02",
+      "ageDays": 1573
     },
     {
       "name": "AUTOTREND Car Fan",
@@ -455,7 +492,10 @@
       "revenue": 642907,
       "sales": 1588,
       "avgPrice": 405,
-      "url": "https://www.ozon.ru/product/3898048439"
+      "url": "https://www.ozon.ru/product/3898048439",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/12743472502.jpg",
+      "listingDate": "2026-04-10",
+      "ageDays": 104
     },
     {
       "name": "Prooofi Distribution Car Fan, 10.8 W",
@@ -465,7 +505,10 @@
       "revenue": 608323,
       "sales": 592,
       "avgPrice": 1028,
-      "url": "https://www.ozon.ru/product/1235471875"
+      "url": "https://www.ozon.ru/product/1235471875",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/10226998698.jpg",
+      "listingDate": "2023-10-11",
+      "ageDays": 1016
     },
     {
       "name": "MakDen Auto Cigarette Lighter Socket Extension Cable, 10 cm",
@@ -475,7 +518,10 @@
       "revenue": 528960,
       "sales": 2793,
       "avgPrice": 189,
-      "url": "https://www.ozon.ru/product/2068324552"
+      "url": "https://www.ozon.ru/product/2068324552",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/7544636942.jpg",
+      "listingDate": "2025-04-24",
+      "ageDays": 455
     },
     {
       "name": "Car Fan",
@@ -485,7 +531,305 @@
       "revenue": 471059,
       "sales": 914,
       "avgPrice": 515,
-      "url": "https://www.ozon.ru/product/4586804347"
+      "url": "https://www.ozon.ru/product/4586804347",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/12184313652.jpg",
+      "listingDate": "2026-06-04",
+      "ageDays": 49
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": null,
+      "revenueGrowthCoverage": 0,
+      "impressions": 36104775,
+      "visits": 1368822,
+      "visitRate": 0.0379,
+      "orderConversionMedian": 0.18,
+      "orderConversionCoverage": 99.9,
+      "cartAddMedian": 0.09805,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 28,
+      "stockoutCoverage": 70.5,
+      "missedRevenue": 9876913,
+      "missedRevenueCoverage": 91.5,
+      "inventoryCoverMedian": null,
+      "inventoryCoverCoverage": 0
+    },
+    "marketing": {
+      "discountMedian": 0.1206,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.7614000000000001,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0,
+      "adRoiCoverage": 91.5,
+      "promoActiveShare": 97.4,
+      "adActiveShare": 100
+    },
+    "fulfillment": {
+      "signRateMedian": 0.904,
+      "signRateCoverage": 91.5,
+      "fboShare": 51.9,
+      "deliveryCoverage": 100,
+      "volumeMedian": 1.2,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 91.5,
+      "freshCount": 246,
+      "freshRevenueShare": 32.5,
+      "futureDateCount": 0,
+      "outlierDateCount": 77
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“车载风扇”拆出 2–3 个明确规格，并优先覆盖 1,000–2,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 50.6%",
+        "1,000–2,000 ₽ 贡献 34% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 91.5%",
+        "180 天内新品 246 个",
+        "新品销售额占样本 32.5%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 70.5%",
+        "缺货天数中位数 28 天",
+        "库存覆盖字段 0%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 99.9%",
+        "下单转化率中位数 18%",
+        "访问率 3.79%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Car Fan, 20 W",
+      "type": "车载风扇",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4554085023",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/11070837899.jpg",
+      "listingDate": "2026-06-02",
+      "ageDays": 51,
+      "revenue": 1900665,
+      "sales": 1839,
+      "avgPrice": 1034,
+      "revenueGrowth": null,
+      "orderConv": 0.22,
+      "cartAdd": 0.1373,
+      "stockoutDays": 28,
+      "adRoi": 0.039
+    },
+    {
+      "name": "AVS Car Fan, 10 W",
+      "type": "车载风扇",
+      "brand": "AVS",
+      "url": "https://www.ozon.ru/product/3543671617",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/9101351955.jpg",
+      "listingDate": "2026-02-19",
+      "ageDays": 154,
+      "revenue": 938114,
+      "sales": 1273,
+      "avgPrice": 737,
+      "revenueGrowth": null,
+      "orderConv": 0.24,
+      "cartAdd": 0.1354,
+      "stockoutDays": 28,
+      "adRoi": 0.047
+    },
+    {
+      "name": "AVS Car Fan, 14 W",
+      "type": "车载风扇",
+      "brand": "AVS",
+      "url": "https://www.ozon.ru/product/3543696515",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9101412718.jpg",
+      "listingDate": "2026-02-19",
+      "ageDays": 154,
+      "revenue": 882872,
+      "sales": 1126,
+      "avgPrice": 784,
+      "revenueGrowth": null,
+      "orderConv": 0.25,
+      "cartAdd": 0.1307,
+      "stockoutDays": 28,
+      "adRoi": 0.05
+    },
+    {
+      "name": "АвтоХит Car Fan, 15 W",
+      "type": "车载风扇",
+      "brand": "АвтоХит",
+      "url": "https://www.ozon.ru/product/4257675848",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/12075287010.jpg",
+      "listingDate": "2026-05-10",
+      "ageDays": 74,
+      "revenue": 706445,
+      "sales": 556,
+      "avgPrice": 1271,
+      "revenueGrowth": null,
+      "orderConv": 0.24,
+      "cartAdd": 0.1385,
+      "stockoutDays": 28,
+      "adRoi": 0.029
+    },
+    {
+      "name": "AUTOTREND Car Fan",
+      "type": "车载风扇",
+      "brand": "AUTOTREND",
+      "url": "https://www.ozon.ru/product/3898048439",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/12743472502.jpg",
+      "listingDate": "2026-04-10",
+      "ageDays": 104,
+      "revenue": 642907,
+      "sales": 1588,
+      "avgPrice": 405,
+      "revenueGrowth": null,
+      "orderConv": 0.12,
+      "cartAdd": 0.1293,
+      "stockoutDays": 28,
+      "adRoi": 0.228
+    },
+    {
+      "name": "Car Fan",
+      "type": "车载风扇",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4586804347",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/12184313652.jpg",
+      "listingDate": "2026-06-04",
+      "ageDays": 49,
+      "revenue": 471059,
+      "sales": 914,
+      "avgPrice": 515,
+      "revenueGrowth": null,
+      "orderConv": 0.33,
+      "cartAdd": 0.1506,
+      "stockoutDays": 28,
+      "adRoi": 0
+    },
+    {
+      "name": "Car Fan, 24 W",
+      "type": "车载风扇",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3970789890",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/9844691523.jpg",
+      "listingDate": "2026-04-16",
+      "ageDays": 98,
+      "revenue": 446269,
+      "sales": 1125,
+      "avgPrice": 397,
+      "revenueGrowth": null,
+      "orderConv": 0.26,
+      "cartAdd": 0.1646,
+      "stockoutDays": 28,
+      "adRoi": 0.016
+    },
+    {
+      "name": "PKBFLOW Car Fan, 16 W",
+      "type": "车载风扇",
+      "brand": "PKBFLOW",
+      "url": "https://www.ozon.ru/product/3478939262",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9126754414.jpg",
+      "listingDate": "2026-01-31",
+      "ageDays": 173,
+      "revenue": 437778,
+      "sales": 318,
+      "avgPrice": 1377,
+      "revenueGrowth": null,
+      "orderConv": 0.37,
+      "cartAdd": 0.1486,
+      "stockoutDays": 28,
+      "adRoi": 0
+    },
+    {
+      "name": "Click&Use Car Fan, 15 W",
+      "type": "车载风扇",
+      "brand": "Click&Use",
+      "url": "https://www.ozon.ru/product/4738392037",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-l/7536668601.jpg",
+      "listingDate": "2026-06-15",
+      "ageDays": 38,
+      "revenue": 365267,
+      "sales": 362,
+      "avgPrice": 1009,
+      "revenueGrowth": null,
+      "orderConv": 0.21,
+      "cartAdd": 0.1316,
+      "stockoutDays": 28,
+      "adRoi": 0.083
+    },
+    {
+      "name": "PKBFLOW Car Fan, 12 W",
+      "type": "车载风扇",
+      "brand": "PKBFLOW",
+      "url": "https://www.ozon.ru/product/3478686082",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/9050652470.jpg",
+      "listingDate": "2026-01-31",
+      "ageDays": 173,
+      "revenue": 326096,
+      "sales": 243,
+      "avgPrice": 1342,
+      "revenueGrowth": null,
+      "orderConv": 0.38,
+      "cartAdd": 0.1611,
+      "stockoutDays": 28,
+      "adRoi": 0
+    },
+    {
+      "name": "PKBFLOW Car Fan, 12 W",
+      "type": "车载风扇",
+      "brand": "PKBFLOW",
+      "url": "https://www.ozon.ru/product/3490218366",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/9232322129.jpg",
+      "listingDate": "2026-02-03",
+      "ageDays": 170,
+      "revenue": 296756,
+      "sales": 212,
+      "avgPrice": 1400,
+      "revenueGrowth": null,
+      "orderConv": 0.14,
+      "cartAdd": 0.1279,
+      "stockoutDays": 28,
+      "adRoi": 0.02
+    },
+    {
+      "name": "Car Fan",
+      "type": "车载风扇",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4509593327",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/10964601666.jpg",
+      "listingDate": "2026-05-30",
+      "ageDays": 54,
+      "revenue": 290775,
+      "sales": 912,
+      "avgPrice": 319,
+      "revenueGrowth": null,
+      "orderConv": 0.19,
+      "cartAdd": 0.163,
+      "stockoutDays": 28,
+      "adRoi": 0.036
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 91.5,
     "stockoutMedian": 28,
     "stockoutCoverage": 70.5,
-    "missedRevenue": 9876913,
-    "missedRevenueCoverage": 91.5,
     "promoActiveShare": 97.4,
     "promoCoverage": 100,
     "adActiveShare": 100,
@@ -509,12 +851,34 @@
     "duplicateSku": 48,
     "duplicateUrl": 0,
     "uniqueSku": 952,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 0,
+      "impressions": 91.5,
+      "visits": 100,
+      "orderConv": 99.9,
+      "cartAdd": 100,
+      "stock": 100,
+      "dailySales": 0,
+      "missedRevenue": 91.5,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 91.5,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 91.5
+    },
+    "listingDateCoverage": 91.5,
+    "freshProductCount": 246,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 77
   },
   "insights": [
     "头部品类“车载风扇”贡献 50.6% 销售额；前五品类合计 93.9%。",
     "销售额最集中的价格带是 1,000–2,000 ₽，覆盖 184 条商品记录，贡献 34% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 67.7% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 91.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 91.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 91.5%；其中 180 天内新品 246 个，贡献 32.5% 样本销售额。"
+  ],
+  "path": "reports/generated/car-electronics/index.html"
 }

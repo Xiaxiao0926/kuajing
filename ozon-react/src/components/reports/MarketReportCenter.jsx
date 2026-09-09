@@ -12,6 +12,8 @@ import {
 } from '../../utils/marketReportAnalysis.js'
 import { GENERATED_MARKET_REPORTS } from '../../generated/marketReports.js'
 import { RECENT_MARKET_REPORTS } from '../../generated/recentMarketReports.js'
+import { FEATURED_MARKET_BRIEFS } from '../../generated/featuredMarketBriefs.js'
+import MarketDecisionBrief from './MarketDecisionBrief.jsx'
 import UploadedMarketReport from './UploadedMarketReport.jsx'
 
 const FEATURED_REPORTS = [
@@ -24,6 +26,7 @@ const FEATURED_REPORTS = [
     sample: '1,000 SKU',
     path: 'reports/ozon-lighting-deep-analysis/index.html',
     frameTitle: 'Ozon 车灯照明市场深度分析报告',
+    decisionBrief: FEATURED_MARKET_BRIEFS.lighting,
     icon: Lightbulb,
   },
   {
@@ -35,6 +38,7 @@ const FEATURED_REPORTS = [
     sample: '1,000 SKU',
     path: 'reports/doors-windows-top10/ozon-doors-windows-top10.html',
     frameTitle: '门窗五金 TOP 10 品类详细分析报告',
+    decisionBrief: FEATURED_MARKET_BRIEFS['door-window'],
     icon: DoorOpen,
   },
 ]
@@ -48,7 +52,7 @@ function parseWorkbook(arrayBuffer, fileType) {
   const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
   const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
   if (!firstSheet) throw new Error(`${fileType} 中没有可读取的数据表。`)
-  return XLSX.utils.sheet_to_json(firstSheet, { defval: null })
+  return XLSX.utils.sheet_to_json(firstSheet, { defval: null, raw: fileType !== 'CSV' })
 }
 
 async function parseImportFile(file, fileType) {
@@ -280,12 +284,15 @@ export default function MarketReportCenter() {
           {activeReport.kind === 'uploaded' || activeReport.kind === 'embedded' ? (
             <UploadedMarketReport key={activeReport.id} report={activeReport} />
           ) : (
-            <iframe
-              key={activeReport.id}
-              title={activeReport.frameTitle}
-              src={reportUrl}
-              className="h-[calc(100vh-16rem)] min-h-[680px] w-full rounded-md border border-gray-200 bg-white"
-            />
+            <>
+              <MarketDecisionBrief brief={activeReport.decisionBrief} />
+              <iframe
+                key={activeReport.id}
+                title={activeReport.frameTitle}
+                src={reportUrl}
+                className="h-[calc(100vh-16rem)] min-h-[680px] w-full rounded-md border border-gray-200 bg-white"
+              />
+            </>
           )}
         </div>
       </div>

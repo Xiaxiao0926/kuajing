@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-car-security",
   "label": "汽车防盗",
   "title": "Ozon 汽车防盗市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23汽车防盗_清洗版.xlsx",
-  "path": "reports/generated/car-security/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车防盗市场分析报告",
+  "sourceFile": "ozon-2026-07-23汽车防盗_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:37.039Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 103417151,
@@ -345,7 +349,10 @@
       "revenue": 7224728,
       "sales": 619,
       "avgPrice": 11672,
-      "url": "https://www.ozon.ru/product/4399384316"
+      "url": "https://www.ozon.ru/product/4399384316",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/10688036490.jpg",
+      "listingDate": "2026-05-22",
+      "ageDays": 62
     },
     {
       "name": "StarLine Car Alarm",
@@ -355,7 +362,10 @@
       "revenue": 2867813,
       "sales": 140,
       "avgPrice": 20484,
-      "url": "https://www.ozon.ru/product/201163689"
+      "url": "https://www.ozon.ru/product/201163689",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-0/6986853756.jpg",
+      "listingDate": "2020-10-14",
+      "ageDays": 2108
     },
     {
       "name": "StarLine Car Alarm",
@@ -365,7 +375,10 @@
       "revenue": 2769950,
       "sales": 154,
       "avgPrice": 17987,
-      "url": "https://www.ozon.ru/product/211052475"
+      "url": "https://www.ozon.ru/product/211052475",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/7122955984.jpg",
+      "listingDate": "2020-11-27",
+      "ageDays": 2064
     },
     {
       "name": "StarLine Car Alarm",
@@ -375,7 +388,10 @@
       "revenue": 2076654,
       "sales": 101,
       "avgPrice": 20561,
-      "url": "https://www.ozon.ru/product/211675317"
+      "url": "https://www.ozon.ru/product/211675317",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/7122956596.jpg",
+      "listingDate": "2020-11-28",
+      "ageDays": 2063
     },
     {
       "name": "StarLine Car Alarm",
@@ -385,7 +401,10 @@
       "revenue": 1891525,
       "sales": 97,
       "avgPrice": 19500,
-      "url": "https://www.ozon.ru/product/590080253"
+      "url": "https://www.ozon.ru/product/590080253",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/6986853685.jpg",
+      "listingDate": "2022-05-18",
+      "ageDays": 1527
     },
     {
       "name": "StarLine Car Alarm",
@@ -395,7 +414,10 @@
       "revenue": 1619521,
       "sales": 58,
       "avgPrice": 27923,
-      "url": "https://www.ozon.ru/product/1083821212"
+      "url": "https://www.ozon.ru/product/1083821212",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/6986854323.jpg",
+      "listingDate": "2023-07-17",
+      "ageDays": 1102
     },
     {
       "name": "StarLine Car Alarm",
@@ -405,7 +427,10 @@
       "revenue": 1607601,
       "sales": 90,
       "avgPrice": 17862,
-      "url": "https://www.ozon.ru/product/3553339723"
+      "url": "https://www.ozon.ru/product/3553339723",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/9139237118.jpg",
+      "listingDate": "2026-02-24",
+      "ageDays": 149
     },
     {
       "name": "StarLine Car Alarm",
@@ -415,7 +440,10 @@
       "revenue": 1424479,
       "sales": 124,
       "avgPrice": 11488,
-      "url": "https://www.ozon.ru/product/1634806239"
+      "url": "https://www.ozon.ru/product/1634806239",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/10889064863.jpg",
+      "listingDate": "2024-07-22",
+      "ageDays": 731
     },
     {
       "name": "StarLine Car Alarm",
@@ -425,7 +453,10 @@
       "revenue": 1195439,
       "sales": 47,
       "avgPrice": 25435,
-      "url": "https://www.ozon.ru/product/201322757"
+      "url": "https://www.ozon.ru/product/201322757",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/6986853992.jpg",
+      "listingDate": "2020-10-15",
+      "ageDays": 2107
     },
     {
       "name": "StarLine Car Alarm",
@@ -435,7 +466,10 @@
       "revenue": 1193735,
       "sales": 46,
       "avgPrice": 25951,
-      "url": "https://www.ozon.ru/product/1656225663"
+      "url": "https://www.ozon.ru/product/1656225663",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/7102100333.jpg",
+      "listingDate": "2024-08-12",
+      "ageDays": 710
     },
     {
       "name": "StarLine Car Alarm Remote Control Key",
@@ -445,7 +479,10 @@
       "revenue": 1146875,
       "sales": 234,
       "avgPrice": 4901,
-      "url": "https://www.ozon.ru/product/1771378975"
+      "url": "https://www.ozon.ru/product/1771378975",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-j/6899667859.jpg",
+      "listingDate": "2024-11-29",
+      "ageDays": 601
     },
     {
       "name": "StarLine Car Alarm",
@@ -455,7 +492,10 @@
       "revenue": 1128789,
       "sales": 42,
       "avgPrice": 26876,
-      "url": "https://www.ozon.ru/product/4075066979"
+      "url": "https://www.ozon.ru/product/4075066979",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/6996062453.jpg",
+      "listingDate": "2026-04-24",
+      "ageDays": 90
     },
     {
       "name": "StarLine Car Alarm",
@@ -465,7 +505,10 @@
       "revenue": 1089173,
       "sales": 83,
       "avgPrice": 13123,
-      "url": "https://www.ozon.ru/product/1634804190"
+      "url": "https://www.ozon.ru/product/1634804190",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/10889038462.jpg",
+      "listingDate": "2024-07-22",
+      "ageDays": 731
     },
     {
       "name": "SmartElectronics Car Alarm",
@@ -475,7 +518,10 @@
       "revenue": 992477,
       "sales": 222,
       "avgPrice": 4471,
-      "url": "https://www.ozon.ru/product/3045441137"
+      "url": "https://www.ozon.ru/product/3045441137",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/7072438560.jpg",
+      "listingDate": "2025-10-30",
+      "ageDays": 266
     },
     {
       "name": "StarLine Car Alarm",
@@ -485,7 +531,305 @@
       "revenue": 961163,
       "sales": 59,
       "avgPrice": 16291,
-      "url": "https://www.ozon.ru/product/3538733070"
+      "url": "https://www.ozon.ru/product/3538733070",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9112460795.jpg",
+      "listingDate": "2026-02-17",
+      "ageDays": 156
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.03,
+      "revenueGrowthCoverage": 96.5,
+      "impressions": 34215995,
+      "visits": 1594255,
+      "visitRate": 0.0466,
+      "orderConversionMedian": 0.0027,
+      "orderConversionCoverage": 100,
+      "cartAddMedian": 0.1069,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 18,
+      "stockoutCoverage": 88.3,
+      "missedRevenue": 5601017.1,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 36,
+      "inventoryCoverCoverage": 76.2
+    },
+    "marketing": {
+      "discountMedian": 0.02715,
+      "discountCoverage": 100,
+      "promoShareMedian": 0.1177,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0,
+      "adRoiCoverage": 96.5,
+      "promoActiveShare": 67.8,
+      "adActiveShare": 13.1
+    },
+    "fulfillment": {
+      "signRateMedian": 0.9059999999999999,
+      "signRateCoverage": 95.5,
+      "fboShare": 86.3,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.3,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 95.5,
+      "freshCount": 171,
+      "freshRevenueShare": 23.1,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“汽车防盗器”拆出 2–3 个明确规格，并优先覆盖 ≥5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 58.1%",
+        "≥5,000 ₽ 贡献 50.6% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 95.5%",
+        "180 天内新品 171 个",
+        "新品销售额占样本 23.1%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 88.3%",
+        "缺货天数中位数 18 天",
+        "库存覆盖字段 76.2%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 100%",
+        "下单转化率中位数 0.3%",
+        "访问率 4.66%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "StarLine Car Alarm",
+      "type": "汽车防盗器",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/4399384316",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/10688036490.jpg",
+      "listingDate": "2026-05-22",
+      "ageDays": 62,
+      "revenue": 7224728,
+      "sales": 619,
+      "avgPrice": 11672,
+      "revenueGrowth": 0.82,
+      "orderConv": 0.0012,
+      "cartAdd": 0.0701,
+      "stockoutDays": 5,
+      "adRoi": 0.023
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "type": "汽车防盗器",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/3553339723",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/9139237118.jpg",
+      "listingDate": "2026-02-24",
+      "ageDays": 149,
+      "revenue": 1607601,
+      "sales": 90,
+      "avgPrice": 17862,
+      "revenueGrowth": 0.43,
+      "orderConv": 0.0007000000000000001,
+      "cartAdd": 0.0361,
+      "stockoutDays": 2,
+      "adRoi": 0.021
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "type": "汽车防盗器",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/4075066979",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/6996062453.jpg",
+      "listingDate": "2026-04-24",
+      "ageDays": 90,
+      "revenue": 1128789,
+      "sales": 42,
+      "avgPrice": 26876,
+      "revenueGrowth": 0.58,
+      "orderConv": 0.0005,
+      "cartAdd": 0.0226,
+      "stockoutDays": 5,
+      "adRoi": 0.022
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "type": "汽车防盗器",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/3538733070",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/9112460795.jpg",
+      "listingDate": "2026-02-17",
+      "ageDays": 156,
+      "revenue": 961163,
+      "sales": 59,
+      "avgPrice": 16291,
+      "revenueGrowth": 0.96,
+      "orderConv": 0.0008,
+      "cartAdd": 0.0487,
+      "stockoutDays": 18,
+      "adRoi": 0.009000000000000001
+    },
+    {
+      "name": "Pandora Car Alarm, Immobilizer",
+      "type": "汽车防盗器",
+      "brand": "Pandora",
+      "url": "https://www.ozon.ru/product/3813112904",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/9778509116.jpg",
+      "listingDate": "2026-04-01",
+      "ageDays": 113,
+      "revenue": 790562,
+      "sales": 42,
+      "avgPrice": 18823,
+      "revenueGrowth": 0.023,
+      "orderConv": 0.0001,
+      "cartAdd": 0.0425,
+      "stockoutDays": 24,
+      "adRoi": 0.159
+    },
+    {
+      "name": "HODEKT Car Alarm",
+      "type": "汽车遥控钥匙",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4017457964",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/8922964137.jpg",
+      "listingDate": "2026-04-20",
+      "ageDays": 94,
+      "revenue": 547167,
+      "sales": 463,
+      "avgPrice": 1182,
+      "revenueGrowth": -0.18,
+      "orderConv": 0.0031,
+      "cartAdd": 0.1202,
+      "stockoutDays": 21,
+      "adRoi": 0.025
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "type": "汽车防盗器",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/3754309155",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/9555934994.jpg",
+      "listingDate": "2026-03-26",
+      "ageDays": 119,
+      "revenue": 497373,
+      "sales": 18,
+      "avgPrice": 27632,
+      "revenueGrowth": 0.48,
+      "orderConv": 0.0004,
+      "cartAdd": 0.015,
+      "stockoutDays": 3,
+      "adRoi": 0.014
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "type": "汽车防盗器",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/3754739266",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/9556053993.jpg",
+      "listingDate": "2026-03-26",
+      "ageDays": 119,
+      "revenue": 452213,
+      "sales": 15,
+      "avgPrice": 30148,
+      "revenueGrowth": -0.26,
+      "orderConv": 0.0002,
+      "cartAdd": 0.012,
+      "stockoutDays": 5,
+      "adRoi": 0.07400000000000001
+    },
+    {
+      "name": "StarLine Car Alarm Remote Control Key",
+      "type": "汽车遥控钥匙",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/3620388463",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/9309883600.jpg",
+      "listingDate": "2026-03-10",
+      "ageDays": 135,
+      "revenue": 400470,
+      "sales": 86,
+      "avgPrice": 4657,
+      "revenueGrowth": 0.1,
+      "orderConv": 0.0013,
+      "cartAdd": 0.0723,
+      "stockoutDays": 6,
+      "adRoi": 0.047
+    },
+    {
+      "name": "NFLH Car Alarm",
+      "type": "汽车遥控钥匙",
+      "brand": "NFLH",
+      "url": "https://www.ozon.ru/product/3823803444",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/9605960844.jpg",
+      "listingDate": "2026-04-02",
+      "ageDays": 112,
+      "revenue": 350802,
+      "sales": 227,
+      "avgPrice": 1545,
+      "revenueGrowth": 0.39,
+      "orderConv": 0.0061,
+      "cartAdd": 0.1371,
+      "stockoutDays": 20,
+      "adRoi": 0
+    },
+    {
+      "name": "StarLine Anti-Theft Device",
+      "type": "防盗装置",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/3825849951",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/9693903376.jpg",
+      "listingDate": "2026-04-02",
+      "ageDays": 112,
+      "revenue": 333511,
+      "sales": 1013,
+      "avgPrice": 329,
+      "revenueGrowth": 0.03,
+      "orderConv": 0.005,
+      "cartAdd": 0.1288,
+      "stockoutDays": 5,
+      "adRoi": 0.081
+    },
+    {
+      "name": "StarLine Car Alarm",
+      "type": "汽车防盗器",
+      "brand": "StarLine",
+      "url": "https://www.ozon.ru/product/4398871024",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/10686709074.jpg",
+      "listingDate": "2026-05-22",
+      "ageDays": 62,
+      "revenue": 326877,
+      "sales": 36,
+      "avgPrice": 9080,
+      "revenueGrowth": 0.76,
+      "orderConv": 0.0005,
+      "cartAdd": 0.0257,
+      "stockoutDays": 3,
+      "adRoi": 0.047
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 95.5,
     "stockoutMedian": 18,
     "stockoutCoverage": 88.3,
-    "missedRevenue": 5601017.1,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 67.8,
     "promoCoverage": 96.5,
     "adActiveShare": 13.1,
@@ -509,12 +851,34 @@
     "duplicateSku": 41,
     "duplicateUrl": 0,
     "uniqueSku": 959,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 96.5,
+      "impressions": 96.5,
+      "visits": 100,
+      "orderConv": 100,
+      "cartAdd": 100,
+      "stock": 82.1,
+      "dailySales": 85.8,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 96.5,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 95.5
+    },
+    "listingDateCoverage": 95.5,
+    "freshProductCount": 171,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“汽车防盗器”贡献 58.1% 销售额；前五品类合计 99.2%。",
     "销售额最集中的价格带是 ≥5,000 ₽，覆盖 85 条商品记录，贡献 50.6% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 89% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 96.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 96.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 95.5%；其中 180 天内新品 171 个，贡献 23.1% 样本销售额。"
+  ],
+  "path": "reports/generated/car-security/index.html"
 }

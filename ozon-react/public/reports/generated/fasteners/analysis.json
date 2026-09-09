@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-fasteners",
   "label": "汽车紧固件",
   "title": "Ozon 汽车紧固件市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23汽车紧固件_清洗版.xlsx",
-  "path": "reports/generated/fasteners/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车紧固件市场分析报告",
+  "sourceFile": "ozon-2026-07-23汽车紧固件_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:37.296Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 197689324,
@@ -345,7 +349,10 @@
       "revenue": 2892874,
       "sales": 5258,
       "avgPrice": 550,
-      "url": "https://www.ozon.ru/product/1526804117"
+      "url": "https://www.ozon.ru/product/1526804117",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/9142017771.jpg",
+      "listingDate": "2024-04-04",
+      "ageDays": 840
     },
     {
       "name": "Schneiden Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs",
@@ -355,7 +362,10 @@
       "revenue": 2470731,
       "sales": 16217,
       "avgPrice": 152,
-      "url": "https://www.ozon.ru/product/3854310964"
+      "url": "https://www.ozon.ru/product/3854310964",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/8206824578.jpg",
+      "listingDate": "2026-04-06",
+      "ageDays": 108
     },
     {
       "name": "Car Film 3 mх50 cm",
@@ -365,7 +375,10 @@
       "revenue": 2250909,
       "sales": 6587,
       "avgPrice": 342,
-      "url": "https://www.ozon.ru/product/658680386"
+      "url": "https://www.ozon.ru/product/658680386",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/12594412621.jpg",
+      "listingDate": "2022-08-02",
+      "ageDays": 1451
     },
     {
       "name": "Sell-Ti Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs",
@@ -375,7 +388,10 @@
       "revenue": 2202118,
       "sales": 17433,
       "avgPrice": 126,
-      "url": "https://www.ozon.ru/product/1544427517"
+      "url": "https://www.ozon.ru/product/1544427517",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/7295017005.jpg",
+      "listingDate": "2024-04-13",
+      "ageDays": 831
     },
     {
       "name": "MTF Light Car Film 3 mх50 cm",
@@ -385,7 +401,10 @@
       "revenue": 2066125,
       "sales": 2827,
       "avgPrice": 731,
-      "url": "https://www.ozon.ru/product/1783168451"
+      "url": "https://www.ozon.ru/product/1783168451",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/7294337714.jpg",
+      "listingDate": "2024-12-11",
+      "ageDays": 589
     },
     {
       "name": "Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs",
@@ -395,7 +414,10 @@
       "revenue": 2029730,
       "sales": 15900,
       "avgPrice": 128,
-      "url": "https://www.ozon.ru/product/2807174920"
+      "url": "https://www.ozon.ru/product/2807174920",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/9588621197.jpg",
+      "listingDate": "2025-09-04",
+      "ageDays": 322
     },
     {
       "name": "BLAU DRIVE Car Film 1.5 mх30 cm",
@@ -405,7 +427,10 @@
       "revenue": 1958504,
       "sales": 1374,
       "avgPrice": 1425,
-      "url": "https://www.ozon.ru/product/1653759923"
+      "url": "https://www.ozon.ru/product/1653759923",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/7534436825.jpg",
+      "listingDate": "2024-08-09",
+      "ageDays": 713
     },
     {
       "name": "Car Film 3 mх5 cm",
@@ -415,7 +440,10 @@
       "revenue": 1946939,
       "sales": 29569,
       "avgPrice": 66,
-      "url": "https://www.ozon.ru/product/2080358045"
+      "url": "https://www.ozon.ru/product/2080358045",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/8365121057.jpg",
+      "listingDate": "2025-04-28",
+      "ageDays": 451
     },
     {
       "name": "MTF Light Car Film 3 mх75 cm",
@@ -425,7 +453,10 @@
       "revenue": 1911179,
       "sales": 1895,
       "avgPrice": 1009,
-      "url": "https://www.ozon.ru/product/1783168395"
+      "url": "https://www.ozon.ru/product/1783168395",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/7387847178.jpg",
+      "listingDate": "2024-12-11",
+      "ageDays": 589
     },
     {
       "name": "ELDEN LINE Car LED Backlight Kit",
@@ -435,7 +466,10 @@
       "revenue": 1888964,
       "sales": 355,
       "avgPrice": 5321,
-      "url": "https://www.ozon.ru/product/1503200083"
+      "url": "https://www.ozon.ru/product/1503200083",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/9296190890.jpg",
+      "listingDate": "2024-03-26",
+      "ageDays": 849
     },
     {
       "name": "IllumiCar Car LED Backlight Kit",
@@ -445,7 +479,10 @@
       "revenue": 1591605,
       "sales": 1036,
       "avgPrice": 1536,
-      "url": "https://www.ozon.ru/product/1590316681"
+      "url": "https://www.ozon.ru/product/1590316681",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-o/7379960496.jpg",
+      "listingDate": "2024-05-30",
+      "ageDays": 784
     },
     {
       "name": "IllumiCar Car LED Backlight Kit",
@@ -455,7 +492,10 @@
       "revenue": 1583306,
       "sales": 449,
       "avgPrice": 3526,
-      "url": "https://www.ozon.ru/product/1631824630"
+      "url": "https://www.ozon.ru/product/1631824630",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-z/7773399395.jpg",
+      "listingDate": "2024-07-18",
+      "ageDays": 735
     },
     {
       "name": "Car Film 1 mх30 cm",
@@ -465,7 +505,10 @@
       "revenue": 1376125,
       "sales": 6550,
       "avgPrice": 210,
-      "url": "https://www.ozon.ru/product/1634005585"
+      "url": "https://www.ozon.ru/product/1634005585",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/12213888577.jpg",
+      "listingDate": "2024-07-20",
+      "ageDays": 733
     },
     {
       "name": "PrimeParts Car Mounting Clip M10 x 1.5, 10 mm, 100 pcs",
@@ -475,7 +518,10 @@
       "revenue": 1300996,
       "sales": 5850,
       "avgPrice": 222,
-      "url": "https://www.ozon.ru/product/631663147"
+      "url": "https://www.ozon.ru/product/631663147",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/12113104684.jpg",
+      "listingDate": "2022-07-01",
+      "ageDays": 1483
     },
     {
       "name": "Solartek Car Film 1 mх30 cm",
@@ -485,7 +531,305 @@
       "revenue": 1297097,
       "sales": 2507,
       "avgPrice": 517,
-      "url": "https://www.ozon.ru/product/3543432177"
+      "url": "https://www.ozon.ru/product/3543432177",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9129618178.jpg",
+      "listingDate": "2026-02-19",
+      "ageDays": 154
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": null,
+      "revenueGrowthCoverage": 0,
+      "impressions": 440328582,
+      "visits": 10409058,
+      "visitRate": 0.0236,
+      "orderConversionMedian": 0.22,
+      "orderConversionCoverage": 99.6,
+      "cartAddMedian": 0.15465,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 28,
+      "stockoutCoverage": 96.2,
+      "missedRevenue": 2841293,
+      "missedRevenueCoverage": 98.4,
+      "inventoryCoverMedian": null,
+      "inventoryCoverCoverage": 0
+    },
+    "marketing": {
+      "discountMedian": 0.2599,
+      "discountCoverage": 100,
+      "promoShareMedian": 1,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.119,
+      "adRoiCoverage": 98.4,
+      "promoActiveShare": 100,
+      "adActiveShare": 100
+    },
+    "fulfillment": {
+      "signRateMedian": 0.9359999999999999,
+      "signRateCoverage": 98.2,
+      "fboShare": 94.4,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.2,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 98.2,
+      "freshCount": 244,
+      "freshRevenueShare": 21,
+      "futureDateCount": 1,
+      "outlierDateCount": 8
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“汽车贴膜”拆出 2–3 个明确规格，并优先覆盖 <200 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 25%",
+        "<200 ₽ 贡献 43.1% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 98.2%",
+        "180 天内新品 244 个",
+        "新品销售额占样本 21%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 96.2%",
+        "缺货天数中位数 28 天",
+        "库存覆盖字段 0%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 99.6%",
+        "下单转化率中位数 22%",
+        "访问率 2.36%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "Schneiden Car Mounting Clip M10 x 1.5, 13 mm, 100 pcs",
+      "type": "汽车紧固夹",
+      "brand": "Schneiden",
+      "url": "https://www.ozon.ru/product/3854310964",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/8206824578.jpg",
+      "listingDate": "2026-04-06",
+      "ageDays": 108,
+      "revenue": 2470731,
+      "sales": 16217,
+      "avgPrice": 152,
+      "revenueGrowth": null,
+      "orderConv": 0.13,
+      "cartAdd": 0.2287,
+      "stockoutDays": 28,
+      "adRoi": 0.275
+    },
+    {
+      "name": "Solartek Car Film 1 mх30 cm",
+      "type": "汽车贴膜",
+      "brand": "Solartek",
+      "url": "https://www.ozon.ru/product/3543432177",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9129618178.jpg",
+      "listingDate": "2026-02-19",
+      "ageDays": 154,
+      "revenue": 1297097,
+      "sales": 2507,
+      "avgPrice": 517,
+      "revenueGrowth": null,
+      "orderConv": 0.4,
+      "cartAdd": 0.1119,
+      "stockoutDays": 28,
+      "adRoi": 0.194
+    },
+    {
+      "name": "АвтоУспех Car Mounting Clip M10 x 1.5, 10 mm, 1330 pcs",
+      "type": "汽车紧固夹",
+      "brand": "АвтоУспех",
+      "url": "https://www.ozon.ru/product/3878756864",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/9689633948.jpg",
+      "listingDate": "2026-04-08",
+      "ageDays": 106,
+      "revenue": 909592,
+      "sales": 758,
+      "avgPrice": 1200,
+      "revenueGrowth": null,
+      "orderConv": 0.13,
+      "cartAdd": 0.0941,
+      "stockoutDays": 28,
+      "adRoi": 0.075
+    },
+    {
+      "name": "ROOTO Car Metal Fasteners 1/2 UNF, 17 mm, 20 pcs",
+      "type": "汽车紧固件",
+      "brand": "ROOTO",
+      "url": "https://www.ozon.ru/product/3571550102",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/9156605541.jpg",
+      "listingDate": "2026-03-01",
+      "ageDays": 144,
+      "revenue": 721094,
+      "sales": 4088,
+      "avgPrice": 176,
+      "revenueGrowth": null,
+      "orderConv": 0.13,
+      "cartAdd": 0.1955,
+      "stockoutDays": 28,
+      "adRoi": 0.279
+    },
+    {
+      "name": "WonderInc Car Film 5 mх10 cm",
+      "type": "汽车贴膜",
+      "brand": "WonderInc",
+      "url": "https://www.ozon.ru/product/4388687671",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/10659573892.jpg",
+      "listingDate": "2026-05-21",
+      "ageDays": 63,
+      "revenue": 712880,
+      "sales": 3478,
+      "avgPrice": 205,
+      "revenueGrowth": null,
+      "orderConv": 0.24,
+      "cartAdd": 0.1495,
+      "stockoutDays": 28,
+      "adRoi": 0.177
+    },
+    {
+      "name": "Автостор Removable Car Window Tint, 150х75 cm, 10% of light transmittance",
+      "type": "可拆卸遮阳膜",
+      "brand": "Автостор",
+      "url": "https://www.ozon.ru/product/3585052090",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9184324979.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141,
+      "revenue": 683751,
+      "sales": 414,
+      "avgPrice": 1652,
+      "revenueGrowth": null,
+      "orderConv": 0.13,
+      "cartAdd": 0.062,
+      "stockoutDays": 28,
+      "adRoi": 0.099
+    },
+    {
+      "name": "Автостор Removable Car Window Tint, 150х75 cm, 20% of light transmittance",
+      "type": "可拆卸遮阳膜",
+      "brand": "Автостор",
+      "url": "https://www.ozon.ru/product/3585056141",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-c/9184334700.jpg",
+      "listingDate": "2026-03-04",
+      "ageDays": 141,
+      "revenue": 631070,
+      "sales": 384,
+      "avgPrice": 1643,
+      "revenueGrowth": null,
+      "orderConv": 0.13,
+      "cartAdd": 0.06059999999999999,
+      "stockoutDays": 28,
+      "adRoi": 0.103
+    },
+    {
+      "name": "Starleks Car Nut M12 х 1.5, 35 mm, 20 pcs",
+      "type": "汽车螺母",
+      "brand": "Starleks",
+      "url": "https://www.ozon.ru/product/3507759516",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/9364346452.jpg",
+      "listingDate": "2026-02-06",
+      "ageDays": 167,
+      "revenue": 585079,
+      "sales": 1117,
+      "avgPrice": 524,
+      "revenueGrowth": null,
+      "orderConv": 0.38,
+      "cartAdd": 0.111,
+      "stockoutDays": 28,
+      "adRoi": 0.126
+    },
+    {
+      "name": "Solartek Car Film 1 mх30 cm",
+      "type": "汽车贴膜",
+      "brand": "Solartek",
+      "url": "https://www.ozon.ru/product/3545078209",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/9129528649.jpg",
+      "listingDate": "2026-02-20",
+      "ageDays": 153,
+      "revenue": 525122,
+      "sales": 620,
+      "avgPrice": 847,
+      "revenueGrowth": null,
+      "orderConv": 0.11,
+      "cartAdd": 0.1041,
+      "stockoutDays": 28,
+      "adRoi": 0.296
+    },
+    {
+      "name": "Car Film 3 mх50 cm",
+      "type": "汽车贴膜",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3517347013",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/9065319788.jpg",
+      "listingDate": "2026-02-09",
+      "ageDays": 164,
+      "revenue": 524581,
+      "sales": 1271,
+      "avgPrice": 413,
+      "revenueGrowth": null,
+      "orderConv": 0.47,
+      "cartAdd": 0.1064,
+      "stockoutDays": 28,
+      "adRoi": 0.017
+    },
+    {
+      "name": "ARS Car Fasteners Caps 2\"-12, 170 pcs",
+      "type": "卡扣盖板",
+      "brand": "ARS",
+      "url": "https://www.ozon.ru/product/3513680037",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/9046459382.jpg",
+      "listingDate": "2026-02-08",
+      "ageDays": 165,
+      "revenue": 510020,
+      "sales": 933,
+      "avgPrice": 547,
+      "revenueGrowth": null,
+      "orderConv": 0.24,
+      "cartAdd": 0.1228,
+      "stockoutDays": 28,
+      "adRoi": 0.07200000000000001
+    },
+    {
+      "name": "Car Cover Plate, 3 pcs",
+      "type": "汽车装饰贴片",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4161794214",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-7/10178809855.jpg",
+      "listingDate": "2026-05-02",
+      "ageDays": 82,
+      "revenue": 482691,
+      "sales": 1264,
+      "avgPrice": 382,
+      "revenueGrowth": null,
+      "orderConv": 0.25,
+      "cartAdd": 0.126,
+      "stockoutDays": 28,
+      "adRoi": 0.071
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 98.2,
     "stockoutMedian": 28,
     "stockoutCoverage": 96.2,
-    "missedRevenue": 2841293,
-    "missedRevenueCoverage": 98.4,
     "promoActiveShare": 100,
     "promoCoverage": 100,
     "adActiveShare": 100,
@@ -509,12 +851,34 @@
     "duplicateSku": 15,
     "duplicateUrl": 0,
     "uniqueSku": 985,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 0,
+      "impressions": 98.4,
+      "visits": 100,
+      "orderConv": 99.6,
+      "cartAdd": 100,
+      "stock": 100,
+      "dailySales": 0,
+      "missedRevenue": 98.4,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 98.4,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 98.2
+    },
+    "listingDateCoverage": 98.2,
+    "freshProductCount": 244,
+    "futureListingDateCount": 1,
+    "outlierListingDateCount": 8
   },
   "insights": [
     "头部品类“汽车贴膜”贡献 25% 销售额；前五品类合计 66.5%。",
     "销售额最集中的价格带是 <200 ₽，覆盖 627 条商品记录，贡献 43.1% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 59.9% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 98.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 98.4%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 98.2%；其中 180 天内新品 244 个，贡献 21% 样本销售额。"
+  ],
+  "path": "reports/generated/fasteners/index.html"
 }

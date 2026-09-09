@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-passenger-car-parts",
   "label": "乘用车配件",
   "title": "Ozon 乘用车配件市场分析",
   "group": "汽车生态",
   "snapshot": "2026-07-23",
-  "sourceFile": "ozon-2026-07-23乘用车配件_清洗版.xlsx",
-  "path": "reports/generated/passenger-car-parts/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 乘用车配件市场分析报告",
+  "sourceFile": "ozon-2026-07-23乘用车配件_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:36.012Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 473900177,
@@ -345,7 +349,10 @@
       "revenue": 13563810,
       "sales": 680,
       "avgPrice": 19947,
-      "url": "https://www.ozon.ru/product/2794970818"
+      "url": "https://www.ozon.ru/product/2794970818",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/10152326691.jpg",
+      "listingDate": "2025-09-02",
+      "ageDays": 324
     },
     {
       "name": "ANENJI Automotive Inverter, 4200W",
@@ -355,7 +362,10 @@
       "revenue": 10537206,
       "sales": 634,
       "avgPrice": 16620,
-      "url": "https://www.ozon.ru/product/2792839506"
+      "url": "https://www.ozon.ru/product/2792839506",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-n/10103806499.jpg",
+      "listingDate": "2025-09-02",
+      "ageDays": 324
     },
     {
       "name": "Dagger Driveshaft",
@@ -365,7 +375,10 @@
       "revenue": 9994881,
       "sales": 512,
       "avgPrice": 19521,
-      "url": "https://www.ozon.ru/product/1966654633"
+      "url": "https://www.ozon.ru/product/1966654633",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/12868661709.jpg",
+      "listingDate": "2025-03-24",
+      "ageDays": 486
     },
     {
       "name": "ANENJI Automotive Inverter",
@@ -375,7 +388,10 @@
       "revenue": 7973771,
       "sales": 480,
       "avgPrice": 16612,
-      "url": "https://www.ozon.ru/product/3007953972"
+      "url": "https://www.ozon.ru/product/3007953972",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-4/11257954996.jpg",
+      "listingDate": "2025-10-23",
+      "ageDays": 273
     },
     {
       "name": "Autonomous Diesel Heater, 8000W",
@@ -385,7 +401,10 @@
       "revenue": 5828827,
       "sales": 1029,
       "avgPrice": 5665,
-      "url": "https://www.ozon.ru/product/3012706171"
+      "url": "https://www.ozon.ru/product/3012706171",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/8202590473.jpg",
+      "listingDate": "2025-10-24",
+      "ageDays": 272
     },
     {
       "name": "ОБОРОТЫ Automotive Inverter, 220V, 3000W",
@@ -395,7 +414,10 @@
       "revenue": 4584475,
       "sales": 871,
       "avgPrice": 5263,
-      "url": "https://www.ozon.ru/product/1355324597"
+      "url": "https://www.ozon.ru/product/1355324597",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/9494623582.jpg",
+      "listingDate": "2023-12-23",
+      "ageDays": 943
     },
     {
       "name": "CoolQueen Automotive Inverter, 3600W",
@@ -405,7 +427,10 @@
       "revenue": 3944932,
       "sales": 661,
       "avgPrice": 5968,
-      "url": "https://www.ozon.ru/product/3574675785"
+      "url": "https://www.ozon.ru/product/3574675785",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/9263182609.jpg",
+      "listingDate": "2026-03-02",
+      "ageDays": 143
     },
     {
       "name": "CoolQueen Automotive Inverter, 3000W",
@@ -415,7 +440,10 @@
       "revenue": 3691109,
       "sales": 630,
       "avgPrice": 5859,
-      "url": "https://www.ozon.ru/product/2804925000"
+      "url": "https://www.ozon.ru/product/2804925000",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/9441174389.jpg",
+      "listingDate": "2025-09-04",
+      "ageDays": 322
     },
     {
       "name": "Мавико Brake Disc",
@@ -425,7 +453,10 @@
       "revenue": 3615450,
       "sales": 803,
       "avgPrice": 4502,
-      "url": "https://www.ozon.ru/product/1283206141"
+      "url": "https://www.ozon.ru/product/1283206141",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-8/7400349548.jpg",
+      "listingDate": "2023-11-09",
+      "ageDays": 987
     },
     {
       "name": "Autonomous Diesel Heater, 8000W",
@@ -435,7 +466,10 @@
       "revenue": 3532159,
       "sales": 638,
       "avgPrice": 5536,
-      "url": "https://www.ozon.ru/product/3199584348"
+      "url": "https://www.ozon.ru/product/3199584348",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/9155659406.jpg",
+      "listingDate": "2025-12-05",
+      "ageDays": 230
     },
     {
       "name": "DLED Car Lamp H4, H4 Long, 2 pcs",
@@ -445,7 +479,10 @@
       "revenue": 3498829,
       "sales": 3309,
       "avgPrice": 1057,
-      "url": "https://www.ozon.ru/product/193411037"
+      "url": "https://www.ozon.ru/product/193411037",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/9096259516.jpg",
+      "listingDate": "2020-09-12",
+      "ageDays": 2140
     },
     {
       "name": "Gates Spare Parts for Car Timing Belt, 5 pcs",
@@ -455,7 +492,10 @@
       "revenue": 3450274,
       "sales": 639,
       "avgPrice": 5399,
-      "url": "https://www.ozon.ru/product/1167942489"
+      "url": "https://www.ozon.ru/product/1167942489",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/9573161055.jpg",
+      "listingDate": "2023-09-02",
+      "ageDays": 1055
     },
     {
       "name": "RUYCH Car Lamp H7, 2 pcs",
@@ -465,7 +505,10 @@
       "revenue": 3080198,
       "sales": 1562,
       "avgPrice": 1972,
-      "url": "https://www.ozon.ru/product/1254123065"
+      "url": "https://www.ozon.ru/product/1254123065",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-r/7909264935.jpg",
+      "listingDate": "2023-10-22",
+      "ageDays": 1005
     },
     {
       "name": "Cswur Automotive Inverter, 2600W",
@@ -475,7 +518,10 @@
       "revenue": 3074923,
       "sales": 851,
       "avgPrice": 3613,
-      "url": "https://www.ozon.ru/product/3658820287"
+      "url": "https://www.ozon.ru/product/3658820287",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/7762336882.jpg",
+      "listingDate": "2026-03-16",
+      "ageDays": 129
     },
     {
       "name": "Car Lamp H4, 2 pcs",
@@ -485,7 +531,305 @@
       "revenue": 3067850,
       "sales": 1246,
       "avgPrice": 2462,
-      "url": "https://www.ozon.ru/product/2019324821"
+      "url": "https://www.ozon.ru/product/2019324821",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/8622464455.jpg",
+      "listingDate": "2025-04-10",
+      "ageDays": 469
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.04,
+      "revenueGrowthCoverage": 97.5,
+      "impressions": 311158071,
+      "visits": 10431189,
+      "visitRate": 0.0335,
+      "orderConversionMedian": 0.0033,
+      "orderConversionCoverage": 99.4,
+      "cartAddMedian": 0.1387,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 9,
+      "stockoutCoverage": 95.1,
+      "missedRevenue": 9052839.3,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 25.692105263157895,
+      "inventoryCoverCoverage": 94.2
+    },
+    "marketing": {
+      "discountMedian": 0.1965,
+      "discountCoverage": 100,
+      "promoShareMedian": 1,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.07,
+      "adRoiCoverage": 97.5,
+      "promoActiveShare": 84.4,
+      "adActiveShare": 36
+    },
+    "fulfillment": {
+      "signRateMedian": 0.91,
+      "signRateCoverage": 97.4,
+      "fboShare": 95,
+      "deliveryCoverage": 100,
+      "volumeMedian": 0.4,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 97.4,
+      "freshCount": 175,
+      "freshRevenueShare": 14.2,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“车灯”拆出 2–3 个明确规格，并优先覆盖 500–1,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 19.1%",
+        "500–1,000 ₽ 贡献 24.4% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 97.4%",
+        "180 天内新品 175 个",
+        "新品销售额占样本 14.2%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 95.1%",
+        "缺货天数中位数 9 天",
+        "库存覆盖字段 94.2%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 99.4%",
+        "下单转化率中位数 0.3%",
+        "访问率 3.35%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "CoolQueen Automotive Inverter, 3600W",
+      "type": "汽车逆变器",
+      "brand": "CoolQueen",
+      "url": "https://www.ozon.ru/product/3574675785",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/9263182609.jpg",
+      "listingDate": "2026-03-02",
+      "ageDays": 143,
+      "revenue": 3944932,
+      "sales": 661,
+      "avgPrice": 5968,
+      "revenueGrowth": 0.43,
+      "orderConv": 0.0014,
+      "cartAdd": 0.09179999999999999,
+      "stockoutDays": 19,
+      "adRoi": 0.029
+    },
+    {
+      "name": "Cswur Automotive Inverter, 2600W",
+      "type": "汽车逆变器",
+      "brand": "Cswur",
+      "url": "https://www.ozon.ru/product/3658820287",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-y/7762336882.jpg",
+      "listingDate": "2026-03-16",
+      "ageDays": 129,
+      "revenue": 3074923,
+      "sales": 851,
+      "avgPrice": 3613,
+      "revenueGrowth": 0.0688,
+      "orderConv": 0.0013,
+      "cartAdd": 0.09179999999999999,
+      "stockoutDays": 15,
+      "adRoi": 0.086
+    },
+    {
+      "name": "Fuel Pump",
+      "type": "燃油泵",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4024449553",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-3/10261574931.jpg",
+      "listingDate": "2026-04-21",
+      "ageDays": 93,
+      "revenue": 1911220,
+      "sales": 2238,
+      "avgPrice": 854,
+      "revenueGrowth": 1.3876,
+      "orderConv": 0.0049,
+      "cartAdd": 0.1191,
+      "stockoutDays": 26,
+      "adRoi": 0
+    },
+    {
+      "name": "Теплмяг Car Lamp H4, 2 pcs",
+      "type": "车灯",
+      "brand": "Теплмяг",
+      "url": "https://www.ozon.ru/product/3490457182",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/11666335929.jpg",
+      "listingDate": "2026-02-03",
+      "ageDays": 170,
+      "revenue": 1574582,
+      "sales": 1661,
+      "avgPrice": 948,
+      "revenueGrowth": 0.0286,
+      "orderConv": 0.0006,
+      "cartAdd": 0.1223,
+      "stockoutDays": 14,
+      "adRoi": 0.303
+    },
+    {
+      "name": "Car Lamp H11/H8/H9, 2 pcs",
+      "type": "车灯",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3492754682",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-q/11440826702.jpg",
+      "listingDate": "2026-02-03",
+      "ageDays": 170,
+      "revenue": 1469111,
+      "sales": 865,
+      "avgPrice": 1698,
+      "revenueGrowth": 0.011399999999999999,
+      "orderConv": 0.0027,
+      "cartAdd": 0.1114,
+      "stockoutDays": 11,
+      "adRoi": 0.135
+    },
+    {
+      "name": "АТС Drum Brake",
+      "type": "制动鼓",
+      "brand": "АТС",
+      "url": "https://www.ozon.ru/product/3528933562",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-2/9083293022.jpg",
+      "listingDate": "2026-02-12",
+      "ageDays": 161,
+      "revenue": 1366679,
+      "sales": 505,
+      "avgPrice": 2706,
+      "revenueGrowth": -0.1,
+      "orderConv": 0.0025,
+      "cartAdd": 0.1063,
+      "stockoutDays": 11,
+      "adRoi": 0.025
+    },
+    {
+      "name": "АВТОРУБИКС Car Hose",
+      "type": "汽车软管",
+      "brand": "АВТОРУБИКС",
+      "url": "https://www.ozon.ru/product/4299703816",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-5/10457160377.jpg",
+      "listingDate": "2026-05-14",
+      "ageDays": 70,
+      "revenue": 1352908,
+      "sales": 2029,
+      "avgPrice": 667,
+      "revenueGrowth": 1.085,
+      "orderConv": 0.0048,
+      "cartAdd": 0.1116,
+      "stockoutDays": 26,
+      "adRoi": 0
+    },
+    {
+      "name": "Теплмяг Car Lamp H4, 2 pcs",
+      "type": "车灯",
+      "brand": "Теплмяг",
+      "url": "https://www.ozon.ru/product/3490566702",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-m/12308949562.jpg",
+      "listingDate": "2026-02-03",
+      "ageDays": 170,
+      "revenue": 1256911,
+      "sales": 805,
+      "avgPrice": 1561,
+      "revenueGrowth": -0.02,
+      "orderConv": 0.0006,
+      "cartAdd": 0.1075,
+      "stockoutDays": 21,
+      "adRoi": 0.254
+    },
+    {
+      "name": "Tyre pressure sensor",
+      "type": "汽车传感器",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3616620598",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-f/11271143715.jpg",
+      "listingDate": "2026-03-10",
+      "ageDays": 135,
+      "revenue": 1185427,
+      "sales": 1069,
+      "avgPrice": 1109,
+      "revenueGrowth": 0.67,
+      "orderConv": 0.0032,
+      "cartAdd": 0.1942,
+      "stockoutDays": 11,
+      "adRoi": 0.029
+    },
+    {
+      "name": "Barracuda Engine & Gearbox Protection",
+      "type": "发动机、变速箱护板",
+      "brand": "Barracuda",
+      "url": "https://www.ozon.ru/product/4189508915",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-9/10268337105.jpg",
+      "listingDate": "2026-05-05",
+      "ageDays": 79,
+      "revenue": 1160817,
+      "sales": 463,
+      "avgPrice": 2507,
+      "revenueGrowth": 0.26,
+      "orderConv": 0.0031,
+      "cartAdd": 0.1069,
+      "stockoutDays": 13,
+      "adRoi": 0
+    },
+    {
+      "name": "CC-LOT Car Lamp H4, 2 pcs",
+      "type": "车灯",
+      "brand": "CC-LOT",
+      "url": "https://www.ozon.ru/product/3474244244",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/7656521554.jpg",
+      "listingDate": "2026-01-30",
+      "ageDays": 174,
+      "revenue": 1068592,
+      "sales": 797,
+      "avgPrice": 1341,
+      "revenueGrowth": 0.61,
+      "orderConv": 0.0016,
+      "cartAdd": 0.1251,
+      "stockoutDays": 13,
+      "adRoi": 0.133
+    },
+    {
+      "name": "HOFER Spark Plug, 4 pcs",
+      "type": "火花塞",
+      "brand": "ЭЗ",
+      "url": "https://www.ozon.ru/product/3595991735",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9238983023.jpg",
+      "listingDate": "2026-03-06",
+      "ageDays": 139,
+      "revenue": 1050720,
+      "sales": 2474,
+      "avgPrice": 425,
+      "revenueGrowth": 0.1,
+      "orderConv": 0.0051,
+      "cartAdd": 0.1779,
+      "stockoutDays": 7,
+      "adRoi": 0.018
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 97.4,
     "stockoutMedian": 9,
     "stockoutCoverage": 95.1,
-    "missedRevenue": 9052839.3,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 84.4,
     "promoCoverage": 97.5,
     "adActiveShare": 36,
@@ -509,12 +851,34 @@
     "duplicateSku": 14,
     "duplicateUrl": 0,
     "uniqueSku": 986,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 97.5,
+      "impressions": 97.5,
+      "visits": 100,
+      "orderConv": 99.4,
+      "cartAdd": 100,
+      "stock": 94.2,
+      "dailySales": 97.6,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 97.5,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 97.4
+    },
+    "listingDateCoverage": 97.4,
+    "freshProductCount": 175,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“车灯”贡献 19.1% 销售额；前五品类合计 49.6%。",
     "销售额最集中的价格带是 500–1,000 ₽，覆盖 224 条商品记录，贡献 24.4% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 44.3% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 97.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 97.5%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 97.4%；其中 180 天内新品 175 个，贡献 14.2% 样本销售额。"
+  ],
+  "path": "reports/generated/passenger-car-parts/index.html"
 }

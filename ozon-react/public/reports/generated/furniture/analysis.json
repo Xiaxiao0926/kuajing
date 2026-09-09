@@ -1,12 +1,16 @@
 {
+  "schemaVersion": 1,
+  "kind": "generated",
   "id": "generated-furniture",
   "label": "家具",
   "title": "Ozon 家具市场分析",
   "group": "家居与维修",
   "snapshot": "2026-07-22",
-  "sourceFile": "ozon-2026-07-22家具_清洗版.xlsx",
-  "path": "reports/generated/furniture/index.html",
+  "source": "用户导入 Excel",
+  "sample": "1,000 条记录",
   "frameTitle": "Ozon 家具市场分析报告",
+  "sourceFile": "ozon-2026-07-22家具_清洗版.xlsx",
+  "publishedAt": "2026-09-09T01:45:35.281Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 1505399946,
@@ -345,7 +349,10 @@
       "revenue": 43602574,
       "sales": 3340,
       "avgPrice": 13055,
-      "url": "https://www.ozon.ru/product/624078645"
+      "url": "https://www.ozon.ru/product/624078645",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-x/11992995537.jpg",
+      "listingDate": "2022-06-22",
+      "ageDays": 1491
     },
     {
       "name": "HYPNOZ Mattress, Independent springs, 160 х 200 cm",
@@ -355,7 +362,10 @@
       "revenue": 25653423,
       "sales": 2839,
       "avgPrice": 9036,
-      "url": "https://www.ozon.ru/product/656762826"
+      "url": "https://www.ozon.ru/product/656762826",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/10791321726.jpg",
+      "listingDate": "2022-07-30",
+      "ageDays": 1453
     },
     {
       "name": "ASKONA Mattress, With zone spring unit, 160 х 200 cm",
@@ -365,7 +375,10 @@
       "revenue": 24767413,
       "sales": 1500,
       "avgPrice": 16512,
-      "url": "https://www.ozon.ru/product/1673606683"
+      "url": "https://www.ozon.ru/product/1673606683",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/9165089498.jpg",
+      "listingDate": "2024-08-28",
+      "ageDays": 693
     },
     {
       "name": "HELE Office Armchair",
@@ -375,7 +388,10 @@
       "revenue": 23849666,
       "sales": 2267,
       "avgPrice": 10520,
-      "url": "https://www.ozon.ru/product/3232293240"
+      "url": "https://www.ozon.ru/product/3232293240",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/8655624704.jpg",
+      "listingDate": "2025-12-13",
+      "ageDays": 221
     },
     {
       "name": "GMMWCB Gaming Chair",
@@ -385,7 +401,10 @@
       "revenue": 21790769,
       "sales": 2944,
       "avgPrice": 7402,
-      "url": "https://www.ozon.ru/product/1605911372"
+      "url": "https://www.ozon.ru/product/1605911372",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/7439771765.jpg",
+      "listingDate": "2024-06-16",
+      "ageDays": 766
     },
     {
       "name": "UTOPIA Mattress, Independent springs, 90 х 200 cm",
@@ -395,7 +414,10 @@
       "revenue": 20989433,
       "sales": 4040,
       "avgPrice": 5195,
-      "url": "https://www.ozon.ru/product/3211083438"
+      "url": "https://www.ozon.ru/product/3211083438",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-p/11030040781.jpg",
+      "listingDate": "2025-12-08",
+      "ageDays": 226
     },
     {
       "name": "UTOPIA Mattress, Independent springs, 160 х 200 cm",
@@ -405,7 +427,10 @@
       "revenue": 18573306,
       "sales": 2353,
       "avgPrice": 7893,
-      "url": "https://www.ozon.ru/product/1784895850"
+      "url": "https://www.ozon.ru/product/1784895850",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-s/11030039632.jpg",
+      "listingDate": "2024-12-12",
+      "ageDays": 587
     },
     {
       "name": "HOMSLY Garden Furniture Set, 4 persons",
@@ -415,7 +440,10 @@
       "revenue": 18072569,
       "sales": 1297,
       "avgPrice": 13934,
-      "url": "https://www.ozon.ru/product/1856494532"
+      "url": "https://www.ozon.ru/product/1856494532",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-j/7304079331.jpg",
+      "listingDate": "2025-02-04",
+      "ageDays": 533
     },
     {
       "name": "WOWSLEEP Mattress, Independent springs, 160 х 200 cm",
@@ -425,7 +453,10 @@
       "revenue": 17756424,
       "sales": 1375,
       "avgPrice": 12914,
-      "url": "https://www.ozon.ru/product/3482410034"
+      "url": "https://www.ozon.ru/product/3482410034",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/11713694266.jpg",
+      "listingDate": "2026-02-01",
+      "ageDays": 171
     },
     {
       "name": "FStore Mattress, Independent springs, 160 х 200 cm",
@@ -435,7 +466,10 @@
       "revenue": 16923218,
       "sales": 1434,
       "avgPrice": 11801,
-      "url": "https://www.ozon.ru/product/3048199240"
+      "url": "https://www.ozon.ru/product/3048199240",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/11993520905.jpg",
+      "listingDate": "2025-10-31",
+      "ageDays": 264
     },
     {
       "name": "FStore Mattress, Independent springs, 180 х 200 cm",
@@ -445,7 +479,10 @@
       "revenue": 14380694,
       "sales": 977,
       "avgPrice": 14719,
-      "url": "https://www.ozon.ru/product/3048199971"
+      "url": "https://www.ozon.ru/product/3048199971",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/11993521186.jpg",
+      "listingDate": "2025-10-31",
+      "ageDays": 264
     },
     {
       "name": "ASKONA Mattress, With zone spring unit, 140 х 200 cm",
@@ -455,7 +492,10 @@
       "revenue": 13825730,
       "sales": 973,
       "avgPrice": 14209,
-      "url": "https://www.ozon.ru/product/1673605810"
+      "url": "https://www.ozon.ru/product/1673605810",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/9978080708.jpg",
+      "listingDate": "2024-08-28",
+      "ageDays": 693
     },
     {
       "name": "HELE Office Armchair",
@@ -465,7 +505,10 @@
       "revenue": 13376029,
       "sales": 1746,
       "avgPrice": 7661,
-      "url": "https://www.ozon.ru/product/2805867707"
+      "url": "https://www.ozon.ru/product/2805867707",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/8066320638.jpg",
+      "listingDate": "2025-09-04",
+      "ageDays": 321
     },
     {
       "name": "Weissgauff Mattress, Independent springs, 160 х 200 cm",
@@ -475,7 +518,10 @@
       "revenue": 13107345,
       "sales": 1253,
       "avgPrice": 10461,
-      "url": "https://www.ozon.ru/product/3889180651"
+      "url": "https://www.ozon.ru/product/3889180651",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/11912805162.jpg",
+      "listingDate": "2026-04-09",
+      "ageDays": 104
     },
     {
       "name": "Сot",
@@ -485,7 +531,305 @@
       "revenue": 12922886,
       "sales": 5418,
       "avgPrice": 2385,
-      "url": "https://www.ozon.ru/product/4292063882"
+      "url": "https://www.ozon.ru/product/4292063882",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/10173760957.jpg",
+      "listingDate": "2026-05-13",
+      "ageDays": 70
+    }
+  ],
+  "marketDimensions": {
+    "demand": {
+      "revenueGrowthMedian": 0.06,
+      "revenueGrowthCoverage": 97.7,
+      "impressions": 609773596,
+      "visits": 27636369,
+      "visitRate": 0.0453,
+      "orderConversionMedian": 0.0022,
+      "orderConversionCoverage": 98.9,
+      "cartAddMedian": 0.1232,
+      "cartAddCoverage": 100
+    },
+    "supply": {
+      "stockoutMedian": 12,
+      "stockoutCoverage": 93.8,
+      "missedRevenue": 21948281.1,
+      "missedRevenueCoverage": 100,
+      "inventoryCoverMedian": 21,
+      "inventoryCoverCoverage": 92.9
+    },
+    "marketing": {
+      "discountMedian": 0.20655,
+      "discountCoverage": 100,
+      "promoShareMedian": 1,
+      "promoShareCoverage": 100,
+      "adRoiMedian": 0.09699999999999999,
+      "adRoiCoverage": 97.7,
+      "promoActiveShare": 87.7,
+      "adActiveShare": 63.2
+    },
+    "fulfillment": {
+      "signRateMedian": 0.91,
+      "signRateCoverage": 96.7,
+      "fboShare": 93.9,
+      "deliveryCoverage": 100,
+      "volumeMedian": 2.6,
+      "volumeCoverage": 100
+    },
+    "newness": {
+      "windowDays": 180,
+      "listingDateCoverage": 96.7,
+      "freshCount": 226,
+      "freshRevenueShare": 19,
+      "futureDateCount": 0,
+      "outlierDateCount": 0
+    }
+  },
+  "recommendations": [
+    {
+      "title": "先从头部需求与主价格带建立首测组",
+      "recommendation": "围绕“床垫”拆出 2–3 个明确规格，并优先覆盖 ≥5,000 ₽ 主成交带；每个规格只做小批量对标测试。",
+      "evidence": [
+        "头部类型销售额占比 33.2%",
+        "≥5,000 ₽ 贡献 49.7% 样本销售额",
+        "样本 1000 条"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "用 180 天新品验证增长方向",
+      "recommendation": "优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。",
+      "evidence": [
+        "有效上架日期覆盖 96.7%",
+        "180 天内新品 226 个",
+        "新品销售额占样本 19%"
+      ],
+      "confidence": "高"
+    },
+    {
+      "title": "把供给缺口转化为备货验证",
+      "recommendation": "优先核验高销售额且缺货天数较高的具体规格，同时用日销和库存覆盖天数控制首批数量，避免把偶发断货误判为真实缺口。",
+      "evidence": [
+        "缺货天数字段覆盖 93.8%",
+        "缺货天数中位数 12 天",
+        "库存覆盖字段 92.9%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "用漏斗数据筛掉“有曝光没成交”商品",
+      "recommendation": "在同类型、同价格带内优先保留访问和下单转化更稳定的商品，再结合广告与促销依赖度判断是否值得自然流量测试。",
+      "evidence": [
+        "下单转化率覆盖 98.9%",
+        "下单转化率中位数 0.2%",
+        "访问率 4.53%"
+      ],
+      "confidence": "中"
+    }
+  ],
+  "newProducts": [
+    {
+      "name": "WOWSLEEP Mattress, Independent springs, 160 х 200 cm",
+      "type": "床垫",
+      "brand": "WOWSLEEP",
+      "url": "https://www.ozon.ru/product/3482410034",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-a/11713694266.jpg",
+      "listingDate": "2026-02-01",
+      "ageDays": 171,
+      "revenue": 17756424,
+      "sales": 1375,
+      "avgPrice": 12914,
+      "revenueGrowth": 0.02,
+      "orderConv": 0.0014,
+      "cartAdd": 0.1058,
+      "stockoutDays": 2,
+      "adRoi": 0.132
+    },
+    {
+      "name": "Weissgauff Mattress, Independent springs, 160 х 200 cm",
+      "type": "床垫",
+      "brand": "Weissgauff",
+      "url": "https://www.ozon.ru/product/3889180651",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-i/11912805162.jpg",
+      "listingDate": "2026-04-09",
+      "ageDays": 104,
+      "revenue": 13107345,
+      "sales": 1253,
+      "avgPrice": 10461,
+      "revenueGrowth": 0.0125,
+      "orderConv": 0.0009,
+      "cartAdd": 0.1115,
+      "stockoutDays": 27,
+      "adRoi": 0.356
+    },
+    {
+      "name": "Сot",
+      "type": "折叠床",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/4292063882",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-1/10173760957.jpg",
+      "listingDate": "2026-05-13",
+      "ageDays": 70,
+      "revenue": 12922886,
+      "sales": 5418,
+      "avgPrice": 2385,
+      "revenueGrowth": 0.0163,
+      "orderConv": 0.0012,
+      "cartAdd": 0.1403,
+      "stockoutDays": 24,
+      "adRoi": 0
+    },
+    {
+      "name": "Deck Chair, Metal, 178 х 66 х 25 cm",
+      "type": "躺椅",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3977891009",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-k/10201660004.jpg",
+      "listingDate": "2026-04-17",
+      "ageDays": 96,
+      "revenue": 9903547,
+      "sales": 1876,
+      "avgPrice": 5279,
+      "revenueGrowth": -0.09,
+      "orderConv": 0.0008,
+      "cartAdd": 0.1168,
+      "stockoutDays": 17,
+      "adRoi": 0.104
+    },
+    {
+      "name": "HELE Mattress, Independent springs, 160 х 200 cm",
+      "type": "床垫",
+      "brand": "HELE",
+      "url": "https://www.ozon.ru/product/4027582004",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-d/10412079457.jpg",
+      "listingDate": "2026-04-21",
+      "ageDays": 92,
+      "revenue": 9467104,
+      "sales": 948,
+      "avgPrice": 9986,
+      "revenueGrowth": -0.27,
+      "orderConv": 0.0013,
+      "cartAdd": 0.1238,
+      "stockoutDays": 6,
+      "adRoi": 0.157
+    },
+    {
+      "name": "Weissgauff Mattress, Independent springs, 90 х 200 cm",
+      "type": "床垫",
+      "brand": "Weissgauff",
+      "url": "https://www.ozon.ru/product/3889177108",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-u/11912790090.jpg",
+      "listingDate": "2026-04-09",
+      "ageDays": 104,
+      "revenue": 9115604,
+      "sales": 1402,
+      "avgPrice": 6502,
+      "revenueGrowth": 0.0362,
+      "orderConv": 0.001,
+      "cartAdd": 0.0992,
+      "stockoutDays": 27,
+      "adRoi": 0.32
+    },
+    {
+      "name": "Stynergy Shelving, 100 х 50 х 200.8 cm",
+      "type": "货架",
+      "brand": "Stynergy",
+      "url": "https://www.ozon.ru/product/3678616618",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-g/12637147336.jpg",
+      "listingDate": "2026-03-18",
+      "ageDays": 126,
+      "revenue": 7608824,
+      "sales": 1337,
+      "avgPrice": 5691,
+      "revenueGrowth": 0.41,
+      "orderConv": 0.0011,
+      "cartAdd": 0.07980000000000001,
+      "stockoutDays": 19,
+      "adRoi": 0.109
+    },
+    {
+      "name": "Weissgauff Mattress, Independent springs, 140 х 200 cm",
+      "type": "床垫",
+      "brand": "PATRINO",
+      "url": "https://www.ozon.ru/product/3889176089",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-t/11912775545.jpg",
+      "listingDate": "2026-04-09",
+      "ageDays": 104,
+      "revenue": 7088914,
+      "sales": 754,
+      "avgPrice": 9402,
+      "revenueGrowth": 0.022400000000000003,
+      "orderConv": 0.0013,
+      "cartAdd": 0.1061,
+      "stockoutDays": 27,
+      "adRoi": 0.212
+    },
+    {
+      "name": "Сot",
+      "type": "折叠床",
+      "brand": "未知/无品牌",
+      "url": "https://www.ozon.ru/product/3980874315",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-b/9860846375.jpg",
+      "listingDate": "2026-04-17",
+      "ageDays": 96,
+      "revenue": 7012318,
+      "sales": 2606,
+      "avgPrice": 2691,
+      "revenueGrowth": 0.23,
+      "orderConv": 0.001,
+      "cartAdd": 0.1197,
+      "stockoutDays": 25,
+      "adRoi": 0.206
+    },
+    {
+      "name": "Kezga Gaming Chair",
+      "type": "游戏椅",
+      "brand": "Kezga",
+      "url": "https://www.ozon.ru/product/4009060261",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-e/10867958366.jpg",
+      "listingDate": "2026-04-19",
+      "ageDays": 94,
+      "revenue": 6803774,
+      "sales": 1076,
+      "avgPrice": 6323,
+      "revenueGrowth": 0.55,
+      "orderConv": 0.0008,
+      "cartAdd": 0.1169,
+      "stockoutDays": 16,
+      "adRoi": 0.027
+    },
+    {
+      "name": "WOWSLEEP Mattress, Independent springs, 140 х 200 cm",
+      "type": "床垫",
+      "brand": "WOWSLEEP",
+      "url": "https://www.ozon.ru/product/3482387007",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-h/11713691213.jpg",
+      "listingDate": "2026-02-01",
+      "ageDays": 171,
+      "revenue": 6592794,
+      "sales": 558,
+      "avgPrice": 11815,
+      "revenueGrowth": -0.09,
+      "orderConv": 0.0013,
+      "cartAdd": 0.1098,
+      "stockoutDays": 2,
+      "adRoi": 0.112
+    },
+    {
+      "name": "Weissgauff Mattress, Independent springs, 160 х 200 cm",
+      "type": "床垫",
+      "brand": "Weissgauff",
+      "url": "https://www.ozon.ru/product/3889176019",
+      "image": "https://ir-20.ozonstatic.cn/s3/multimedia-1-6/11912860194.jpg",
+      "listingDate": "2026-04-09",
+      "ageDays": 104,
+      "revenue": 5913355,
+      "sales": 623,
+      "avgPrice": 9492,
+      "revenueGrowth": 0.0242,
+      "orderConv": 0.0008,
+      "cartAdd": 0.1126,
+      "stockoutDays": 27,
+      "adRoi": 0.346
     }
   ],
   "operations": {
@@ -493,8 +837,6 @@
     "signRateCoverage": 96.7,
     "stockoutMedian": 12,
     "stockoutCoverage": 93.8,
-    "missedRevenue": 21948281.1,
-    "missedRevenueCoverage": 100,
     "promoActiveShare": 87.7,
     "promoCoverage": 97.7,
     "adActiveShare": 63.2,
@@ -509,12 +851,34 @@
     "duplicateSku": 20,
     "duplicateUrl": 0,
     "uniqueSku": 980,
-    "urlCoverage": 100
+    "urlCoverage": 100,
+    "fieldCoverage": {
+      "revenueGrowth": 97.7,
+      "impressions": 97.7,
+      "visits": 99.8,
+      "orderConv": 98.9,
+      "cartAdd": 100,
+      "stock": 92.9,
+      "dailySales": 96.1,
+      "missedRevenue": 100,
+      "discount": 100,
+      "promoShare": 100,
+      "adRoi": 97.7,
+      "delivery": 100,
+      "volume": 100,
+      "listingDate": 96.7
+    },
+    "listingDateCoverage": 96.7,
+    "freshProductCount": 226,
+    "futureListingDateCount": 0,
+    "outlierListingDateCount": 0
   },
   "insights": [
     "头部品类“床垫”贡献 33.2% 销售额；前五品类合计 58.5%。",
     "销售额最集中的价格带是 ≥5,000 ₽，覆盖 92 条商品记录，贡献 49.7% 销售额。",
     "前十品牌（含未知/无品牌桶）合计贡献 54.2% 销售额；该指标反映样本集中度，不等同于完整市场份额。",
-    "销量字段覆盖率为 97.7%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。"
-  ]
+    "销量字段覆盖率为 97.7%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。",
+    "有效上架日期覆盖 96.7%；其中 180 天内新品 226 个，贡献 19% 样本销售额。"
+  ],
+  "path": "reports/generated/furniture/index.html"
 }
