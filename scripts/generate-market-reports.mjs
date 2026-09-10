@@ -282,6 +282,19 @@ function formatCount(value) {
   return formatRub(value)
 }
 
+function formatOptionalRub(value) {
+  return Number.isFinite(value) ? `${formatRub(value)} ₽` : '—'
+}
+
+function formatRatio(value) {
+  return Number.isFinite(value) ? `${round(value * 100, 1)}%` : '—'
+}
+
+function formatChange(value, suffix = '%') {
+  if (!Number.isFinite(value)) return '—'
+  return `${value > 0 ? '+' : ''}${round(value, 1)}${suffix}`
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -293,6 +306,13 @@ function escapeHtml(value) {
 
 function htmlFor(analysis) {
   const dataJson = JSON.stringify(analysis).replaceAll('</script', '<\\/script')
+  const russia = analysis.russiaEntry
+  const context = russia?.context
+  const cohort = russia?.cohortComparison
+  const competition = russia?.competition
+  const logistics = russia?.logisticsFit
+  const executiveRows = (analysis.executiveSummary || []).map((item, index) => `
+    <li><span>${String(index + 1).padStart(2, '0')}</span><p>${escapeHtml(item)}</p></li>`).join('')
   const recommendationRows = analysis.recommendations.map((item) => `
     <div class="recommendation"><div><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.confidence)}置信度</span></div><p>${escapeHtml(item.recommendation)}</p><small>数据依据：${item.evidence.map(escapeHtml).join(' · ')}</small></div>`).join('')
   const newProductRows = analysis.newProducts.map((item, index) => `
@@ -311,6 +331,14 @@ function htmlFor(analysis) {
   const typeRows = analysis.topTypes.map((item, index) => `
     <tr><td>${index + 1}</td><td>${escapeHtml(item.name)}</td><td class="number">${item.rows}</td><td class="number">${formatRub(item.revenue)}</td><td class="number">${formatRub(item.sales)}</td><td class="number">${item.share}%</td></tr>`).join('')
 
+  const opportunityRows = (russia?.typeOpportunities || []).map((item) => `
+    <tr><td><strong>${escapeHtml(item.decision)}</strong></td><td>${escapeHtml(item.name)}</td><td class="number">${item.score ?? '—'}</td><td class="number">${item.revenueShare}%</td><td class="number">${item.freshRevenueShare}%</td><td class="number">${formatOptionalRub(item.revenuePerSku)}</td><td class="number">${Number.isFinite(item.stockoutMedian) ? `${round(item.stockoutMedian, 1)} 天` : '—'}</td><td class="number">${item.whiteLabelRevenueShare}%</td><td class="number">${item.evidenceCoverage}%</td></tr>`).join('')
+  const complianceRows = (context?.compliance?.rules || []).map((rule) => `
+    <li><strong>${escapeHtml(rule.code)}</strong>：${escapeHtml(rule.note)}</li>`).join('')
+  const gapRows = (russia?.gaps || []).map((gap) => `<li>${escapeHtml(gap)}</li>`).join('')
+  const sourceRows = (context?.sources || []).map((source) => `
+    <li><a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${escapeHtml(source.title)}</a><span>${escapeHtml(source.publisher)}${source.asOf ? ` · 截至 ${escapeHtml(source.asOf)}` : ''}</span></li>`).join('')
+
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -324,14 +352,16 @@ function htmlFor(analysis) {
     :root{--paper:#fff;--canvas:#f4f6f7;--ink:#182027;--muted:#62707d;--rule:#dfe4e8;--navy:#174a67;--teal:#16877d;--red:#b84943;--gold:#b9792b;--soft:#edf4f6}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:InstrumentSans,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
     .cover{background:#173a50;color:#fff;padding:58px 0 78px;border-bottom:6px solid var(--teal)}.eyebrow{font-size:12px;font-weight:700;color:#a9d8d2;text-transform:uppercase}.cover h1{font-family:InstrumentSerif,"Songti SC",serif;font-weight:400;font-size:42px;line-height:1.15;margin:12px 0}.cover p{max-width:820px;color:#d8e4ea;margin:0}.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:#bdd0da}.rate{display:inline-block;margin-top:18px;border:1px solid rgba(255,255,255,.24);padding:6px 10px;border-radius:4px;font-size:12px;color:#d8e4ea}
-    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:-42px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
+    .executive{position:relative;margin-top:-42px;background:var(--paper);border:1px solid var(--rule);border-top:4px solid var(--red);padding:22px 24px;box-shadow:0 9px 22px rgba(20,40,52,.1)}.executive-head{display:flex;justify-content:space-between;gap:16px;align-items:baseline}.executive h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:27px;font-weight:400;margin:0}.executive-head span{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase}.executive ol{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}.executive li{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:0 16px;border-left:1px solid var(--rule)}.executive li:first-child{padding-left:0;border-left:0}.executive li:last-child{padding-right:0}.executive li>span{color:var(--red);font-size:12px;font-weight:700}.executive li p{margin:0;font-size:13px;line-height:1.65}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:14px}.kpi{background:var(--paper);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:16px;box-shadow:0 7px 18px rgba(20,40,52,.08)}.kpi span{display:block}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{margin-top:5px;font-size:21px;font-weight:700}.kpi .hint{margin-top:2px;font-size:11px;color:var(--muted)}
     main{padding:34px 0 50px}.quality{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--gold);padding:15px 17px;margin-bottom:34px}.quality strong{white-space:nowrap}.quality p{margin:0;color:var(--muted);font-size:13px}.section{margin:0 0 42px}.section-head{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:8px}.section-no{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:700}.section h2{font-family:InstrumentSerif,"Songti SC",serif;font-size:28px;font-weight:400;margin:0}.lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:880px}
-    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart{background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
+    .insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight{background:var(--paper);border:1px solid var(--rule);padding:16px 18px;font-size:14px}.insight b{color:var(--red);margin-right:7px}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;min-width:0}.chart{min-width:0;overflow:hidden;background:var(--paper);border:1px solid var(--rule);padding:16px}.chart h3{font-size:14px;margin:0 0 8px}.chart-box{width:100%;min-width:0;height:340px}.chart.wide{grid-column:1/-1}.chart.wide .chart-box{height:380px}
     .table-wrap{background:#fff;border:1px solid var(--rule);overflow:auto;max-height:600px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}th{position:sticky;top:0;background:#244b61;color:#fff;text-align:left;padding:10px 12px;white-space:nowrap;z-index:1}td{padding:10px 12px;border-top:1px solid var(--rule);vertical-align:top}tbody tr:nth-child(even){background:#f7f9fa}.number{text-align:right;white-space:nowrap}.product-name{min-width:260px;max-width:420px}.product-name a{color:var(--navy);text-decoration:none}.product-name a:hover{text-decoration:underline}
     .ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.op{background:#fff;border-bottom:3px solid var(--navy);padding:15px}.op .label{font-size:12px;color:var(--muted)}.op .value{font-size:20px;font-weight:700;margin-top:5px}.op .coverage{font-size:11px;color:var(--muted);margin-top:2px}.recommendations{display:grid;gap:10px}.recommendation{background:#fff;border-left:3px solid var(--teal);padding:15px 17px}.recommendation>div{display:flex;justify-content:space-between;gap:12px}.recommendation span{font-size:11px;color:var(--teal);white-space:nowrap}.recommendation p{margin:7px 0;font-size:14px}.recommendation small{color:var(--muted)}.notes{background:#edf4f6;border:1px solid #d4e2e5;padding:18px 20px}.notes ul{margin:0;padding-left:20px}.notes li{margin:6px 0;font-size:13px;color:#4f5f6b}
+    .market-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;min-width:0;background:var(--rule);border:1px solid var(--rule)}.market-metric{min-width:0;background:#fff;padding:14px;border-top:2px solid var(--red)}.market-metric span{display:block;font-size:11px;color:var(--muted)}.market-metric strong{display:block;margin-top:4px;font-size:18px}.market-metric small{display:block;margin-top:2px;color:var(--muted)}.russia-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;min-width:0;margin-top:18px}.panel{min-width:0;overflow:hidden;background:#fff;border:1px solid var(--rule);padding:18px}.panel h3{font-size:15px;margin:0 0 5px}.panel>p{font-size:13px;color:var(--muted);margin:0 0 12px}.signal-list{margin:0;border-top:1px solid var(--rule)}.signal-row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:13px}.signal-row span:last-child{text-align:right;font-weight:700}.callout{margin-top:12px;padding-left:12px;border-left:3px solid var(--teal);font-size:13px}.method{margin-top:9px;font-size:11px;color:var(--muted)}.compliance{margin:10px 0 0;padding-left:20px}.compliance li{margin:8px 0;font-size:13px}.source-list{list-style:none;margin:10px 0 0;padding:0}.source-list li{display:grid;grid-template-columns:1fr auto;gap:16px;padding:8px 0;border-top:1px solid var(--rule);font-size:12px}.source-list a{color:var(--navy);font-weight:700;text-decoration:none}.source-list span{color:var(--muted);text-align:right}.scope-note{margin-top:10px;font-size:11px;color:var(--muted)}
     footer{background:#192a35;color:#b9c8d1;padding:34px 0;font-size:12px}footer strong{color:#fff}footer p{margin:6px 0}footer code{color:#d5e1e7;overflow-wrap:anywhere}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px}
-    @media(max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:-30px}.kpi:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}}
+    @media(max-width:900px){.executive ol{grid-template-columns:1fr}.executive li,.executive li:first-child,.executive li:last-child{padding:11px 0;border-left:0;border-top:1px solid var(--rule)}.executive li:first-child{border-top:0}.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.market-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.russia-grid{grid-template-columns:1fr}.charts{grid-template-columns:1fr}.chart.wide{grid-column:auto}.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 24px,1120px)}.cover{padding:38px 0 62px}.cover h1{font-size:32px}.executive{margin-top:-30px;padding:18px}.executive-head{display:block}.executive-head span{display:block;margin-bottom:4px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px}.kpi:last-child{grid-column:1/-1}.market-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.market-metric:last-child{grid-column:1/-1}.insights{grid-template-columns:1fr}.quality{display:block}.quality strong{display:block;margin-bottom:5px}.chart{padding:12px}.chart-box{height:300px}.ops{grid-template-columns:1fr 1fr}.op .value{font-size:17px}.source-list li{grid-template-columns:1fr}.source-list span{text-align:left}}
     @media print{body{background:#fff}.cover{padding:30px 0}.kpis{margin-top:18px}.chart{break-inside:avoid}.section{break-inside:auto}}
   </style>
 </head>
@@ -345,6 +375,10 @@ function htmlFor(analysis) {
   </div></header>
 
   <div class="wrap">
+    <section class="executive" aria-labelledby="executive-title">
+      <div class="executive-head"><span>Executive Summary</span><h2 id="executive-title">执行摘要</h2></div>
+      <ol>${executiveRows}</ol>
+    </section>
     <div class="kpis">
       <div class="kpi"><span class="label">样本销售额</span><span class="value">${formatCompact(analysis.kpis.totalRevenue)}</span><span class="hint">约 ${round(analysis.kpis.totalRevenue / RUB_PER_CNY / 1e6, 1)} 百万元人民币</span></div>
       <div class="kpi"><span class="label">已记录销量</span><span class="value">${formatCount(analysis.kpis.totalSales)} 件</span><span class="hint">覆盖 ${analysis.quality.salesCoverage}% 商品记录</span></div>
@@ -386,14 +420,68 @@ function htmlFor(analysis) {
       ${newProductRows ? `<div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th class="number">已上架</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>${newProductRows}</tbody></table></div>` : '<div class="notes">当前没有同时满足有效日期、180 天窗口和有效商品链接的记录。</div>'}
     </section>
 
+    ${russia && context && cohort ? `<section class="section">
+      <div class="section-head"><span class="section-no">05</span><h2>俄罗斯市场进入分析</h2></div>
+      <p class="lead">把 Ozon 样本与俄罗斯全网零售、平台结构和欧亚经济联盟法规放在同一决策框架内。外部宏观数据只提供方向，不与当前子类目样本销售额直接相乘。</p>
+      <div class="market-strip">
+        <div class="market-metric"><span>俄罗斯线上零售</span><strong>${context.overall.turnoverRubTrillion} 万亿 ₽</strong><small>2026 年上半年</small></div>
+        <div class="market-metric"><span>同比增长</span><strong>+${context.overall.yoyGrowthPct}%</strong><small>俄罗斯全网零售</small></div>
+        <div class="market-metric"><span>线上占社会零售</span><strong>${context.overall.onlineRetailSharePct}%</strong><small>宏观渠道渗透率</small></div>
+        <div class="market-metric"><span>本土商店与平台</span><strong>${context.overall.domesticPlatformSharePct}%</strong><small>直接跨境 ${context.overall.crossBorderSharePct}%</small></div>
+        <div class="market-metric"><span>${escapeHtml(context.sector?.label || '近似大类')}</span><strong>${context.sector?.sharePct === null || context.sector?.sharePct === undefined ? '未提供份额' : `${context.sector.sharePct}%`}</strong><small>${escapeHtml(context.sector?.growthText || '未匹配可比增速')}</small></div>
+      </div>
+      <p class="scope-note">近似大类来自俄罗斯全网零售统计，不是本报告 Ozon 子类目的市场份额。中国直发适合低库存测款；若验证成功，仍需评估本地库存、俄语内容和履约能力。</p>
+
+      <div class="russia-grid">
+        <article class="panel">
+          <h3>新品能否追上成熟品</h3>
+          <p>同一快照内比较 0–180 天新品与 181 天以上成熟品，避免只看上新数量。</p>
+          <div class="table-wrap"><table><thead><tr><th>指标</th><th class="number">新品</th><th class="number">成熟品</th><th class="number">差异</th></tr></thead><tbody>
+            <tr><td>样本 SKU</td><td class="number">${cohort.fresh.rows}</td><td class="number">${cohort.mature.rows}</td><td class="number">—</td></tr>
+            <tr><td>单位 SKU 销售额</td><td class="number">${formatOptionalRub(cohort.fresh.revenuePerSku)}</td><td class="number">${formatOptionalRub(cohort.mature.revenuePerSku)}</td><td class="number">${Number.isFinite(cohort.revenuePerSkuRatio) ? `${cohort.revenuePerSkuRatio}×` : '—'}</td></tr>
+            <tr><td>均价中位数</td><td class="number">${formatOptionalRub(cohort.fresh.avgPriceMedian)}</td><td class="number">${formatOptionalRub(cohort.mature.avgPriceMedian)}</td><td class="number">${formatChange(cohort.avgPriceDeltaPct)}</td></tr>
+            <tr><td>下单转化率中位数</td><td class="number">${formatRatio(cohort.fresh.orderConversionMedian)}</td><td class="number">${formatRatio(cohort.mature.orderConversionMedian)}</td><td class="number">${formatChange(cohort.orderConversionDeltaPct)}</td></tr>
+            <tr><td>缺货天数中位数</td><td class="number">${Number.isFinite(cohort.fresh.stockoutMedian) ? `${round(cohort.fresh.stockoutMedian, 1)} 天` : '—'}</td><td class="number">${Number.isFinite(cohort.mature.stockoutMedian) ? `${round(cohort.mature.stockoutMedian, 1)} 天` : '—'}</td><td class="number">${formatChange(cohort.stockoutDeltaDays, ' 天')}</td></tr>
+          </tbody></table></div>
+          <div class="callout">${escapeHtml(cohort.interpretation)}</div>
+        </article>
+
+        <article class="panel">
+          <h3>竞争与跨境测试性</h3>
+          <p>集中度判断头部壁垒，体积和价值密度判断首轮中国直发是否值得测试。</p>
+          <div class="signal-list">
+            <div class="signal-row"><span>品牌集中度</span><span>${escapeHtml(competition.brandConcentration)} · HHI ${competition.brandHhi ?? '—'}</span></div>
+            <div class="signal-row"><span>卖家集中度</span><span>${escapeHtml(competition.sellerConcentration)} · HHI ${competition.sellerHhi ?? '—'}</span></div>
+            <div class="signal-row"><span>头部卖家 / 前十卖家</span><span>${competition.topSellerShare}% / ${competition.topTenSellerShare}%</span></div>
+            <div class="signal-row"><span>未知/无品牌销售额</span><span>${competition.whiteLabelRevenueShare}%</span></div>
+            <div class="signal-row"><span>商品体积中位数 / P75</span><span>${Number.isFinite(logistics.volumeMedian) ? `${round(logistics.volumeMedian, 2)} L` : '—'} / ${Number.isFinite(logistics.volumeP75) ? `${round(logistics.volumeP75, 2)} L` : '—'}</span></div>
+            <div class="signal-row"><span>价格价值密度中位数</span><span>${Number.isFinite(logistics.pricePerLiterMedian) ? `${formatOptionalRub(logistics.pricePerLiterMedian)} / L` : '—'}</span></div>
+            <div class="signal-row"><span>≤5 L 首轮筛选占比</span><span>${logistics.compactTestShare === null ? '—' : `${logistics.compactTestShare}%`} · 覆盖 ${logistics.volumeCoverage}%</span></div>
+          </div>
+          <div class="method">${escapeHtml(competition.caveat)} ${escapeHtml(logistics.caveat)}</div>
+        </article>
+      </div>
+
+      <h3 style="margin:26px 0 8px;font-size:16px">品类进入优先级</h3>
+      <p class="lead">这是当前报告内部的探索排序，不能跨类目比较，也不是销量、利润或成功概率预测。</p>
+      <div class="table-wrap"><table><thead><tr><th>优先级</th><th>产品类型</th><th class="number">探索分</th><th class="number">销售额占比</th><th class="number">新品销售额占比</th><th class="number">单位 SKU 销售额</th><th class="number">缺货中位数</th><th class="number">未知品牌占比</th><th class="number">证据覆盖</th></tr></thead><tbody>${opportunityRows}</tbody></table></div>
+      <p class="method">${escapeHtml(russia.method.scoreWeights)} ${escapeHtml(russia.method.decisionRule)} ${escapeHtml(russia.method.boundary)}</p>
+
+      <div class="russia-grid">
+        <article class="panel"><h3>进入俄罗斯前的法规预筛</h3><p>${escapeHtml(context.compliance.summary)}</p>${complianceRows ? `<ul class="compliance">${complianceRows}</ul>` : '<div class="callout">当前未匹配到明确法规方向，询价时先补齐材质、用途、供电方式和 HS 编码。</div>'}</article>
+        <article class="panel"><h3>提高置信度仍需补齐</h3><ul class="compliance">${gapRows}</ul></article>
+      </div>
+      <details class="panel" style="margin-top:18px"><summary><strong>俄罗斯外部证据来源</strong></summary><ul class="source-list">${sourceRows}</ul></details>
+    </section>` : ''}
+
     <section class="section">
-      <div class="section-head"><span class="section-no">05</span><h2>头部类型明细</h2></div>
+      <div class="section-head"><span class="section-no">06</span><h2>头部类型明细</h2></div>
       <p class="lead">先确认需求集中在哪些产品类型，再进入单品、规格、物流成本与合规验证。销量缺失记录不会被填零。</p>
       <div class="table-wrap"><table><thead><tr><th>#</th><th>产品类型</th><th class="number">记录数</th><th class="number">销售额(₽)</th><th class="number">已记录销量</th><th class="number">销售额份额</th></tr></thead><tbody>${typeRows}</tbody></table></div>
     </section>
 
     <section class="section">
-      <div class="section-head"><span class="section-no">06</span><h2>运营信号</h2></div>
+      <div class="section-head"><span class="section-no">07</span><h2>运营信号</h2></div>
       <p class="lead">运营指标只汇总有值记录，并同时展示覆盖率；覆盖率不足时只能作为线索，不能直接据此决定备货。</p>
       <div class="ops">
         <div class="op"><div class="label">签收率中位数</div><div class="value">${analysis.operations.signRateMedian === null ? '—' : `${round(analysis.operations.signRateMedian * 100, 1)}%`}</div><div class="coverage">字段覆盖 ${analysis.operations.signRateCoverage}%</div></div>
@@ -404,13 +492,13 @@ function htmlFor(analysis) {
     </section>
 
     <section class="section">
-      <div class="section-head"><span class="section-no">07</span><h2>头部商品观察</h2></div>
+      <div class="section-head"><span class="section-no">08</span><h2>头部商品观察</h2></div>
       <p class="lead">按销售额列出头部记录，点击名称可回到 Ozon 商品页核验。这里用于拆规格、卖点和评价，不建议直接照搬产品。</p>
       <div class="table-wrap"><table><thead><tr><th>#</th><th>产品</th><th>类型</th><th>品牌</th><th class="number">销售额(₽)</th><th class="number">销量</th><th class="number">均价(₽)</th></tr></thead><tbody>${productRows}</tbody></table></div>
     </section>
 
     <section class="section">
-      <div class="section-head"><span class="section-no">08</span><h2>使用边界与下一步</h2></div>
+      <div class="section-head"><span class="section-no">09</span><h2>使用边界与下一步</h2></div>
       <div class="notes"><ul>
         <li>数据粒度是清洗表中的商品记录。SKU 可能重复，但产品链接未重复，因此本报告不进行无依据合并。</li>
         <li>样本来自 BSR1000 类榜单，适合比较样本内部结构，不等于 Ozon 全市场份额，也不代表未来销量。</li>
@@ -420,7 +508,7 @@ function htmlFor(analysis) {
     </section>
   </main>
 
-  <footer><div class="wrap"><strong>数据来源与口径</strong><p>用户提供的清洗工作簿：<code>${escapeHtml(analysis.sourceFile)}</code></p><p>生成方式：本地批量分析脚本；未调用外部市场数据，未补写缺失值。生成于 ${new Date().toISOString().slice(0, 10)}。</p></div></footer>
+  <footer><div class="wrap"><strong>数据来源与口径</strong><p>商品级分析：用户提供的清洗工作簿 <code>${escapeHtml(analysis.sourceFile)}</code>；缺失值未被补写。</p><p>俄罗斯市场背景：АКИТ、Ozon 官方说明和欧亚经济委员会法规原文。外部数据与 Ozon 样本保持独立口径。生成于 ${new Date().toISOString().slice(0, 10)}。</p></div></footer>
   <script>window.REPORT_DATA=${dataJson}</script>
   <script src="../../_shared/js/echarts.min.js"></script>
   <script src="../../_shared/js/generated-market-report.js"></script>
@@ -446,6 +534,8 @@ function catalogSource(analyses) {
       snapshot: analysis.snapshot,
       kpis: analysis.kpis,
       marketDimensions: analysis.marketDimensions,
+      executiveSummary: analysis.executiveSummary,
+      russiaEntry: analysis.russiaEntry,
       recommendations: analysis.recommendations,
       newProducts: analysis.newProducts,
       quality: analysis.quality,

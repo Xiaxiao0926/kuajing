@@ -1,3 +1,5 @@
+import { buildRussiaMarketContext } from './marketReportRussiaContext.js'
+
 const FIELD_ALIASES = {
   image: ['产品图片'],
   url: ['产品链接'],
@@ -196,6 +198,164 @@ function median(values) {
   if (!valid.length) return null
   const middle = Math.floor(valid.length / 2)
   return valid.length % 2 ? valid[middle] : (valid[middle - 1] + valid[middle]) / 2
+}
+
+function quantile(values, percentile) {
+  const valid = values.filter(Number.isFinite).sort((a, b) => a - b)
+  if (!valid.length) return null
+  const position = (valid.length - 1) * percentile
+  const lower = Math.floor(position)
+  const upper = Math.ceil(position)
+  if (lower === upper) return valid[lower]
+  return valid[lower] + (valid[upper] - valid[lower]) * (position - lower)
+}
+
+function relativeChange(current, baseline) {
+  return Number.isFinite(current) && Number.isFinite(baseline) && baseline !== 0
+    ? round(((current - baseline) / baseline) * 100, 1)
+    : null
+}
+
+function concentrationIndex(items, totalRevenue) {
+  if (!totalRevenue) return null
+  return round(items.reduce((sum, item) => sum + ((item.revenue / totalRevenue) * 100) ** 2, 0))
+}
+
+function concentrationLabel(value) {
+  if (!Number.isFinite(value)) return '无法判断'
+  if (value < 1000) return '分散'
+  if (value < 1800) return '中度集中'
+  return '高度集中'
+}
+
+function cohortSummary(rows) {
+  const revenue = sumField(rows, 'revenue')
+  const sales = sumField(rows, 'sales')
+  const pricePerLiter = rows
+    .filter((row) => Number.isFinite(row.avgPrice) && Number.isFinite(row.volume) && row.volume > 0)
+    .map((row) => row.avgPrice / row.volume)
+  return {
+    rows: rows.length,
+    revenue,
+    sales,
+    revenuePerSku: rows.length ? round(revenue / rows.length) : null,
+    salesPerSku: rows.length ? round(sales / rows.length) : null,
+    avgPriceMedian: medianField(rows, 'avgPrice'),
+    orderConversionMedian: medianField(rows, 'orderConv'),
+    cartAddMedian: medianField(rows, 'cartAdd'),
+    stockoutMedian: medianField(rows, 'stockoutDays'),
+    adRoiMedian: medianField(rows, 'adRoi'),
+    pricePerLiterMedian: median(pricePerLiter),
+  }
+}
+
+function percentileScore(value, values, inverse = false) {
+  if (!Number.isFinite(value)) return null
+  const valid = values.filter(Number.isFinite).sort((a, b) => a - b)
+  if (!valid.length) return null
+  if (valid.length === 1 || valid[0] === valid[valid.length - 1]) return 50
+  const below = valid.filter((item) => item < value).length
+  const equal = valid.filter((item) => item === value).length
+  const rank = ((below + Math.max(0, equal - 1) / 2) / (valid.length - 1)) * 100
+  return round(inverse ? 100 - rank : rank, 1)
+}
+
+function weightedScore(parts) {
+  const available = parts.filter((part) => Number.isFinite(part.score))
+  const weight = available.reduce((sum, part) => sum + part.weight, 0)
+  return weight ? round(available.reduce((sum, part) => sum + part.score * part.weight, 0) / weight, 1) : null
+}
+
+function buildTypeOpportunities(rows, totalRevenue) {
+  const groups = new Map()
+  for (const row of rows) {
+    if (!groups.has(row.type)) groups.set(row.type, [])
+    groups.get(row.type).push(row)
+  }
+  const items = [...groups.entries()].map(([name, typeRows]) => {
+    const revenue = sumField(typeRows, 'revenue')
+    const freshRows = typeRows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 180)
+    const listingRows = typeRows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 3650)
+    const unknownBrandRevenue = sumField(typeRows.filter((row) => row.brand === '未知/无品牌'), 'revenue')
+    const pricePerLiter = typeRows
+      .filter((row) => Number.isFinite(row.avgPrice) && Number.isFinite(row.volume) && row.volume > 0)
+      .map((row) => row.avgPrice / row.volume)
+    return {
+      name,
+      rows: typeRows.length,
+      revenue,
+      revenueShare: pct(revenue, totalRevenue),
+      revenuePerSku: typeRows.length ? round(revenue / typeRows.length) : null,
+      orderConversionMedian: medianField(typeRows, 'orderConv'),
+      orderConversionCoverage: coverage(typeRows, 'orderConv'),
+      freshCount: freshRows.length,
+      freshRevenueShare: pct(sumField(freshRows, 'revenue'), revenue),
+      listingDateCoverage: pct(listingRows.length, typeRows.length),
+      stockoutMedian: medianField(typeRows, 'stockoutDays'),
+      stockoutCoverage: coverage(typeRows, 'stockoutDays'),
+      missedRevenuePerSku: typeRows.length ? round(sumField(typeRows, 'missedRevenue') / typeRows.length) : null,
+      whiteLabelRevenueShare: pct(unknownBrandRevenue, revenue),
+      volumeMedian: medianField(typeRows, 'volume'),
+      volumeCoverage: coverage(typeRows, 'volume'),
+      pricePerLiterMedian: median(pricePerLiter),
+    }
+  }).filter((item) => item.rows >= 3 && item.revenue > 0)
+
+  const metricValues = (field) => items.map((item) => item[field])
+  return items.map((item) => {
+    const demandScore = weightedScore([
+      { score: percentileScore(item.revenueShare, metricValues('revenueShare')), weight: 5 },
+      { score: percentileScore(item.revenuePerSku, metricValues('revenuePerSku')), weight: 3 },
+      { score: item.orderConversionCoverage >= 30 ? percentileScore(item.orderConversionMedian, metricValues('orderConversionMedian')) : null, weight: 2 },
+    ])
+    const newnessScore = item.listingDateCoverage >= 40
+      ? percentileScore(item.freshRevenueShare, metricValues('freshRevenueShare'))
+      : null
+    const supplyScore = item.stockoutCoverage >= 30
+      ? weightedScore([
+        { score: percentileScore(item.stockoutMedian, metricValues('stockoutMedian')), weight: 2 },
+        { score: percentileScore(item.missedRevenuePerSku, metricValues('missedRevenuePerSku')), weight: 1 },
+      ])
+      : null
+    const accessibilityScore = percentileScore(item.whiteLabelRevenueShare, metricValues('whiteLabelRevenueShare'))
+    const logisticsScore = item.volumeCoverage >= 30
+      ? weightedScore([
+        { score: percentileScore(item.volumeMedian, metricValues('volumeMedian'), true), weight: 1 },
+        { score: percentileScore(item.pricePerLiterMedian, metricValues('pricePerLiterMedian')), weight: 1 },
+      ])
+      : null
+    const score = weightedScore([
+      { score: demandScore, weight: 40 },
+      { score: newnessScore, weight: 20 },
+      { score: supplyScore, weight: 15 },
+      { score: accessibilityScore, weight: 15 },
+      { score: logisticsScore, weight: 10 },
+    ])
+    const evidenceCoverage = round([
+      Number.isFinite(demandScore),
+      Number.isFinite(newnessScore),
+      Number.isFinite(supplyScore),
+      Number.isFinite(accessibilityScore),
+      Number.isFinite(logisticsScore),
+    ].filter(Boolean).length / 5 * 100, 0)
+    return {
+      ...item,
+      score,
+      evidenceCoverage,
+      decision: Number.isFinite(score) && score >= 70 && evidenceCoverage >= 60
+        ? '优先小批测试'
+        : Number.isFinite(score) && score >= 45
+          ? '补证据后测试'
+          : '观察',
+      scoreParts: {
+        demand: demandScore,
+        newness: newnessScore,
+        supplyGap: supplyScore,
+        whiteLabelAccess: accessibilityScore,
+        logistics: logisticsScore,
+      },
+    }
+  }).sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 8)
 }
 
 function aggregateBy(rows, field) {
@@ -480,6 +640,64 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
       outlierDateCount: staleListingRows.length,
     },
   }
+  const matureRows = validListingRows.filter((row) => row.ageDays > 180)
+  const freshCohort = cohortSummary(freshRows)
+  const matureCohort = cohortSummary(matureRows)
+  const freshRevenuePerSkuRatio = Number.isFinite(freshCohort.revenuePerSku) && Number.isFinite(matureCohort.revenuePerSku) && matureCohort.revenuePerSku > 0
+    ? round(freshCohort.revenuePerSku / matureCohort.revenuePerSku, 2)
+    : null
+  const cohortComparison = {
+    fresh: freshCohort,
+    mature: matureCohort,
+    revenuePerSkuRatio: freshRevenuePerSkuRatio,
+    orderConversionDeltaPct: relativeChange(freshCohort.orderConversionMedian, matureCohort.orderConversionMedian),
+    avgPriceDeltaPct: relativeChange(freshCohort.avgPriceMedian, matureCohort.avgPriceMedian),
+    stockoutDeltaDays: Number.isFinite(freshCohort.stockoutMedian) && Number.isFinite(matureCohort.stockoutMedian)
+      ? round(freshCohort.stockoutMedian - matureCohort.stockoutMedian, 1)
+      : null,
+    interpretation: !Number.isFinite(freshRevenuePerSkuRatio)
+      ? '新品与成熟品数据不足，暂不能比较单位 SKU 表现。'
+      : freshRevenuePerSkuRatio >= 1.2
+        ? '新品单位 SKU 销售额明显高于成熟品，值得优先拆解头部新品。'
+        : freshRevenuePerSkuRatio >= 0.8
+          ? '新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。'
+          : '新品单位 SKU 表现低于成熟品，不能仅凭上新数量判断机会。',
+  }
+  const unknownBrand = brandRows.find((item) => item.name === '未知/无品牌')
+  const competition = {
+    brandHhi: concentrationIndex(brandRows, totalRevenue),
+    brandConcentration: concentrationLabel(concentrationIndex(brandRows, totalRevenue)),
+    sellerHhi: concentrationIndex(sellerRows, totalRevenue),
+    sellerConcentration: concentrationLabel(concentrationIndex(sellerRows, totalRevenue)),
+    topBrandShare: pct(brandRows[0]?.revenue || 0, totalRevenue),
+    topSellerShare: pct(sellerRows[0]?.revenue || 0, totalRevenue),
+    topTenSellerShare: pct(sellerRows.slice(0, 10).reduce((sum, item) => sum + item.revenue, 0), totalRevenue),
+    whiteLabelRevenueShare: pct(unknownBrand?.revenue || 0, totalRevenue),
+    caveat: '未知/无品牌桶可能同时包含真实白牌和字段缺失，因此只能作为进入空间线索。',
+  }
+  const validVolumes = rows.map((row) => row.volume).filter((value) => Number.isFinite(value) && value > 0)
+  const pricePerLiterValues = rows
+    .filter((row) => Number.isFinite(row.avgPrice) && Number.isFinite(row.volume) && row.volume > 0)
+    .map((row) => row.avgPrice / row.volume)
+  const logisticsFit = {
+    volumeCoverage: fieldCoverage.volume,
+    volumeMedian: median(validVolumes),
+    volumeP75: quantile(validVolumes, 0.75),
+    pricePerLiterMedian: median(pricePerLiterValues),
+    compactTestThresholdLiters: 5,
+    compactTestShare: validVolumes.length ? pct(validVolumes.filter((value) => value <= 5).length, validVolumes.length) : null,
+    caveat: '5 升仅是国内跨境首轮测款的内部筛选阈值，不是平台物流限制；最终仍需重量、三边和、包装与渠道报价。',
+  }
+  const typeOpportunities = buildTypeOpportunities(rows, totalRevenue)
+  const russiaContext = buildRussiaMarketContext({
+    label,
+    typeNames: typeRows.slice(0, 10).map((item) => item.name),
+  })
+  const executiveSummary = [
+    `当前样本的需求集中在“${typeRows[0]?.name || '未分类'}”和 ${strongestBand.label} 价格带，分别贡献 ${pct(typeRows[0]?.revenue || 0, totalRevenue)}% 与 ${strongestBand.share}% 样本销售额。`,
+    `${cohortComparison.interpretation}${Number.isFinite(freshRevenuePerSkuRatio) ? ` 新品/成熟品单位 SKU 销售额比为 ${freshRevenuePerSkuRatio}。` : ''}`,
+    `俄罗斯网络零售在 2026 年上半年同比增长 ${russiaContext.overall.yoyGrowthPct}%，但 ${russiaContext.overall.domesticPlatformSharePct}% 的成交发生在本土商店和平台；跨境小批测试应服务于验证选品，而不是替代后续本地履约。`,
+  ]
 
   const recommendations = [
     {
@@ -520,6 +738,20 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
       recommendation: '当前漏斗字段覆盖不足，选品时应把商品链接、销量、销售额和评价复核放在曝光量之前，并补抓访问与转化数据。',
       evidence: [`曝光覆盖 ${fieldCoverage.impressions}%`, `访问覆盖 ${fieldCoverage.visits}%`, `下单转化率覆盖 ${fieldCoverage.orderConv}%`],
       confidence: '低',
+    },
+    {
+      title: '按俄罗斯本地平台逻辑设计跨境测试',
+      recommendation: '先用中国直发小批量验证点击、加购、签收和退货，再决定是否转本地库存或 FBO；商品页需优先补齐俄语规格、安装/兼容信息和售后边界。',
+      evidence: [`2026 年上半年俄罗斯网络零售同比 +${russiaContext.overall.yoyGrowthPct}%`, `本土商店与平台占线上成交 ${russiaContext.overall.domesticPlatformSharePct}%`, `当前 FBO/Ozon 履约字段占比 ${marketDimensions.fulfillment.fboShare ?? '—'}%`],
+      confidence: '中',
+    },
+    {
+      title: '把合规核验放在打样前',
+      recommendation: russiaContext.compliance.rules.length
+        ? `当前类目命中 ${russiaContext.compliance.rules.map((rule) => rule.code).join('、')} 预筛方向；询价时同步索取材质、用途、供电参数、已有证书与 HS 编码，再判断是否进入样品测试。`
+        : '当前类目无法仅凭名称匹配监管路径；询价时先补齐材质、用途、供电方式、成分与 HS 编码，再决定样品测试。',
+      evidence: [russiaContext.compliance.summary, `法规预筛等级：${russiaContext.compliance.level}`],
+      confidence: '中',
     },
   ]
 
@@ -589,6 +821,25 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
         ageDays: Number.isFinite(row.ageDays) && row.ageDays >= 0 ? row.ageDays : null,
       })),
     marketDimensions,
+    executiveSummary,
+    russiaEntry: {
+      context: russiaContext,
+      cohortComparison,
+      competition,
+      logisticsFit,
+      typeOpportunities,
+      method: {
+        scoreLabel: '样本内探索优先分',
+        scoreWeights: '需求 40% / 新品 20% / 供给缺口 15% / 未知品牌进入线索 15% / 物流测试性 10%；缺失维度按可用权重重算。',
+        decisionRule: '≥70 且证据覆盖≥60%：优先小批测试；45–69.9：补证据后测试；<45：观察。',
+        boundary: '分数只用于同一报告内排序，不可跨类目比较，也不是销量、利润或成功概率预测。',
+      },
+      gaps: [
+        '当前数据没有俄罗斯地区分布，无法判断莫斯科、远东或寒冷地区的差异。',
+        '当前数据没有连续时间序列，无法把季节性与单次快照波动分开。',
+        '当前数据没有评价正文、退货原因、采购价和完整包装重量，仍不能直接给出最终 SKU 与利润结论。',
+      ],
+    },
     recommendations,
     newProducts,
     operations: {

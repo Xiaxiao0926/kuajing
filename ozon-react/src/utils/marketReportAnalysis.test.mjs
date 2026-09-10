@@ -8,6 +8,7 @@ import {
   parseMarketReportJson,
   stableMarketReportId,
 } from './marketReportAnalysis.js'
+import { buildRussiaMarketContext } from './marketReportRussiaContext.js'
 
 const normalizedRows = [
   { 产品名称: 'A', 产品类型: '猫砂', 品牌名: '甲', 卖家名称: '店甲', SKU: '1', 产品链接: 'https://example.com/1', '销售额(₽)': 1000, '销量(件)': 10, '平均售价(₽)': 100, '签收率(%)': 0.9, BSR标签: '销售领导者' },
@@ -108,5 +109,38 @@ const rawMissingSalesReport = buildUploadedMarketReport([
 ], { sourceFile: 'raw.csv', label: '原始数据' })
 assert.equal(rawMissingSalesReport.quality.missingSales, 1)
 assert.equal(rawMissingSalesReport.quality.salesCoverage, 0)
+
+const depthRows = [
+  { 产品名称: 'A-新1', 产品类型: '家具合页', 品牌名: '甲', 卖家名称: '店甲', 产品链接: 'https://example.com/a1', '销售额(₽)': 1500, '销量(件)': 15, '平均售价(₽)': 100, '下单转化率(%)': 0.08, '无库存天数(近28天)': 7, '错失销售额(₽)': 100, '商品体积(升)': 0.4, 上架日期: '01.09.2026' },
+  { 产品名称: 'A-新2', 产品类型: '家具合页', 品牌名: 'без бренда', 卖家名称: '店乙', 产品链接: 'https://example.com/a2', '销售额(₽)': 1200, '销量(件)': 12, '平均售价(₽)': 120, '下单转化率(%)': 0.06, '无库存天数(近28天)': 5, '错失销售额(₽)': 80, '商品体积(升)': 0.5, 上架日期: '01.07.2026' },
+  { 产品名称: 'A-成熟', 产品类型: '家具合页', 品牌名: '乙', 卖家名称: '店甲', 产品链接: 'https://example.com/a3', '销售额(₽)': 900, '销量(件)': 9, '平均售价(₽)': 90, '下单转化率(%)': 0.05, '无库存天数(近28天)': 2, '错失销售额(₽)': 30, '商品体积(升)': 0.6, 上架日期: '01.01.2026' },
+  { 产品名称: 'B-新', 产品类型: '家具脚轮', 品牌名: '丙', 卖家名称: '店丙', 产品链接: 'https://example.com/b1', '销售额(₽)': 800, '销量(件)': 8, '平均售价(₽)': 160, '下单转化率(%)': 0.04, '无库存天数(近28天)': 3, '错失销售额(₽)': 20, '商品体积(升)': 1.2, 上架日期: '20.06.2026' },
+  { 产品名称: 'B-成熟1', 产品类型: '家具脚轮', 品牌名: '丙', 卖家名称: '店丁', 产品链接: 'https://example.com/b2', '销售额(₽)': 700, '销量(件)': 7, '平均售价(₽)': 140, '下单转化率(%)': 0.03, '无库存天数(近28天)': 1, '错失销售额(₽)': 10, '商品体积(升)': 1.5, 上架日期: '01.12.2025' },
+  { 产品名称: 'B-成熟2', 产品类型: '家具脚轮', 品牌名: '丁', 卖家名称: '店丁', 产品链接: 'https://example.com/b3', '销售额(₽)': 600, '销量(件)': 6, '平均售价(₽)': 130, '下单转化率(%)': 0.02, '无库存天数(近28天)': 0, '错失销售额(₽)': 0, '商品体积(升)': 1.8, 上架日期: '01.10.2025' },
+  { 产品名称: 'B-未来日期', 产品类型: '家具脚轮', 品牌名: '丁', 卖家名称: '店丁', 产品链接: 'https://example.com/future', '销售额(₽)': 100, '销量(件)': 1, '平均售价(₽)': 100, '下单转化率(%)': 0.01, '无库存天数(近28天)': 0, '错失销售额(₽)': 0, '商品体积(升)': 1, 上架日期: '01.10.2026' },
+]
+const depthReport = buildUploadedMarketReport(depthRows, { sourceFile: 'ozon-2026-09-10家具五金.xlsx' })
+assert.equal(depthReport.executiveSummary.length, 3)
+assert.equal(depthReport.russiaEntry.context.overall.turnoverRubTrillion, 7.2)
+assert.equal(depthReport.russiaEntry.context.sector.id, 'home-furniture')
+assert.equal(depthReport.russiaEntry.cohortComparison.fresh.rows, 3)
+assert.equal(depthReport.russiaEntry.cohortComparison.mature.rows, 3)
+assert.equal(depthReport.quality.futureListingDateCount, 1)
+assert.ok(!depthReport.newProducts.some((item) => item.url.endsWith('/future')))
+assert.ok(Number.isFinite(depthReport.russiaEntry.cohortComparison.revenuePerSkuRatio))
+assert.ok(Number.isFinite(depthReport.russiaEntry.competition.brandHhi))
+assert.equal(depthReport.russiaEntry.typeOpportunities.length, 2)
+for (const opportunity of depthReport.russiaEntry.typeOpportunities) {
+  assert.ok(Number.isFinite(opportunity.score) && opportunity.score >= 0 && opportunity.score <= 100)
+  assert.ok(['优先小批测试', '补证据后测试', '观察'].includes(opportunity.decision))
+  assert.ok(opportunity.evidenceCoverage >= 0 && opportunity.evidenceCoverage <= 100)
+}
+assert.ok(depthReport.recommendations.every((item) => item.evidence.length > 0))
+
+const automotiveContext = buildRussiaMarketContext({ label: '汽车电子' })
+assert.equal(automotiveContext.sector.id, 'auto-parts')
+assert.ok(automotiveContext.compliance.rules.some((rule) => rule.code.includes('018/2011')))
+assert.ok(automotiveContext.compliance.rules.some((rule) => rule.code.includes('004/2011')))
+assert.ok(automotiveContext.sources.every((source) => source.url.startsWith('https://')))
 
 console.log('uploaded market report analysis tests passed')

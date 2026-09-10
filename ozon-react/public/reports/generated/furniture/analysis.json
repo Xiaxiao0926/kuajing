@@ -10,7 +10,7 @@
   "sample": "1,000 条记录",
   "frameTitle": "Ozon 家具市场分析报告",
   "sourceFile": "ozon-2026-07-22家具_清洗版.xlsx",
-  "publishedAt": "2026-09-09T01:45:35.281Z",
+  "publishedAt": "2026-09-10T01:40:10.858Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 1505399946,
@@ -584,6 +584,372 @@
       "outlierDateCount": 0
     }
   },
+  "executiveSummary": [
+    "当前样本的需求集中在“床垫”和 ≥5,000 ₽ 价格带，分别贡献 33.2% 与 49.7% 样本销售额。",
+    "新品单位 SKU 表现低于成熟品，不能仅凭上新数量判断机会。 新品/成熟品单位 SKU 销售额比为 0.78。",
+    "俄罗斯网络零售在 2026 年上半年同比增长 18.7%，但 96.6% 的成交发生在本土商店和平台；跨境小批测试应服务于验证选品，而不是替代后续本地履约。"
+  ],
+  "russiaEntry": {
+    "context": {
+      "asOf": "2026 年上半年",
+      "overall": {
+        "turnoverRubTrillion": 7.2,
+        "yoyGrowthPct": 18.7,
+        "onlineRetailSharePct": 22.2,
+        "domesticPlatformSharePct": 96.6,
+        "crossBorderSharePct": 3.4
+      },
+      "sector": {
+        "id": "home-furniture",
+        "label": "家居与家具近似大类",
+        "sharePct": 15.8,
+        "turnoverRubBillion": 1130,
+        "growthText": "同比增长超过 20%",
+        "matchType": "俄罗斯全网零售近似大类，不等同于当前 Ozon 报告类目"
+      },
+      "operatingImplications": [
+        "俄罗斯线上零售仍在增长，但本报告的 Ozon BSR 样本不能外推为全市场规模。",
+        "本地平台贡献绝大多数线上成交；跨境直发适合低库存验证，跑通后仍应评估本地备货与履约。",
+        "Ozon 的热门商品、搜索、缺失商品和售罄工具口径不同，应与本报告的销量、缺货和新品信号交叉核验。"
+      ],
+      "compliance": {
+        "level": "中",
+        "summary": "这是法规预筛，不是认证结论；最终范围取决于具体产品、HS 编码、用途和申报主体。",
+        "rules": [
+          {
+            "code": "ТР ТС 025/2012",
+            "note": "完整家具产品需核验家具安全法规；单独五金配件是否在范围内仍应按产品归类确认。",
+            "source": {
+              "id": "eec-tr-cu-025-2012",
+              "title": "ТР ТС 025/2012 家具产品安全技术法规",
+              "publisher": "欧亚经济委员会",
+              "url": "https://eec.eaeunion.org/upload/medialibrary/f2f/RS_P_32.pdf"
+            }
+          }
+        ]
+      },
+      "sources": [
+        {
+          "id": "akit-h1-2026",
+          "title": "АКИТ：2026 年上半年俄罗斯网络零售",
+          "publisher": "俄罗斯网络贸易企业协会（АКИТ）",
+          "asOf": "2026-06-30",
+          "url": "https://www.akit.ru/news/internet-torgovlya-v-pervom-polugodii-2026-7-2-trln-rublej"
+        },
+        {
+          "id": "ozon-analytics-tools",
+          "title": "Ozon 官方卖家分析工具说明",
+          "publisher": "Ozon Help",
+          "asOf": "2026-09-10",
+          "url": "https://docs.ozon.com/global/analytics/analytics-and-metrics/analytics-tools/?country=OTHER"
+        },
+        {
+          "id": "eec-tr-cu-025-2012",
+          "title": "ТР ТС 025/2012 家具产品安全技术法规",
+          "publisher": "欧亚经济委员会",
+          "url": "https://eec.eaeunion.org/upload/medialibrary/f2f/RS_P_32.pdf"
+        }
+      ]
+    },
+    "cohortComparison": {
+      "fresh": {
+        "rows": 226,
+        "revenue": 285835535,
+        "sales": 289061,
+        "revenuePerSku": 1264759,
+        "salesPerSku": 1279.03,
+        "avgPriceMedian": 273,
+        "orderConversionMedian": 0.00215,
+        "cartAddMedian": 0.1361,
+        "stockoutMedian": 13.5,
+        "adRoiMedian": 0.099,
+        "pricePerLiterMedian": 147.85714285714286
+      },
+      "mature": {
+        "rows": 741,
+        "revenue": 1197184672,
+        "sales": 854210,
+        "revenuePerSku": 1615633.84,
+        "salesPerSku": 1152.78,
+        "avgPriceMedian": 407,
+        "orderConversionMedian": 0.0022,
+        "cartAddMedian": 0.1225,
+        "stockoutMedian": 12,
+        "adRoiMedian": 0.09699999999999999,
+        "pricePerLiterMedian": 156.91514670896115
+      },
+      "revenuePerSkuRatio": 0.78,
+      "orderConversionDeltaPct": -2.3,
+      "avgPriceDeltaPct": -32.9,
+      "stockoutDeltaDays": 1.5,
+      "interpretation": "新品单位 SKU 表现低于成熟品，不能仅凭上新数量判断机会。"
+    },
+    "competition": {
+      "brandHhi": 469.14,
+      "brandConcentration": "分散",
+      "sellerHhi": 257.91,
+      "sellerConcentration": "分散",
+      "topBrandShare": 15.5,
+      "topSellerShare": 8.5,
+      "topTenSellerShare": 41.8,
+      "whiteLabelRevenueShare": 15.5,
+      "caveat": "未知/无品牌桶可能同时包含真实白牌和字段缺失，因此只能作为进入空间线索。"
+    },
+    "logisticsFit": {
+      "volumeCoverage": 100,
+      "volumeMedian": 3,
+      "volumeP75": 17.2,
+      "pricePerLiterMedian": 156.4575163398693,
+      "compactTestThresholdLiters": 5,
+      "compactTestShare": 57.2,
+      "caveat": "5 升仅是国内跨境首轮测款的内部筛选阈值，不是平台物流限制；最终仍需重量、三边和、包装与渠道报价。"
+    },
+    "typeOpportunities": [
+      {
+        "name": "折叠床",
+        "rows": 7,
+        "revenue": 50295438,
+        "revenueShare": 3.3,
+        "revenuePerSku": 7185062.57,
+        "orderConversionMedian": 0.0013,
+        "orderConversionCoverage": 100,
+        "freshCount": 2,
+        "freshRevenueShare": 39.6,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 22,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 203038.71,
+        "whiteLabelRevenueShare": 69.6,
+        "volumeMedian": 56.3,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 74.88095238095238,
+        "score": 77.3,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 80.8,
+          "newness": 82.4,
+          "supplyGap": 85,
+          "whiteLabelAccess": 90.2,
+          "logistics": 22.6
+        }
+      },
+      {
+        "name": "躺椅",
+        "rows": 9,
+        "revenue": 41188900,
+        "revenueShare": 2.7,
+        "revenuePerSku": 4576544.44,
+        "orderConversionMedian": 0.0011,
+        "orderConversionCoverage": 100,
+        "freshCount": 3,
+        "freshRevenueShare": 47.3,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 24,
+        "stockoutCoverage": 66.7,
+        "missedRevenuePerSku": 554997.44,
+        "whiteLabelRevenueShare": 71.4,
+        "volumeMedian": 93.4,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 48.96,
+        "score": 76,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 73.5,
+          "newness": 90.2,
+          "supplyGap": 92.1,
+          "whiteLabelAccess": 92.2,
+          "logistics": 8.9
+        }
+      },
+      {
+        "name": "沙滩遮阳伞",
+        "rows": 17,
+        "revenue": 20996542,
+        "revenueShare": 1.4,
+        "revenuePerSku": 1235090.71,
+        "orderConversionMedian": 0.0016,
+        "orderConversionCoverage": 100,
+        "freshCount": 6,
+        "freshRevenueShare": 44.3,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 23,
+        "stockoutCoverage": 94.1,
+        "missedRevenuePerSku": 75415.35,
+        "whiteLabelRevenueShare": 42.6,
+        "volumeMedian": 8.2,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 114.18918918918918,
+        "score": 74.2,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 68.3,
+          "newness": 88.2,
+          "supplyGap": 84.9,
+          "whiteLabelAccess": 76.5,
+          "logistics": 50
+        }
+      },
+      {
+        "name": "花园秋千",
+        "rows": 5,
+        "revenue": 16850085,
+        "revenueShare": 1.1,
+        "revenuePerSku": 3370017,
+        "orderConversionMedian": 0.001,
+        "orderConversionCoverage": 100,
+        "freshCount": 3,
+        "freshRevenueShare": 30,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 26,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 759102,
+        "whiteLabelRevenueShare": 30,
+        "volumeMedian": 41.3,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 106.04260089686099,
+        "score": 67.2,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 63.9,
+          "newness": 72.5,
+          "supplyGap": 99.3,
+          "whiteLabelAccess": 56.9,
+          "logistics": 37.3
+        }
+      },
+      {
+        "name": "吊床",
+        "rows": 29,
+        "revenue": 27957471,
+        "revenueShare": 1.9,
+        "revenuePerSku": 964050.72,
+        "orderConversionMedian": 0.0018,
+        "orderConversionCoverage": 93.1,
+        "freshCount": 21,
+        "freshRevenueShare": 72.8,
+        "listingDateCoverage": 93.1,
+        "stockoutMedian": 18,
+        "stockoutCoverage": 86.2,
+        "missedRevenuePerSku": 2178.85,
+        "whiteLabelRevenueShare": 5.9,
+        "volumeMedian": 7.2,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 93.33333333333333,
+        "score": 66.7,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 70,
+          "newness": 98,
+          "supplyGap": 68,
+          "whiteLabelAccess": 27.5,
+          "logistics": 48.1
+        }
+      },
+      {
+        "name": "抽屉柜",
+        "rows": 4,
+        "revenue": 8699807,
+        "revenueShare": 0.6,
+        "revenuePerSku": 2174951.75,
+        "orderConversionMedian": 0.00115,
+        "orderConversionCoverage": 100,
+        "freshCount": 1,
+        "freshRevenueShare": 27.7,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 20.5,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 240968.5,
+        "whiteLabelRevenueShare": 100,
+        "volumeMedian": 57.1,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 46.662178801336495,
+        "score": 63.2,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 52.5,
+          "newness": 68.6,
+          "supplyGap": 84.3,
+          "whiteLabelAccess": 98,
+          "logistics": 11.8
+        }
+      },
+      {
+        "name": "床垫",
+        "rows": 59,
+        "revenue": 499684198,
+        "revenueShare": 33.2,
+        "revenuePerSku": 8469223.69,
+        "orderConversionMedian": 0.0011,
+        "orderConversionCoverage": 100,
+        "freshCount": 15,
+        "freshRevenueShare": 20.4,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 18,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 53265.15,
+        "whiteLabelRevenueShare": 1.9,
+        "volumeMedian": 86.4,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 88.15609756097561,
+        "score": 62.4,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 83.9,
+          "newness": 56.9,
+          "supplyGap": 77.1,
+          "whiteLabelAccess": 23.5,
+          "logistics": 23.5
+        }
+      },
+      {
+        "name": "鞋架",
+        "rows": 39,
+        "revenue": 41595576,
+        "revenueShare": 2.8,
+        "revenuePerSku": 1066553.23,
+        "orderConversionMedian": 0.0013,
+        "orderConversionCoverage": 97.4,
+        "freshCount": 11,
+        "freshRevenueShare": 20.2,
+        "listingDateCoverage": 97.4,
+        "stockoutMedian": 15,
+        "stockoutCoverage": 92.3,
+        "missedRevenuePerSku": 10750.57,
+        "whiteLabelRevenueShare": 26.8,
+        "volumeMedian": 6,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 130.19230769230768,
+        "score": 62.4,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 69.2,
+          "newness": 54.9,
+          "supplyGap": 66.6,
+          "whiteLabelAccess": 52.9,
+          "logistics": 58.4
+        }
+      }
+    ],
+    "method": {
+      "scoreLabel": "样本内探索优先分",
+      "scoreWeights": "需求 40% / 新品 20% / 供给缺口 15% / 未知品牌进入线索 15% / 物流测试性 10%；缺失维度按可用权重重算。",
+      "decisionRule": "≥70 且证据覆盖≥60%：优先小批测试；45–69.9：补证据后测试；<45：观察。",
+      "boundary": "分数只用于同一报告内排序，不可跨类目比较，也不是销量、利润或成功概率预测。"
+    },
+    "gaps": [
+      "当前数据没有俄罗斯地区分布，无法判断莫斯科、远东或寒冷地区的差异。",
+      "当前数据没有连续时间序列，无法把季节性与单次快照波动分开。",
+      "当前数据没有评价正文、退货原因、采购价和完整包装重量，仍不能直接给出最终 SKU 与利润结论。"
+    ]
+  },
   "recommendations": [
     {
       "title": "先从头部需求与主价格带建立首测组",
@@ -622,6 +988,25 @@
         "下单转化率覆盖 98.9%",
         "下单转化率中位数 0.2%",
         "访问率 4.53%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "按俄罗斯本地平台逻辑设计跨境测试",
+      "recommendation": "先用中国直发小批量验证点击、加购、签收和退货，再决定是否转本地库存或 FBO；商品页需优先补齐俄语规格、安装/兼容信息和售后边界。",
+      "evidence": [
+        "2026 年上半年俄罗斯网络零售同比 +18.7%",
+        "本土商店与平台占线上成交 96.6%",
+        "当前 FBO/Ozon 履约字段占比 93.9%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "把合规核验放在打样前",
+      "recommendation": "当前类目命中 ТР ТС 025/2012 预筛方向；询价时同步索取材质、用途、供电参数、已有证书与 HS 编码，再判断是否进入样品测试。",
+      "evidence": [
+        "这是法规预筛，不是认证结论；最终范围取决于具体产品、HS 编码、用途和申报主体。",
+        "法规预筛等级：中"
       ],
       "confidence": "中"
     }

@@ -10,7 +10,7 @@
   "sample": "1,000 条记录",
   "frameTitle": "Ozon 宠物用品市场分析报告",
   "sourceFile": "ozon-2026-07-22宠物用品_清洗版.xlsx",
-  "publishedAt": "2026-09-09T01:45:35.119Z",
+  "publishedAt": "2026-09-10T01:40:10.654Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 1285153357,
@@ -584,6 +584,355 @@
       "outlierDateCount": 0
     }
   },
+  "executiveSummary": [
+    "当前样本的需求集中在“猫砂”和 500–1,000 ₽ 价格带，分别贡献 50.3% 与 36.7% 样本销售额。",
+    "新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。 新品/成熟品单位 SKU 销售额比为 0.87。",
+    "俄罗斯网络零售在 2026 年上半年同比增长 18.7%，但 96.6% 的成交发生在本土商店和平台；跨境小批测试应服务于验证选品，而不是替代后续本地履约。"
+  ],
+  "russiaEntry": {
+    "context": {
+      "asOf": "2026 年上半年",
+      "overall": {
+        "turnoverRubTrillion": 7.2,
+        "yoyGrowthPct": 18.7,
+        "onlineRetailSharePct": 22.2,
+        "domesticPlatformSharePct": 96.6,
+        "crossBorderSharePct": 3.4
+      },
+      "sector": {
+        "id": "pet",
+        "label": "宠物用品相关零售",
+        "sharePct": null,
+        "turnoverRubBillion": null,
+        "growthText": "宠物商店销售同比增长接近 30%",
+        "matchType": "俄罗斯全网零售近似大类，不等同于当前 Ozon 报告类目"
+      },
+      "operatingImplications": [
+        "俄罗斯线上零售仍在增长，但本报告的 Ozon BSR 样本不能外推为全市场规模。",
+        "本地平台贡献绝大多数线上成交；跨境直发适合低库存验证，跑通后仍应评估本地备货与履约。",
+        "Ozon 的热门商品、搜索、缺失商品和售罄工具口径不同，应与本报告的销量、缺货和新品信号交叉核验。"
+      ],
+      "compliance": {
+        "level": "待分类",
+        "summary": "当前类目无法仅凭报告标签确定监管路径，首轮询价时需补齐材质、用途、供电方式和 HS 编码。",
+        "rules": []
+      },
+      "sources": [
+        {
+          "id": "akit-h1-2026",
+          "title": "АКИТ：2026 年上半年俄罗斯网络零售",
+          "publisher": "俄罗斯网络贸易企业协会（АКИТ）",
+          "asOf": "2026-06-30",
+          "url": "https://www.akit.ru/news/internet-torgovlya-v-pervom-polugodii-2026-7-2-trln-rublej"
+        },
+        {
+          "id": "ozon-analytics-tools",
+          "title": "Ozon 官方卖家分析工具说明",
+          "publisher": "Ozon Help",
+          "asOf": "2026-09-10",
+          "url": "https://docs.ozon.com/global/analytics/analytics-and-metrics/analytics-tools/?country=OTHER"
+        }
+      ]
+    },
+    "cohortComparison": {
+      "fresh": {
+        "rows": 195,
+        "revenue": 145077000,
+        "sales": 545284,
+        "revenuePerSku": 743984.62,
+        "salesPerSku": 2796.33,
+        "avgPriceMedian": 197,
+        "orderConversionMedian": 0.0029,
+        "cartAddMedian": 0.1781,
+        "stockoutMedian": 16,
+        "adRoiMedian": 0.106,
+        "pricePerLiterMedian": 179
+      },
+      "mature": {
+        "rows": 641,
+        "revenue": 548333090,
+        "sales": 1858539,
+        "revenuePerSku": 855433.84,
+        "salesPerSku": 2899.44,
+        "avgPriceMedian": 220,
+        "orderConversionMedian": 0.0036,
+        "cartAddMedian": 0.1712,
+        "stockoutMedian": 11,
+        "adRoiMedian": 0.115,
+        "pricePerLiterMedian": 274.34523809523813
+      },
+      "revenuePerSkuRatio": 0.87,
+      "orderConversionDeltaPct": -19.4,
+      "avgPriceDeltaPct": -10.5,
+      "stockoutDeltaDays": 5,
+      "interpretation": "新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。"
+    },
+    "competition": {
+      "brandHhi": 585.86,
+      "brandConcentration": "分散",
+      "sellerHhi": 2088.43,
+      "sellerConcentration": "高度集中",
+      "topBrandShare": 14.1,
+      "topSellerShare": 45.3,
+      "topTenSellerShare": 58.9,
+      "whiteLabelRevenueShare": 13.7,
+      "caveat": "未知/无品牌桶可能同时包含真实白牌和字段缺失，因此只能作为进入空间线索。"
+    },
+    "logisticsFit": {
+      "volumeCoverage": 100,
+      "volumeMedian": 1.1,
+      "volumeP75": 6.1,
+      "pricePerLiterMedian": 204.30390492359933,
+      "compactTestThresholdLiters": 5,
+      "compactTestShare": 72.4,
+      "caveat": "5 升仅是国内跨境首轮测款的内部筛选阈值，不是平台物流限制；最终仍需重量、三边和、包装与渠道报价。"
+    },
+    "typeOpportunities": [
+      {
+        "name": "驱虫器",
+        "rows": 27,
+        "revenue": 27270304,
+        "revenueShare": 2.1,
+        "revenuePerSku": 1010011.26,
+        "orderConversionMedian": 0.0028,
+        "orderConversionCoverage": 92.6,
+        "freshCount": 22,
+        "freshRevenueShare": 91.3,
+        "listingDateCoverage": 92.6,
+        "stockoutMedian": 17.5,
+        "stockoutCoverage": 66.7,
+        "missedRevenuePerSku": 13204.65,
+        "whiteLabelRevenueShare": 88.2,
+        "volumeMedian": 1.4,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 330.36296296296297,
+        "score": 80.1,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 71.3,
+          "newness": 100,
+          "supplyGap": 86.5,
+          "whiteLabelAccess": 95.7,
+          "logistics": 42.1
+        }
+      },
+      {
+        "name": "异味中和剂",
+        "rows": 17,
+        "revenue": 16881278,
+        "revenueShare": 1.3,
+        "revenuePerSku": 993016.35,
+        "orderConversionMedian": 0.00345,
+        "orderConversionCoverage": 70.6,
+        "freshCount": 2,
+        "freshRevenueShare": 34.1,
+        "listingDateCoverage": 58.8,
+        "stockoutMedian": 16,
+        "stockoutCoverage": 47.1,
+        "missedRevenuePerSku": 25851.62,
+        "whiteLabelRevenueShare": 51,
+        "volumeMedian": 0.8,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 290,
+        "score": 74.2,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 69.8,
+          "newness": 85.1,
+          "supplyGap": 85.1,
+          "whiteLabelAccess": 78.7,
+          "logistics": 46.8
+        }
+      },
+      {
+        "name": "猫抓柱",
+        "rows": 35,
+        "revenue": 31484220,
+        "revenueShare": 2.4,
+        "revenuePerSku": 899549.14,
+        "orderConversionMedian": 0.0037,
+        "orderConversionCoverage": 97.1,
+        "freshCount": 10,
+        "freshRevenueShare": 30.1,
+        "listingDateCoverage": 85.7,
+        "stockoutMedian": 15,
+        "stockoutCoverage": 74.3,
+        "missedRevenuePerSku": 1215.44,
+        "whiteLabelRevenueShare": 28.3,
+        "volumeMedian": 2.7,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 95.45454545454545,
+        "score": 68.9,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 78,
+          "newness": 83,
+          "supplyGap": 71.6,
+          "whiteLabelAccess": 57.4,
+          "logistics": 17.1
+        }
+      },
+      {
+        "name": "宠物绷带",
+        "rows": 8,
+        "revenue": 5294446,
+        "revenueShare": 0.4,
+        "revenuePerSku": 661805.75,
+        "orderConversionMedian": 0.0038,
+        "orderConversionCoverage": 87.5,
+        "freshCount": 3,
+        "freshRevenueShare": 61.4,
+        "listingDateCoverage": 87.5,
+        "stockoutMedian": 14,
+        "stockoutCoverage": 50,
+        "missedRevenuePerSku": 12.36,
+        "whiteLabelRevenueShare": 84.2,
+        "volumeMedian": 1.15,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 204.8611111111111,
+        "score": 65,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 47.7,
+          "newness": 95.7,
+          "supplyGap": 65.2,
+          "whiteLabelAccess": 91.5,
+          "logistics": 32.5
+        }
+      },
+      {
+        "name": "宠物玩具",
+        "rows": 146,
+        "revenue": 66117647,
+        "revenueShare": 5.1,
+        "revenuePerSku": 452860.6,
+        "orderConversionMedian": 0.0026,
+        "orderConversionCoverage": 98.6,
+        "freshCount": 41,
+        "freshRevenueShare": 25.1,
+        "listingDateCoverage": 97.9,
+        "stockoutMedian": 11,
+        "stockoutCoverage": 93.2,
+        "missedRevenuePerSku": 1557.39,
+        "whiteLabelRevenueShare": 47.5,
+        "volumeMedian": 0.3,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 425,
+        "score": 64.5,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 57.9,
+          "newness": 73.4,
+          "supplyGap": 56.1,
+          "whiteLabelAccess": 76.6,
+          "logistics": 67.6
+        }
+      },
+      {
+        "name": "宠物卫生包装",
+        "rows": 17,
+        "revenue": 8899173,
+        "revenueShare": 0.7,
+        "revenuePerSku": 523480.76,
+        "orderConversionMedian": 0.0062,
+        "orderConversionCoverage": 100,
+        "freshCount": 6,
+        "freshRevenueShare": 23.9,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 8,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 4538.12,
+        "whiteLabelRevenueShare": 51.5,
+        "volumeMedian": 0.6,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 323.33333333333337,
+        "score": 60.9,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 58.7,
+          "newness": 70.2,
+          "supplyGap": 36.9,
+          "whiteLabelAccess": 83,
+          "logistics": 54.3
+        }
+      },
+      {
+        "name": "宠物厕所",
+        "rows": 26,
+        "revenue": 30943451,
+        "revenueShare": 2.4,
+        "revenuePerSku": 1190132.73,
+        "orderConversionMedian": 0.0028,
+        "orderConversionCoverage": 100,
+        "freshCount": 5,
+        "freshRevenueShare": 21.6,
+        "listingDateCoverage": 80.8,
+        "stockoutMedian": 17,
+        "stockoutCoverage": 73.1,
+        "missedRevenuePerSku": 892.46,
+        "whiteLabelRevenueShare": 9.8,
+        "volumeMedian": 14.85,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 34.561865729898514,
+        "score": 60.7,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 74.8,
+          "newness": 68.1,
+          "supplyGap": 73.8,
+          "whiteLabelAccess": 40.4,
+          "logistics": 0
+        }
+      },
+      {
+        "name": "宠物口腔护理药物",
+        "rows": 7,
+        "revenue": 7608231,
+        "revenueShare": 0.6,
+        "revenuePerSku": 1086890.14,
+        "orderConversionMedian": 0.004500000000000001,
+        "orderConversionCoverage": 100,
+        "freshCount": 1,
+        "freshRevenueShare": 26.4,
+        "listingDateCoverage": 71.4,
+        "stockoutMedian": 11.5,
+        "stockoutCoverage": 57.1,
+        "missedRevenuePerSku": 0,
+        "whiteLabelRevenueShare": 0,
+        "volumeMedian": 0.2,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 1086.6666666666667,
+        "score": 59.4,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 66.4,
+          "newness": 77.7,
+          "supplyGap": 44.4,
+          "whiteLabelAccess": 12.8,
+          "logistics": 86.7
+        }
+      }
+    ],
+    "method": {
+      "scoreLabel": "样本内探索优先分",
+      "scoreWeights": "需求 40% / 新品 20% / 供给缺口 15% / 未知品牌进入线索 15% / 物流测试性 10%；缺失维度按可用权重重算。",
+      "decisionRule": "≥70 且证据覆盖≥60%：优先小批测试；45–69.9：补证据后测试；<45：观察。",
+      "boundary": "分数只用于同一报告内排序，不可跨类目比较，也不是销量、利润或成功概率预测。"
+    },
+    "gaps": [
+      "当前数据没有俄罗斯地区分布，无法判断莫斯科、远东或寒冷地区的差异。",
+      "当前数据没有连续时间序列，无法把季节性与单次快照波动分开。",
+      "当前数据没有评价正文、退货原因、采购价和完整包装重量，仍不能直接给出最终 SKU 与利润结论。"
+    ]
+  },
   "recommendations": [
     {
       "title": "先从头部需求与主价格带建立首测组",
@@ -622,6 +971,25 @@
         "下单转化率覆盖 98.3%",
         "下单转化率中位数 0.4%",
         "访问率 3.33%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "按俄罗斯本地平台逻辑设计跨境测试",
+      "recommendation": "先用中国直发小批量验证点击、加购、签收和退货，再决定是否转本地库存或 FBO；商品页需优先补齐俄语规格、安装/兼容信息和售后边界。",
+      "evidence": [
+        "2026 年上半年俄罗斯网络零售同比 +18.7%",
+        "本土商店与平台占线上成交 96.6%",
+        "当前 FBO/Ozon 履约字段占比 91.1%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "把合规核验放在打样前",
+      "recommendation": "当前类目无法仅凭名称匹配监管路径；询价时先补齐材质、用途、供电方式、成分与 HS 编码，再决定样品测试。",
+      "evidence": [
+        "当前类目无法仅凭报告标签确定监管路径，首轮询价时需补齐材质、用途、供电方式和 HS 编码。",
+        "法规预筛等级：待分类"
       ],
       "confidence": "中"
     }

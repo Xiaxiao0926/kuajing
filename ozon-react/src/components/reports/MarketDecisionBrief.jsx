@@ -1,3 +1,5 @@
+import RussiaMarketEntry from './RussiaMarketEntry.jsx'
+
 const number = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 1 })
 
 function formatRub(value) {
@@ -34,6 +36,15 @@ export default function MarketDecisionBrief({ brief }) {
         </div>
         <p className="text-xs text-morandi-text-light">BSR 样本内部分析，不等同 Ozon 全市场规模</p>
       </div>
+
+      {brief.executiveSummary?.length ? (
+        <section className="mt-4 border-l-4 border-blue-700 bg-white px-4 py-4" aria-label="Executive Summary">
+          <h4 className="text-sm font-semibold text-morandi-text">Executive Summary / 执行摘要</h4>
+          <ul className="mt-2 space-y-2 text-sm leading-6 text-morandi-text-light">
+            {brief.executiveSummary.map((item) => <li key={item} className="flex gap-2"><span className="font-semibold text-blue-700">•</span><span>{item}</span></li>)}
+          </ul>
+        </section>
+      ) : null}
 
       <div className="mt-4 grid gap-px border border-gray-200 bg-gray-200 sm:grid-cols-2 xl:grid-cols-5">
         <Metric label="180 天内新品" value={`${newness.freshCount} 个`} coverage={newness.listingDateCoverage} />
@@ -105,6 +116,8 @@ export default function MarketDecisionBrief({ brief }) {
           <p className="mt-3 border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">当前没有同时满足有效日期、180 天窗口和有效商品链接的记录，不跨日期补位。</p>
         )}
       </div>
+
+      <RussiaMarketEntry entry={brief.russiaEntry} />
     </section>
   )
 }

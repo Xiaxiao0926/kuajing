@@ -111,6 +111,8 @@ function decisionBrief(report) {
     snapshot: report.snapshot,
     kpis: report.kpis,
     marketDimensions: report.marketDimensions,
+    executiveSummary: report.executiveSummary,
+    russiaEntry: report.russiaEntry,
     recommendations: report.recommendations,
     newProducts: report.newProducts,
     quality: report.quality,

@@ -10,7 +10,7 @@
   "sample": "1,000 条记录",
   "frameTitle": "Ozon 汽车电池市场分析报告",
   "sourceFile": "ozon-2026-07-23汽车电池_清洗版.xlsx",
-  "publishedAt": "2026-09-09T01:45:36.764Z",
+  "publishedAt": "2026-09-10T01:40:12.510Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 327433415,
@@ -530,6 +530,298 @@
       "outlierDateCount": 37
     }
   },
+  "executiveSummary": [
+    "当前样本的需求集中在“启动充电装置”和 2,000–5,000 ₽ 价格带，分别贡献 52.9% 与 40.1% 样本销售额。",
+    "新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。 新品/成熟品单位 SKU 销售额比为 1.08。",
+    "俄罗斯网络零售在 2026 年上半年同比增长 18.7%，但 96.6% 的成交发生在本土商店和平台；跨境小批测试应服务于验证选品，而不是替代后续本地履约。"
+  ],
+  "russiaEntry": {
+    "context": {
+      "asOf": "2026 年上半年",
+      "overall": {
+        "turnoverRubTrillion": 7.2,
+        "yoyGrowthPct": 18.7,
+        "onlineRetailSharePct": 22.2,
+        "domesticPlatformSharePct": 96.6,
+        "crossBorderSharePct": 3.4
+      },
+      "sector": {
+        "id": "auto-parts",
+        "label": "汽车零配件与汽车用品近似大类",
+        "sharePct": 6.1,
+        "turnoverRubBillion": null,
+        "growthText": null,
+        "matchType": "俄罗斯全网零售近似大类，不等同于当前 Ozon 报告类目"
+      },
+      "operatingImplications": [
+        "俄罗斯线上零售仍在增长，但本报告的 Ozon BSR 样本不能外推为全市场规模。",
+        "本地平台贡献绝大多数线上成交；跨境直发适合低库存验证，跑通后仍应评估本地备货与履约。",
+        "Ozon 的热门商品、搜索、缺失商品和售罄工具口径不同，应与本报告的销量、缺货和新品信号交叉核验。"
+      ],
+      "compliance": {
+        "level": "中高",
+        "summary": "这是法规预筛，不是认证结论；最终范围取决于具体产品、HS 编码、用途和申报主体。",
+        "rules": [
+          {
+            "code": "ТР ТС 018/2011",
+            "note": "涉及车辆安全、受监管部件或安装后影响车辆性能时核验；不能仅凭商品名称判断适用。",
+            "source": {
+              "id": "eec-tr-cu-018-2011",
+              "title": "ТР ТС 018/2011 轮式车辆安全技术法规",
+              "publisher": "欧亚经济委员会",
+              "url": "https://eec.eaeunion.org/upload/medialibrary/834/Plan-TR-EAES-_2021_.pdf"
+            }
+          },
+          {
+            "code": "ТР ТС 004/2011 / 020/2011 / ТР ЕАЭС 037/2016",
+            "note": "带电、充电或无线/电子产品需按电压、用途和产品清单分别核验低压安全、电磁兼容与有害物质限制。",
+            "source": {
+              "id": "eec-tr-cu-004-2011",
+              "title": "ТР ТС 004/2011 低电压设备安全技术法规",
+              "publisher": "欧亚经济委员会",
+              "url": "https://eec.eaeunion.org/upload/medialibrary/269/TR-TS-Downvolt.pdf"
+            },
+            "extraSources": [
+              {
+                "id": "eec-tr-cu-020-2011",
+                "title": "ТР ТС 020/2011 技术设备电磁兼容法规",
+                "publisher": "欧亚经济委员会",
+                "url": "https://eec.eaeunion.org/upload/medialibrary/1ab/TehReg-TS-EMS.pdf"
+              },
+              {
+                "id": "eec-tr-eaeu-037-2016",
+                "title": "ТР ЕАЭС 037/2016 电气电子产品有害物质限制",
+                "publisher": "欧亚经济委员会",
+                "url": "https://eec.eaeunion.org/upload/medialibrary/7d0/f8sym7qu883mt9ms7z4c6maijt358pl8/TR-EAES-statistika-27.02.2024-deystvuyushchie.pdf"
+              }
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "id": "akit-h1-2026",
+          "title": "АКИТ：2026 年上半年俄罗斯网络零售",
+          "publisher": "俄罗斯网络贸易企业协会（АКИТ）",
+          "asOf": "2026-06-30",
+          "url": "https://www.akit.ru/news/internet-torgovlya-v-pervom-polugodii-2026-7-2-trln-rublej"
+        },
+        {
+          "id": "ozon-analytics-tools",
+          "title": "Ozon 官方卖家分析工具说明",
+          "publisher": "Ozon Help",
+          "asOf": "2026-09-10",
+          "url": "https://docs.ozon.com/global/analytics/analytics-and-metrics/analytics-tools/?country=OTHER"
+        },
+        {
+          "id": "eec-tr-cu-018-2011",
+          "title": "ТР ТС 018/2011 轮式车辆安全技术法规",
+          "publisher": "欧亚经济委员会",
+          "url": "https://eec.eaeunion.org/upload/medialibrary/834/Plan-TR-EAES-_2021_.pdf"
+        },
+        {
+          "id": "eec-tr-cu-004-2011",
+          "title": "ТР ТС 004/2011 低电压设备安全技术法规",
+          "publisher": "欧亚经济委员会",
+          "url": "https://eec.eaeunion.org/upload/medialibrary/269/TR-TS-Downvolt.pdf"
+        },
+        {
+          "id": "eec-tr-cu-020-2011",
+          "title": "ТР ТС 020/2011 技术设备电磁兼容法规",
+          "publisher": "欧亚经济委员会",
+          "url": "https://eec.eaeunion.org/upload/medialibrary/1ab/TehReg-TS-EMS.pdf"
+        },
+        {
+          "id": "eec-tr-eaeu-037-2016",
+          "title": "ТР ЕАЭС 037/2016 电气电子产品有害物质限制",
+          "publisher": "欧亚经济委员会",
+          "url": "https://eec.eaeunion.org/upload/medialibrary/7d0/f8sym7qu883mt9ms7z4c6maijt358pl8/TR-EAES-statistika-27.02.2024-deystvuyushchie.pdf"
+        }
+      ]
+    },
+    "cohortComparison": {
+      "fresh": {
+        "rows": 191,
+        "revenue": 67218932,
+        "sales": 35788,
+        "revenuePerSku": 351931.58,
+        "salesPerSku": 187.37,
+        "avgPriceMedian": 1704,
+        "orderConversionMedian": 0.12,
+        "cartAddMedian": 0.09029999999999999,
+        "stockoutMedian": 28,
+        "adRoiMedian": 0.069,
+        "pricePerLiterMedian": 712.3958333333333
+      },
+      "mature": {
+        "rows": 759,
+        "revenue": 247829291,
+        "sales": 113569,
+        "revenuePerSku": 326520.81,
+        "salesPerSku": 149.63,
+        "avgPriceMedian": 1906,
+        "orderConversionMedian": 0.13,
+        "cartAddMedian": 0.079,
+        "stockoutMedian": 28,
+        "adRoiMedian": 0.06,
+        "pricePerLiterMedian": 845.975
+      },
+      "revenuePerSkuRatio": 1.08,
+      "orderConversionDeltaPct": -7.7,
+      "avgPriceDeltaPct": -10.6,
+      "stockoutDeltaDays": 0,
+      "interpretation": "新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。"
+    },
+    "competition": {
+      "brandHhi": 665.15,
+      "brandConcentration": "分散",
+      "sellerHhi": 157.25,
+      "sellerConcentration": "分散",
+      "topBrandShare": 23,
+      "topSellerShare": 5.4,
+      "topTenSellerShare": 29.3,
+      "whiteLabelRevenueShare": 23,
+      "caveat": "未知/无品牌桶可能同时包含真实白牌和字段缺失，因此只能作为进入空间线索。"
+    },
+    "logisticsFit": {
+      "volumeCoverage": 100,
+      "volumeMedian": 2.2,
+      "volumeP75": 3.6,
+      "pricePerLiterMedian": 785.7045454545455,
+      "compactTestThresholdLiters": 5,
+      "compactTestShare": 89.1,
+      "caveat": "5 升仅是国内跨境首轮测款的内部筛选阈值，不是平台物流限制；最终仍需重量、三边和、包装与渠道报价。"
+    },
+    "typeOpportunities": [
+      {
+        "name": "启动充电装置",
+        "rows": 296,
+        "revenue": 173145200,
+        "revenueShare": 52.9,
+        "revenuePerSku": 584950,
+        "orderConversionMedian": 0.08,
+        "orderConversionCoverage": 99.7,
+        "freshCount": 81,
+        "freshRevenueShare": 24.4,
+        "listingDateCoverage": 90.9,
+        "stockoutMedian": 28,
+        "stockoutCoverage": 92.9,
+        "missedRevenuePerSku": 30540.54,
+        "whiteLabelRevenueShare": 34.5,
+        "volumeMedian": 3.1,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 905.6887755102041,
+        "score": 75.3,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 80,
+          "newness": 100,
+          "supplyGap": 55.6,
+          "whiteLabelAccess": 66.7,
+          "logistics": 50
+        }
+      },
+      {
+        "name": "汽车电瓶充电器",
+        "rows": 311,
+        "revenue": 90034766,
+        "revenueShare": 27.5,
+        "revenuePerSku": 289500.86,
+        "orderConversionMedian": 0.13,
+        "orderConversionCoverage": 99,
+        "freshCount": 58,
+        "freshRevenueShare": 22.1,
+        "listingDateCoverage": 97.1,
+        "stockoutMedian": 28,
+        "stockoutCoverage": 99,
+        "missedRevenuePerSku": 8094.49,
+        "whiteLabelRevenueShare": 11.5,
+        "volumeMedian": 1.9,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 655.625,
+        "score": 52.3,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 60,
+          "newness": 66.7,
+          "supplyGap": 44.4,
+          "whiteLabelAccess": 33.3,
+          "logistics": 33.4
+        }
+      },
+      {
+        "name": "摩托车电池",
+        "rows": 247,
+        "revenue": 58156455,
+        "revenueShare": 17.8,
+        "revenuePerSku": 235451.23,
+        "orderConversionMedian": 0.19,
+        "orderConversionCoverage": 100,
+        "freshCount": 24,
+        "freshRevenueShare": 7.8,
+        "listingDateCoverage": 97.2,
+        "stockoutMedian": 28,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 54881.09,
+        "whiteLabelRevenueShare": 3.5,
+        "volumeMedian": 2.4,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 857.6470588235294,
+        "score": 37.7,
+        "evidenceCoverage": 100,
+        "decision": "观察",
+        "scoreParts": {
+          "demand": 40,
+          "newness": 33.3,
+          "supplyGap": 66.7,
+          "whiteLabelAccess": 0,
+          "logistics": 50
+        }
+      },
+      {
+        "name": "蓄电池配件",
+        "rows": 146,
+        "revenue": 6096994,
+        "revenueShare": 1.9,
+        "revenuePerSku": 41760.23,
+        "orderConversionMedian": 0.2,
+        "orderConversionCoverage": 100,
+        "freshCount": 28,
+        "freshRevenueShare": 7.6,
+        "listingDateCoverage": 95.2,
+        "stockoutMedian": 28,
+        "stockoutCoverage": 75.3,
+        "missedRevenuePerSku": 5219.64,
+        "whiteLabelRevenueShare": 54.9,
+        "volumeMedian": 0.5,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 696,
+        "score": 34.7,
+        "evidenceCoverage": 100,
+        "decision": "观察",
+        "scoreParts": {
+          "demand": 20,
+          "newness": 0,
+          "supplyGap": 33.3,
+          "whiteLabelAccess": 100,
+          "logistics": 66.7
+        }
+      }
+    ],
+    "method": {
+      "scoreLabel": "样本内探索优先分",
+      "scoreWeights": "需求 40% / 新品 20% / 供给缺口 15% / 未知品牌进入线索 15% / 物流测试性 10%；缺失维度按可用权重重算。",
+      "decisionRule": "≥70 且证据覆盖≥60%：优先小批测试；45–69.9：补证据后测试；<45：观察。",
+      "boundary": "分数只用于同一报告内排序，不可跨类目比较，也不是销量、利润或成功概率预测。"
+    },
+    "gaps": [
+      "当前数据没有俄罗斯地区分布，无法判断莫斯科、远东或寒冷地区的差异。",
+      "当前数据没有连续时间序列，无法把季节性与单次快照波动分开。",
+      "当前数据没有评价正文、退货原因、采购价和完整包装重量，仍不能直接给出最终 SKU 与利润结论。"
+    ]
+  },
   "recommendations": [
     {
       "title": "先从头部需求与主价格带建立首测组",
@@ -568,6 +860,25 @@
         "下单转化率覆盖 99.6%",
         "下单转化率中位数 13%",
         "访问率 4.73%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "按俄罗斯本地平台逻辑设计跨境测试",
+      "recommendation": "先用中国直发小批量验证点击、加购、签收和退货，再决定是否转本地库存或 FBO；商品页需优先补齐俄语规格、安装/兼容信息和售后边界。",
+      "evidence": [
+        "2026 年上半年俄罗斯网络零售同比 +18.7%",
+        "本土商店与平台占线上成交 96.6%",
+        "当前 FBO/Ozon 履约字段占比 64.1%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "把合规核验放在打样前",
+      "recommendation": "当前类目命中 ТР ТС 018/2011、ТР ТС 004/2011 / 020/2011 / ТР ЕАЭС 037/2016 预筛方向；询价时同步索取材质、用途、供电参数、已有证书与 HS 编码，再判断是否进入样品测试。",
+      "evidence": [
+        "这是法规预筛，不是认证结论；最终范围取决于具体产品、HS 编码、用途和申报主体。",
+        "法规预筛等级：中高"
       ],
       "confidence": "中"
     }
