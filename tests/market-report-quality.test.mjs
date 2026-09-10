@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { GENERATED_MARKET_REPORTS } from '../ozon-react/src/generated/marketReports.js'
 import { RECENT_MARKET_REPORTS } from '../ozon-react/src/generated/recentMarketReports.js'
 import { FEATURED_MARKET_BRIEFS } from '../ozon-react/src/generated/featuredMarketBriefs.js'
@@ -41,5 +42,27 @@ for (const brief of reportBriefs) {
     assert.match(source.url, /^https:\/\//u, `${brief.id}: external evidence links must use HTTPS`)
   }
 }
+
+const lightingReportHtml = readFileSync(
+  new URL('../ozon-react/public/reports/ozon-lighting-deep-analysis/index.html', import.meta.url),
+  'utf8',
+)
+const lightingReportCharts = readFileSync(
+  new URL('../ozon-react/public/reports/ozon-lighting-deep-analysis/assets/charts.js', import.meta.url),
+  'utf8',
+)
+
+assert.doesNotMatch(lightingReportHtml, /330%/u, 'lighting report must not regress to the 330% CTR typo')
+assert.match(lightingReportHtml, /33\.1% 卡访率/u, 'lighting report must show the verified 33.1% CTR')
+assert.match(
+  lightingReportCharts,
+  /Math\.round\(\(v-1\)\*100\)/u,
+  'lighting chart axis and tooltip percentages must be rounded',
+)
+assert.match(
+  lightingReportCharts,
+  /Math\.round\(\(p\.value-1\)\*100\)/u,
+  'lighting chart data labels must be rounded',
+)
 
 console.log(`validated ${reportBriefs.length} market reports: Russia context, evidence, dates and scores`)
