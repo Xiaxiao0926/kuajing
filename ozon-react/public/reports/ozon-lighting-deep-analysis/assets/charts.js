@@ -151,13 +151,13 @@
   var chRatio = echarts.init(document.getElementById('chart-ratio'), null, {renderer:'svg'});
   chRatio.setOption({
     animation:false,
-    tooltip:{trigger:'axis',appendToBody:true,axisPointer:{type:'shadow'},valueFormatter:function(v){return (v-1)*100+'% 溢价';}},
+    tooltip:{trigger:'axis',appendToBody:true,axisPointer:{type:'shadow'},valueFormatter:function(v){return Math.round((v-1)*100)+'% 溢价';}},
     grid:{left:8,right:28,top:10,bottom:6,containLabel:true},
-    xAxis:{type:'value',axisLabel:{color:muted,fontSize:11,formatter:function(v){return (v-1)*100+'%';}},splitLine:{lineStyle:{color:rule}},name:'品牌溢价(有牌vs无牌)',nameTextStyle:{color:muted,fontSize:11}},
+    xAxis:{type:'value',axisLabel:{color:muted,fontSize:11,formatter:function(v){return Math.round((v-1)*100)+'%';}},splitLine:{lineStyle:{color:rule}},name:'品牌溢价(有牌vs无牌)',nameTextStyle:{color:muted,fontSize:11}},
     yAxis:{type:'category',data:ratioCats.slice().reverse(),axisLine:{show:false},axisTick:{show:false},axisLabel:{color:ink,fontSize:12}},
     series:[{type:'bar',data:ratioVals.slice().reverse(),barWidth:22,
       itemStyle:{color:accent2,borderRadius:[0,4,4,0]},
-      label:{show:true,position:'right',color:accent2,fontSize:12,fontWeight:700,formatter:function(p){return '+'+(p.value-1)*100+'%';}} }]
+      label:{show:true,position:'right',color:accent2,fontSize:12,fontWeight:700,formatter:function(p){return '+'+Math.round((p.value-1)*100)+'%';}} }]
   });
   window.addEventListener('resize', function(){ chRatio.resize(); });
 })();
