@@ -10,7 +10,7 @@
   "sample": "1,000 条记录",
   "frameTitle": "Ozon 成人用品市场分析报告",
   "sourceFile": "ozon-2026-07-23成人用品_清洗版.xlsx",
-  "publishedAt": "2026-09-09T01:45:35.877Z",
+  "publishedAt": "2026-09-10T01:40:11.551Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 398333622,
@@ -584,6 +584,355 @@
       "outlierDateCount": 0
     }
   },
+  "executiveSummary": [
+    "当前样本的需求集中在“振动器”和 500–1,000 ₽ 价格带，分别贡献 30% 与 28.9% 样本销售额。",
+    "新品单位 SKU 销售额明显高于成熟品，值得优先拆解头部新品。 新品/成熟品单位 SKU 销售额比为 1.21。",
+    "俄罗斯网络零售在 2026 年上半年同比增长 18.7%，但 96.6% 的成交发生在本土商店和平台；跨境小批测试应服务于验证选品，而不是替代后续本地履约。"
+  ],
+  "russiaEntry": {
+    "context": {
+      "asOf": "2026 年上半年",
+      "overall": {
+        "turnoverRubTrillion": 7.2,
+        "yoyGrowthPct": 18.7,
+        "onlineRetailSharePct": 22.2,
+        "domesticPlatformSharePct": 96.6,
+        "crossBorderSharePct": 3.4
+      },
+      "sector": {
+        "id": "beauty-health",
+        "label": "美容与健康近似大类",
+        "sharePct": 6.8,
+        "turnoverRubBillion": 490,
+        "growthText": "同比增长超过 20%",
+        "matchType": "俄罗斯全网零售近似大类，不等同于当前 Ozon 报告类目"
+      },
+      "operatingImplications": [
+        "俄罗斯线上零售仍在增长，但本报告的 Ozon BSR 样本不能外推为全市场规模。",
+        "本地平台贡献绝大多数线上成交；跨境直发适合低库存验证，跑通后仍应评估本地备货与履约。",
+        "Ozon 的热门商品、搜索、缺失商品和售罄工具口径不同，应与本报告的销量、缺货和新品信号交叉核验。"
+      ],
+      "compliance": {
+        "level": "待分类",
+        "summary": "当前类目无法仅凭报告标签确定监管路径，首轮询价时需补齐材质、用途、供电方式和 HS 编码。",
+        "rules": []
+      },
+      "sources": [
+        {
+          "id": "akit-h1-2026",
+          "title": "АКИТ：2026 年上半年俄罗斯网络零售",
+          "publisher": "俄罗斯网络贸易企业协会（АКИТ）",
+          "asOf": "2026-06-30",
+          "url": "https://www.akit.ru/news/internet-torgovlya-v-pervom-polugodii-2026-7-2-trln-rublej"
+        },
+        {
+          "id": "ozon-analytics-tools",
+          "title": "Ozon 官方卖家分析工具说明",
+          "publisher": "Ozon Help",
+          "asOf": "2026-09-10",
+          "url": "https://docs.ozon.com/global/analytics/analytics-and-metrics/analytics-tools/?country=OTHER"
+        }
+      ]
+    },
+    "cohortComparison": {
+      "fresh": {
+        "rows": 297,
+        "revenue": 135074576,
+        "sales": 125266,
+        "revenuePerSku": 454796.55,
+        "salesPerSku": 421.77,
+        "avgPriceMedian": 740,
+        "orderConversionMedian": 0.0014,
+        "cartAddMedian": 0.0806,
+        "stockoutMedian": 15,
+        "adRoiMedian": 0.155,
+        "pricePerLiterMedian": 1000
+      },
+      "mature": {
+        "rows": 637,
+        "revenue": 239848876,
+        "sales": 318350,
+        "revenuePerSku": 376528.85,
+        "salesPerSku": 499.76,
+        "avgPriceMedian": 540,
+        "orderConversionMedian": 0.0019,
+        "cartAddMedian": 0.0785,
+        "stockoutMedian": 9,
+        "adRoiMedian": 0.121,
+        "pricePerLiterMedian": 839.1666666666667
+      },
+      "revenuePerSkuRatio": 1.21,
+      "orderConversionDeltaPct": -26.3,
+      "avgPriceDeltaPct": 37,
+      "stockoutDeltaDays": 6,
+      "interpretation": "新品单位 SKU 销售额明显高于成熟品，值得优先拆解头部新品。"
+    },
+    "competition": {
+      "brandHhi": 709.86,
+      "brandConcentration": "分散",
+      "sellerHhi": 156.32,
+      "sellerConcentration": "分散",
+      "topBrandShare": 23.7,
+      "topSellerShare": 5.4,
+      "topTenSellerShare": 33,
+      "whiteLabelRevenueShare": 23.7,
+      "caveat": "未知/无品牌桶可能同时包含真实白牌和字段缺失，因此只能作为进入空间线索。"
+    },
+    "logisticsFit": {
+      "volumeCoverage": 100,
+      "volumeMedian": 0.7,
+      "volumeP75": 1.5,
+      "pricePerLiterMedian": 878.25,
+      "compactTestThresholdLiters": 5,
+      "compactTestShare": 97.3,
+      "caveat": "5 升仅是国内跨境首轮测款的内部筛选阈值，不是平台物流限制；最终仍需重量、三边和、包装与渠道报价。"
+    },
+    "typeOpportunities": [
+      {
+        "name": "延长器",
+        "rows": 28,
+        "revenue": 8986187,
+        "revenueShare": 2.3,
+        "revenuePerSku": 320935.25,
+        "orderConversionMedian": 0.0036499999999999996,
+        "orderConversionCoverage": 100,
+        "freshCount": 12,
+        "freshRevenueShare": 34.3,
+        "listingDateCoverage": 82.1,
+        "stockoutMedian": 15,
+        "stockoutCoverage": 82.1,
+        "missedRevenuePerSku": 3281.03,
+        "whiteLabelRevenueShare": 50.8,
+        "volumeMedian": 0.2,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 2425,
+        "score": 80.1,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 76.9,
+          "newness": 72.4,
+          "supplyGap": 74.7,
+          "whiteLabelAccess": 93.1,
+          "logistics": 96.6
+        }
+      },
+      {
+        "name": "催情产品",
+        "rows": 148,
+        "revenue": 40992481,
+        "revenueShare": 10.3,
+        "revenuePerSku": 276976.22,
+        "orderConversionMedian": 0.0021,
+        "orderConversionCoverage": 96.6,
+        "freshCount": 59,
+        "freshRevenueShare": 41.5,
+        "listingDateCoverage": 82.4,
+        "stockoutMedian": 10,
+        "stockoutCoverage": 82.4,
+        "missedRevenuePerSku": 13329.63,
+        "whiteLabelRevenueShare": 48.2,
+        "volumeMedian": 0.2,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 1520,
+        "score": 79.4,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 79,
+          "newness": 86.2,
+          "supplyGap": 52.9,
+          "whiteLabelAccess": 89.7,
+          "logistics": 91.4
+        }
+      },
+      {
+        "name": "前列腺按摩器",
+        "rows": 17,
+        "revenue": 12120068,
+        "revenueShare": 3,
+        "revenuePerSku": 712945.18,
+        "orderConversionMedian": 0.0013,
+        "orderConversionCoverage": 100,
+        "freshCount": 7,
+        "freshRevenueShare": 53.3,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 11,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 7086.06,
+        "whiteLabelRevenueShare": 65.9,
+        "volumeMedian": 1.1,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 1330.8333333333335,
+        "score": 75.9,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 71.1,
+          "newness": 93.1,
+          "supplyGap": 57.5,
+          "whiteLabelAccess": 98.3,
+          "logistics": 54.4
+        }
+      },
+      {
+        "name": "飞机杯",
+        "rows": 98,
+        "revenue": 80638936,
+        "revenueShare": 20.2,
+        "revenuePerSku": 822846.29,
+        "orderConversionMedian": 0.0013,
+        "orderConversionCoverage": 96.9,
+        "freshCount": 42,
+        "freshRevenueShare": 55.7,
+        "listingDateCoverage": 91.8,
+        "stockoutMedian": 12.5,
+        "stockoutCoverage": 91.8,
+        "missedRevenuePerSku": 20552.51,
+        "whiteLabelRevenueShare": 11.7,
+        "volumeMedian": 2,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 525.625,
+        "score": 67.8,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 79,
+          "newness": 96.6,
+          "supplyGap": 74.7,
+          "whiteLabelAccess": 24.1,
+          "logistics": 20.7
+        }
+      },
+      {
+        "name": "私处护理霜",
+        "rows": 34,
+        "revenue": 7162120,
+        "revenueShare": 1.8,
+        "revenuePerSku": 210650.59,
+        "orderConversionMedian": 0.00275,
+        "orderConversionCoverage": 100,
+        "freshCount": 15,
+        "freshRevenueShare": 46.4,
+        "listingDateCoverage": 91.2,
+        "stockoutMedian": 7,
+        "stockoutCoverage": 91.2,
+        "missedRevenuePerSku": 2710.16,
+        "whiteLabelRevenueShare": 36.3,
+        "volumeMedian": 0.25,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 1780,
+        "score": 67.5,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 63.6,
+          "newness": 89.7,
+          "supplyGap": 25.3,
+          "whiteLabelAccess": 75.9,
+          "logistics": 89.7
+        }
+      },
+      {
+        "name": "费洛蒙香水",
+        "rows": 6,
+        "revenue": 1045620,
+        "revenueShare": 0.3,
+        "revenuePerSku": 174270,
+        "orderConversionMedian": 0.3067,
+        "orderConversionCoverage": 100,
+        "freshCount": 2,
+        "freshRevenueShare": 36.2,
+        "listingDateCoverage": 50,
+        "stockoutMedian": 20,
+        "stockoutCoverage": 50,
+        "missedRevenuePerSku": 20400.77,
+        "whiteLabelRevenueShare": 65.9,
+        "volumeMedian": 0.4,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 756.25,
+        "score": 65.7,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 39.7,
+          "newness": 75.9,
+          "supplyGap": 93.1,
+          "whiteLabelAccess": 98.3,
+          "logistics": 59.5
+        }
+      },
+      {
+        "name": "性爱机器",
+        "rows": 4,
+        "revenue": 5189772,
+        "revenueShare": 1.3,
+        "revenuePerSku": 1297443,
+        "orderConversionMedian": 0.00065,
+        "orderConversionCoverage": 100,
+        "freshCount": 4,
+        "freshRevenueShare": 100,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 21.5,
+        "stockoutCoverage": 100,
+        "missedRevenuePerSku": 90737.5,
+        "whiteLabelRevenueShare": 14.6,
+        "volumeMedian": 9.95,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 432.5923725151253,
+        "score": 63.2,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 57.6,
+          "newness": 100,
+          "supplyGap": 97.7,
+          "whiteLabelAccess": 31,
+          "logistics": 8.6
+        }
+      },
+      {
+        "name": "振动蛋",
+        "rows": 22,
+        "revenue": 8920639,
+        "revenueShare": 2.2,
+        "revenuePerSku": 405483.59,
+        "orderConversionMedian": 0.0014,
+        "orderConversionCoverage": 95.5,
+        "freshCount": 9,
+        "freshRevenueShare": 32.1,
+        "listingDateCoverage": 95.5,
+        "stockoutMedian": 12,
+        "stockoutCoverage": 95.5,
+        "missedRevenuePerSku": 3902.68,
+        "whiteLabelRevenueShare": 32.3,
+        "volumeMedian": 0.75,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 947.7777777777777,
+        "score": 63.1,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 65.2,
+          "newness": 58.6,
+          "supplyGap": 60.9,
+          "whiteLabelAccess": 72.4,
+          "logistics": 53.5
+        }
+      }
+    ],
+    "method": {
+      "scoreLabel": "样本内探索优先分",
+      "scoreWeights": "需求 40% / 新品 20% / 供给缺口 15% / 未知品牌进入线索 15% / 物流测试性 10%；缺失维度按可用权重重算。",
+      "decisionRule": "≥70 且证据覆盖≥60%：优先小批测试；45–69.9：补证据后测试；<45：观察。",
+      "boundary": "分数只用于同一报告内排序，不可跨类目比较，也不是销量、利润或成功概率预测。"
+    },
+    "gaps": [
+      "当前数据没有俄罗斯地区分布，无法判断莫斯科、远东或寒冷地区的差异。",
+      "当前数据没有连续时间序列，无法把季节性与单次快照波动分开。",
+      "当前数据没有评价正文、退货原因、采购价和完整包装重量，仍不能直接给出最终 SKU 与利润结论。"
+    ]
+  },
   "recommendations": [
     {
       "title": "先从头部需求与主价格带建立首测组",
@@ -622,6 +971,25 @@
         "下单转化率覆盖 98.2%",
         "下单转化率中位数 0.2%",
         "访问率 5.3%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "按俄罗斯本地平台逻辑设计跨境测试",
+      "recommendation": "先用中国直发小批量验证点击、加购、签收和退货，再决定是否转本地库存或 FBO；商品页需优先补齐俄语规格、安装/兼容信息和售后边界。",
+      "evidence": [
+        "2026 年上半年俄罗斯网络零售同比 +18.7%",
+        "本土商店与平台占线上成交 96.6%",
+        "当前 FBO/Ozon 履约字段占比 92.9%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "把合规核验放在打样前",
+      "recommendation": "当前类目无法仅凭名称匹配监管路径；询价时先补齐材质、用途、供电方式、成分与 HS 编码，再决定样品测试。",
+      "evidence": [
+        "当前类目无法仅凭报告标签确定监管路径，首轮询价时需补齐材质、用途、供电方式和 HS 编码。",
+        "法规预筛等级：待分类"
       ],
       "confidence": "中"
     }

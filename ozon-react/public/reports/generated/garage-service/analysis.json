@@ -10,7 +10,7 @@
   "sample": "1,000 条记录",
   "frameTitle": "Ozon 车库与汽车服务市场分析报告",
   "sourceFile": "ozon-2026-07-23车库汽车服务_清洗版.xlsx",
-  "publishedAt": "2026-09-09T01:45:35.568Z",
+  "publishedAt": "2026-09-10T01:40:11.200Z",
   "kpis": {
     "rowCount": 1000,
     "totalRevenue": 650688467,
@@ -584,6 +584,372 @@
       "outlierDateCount": 0
     }
   },
+  "executiveSummary": [
+    "当前样本的需求集中在“汽车压缩机”和 1,000–2,000 ₽ 价格带，分别贡献 24.4% 与 24.6% 样本销售额。",
+    "新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。 新品/成熟品单位 SKU 销售额比为 1.02。",
+    "俄罗斯网络零售在 2026 年上半年同比增长 18.7%，但 96.6% 的成交发生在本土商店和平台；跨境小批测试应服务于验证选品，而不是替代后续本地履约。"
+  ],
+  "russiaEntry": {
+    "context": {
+      "asOf": "2026 年上半年",
+      "overall": {
+        "turnoverRubTrillion": 7.2,
+        "yoyGrowthPct": 18.7,
+        "onlineRetailSharePct": 22.2,
+        "domesticPlatformSharePct": 96.6,
+        "crossBorderSharePct": 3.4
+      },
+      "sector": {
+        "id": "auto-parts",
+        "label": "汽车零配件与汽车用品近似大类",
+        "sharePct": 6.1,
+        "turnoverRubBillion": null,
+        "growthText": null,
+        "matchType": "俄罗斯全网零售近似大类，不等同于当前 Ozon 报告类目"
+      },
+      "operatingImplications": [
+        "俄罗斯线上零售仍在增长，但本报告的 Ozon BSR 样本不能外推为全市场规模。",
+        "本地平台贡献绝大多数线上成交；跨境直发适合低库存验证，跑通后仍应评估本地备货与履约。",
+        "Ozon 的热门商品、搜索、缺失商品和售罄工具口径不同，应与本报告的销量、缺货和新品信号交叉核验。"
+      ],
+      "compliance": {
+        "level": "中",
+        "summary": "这是法规预筛，不是认证结论；最终范围取决于具体产品、HS 编码、用途和申报主体。",
+        "rules": [
+          {
+            "code": "ТР ТС 018/2011",
+            "note": "涉及车辆安全、受监管部件或安装后影响车辆性能时核验；不能仅凭商品名称判断适用。",
+            "source": {
+              "id": "eec-tr-cu-018-2011",
+              "title": "ТР ТС 018/2011 轮式车辆安全技术法规",
+              "publisher": "欧亚经济委员会",
+              "url": "https://eec.eaeunion.org/upload/medialibrary/834/Plan-TR-EAES-_2021_.pdf"
+            }
+          }
+        ]
+      },
+      "sources": [
+        {
+          "id": "akit-h1-2026",
+          "title": "АКИТ：2026 年上半年俄罗斯网络零售",
+          "publisher": "俄罗斯网络贸易企业协会（АКИТ）",
+          "asOf": "2026-06-30",
+          "url": "https://www.akit.ru/news/internet-torgovlya-v-pervom-polugodii-2026-7-2-trln-rublej"
+        },
+        {
+          "id": "ozon-analytics-tools",
+          "title": "Ozon 官方卖家分析工具说明",
+          "publisher": "Ozon Help",
+          "asOf": "2026-09-10",
+          "url": "https://docs.ozon.com/global/analytics/analytics-and-metrics/analytics-tools/?country=OTHER"
+        },
+        {
+          "id": "eec-tr-cu-018-2011",
+          "title": "ТР ТС 018/2011 轮式车辆安全技术法规",
+          "publisher": "欧亚经济委员会",
+          "url": "https://eec.eaeunion.org/upload/medialibrary/834/Plan-TR-EAES-_2021_.pdf"
+        }
+      ]
+    },
+    "cohortComparison": {
+      "fresh": {
+        "rows": 305,
+        "revenue": 207414524,
+        "sales": 479397,
+        "revenuePerSku": 680047.62,
+        "salesPerSku": 1571.79,
+        "avgPriceMedian": 247,
+        "orderConversionMedian": 0.002,
+        "cartAddMedian": 0.1559,
+        "stockoutMedian": 16,
+        "adRoiMedian": 0.07200000000000001,
+        "pricePerLiterMedian": 336.6666666666667
+      },
+      "mature": {
+        "rows": 611,
+        "revenue": 407500719,
+        "sales": 931651,
+        "revenuePerSku": 666940.62,
+        "salesPerSku": 1524.8,
+        "avgPriceMedian": 266,
+        "orderConversionMedian": 0.0022,
+        "cartAddMedian": 0.1555,
+        "stockoutMedian": 11,
+        "adRoiMedian": 0.064,
+        "pricePerLiterMedian": 411.875
+      },
+      "revenuePerSkuRatio": 1.02,
+      "orderConversionDeltaPct": -9.1,
+      "avgPriceDeltaPct": -7.1,
+      "stockoutDeltaDays": 5,
+      "interpretation": "新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。"
+    },
+    "competition": {
+      "brandHhi": 1604.19,
+      "brandConcentration": "中度集中",
+      "sellerHhi": 71.52,
+      "sellerConcentration": "分散",
+      "topBrandShare": 39.2,
+      "topSellerShare": 3.4,
+      "topTenSellerShare": 18.4,
+      "whiteLabelRevenueShare": 39.2,
+      "caveat": "未知/无品牌桶可能同时包含真实白牌和字段缺失，因此只能作为进入空间线索。"
+    },
+    "logisticsFit": {
+      "volumeCoverage": 100,
+      "volumeMedian": 0.9,
+      "volumeP75": 2.8,
+      "pricePerLiterMedian": 399.58333333333337,
+      "compactTestThresholdLiters": 5,
+      "compactTestShare": 88.7,
+      "caveat": "5 升仅是国内跨境首轮测款的内部筛选阈值，不是平台物流限制；最终仍需重量、三边和、包装与渠道报价。"
+    },
+    "typeOpportunities": [
+      {
+        "name": "工业漏斗",
+        "rows": 107,
+        "revenue": 62867689,
+        "revenueShare": 9.7,
+        "revenuePerSku": 587548.5,
+        "orderConversionMedian": 0.0026,
+        "orderConversionCoverage": 89.7,
+        "freshCount": 25,
+        "freshRevenueShare": 30.8,
+        "listingDateCoverage": 86,
+        "stockoutMedian": 24,
+        "stockoutCoverage": 72.9,
+        "missedRevenuePerSku": 53088.64,
+        "whiteLabelRevenueShare": 55.2,
+        "volumeMedian": 2.6,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 116.84782608695653,
+        "score": 70,
+        "evidenceCoverage": 100,
+        "decision": "优先小批测试",
+        "scoreParts": {
+          "demand": 80,
+          "newness": 62.5,
+          "supplyGap": 96.8,
+          "whiteLabelAccess": 65.6,
+          "logistics": 11.8
+        }
+      },
+      {
+        "name": "接油盘",
+        "rows": 6,
+        "revenue": 4205546,
+        "revenueShare": 0.6,
+        "revenuePerSku": 700924.33,
+        "orderConversionMedian": 0.00245,
+        "orderConversionCoverage": 100,
+        "freshCount": 6,
+        "freshRevenueShare": 100,
+        "listingDateCoverage": 100,
+        "stockoutMedian": null,
+        "stockoutCoverage": 0,
+        "missedRevenuePerSku": 0,
+        "whiteLabelRevenueShare": 100,
+        "volumeMedian": 9.6,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 37.395833333333336,
+        "score": 68,
+        "evidenceCoverage": 80,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 57.7,
+          "newness": 100,
+          "supplyGap": null,
+          "whiteLabelAccess": 98.4,
+          "logistics": 0
+        }
+      },
+      {
+        "name": "燃油和润滑油泵",
+        "rows": 145,
+        "revenue": 121199499,
+        "revenueShare": 18.6,
+        "revenuePerSku": 835858.61,
+        "orderConversionMedian": 0.00255,
+        "orderConversionCoverage": 89.7,
+        "freshCount": 38,
+        "freshRevenueShare": 23.2,
+        "listingDateCoverage": 86.2,
+        "stockoutMedian": 25,
+        "stockoutCoverage": 56.6,
+        "missedRevenuePerSku": 71555.22,
+        "whiteLabelRevenueShare": 43.8,
+        "volumeMedian": 2.6,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 400,
+        "score": 67.9,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 86,
+          "newness": 39.1,
+          "supplyGap": 100,
+          "whiteLabelAccess": 53.1,
+          "logistics": 27.4
+        }
+      },
+      {
+        "name": "汽车压缩机",
+        "rows": 83,
+        "revenue": 158989041,
+        "revenueShare": 24.4,
+        "revenuePerSku": 1915530.61,
+        "orderConversionMedian": 0.0015,
+        "orderConversionCoverage": 88,
+        "freshCount": 39,
+        "freshRevenueShare": 46.4,
+        "listingDateCoverage": 83.1,
+        "stockoutMedian": 14,
+        "stockoutCoverage": 83.1,
+        "missedRevenuePerSku": 21842.34,
+        "whiteLabelRevenueShare": 30.1,
+        "volumeMedian": 2.8,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 415.25,
+        "score": 67,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 80.6,
+          "newness": 84.4,
+          "supplyGap": 70.3,
+          "whiteLabelAccess": 31.3,
+          "logistics": 26.6
+        }
+      },
+      {
+        "name": "注油枪",
+        "rows": 55,
+        "revenue": 26099127,
+        "revenueShare": 4,
+        "revenuePerSku": 474529.58,
+        "orderConversionMedian": 0.0023,
+        "orderConversionCoverage": 100,
+        "freshCount": 23,
+        "freshRevenueShare": 42.9,
+        "listingDateCoverage": 98.2,
+        "stockoutMedian": 9,
+        "stockoutCoverage": 89.1,
+        "missedRevenuePerSku": 3350.43,
+        "whiteLabelRevenueShare": 55.8,
+        "volumeMedian": 1.5,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 236.66666666666666,
+        "score": 63.8,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 69.1,
+          "newness": 79.7,
+          "supplyGap": 39.8,
+          "whiteLabelAccess": 71.9,
+          "logistics": 34.4
+        }
+      },
+      {
+        "name": "洗车机配件",
+        "rows": 10,
+        "revenue": 10177174,
+        "revenueShare": 1.6,
+        "revenuePerSku": 1017717.4,
+        "orderConversionMedian": 0.0022500000000000003,
+        "orderConversionCoverage": 100,
+        "freshCount": 4,
+        "freshRevenueShare": 19.2,
+        "listingDateCoverage": 100,
+        "stockoutMedian": 18.5,
+        "stockoutCoverage": 60,
+        "missedRevenuePerSku": 33450.3,
+        "whiteLabelRevenueShare": 81.4,
+        "volumeMedian": 6,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 127.72727272727273,
+        "score": 62.7,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 73.4,
+          "newness": 34.4,
+          "supplyGap": 83.5,
+          "whiteLabelAccess": 87.5,
+          "logistics": 7.8
+        }
+      },
+      {
+        "name": "拉拔器",
+        "rows": 54,
+        "revenue": 19603686,
+        "revenueShare": 3,
+        "revenuePerSku": 363031.22,
+        "orderConversionMedian": 0.0021,
+        "orderConversionCoverage": 98.1,
+        "freshCount": 15,
+        "freshRevenueShare": 29.7,
+        "listingDateCoverage": 90.7,
+        "stockoutMedian": 14,
+        "stockoutCoverage": 90.7,
+        "missedRevenuePerSku": 9446.95,
+        "whiteLabelRevenueShare": 58,
+        "volumeMedian": 0.5,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 657.2727272727273,
+        "score": 62.7,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 59.7,
+          "newness": 59.4,
+          "supplyGap": 67.2,
+          "whiteLabelAccess": 75,
+          "logistics": 56.3
+        }
+      },
+      {
+        "name": "玻璃维修套件",
+        "rows": 10,
+        "revenue": 5613303,
+        "revenueShare": 0.9,
+        "revenuePerSku": 561330.3,
+        "orderConversionMedian": 0.0019,
+        "orderConversionCoverage": 90,
+        "freshCount": 5,
+        "freshRevenueShare": 81.1,
+        "listingDateCoverage": 80,
+        "stockoutMedian": 19.5,
+        "stockoutCoverage": 80,
+        "missedRevenuePerSku": 1171.27,
+        "whiteLabelRevenueShare": 4.6,
+        "volumeMedian": 0.3,
+        "volumeCoverage": 100,
+        "pricePerLiterMedian": 970,
+        "score": 61.5,
+        "evidenceCoverage": 100,
+        "decision": "补证据后测试",
+        "scoreParts": {
+          "demand": 55,
+          "newness": 93.8,
+          "supplyGap": 74.5,
+          "whiteLabelAccess": 12.5,
+          "logistics": 76.6
+        }
+      }
+    ],
+    "method": {
+      "scoreLabel": "样本内探索优先分",
+      "scoreWeights": "需求 40% / 新品 20% / 供给缺口 15% / 未知品牌进入线索 15% / 物流测试性 10%；缺失维度按可用权重重算。",
+      "decisionRule": "≥70 且证据覆盖≥60%：优先小批测试；45–69.9：补证据后测试；<45：观察。",
+      "boundary": "分数只用于同一报告内排序，不可跨类目比较，也不是销量、利润或成功概率预测。"
+    },
+    "gaps": [
+      "当前数据没有俄罗斯地区分布，无法判断莫斯科、远东或寒冷地区的差异。",
+      "当前数据没有连续时间序列，无法把季节性与单次快照波动分开。",
+      "当前数据没有评价正文、退货原因、采购价和完整包装重量，仍不能直接给出最终 SKU 与利润结论。"
+    ]
+  },
   "recommendations": [
     {
       "title": "先从头部需求与主价格带建立首测组",
@@ -622,6 +988,25 @@
         "下单转化率覆盖 95.6%",
         "下单转化率中位数 0.2%",
         "访问率 2.77%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "按俄罗斯本地平台逻辑设计跨境测试",
+      "recommendation": "先用中国直发小批量验证点击、加购、签收和退货，再决定是否转本地库存或 FBO；商品页需优先补齐俄语规格、安装/兼容信息和售后边界。",
+      "evidence": [
+        "2026 年上半年俄罗斯网络零售同比 +18.7%",
+        "本土商店与平台占线上成交 96.6%",
+        "当前 FBO/Ozon 履约字段占比 76.7%"
+      ],
+      "confidence": "中"
+    },
+    {
+      "title": "把合规核验放在打样前",
+      "recommendation": "当前类目命中 ТР ТС 018/2011 预筛方向；询价时同步索取材质、用途、供电参数、已有证书与 HS 编码，再判断是否进入样品测试。",
+      "evidence": [
+        "这是法规预筛，不是认证结论；最终范围取决于具体产品、HS 编码、用途和申报主体。",
+        "法规预筛等级：中"
       ],
       "confidence": "中"
     }
