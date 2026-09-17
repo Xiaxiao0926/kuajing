@@ -236,6 +236,42 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify({ version: dataVersion }), 'utf-8');
     }
+    else if (pathname === '/api/market-intelligence/keywords') {
+        try {
+            const { searchKeywords } = require('./scripts/keywordsSearchService.cjs');
+            const result = searchKeywords(query);
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify(result), 'utf-8');
+        } catch (err) {
+            console.error('[Keywords API Error]:', err.message);
+            res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify({ error: err.message }), 'utf-8');
+        }
+    }
+    else if (pathname === '/api/market-intelligence/upload' && req.method === 'POST') {
+        const { handleUploadRequest } = require('./scripts/market_intelligence/pipelineRunner.cjs');
+        handleUploadRequest(req, res);
+    }
+    else if (pathname === '/api/market-intelligence/run-pipeline' && req.method === 'POST') {
+        const { handleRunPipelineRequest } = require('./scripts/market_intelligence/pipelineRunner.cjs');
+        handleRunPipelineRequest(req, res);
+    }
+    else if (pathname === '/api/market-intelligence/pipeline-status') {
+        const { handleStatusRequest } = require('./scripts/market_intelligence/pipelineRunner.cjs');
+        handleStatusRequest(req, res);
+    }
+    else if (pathname === '/api/market-intelligence/diff-report') {
+        const { handleDiffReportRequest } = require('./scripts/market_intelligence/pipelineRunner.cjs');
+        handleDiffReportRequest(req, res, query.run_id);
+    }
+    else if (pathname === '/api/market-intelligence/rollback' && req.method === 'POST') {
+        const { handleRollbackRequest } = require('./scripts/market_intelligence/pipelineRunner.cjs');
+        handleRollbackRequest(req, res);
+    }
+    else if (pathname === '/api/market-intelligence/audit-log') {
+        const { handleAuditLogRequest } = require('./scripts/market_intelligence/pipelineRunner.cjs');
+        handleAuditLogRequest(req, res);
+    }
     else if (pathname === '/api/summary') {
         const results = readAnalysisResults();
         const marketData = loadCleanedMarketData();

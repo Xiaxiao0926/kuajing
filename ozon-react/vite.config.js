@@ -3,7 +3,9 @@ import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
 import { execFileSync } from 'child_process'
+import { createRequire } from 'module'
 
+const require = createRequire(import.meta.url)
 const REPO_ROOT = path.resolve(__dirname, '..')
 const OZON_DATA_DIR = path.resolve(process.env.OZON_DATA_DIR || path.join(REPO_ROOT, '市场分析'))
 const OZON_UPLOADS_DIR = path.resolve(process.env.OZON_UPLOADS_DIR || path.join(OZON_DATA_DIR, 'uploads'))
@@ -78,6 +80,68 @@ function ozonDataSyncPlugin() {
     buildStart() { syncData() },
     configureServer(server) {
       syncData()
+
+      server.middlewares.use('/api/market-intelligence/keywords', (req, res, next) => {
+        if (req.method !== 'GET') { next(); return }
+        try {
+          const urlObj = new URL(req.url, 'http://localhost')
+          const q = urlObj.searchParams.get('q') || ''
+          const category = urlObj.searchParams.get('category') || 'ALL'
+          const intent = urlObj.searchParams.get('intent') || 'ALL'
+          const type = urlObj.searchParams.get('type') || 'ALL'
+          const sortBy = urlObj.searchParams.get('sortBy') || 'search_vol'
+          const sortDir = urlObj.searchParams.get('sortDir') || 'desc'
+          const page = parseInt(urlObj.searchParams.get('page') || '1', 10)
+          const pageSize = parseInt(urlObj.searchParams.get('pageSize') || '50', 10)
+
+          const { searchKeywords } = require(path.resolve(__dirname, '../scripts/keywordsSearchService.cjs'))
+          const result = searchKeywords({ q, category, intent, type, sortBy, sortDir, page, pageSize })
+          res.setHeader('Content-Type', 'application/json; charset=utf-8')
+          res.end(JSON.stringify(result))
+        } catch (err) {
+          console.error('[API /api/market-intelligence/keywords error]:', err)
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify({ error: err.message }))
+        }
+      })
+
+      server.middlewares.use('/api/market-intelligence/upload', (req, res, next) => {
+        if (req.method !== 'POST') { next(); return }
+        const { handleUploadRequest } = require(path.resolve(__dirname, '../scripts/market_intelligence/pipelineRunner.cjs'))
+        handleUploadRequest(req, res)
+      })
+
+      server.middlewares.use('/api/market-intelligence/run-pipeline', (req, res, next) => {
+        if (req.method !== 'POST') { next(); return }
+        const { handleRunPipelineRequest } = require(path.resolve(__dirname, '../scripts/market_intelligence/pipelineRunner.cjs'))
+        handleRunPipelineRequest(req, res)
+      })
+
+      server.middlewares.use('/api/market-intelligence/pipeline-status', (req, res, next) => {
+        if (req.method !== 'GET') { next(); return }
+        const { handleStatusRequest } = require(path.resolve(__dirname, '../scripts/market_intelligence/pipelineRunner.cjs'))
+        handleStatusRequest(req, res)
+      })
+
+      server.middlewares.use('/api/market-intelligence/diff-report', (req, res, next) => {
+        if (req.method !== 'GET') { next(); return }
+        const urlObj = new URL(req.url, 'http://localhost')
+        const runId = urlObj.searchParams.get('run_id') || ''
+        const { handleDiffReportRequest } = require(path.resolve(__dirname, '../scripts/market_intelligence/pipelineRunner.cjs'))
+        handleDiffReportRequest(req, res, runId)
+      })
+
+      server.middlewares.use('/api/market-intelligence/rollback', (req, res, next) => {
+        if (req.method !== 'POST') { next(); return }
+        const { handleRollbackRequest } = require(path.resolve(__dirname, '../scripts/market_intelligence/pipelineRunner.cjs'))
+        handleRollbackRequest(req, res)
+      })
+
+      server.middlewares.use('/api/market-intelligence/audit-log', (req, res, next) => {
+        const { handleAuditLogRequest } = require(path.resolve(__dirname, '../scripts/market_intelligence/pipelineRunner.cjs'))
+        handleAuditLogRequest(req, res)
+      })
 
       server.middlewares.use('/api/persist', (req, res, next) => {
         if (req.method === 'GET') {

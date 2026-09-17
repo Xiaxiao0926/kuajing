@@ -18,9 +18,10 @@ export function getApiBase() {
 
 export function getAssetUrl(pathname = '') {
   const config = getRuntimeConfig()
-  const base = config.assetBase || import.meta.env.BASE_URL || '/'
+  const base = config.assetBase || (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) || '/'
   const normalizedBase = base.endsWith('/') ? base : `${base}/`
-  return new URL(pathname.replace(/^\//, ''), new URL(normalizedBase, window.location.origin)).toString()
+  const origin = typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'http://localhost'
+  return new URL(pathname.replace(/^\//, ''), new URL(normalizedBase, origin)).toString()
 }
 
 export function getDataUrl(pathname = '') {

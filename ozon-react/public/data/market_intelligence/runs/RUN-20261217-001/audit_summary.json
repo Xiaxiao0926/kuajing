@@ -1,0 +1,33 @@
+{
+  "total_fields": 43,
+  "total_niches_raw": 7630,
+  "passed_gate_count": 6534,
+  "eliminated_count": 1096,
+  "elimination_reasons": {
+    "dead_niche_zero_revenue": 383,
+    "micro_niche_gmv_under_50k": 697,
+    "single_seller_monopoly": 1,
+    "other": 15
+  },
+  "key_field_corrections": [
+    {
+      "field": "实际成交率",
+      "initial_assumption": "访客-订单下单转化率 CVR",
+      "confirmed_definition": "买家签收率 (Выкуп = 成交量 / (成交量 + 取消量))",
+      "mean_val": "78.4%",
+      "impact": "反向退货风险衡量指标，大于85%极度安全"
+    },
+    {
+      "field": "订单集中度(%)",
+      "initial_assumption": "订单集中度越高头部垄断越大",
+      "confirmed_definition": "占80%订单的卖家数量占比 (值越大竞争越分散，越容易切入)",
+      "impact": "方向校正为正向计分"
+    }
+  ],
+  "bridge_stats": {
+    "exact_matches": 5167,
+    "niche_coverage_pct": "79.1%",
+    "search_volume_coverage_pct": "99.7%",
+    "total_search_volume": 3163236765
+  }
+}

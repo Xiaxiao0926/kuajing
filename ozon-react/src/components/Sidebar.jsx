@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from 'react'
 import {
   Upload, FileSpreadsheet, Loader2, FolderOpen, ChevronDown, ChevronRight, CheckCircle2, Info, GitBranch,
   LayoutDashboard, Search, Target, ClipboardList, Store, Truck, FileText, Package, Factory, ShieldCheck, Wallet, Database, BarChart3, Warehouse,
-  Inbox, FolderKanban, Layers, BookOpen,
+  Inbox, FolderKanban, Layers, BookOpen, Compass,
 } from 'lucide-react'
 import { ROADMAP_PHASES } from '../data/roadmap'
 import { persistGet, persistSet } from '../utils/persist'
@@ -27,6 +27,7 @@ const NAV_SECTIONS = [
   {
     id: 'market', label: '市场与选品', icon: BarChart3,
     items: [
+      { id: '__market_intelligence__', label: '俄罗斯市场情报', icon: Compass },
       { id: 'n2', label: '市场调研', icon: Search },
       { id: '__purity_analysis__', label: '选品市场分析', icon: Layers },
       { id: '__market_reports__', label: '市场报告中心', icon: BookOpen },

@@ -1,0 +1,97 @@
+[
+  {
+    "id": "audit_1789625396203_27oo6",
+    "timestamp": "2026-09-17T06:09:56.203Z",
+    "action": "RUN_ROLLBACK",
+    "old_value": "RUN-20260917-001",
+    "new_value": "RUN-20261217-001",
+    "source": "DATAHUB_ROLLBACK_ACTION"
+  },
+  {
+    "id": "audit_1789625396202_8fs1j",
+    "timestamp": "2026-09-17T06:09:56.202Z",
+    "action": "RUN_ROLLBACK",
+    "old_value": "RUN-20261217-001",
+    "new_value": "RUN-20260917-001",
+    "source": "DATAHUB_ROLLBACK_ACTION"
+  },
+  {
+    "id": "audit_1789625396195_qqh52",
+    "timestamp": "2026-09-17T06:09:56.195Z",
+    "action": "OVERRIDE_STATUS",
+    "niche_uid": "wb_niche_d0198d600bed",
+    "niche_name": "发泡胶枪",
+    "old_value": {
+      "status": "WATCHLIST"
+    },
+    "new_value": {
+      "status": "SHORTLISTED",
+      "reason": "跨境头程空运利润达标"
+    },
+    "source": "acceptance_test",
+    "user": "test_hardening_agent"
+  },
+  {
+    "id": "audit_1789625356443_rp7wf",
+    "timestamp": "2026-09-17T06:09:16.443Z",
+    "action": "RUN_ROLLBACK",
+    "old_value": "RUN-20260917-001",
+    "new_value": "RUN-20261217-001",
+    "source": "DATAHUB_ROLLBACK_ACTION"
+  },
+  {
+    "id": "audit_1789625356442_qzai0",
+    "timestamp": "2026-09-17T06:09:16.442Z",
+    "action": "RUN_ROLLBACK",
+    "old_value": "RUN-20261217-001",
+    "new_value": "RUN-20260917-001",
+    "source": "DATAHUB_ROLLBACK_ACTION"
+  },
+  {
+    "id": "audit_1789625356435_ouaxx",
+    "timestamp": "2026-09-17T06:09:16.435Z",
+    "action": "OVERRIDE_STATUS",
+    "niche_uid": "wb_niche_d0198d600bed",
+    "niche_name": "发泡胶枪",
+    "old_value": {
+      "status": "WATCHLIST"
+    },
+    "new_value": {
+      "status": "SHORTLISTED",
+      "reason": "跨境头程空运利润达标"
+    },
+    "source": "acceptance_test",
+    "user": "test_hardening_agent"
+  },
+  {
+    "id": "audit_1789625274187_iogt8",
+    "timestamp": "2026-09-17T06:07:54.187Z",
+    "action": "RUN_ROLLBACK",
+    "old_value": "RUN-20260917-001",
+    "new_value": "RUN-20261217-001",
+    "source": "DATAHUB_ROLLBACK_ACTION"
+  },
+  {
+    "id": "audit_1789625266755_ye86r",
+    "timestamp": "2026-09-17T06:07:46.755Z",
+    "action": "RUN_ROLLBACK",
+    "old_value": "RUN-20261217-001",
+    "new_value": "RUN-20260917-001",
+    "source": "DATAHUB_ROLLBACK_ACTION"
+  },
+  {
+    "id": "audit_1789625260005_sqncw",
+    "timestamp": "2026-09-17T06:07:40.005Z",
+    "action": "OVERRIDE_STATUS",
+    "niche_uid": "wb_niche_d0198d600bed",
+    "niche_name": "发泡胶枪",
+    "old_value": {
+      "status": "WATCHLIST"
+    },
+    "new_value": {
+      "status": "SHORTLISTED"
+    },
+    "source": "test_hardening",
+    "user": "qa_agent"
+  }
+]

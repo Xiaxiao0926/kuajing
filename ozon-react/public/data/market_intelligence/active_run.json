@@ -1,0 +1,59 @@
+{
+  "active_run_id": "RUN-20261217-001",
+  "previous_active_run_id": "RUN-20260917-001",
+  "available_runs": [
+    {
+      "run_id": "RUN-20261217-001",
+      "title": "2026 Q4 俄罗斯市场选品决策基线",
+      "date_range": "2026-06-18 ~ 2026-09-15",
+      "niches_count": 6534,
+      "keywords_count": 300000,
+      "created_at": "2026-09-17",
+      "manifest": {
+        "niche_file": {
+          "name": "WB--16-9-2026 利基分析(付费版) 从 18-06-2026 到 15-09-2026.xlsx",
+          "sha256": "33ef76a98101b395648b02ce4703db23a2698c7961cbd796bc75ac57bd4a1ce8",
+          "size_bytes": 1235080,
+          "schema_version": "WB-NICHE-SCHEMA-V1"
+        },
+        "keyword_file": {
+          "name": "WB--16-9-2026 在WB上的搜索请求. Jam 从 18-06-2026 到 15-09-2026.xlsx",
+          "sha256": "3820283d68e3cf763740479e025dddec62a3bd12d21b2f9171c7bcf3732495f9",
+          "size_bytes": 45077267,
+          "schema_version": "WB-JAM-SCHEMA-V1"
+        }
+      },
+      "models": {
+        "market_model": "WB-MARKET-MODEL-V1",
+        "risk_model": "WB-CROSSBORDER-RISK-V1",
+        "keyword_model": "WB-DSI-V1"
+      }
+    },
+    {
+      "run_id": "RUN-20260917-001",
+      "title": "2026 Q3 俄罗斯市场全量选品决策基线",
+      "date_range": "2026-06-18 ~ 2026-09-15",
+      "niches_count": 6534,
+      "keywords_count": 300001,
+      "created_at": "2026-09-17",
+      "models": {
+        "market_model": "WB-MARKET-MODEL-V1",
+        "risk_model": "WB-CROSSBORDER-RISK-V1",
+        "keyword_model": "WB-DSI-V1"
+      }
+    },
+    {
+      "run_id": "RUN-20260615-001",
+      "title": "2026 Q2 历史选品决策对比基线",
+      "date_range": "2026-03-15 ~ 2026-06-15",
+      "niches_count": 6180,
+      "keywords_count": 284500,
+      "created_at": "2026-06-16",
+      "models": {
+        "market_model": "WB-MARKET-MODEL-V1",
+        "risk_model": "WB-CROSSBORDER-RISK-V1",
+        "keyword_model": "WB-DSI-V1"
+      }
+    }
+  ]
+}

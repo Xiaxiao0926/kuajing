@@ -198,7 +198,7 @@ export function findCandidateByProductId(sourceProductId) {
 }
 
 /** 候选不存在则创建（latestSnapshotId 置 null，随后由 refreshCandidateSnapshot 挂快照）；sourceProductId 为空 fail-close */
-export function ensureCandidate({ sourceProductId, candidateIndex, name, categoryLeaf, categoryFull, owner = '', notes = '' }) {
+export function ensureCandidate({ sourceProductId, candidateIndex, name, categoryLeaf, categoryFull, owner = '', notes = '', source_niche_id, source_run_id, source_system }) {
   if (!sourceProductId || !String(sourceProductId).trim()) {
     throw new Error('T6_STORE: sourceProductId 为空，禁止创建候选（稳定业务身份缺失，fail-close）')
   }
@@ -211,6 +211,9 @@ export function ensureCandidate({ sourceProductId, candidateIndex, name, categor
     candidateIndex, candidateName: name, categoryLeaf, categoryFull,
     latestSnapshotId: null,
     bizStatus: '观察', owner, notes,
+    ...(source_niche_id ? { source_niche_id: String(source_niche_id) } : {}),
+    ...(source_run_id ? { source_run_id: String(source_run_id) } : {}),
+    ...(source_system ? { source_system: String(source_system) } : {}),
     projectIds: [],
     addedAt: now, updatedAt: now,
   }

@@ -1,0 +1,27 @@
+{
+  "aliases": {
+    "手动工具及配件::聚氨酯泡沫枪": "wb_niche_d0198d600bed",
+    "手动工具及配件::泡沫填缝剂施工枪": "wb_niche_d0198d600bed",
+    "聚氨酯泡沫枪": "wb_niche_d0198d600bed",
+    "泡沫填缝剂施工枪": "wb_niche_d0198d600bed",
+    "电工电气::防水免焊热缩接线套管": "wb_niche_95bbf0baa514",
+    "防水免焊热缩接线套管": "wb_niche_95bbf0baa514"
+  },
+  "uid_map": {
+    "wb_niche_d0198d600bed": {
+      "canonical_name": "发泡胶枪",
+      "category": "手动工具及配件",
+      "aliases": [
+        "聚氨酯泡沫枪",
+        "泡沫填缝剂施工枪"
+      ]
+    },
+    "wb_niche_95bbf0baa514": {
+      "canonical_name": "热缩管",
+      "category": "电工电气",
+      "aliases": [
+        "防水免焊热缩接线套管"
+      ]
+    }
+  }
+}

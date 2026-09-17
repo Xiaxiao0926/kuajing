@@ -1,0 +1,898 @@
+{
+  "run_id": "RUN-20260917-001",
+  "run_title": "2026 Q3 俄罗斯市场全量选品决策基线",
+  "run_date": "2026-09-17",
+  "data_period": "2026-06-18 ~ 2026-09-15",
+  "models": {
+    "market_model": "WB-MARKET-MODEL-V1",
+    "risk_model": "WB-CROSSBORDER-RISK-V1",
+    "keyword_model": "WB-DSI-V1"
+  },
+  "manifest": {
+    "schema_version": "WB-DATASET-V1",
+    "generated_at": "2026-09-17T00:00:00.000000",
+    "niche_file": {
+      "name": "WB--16-9-2026 利基分析(付费版) 从 18-06-2026 到 15-09-2026.xlsx",
+      "sha256": "33ef76a98101b395648b02ce4703db23a2698c7961cbd796bc75ac57bd4a1ce8",
+      "bytes": 1235080,
+      "sheet_name": "详细信息"
+    },
+    "keyword_file": {
+      "name": "WB--16-9-2026 在WB上的搜索请求. Jam 从 18-06-2026 到 15-09-2026.xlsx",
+      "sha256": "3820283d68e3cf763740479e025dddec62a3bd12d21b2f9171c7bcf3732495f9",
+      "bytes": 45077267,
+      "sheet_name": "Sheet1"
+    }
+  },
+  "summary_kpis": {
+    "total_niches_audited": 7630,
+    "passed_niches": 6534,
+    "gated_eliminated": 1096,
+    "high_opportunity_sa": 784,
+    "immediate_test_candidates": 5,
+    "verify_candidates": 6,
+    "watchlist_count": 117,
+    "drop_count": 1,
+    "total_search_queries": 300001,
+    "blue_ocean_keywords": 150,
+    "total_quarterly_gmv_rub": 149202033238,
+    "avg_buyout_rate": 78.4
+  },
+  "today_highlights": {
+    "growth": [
+      {
+        "name": "封口器",
+        "category": "餐具器具",
+        "growth": "+625.9%",
+        "gmv": 38045524,
+        "note": "秋季果酱蔬菜封罐民俗刚需，季度营收爆发超6倍"
+      },
+      {
+        "name": "进气翻板",
+        "category": "汽车配件",
+        "growth": "+155.5%",
+        "gmv": 5766331,
+        "note": "汽配改装季度爆发，客单高"
+      }
+    ],
+    "supply_gap": [
+      {
+        "name": "装饰绝缘子",
+        "category": "电工电气",
+        "sellers": 71,
+        "buyout": "86.0%",
+        "search": 2834,
+        "note": "木屋复古明线家装特色蓝海，仅71家在售"
+      },
+      {
+        "name": "发泡胶枪",
+        "category": "手动工具及配件",
+        "sellers": 945,
+        "buyout": "91.0%",
+        "search": 243766,
+        "note": "24.4万次搜索高需求，签收率达91%"
+      }
+    ],
+    "cross_border": [
+      {
+        "name": "热缩管",
+        "category": "电工电气",
+        "weight": "120g",
+        "price": 39.0,
+        "buyout": "91.0%",
+        "note": "免烙铁防水含锡套管，120g盒装，国际运费占比极低"
+      },
+      {
+        "name": "接线端子",
+        "category": "电工电气",
+        "weight": "160g",
+        "price": 35.0,
+        "buyout": "92.0%",
+        "note": "WAGO替代款透明导线快接，签收率92%，高频易耗标品"
+      }
+    ]
+  },
+  "categories_summary": [
+    {
+      "category": "手动工具及配件",
+      "gated_niche_count": "208",
+      "total_revenue": "836913164",
+      "avg_composite_index": "72.6",
+      "best_niche": "发泡胶枪",
+      "best_niche_cpi": "85.5",
+      "category_priority": "P1 优先"
+    },
+    {
+      "category": "电工电气",
+      "gated_niche_count": "87",
+      "total_revenue": "498785342",
+      "avg_composite_index": "71.5",
+      "best_niche": "稳压器",
+      "best_niche_cpi": "84.4",
+      "category_priority": "P1 优先"
+    },
+    {
+      "category": "工作服及防护用品",
+      "gated_niche_count": "63",
+      "total_revenue": "613180485",
+      "avg_composite_index": "70.7",
+      "best_niche": "一次性拖鞋",
+      "best_niche_cpi": "82.5",
+      "category_priority": "P1 优先"
+    },
+    {
+      "category": "汽车配件及改装件",
+      "gated_niche_count": "232",
+      "total_revenue": "1796796160",
+      "avg_composite_index": "70.3",
+      "best_niche": "拖车支轮",
+      "best_niche_cpi": "89.4",
+      "category_priority": "P1 优先"
+    },
+    {
+      "category": "装修材料",
+      "gated_niche_count": "122",
+      "total_revenue": "1742658304",
+      "avg_composite_index": "69.9",
+      "best_niche": "发泡胶",
+      "best_niche_cpi": "84.2",
+      "category_priority": "P1 优先"
+    },
+    {
+      "category": "收纳",
+      "gated_niche_count": "24",
+      "total_revenue": "838252208",
+      "avg_composite_index": "69.7",
+      "best_niche": "纸箱",
+      "best_niche_cpi": "84.9",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "汽车配件",
+      "gated_niche_count": "365",
+      "total_revenue": "1329955934",
+      "avg_composite_index": "69.4",
+      "best_niche": "进气翻板",
+      "best_niche_cpi": "85.3",
+      "category_priority": "P1 优先"
+    },
+    {
+      "category": "小型家具",
+      "gated_niche_count": "23",
+      "total_revenue": "1052138417",
+      "avg_composite_index": "67.6",
+      "best_niche": "梳妆台",
+      "best_niche_cpi": "77.5",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "园艺工具及灌溉用品",
+      "gated_niche_count": "82",
+      "total_revenue": "628810549",
+      "avg_composite_index": "66.9",
+      "best_niche": "除雪锹",
+      "best_niche_cpi": "78.2",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "露营及休闲用品",
+      "gated_niche_count": "112",
+      "total_revenue": "1738328778",
+      "avg_composite_index": "66.8",
+      "best_niche": "泳池撇渣器",
+      "best_niche_cpi": "81.3",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "餐具器具",
+      "gated_niche_count": "269",
+      "total_revenue": "3279440701",
+      "avg_composite_index": "66.4",
+      "best_niche": "封口器",
+      "best_niche_cpi": "83.0",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "家居用品",
+      "gated_niche_count": "90",
+      "total_revenue": "1626512344",
+      "avg_composite_index": "66.4",
+      "best_niche": "湿厕纸",
+      "best_niche_cpi": "81.6",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "运动配件",
+      "gated_niche_count": "142",
+      "total_revenue": "425507064",
+      "avg_composite_index": "66.2",
+      "best_niche": "枪械支架",
+      "best_niche_cpi": "79.8",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "园艺用品",
+      "gated_niche_count": "95",
+      "total_revenue": "2414041492",
+      "avg_composite_index": "66.2",
+      "best_niche": "泥炭土",
+      "best_niche_cpi": "82.1",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "定制家具",
+      "gated_niche_count": "4",
+      "total_revenue": "321790675",
+      "avg_composite_index": "65.8",
+      "best_niche": "厨房橱柜",
+      "best_niche_cpi": "69.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "运动营养品及化妆品",
+      "gated_niche_count": "25",
+      "total_revenue": "563515168",
+      "avg_composite_index": "64.4",
+      "best_niche": "运动饼干",
+      "best_niche_cpi": "73.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "网络设备",
+      "gated_niche_count": "13",
+      "total_revenue": "145901646",
+      "avg_composite_index": "64.3",
+      "best_niche": "WiFi信号放大器",
+      "best_niche_cpi": "72.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "宠物用品",
+      "gated_niche_count": "246",
+      "total_revenue": "3293305685",
+      "avg_composite_index": "64.2",
+      "best_niche": "动物凝胶",
+      "best_niche_cpi": "83.7",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "家用纺织品",
+      "gated_niche_count": "47",
+      "total_revenue": "4587835429",
+      "avg_composite_index": "63.9",
+      "best_niche": "一次性床单",
+      "best_niche_cpi": "76.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "配饰",
+      "gated_niche_count": "102",
+      "total_revenue": "3854249278",
+      "avg_composite_index": "63.8",
+      "best_niche": "行李箱保护套",
+      "best_niche_cpi": "78.3",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "建筑材料",
+      "gated_niche_count": "162",
+      "total_revenue": "819136831",
+      "avg_composite_index": "63.8",
+      "best_niche": "屋顶自攻螺丝",
+      "best_niche_cpi": "80.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "个护健康",
+      "gated_niche_count": "41",
+      "total_revenue": "1226033387",
+      "avg_composite_index": "63.8",
+      "best_niche": "牙刷消毒器",
+      "best_niche_cpi": "75.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "电脑外设及配件",
+      "gated_niche_count": "16",
+      "total_revenue": "387916440",
+      "avg_composite_index": "63.6",
+      "best_niche": "键盘",
+      "best_niche_cpi": "71.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "轮胎及轮毂",
+      "gated_niche_count": "11",
+      "total_revenue": "1942143070",
+      "avg_composite_index": "63.5",
+      "best_niche": "补胎钉",
+      "best_niche_cpi": "76.2",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "图书与光盘",
+      "gated_niche_count": "31",
+      "total_revenue": "1854962417",
+      "avg_composite_index": "63.3",
+      "best_niche": "教科书",
+      "best_niche_cpi": "75.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "智能家居与安防",
+      "gated_niche_count": "29",
+      "total_revenue": "1298923888",
+      "avg_composite_index": "63.3",
+      "best_niche": "非可视对讲门铃",
+      "best_niche_cpi": "73.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "柜类家具及储物家具",
+      "gated_niche_count": "41",
+      "total_revenue": "1758991896",
+      "avg_composite_index": "63.2",
+      "best_niche": "高架储物柜",
+      "best_niche_cpi": "75.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "影音设备",
+      "gated_niche_count": "35",
+      "total_revenue": "1347376041",
+      "avg_composite_index": "62.8",
+      "best_niche": "视频信号接收器",
+      "best_niche_cpi": "76.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "玩具",
+      "gated_niche_count": "113",
+      "total_revenue": "2013264760",
+      "avg_composite_index": "62.8",
+      "best_niche": "互动玩具",
+      "best_niche_cpi": "72.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "花园家具",
+      "gated_niche_count": "16",
+      "total_revenue": "276943644",
+      "avg_composite_index": "62.7",
+      "best_niche": "花园长凳",
+      "best_niche_cpi": "74.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "照明设备",
+      "gated_niche_count": "10",
+      "total_revenue": "662525029",
+      "avg_composite_index": "62.6",
+      "best_niche": "台灯",
+      "best_niche_cpi": "72.2",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "游戏机与游戏",
+      "gated_niche_count": "11",
+      "total_revenue": "254828263",
+      "avg_composite_index": "62.6",
+      "best_niche": "游戏订阅服务",
+      "best_niche_cpi": "78.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "办公设备",
+      "gated_niche_count": "21",
+      "total_revenue": "346585550",
+      "avg_composite_index": "62.5",
+      "best_niche": "相纸",
+      "best_niche_cpi": "71.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "电动工具及设备",
+      "gated_niche_count": "66",
+      "total_revenue": "1176501135",
+      "avg_composite_index": "62.5",
+      "best_niche": "砂轮机",
+      "best_niche_cpi": "73.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "专业乐器",
+      "gated_niche_count": "79",
+      "total_revenue": "74358728",
+      "avg_composite_index": "62.3",
+      "best_niche": "乐器支架",
+      "best_niche_cpi": "75.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "家居装饰品",
+      "gated_niche_count": "73",
+      "total_revenue": "1264742014",
+      "avg_composite_index": "62.3",
+      "best_niche": "照片冲印服务",
+      "best_niche_cpi": "78.1",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "宗教与玄学",
+      "gated_niche_count": "18",
+      "total_revenue": "111897095",
+      "avg_composite_index": "62.2",
+      "best_niche": "墓地花瓶",
+      "best_niche_cpi": "71.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "车载电子",
+      "gated_niche_count": "23",
+      "total_revenue": "421379682",
+      "avg_composite_index": "62.2",
+      "best_niche": "车载逆变器",
+      "best_niche_cpi": "70.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "体育用品",
+      "gated_niche_count": "469",
+      "total_revenue": "3726077924",
+      "avg_composite_index": "62.1",
+      "best_niche": "钓鱼支架",
+      "best_niche_cpi": "78.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "摄影器材",
+      "gated_niche_count": "44",
+      "total_revenue": "158088333",
+      "avg_composite_index": "61.8",
+      "best_niche": "胶卷",
+      "best_niche_cpi": "80.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "窗帘及配件",
+      "gated_niche_count": "12",
+      "total_revenue": "1266654482",
+      "avg_composite_index": "61.6",
+      "best_niche": "窗帘杆",
+      "best_niche_cpi": "71.1",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "家居清洁用品",
+      "gated_niche_count": "50",
+      "total_revenue": "2113490614",
+      "avg_composite_index": "61.5",
+      "best_niche": "洗碗机清洁块",
+      "best_niche_cpi": "79.4",
+      "category_priority": "P2 推荐"
+    },
+    {
+      "category": "电子配件",
+      "gated_niche_count": "198",
+      "total_revenue": "2183444473",
+      "avg_composite_index": "61.3",
+      "best_niche": "延长保修证书",
+      "best_niche_cpi": "85.4",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "成人用品",
+      "gated_niche_count": "92",
+      "total_revenue": "317788431",
+      "avg_composite_index": "61.2",
+      "best_niche": "情趣枕头",
+      "best_niche_cpi": "74.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "办公家具及商业设备",
+      "gated_niche_count": "74",
+      "total_revenue": "1641171989",
+      "avg_composite_index": "61.1",
+      "best_niche": "写字桌",
+      "best_niche_cpi": "77.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "婴儿内衣",
+      "gated_niche_count": "14",
+      "total_revenue": "118068410",
+      "avg_composite_index": "60.7",
+      "best_niche": "婴儿内裤",
+      "best_niche_cpi": "69.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "气候电器",
+      "gated_niche_count": "27",
+      "total_revenue": "667924688",
+      "avg_composite_index": "60.7",
+      "best_niche": "除湿机",
+      "best_niche_cpi": "73.4",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "手工制品",
+      "gated_niche_count": "116",
+      "total_revenue": "1143043097",
+      "avg_composite_index": "60.6",
+      "best_niche": "手工剪刀",
+      "best_niche_cpi": "73.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "办公用品",
+      "gated_niche_count": "155",
+      "total_revenue": "2430014837",
+      "avg_composite_index": "60.2",
+      "best_niche": "防拆袋",
+      "best_niche_cpi": "72.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "数字商品",
+      "gated_niche_count": "1",
+      "total_revenue": "111505",
+      "avg_composite_index": "60.2",
+      "best_niche": "激活码",
+      "best_niche_cpi": "60.2",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "卫浴",
+      "gated_niche_count": "134",
+      "total_revenue": "1440374476",
+      "avg_composite_index": "60.1",
+      "best_niche": "膨胀罐",
+      "best_niche_cpi": "76.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "摩托车用品",
+      "gated_niche_count": "80",
+      "total_revenue": "369313664",
+      "avg_composite_index": "59.9",
+      "best_niche": "四轮摩托车罩",
+      "best_niche_cpi": "77.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "园艺设备",
+      "gated_niche_count": "41",
+      "total_revenue": "1372272663",
+      "avg_composite_index": "59.8",
+      "best_niche": "割草机线盘",
+      "best_niche_cpi": "69.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "节庆用品",
+      "gated_niche_count": "74",
+      "total_revenue": "825590765",
+      "avg_composite_index": "59.3",
+      "best_niche": "充值卡",
+      "best_niche_cpi": "79.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "睡眠家具",
+      "gated_niche_count": "13",
+      "total_revenue": "1131849304",
+      "avg_composite_index": "59.2",
+      "best_niche": "床",
+      "best_niche_cpi": "69.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "婴儿用品",
+      "gated_niche_count": "138",
+      "total_revenue": "1476534955",
+      "avg_composite_index": "58.7",
+      "best_niche": "婴儿床笠",
+      "best_niche_cpi": "74.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "鞋类配件",
+      "gated_niche_count": "41",
+      "total_revenue": "179342282",
+      "avg_composite_index": "58.7",
+      "best_niche": "鞋袋",
+      "best_niche_cpi": "70.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "服务",
+      "gated_niche_count": "1",
+      "total_revenue": "1227706",
+      "avg_composite_index": "58.6",
+      "best_niche": "配送卡",
+      "best_niche_cpi": "58.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "烟具",
+      "gated_niche_count": "31",
+      "total_revenue": "53545957",
+      "avg_composite_index": "58.6",
+      "best_niche": "卷烟纸",
+      "best_niche_cpi": "76.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "酒类",
+      "gated_niche_count": "2",
+      "total_revenue": "82847",
+      "avg_composite_index": "58.3",
+      "best_niche": "葡萄酒",
+      "best_niche_cpi": "58.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "车辆蓄电池",
+      "gated_niche_count": "3",
+      "total_revenue": "82962860",
+      "avg_composite_index": "58.0",
+      "best_niche": "摩托车电池",
+      "best_niche_cpi": "63.4",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "汽车",
+      "gated_niche_count": "1",
+      "total_revenue": "2303212",
+      "avg_composite_index": "57.9",
+      "best_niche": "新车",
+      "best_niche_cpi": "57.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "珠宝饰品",
+      "gated_niche_count": "23",
+      "total_revenue": "1393293671",
+      "avg_composite_index": "57.8",
+      "best_niche": "珠宝套装",
+      "best_niche_cpi": "70.2",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "婴儿配件",
+      "gated_niche_count": "14",
+      "total_revenue": "38184625",
+      "avg_composite_index": "57.1",
+      "best_niche": "防抓指套",
+      "best_niche_cpi": "73.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "软体家具",
+      "gated_niche_count": "20",
+      "total_revenue": "612312794",
+      "avg_composite_index": "57.0",
+      "best_niche": "摇椅",
+      "best_niche_cpi": "68.1",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "汽车化学品及美容用品",
+      "gated_niche_count": "47",
+      "total_revenue": "423497580",
+      "avg_composite_index": "56.6",
+      "best_niche": "汽车润滑脂",
+      "best_niche_cpi": "71.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "交通工具",
+      "gated_niche_count": "11",
+      "total_revenue": "21328581",
+      "avg_composite_index": "56.5",
+      "best_niche": "摩托车",
+      "best_niche_cpi": "62.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "发饰",
+      "gated_niche_count": "27",
+      "total_revenue": "248734753",
+      "avg_composite_index": "56.1",
+      "best_niche": "发圈",
+      "best_niche_cpi": "67.7",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "家用电器",
+      "gated_niche_count": "54",
+      "total_revenue": "1530105983",
+      "avg_composite_index": "56.0",
+      "best_niche": "真空密封袋",
+      "best_niche_cpi": "74.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "帽类",
+      "gated_niche_count": "16",
+      "total_revenue": "418171817",
+      "avg_composite_index": "55.4",
+      "best_niche": "防风面罩",
+      "best_niche_cpi": "62.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "饰品",
+      "gated_niche_count": "24",
+      "total_revenue": "1066251466",
+      "avg_composite_index": "54.9",
+      "best_niche": "手链",
+      "best_niche_cpi": "68.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "健康用品",
+      "gated_niche_count": "271",
+      "total_revenue": "3116944852",
+      "avg_composite_index": "53.5",
+      "best_niche": "成人纸尿裤",
+      "best_niche_cpi": "71.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "内衣",
+      "gated_niche_count": "48",
+      "total_revenue": "5397676363",
+      "avg_composite_index": "53.5",
+      "best_niche": "内裤",
+      "best_niche_cpi": "65.2",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "婴儿服装",
+      "gated_niche_count": "55",
+      "total_revenue": "515390924",
+      "avg_composite_index": "52.9",
+      "best_niche": "婴儿开襟衣",
+      "best_niche_cpi": "69.1",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "机油及工业油液",
+      "gated_niche_count": "11",
+      "total_revenue": "543872027",
+      "avg_composite_index": "52.6",
+      "best_niche": "汽车保养套装",
+      "best_niche_cpi": "62.3",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "厨房电器",
+      "gated_niche_count": "77",
+      "total_revenue": "1660163778",
+      "avg_composite_index": "52.6",
+      "best_niche": "真空包装机",
+      "best_niche_cpi": "69.7",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "运动鞋",
+      "gated_niche_count": "21",
+      "total_revenue": "192725868",
+      "avg_composite_index": "52.6",
+      "best_niche": "舞蹈鞋",
+      "best_niche_cpi": "62.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "美妆",
+      "gated_niche_count": "308",
+      "total_revenue": "11026076551",
+      "avg_composite_index": "51.9",
+      "best_niche": "封层胶",
+      "best_niche_cpi": "67.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "运动服装",
+      "gated_niche_count": "61",
+      "total_revenue": "2376280827",
+      "avg_composite_index": "50.2",
+      "best_niche": "桑搏服",
+      "best_niche_cpi": "62.4",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "即食食品",
+      "gated_niche_count": "1",
+      "total_revenue": "40521",
+      "avg_composite_index": "50.2",
+      "best_niche": "寿司卷及饭团",
+      "best_niche_cpi": "50.2",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "鞋类",
+      "gated_niche_count": "28",
+      "total_revenue": "8445762530",
+      "avg_composite_index": "49.2",
+      "best_niche": "凉拖",
+      "best_niche_cpi": "54.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "食品",
+      "gated_niche_count": "280",
+      "total_revenue": "3318152914",
+      "avg_composite_index": "49.1",
+      "best_niche": "肉罐头",
+      "best_niche_cpi": "62.9",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "电脑及笔记本",
+      "gated_niche_count": "28",
+      "total_revenue": "1606584360",
+      "avg_composite_index": "48.8",
+      "best_niche": "笔记本支架",
+      "best_niche_cpi": "62.8",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "服装",
+      "gated_niche_count": "66",
+      "total_revenue": "28215006619",
+      "avg_composite_index": "48.5",
+      "best_niche": "Polo衫",
+      "best_niche_cpi": "57.4",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "智能手机及数码产品",
+      "gated_niche_count": "8",
+      "total_revenue": "4093061550",
+      "avg_composite_index": "47.3",
+      "best_niche": "运动手环",
+      "best_niche_cpi": "50.5",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "兽药",
+      "gated_niche_count": "19",
+      "total_revenue": "219081224",
+      "avg_composite_index": "46.4",
+      "best_niche": "宠物抗过敏药",
+      "best_niche_cpi": "59.0",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "婴儿食品",
+      "gated_niche_count": "20",
+      "total_revenue": "204666281",
+      "avg_composite_index": "45.6",
+      "best_niche": "儿童牛奶",
+      "best_niche_cpi": "53.6",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "大家电",
+      "gated_niche_count": "15",
+      "total_revenue": "911474674",
+      "avg_composite_index": "41.4",
+      "best_niche": "冰柜",
+      "best_niche_cpi": "54.1",
+      "category_priority": "P3 审慎"
+    },
+    {
+      "category": "药品",
+      "gated_niche_count": "23",
+      "total_revenue": "79481938",
+      "avg_composite_index": "40.1",
+      "best_niche": "内分泌药物",
+      "best_niche_cpi": "58.0",
+      "category_priority": "P3 审慎"
+    }
+  ]
+}

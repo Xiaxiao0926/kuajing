@@ -40,6 +40,7 @@ const FragrancePricing = lazy(() => import('./components/FragrancePricing'))
 const ListingContent = lazy(() => import('./components/ListingContent'))
 const WBCalc = lazy(() => import('./components/WBCalc'))
 const MarketReportCenter = lazy(() => import('./components/reports/MarketReportCenter'))
+const MarketIntelligenceApp = lazy(() => import('./components/marketIntelligence/MarketIntelligenceApp'))
 
 const LazyFallback = () => (
   <div className="flex items-center justify-center py-24 text-sm text-morandi-text-light">页面加载中…</div>
@@ -49,6 +50,7 @@ const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
 // 页面错误边界的标题映射（仅展示用）
 function pageLabelForNode(nodeId) {
+  if (nodeId === '__market_intelligence__') return '俄罗斯市场情报'
   if (nodeId === '__scoring__') return '选品评分'
   if (nodeId === '__purity_analysis__') return '选品市场分析'
   if (nodeId === '__market_reports__' || nodeId === '__door_window_report__') return '市场报告中心'
@@ -238,6 +240,13 @@ function DashboardApp() {
         </Suspense>
       )
     }
+    if (activeNode === '__market_intelligence__') {
+      return (
+        <Suspense fallback={<LazyFallback />}>
+          <MarketIntelligenceApp onNavigateToWbCalc={() => setActiveNode('n39')} />
+        </Suspense>
+      )
+    }
     if (activeNode === '__market_reports__' || activeNode === '__door_window_report__') {
       return (
         <Suspense fallback={<LazyFallback />}>
@@ -391,6 +400,7 @@ function DashboardApp() {
               className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-morandi-text"
             >
               <option value="__project_flow__">项目流程总览</option>
+              <option value="__market_intelligence__">俄罗斯市场情报</option>
               <option value="__purity_analysis__">选品市场分析</option>
               <option value="__scoring__">选品评分</option>
               <option value="__t6_candidates__">候选池</option>

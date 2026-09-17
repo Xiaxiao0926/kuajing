@@ -1,0 +1,631 @@
+{
+  "run_id": "RUN-20261217-001",
+  "run_title": "2026 Q4 俄罗斯市场选品决策基线",
+  "run_date": "2026-09-17",
+  "data_period": "2026-06-18 ~ 2026-09-15",
+  "models": {
+    "market_model": "WB-MARKET-MODEL-V1",
+    "risk_model": "WB-CROSSBORDER-RISK-V1",
+    "keyword_model": "WB-DSI-V1"
+  },
+  "manifest": {
+    "niche_file": {
+      "name": "WB--16-9-2026 利基分析(付费版) 从 18-06-2026 到 15-09-2026.xlsx",
+      "sha256": "33ef76a98101b395648b02ce4703db23a2698c7961cbd796bc75ac57bd4a1ce8",
+      "size_bytes": 1235080,
+      "schema_version": "WB-NICHE-SCHEMA-V1"
+    },
+    "keyword_file": {
+      "name": "WB--16-9-2026 在WB上的搜索请求. Jam 从 18-06-2026 到 15-09-2026.xlsx",
+      "sha256": "3820283d68e3cf763740479e025dddec62a3bd12d21b2f9171c7bcf3732495f9",
+      "size_bytes": 45077267,
+      "schema_version": "WB-JAM-SCHEMA-V1"
+    }
+  },
+  "summary_kpis": {
+    "total_niches_audited": 7630,
+    "passed_niches": 6534,
+    "gated_eliminated": 1096,
+    "high_opportunity_sa": 437,
+    "immediate_test_candidates": 34,
+    "verify_candidates": 150,
+    "watchlist_count": 871,
+    "drop_count": 5479,
+    "total_search_queries": 300000,
+    "blue_ocean_keywords": 150,
+    "total_quarterly_gmv_rub": 149202033238,
+    "avg_buyout_rate": 78.4,
+    "inherited_states_count": 0,
+    "mapping_reviews_count": 0
+  },
+  "today_highlights": {
+    "growth": [
+      {
+        "name": "封口器",
+        "category": "餐具器具",
+        "growth": "+625.9%",
+        "gmv": 38045524,
+        "note": "秋季果酱蔬菜封罐民俗刚需，季度营收爆发超6倍"
+      },
+      {
+        "name": "进气翻板",
+        "category": "汽车配件",
+        "growth": "+155.5%",
+        "gmv": 5766331,
+        "note": "汽配改装季度爆发，客单高"
+      }
+    ],
+    "supply_gap": [
+      {
+        "name": "装饰绝缘子",
+        "category": "电工电气",
+        "sellers": 71,
+        "buyout": "86.0%",
+        "search": 2834,
+        "note": "木屋复古明线家装特色蓝海，仅71家在售"
+      },
+      {
+        "name": "发泡胶枪",
+        "category": "手动工具及配件",
+        "sellers": 945,
+        "buyout": "91.0%",
+        "search": 243766,
+        "note": "24.4万次搜索高需求，签收率达91%"
+      }
+    ],
+    "cross_border": [
+      {
+        "name": "热缩管",
+        "category": "电工电气",
+        "weight": "120g",
+        "price": 39.0,
+        "buyout": "91.0%",
+        "note": "免烙铁防水含锡套管，120g盒装，国际运费占比极低"
+      },
+      {
+        "name": "接线端子",
+        "category": "电工电气",
+        "weight": "160g",
+        "price": 35.0,
+        "buyout": "92.0%",
+        "note": "WAGO替代款透明导线快接，签收率92%，高频易耗标品"
+      }
+    ]
+  },
+  "categories_summary": [
+    {
+      "category": "服装",
+      "niche_count": 66,
+      "total_gmv": 28215006619,
+      "avg_sellers": 3512.3
+    },
+    {
+      "category": "美妆",
+      "niche_count": 308,
+      "total_gmv": 11026076551,
+      "avg_sellers": 1248.2
+    },
+    {
+      "category": "鞋类",
+      "niche_count": 28,
+      "total_gmv": 8445762530,
+      "avg_sellers": 1758.4
+    },
+    {
+      "category": "内衣",
+      "niche_count": 48,
+      "total_gmv": 5397676363,
+      "avg_sellers": 1032.9
+    },
+    {
+      "category": "家用纺织品",
+      "niche_count": 47,
+      "total_gmv": 4587835429,
+      "avg_sellers": 1181.9
+    },
+    {
+      "category": "智能手机及数码产品",
+      "niche_count": 8,
+      "total_gmv": 4093061550,
+      "avg_sellers": 2303.5
+    },
+    {
+      "category": "配饰",
+      "niche_count": 102,
+      "total_gmv": 3854249278,
+      "avg_sellers": 1314.9
+    },
+    {
+      "category": "体育用品",
+      "niche_count": 469,
+      "total_gmv": 3726077924,
+      "avg_sellers": 304.4
+    },
+    {
+      "category": "食品",
+      "niche_count": 280,
+      "total_gmv": 3318152914,
+      "avg_sellers": 294.2
+    },
+    {
+      "category": "宠物用品",
+      "niche_count": 246,
+      "total_gmv": 3293305685,
+      "avg_sellers": 410.4
+    },
+    {
+      "category": "餐具器具",
+      "niche_count": 269,
+      "total_gmv": 3279440701,
+      "avg_sellers": 859.4
+    },
+    {
+      "category": "健康用品",
+      "niche_count": 271,
+      "total_gmv": 3116944852,
+      "avg_sellers": 282.6
+    },
+    {
+      "category": "办公用品",
+      "niche_count": 155,
+      "total_gmv": 2430014837,
+      "avg_sellers": 689.8
+    },
+    {
+      "category": "园艺用品",
+      "niche_count": 95,
+      "total_gmv": 2414041492,
+      "avg_sellers": 605.5
+    },
+    {
+      "category": "运动服装",
+      "niche_count": 61,
+      "total_gmv": 2376280827,
+      "avg_sellers": 460.2
+    },
+    {
+      "category": "电子配件",
+      "niche_count": 198,
+      "total_gmv": 2183444473,
+      "avg_sellers": 607.3
+    },
+    {
+      "category": "家居清洁用品",
+      "niche_count": 50,
+      "total_gmv": 2113490614,
+      "avg_sellers": 1210.7
+    },
+    {
+      "category": "玩具",
+      "niche_count": 113,
+      "total_gmv": 2013264760,
+      "avg_sellers": 1109.3
+    },
+    {
+      "category": "轮胎及轮毂",
+      "niche_count": 11,
+      "total_gmv": 1942143070,
+      "avg_sellers": 277.5
+    },
+    {
+      "category": "图书与光盘",
+      "niche_count": 31,
+      "total_gmv": 1854962417,
+      "avg_sellers": 598.9
+    },
+    {
+      "category": "汽车配件及改装件",
+      "niche_count": 232,
+      "total_gmv": 1796796160,
+      "avg_sellers": 501.0
+    },
+    {
+      "category": "柜类家具及储物家具",
+      "niche_count": 41,
+      "total_gmv": 1758991896,
+      "avg_sellers": 518.9
+    },
+    {
+      "category": "装修材料",
+      "niche_count": 122,
+      "total_gmv": 1742658304,
+      "avg_sellers": 296.7
+    },
+    {
+      "category": "露营及休闲用品",
+      "niche_count": 112,
+      "total_gmv": 1738328778,
+      "avg_sellers": 349.0
+    },
+    {
+      "category": "厨房电器",
+      "niche_count": 77,
+      "total_gmv": 1660163778,
+      "avg_sellers": 536.7
+    },
+    {
+      "category": "办公家具及商业设备",
+      "niche_count": 74,
+      "total_gmv": 1641171989,
+      "avg_sellers": 265.4
+    },
+    {
+      "category": "家居用品",
+      "niche_count": 90,
+      "total_gmv": 1626512344,
+      "avg_sellers": 1002.4
+    },
+    {
+      "category": "电脑及笔记本",
+      "niche_count": 28,
+      "total_gmv": 1606584360,
+      "avg_sellers": 400.0
+    },
+    {
+      "category": "家用电器",
+      "niche_count": 54,
+      "total_gmv": 1530105983,
+      "avg_sellers": 565.6
+    },
+    {
+      "category": "婴儿用品",
+      "niche_count": 138,
+      "total_gmv": 1476534955,
+      "avg_sellers": 273.4
+    },
+    {
+      "category": "卫浴",
+      "niche_count": 134,
+      "total_gmv": 1440374476,
+      "avg_sellers": 383.3
+    },
+    {
+      "category": "珠宝饰品",
+      "niche_count": 23,
+      "total_gmv": 1393293671,
+      "avg_sellers": 314.3
+    },
+    {
+      "category": "园艺设备",
+      "niche_count": 41,
+      "total_gmv": 1372272663,
+      "avg_sellers": 562.1
+    },
+    {
+      "category": "影音设备",
+      "niche_count": 35,
+      "total_gmv": 1347376041,
+      "avg_sellers": 448.0
+    },
+    {
+      "category": "汽车配件",
+      "niche_count": 365,
+      "total_gmv": 1329955934,
+      "avg_sellers": 367.0
+    },
+    {
+      "category": "智能家居与安防",
+      "niche_count": 29,
+      "total_gmv": 1298923888,
+      "avg_sellers": 443.9
+    },
+    {
+      "category": "窗帘及配件",
+      "niche_count": 12,
+      "total_gmv": 1266654482,
+      "avg_sellers": 885.2
+    },
+    {
+      "category": "家居装饰品",
+      "niche_count": 73,
+      "total_gmv": 1264742014,
+      "avg_sellers": 982.6
+    },
+    {
+      "category": "个护健康",
+      "niche_count": 41,
+      "total_gmv": 1226033387,
+      "avg_sellers": 1119.0
+    },
+    {
+      "category": "电动工具及设备",
+      "niche_count": 66,
+      "total_gmv": 1176501135,
+      "avg_sellers": 519.3
+    },
+    {
+      "category": "手工制品",
+      "niche_count": 116,
+      "total_gmv": 1143043097,
+      "avg_sellers": 602.1
+    },
+    {
+      "category": "睡眠家具",
+      "niche_count": 13,
+      "total_gmv": 1131849304,
+      "avg_sellers": 391.4
+    },
+    {
+      "category": "饰品",
+      "niche_count": 24,
+      "total_gmv": 1066251466,
+      "avg_sellers": 3107.8
+    },
+    {
+      "category": "小型家具",
+      "niche_count": 23,
+      "total_gmv": 1052138417,
+      "avg_sellers": 487.1
+    },
+    {
+      "category": "大家电",
+      "niche_count": 15,
+      "total_gmv": 911474674,
+      "avg_sellers": 179.7
+    },
+    {
+      "category": "收纳",
+      "niche_count": 24,
+      "total_gmv": 838252208,
+      "avg_sellers": 1583.7
+    },
+    {
+      "category": "手动工具及配件",
+      "niche_count": 208,
+      "total_gmv": 836913164,
+      "avg_sellers": 453.0
+    },
+    {
+      "category": "节庆用品",
+      "niche_count": 74,
+      "total_gmv": 825590765,
+      "avg_sellers": 809.6
+    },
+    {
+      "category": "建筑材料",
+      "niche_count": 162,
+      "total_gmv": 819136831,
+      "avg_sellers": 192.8
+    },
+    {
+      "category": "气候电器",
+      "niche_count": 27,
+      "total_gmv": 667924688,
+      "avg_sellers": 631.7
+    },
+    {
+      "category": "照明设备",
+      "niche_count": 10,
+      "total_gmv": 662525029,
+      "avg_sellers": 2355.9
+    },
+    {
+      "category": "园艺工具及灌溉用品",
+      "niche_count": 82,
+      "total_gmv": 628810549,
+      "avg_sellers": 486.0
+    },
+    {
+      "category": "工作服及防护用品",
+      "niche_count": 63,
+      "total_gmv": 613180485,
+      "avg_sellers": 273.8
+    },
+    {
+      "category": "软体家具",
+      "niche_count": 20,
+      "total_gmv": 612312794,
+      "avg_sellers": 228.1
+    },
+    {
+      "category": "运动营养品及化妆品",
+      "niche_count": 25,
+      "total_gmv": 563515168,
+      "avg_sellers": 288.0
+    },
+    {
+      "category": "机油及工业油液",
+      "niche_count": 11,
+      "total_gmv": 543872027,
+      "avg_sellers": 356.7
+    },
+    {
+      "category": "婴儿服装",
+      "niche_count": 55,
+      "total_gmv": 515390924,
+      "avg_sellers": 269.8
+    },
+    {
+      "category": "电工电气",
+      "niche_count": 87,
+      "total_gmv": 498785342,
+      "avg_sellers": 319.1
+    },
+    {
+      "category": "运动配件",
+      "niche_count": 142,
+      "total_gmv": 425507064,
+      "avg_sellers": 285.6
+    },
+    {
+      "category": "汽车化学品及美容用品",
+      "niche_count": 47,
+      "total_gmv": 423497580,
+      "avg_sellers": 519.4
+    },
+    {
+      "category": "车载电子",
+      "niche_count": 23,
+      "total_gmv": 421379682,
+      "avg_sellers": 559.1
+    },
+    {
+      "category": "帽类",
+      "niche_count": 16,
+      "total_gmv": 418171817,
+      "avg_sellers": 1915.7
+    },
+    {
+      "category": "电脑外设及配件",
+      "niche_count": 16,
+      "total_gmv": 387916440,
+      "avg_sellers": 690.4
+    },
+    {
+      "category": "摩托车用品",
+      "niche_count": 80,
+      "total_gmv": 369313664,
+      "avg_sellers": 291.6
+    },
+    {
+      "category": "办公设备",
+      "niche_count": 21,
+      "total_gmv": 346585550,
+      "avg_sellers": 294.6
+    },
+    {
+      "category": "定制家具",
+      "niche_count": 4,
+      "total_gmv": 321790675,
+      "avg_sellers": 226.5
+    },
+    {
+      "category": "成人用品",
+      "niche_count": 92,
+      "total_gmv": 317788431,
+      "avg_sellers": 268.3
+    },
+    {
+      "category": "花园家具",
+      "niche_count": 16,
+      "total_gmv": 276943644,
+      "avg_sellers": 179.9
+    },
+    {
+      "category": "游戏机与游戏",
+      "niche_count": 11,
+      "total_gmv": 254828263,
+      "avg_sellers": 696.5
+    },
+    {
+      "category": "发饰",
+      "niche_count": 27,
+      "total_gmv": 248734753,
+      "avg_sellers": 1104.2
+    },
+    {
+      "category": "兽药",
+      "niche_count": 19,
+      "total_gmv": 219081224,
+      "avg_sellers": 89.3
+    },
+    {
+      "category": "婴儿食品",
+      "niche_count": 20,
+      "total_gmv": 204666281,
+      "avg_sellers": 82.3
+    },
+    {
+      "category": "运动鞋",
+      "niche_count": 21,
+      "total_gmv": 192725868,
+      "avg_sellers": 154.3
+    },
+    {
+      "category": "鞋类配件",
+      "niche_count": 41,
+      "total_gmv": 179342282,
+      "avg_sellers": 493.6
+    },
+    {
+      "category": "摄影器材",
+      "niche_count": 44,
+      "total_gmv": 158088333,
+      "avg_sellers": 250.3
+    },
+    {
+      "category": "网络设备",
+      "niche_count": 13,
+      "total_gmv": 145901646,
+      "avg_sellers": 323.2
+    },
+    {
+      "category": "婴儿内衣",
+      "niche_count": 14,
+      "total_gmv": 118068410,
+      "avg_sellers": 263.1
+    },
+    {
+      "category": "宗教与玄学",
+      "niche_count": 18,
+      "total_gmv": 111897095,
+      "avg_sellers": 392.2
+    },
+    {
+      "category": "车辆蓄电池",
+      "niche_count": 3,
+      "total_gmv": 82962860,
+      "avg_sellers": 179.7
+    },
+    {
+      "category": "药品",
+      "niche_count": 23,
+      "total_gmv": 79481938,
+      "avg_sellers": 1.6
+    },
+    {
+      "category": "专业乐器",
+      "niche_count": 79,
+      "total_gmv": 74358728,
+      "avg_sellers": 121.9
+    },
+    {
+      "category": "烟具",
+      "niche_count": 31,
+      "total_gmv": 53545957,
+      "avg_sellers": 171.9
+    },
+    {
+      "category": "婴儿配件",
+      "niche_count": 14,
+      "total_gmv": 38184625,
+      "avg_sellers": 194.5
+    },
+    {
+      "category": "交通工具",
+      "niche_count": 11,
+      "total_gmv": 21328581,
+      "avg_sellers": 15.1
+    },
+    {
+      "category": "汽车",
+      "niche_count": 1,
+      "total_gmv": 2303212,
+      "avg_sellers": 10.0
+    },
+    {
+      "category": "服务",
+      "niche_count": 1,
+      "total_gmv": 1227706,
+      "avg_sellers": 1.0
+    },
+    {
+      "category": "数字商品",
+      "niche_count": 1,
+      "total_gmv": 111505,
+      "avg_sellers": 10.0
+    },
+    {
+      "category": "酒类",
+      "niche_count": 2,
+      "total_gmv": 82847,
+      "avg_sellers": 8.0
+    },
+    {
+      "category": "即食食品",
+      "niche_count": 1,
+      "total_gmv": 40521,
+      "avg_sellers": 14.0
+    }
+  ]
+}
