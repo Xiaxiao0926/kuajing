@@ -56,7 +56,7 @@ export function findOzonChannelRaw(channelId) {
  * 冻结解析配置：渠道完整配置（含 meta）+ 汇率/代理费快照 + 计算器版本。
  * 不复制费率数值；直接引用 config 原始记录。
  */
-export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = settingsData) {
+export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = settingsData, agencyFeePercent = null) {
   const raw = findOzonChannelRaw(selectedChannelId)
   if (!raw) throw new Error(`T6_COST: 渠道 ${selectedChannelId} 不在 config/ozon_channels.json（fail-close）`)
   return {
@@ -65,7 +65,7 @@ export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = set
     calculation_version: runtimeSettings.calculation_version || 'v1.0',
     rubPerCny: runtimeSettings.rub_per_cny,
     agencyFee: {
-      rate: runtimeSettings.agency_fee.rate,
+      rate: agencyFeePercent === null ? runtimeSettings.agency_fee.rate : Number(agencyFeePercent) / 100,
       min_rub: runtimeSettings.agency_fee.min_rub,
       max_rub: runtimeSettings.agency_fee.max_rub,
     },
@@ -87,17 +87,28 @@ export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = set
  * - inputPayload = 核算面板全部真实输入（含用户填写的成本字段）
  * - outputPayload = calcChannelProfit 输出原文（verbatim）
  */
-export function buildOzonScenarioPayload({ project, inputPayload, selectedChannelId, outputPayload }) {
+export function buildOzonScenarioPayload({ project, inputPayload, selectedChannelId, outputPayload, exchangeRateInfo }) {
   if (!project) throw new Error('T6_COST: 项目不存在')
   if (!inputPayload) throw new Error('T6_COST: inputPayload 必填')
   if (!outputPayload) throw new Error('T6_COST: outputPayload 必填（引擎输出原文）')
   const snap = getSnapshot(project.source.creationSnapshotId)
   if (!snap) throw new Error(`T6_COST: 立项快照 ${project.source.creationSnapshotId} 不存在（场景上下文缺失）`)
+  const rate = exchangeRateInfo?.rubPerCny ?? settingsData.rub_per_cny
+  if (!Number.isFinite(Number(rate)) || Number(rate) <= 0) throw new Error('T6_COST: 汇率无效，无法冻结场景')
+  const agencyFeePercent = inputPayload.agencyFee === '' || inputPayload.agencyFee === undefined || inputPayload.agencyFee === null
+    ? null : Number(inputPayload.agencyFee)
+  if (agencyFeePercent !== null && (!Number.isFinite(agencyFeePercent) || agencyFeePercent < 0 || agencyFeePercent > 100)) throw new Error('T6_COST: 代理费率无效')
+  const resolvedConfig = buildOzonResolvedConfig(selectedChannelId, { ...settingsData, rub_per_cny: Number(rate) }, agencyFeePercent)
+  if (exchangeRateInfo) {
+    resolvedConfig.exchangeRateSource = exchangeRateInfo.source || '配置值'
+    resolvedConfig.exchangeRateDate = exchangeRateInfo.date || null
+    resolvedConfig.exchangeRateRefDate = exchangeRateInfo.refDate || null
+  }
   return {
     platform: 'OZON',
     sourceSnapshotId: snap.id,
     inputPayload: JSON.parse(JSON.stringify(inputPayload)),
-    resolvedConfig: buildOzonResolvedConfig(selectedChannelId),
+    resolvedConfig,
     outputPayload: JSON.parse(JSON.stringify(outputPayload)),
   }
 }

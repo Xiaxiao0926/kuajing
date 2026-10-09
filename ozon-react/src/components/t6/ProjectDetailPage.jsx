@@ -145,7 +145,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
   // T6-2B1：保存 Ozon 核算面板当前方案为不可变成本场景
   const saveOzonScenario = (data) => {
     try {
-      const payload = buildOzonScenarioPayload({ project, inputPayload: data.inputPayload, selectedChannelId: data.selectedChannelId, outputPayload: data.outputPayload })
+      const payload = buildOzonScenarioPayload({ project, inputPayload: data.inputPayload, selectedChannelId: data.selectedChannelId, outputPayload: data.outputPayload, exchangeRateInfo: data.exchangeRateInfo })
       const sc = createCostScenario({
         projectId: project.id,
         platform: 'OZON',

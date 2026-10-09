@@ -206,7 +206,7 @@ export const calcRow = (sku, common) => {
   const effectiveRubPerCny = common?.rubPerCny ?? rubPerCny
   const priceCnyRaw = rubToCnyExact(price, effectiveRubPerCny)
   const priceRMB = round2(priceCnyRaw)
-  const listPriceRMB = toCNY(listPrice)
+  const listPriceRMB = toCNY(listPrice, effectiveRubPerCny)
   const domesticCost = purchaseCost + domesticShip + labelFee
   const bestShip = price && weight && length && width && height ? getBestShipping(price, weight, length, width, height) : null
   const agencyConfig = common?.agencyFeeConfig || null
