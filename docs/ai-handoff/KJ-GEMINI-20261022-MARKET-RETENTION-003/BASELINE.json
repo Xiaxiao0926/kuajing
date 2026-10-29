@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20261022-MARKET-RETENTION-003",
+  "recorded_at": "2026-10-26T01:38:27.226Z",
+  "git": {
+    "expected_head": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+    "actual_head": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+    "head_matches": true,
+    "expected_branch": "feat/platform-calc-parity-20261009",
+    "actual_branch": "feat/platform-calc-parity-20261009",
+    "branch_matches": true,
+    "initial_git_status_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/initial-git-status.txt",
+    "initial_target_diff_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/initial-target-diff.patch"
+  },
+  "authorization_and_deployment": {
+    "local_implementation_authorized": true,
+    "production_authorized": false,
+    "deployment_status": "not_deployed",
+    "public_verification_status": "not_performed"
+  },
+  "permitted_target_files_pre_edit": [
+    {
+      "path": "ozon-react/src/utils/marketReportAnalysis.js",
+      "exists": true,
+      "bytes": 43203,
+      "sha256": "f3c00dd0f2dba4e3b220a7388bd3a08a639b5dbe659e1f9812fa642671d3127b",
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__utils__marketReportAnalysis.js"
+    },
+    {
+      "path": "ozon-react/src/components/reports/MarketReportCenter.jsx",
+      "exists": true,
+      "bytes": 15149,
+      "sha256": "ef95bd70cfd03ec84328273b3c416df382d28ce47b35b333ee347198cc6d3928",
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__components__reports__MarketReportCenter.jsx"
+    },
+    {
+      "path": "ozon-react/src/components/reports/UploadedMarketReport.jsx",
+      "exists": true,
+      "bytes": 9198,
+      "sha256": "0c63ff929e7b2f3520631c2057902fe2d9ea30a9292e34c6380d99a5e86423c8",
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__components__reports__UploadedMarketReport.jsx"
+    },
+    {
+      "path": "ozon-react/src/components/reports/MarketDecisionBrief.jsx",
+      "exists": true,
+      "bytes": 8230,
+      "sha256": "8cae1130b329cc534864b6156df5eba305df38e0104ee2da08a4d28a8b8c71ff",
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__components__reports__MarketDecisionBrief.jsx"
+    },
+    {
+      "path": "ozon-react/src/utils/marketReportAnalysis.test.mjs",
+      "exists": true,
+      "bytes": 10080,
+      "sha256": "c1e71e6bb959b68f1a87874c6c21e7f165595ca46b8de2ec7f28464af0449902",
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__utils__marketReportAnalysis.test.mjs"
+    },
+    {
+      "path": "tests/report-integration.test.mjs",
+      "exists": true,
+      "bytes": 7352,
+      "sha256": "17ebc81a2577f6abdb2cf9500d00a1f3c4f2c2d809539bf0eee56fe530a3f569",
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\tests__report-integration.test.mjs"
+    },
+    {
+      "path": "package.json",
+      "exists": true,
+      "bytes": 3032,
+      "sha256": "f12888b6d46a03ec619219b67d27f8975eb3722a70b03950aa64cbbccd761097",
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\package.json"
+    }
+  ],
+  "read_only_reference_files": [
+    {
+      "path": "ozon-react/src/utils/serverFiles.js",
+      "exists": true,
+      "bytes": 6879,
+      "sha256": "76b061109e35d68cc9f607adf77f63d9e7b332e9f31b0371bc8b31c98c0960d1",
+      "post_edit_sha256": "76b061109e35d68cc9f607adf77f63d9e7b332e9f31b0371bc8b31c98c0960d1",
+      "unchanged": true
+    },
+    {
+      "path": "ozon-react/src/utils/persist.js",
+      "exists": true,
+      "bytes": 22578,
+      "sha256": "11e7aaebac4c97c420fc7a45b433215caf4600e036db7d568ea032d8457cf2e4",
+      "post_edit_sha256": "11e7aaebac4c97c420fc7a45b433215caf4600e036db7d568ea032d8457cf2e4",
+      "unchanged": true
+    },
+    {
+      "path": "ozon-react/src/utils/marketReportRussiaContext.js",
+      "exists": true,
+      "bytes": 6471,
+      "sha256": "d4e23f87a025d7e4ae29647cfcb4ee22f777ab65dc73bb4853e02f2ce47ff410",
+      "post_edit_sha256": "d4e23f87a025d7e4ae29647cfcb4ee22f777ab65dc73bb4853e02f2ce47ff410",
+      "unchanged": true
+    },
+    {
+      "path": "ozon-react/src/components/reports/RussiaMarketEntry.jsx",
+      "exists": true,
+      "bytes": 12405,
+      "sha256": "d554b9ba3cb9eaa17b7e6c8f107f9c20c3c53984b84e1496ec60cec29c4005fa",
+      "post_edit_sha256": "d554b9ba3cb9eaa17b7e6c8f107f9c20c3c53984b84e1496ec60cec29c4005fa",
+      "unchanged": true
+    },
+    {
+      "path": "tests/market-report-quality.test.mjs",
+      "exists": true,
+      "bytes": 3180,
+      "sha256": "e8c0b06ddd72f4c01db32e9e16a2cbc0e4029967d0f965f337806ccfb74c2e2b",
+      "post_edit_sha256": "e8c0b06ddd72f4c01db32e9e16a2cbc0e4029967d0f965f337806ccfb74c2e2b",
+      "unchanged": true
+    },
+    {
+      "path": "wordpress/kuajing-persistence/kuajing-persistence.php",
+      "exists": true,
+      "bytes": 53699,
+      "sha256": "1bf1cb307a9b44a8799372202ce96f1df5f6ac7621c127b8be9ef5fddd02a023",
+      "post_edit_sha256": "1bf1cb307a9b44a8799372202ce96f1df5f6ac7621c127b8be9ef5fddd02a023",
+      "unchanged": true
+    }
+  ],
+  "completed_at": "2026-10-26T02:10:10.296Z",
+  "permitted_target_files_post_edit": [
+    {
+      "path": "ozon-react/src/utils/marketReportAnalysis.js",
+      "pre_edit_bytes": 43203,
+      "pre_edit_sha256": "f3c00dd0f2dba4e3b220a7388bd3a08a639b5dbe659e1f9812fa642671d3127b",
+      "post_edit_bytes": 46777,
+      "post_edit_sha256": "1526283551344a2cefcd67b20dc3c28816b6ea1d931cb847d483b88b6d92ba4c",
+      "modified": true,
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__utils__marketReportAnalysis.js"
+    },
+    {
+      "path": "ozon-react/src/components/reports/MarketReportCenter.jsx",
+      "pre_edit_bytes": 15149,
+      "pre_edit_sha256": "ef95bd70cfd03ec84328273b3c416df382d28ce47b35b333ee347198cc6d3928",
+      "post_edit_bytes": 27825,
+      "post_edit_sha256": "6ef751b5218e732143189a2502db68e94d29a1cc9dfb9e2ba8fdf029dd5da043",
+      "modified": true,
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__components__reports__MarketReportCenter.jsx"
+    },
+    {
+      "path": "ozon-react/src/components/reports/UploadedMarketReport.jsx",
+      "pre_edit_bytes": 9198,
+      "pre_edit_sha256": "0c63ff929e7b2f3520631c2057902fe2d9ea30a9292e34c6380d99a5e86423c8",
+      "post_edit_bytes": 11742,
+      "post_edit_sha256": "9c32f416f9da84a7afbf47e56a712c2e25941fc38e57258a21c203dba3dddfa4",
+      "modified": true,
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__components__reports__UploadedMarketReport.jsx"
+    },
+    {
+      "path": "ozon-react/src/components/reports/MarketDecisionBrief.jsx",
+      "pre_edit_bytes": 8230,
+      "pre_edit_sha256": "8cae1130b329cc534864b6156df5eba305df38e0104ee2da08a4d28a8b8c71ff",
+      "post_edit_bytes": 12345,
+      "post_edit_sha256": "45915ae74c0ba36fe50f63bae750ca847c96a81e58e0ce21aca16f9d2d771e24",
+      "modified": true,
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__components__reports__MarketDecisionBrief.jsx"
+    },
+    {
+      "path": "ozon-react/src/utils/marketReportAnalysis.test.mjs",
+      "pre_edit_bytes": 10080,
+      "pre_edit_sha256": "c1e71e6bb959b68f1a87874c6c21e7f165595ca46b8de2ec7f28464af0449902",
+      "post_edit_bytes": 12275,
+      "post_edit_sha256": "25475cba5c5ca5cfd55f353823f6552c775108aa80a3de2d6a31195a755903af",
+      "modified": true,
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\ozon-react__src__utils__marketReportAnalysis.test.mjs"
+    },
+    {
+      "path": "tests/report-integration.test.mjs",
+      "pre_edit_bytes": 7352,
+      "pre_edit_sha256": "17ebc81a2577f6abdb2cf9500d00a1f3c4f2c2d809539bf0eee56fe530a3f569",
+      "post_edit_bytes": 7352,
+      "post_edit_sha256": "17ebc81a2577f6abdb2cf9500d00a1f3c4f2c2d809539bf0eee56fe530a3f569",
+      "modified": false,
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\tests__report-integration.test.mjs"
+    },
+    {
+      "path": "package.json",
+      "pre_edit_bytes": 3032,
+      "pre_edit_sha256": "f12888b6d46a03ec619219b67d27f8975eb3722a70b03950aa64cbbccd761097",
+      "post_edit_bytes": 3109,
+      "post_edit_sha256": "df56c357c609d4d0bf1e5e31c9c27fad2a733ab3665a337d7626b1cbd74a5b64",
+      "modified": true,
+      "backupPath": "docs\\ai-handoff\\KJ-GEMINI-20261022-MARKET-RETENTION-003\\evidence\\target-backups\\package.json"
+    }
+  ],
+  "permitted_new_files": [
+    {
+      "path": "ozon-react/src/utils/marketReport/retentionContract.js",
+      "bytes": 10865,
+      "sha256": "2bddd5e1a2b04b80ca72fc7d9e64f5e13272ac86fcad3785c1e32372ab33945d"
+    },
+    {
+      "path": "ozon-react/src/components/reports/MarketReportImportConfirm.jsx",
+      "bytes": 6260,
+      "sha256": "f64e282c9e80d867b18c5a5335b3e1065e7666725fcb6a0ef1f7374b94ce720a"
+    },
+    {
+      "path": "tests/market-report-retention.test.mjs",
+      "bytes": 37878,
+      "sha256": "a93eaed0944dbe920e6cacc2d266430811b325dad16233ca6849ecf8b28064f6"
+    },
+    {
+      "path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/browser-harness.mjs",
+      "bytes": 26717,
+      "sha256": "191f8fd3fb89fbfc7fbc219afc15984d6dc7e66e26e35964227e18c8b7e455c7"
+    }
+  ],
+  "synthetic_fixtures_and_frozen_payloads": [
+    {
+      "path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/fixtures/batch1-ozon-same-batch.json",
+      "bytes": 1408,
+      "sha256": "c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6"
+    },
+    {
+      "path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/fixtures/batch2-ozon-same-batch.json",
+      "bytes": 1403,
+      "sha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c"
+    },
+    {
+      "path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/fixtures/frozen-retry-payload.json",
+      "bytes": 12536,
+      "sha256": "b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184"
+    }
+  ],
+  "incremental_diff": {
+    "path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/incremental.diff",
+    "bytes": 125298,
+    "sha256": "77b852b83b2e009c86fc9535eb9d0a9b3be224dc6501f8427c02178b679450cb"
+  }
+}

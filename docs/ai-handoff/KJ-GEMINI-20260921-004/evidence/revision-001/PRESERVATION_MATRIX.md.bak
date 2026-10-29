@@ -1,0 +1,37 @@
+# 核心资产与契约冻结保留清单 (PRESERVATION_MATRIX.md)
+
+> 审计任务：KJ-GEMINI-20260921-004  
+> 审计时间：2026-09-21  
+> 核心原则：**前端重构不得导致数据迁移、语义漂移、计算公式修改或访问断裂。重构仅限于呈现层与交互架构。**
+
+---
+
+## 1. 核心保留对象矩阵 (Preservation Matrix)
+
+| 类别 | 冻结保留对象 | 代码位置 / 物理标识 | 重构绝对禁止项 (Forbidden) | 允许的适配与重构方案 (Allowed) | 上线前核验与测试用例 | 失败回退方案 (Rollback) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **访问路径与 URL** | WordPress 页面 `/kuajing/`<br>短代码 `[kuajing_dashboard]` | `kuajing-persistence.php:31`<br>`kuajing-persistence.php:245` | 禁止修改 slug，禁止删除短代码，禁止改动 `body.fyzsxnb-kuajing-page` scope 根类名 | 允许在 shortcode 输出内重构 React 挂载容器与外层骨架 | 访问 `fyzsxnb.com/kuajing/` 检查 200 响应与脚本正常加载 | 还原 `kuajing-persistence.php` 模板输出 |
+| **配置注入接口** | `<script id="fyzsxnb-kuajing-config">` | `runtime.js:3-9`<br>`kuajing-persistence.php:550` | 禁止变更 JSON 配置标签 ID、禁止删除 `apiBase`, `assetBase`, `dataBase`, `nonce`, `authorized` 字段 | 允许在配置中追加非破坏性的前端特性开关字段 | 检查 `getRuntimeConfig()` 返回标准字典 | 还原 DOM 结构 |
+| **导航标识符 (Node IDs)** | `__progress_overview__`<br>`__market_intelligence__`<br>`__market_reports__`<br>`__t6_candidates__`<br>`__t6_projects__`<br>`__t6_project_detail__`<br>`__scoring__`<br>`__purity_analysis__`<br>`__fbp_calc__`<br>`n1, n2, n4, n5, n6, n8, n14, n36, n39` | `App.jsx:52-83`<br>`Sidebar.jsx:22-90`<br>`data/roadmap.js` | **绝对禁止重命名已有 Node ID**；禁止删除已记录状态的历史节点 | 允许在 UI 上重新分组、折叠、改变视觉排版，甚至引入 React Router 作为顶层别名，但必须兼容已有 Node ID | `tests/ia-navigation-acceptance.test.mjs` (必须全绿) | 还原 `Sidebar.jsx` 导航映射表 |
+| **持久化 Key 前缀** | `t6.candidate.`<br>`t6.project.`<br>`t6.snapshot.`<br>`t6.log.`<br>`t6.costScenario.`<br>`t6.supplier.`<br>`t6.supplierQuote.`<br>`t6.sample.` | `t6Store.js:62-71`<br>`t6Store.js:82` | **严禁修改任何 Key 前缀**；严禁把多实体合并为单一巨大 JSON Key | 允许在实体内部扩展可选字段；允许增加新前缀 | `tests/ia-project-product-profile.test.mjs`<br>`tests/ia-project-supply-chain-ui.test.mjs` | 本地存储导出恢复 |
+| **实体主键与版本控制** | UUID 唯一主键 (`id`)<br>自增版本锁 (`revision`)<br>不可变版本树 (`SupplierQuote.version`) | `t6Store.js:73-76`<br>`persist.js:155-163`<br>`kuajing-persistence.php:69` | 严禁把人类编号 `RU-YYYY-NNN` 当作数据表主键；严禁在修改时覆盖旧 Quote；严禁伪造 revision | 允许在列表显示自定义别名；允许追加搜索索引 | `tests/state-safety-contract.test.mjs` (自增版本与 409 拦截核验) | 从 MySQL `kuajing_state_versions` 还原 |
+| **REST API 契约** | `/wp-json/kuajing/v1/state`<br>`/wp-json/kuajing/v1/session`<br>`/wp-json/kuajing/v1/state/backup`<br>`/wp-json/kuajing/v1/state/restore` | `kuajing-persistence.php:561-642`<br>`persist.js:179-208` | 严禁修改请求报文格式 `{ entries: { [key]: { value, baseRevision, deviceId } } }`；严禁移除 409 状态码 | 允许在服务端增加只读过滤参数（如按 namespace 过滤） | `tests/web-persistence.test.mjs`<br>`tests/access-session.test.mjs` | 回滚 PHP 端插件文件 |
+| **计算引擎公式与费率** | WB 运费跳档与赔偿 (`wbEngine.js`)<br>Ozon 佣金与渠道 (`ozonEngine.js`)<br>FBP 边境仓全链路 (`ozonFbpEngine.js`)<br>选品评分模型 (`scoringEngine.js`) | `src/utils/wbEngine.js`<br>`src/utils/ozonEngine.js`<br>`src/utils/ozonFbpEngine.js`<br>`src/utils/scoring/` | **宪法级红线：严禁在前端重构中以任何理由触碰、修改、重写计算公式！** | 允许优化公式输入面板的 UI 排版与展示交互，但必须逐位调用既有引擎函数 | `npm test` (全套 65+31+29+81+56 项测试必须 100% 保持全绿) | 还原 `src/utils/` 下相关 js 引擎 |
+| **费率配置单源** | `config/wb_tariffs.json`<br>`config/ozon_channels.json`<br>`config/settings.json`<br>`src/generated/*.js` | `config/`<br>`scripts/sync-config.js` | 严禁在 React 组件中写死费率常数；严禁绕过 `sync-config.js` 手动修改 generated 文件 | 允许通过统一更新流程在 `config/*.json` 增加新版本有效条目 | `npm run test:golden`<br>`npm run test:sync` (双端对拍零差异) | `git checkout -- config/` |
+| **Stage Gate 门禁语义** | `gateEngine.js`<br>`PROJECT_STAGES`<br>`cert_plan`, `supplier_quote`, `samples_record` | `gateEngine.js:1-320`<br>`stageModel.js` | 严禁改变 `FAIL (RED)`、`WARN (YELLOW)`、`PASS (GREEN)`、`NOT_EVALUATED` 判定语义；严禁把内部计划门写成平台法定放行 | 允许美化门禁卡片 UI 与说明文字，但评估求值必须保持纯函数调用 | `tests/ia-project-supply-gate.test.mjs`<br>`tests/ia-project-compliance-gate.test.mjs` | 还原 `gateEngine.js` |
+| **存量缺字段兼容原则** | 历史项目未评估字段兼容 (`undefined != 'UNASSESSED'`) | `complianceProfile.js:33-36`<br>`complianceDraftState.js` | **严禁在数据载入时执行全库隐式补齐**；严禁把 `undefined` 字段自动存为 `UNASSESSED` 破坏历史门禁 | 允许在 UI 展示层对于缺失值显示占位符或提示性文案，但持久化事实保持原貌 | `tests/ia-project-compliance-draft.test.mjs` (7大场景前后契约测试) | 检查存储 diff 撤回变更 |
+| **安全与认证入口** | 密码哈希校验<br>HMAC-SHA256 签名 Cookie<br>Rate Limiter 10次锁定 | `kuajing-persistence.php:402-414`<br>`kuajing-persistence.php:453-475` | 严禁在前端硬编码或明文传输访问密码；严禁移除 Rate Limiter | 允许改进登录弹窗的视觉质感与报错文案 | 模拟错误密码 10 次触发 429 测试 | 还原会话逻辑 |
+
+---
+
+## 2. 重构技术栈边界约束 (Technical Boundaries)
+
+1. **框架与依赖守则**：
+   - 维持 `React 18 + Vite` 技术栈，不得随意迁移至 Next.js / Remix 等 SSR 框架（当前系统面向内部 2~3 人使用，依赖静态构建产物挂载在 WordPress 单一页面）；
+   - 不得引入依赖复杂 Native 编译或多租户账户体系的庞大外部中后台框架。
+2. **状态所有权守则**：
+   - 全局共享业务数据归属于 `t6Store` 与 `miStore`；
+   - 表单草稿态必须与持久化态严格分离，未点击显式保存前不得污染底层 Store；
+   - 严禁单例组件与项目级组件混用内部上下文状态。
+3. **样式与类名隔离守则**：
+   - 所有 CSS 样式必须完全限制在 `.fyzsxnb-workspace` / `body.fyzsxnb-kuajing-page` 命名空间内部，绝对禁止编写全局无限定标签选择器（如全局 `button`, `h1`, `table` 等），严禁污染 WordPress 主题与前台其它页面。

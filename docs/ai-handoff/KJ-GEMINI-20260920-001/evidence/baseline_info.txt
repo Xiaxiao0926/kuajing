@@ -1,0 +1,21 @@
+TASK ID: KJ-GEMINI-20260920-001
+TASK TITLE: Compliance Panel Unsaved Input Protection
+BASELINE HEAD: de0cecf107e670e1c0d9cf393c50b92ab85afdee
+DATE: 2026-09-20
+
+ORIGINAL TARGET COMPONENT:
+  File: ozon-react/src/components/t6/ProjectCompliancePanel.jsx
+  Precheck SHA256: C34F5A7C39495F2D282C434771B5519429861BAA846A43DF782809877ED667F0
+  Backup file: docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/ProjectCompliancePanel.jsx.orig
+  Backup SHA256: C34F5A7C39495F2D282C434771B5519429861BAA846A43DF782809877ED667F0
+
+CHANGED FILES IN THIS TASK:
+  1. ozon-react/src/components/t6/ProjectCompliancePanel.jsx (modified)
+  2. ozon-react/src/utils/t6/complianceDraftState.js (new pure helper)
+  3. tests/ia-project-compliance-draft.test.mjs (new comprehensive test suite)
+
+EVIDENCE ASSETS:
+  - ProjectCompliancePanel.jsx.orig (Original uncommitted baseline)
+  - ProjectCompliancePanel.jsx.diff (Full git diff patch)
+  - test_run.log (Execution output of 8 test scenarios)
+  - baseline_info.txt (This baseline tracking note)

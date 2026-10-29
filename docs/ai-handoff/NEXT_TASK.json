@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20260921-004",
+  "status": "consumed",
+  "task_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/TASK.md",
+  "after_task_id": "KJ-GEMINI-20260921-003",
+  "activation_condition": "Current owner has completed 003 and archived its review_ready status; compare CURRENT_TASK before switching; do not interrupt or overwrite another owner",
+  "result_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/RESULT.md",
+  "tests_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/tests.json",
+  "review_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/REVIEW.md",
+  "codex_planning_not_before": "2026-09-21T14:00:00+08:00",
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "notes": "Historical queue entry only. 004 archived; use CURRENT_TASK.json for 005. Do not activate 004 again."
+}

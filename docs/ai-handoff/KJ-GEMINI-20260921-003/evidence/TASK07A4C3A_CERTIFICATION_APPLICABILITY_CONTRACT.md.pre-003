@@ -1,0 +1,339 @@
+# KUAIJING-IA-REFACTOR-V1 · TASK 07A-4C3A
+# Certification Applicability & cert_plan Gate Contract Audit (只读审计与最小数据合同裁决)
+
+> **任务属性**：只读审计 + 最小数据合同裁决。  
+> **生产代码变更**：**0 行**（严格不修改任何生产代码与现有测试）。  
+> **唯一新增交付物**：`docs/ia/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md`。  
+> **目标**：解决当前 Compliance Gate 唯一剩余未实现检查项 `cert_plan` 的语义与数据合同缺口。
+
+---
+
+## 1. 当前业务困境与核心歧义 (Current Ambiguity)
+
+在 TASK 07A-4C2 落地后，合规门禁形成了 `compliance_pending`（准入合规阶段）与 `compliance_done`（准入生产阶段）的稳定实现，但 `CHECKS.PRODUCTION` 中的 `cert_plan` 依然保持 `NOT_EVALUATED`。
+
+根本原因在于当前底层数据结构中存在无法消除的推导歧义：
+
+```text
+       project.compliance.requirements: []
+                       │
+       ┌───────────────┼───────────────┐
+       ▼               ▼               ▼
+    CASE A          CASE B          CASE C
+  普货无需认证      尚未开展认证评估   需要办证但漏录入
+  (Legit Exempt)  (Unassessed)    (Data Missing)
+       │               │               │
+  期望: PASS       期望: FAIL      期望: FAIL
+```
+
+1. **`requirements` 数组不能作为 Applicability Owner**：
+   - 空数组无法在语义上区分“商品免认证”、“尚未评估”还是“漏录入”；
+   - 依赖事项数组推导商品属性属于典型的领域倒置。
+2. **`certificationPlan` 文本不能作为 Applicability Owner**：
+   - 文本为空（`certificationPlan === ''`）同样无法区分是“无需认证所以不写”，还是“未制定计划”，抑或“遗漏未填”；
+   - `certificationPlan` 是规划说明文本（Plan Text），不具备结构化裁决属性（Applicability Decision）。
+3. **结论**：
+   必须在 `project.compliance` 顶层增加一个独立的显式决策字段，负责且仅负责表达：**“当前 SKU 到底需要认证、无需认证，还是尚未判断？”**
+
+---
+
+## 2. 既有源码认证语义审计 (Existing Certification Semantics in Source)
+
+对仓库现有源码中涉及 EAC、认证状态和豁免的定义进行全量审计：
+
+| 源码位置 | 字段 / 代码片段 | 业务性质 | 审计定性 |
+| :--- | :--- | :--- | :--- |
+| `candidateMarketBridge.js:65-66` | `eacStatus: niche?.eac_status`<br>`certificationStatus: niche?.certification_status` | 选品市场调研证据 | **外部市场参考线索**（只读，零法定效力） |
+| `validation_pool.json:19` | `"eac": "NOT_REQUIRED_VERIFIED (属于非电气类手动五金工具，通常仅需豁免函)"` | 调研样例池元数据 | **非受控文本**（混杂了无需认证与豁免函事实） |
+| `ManualProcurementWorkbench.jsx:47` | `niche.eac === 'NOT_REQUIRED_VERIFIED' ? 'REGULATION_VERIFIED' : 'ESTIMATED'` | 采购工作台来源标记 | **市场证据 Provenance**，非项目认证决策 |
+| `complianceProfile.js:8-10, 66` | `FORBIDDEN_RESULT_FIELDS = ['resultType', 'certificateNumber', 'exemptReason', ...]` | 4B 冻结的核心防御 | **明确将 `exemptReason` 列为严禁混入的 Result 字段** |
+| `ProjectCompliancePanel.jsx:9, 568` | `Layer C: Result（证书编号、豁免依据）暂未开放`<br>`placeholder="明确认证路径方案，例如：无需办理 EAC 证书，申请豁免函..."` | UI 占位与输入提示 | **当前仅在 Plan 文本占位中提及方案，缺少结构化字段** |
+| `ComplianceAssessment.jsx` | 36 项全局清单（`c1~c4`，法规识别/成分筛查/标签要求/风险等级） | 历史全局单例工作台 | **零 `projectId`，无 SKU 级认证决策枚举** |
+
+---
+
+## 3. MI 市场证据与项目合规决策隔离原则
+
+- `candidate.marketEvidence.eacStatus` 与 `certificationStatus` 是市场验证阶段采集到的外部竞品/类目情报；
+- 宪法铁律：**MI 证据绝对禁止自动复制或自动预填到 `project.compliance` 中**；
+- 理由：类目通常情况免认证不代表特定工厂的具体商品免认证（例如普通五金若带锂电/激光测距则必须认证）。项目级认证决策必须由运营人员/合规专员人工确认。MI 证据仅可在 UI 界面作为“参考线索”并列展示。
+
+---
+
+## 4. 核心语义三层分层模型 (Core Semantic Layers)
+
+合规领域严格遵循三层单向演进模型，绝不可混层：
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ Layer A: APPLICABILITY DECISION (适用性裁决)                │
+│   - 核心问题：当前 SKU 在法律法规上是否适用/需要认证处理？      │
+│   - 决策人：项目合规负责人                                    │
+│   - 字段归属：project.compliance.certificationApplicability  │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Layer B: PLAN (路径方案与执行清单)                           │
+│   - 核心问题：如果需要认证，具体走什么路径？有何前置事项？    │
+│   - 载体：certificationPlan (路径说明), requirements[] (清单)│
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Layer C: RESULT (法定结果与凭证 - 当前严格禁止/延期)         │
+│   - 核心问题：最终是否取得了正式证书、宣告编号或官方豁免批复？ │
+│   - 载体：certificateNumber, exemptReason, validUntil 等     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 5. “EXEMPT” (豁免) 深度审计与边界定性
+
+### 5.1 概念辨析：NOT_REQUIRED vs EXEMPT
+- **`NOT_REQUIRED`（无需认证 / 普货不适用）**：
+  - 商品物理属性完全不在技术法规（如 TR CU 004 / 020 / 037 等）的规制管辖清单内（例如纯机械手动五金扳手、木质日用品）；
+  - 该属性属于商品与法规的固有适用关系，无需向认证机构申请，亦无需获得官方批复。
+  - **属于 Layer A: APPLICABILITY**。
+- **`EXEMPT`（法定豁免 / Отказное письмо 豁免函）**：
+  - 商品可能落在海关 HS 编码监管交叉范围、属于受控类目但符合免测条件（如零配件、测试样机、非销售样品），或需要由俄罗斯认证机构官方出具正式的《豁免函（Отказное письмо）》以供清关与平台审核；
+  - 豁免函具有发证机构、公函编号、判定依据条款，属于法律效力凭证。
+  - **属于 Layer C: RESULT**（或 Plan 阶段的“拟申请豁免函方案”）。
+
+### 5.2 审计裁决
+- **`EXEMPT_LAYER = RESULT`**；
+- **裁决结论**：**严禁将 `EXEMPT` 纳入认证适用性（Applicability）枚举**！
+- 如果在适用性中引入 `EXEMPT`，就会将“商品本身免认证”与“取得官方豁免证明”这两个不同时期的概念再次混同，过早污染尚未建立的 Result Layer。
+
+---
+
+## 6. 最小适用性枚举方案比选 (Enum Options Evaluation)
+
+| 比选维度 | OPTION A (推荐采纳)<br>`UNASSESSED` / `REQUIRED` / `NOT_REQUIRED` | OPTION B<br>`UNKNOWN` / `REQUIRED` / `NOT_APPLICABLE` | OPTION C<br>`PENDING` / `REQUIRED` / `EXEMPT` |
+| :--- | :--- | :--- | :--- |
+| **Meaning Clarity (语义明确性)** | **最高**。<br>`UNASSESSED` 准确表达“尚未人工评估”；<br>`REQUIRED` 表达需要认证；<br>`NOT_REQUIRED` 表达无需认证。 | 良好。<br>但 `UNKNOWN` 容易与“系统未知/未同步”混淆；`NOT_APPLICABLE` 偏技术抽象。 | 较差。<br>`PENDING` 易与事项状态 `status: PENDING` 混淆；`EXEMPT` 混入结果层。 |
+| **Backward Compatibility (向后兼容性)** | **极佳**。<br>旧档案缺失字段可平滑视为未评估。 | 良好。 | 较差。 |
+| **Result-layer Pollution (结果层隔离)** | **零污染**。<br>完全排除豁免与发证概念。 | **零污染**。 | **严重污染**。<br>提前引入了豁免概念。 |
+| **Gate Usability (门禁易用性)** | **最佳**。<br>三态分明，完美对应 PASS / FAIL / NOT_EVALUATED。 | 良好。 | 模糊。 |
+
+### 裁决结论：采纳 OPTION A
+定义枚举常量：
+```javascript
+export const COMPLIANCE_CERTIFICATION_APPLICABILITY = Object.freeze({
+  UNASSESSED: 'UNASSESSED',     // 尚未判断
+  REQUIRED: 'REQUIRED',         // 需要认证
+  NOT_REQUIRED: 'NOT_REQUIRED', // 无需认证
+})
+```
+
+---
+
+## 7. 字段契约与默认值定义 (Field Contract)
+
+- **字段命名**：`certificationApplicability`
+- **字段位置**：`project.compliance.certificationApplicability`（顶层核心字段，属于 `REQUIRED_CORE` 结构化标准规范）；
+- **主归属层级**：**`CERTIFICATION_APPLICABILITY_LAYER = ASSESSMENT`**（属于合规评估对商品特征的法规定性）；
+- **初始草稿默认值**：
+  在 `buildInitialComplianceDraft()` 中：
+  ```javascript
+  certificationApplicability: 'UNASSESSED'
+  ```
+  - 严禁默认赋值为 `REQUIRED` 或 `NOT_REQUIRED`；
+  - 必须由操作人员在工作区中显式选择确认。
+
+---
+
+## 8. 历史兼容与数据无害迁移 (Legacy Compatibility)
+
+- **禁止全库后台自动跑批迁移**：严禁在启动时对存储器遍历补写字段；
+- **兼容解释原则**：
+  - 历史 Project 中 `project.compliance` 存在且非空，但未持久化 `certificationApplicability` 字段时：
+    - 读取层（Reader）与门禁注入层将其解释为 **`LEGACY_UNEVALUATED`**（或内部等同于缺失）；
+    - **严禁**将其默认解释为 `NOT_REQUIRED`（否则会放行未经评估的历史风险商品进入生产）；
+  - **Gate 行为保护**：
+    - 针对缺失该字段的历史项目，Gate 必须继续返回 **`NOT_EVALUATED`**，保持零阻断向后兼容，绝不因系统升级而导致历史项目意外 RED FAIL；
+    - 仅当用户在详情页打开 Compliance Panel 并显式点击保存后，新字段才被正规写入 Store。
+
+---
+
+## 9. Assessment 与 Certification Applicability 关系
+
+- **解耦独立性**：
+  - 允许存在 `assessmentStatus === 'COMPLETED'` 但 `certificationApplicability === 'UNASSESSED'`；
+  - 解释：团队可能已完成标签、成分、物理安全维度的核验，但认证渠道/政策仍在调研中；
+  - 此时，`compliance_done` 检查（检查 `assessmentStatus`）可以通过（PASS）；
+  - 但随后同在 `CHECKS.PRODUCTION` 中的 `cert_plan` 检查将准确抛出 `FAIL`，精准拦截其进入生产；
+  - 这证明了 `compliance_done` 与 `cert_plan` 两个独立 Check 的分工价值，无需在 Profile Validator 中过度耦合。
+
+---
+
+## 10. `cert_plan` 门禁求值规则裁决 (Gate Evaluation Rules)
+
+依据 Check 本质意图——**“进入生产阶段前，商品的认证处理路径是否已明确”**：
+
+### 10.1 场景推演与判定
+1. **`certificationApplicability === 'NOT_REQUIRED'`**：
+   - 裁决：**`PASS`**。
+   - 业务事实：已明确免办认证，商品按普货流程生产与报关，处理路径完全清晰闭环，无需强求填写冗余的计划文本。
+2. **`certificationApplicability === 'REQUIRED'`**：
+   - 判定依据：**`certificationPlan` 方案文本是否非空**。
+   - 若 `certificationPlan.trim() !== ''` → **`PASS`**（认证方案已明确，例如：明确了委托代工厂出具报告并由代理办理 EAC DoC）；
+   - 若 `certificationPlan.trim() === ''` → **`FAIL`**（阻塞原因：`'商品需要办理认证，但尚未制定认证处理计划'`）；
+   - 边界守护：**不强求 `requirements` 数组中必须包含事项，更严禁检查事项是否处于 `DONE`**。
+3. **`certificationApplicability === 'UNASSESSED'`**：
+   - 裁决：**`FAIL`**（Fail-close 防御）。
+   - 业务事实：项目已接入合规数据，但在生产前未对是否需要认证做出定性，存在重大清关查扣风险，必须阻断（阻塞原因：`'认证适用性尚未判断，请在合规面板确认'`）。
+4. **历史档案缺失字段（`fact.evaluated === true && !fact.certificationApplicability`）**：
+   - 裁决：**`NOT_EVALUATED`**（向后兼容保护，提示：`'认证处理计划尚未接入（历史档案）'`）。
+5. **模块未接入（`!fact || fact.evaluated !== true`）**：
+   - 裁决：**`NOT_EVALUATED`**。
+6. **非法枚举（`BROKEN` 等）**：
+   - 裁决：**`FAIL`**（提示：`'认证适用性状态无效'`）。
+
+---
+
+## 11. 门禁四态语义矩阵 (cert_plan Semantic Matrix)
+
+| 场景输入条件 | `cert_plan` 结果 | 阻断性 | 说明 / 提示消息 |
+| :--- | :---: | :---: | :--- |
+| 未接入模块事实 (`!fact \|\| fact.evaluated !== true`) | **`NOT_EVALUATED`** | 允许推进 | `'合规数据域尚未接入'` |
+| 历史档案缺失新字段 (`fact.evaluated === true && !fact.certificationApplicability`) | **`NOT_EVALUATED`** | 允许推进 | `'认证处理计划尚未接入（历史档案）'` |
+| 显式尚未判断 (`certificationApplicability === 'UNASSESSED'`) | **`FAIL`** | **RED 阻断** | `'认证适用性尚未判断，请在合规面板确认'` |
+| 需要认证但无计划 (`REQUIRED` + `plan === ''`) | **`FAIL`** | **RED 阻断** | `'需要办理认证，但尚未填写认证处理计划'` |
+| 需要认证且有计划 (`REQUIRED` + `plan !== ''`) | **`PASS`** | 绿色放行 | 认证路径清晰 |
+| 明确无需认证 (`NOT_REQUIRED`) | **`PASS`** | 绿色放行 | 普货免认证路径清晰 |
+| 非法/损坏状态 (`certificationApplicability` 非合法枚举) | **`FAIL`** | **RED 阻断** | `'认证适用性状态无效'` |
+
+---
+
+## 12. 跨阶段长路径推演 (SAMPLING → PRODUCTION)
+
+当项目跨阶段直接推进时，路径聚合求值 `['COMPLIANCE', 'PRODUCTION']`：
+
+| 跨阶段场景组合 | `samples_record`<br>(COMPLIANCE) | `compliance_pending`<br>(COMPLIANCE) | `compliance_done`<br>(PRODUCTION) | `cert_plan`<br>(PRODUCTION) | 阶段聚合总 Verdict | 推进许可行为 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **A. COMPLETED + UNASSESSED** | PASS | PASS | PASS | **FAIL** | **RED** | 阻断，需填写理由 Override |
+| **B. COMPLETED + REQUIRED + 空 Plan** | PASS | PASS | PASS | **FAIL** | **RED** | 阻断，需填写理由 Override |
+| **C. COMPLETED + REQUIRED + 有 Plan** | PASS | PASS | PASS | **PASS** | **GREEN** | **全绿无阻断放行** |
+| **D. COMPLETED + NOT_REQUIRED** | PASS | PASS | PASS | **PASS** | **GREEN** | **全绿无阻断放行** |
+| **E. 历史项目未填新字段** | PASS | PASS | PASS | **NOT_EVALUATED**| **NOT_EVALUATED** | 兼容允许直接推进 |
+
+> **关键变化显式记录**：当 4C3B 正式激活 `cert_plan` 后，场景 C 和 D 将迎来真正意义上的首个全链路 **GREEN**；而场景 A 和 B 将精准阻断为 **RED**。
+
+---
+
+## 13. Gate Fact 最小注入上下文 (Context Shape)
+
+在 `ProjectDetailPage.jsx` 中，调用层应负责将文本规整为布尔标志，使 `gateEngine.js` 保持纯净：
+```javascript
+// 4C3B 预期注入结构 (PROPOSED CONTRACT):
+availableModules: {
+  ...
+  compliance: {
+    evaluated: true,
+    assessmentStatus: project.compliance?.assessmentStatus,
+    certificationApplicability: project.compliance?.certificationApplicability,
+    certificationPlanPresent: Boolean(
+      typeof project.compliance?.certificationPlan === 'string' &&
+      project.compliance.certificationPlan.trim() !== ''
+    ),
+  }
+}
+```
+- **架构纯度**：`gateEngine.js` 仅消费 `certificationApplicability` 枚举与 `certificationPlanPresent` 布尔值，不需要在引擎内部处理字符串截取或空白过滤。
+
+---
+
+## 14. 领域所有权矩阵 (Ownership Matrix)
+
+| 概念 / 事实维度 | MI / Snapshot | Project Compliance | Requirement | Gate Engine |
+| :--- | :---: | :---: | :---: | :---: |
+| **Certification market hint (`eacStatus`)** | **OWNER** | REFERENCE | NOT_OWNER | NOT_OWNER |
+| **Certification applicability decision (`certificationApplicability`)** | NOT_OWNER | **OWNER** | NOT_OWNER | CONSUMER |
+| **Certification path plan (`certificationPlan`)** | NOT_OWNER | **OWNER** | REFERENCE | CONSUMER |
+| **Certification task execution (Checklist items)** | NOT_OWNER | REFERENCE | **OWNER** | NOT_OWNER |
+| **Certification result (`certificateNumber`, `exemptReason`)** | NOT_OWNER | NOT_OWNER (Deferred) | NOT_OWNER | NOT_OWNER |
+
+---
+
+## 15. A1 ~ A5 结构性缺口裁决 (Fixed Gap Audit)
+
+- **A1 — APPLICABILITY MODEL GAP**：**FIXED**。确定在 `project.compliance` 顶层新增 `certificationApplicability: 'UNASSESSED' | 'REQUIRED' | 'NOT_REQUIRED'` 单一事实源。
+- **A2 — LEGACY PROFILE GAP**：**FIXED**。明确历史项目缺字段在 Gate 中恒为 `NOT_EVALUATED`，零强制改库，零破坏性阻断。
+- **A3 — PLAN SEMANTIC GAP**：**FIXED**。确立“处理路径明确”即通过标准：`NOT_REQUIRED` 直接 PASS；`REQUIRED` 凭 `certificationPlan` 文本非空（调用层转 `certificationPlanPresent: true`）PASS。
+- **A4 — RESULT SEPARATION GAP**：**FIXED**。将“豁免（EXEMPT）”准确定位为 Result 层凭据，彻底移出 Applicability 枚举，阻断层级污染。
+- **A5 — GATE FACT GAP**：**FIXED**。固定 Gate 上下文仅注入 4 个最小字段，不向 Gate 泄漏 requirements 数组。
+
+---
+
+## 16. 07A-4C3B 实施决策与范围 (Implementation Decision)
+
+- **`07A-4C3B IMPLEMENTATION STATUS: READY`**
+- **实施范围收敛**：
+  1. **Store / Profile 层**（`complianceProfile.js`）：
+     - 导出 `COMPLIANCE_CERTIFICATION_APPLICABILITY` 枚举；
+     - 将 `certificationApplicability` 纳入 `PROJECT_COMPLIANCE_FIELDS` 与 `PROFILE_PATCH_ALLOWED_FIELDS`；
+     - `buildInitialComplianceDraft()` 默认初始值为 `'UNASSESSED'`；
+     - 影响评估：**`LOW_IMPACT`**（无需新加 Store API，既有 `updateProjectCompliance` 白名单自然支持）。
+  2. **UI 层**（`ProjectCompliancePanel.jsx`）：
+     - 在“认证方案计划 (Certification Plan)”区块顶部，增加显式单选/下拉组件：“认证适用性（尚未判断 / 需要办理 / 无需办理）”；
+     - 当选择“无需办理”时，给出普货免办提示；选择“需要办理”时，引导完善方案文本。
+  3. **Gate 调用层**（`ProjectDetailPage.jsx`）：
+     - 在 `gateDeps.availableModules.compliance` 中追加 `certificationApplicability` 与 `certificationPlanPresent`。
+  4. **Gate 引擎层**（`gateEngine.js`）：
+     - 为 `CHECKS.PRODUCTION` 中的 `cert_plan` 实现四态求值器；
+     - 推荐更新 Label 为：**`'认证处理路径已明确'`**。
+
+---
+
+## 17. CONTRACT SUMMARY
+
+```text
+CERTIFICATION APPLICABILITY
+Owner: project.compliance
+Layer: ASSESSMENT (Layer A)
+Field: certificationApplicability
+Enum: UNASSESSED | REQUIRED | NOT_REQUIRED
+Initial Value: UNASSESSED
+Legacy Missing Meaning: LEGACY_UNEVALUATED (Treated as NOT_EVALUATED in Gate)
+MI Auto-prefill: FORBIDDEN (Display reference only)
+Requirement Auto-sync: FORBIDDEN (Single owner)
+
+PLAN
+Plan Owner: project.compliance
+Plan Field: certificationPlan (Text)
+Required When: certificationApplicability === 'REQUIRED'
+Not Required Case: certificationApplicability === 'NOT_REQUIRED' (Passes without plan text)
+
+RESULT
+Exemption: RESULT Layer (Official letter/proof, outside applicability)
+Certificate: RESULT Layer (certificateNumber, issuingBody)
+Result Layer Status: DEFERRED (Strictly forbidden in V1)
+
+GATE
+cert_plan ID: cert_plan
+Recommended Label: 认证处理路径已明确
+Missing Module: NOT_EVALUATED
+Legacy Missing Field: NOT_EVALUATED
+Unassessed: FAIL
+Required + Empty Plan: FAIL
+Required + Plan: PASS
+Not Required: PASS
+Invalid Value: FAIL
+
+CONTEXT
+Gate Fact Shape:
+  availableModules.compliance = {
+    evaluated: boolean,
+    assessmentStatus: string,
+    certificationApplicability?: string,
+    certificationPlanPresent?: boolean,
+  }
+
+NEXT
+07A-4C3B Status: READY
+07A-4C3B Store Scope: Extend complianceProfile.js whitelist + default draft
+07A-4C3B UI Scope: Add Applicability selector to ProjectCompliancePanel Plan section
+07A-4C3B Gate Scope: Implement cert_plan evaluator in gateEngine + update ProjectDetailPage injection
+```

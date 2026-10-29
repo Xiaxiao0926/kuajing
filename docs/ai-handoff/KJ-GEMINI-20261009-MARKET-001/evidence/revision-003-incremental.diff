@@ -1,0 +1,100 @@
+diff --git a/ozon-react/src/utils/marketIntelligence/miStore.js b/ozon-react/src/utils/marketIntelligence/miStore.js
+index dac2f31..b16f2dc 100644
+--- a/ozon-react/src/utils/marketIntelligence/miStore.js
++++ b/ozon-react/src/utils/marketIntelligence/miStore.js
+@@ -366,20 +366,13 @@ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-0
+         )
+       }
+ 
+-      // 5. 身份充分性校验：若旧记录缺失 UID 或来源字段，但名称或类目不具备强一致先验凭证，禁止自动同步写入旧记录
+-      const hasUidMatch = Boolean(byProduct.source_niche_uid && byProduct.source_niche_uid === nicheUid)
+-      const hasIdenticalNameAndCat = Boolean(
+-        candName && nicheName && candName === nicheName &&
+-        hasSpecificNicheCat && hasSpecificCandCat &&
+-        (candCatLeaf === nicheCat || candCatFull === nicheCat)
+-      )
+-
+-      if (hasUidMatch || hasIdenticalNameAndCat) {
++      // 5. 来源身份校验：必须具备与当前利基一致的 source_niche_uid，禁止仅凭名称/类目相同自动复用
++      if (byProduct.source_niche_uid && byProduct.source_niche_uid === nicheUid) {
+         existing = byProduct
+       } else {
+-        // 信息不足，且 stableSourceProductId 已被占用，严禁盲目复用或进入 STEP 4 产生伪成功
++        // 旧记录缺少可证明当前来源的 UID 身份凭据，且 stableSourceProductId 已被占用，必须阻断
+         throw new Error(
+-          `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 占用了 sourceProductId (${stableSourceProductId}) 但缺少可信 UID/来源字段且身份不充分，禁止自动同步，需人工核实`
++          `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 占用了 sourceProductId (${stableSourceProductId}) 但缺少当前来源 UID 身份凭据，禁止自动同步覆盖，需人工核实`
+         )
+       }
+     }
+diff --git a/tests/candidate-identity-backfill.test.mjs b/tests/candidate-identity-backfill.test.mjs
+index cb7690b..c210079 100644
+--- a/tests/candidate-identity-backfill.test.mjs
++++ b/tests/candidate-identity-backfill.test.mjs
+@@ -620,4 +620,66 @@ console.log('\n--- 12. 合法跨批次重复推流验证 (同 UID/来源/类目/
+   console.log('  ✅ 12.1 合法跨批次重复推流验证通过：同一 candidateId，证据与最新 runId/排名平滑刷新')
+ }
+ 
++// ----------------------------------------------------
++// 13. STEP 2 来源身份不足隔离反例：同名同类目但旧记录缺少 UID/来源身份 (REVISION-003 Fail-Close)
++// ----------------------------------------------------
++console.log('\n--- 13. STEP 2 来源身份不足反例：同名同类目但旧记录缺少 UID/来源身份 (Fail-Close) ---')
++{
++  resetStore()
++
++  // 旧候选：sourceProductId=wb-niche-u-1，名称“手套”，类目“劳保”，无 source_niche_uid、source_niche_id、source_system
++  const existingGlove = t6Store.ensureCandidate({
++    sourceProductId: 'wb-niche-u-1',
++    candidateIndex: 10,
++    name: '手套',
++    categoryLeaf: '劳保',
++    categoryFull: '劳保',
++    notes: '旧无来源字段手套候选单品',
++  }).candidate
++
++  t6Store.setCandidateBizStatus(existingGlove.id, '待立项', '待定评审')
++  t6Store.setCandidateOwner(existingGlove.id, '张主管')
++  const candRec = t6Store.getCandidate(existingGlove.id)
++  candRec.projectIds = ['proj-legacy-glove-99']
++  mem.set(`t6.candidate.${existingGlove.id}`, JSON.stringify(candRec))
++
++  // 记录旧候选完整快照、Store 条数、审计日志数与决策日志数
++  const oldSnapshot = JSON.stringify(t6Store.getCandidate(existingGlove.id))
++  const logCountBefore = t6Store.listLogs().length
++  const auditCountBefore = auditLogsRecorded.length
++
++  // 新利基：uid=u-1 (构造相同的 stableSourceProductId: wb-niche-u-1)，id=999，名称“手套”，类目“劳保” (同名同类)
++  const incomingSameNameCatNiche = {
++    id: 999,
++    uid: 'u-1',
++    name: '手套',
++    category: '劳保',
++    mos: 85,
++    cfs: 90,
++    price: 35,
++  }
++
++  // 必须阻断！禁止仅凭 candidateName 和 categoryLeaf 相同就调用 syncCandidateMarketEvidence() 覆盖旧记录
++  assert.throws(
++    () => promoteToT6Candidate(incomingSameNameCatNiche, '同名同类缺少UID旧候选推流'),
++    /身份冲突阻断/,
++    '稳定 Product ID 相同且同名同类目，但旧记录缺少来源 UID 身份凭据时必须阻断并抛出异常'
++  )
++
++  // 断言：旧记录 100% 字节级不变（严禁被写入新 UID、新来源 ID 999、新系统或新市场证据）
++  assert.strictEqual(
++    JSON.stringify(t6Store.getCandidate(existingGlove.id)),
++    oldSnapshot,
++    '旧候选必须保持 100% 字节级不变'
++  )
++
++  // 断言：候选数不变
++  assert.strictEqual(t6Store.listCandidates().length, 1, '候选池总数严格保持 1 条')
++
++  // 断言：零新增成功审计日志与决策日志
++  assert.strictEqual(auditLogsRecorded.length, auditCountBefore, '阻断推流后严禁产生新增审计成功日志 (0条)')
++  assert.strictEqual(t6Store.listLogs().length, logCountBefore, '阻断推流后严禁产生新增决策日志 (0条)')
++  console.log('  ✅ 13.1 STEP 2 来源身份不足反例验证通过：同名同类但旧记录缺少 UID 身份时阻断，旧记录 100% 字节级不变，0 新增审计/决策日志')
++}
++
+ console.log('\n🎉 [PASS] Candidate Identity & Legacy Backfill 全部测试通过！\n')

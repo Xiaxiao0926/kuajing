@@ -1,0 +1,282 @@
+{
+  "task_id": "KJ-GEMINI-20260921-005",
+  "recorded_at": "2026-09-21T15:27:00+08:00",
+  "summary": {
+    "total_checks": 22,
+    "passed": 20,
+    "failed": 0,
+    "not_run": 2
+  },
+  "evidence_rules": {
+    "local_run_verified": "本地真实执行命令，生成持久化测试日志并记录退出码 0",
+    "source_code_confirmed": "基于本地仓库代码静态查阅并引证具体文件名与行号",
+    "not_run": "明确标记为未执行，绝不冒称已运行"
+  },
+  "static_checks": [
+    {
+      "name": "check_baseline_git_head",
+      "command": "git log -1 --format=\"%H\"",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/BASELINE.json",
+      "notes": "Verified HEAD matches baseline: de0cecf107e670e1c0d9cf393c50b92ab85afdee"
+    },
+    {
+      "name": "check_pre_flight_hashes",
+      "command": "node check baseline key_file_hashes",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/start-hashes.log",
+      "notes": "All 19 critical files matched initial baseline hashes 100%"
+    },
+    {
+      "name": "check_whitelist_diff_bounded",
+      "command": "git diff --no-index ProjectCompliancePanel.jsx.pre-005 ProjectCompliancePanel.jsx",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/compliance-panel-005.patch",
+      "notes": "Production code changes strictly bounded to Requirements table JSX and classes (lines 998-1172)"
+    },
+    {
+      "name": "check_post_hashes_unauthorized_zero",
+      "command": "node compare post-hashes with baseline",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/hash-comparison.json",
+      "notes": "Zero unauthorized mismatches across all 19 baseline files; only allowed file modified"
+    }
+  ],
+  "geometry_and_layout_checks": [
+    {
+      "name": "viewport_multi_width_geometry",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Step 3)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_files": [
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-360-normal.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-390-normal.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-768-normal.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-1440-normal.png"
+      ],
+      "notes": "Verified 360, 390, 768, 1440px viewports have zero document horizontal overflow; container scroll isolated"
+    },
+    {
+      "name": "badge_characters_horizontal_single_line",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Step 3 assert 3)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "All category, nature, risk, and status badges verified strictly single-line horizontal (height <= 28px)"
+    },
+    {
+      "name": "add_button_single_line_stable",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Step 3 assert 4)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Add requirement button maintains 92x28px horizontal layout; no vertical text wrapping across all viewports"
+    },
+    {
+      "name": "action_buttons_reachable_and_visible",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Step 3 assert 5)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "On narrow screens, scrolling table container to the far right renders action buttons fully visible and clickable within viewport"
+    },
+    {
+      "name": "states_screenshots_390_and_1440",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Step 4)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_files": [
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-390-editing.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-390-deleting.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-390-add-expanded.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-390-empty.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-1440-editing.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-1440-deleting.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-1440-add-expanded.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-1440-empty.png"
+      ],
+      "notes": "Captured editing, delete confirmation, add expanded, and empty state screenshots at 390px and 1440px"
+    }
+  ],
+  "interactive_and_behavioral_checks": [
+    {
+      "name": "edit_cancel_store_unmodified",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Action 1)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Editing requirement name and clicking cancel discards draft without modifying store"
+    },
+    {
+      "name": "edit_save_target_item_updated_only",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Action 2)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Editing requirement name and clicking save updates target item only; other items remain untouched"
+    },
+    {
+      "name": "delete_cancel_item_retained",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Action 3)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Clicking delete then cancel in confirmation modal leaves item intact in store"
+    },
+    {
+      "name": "delete_confirm_target_item_removed",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Action 4)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Confirming delete removes targeted requirement from store"
+    },
+    {
+      "name": "add_requirement_functional",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Action 5)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Adding requirement via expanded form writes new requirement to store"
+    },
+    {
+      "name": "viewport_switch_draft_retained",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Action 6)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Resizing viewport 390px -> 1440px -> 390px during inline editing retains input values intact"
+    },
+    {
+      "name": "layer_a_layer_b_drafts_non_interference",
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs (Action 7)",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Table actions do not clear or interfere with Layer A assessment or Layer B certification plan unsaved drafts"
+    },
+    {
+      "name": "fault_injection_verification",
+      "command": "TABLE_LAYOUT_TEST_INJECT_FAILURE=1 node tests/ia-project-compliance-table-layout.test.mjs",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 1,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/table-layout-results.json",
+      "notes": "Fault injection verified: intentional assertion failure causes non-zero exit code and sets passed=false"
+    }
+  ],
+  "regression_suite_checks": [
+    {
+      "name": "test_compliance_layout",
+      "command": "node tests/ia-project-compliance-layout.test.mjs",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/test-compliance-layout.log",
+      "notes": "002 compliance layout test passed on all viewports without regression"
+    },
+    {
+      "name": "test_compliance_draft",
+      "command": "node tests/ia-project-compliance-draft.test.mjs",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/test-compliance-draft.log",
+      "notes": "001 compliance draft protection test (including headless browser suite) passed with exit code 0"
+    },
+    {
+      "name": "test_compliance_core",
+      "command": "node tests/ia-project-compliance.test.mjs",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/test-compliance-core.log",
+      "notes": "All 32 compliance profile and store test groups passed with exit code 0"
+    },
+    {
+      "name": "test_compliance_gate",
+      "command": "node tests/ia-project-compliance-gate.test.mjs",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/test-compliance-gate.log",
+      "notes": "All 49 compliance stage gate tests passed with exit code 0"
+    },
+    {
+      "name": "npm_test",
+      "command": "npm test",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/npm-test.log",
+      "notes": "Full project unit test suite (29 FBP + 56 golden + 44 Python + 65 React) passed with exit code 0"
+    },
+    {
+      "name": "npm_test_golden",
+      "command": "npm run test:golden",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/npm-test-golden.log",
+      "notes": "Pricing golden cases matched 100% with exit code 0"
+    },
+    {
+      "name": "npm_test_sync",
+      "command": "npm run test:sync",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/npm-test-sync.log",
+      "notes": "Config sync test passed with exit code 0"
+    },
+    {
+      "name": "npm_build_react",
+      "command": "npm --prefix ozon-react run build",
+      "status": "passed",
+      "evidence_level": "local_run_verified",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/npm-build-react.log",
+      "notes": "Vite production build passed cleanly with exit code 0"
+    }
+  ],
+  "unexecuted_or_skipped_checks": [
+    {
+      "name": "live_production_browser_walkthrough",
+      "command": "Manual walkthrough on physical production website fyzsxnb.com/kuajing",
+      "status": "not_run",
+      "evidence_level": "not_run",
+      "exit_code": null,
+      "evidence_file": null,
+      "notes": "Strictly local visual prototype task; zero production write access requested or performed"
+    },
+    {
+      "name": "production_deployment",
+      "command": "Deployment of modified bundle to live WordPress environment",
+      "status": "not_run",
+      "evidence_level": "not_run",
+      "exit_code": null,
+      "evidence_file": null,
+      "notes": "Per TASK.md: production_authorized=false, deployment_status=not_deployed"
+    }
+  ]
+}

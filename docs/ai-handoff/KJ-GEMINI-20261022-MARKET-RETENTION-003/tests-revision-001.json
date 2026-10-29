@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20261022-MARKET-RETENTION-003",
+  "revision": "001",
+  "executor": "Luna",
+  "executed_at": "2026-10-28",
+  "all_passed": true,
+  "relation_to_tests_json": "tests.json 是 Gemini 于 2026-10-26 产出的原始历史证据，予以保留。其第 48 行对 npm test 的脚本展开与当前 package.json 实际入口不一致（P2 问题，见 CODEX-LUNA-READOUT-20261028.md），其覆盖数量不能直接作为当前全量测试证明。本文件为 Revision 001 的权威测试记录，命令行均摘自 evidence/revision-001/ 各日志中 npm 输出的 `> command` 行及当前 package.json 实际脚本。",
+  "note_on_overlap": "`npm test` 内部重复执行了 `npm run test:market` 链路（含 test:market-retention 与 test:market-source-download）；该重复执行记录用于回归完整性，不计为额外独立覆盖。日志中无断言总数的精确输出，故不虚构断言总数。",
+  "commands": [
+    {
+      "command": "npm test",
+      "script": "node scripts/sync-config.js && node --experimental-vm-modules ozon-react/src/utils/wbEngine.test.mjs && node ozon-react/src/utils/exchangeRate.test.mjs && npm run test:scoring && npm run test:t6 && npm run test:market && npm run test:fbp && npm run test:scoring-golden && npm run test:python",
+      "exit_code": 0,
+      "independent_coverage": false,
+      "overlap_note": "内含 npm run test:market 链路；独立部分为 wbEngine、exchangeRate、test:scoring、test:t6、test:fbp、test:scoring-golden、test:python（日志末尾显示 Python 套件 44/44 通过）。",
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/npm-test-final.log",
+      "additional_log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/npm-test.log",
+      "summary": "按当前 package.json 实际入口执行的全量测试链路，日志末尾 🎉 全部通过。此展开方式已纠正 tests.json 中过时的脚本展开。"
+    },
+    {
+      "command": "npm run test:market",
+      "script": "node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/specParser.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/purityFilter.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/pipeline.e2e.test.mjs && node ozon-react/src/utils/marketReportAnalysis.test.mjs && npm run test:market-retention",
+      "exit_code": 0,
+      "independent_coverage": false,
+      "overlap_note": "链内 test:market-retention 又执行 test:market-source-download；与本文件单独登记的 test:market-source-download 条目存在重复执行，不重复计覆盖。",
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/test-market-final.log",
+      "additional_log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/test-market.log",
+      "summary": "specParser、purityFilter、pipeline.e2e、marketReportAnalysis、market-report-retention（验收场景 1-8）及 market-report-source-download 全部通过，末尾 PASS 行明确包含 'PASS market-report-source-download: exact binding, integrity, legacy, origin and retry failures'。"
+    },
+    {
+      "command": "npm run test:market-source-download",
+      "script": "node tests/market-report-source-download.test.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/test-source-download.log",
+      "summary": "Revision 001 新增的源文件下载焦点测试：精确绑定、完整性校验、旧版报告、来源校验与重试失败路径，PASS。"
+    },
+    {
+      "command": "npm run test:golden",
+      "script": "node scripts/sync-config.js && node scripts/run-golden-tests.js",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/npm-test-golden.log",
+      "summary": "黄金案例 76 通过 / 0 失败。"
+    },
+    {
+      "command": "npm run test:sync",
+      "script": "node scripts/sync-config.js && node scripts/verify_sync.js",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/npm-test-sync.log",
+      "summary": "双端对拍零差异（16 个重量边界 + 2 个版本边界 + scoring_rules 一致性）。"
+    },
+    {
+      "command": "node tests/report-integration.test.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/test-report-integration.log",
+      "summary": "日志输出 'market report center integration contract tests passed'，报告集成合同保持完好。"
+    },
+    {
+      "command": "node tests/market-report-quality.test.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/test-market-report-quality.log",
+      "summary": "日志输出 'validated 24 market reports: Russia context, evidence, dates and scores'，24 份内置报告质量合同通过。"
+    },
+    {
+      "command": "npm --prefix ozon-react run build",
+      "script": "vite build",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/npm-build-final.log",
+      "additional_log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/npm-build.log",
+      "summary": "生产 Vite 构建干净完成（最终日志 ✓ built in 8.37s；首轮日志 ✓ built in 9.41s）。"
+    }
+  ],
+  "browser_evidence": {
+    "harness_script": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/browser-harness.mjs",
+    "log_path": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/revision-001/browser-harness.log",
+    "note": "browser-harness.log 未打印命令行本身，故不列入 commands；依据同目录 harness 脚本与日志内容（Local Vite + Mock API server listening at http://127.0.0.1:65397/ 与 'Browser harness completed and saved screenshots + request/payload evidence!'）确认执行成功。请求/载荷证据见同目录 browser-request-payload-evidence.json。",
+    "screenshots": [
+      "confirm-step-desktop-1366x900.png",
+      "confirm-step-narrow-390x844.png",
+      "source-download-success-desktop-1366x900.png",
+      "source-download-success-narrow-390x844.png",
+      "source-download-switch-reset-desktop-1366x900.png",
+      "pending-retry-desktop-1366x900.png",
+      "pending-retry-narrow-390x844.png",
+      "reloaded-revisions-desktop-1366x900.png",
+      "reloaded-revisions-narrow-390x844.png",
+      "duplicate-warning-desktop-1366x900.png"
+    ],
+    "screenshot_note": "source-download-switch-reset 与 duplicate-warning 两个场景的证据目录中仅存在 desktop (1366x900) 一份 PNG，未发现对应 narrow (390x844) 文件，故如实只列 desktop 版本。"
+  },
+  "reviewer_verification": {
+    "reviewer": "GLM-5.3",
+    "date": "2026-10-28",
+    "method": "独立复跑 npm run test:market-retention 与 npm run test:market-source-download，两者均 PASS（exit 0）；另对 sourceDownload.js、UploadedMarketReport.jsx、retentionContract.js 做只读代码抽查（确认 Download 按钮、AbortController + 请求序号守卫、0001-9999 年份边界存在）。",
+    "result": "PASS"
+  },
+  "limitations": [
+    "各日志文件本身未内嵌 exit code 行：焦点两条测试的 exit 0 由 reviewer 于 2026-10-28 独立复跑确认，其余条目的 exit 0 依据执行记录与日志末尾成功输出（🎉/PASS/✓ built 等）。",
+    "日志未输出精确断言总数，本文件不虚构断言总数；test:market 链路中 test:market-retention 及 test:market-source-download 的重复执行不计为独立覆盖。",
+    "本轮未部署（not_deployed），未做生产验证（not_performed）；后端响应仅确认备份文件名，不能视为服务器端对内容哈希的独立验证。",
+    "硬刷新导入恢复（跨刷新/跨设备可恢复导入）为既有遗留限制，不属本轮范围。"
+  ]
+}

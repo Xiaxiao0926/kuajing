@@ -1,0 +1,20 @@
+{
+  "task_id": "KJ-GEMINI-20260921-004",
+  "status": "accepted_with_known_limitations",
+  "revision": 1,
+  "review_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/REVIEW-REVISION-001.md",
+  "approved_baseline_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/APPROVED_BASELINE.md",
+  "acceptance_scope": "Corrected local planning baseline only; not blanket approval of original audit.",
+  "planning_status": "narrow_ui_sample_authorized",
+  "next_task_id": "KJ-GEMINI-20260921-005",
+  "open_items": [
+    "calculator_shared_write_runtime_validation",
+    "spa_unsaved_navigation",
+    "backup_restore_runtime",
+    "live_production_capabilities",
+    "003_contract_review"
+  ],
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "public_verification_status": "not_performed"
+}

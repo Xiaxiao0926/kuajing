@@ -1,0 +1,17 @@
+{
+  "missingDepCheck": {
+    "exitCode": 0,
+    "reportsNotRun": true,
+    "doesNotSayAllPassed": true,
+    "exitedZeroForUnit": true,
+    "passed": true
+  },
+  "faultInjectionCheck": {
+    "exitCode": 1,
+    "errorReported": true,
+    "injectedNoAllPassed": true,
+    "exitedNonZero": true,
+    "passed": true
+  },
+  "passed": true
+}

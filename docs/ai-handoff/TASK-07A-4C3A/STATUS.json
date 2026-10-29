@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "KUAIJING-IA-REFACTOR-V1-07A-4C3A-R5",
+  "task_title": "TASK 07A-4C3A-R5 — Final Contract Freeze",
+  "status": "review_ready",
+  "claimed_by": "Gemini",
+  "previous_task_id": "KJ-GEMINI-20260922-001",
+  "previous_task_status": "review_ready",
+  "task_file": "docs/ai-handoff/TASK-07A-4C3A/TASK.md",
+  "target_contract_file": "docs/ia/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md",
+  "forbidden_files": [
+    "ozon-react/src/utils/t6/t6Store.js",
+    "ozon-react/src/utils/t6/complianceProfile.js",
+    "ozon-react/src/components/t6/ProjectCompliancePanel.jsx",
+    "ozon-react/src/utils/t6/gateEngine.js",
+    "ozon-react/src/components/t6/ProjectDetailPage.jsx",
+    "ozon-react/src/utils/t6/stageTransition.js"
+  ],
+  "implementation_authorized": false,
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "execution_scope": "Read-only contract audit for Certification Applicability and cert_plan gate semantics only; zero production code modification."
+}

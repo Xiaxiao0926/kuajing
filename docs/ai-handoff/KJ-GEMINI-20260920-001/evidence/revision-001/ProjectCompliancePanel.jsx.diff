@@ -1,0 +1,456 @@
+diff --git a/docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/ProjectCompliancePanel.jsx.pre-rev1 b/ozon-react/src/components/t6/ProjectCompliancePanel.jsx
+index 33762c6..ae0181f 100644
+--- a/docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/ProjectCompliancePanel.jsx.pre-rev1
++++ b/ozon-react/src/components/t6/ProjectCompliancePanel.jsx
+@@ -35,6 +35,8 @@ import {
+   extractPlanState,
+   isAssessmentDirty,
+   isPlanDirty,
++  detectAssessmentConflict,
++  detectPlanConflict,
+   resolveSyncOnProjectUpdate,
+ } from '../../utils/t6/complianceDraftState.js'
+ import {
+@@ -110,18 +112,21 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+   const [isSavingAssessment, setIsSavingAssessment] = useState(false)
+   const [isSavingPlan, setIsSavingPlan] = useState(false)
+ 
+-  // 1. 读取 Store 实体与外部领域只读上下文
+-  const project = useMemo(() => (projectId ? getProject(projectId) : null), [projectId, tick])
++  // 1. 读取 Store 实体与外部领域只读上下文（每次 render 读取最新 Store，解决 R2）
++  const project = projectId ? getProject(projectId) : null
+   const snapshot = useMemo(() => {
+     return project?.source?.creationSnapshotId ? getSnapshot(project.source.creationSnapshotId) : null
+-  }, [project])
++  }, [project?.source?.creationSnapshotId])
+   const samples = useMemo(() => (projectId ? getProjectSamples(projectId) : []), [projectId, tick])
+ 
+-  const compliance = useMemo(() => project?.compliance || {}, [project])
+-  const requirements = useMemo(() => (Array.isArray(compliance.requirements) ? compliance.requirements : []), [compliance])
++  const compliance = project?.compliance || {}
++  const requirements = Array.isArray(compliance.requirements) ? compliance.requirements : []
++
++  // 草稿所属项目 ID（铁律：草稿与项目强绑定，解决 R1 跨项目泄漏）
++  const [draftProjectId, setDraftProjectId] = useState(projectId)
+ 
+   // 2. 本地表单状态与基准 — Layer A: Assessment
+-  const initialAssessment = useMemo(() => extractAssessmentState(compliance), [])
++  const initialAssessment = extractAssessmentState(compliance)
+   const [assessmentStatus, setAssessmentStatus] = useState(initialAssessment.assessmentStatus)
+   const [riskLevel, setRiskLevel] = useState(initialAssessment.riskLevel)
+   const [notes, setNotes] = useState(initialAssessment.notes)
+@@ -129,12 +134,75 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+   const [assessmentConflict, setAssessmentConflict] = useState(false)
+ 
+   // 3. 本地表单状态与基准 — Layer B: Plan
+-  const initialPlan = useMemo(() => extractPlanState(compliance), [])
++  const initialPlan = extractPlanState(compliance)
+   const [standardsText, setStandardsText] = useState(initialPlan.standardsText)
+   const [certificationPlan, setCertificationPlan] = useState(initialPlan.certificationPlan)
+   const [planBaseline, setPlanBaseline] = useState(initialPlan)
+   const [planConflict, setPlanConflict] = useState(false)
+ 
++  // 4. 本地表单状态 — Requirement CRUD 交互状态
++  const [isAddingReq, setIsAddingReq] = useState(false)
++  const [newReq, setNewReq] = useState({
++    category: 'REGULATION',
++    name: '',
++    required: true,
++    status: 'PENDING',
++    risk: '',
++    desc: '',
++  })
++  const [editingReqId, setEditingReqId] = useState(null)
++  const [editingDraft, setEditingDraft] = useState(null)
++  const [deletingReqId, setDeletingReqId] = useState(null)
++
++  // 外部 Store 镜像基准追踪（用于检测同项目外部并发更新）
++  const lastExternalRef = useRef({
++    projectId,
++    assessment: initialAssessment,
++    plan: initialPlan,
++  })
++
++  // 场景 F 核心防御：项目身份切换立即重置（React 官方 Adjusting state when props change 模式）
++  // 绝不在 render 阶段覆盖用于比较的旧 ID，一旦检测到 projectId 变更，立即重置全部草稿与基准
++  if (draftProjectId !== projectId) {
++    setDraftProjectId(projectId)
++    const freshProject = projectId ? getProject(projectId) : null
++    const freshComp = freshProject?.compliance || {}
++    const freshA = extractAssessmentState(freshComp)
++    const freshP = extractPlanState(freshComp)
++
++    setAssessmentStatus(freshA.assessmentStatus)
++    setRiskLevel(freshA.riskLevel)
++    setNotes(freshA.notes)
++    setAssessmentBaseline(freshA)
++    setAssessmentConflict(false)
++
++    setStandardsText(freshP.standardsText)
++    setCertificationPlan(freshP.certificationPlan)
++    setPlanBaseline(freshP)
++    setPlanConflict(false)
++
++    setIsAddingReq(false)
++    setNewReq({
++      category: 'REGULATION',
++      name: '',
++      required: true,
++      status: 'PENDING',
++      risk: '',
++      desc: '',
++    })
++    setEditingReqId(null)
++    setEditingDraft(null)
++    setDeletingReqId(null)
++    setErrorMsg('')
++    setNotice('')
++
++    lastExternalRef.current = {
++      projectId,
++      assessment: freshA,
++      plan: freshP,
++    }
++  }
++
+   // 4. 派生未保存状态 (Dirty Tracking)
+   const isAssessmentDirtyState = useMemo(() => {
+     return isAssessmentDirty({ assessmentStatus, riskLevel, notes }, assessmentBaseline)
+@@ -144,102 +212,112 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+     return isPlanDirty({ standardsText, certificationPlan }, planBaseline)
+   }, [standardsText, certificationPlan, planBaseline])
+ 
+-  // 引用追踪当前最新状态（防止 effect 闭包陈旧与并发同步抖动）
+-  const latestRef = useRef({
+-    projectId,
+-    assessmentDraft: { assessmentStatus, riskLevel, notes },
+-    assessmentBaseline,
+-    planDraft: { standardsText, certificationPlan },
+-    planBaseline,
+-    assessmentConflict,
+-    planConflict,
+-  })
+-  latestRef.current = {
+-    projectId,
+-    assessmentDraft: { assessmentStatus, riskLevel, notes },
+-    assessmentBaseline,
+-    planDraft: { standardsText, certificationPlan },
+-    planBaseline,
+-    assessmentConflict,
+-    planConflict,
+-  }
++  const incomingAssessment = extractAssessmentState(compliance)
++  const incomingPlan = extractPlanState(compliance)
+ 
+-  // 5. 同步外部 project 数据至本地表单与冲突控制
++  // 5. 同项目外部数据变更同步与冲突检测 (场景 G & R2 / R3)
+   useEffect(() => {
+-    if (!project) return
+-    const comp = project.compliance || {}
+-    const {
+-      projectId: prevPid,
+-      assessmentDraft,
+-      assessmentBaseline: curAssessmentBaseline,
+-      planDraft,
+-      planBaseline: curPlanBaseline,
+-    } = latestRef.current
+-
+-    const nextPid = projectId
+-
+-    const synced = resolveSyncOnProjectUpdate({
+-      prevProjectId: prevPid,
+-      nextProjectId: nextPid,
+-      currentAssessmentDraft: assessmentDraft,
+-      currentAssessmentBaseline: curAssessmentBaseline,
+-      currentPlanDraft: planDraft,
+-      currentPlanBaseline: curPlanBaseline,
+-      nextCompliance: comp,
+-    })
++    if (draftProjectId !== projectId) return
+ 
+-    if (prevPid !== nextPid) {
+-      // 场景 F: 项目切换 — 重置所有草稿与基准，禁止跨项目草稿串写
+-      setAssessmentStatus(synced.assessmentDraft.assessmentStatus)
+-      setRiskLevel(synced.assessmentDraft.riskLevel)
+-      setNotes(synced.assessmentDraft.notes)
+-      setAssessmentBaseline(synced.assessmentBaseline)
+-      setAssessmentConflict(false)
++    const prevExtA = lastExternalRef.current.assessment
++    const prevExtP = lastExternalRef.current.plan
+ 
+-      setStandardsText(synced.planDraft.standardsText)
+-      setCertificationPlan(synced.planDraft.certificationPlan)
+-      setPlanBaseline(synced.planBaseline)
+-      setPlanConflict(false)
++    const extAChanged = (
++      incomingAssessment.assessmentStatus !== prevExtA.assessmentStatus ||
++      incomingAssessment.riskLevel !== prevExtA.riskLevel ||
++      incomingAssessment.notes !== prevExtA.notes
++    )
++    const extPChanged = (
++      incomingPlan.standardsText !== prevExtP.standardsText ||
++      incomingPlan.certificationPlan !== prevExtP.certificationPlan
++    )
+ 
+-      setIsAddingReq(false)
+-      setNewReq({
+-        category: 'REGULATION',
+-        name: '',
+-        required: true,
+-        status: 'PENDING',
+-        risk: '',
+-        desc: '',
+-      })
+-      setEditingReqId(null)
+-      setEditingDraft(null)
+-      setDeletingReqId(null)
+-      setErrorMsg('')
+-      setNotice('')
++    if (!extAChanged && !extPChanged) {
++      // 外部数据未变，但用户若修改草稿使其与外部数据一致，应自动解除冲突 (R3)
++      if (assessmentConflict) {
++        const stillConflict = detectAssessmentConflict({
++          draft: { assessmentStatus, riskLevel, notes },
++          baseline: assessmentBaseline,
++          incoming: incomingAssessment,
++        })
++        if (!stillConflict) setAssessmentConflict(false)
++      }
++      if (planConflict) {
++        const stillConflict = detectPlanConflict({
++          draft: { standardsText, certificationPlan },
++          baseline: planBaseline,
++          incoming: incomingPlan,
++        })
++        if (!stillConflict) setPlanConflict(false)
++      }
+       return
+     }
+ 
+-    // 场景 G: 同项目外部数据变更
+-    // Assessment: 未编辑则安全刷新；已编辑且有冲突则标出冲突，绝不静默覆盖草稿
+-    if (!isAssessmentDirty(assessmentDraft, curAssessmentBaseline)) {
+-      setAssessmentStatus(synced.assessmentDraft.assessmentStatus)
+-      setRiskLevel(synced.assessmentDraft.riskLevel)
+-      setNotes(synced.assessmentDraft.notes)
+-      setAssessmentBaseline(synced.assessmentBaseline)
+-      setAssessmentConflict(false)
+-    } else if (synced.assessmentConflict) {
+-      setAssessmentConflict(true)
++    // 外部数据确实发生变动：更新镜像基准
++    lastExternalRef.current = {
++      projectId,
++      assessment: incomingAssessment,
++      plan: incomingPlan,
+     }
+ 
+-    // Plan: 未编辑则安全刷新；已编辑且有冲突则标出冲突，绝不静默覆盖草稿
+-    if (!isPlanDirty(planDraft, curPlanBaseline)) {
+-      setStandardsText(synced.planDraft.standardsText)
+-      setCertificationPlan(synced.planDraft.certificationPlan)
+-      setPlanBaseline(synced.planBaseline)
+-      setPlanConflict(false)
+-    } else if (synced.planConflict) {
+-      setPlanConflict(true)
++    // Plan 区块同步
++    if (extPChanged) {
++      if (!isPlanDirtyState) {
++        // 干净区块：安全跟随外部最新数据刷新 (R2)
++        setStandardsText(incomingPlan.standardsText)
++        setCertificationPlan(incomingPlan.certificationPlan)
++        setPlanBaseline(incomingPlan)
++        setPlanConflict(false)
++      } else {
++        // dirty 区块：保留用户未保存草稿，准确检测并提示冲突 (R2/R3)
++        const conflict = detectPlanConflict({
++          draft: { standardsText, certificationPlan },
++          baseline: planBaseline,
++          incoming: incomingPlan,
++        })
++        setPlanConflict(conflict)
++      }
++    }
++
++    // Assessment 区块同步
++    if (extAChanged) {
++      if (!isAssessmentDirtyState) {
++        // 干净区块：安全跟随外部最新数据刷新 (R2)
++        setAssessmentStatus(incomingAssessment.assessmentStatus)
++        setRiskLevel(incomingAssessment.riskLevel)
++        setNotes(incomingAssessment.notes)
++        setAssessmentBaseline(incomingAssessment)
++        setAssessmentConflict(false)
++      } else {
++        // dirty 区块：保留用户未保存草稿，准确检测并提示冲突 (R2/R3)
++        const conflict = detectAssessmentConflict({
++          draft: { assessmentStatus, riskLevel, notes },
++          baseline: assessmentBaseline,
++          incoming: incomingAssessment,
++        })
++        setAssessmentConflict(conflict)
++      }
+     }
+-  }, [project, projectId])
++  }, [
++    projectId,
++    draftProjectId,
++    incomingAssessment.assessmentStatus,
++    incomingAssessment.riskLevel,
++    incomingAssessment.notes,
++    incomingPlan.standardsText,
++    incomingPlan.certificationPlan,
++    isAssessmentDirtyState,
++    isPlanDirtyState,
++    assessmentStatus,
++    riskLevel,
++    notes,
++    standardsText,
++    certificationPlan,
++    assessmentBaseline,
++    planBaseline,
++    assessmentConflict,
++    planConflict,
++  ])
+ 
+   // 6. 浏览器窗口刷新 / 关闭前未保存草稿拦截与清理
+   useEffect(() => {
+@@ -258,20 +336,6 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+     }
+   }, [isAssessmentDirtyState, isPlanDirtyState])
+ 
+-  // 7. 事项 CRUD 本地交互状态
+-  const [isAddingReq, setIsAddingReq] = useState(false)
+-  const [newReq, setNewReq] = useState({
+-    category: 'REGULATION',
+-    name: '',
+-    required: true,
+-    status: 'PENDING',
+-    risk: '',
+-    desc: '',
+-  })
+-  const [editingReqId, setEditingReqId] = useState(null)
+-  const [editingDraft, setEditingDraft] = useState(null)
+-  const [deletingReqId, setDeletingReqId] = useState(null)
+-
+   // 统计概览指标
+   const totalReqs = requirements.length
+   const completedReqs = requirements.filter((r) => r.status === COMPLIANCE_REQUIREMENT_STATUS.DONE).length
+@@ -287,6 +351,10 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+   // 保存评估状态 (Layer A)
+   const handleSaveAssessment = () => {
+     setErrorMsg('')
++    if (draftProjectId !== projectId) {
++      setErrorMsg('草稿所属项目与当前项目不一致，已阻止保存')
++      return
++    }
+     setIsSavingAssessment(true)
+     try {
+       updateProjectCompliance(projectId, {
+@@ -297,8 +365,7 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+       const nextBaseline = { assessmentStatus, riskLevel, notes }
+       setAssessmentBaseline(nextBaseline)
+       setAssessmentConflict(false)
+-      latestRef.current.assessmentBaseline = nextBaseline
+-      latestRef.current.assessmentConflict = false
++      lastExternalRef.current.assessment = nextBaseline
+ 
+       setNotice('合规评估已保存')
+       setTick((t) => t + 1)
+@@ -313,6 +380,10 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+   // 保存合规计划 (Layer B)
+   const handleSavePlan = () => {
+     setErrorMsg('')
++    if (draftProjectId !== projectId) {
++      setErrorMsg('草稿所属项目与当前项目不一致，已阻止保存')
++      return
++    }
+     setIsSavingPlan(true)
+     try {
+       const standards = normalizeApplicableStandards(standardsText)
+@@ -330,9 +401,7 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+       }
+       setPlanBaseline(nextBaseline)
+       setPlanConflict(false)
+-      latestRef.current.planDraft = nextBaseline
+-      latestRef.current.planBaseline = nextBaseline
+-      latestRef.current.planConflict = false
++      lastExternalRef.current.plan = nextBaseline
+ 
+       setNotice('合规计划已保存')
+       setTick((t) => t + 1)
+@@ -347,6 +416,10 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+   // 添加事项
+   const handleCreateRequirement = () => {
+     setErrorMsg('')
++    if (draftProjectId !== projectId) {
++      setErrorMsg('草稿所属项目与当前项目不一致，已阻止操作')
++      return
++    }
+     if (!newReq.name.trim()) {
+       setErrorMsg('事项名称必填')
+       return
+@@ -372,6 +445,7 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+ 
+   // 开始编辑事项
+   const handleStartEdit = (req) => {
++    if (draftProjectId !== projectId) return
+     setEditingReqId(req.id)
+     setEditingDraft({
+       category: req.category,
+@@ -387,6 +461,10 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+   // 保存编辑事项
+   const handleSaveEdit = () => {
+     setErrorMsg('')
++    if (draftProjectId !== projectId) {
++      setErrorMsg('草稿所属项目与当前项目不一致，已阻止操作')
++      return
++    }
+     if (!editingDraft.name.trim()) {
+       setErrorMsg('事项名称必填')
+       return
+@@ -406,6 +484,10 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+   // 删除事项（两步内联确认）
+   const handleConfirmDelete = (reqId) => {
+     setErrorMsg('')
++    if (draftProjectId !== projectId) {
++      setErrorMsg('草稿所属项目与当前项目不一致，已阻止操作')
++      return
++    }
+     try {
+       removeProjectComplianceRequirement(projectId, reqId)
+       setDeletingReqId(null)
+@@ -643,14 +725,14 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+               size="sm"
+               variant="outline"
+               onClick={() => {
+-                const inc = extractAssessmentState(project?.compliance)
++                const freshProject = projectId ? getProject(projectId) : null
++                const inc = extractAssessmentState(freshProject?.compliance)
+                 setAssessmentStatus(inc.assessmentStatus)
+                 setRiskLevel(inc.riskLevel)
+                 setNotes(inc.notes)
+                 setAssessmentBaseline(inc)
+                 setAssessmentConflict(false)
+-                latestRef.current.assessmentBaseline = inc
+-                latestRef.current.assessmentConflict = false
++                lastExternalRef.current.assessment = inc
+               }}
+             >
+               放弃草稿并载入外部数据
+@@ -747,13 +829,13 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+               size="sm"
+               variant="outline"
+               onClick={() => {
+-                const inc = extractPlanState(project?.compliance)
++                const freshProject = projectId ? getProject(projectId) : null
++                const inc = extractPlanState(freshProject?.compliance)
+                 setStandardsText(inc.standardsText)
+                 setCertificationPlan(inc.certificationPlan)
+                 setPlanBaseline(inc)
+                 setPlanConflict(false)
+-                latestRef.current.planBaseline = inc
+-                latestRef.current.planConflict = false
++                lastExternalRef.current.plan = inc
+               }}
+             >
+               放弃草稿并载入外部数据

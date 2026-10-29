@@ -1,0 +1,136 @@
+{
+  "task_id": "KJ-GEMINI-20260921-002",
+  "status": "passed",
+  "summary": {
+    "behavioral": "passed",
+    "geometric": "passed",
+    "visual": "passed"
+  },
+  "checks": [
+    {
+      "id": "check1-draft-test",
+      "category": "behavior",
+      "name": "合规草稿保护专项测试 (含真实组件端到端)",
+      "command": "node tests/ia-project-compliance-draft.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check1-draft-test.log",
+      "notes": "全场景 A~G、G2、G3 状态流转与真实组件交互测试全绿"
+    },
+    {
+      "id": "check2-compliance-test",
+      "category": "behavior",
+      "name": "合规工作区与核心 Store 既有测试套件 (TASK 07A-4B)",
+      "command": "node tests/ia-project-compliance.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check2-compliance-test.log",
+      "notes": "32 组测试全绿，验证合规 Profile/Requirement CRUD/领域边界无回归"
+    },
+    {
+      "id": "check3-gate-test",
+      "category": "behavior",
+      "name": "合规阶段门禁集成测试套件 (TASK 07A-4C2)",
+      "command": "node tests/ia-project-compliance-gate.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check3-gate-test.log",
+      "notes": "49 项门禁测试全绿，验证 compliance_pending / compliance_done 推进与拦截"
+    },
+    {
+      "id": "check4-npm-test",
+      "category": "behavior",
+      "name": "全局多端引擎自动化测试",
+      "command": "npm test",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check4-npm-test.log",
+      "notes": "React 运费/利润、Python 核算（44 项全部通过）、T4 评分黄金用例全绿"
+    },
+    {
+      "id": "check5-golden-test",
+      "category": "behavior",
+      "name": "黄金业务案例回归测试",
+      "command": "npm run test:golden",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check5-golden-test.log",
+      "notes": "76 项黄金案例全部通过"
+    },
+    {
+      "id": "check6-sync-test",
+      "category": "behavior",
+      "name": "双端对拍校验",
+      "command": "npm run test:sync",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check6-sync-test.log",
+      "notes": "16 个重量边界 + 2 个版本边界 + scoring_rules 一致性零差异全绿"
+    },
+    {
+      "id": "check7-build",
+      "category": "build",
+      "name": "React 前端生产构建",
+      "command": "npm --prefix ozon-react run build",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check7-build.log",
+      "notes": "Vite 构建通过；产物留存；manifest.json 预备份并无损还原"
+    },
+    {
+      "id": "check8-layout-test",
+      "category": "geometric",
+      "name": "真实项目 CSS 编译与 Headless 响应式多视口几何测量",
+      "command": "node tests/ia-project-compliance-layout.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/check8-layout-test.log",
+      "geometric_metrics": {
+        "results_json": "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-test-results.json",
+        "360px": {
+          "horizontal_overflow": false,
+          "button_dimension": "92x28px",
+          "character_layout": "horizontal_single_line",
+          "overflow_controls_count": 0
+        },
+        "390px": {
+          "horizontal_overflow": false,
+          "button_dimension": "92x28px",
+          "character_layout": "horizontal_single_line",
+          "overflow_controls_count": 0
+        },
+        "768px": {
+          "horizontal_overflow": false,
+          "button_dimension": "92x28px",
+          "character_layout": "horizontal_single_line",
+          "overflow_controls_count": 0
+        },
+        "1440px": {
+          "horizontal_overflow": false,
+          "button_dimension": "92x28px",
+          "character_layout": "horizontal_single_line",
+          "overflow_controls_count": 0
+        }
+      },
+      "notes": "360px、390px、768px、1440px 几何检查零横向溢出，按钮尺寸稳定 (92x28px)，文字单行严格递增排列"
+    },
+    {
+      "id": "visual-inspection",
+      "category": "visual",
+      "name": "四视口与四业务状态全页截图人工/视觉核验",
+      "command": "playwright page.screenshot (fullPage)",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_screenshots": [
+        "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-360.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-390.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-768.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-1440.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-390-conflict.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-390-add-form.png",
+        "docs/ai-handoff/KJ-GEMINI-20260921-002/evidence/layout-390-editing.png"
+      ],
+      "notes": "全屏截图确认移动端标题与副标题自然换行，按钮独占新行保持完整横排，桌面端保持单行对齐无退化"
+    }
+  ]
+}

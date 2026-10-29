@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20260921-005",
+  "status": "accepted_with_known_limitations",
+  "claimed_by": "Gemini",
+  "previous_task_id": "KJ-GEMINI-20260921-004",
+  "previous_task_status": "accepted_with_known_limitations",
+  "task_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/TASK.md",
+  "baseline_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/BASELINE.json",
+  "result_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/RESULT.md",
+  "tests_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/tests.json",
+  "review_file": "docs/ai-handoff/KJ-GEMINI-20260921-005/REVIEW.md",
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "public_verification_status": "not_performed",
+  "next_task_id": "KJ-GEMINI-20260921-006",
+  "acceptance_scope": "Local Requirements table presentation only; no production or whole-app acceptance."
+}

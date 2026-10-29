@@ -1,0 +1,82 @@
+{
+  "recorded_at": "2026-10-12T14:11:00.000Z",
+  "task_id": "KJ-GEMINI-20261012-MARKET-PLAN-002",
+  "task_title": "市场报告到工厂选品的下一阶段优化策划",
+  "task_type": "read_only_planning",
+  "execution_boundary": {
+    "local_implementation_authorized": false,
+    "production_authorized": false,
+    "deployment_status": "not_deployed",
+    "public_verification_status": "not_performed",
+    "notes": "本阶段为纯只读调查、证据核验与实施切片策划任务。严禁修改生产代码、测试文件或业务数据；不执行任何部署或远程账号操作；零生产环境写入。"
+  },
+  "git_environment": {
+    "head": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+    "branch": "feat/platform-calc-parity-20261009",
+    "working_tree_policy": "仓库已有大量未提交/未跟踪文件，严格保持原样，不清理、不恢复、不提交、不将其归功于本轮。"
+  },
+  "previous_task_state": {
+    "task_id": "KJ-GEMINI-20261009-MARKET-001",
+    "status": "accepted",
+    "acceptance_date": "2026-10-12",
+    "acceptance_scope": "仅本地实施验收（Revision 003 10 项测试 exit 0），非部署授权",
+    "deployment_status": "not_deployed"
+  },
+  "key_investigation_files": [
+    {
+      "path": "ozon-react/src/components/reports/MarketReportCenter.jsx",
+      "sha256": "EF95BD70CFD03EC84328273B3C416DF382D28CE47B35B333EE347198CC6D3928",
+      "bytes": 15149
+    },
+    {
+      "path": "ozon-react/src/components/reports/UploadedMarketReport.jsx",
+      "sha256": "0C63FF929E7B2F3520631C2057902FE2D9EA30A9292E34C6380D99A5E86423C8",
+      "bytes": 9198
+    },
+    {
+      "path": "ozon-react/src/components/reports/MarketDecisionBrief.jsx",
+      "sha256": "8CAE1130B329CC534864B6156DF5EBA305DF38E0104EE2DA08A4D28A8B8C71FF",
+      "bytes": 8230
+    },
+    {
+      "path": "ozon-react/src/utils/marketReportAnalysis.js",
+      "sha256": "F3C00DD0F2DBA4E3B220A7388BD3A08A639B5DBE659E1F9812FA642671D3127B",
+      "bytes": 43203
+    },
+    {
+      "path": "ozon-react/src/utils/marketReportRussiaContext.js",
+      "sha256": "D4E23F87A025D7E4AE29647CFCB4EE22F777AB65DC73BB4853E02F2CE47FF410",
+      "bytes": 6471
+    },
+    {
+      "path": "ozon-react/src/utils/serverFiles.js",
+      "sha256": "76B061109E35D68CC9F607ADF77F63D9E7B332E9F31B0371BC8B31C98C0960D1",
+      "bytes": 6879
+    },
+    {
+      "path": "ozon-react/src/utils/persist.js",
+      "sha256": "11E7AAEBAC4C97C420FC7A45B433215CAF4600E036DB7D568EA032D8457CF2E4",
+      "bytes": 22578
+    },
+    {
+      "path": "ozon-react/src/utils/marketIntelligence/miStore.js",
+      "sha256": "1B48461087A2F35E6D07F4A0065B73DBBB415C7CA0512FD623068E8C24088B2F",
+      "bytes": 20120
+    },
+    {
+      "path": "ozon-react/src/utils/t6/t6Store.js",
+      "sha256": "1AC198681BAFF84D6CC2653147E5C4A821A332E25346FBB9D82FD127619FC046",
+      "bytes": 49410
+    },
+    {
+      "path": "ozon-react/src/utils/t6/candidateProjectEvidence.js",
+      "sha256": "50091C41D983F5A8ED2856F4C62B80747F2F86F068558238C52D08A3409C76D7",
+      "bytes": 14723
+    },
+    {
+      "path": "ozon-react/src/utils/t6/gateEngine.js",
+      "sha256": "687F869772D460D484736886AF1405BF2970149A94297630434C3D91A2275264",
+      "bytes": 14284
+    }
+  ]
+}

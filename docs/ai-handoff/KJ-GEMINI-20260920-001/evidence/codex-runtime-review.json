@@ -1,0 +1,26 @@
+{
+  "scope": "Isolated real React integration, no CSS/layout acceptance and no production writes",
+  "cases": [
+    {
+      "name": "A: saving assessment preserves plan",
+      "passed": true
+    },
+    {
+      "name": "B: saving plan preserves assessment",
+      "passed": true
+    },
+    {
+      "name": "F: same component switching A to B",
+      "passed": false,
+      "notesAfterSwitch": "A UNSAVED NOTES",
+      "savedB": "A UNSAVED NOTES",
+      "expected": "B ORIGINAL"
+    },
+    {
+      "name": "G: external Store change plus parent rerender",
+      "passed": false,
+      "externalPlan": "",
+      "conflictCount": 0
+    }
+  ]
+}

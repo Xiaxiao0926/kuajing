@@ -1,0 +1,93 @@
+{
+  "task_id": "KJ-GEMINI-20260921-004",
+  "checks": [
+    {
+      "name": "check_baseline_git_head",
+      "command": "git log -1",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Verified HEAD is de0cecf107e670e1c0d9cf393c50b92ab85afdee on main branch"
+    },
+    {
+      "name": "check_deployed_commit_divergence",
+      "command": "git log --oneline a0dfa64bcc941b20b37d7e13028a25ad85dad802..HEAD",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Identified 24 commits ahead of deployed commit record"
+    },
+    {
+      "name": "check_plugin_version_divergence",
+      "command": "node -e 'fs.readFileSync(\"deploy/kuajing-persistence/kuajing-persistence.php\"); fs.readFileSync(\"wordpress/kuajing-persistence/kuajing-persistence.php\")'",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Discovered deploy plugin is v0.2.5 whereas repository plugin is v0.3.3"
+    },
+    {
+      "name": "check_frontend_build_divergence",
+      "command": "view_file deploy/kuajing-persistence/dist/.vite/manifest.json and ozon-react/dist/.vite/manifest.json",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Deploy dist has assets/index-BMWZJd3i.js (Aug 26); ozon-react dist has assets/index-HdMyp8U-.js"
+    },
+    {
+      "name": "check_unit_tests_green",
+      "command": "npm test",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "Terminal execution output",
+      "notes": "All calculation engines, scoring rules, Python tests and T6 tests are 100% green"
+    },
+    {
+      "name": "check_web_persistence_contract",
+      "command": "npm run test:web-persistence",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "Terminal execution output",
+      "notes": "Web persistence, access session, state safety, report quality and deploy safety tests passed"
+    },
+    {
+      "name": "check_ia_navigation_acceptance",
+      "command": "node tests/ia-navigation-acceptance.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "Terminal execution output",
+      "notes": "IA navigation acceptance test passed for all 8 domains and 12 navigation items"
+    },
+    {
+      "name": "check_ia_candidate_suite",
+      "command": "node tests/ia-candidate-capabilities.test.mjs && node tests/ia-candidate-detail.test.mjs && node tests/ia-candidate-market-bridge.test.mjs && node tests/ia-candidate-project-launch.test.mjs && node tests/ia-dual-snapshot-project-gate.test.mjs && node tests/ia-market-research-embedded.test.mjs && node tests/ia-market-validation-snapshot.test.mjs && node tests/ia-opportunity-shell.test.mjs && node tests/ia-procurement-identity.test.mjs && node tests/ia-purity-gateway.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "Terminal execution output",
+      "notes": "All 10 candidate and market intelligence IA test suites passed"
+    },
+    {
+      "name": "check_ia_project_suite",
+      "command": "node tests/ia-project-compliance-draft.test.mjs && node tests/ia-project-compliance-gate.test.mjs && node tests/ia-project-compliance-layout.test.mjs && node tests/ia-project-compliance.test.mjs && node tests/ia-project-product-cost-prefill.test.mjs && node tests/ia-project-product-profile.test.mjs && node tests/ia-project-supply-chain-ui.test.mjs && node tests/ia-project-supply-cost-apply.test.mjs && node tests/ia-project-supply-gate.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "Terminal execution output",
+      "notes": "All 9 project workspace, compliance, supply chain and cost bridge test suites passed"
+    },
+    {
+      "name": "check_key_files_sha256_unaltered",
+      "command": "node crypto hash calculation on 19 critical files",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Physical SHA256 hashes computed; core logic zero drift confirmed"
+    },
+    {
+      "name": "runtime_live_browser_verification",
+      "command": "Manual end-to-end browser walkthrough on fyzsxnb.com/kuajing",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence": "N/A",
+      "notes": "Per TASK.md: strict read-only audit; no production state mutations, no credential scraping, static code and local synthetic validation only"
+    }
+  ]
+}

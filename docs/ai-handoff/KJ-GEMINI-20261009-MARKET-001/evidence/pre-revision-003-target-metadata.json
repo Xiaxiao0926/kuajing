@@ -1,0 +1,15 @@
+{
+  "recorded_at": "2026-10-12T03:16:41.171Z",
+  "files": [
+    {
+      "path": "ozon-react/src/utils/marketIntelligence/miStore.js",
+      "sha256": "0007134E989FB7B6A4C3C95E9EB58581125B71BC6CD62FA5C3FF3F66FB1378B5",
+      "backup": "docs\\ai-handoff\\KJ-GEMINI-20261009-MARKET-001\\evidence\\pre-revision-003-targets\\miStore.js"
+    },
+    {
+      "path": "tests/candidate-identity-backfill.test.mjs",
+      "sha256": "391CA04A52A09486C8C3071DF6FA6E7E491F4007F664298DB088CF22EAC19A86",
+      "backup": "docs\\ai-handoff\\KJ-GEMINI-20261009-MARKET-001\\evidence\\pre-revision-003-targets\\candidate-identity-backfill.test.mjs"
+    }
+  ]
+}

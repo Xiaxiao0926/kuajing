@@ -1,0 +1,125 @@
+{
+  "task_id": "KJ-GEMINI-20260921-004",
+  "revision": 1,
+  "timestamp": "2026-09-21T15:00:00+08:00",
+  "evidence_rules": {
+    "source_code_confirmed": "基于本地仓库代码静态查阅并引证具体文件名与行号",
+    "local_run_verified": "本地真实执行命令，生成持久化测试日志并记录退出码 0",
+    "agent_reported": "执行者自报但缺乏可独立复核之本地持久化日志",
+    "not_run": "明确标记为未执行，绝不冒称已运行"
+  },
+  "static_checks": [
+    {
+      "name": "check_baseline_git_head",
+      "command": "git log -1 --format=\"%H\"",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Verified HEAD is de0cecf107e670e1c0d9cf393c50b92ab85afdee on main branch"
+    },
+    {
+      "name": "check_deployed_commit_divergence",
+      "command": "git log --oneline a0dfa64bcc941b20b37d7e13028a25ad85dad802..HEAD",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Identified 24 commits ahead of local deployed commit record (local package only; live server unknown)"
+    },
+    {
+      "name": "check_plugin_version_divergence",
+      "command": "Static inspection of plugin header versions",
+      "evidence_level": "source_code_confirmed",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Repo source plugin is v0.3.3; local historical deploy package is v0.2.5; live production version is unknown"
+    },
+    {
+      "name": "check_frontend_build_divergence",
+      "command": "Static inspection of manifest.json in deploy/ vs ozon-react/dist/",
+      "evidence_level": "source_code_confirmed",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/BASELINE.json",
+      "notes": "Deploy dist has index-BMWZJd3i.js; ozon-react dist has index-HdMyp8U-.js"
+    },
+    {
+      "name": "check_key_files_sha256_unaltered",
+      "command": "node crypto SHA256 calculation on 19 critical files",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/evidence/sha256-hashes.log",
+      "notes": "Physical SHA256 hashes logged and matched; zero drift on 19 audited files confirmed"
+    }
+  ],
+  "local_verified_checks": [
+    {
+      "name": "check_unit_tests_green",
+      "command": "npm test",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/evidence/npm-test.log",
+      "notes": "Full test suite executed locally: 29 FBP + 56 golden + 44 Python + 65 React unit tests passed with exit code 0"
+    },
+    {
+      "name": "check_web_persistence_contract",
+      "command": "npm run test:web-persistence",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/evidence/web-persistence.log",
+      "notes": "Web persistence, access session, state safety contract tests passed with exit code 0"
+    },
+    {
+      "name": "check_ia_navigation_acceptance",
+      "command": "node tests/ia-navigation-acceptance.test.mjs",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/evidence/ia-navigation.log",
+      "notes": "IA navigation acceptance test passed for 8 domains and 12 navigation items with exit code 0"
+    },
+    {
+      "name": "check_ia_candidate_suite",
+      "command": "node tests/ia-candidate-capabilities.test.mjs && node tests/ia-candidate-detail.test.mjs && node tests/ia-candidate-market-bridge.test.mjs && node tests/ia-candidate-project-launch.test.mjs && node tests/ia-dual-snapshot-project-gate.test.mjs && node tests/ia-market-research-embedded.test.mjs && node tests/ia-market-validation-snapshot.test.mjs && node tests/ia-opportunity-shell.test.mjs && node tests/ia-procurement-identity.test.mjs && node tests/ia-purity-gateway.test.mjs",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/evidence/ia-candidate.log",
+      "notes": "All 10 candidate and market intelligence IA test suites passed with exit code 0"
+    },
+    {
+      "name": "check_ia_project_suite",
+      "command": "node tests/ia-project-compliance-draft.test.mjs && node tests/ia-project-compliance-gate.test.mjs && node tests/ia-project-compliance-layout.test.mjs && node tests/ia-project-compliance.test.mjs && node tests/ia-project-product-cost-prefill.test.mjs && node tests/ia-project-product-profile.test.mjs && node tests/ia-project-supply-chain-ui.test.mjs && node tests/ia-project-supply-cost-apply.test.mjs && node tests/ia-project-supply-gate.test.mjs",
+      "evidence_level": "local_run_verified",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-004/evidence/ia-project.log",
+      "notes": "All 9 project workspace, compliance, supply chain and cost bridge test suites passed with exit code 0"
+    }
+  ],
+  "unexecuted_or_remote_checks": [
+    {
+      "name": "runtime_live_browser_verification",
+      "command": "Manual end-to-end browser walkthrough on fyzsxnb.com/kuajing",
+      "evidence_level": "not_run",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_file": null,
+      "notes": "Per TASK.md and REVISION-001.md: strictly documentation-only audit; zero production network writes, no credential scraping, live browser test not run"
+    },
+    {
+      "name": "remote_production_plugin_db_probe",
+      "command": "Authorized read-only API probe to fyzsxnb.com /wp-json/kuajing/v1/",
+      "evidence_level": "not_run",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_file": null,
+      "notes": "Production credentials/permissions not requested during audit; remote live version and tables remain strictly unknown"
+    }
+  ]
+}

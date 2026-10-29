@@ -1,0 +1,142 @@
+# 前后台问题诊断与重构切分建议 (FINDINGS.md)
+
+> 审计任务：KJ-GEMINI-20260921-004  
+> 审计时间：2026-09-21  
+> 判定原则：以可复核代码证据为基础，严格区分确认缺陷与审美偏好，不提供假大空重写计划。
+
+---
+
+## 一、问题分级诊断清单
+
+### 🔴 P0 级严重隐患 (数据丢失 / 跨项目串扰 / 生产脱节)
+
+#### P0-1: 线上部署版本脱节与客户端依赖断层
+- **代码证据**：
+  - 部署记录文件：[`deploy/kuajing-persistence/DEPLOYED_COMMIT`](file:///D:/ozon/deploy/kuajing-persistence/DEPLOYED_COMMIT) 停留在 `a0dfa64bcc941b20b37d7e13028a25ad85dad802`（2026-08-26）；
+  - 部署目录插件代码：[`deploy/kuajing-persistence/kuajing-persistence.php`](file:///D:/ozon/deploy/kuajing-persistence/kuajing-persistence.php) 版本为 `0.2.5`；
+  - 仓库最新插件代码：[`wordpress/kuajing-persistence/kuajing-persistence.php`](file:///D:/ozon/wordpress/kuajing-persistence/kuajing-persistence.php) 版本为 `0.3.3`。
+- **影响与机理**：
+  - 线上生产环境运行的是 v0.2.5 插件，仅具备简单的单表键值覆盖保存能力，**根本没有 `kuajing_state_versions` 版本历史表、`kuajing_state_backups` 冲突表、以及 `/state/backup` REST 路由**；
+  - 本地最新的 React 前端 (`persist.js:210-227`) 强依赖 v0.3.3 的并发 Revision 乐观锁机制与 409 备份协议；
+  - 若冒然将新编译的前端推向现有生产服务器，客户端一旦触发备份调用将遭遇 HTTP 404；且现有生产环境在多设备并发保存时处于“后写覆盖先写（Last-Write-Wins）”的高危状态，存在真实数据丢失风险。
+- **治理建议**：在执行任何前端新版上线前，必须执行正式的 WordPress 插件迁移与数据表结构升级验证流程。
+
+#### P0-2: 核算工具全局单例与 SKU 项目上下文串扰
+- **代码证据**：
+  - [`ozon-react/src/components/OzonCalc.jsx:128-130`](file:///D:/ozon/ozon-react/src/components/OzonCalc.jsx#L128-L130)
+  - [`ozon-react/src/components/WBCalc.jsx:49-72`](file:///D:/ozon/ozon-react/src/components/WBCalc.jsx#L49-L72)
+- **影响与机理**：
+  - `OzonCalc` 和 `WBCalc` 最初设计为全站全局唯一的计算器单例，持久化直接绑定全局 key `ozon_pricing_calc` 和 `wb_settings`；
+  - T6 阶段为了支持 SKU 项目的成本核算，在 `ProjectDetailPage.jsx` 中将它们作为嵌入式组件引用，并传入了 `projectContext` 和 `supplyCostReference`；
+  - 但组件内部仍有部分辅助读取（例如常用包装箱规格、默认尾程运费渠道偏好等）直接回退到全局单例的 localStorage 记录。当运营人员在“项目 A”中临时调试参数时，若误操作保存，可能会污染全局单例甚至影响到其他项目的核算默认初值。
+- **治理建议**：将计算器组件内部状态彻底参数化为纯受控模式：当检测到 `projectContext` 存在时，完全断开全局 localStorage 的读取与写入回路，仅在组件局部维护并通过回调向父级投递 `CostScenario`。
+
+#### P0-3: 关键表单缺乏离页草稿保护导致静默丢失
+- **代码证据**：
+  - [`ozon-react/src/components/t6/ProductProfileEditor.jsx:80-150`](file:///D:/ozon/ozon-react/src/components/t6/ProductProfileEditor.jsx#L80-L150)
+  - [`ozon-react/src/components/t6/ProjectSupplyChainPanel.jsx:120-210`](file:///D:/ozon/ozon-react/src/components/t6/ProjectSupplyChainPanel.jsx#L120-L210)
+  - [`ozon-react/src/components/t6/ProjectDetailPage.jsx:63-88`](file:///D:/ozon/ozon-react/src/components/t6/ProjectDetailPage.jsx#L63-L88)
+- **影响与机理**：
+  - 任务 001/002 仅为 `ProjectCompliancePanel`（合规面板）构建了基于 `complianceDraftState.js` 的完备草稿跟踪与未保存拦截系统；
+  - 然而在「商品档案编辑」与「供应商/报价录入」中，运营人员可能正在输入复杂的包装规格、材质、工厂名称及多阶报价阶梯。此时若误点击 Sidebar 导航、或在项目详情内切换了顶部 Tab（如从档案切到总览），React 组件直接 unmount，所有未点击显式保存的表单数据瞬间静默丢失，且无任何确认弹窗。
+- **治理建议**：推广合规面板的成熟草稿状态机制，在各业务 Panel 实现统一的 `isDirty` 标识，并在 `ProjectDetailPage` 顶层统一捕获 Tab 切换与路由离开事件。
+
+---
+
+### 🟠 P1 级业务缺陷与操作阻力 (效率 / 冗余 / 性能)
+
+#### P1-1: 缺少浏览器路由与页面深度链接
+- **代码证据**：[`ozon-react/src/App.jsx:93`](file:///D:/ozon/ozon-react/src/App.jsx#L93) (`useState('n1')`)
+- **影响与机理**：
+  - 全站仅靠单一内存 state 切换视图，浏览器地址栏始终固定为 `/kuajing/`，不包含任何 path 或 query/hash；
+  - 团队成员之间无法通过 URL 发送“请查看该 SKU 项目”的直接链接；
+  - 用户习惯性点击浏览器“后退”按钮时，不会返回上一层视图，而是直接退出整个跨境系统甚至离开物理网站。
+- **治理建议**：在不重构外部 WordPress 路由的前提下，引入标准前端 Hash 路由（如 `#/t6/projects/RU-2026-001` 或 `#/market-intelligence`），将 `activeNode` 与 `window.location.hash` 双向同步。
+
+#### P1-2: 遗留旧入口与 T6 业务中台严重并存且功能割裂
+- **代码证据**：
+  - 遗留入口：`n5` (商品档案), `n8` (成本报价), `n9` (合规评估), `n6` (供应链开发)
+  - T6 对应入口：`ProjectDetailPage` 内的「商品档案」、「成本核算」、「合规认证」、「供应链」
+- **影响与机理**：
+  - 遗留入口是针对单品时代（吹风机/香薰机）的手写表单，数据存放在 `product_definition`, `cost_quote_data` 等旧 key 中；
+  - T6 则是支持多 SKU 项目生命周期的全新中台，数据存放在 `t6.project.*` 和 `t6.supplier.*` 中；
+  - 两个入口同时存在于 Sidebar 中，新用户和运营极易误入旧入口输入数据，导致数据未进入 T6 体系，产生“为什么我填了商品档案但在 SKU 项目里看不到”的强烈困惑。
+- **治理建议**：在 Sidebar 导航中明确将遗留旧入口归档或降级为只读参考，主导航只保留 T6 正式业务入口。
+
+#### P1-3: 大数据量列表无虚拟滚动与前台解析性能隐患
+- **代码证据**：
+  - [`ozon-react/src/components/t6/CandidatePoolPage.jsx`](file:///D:/ozon/ozon-react/src/components/t6/CandidatePoolPage.jsx)
+  - [`ozon-react/src/components/marketIntelligence/views/KeywordsView.jsx`](file:///D:/ozon/ozon-react/src/components/marketIntelligence/views/KeywordsView.jsx)
+  - [`ozon-react/src/App.jsx:166-186`](file:///D:/ozon/ozon-react/src/App.jsx#L166-L186)
+- **影响与机理**：
+  - 选品候选商品、Top 关键词列表直接渲染数百乃至上千个 `<tr>` DOM 节点，在低配办公笔记本上滚动和搜索时出现严重卡顿；
+  - `App.jsx` 在首屏自动加载销售报表时，主线程使用 DOMParser 直接解析超大 HTML/XLSX，导致界面挂起 2~4 秒。
+- **治理建议**：引入轻量级虚拟列表组件渲染长表格；将大文件解析移入 Web Worker 或转由后端预生成精简索引。
+
+#### P1-4: 窄屏移动端表格可读性缺陷 (已登记在 BACKLOG.md)
+- **代码证据**：[`ozon-react/src/components/t6/ProjectCompliancePanel.jsx`](file:///D:/ozon/ozon-react/src/components/t6/ProjectCompliancePanel.jsx)
+- **影响与机理**：
+  - 在 360px~390px 视口下，合规事项列表采用多列表格呈现，类别、风险、状态被压缩成竖排文字，用户必须频繁横向拖拽滚动条才能完成编辑与状态确认。
+- **治理建议**：在 `@media (max-width: 640px)` 断点下，将表格行转换为卡片式垂直布局（Card View），保证关键信息一屏完整可见。
+
+---
+
+### 🟡 P2 级技术债与视觉瑕疵 (非阻断性)
+
+1. **视觉风格新旧不一**：
+   - 新研发的 `components/t6/` 和 `marketIntelligence/` 遵循 Workspace Morandi 规范（`workspace-surface`, `workspace-border` 等柔和扁平基调）；
+   - 遗留的 `OzonCalc`, `WBCalc`, `MarketResearch` 充斥着纯蓝高亮底色和旧版彩色卡片，视觉体验割裂。
+2. **死代码残留**：
+   - `PricingCalc.jsx` 和 `ShippingCalc.jsx` 虽保留在组件目录，但未在 `App.jsx` 中引用，属于未清理的孤立代码（已登记在 TD-16）。
+3. **Vite 插件的时间戳污染**：
+   - `ozonDataSyncPlugin` 每次执行构建或启动都会更新 `manifest.json` 的 `updatedAt` 字段，产生非实质性的 Git dirty 变更（已登记在 TD-8）。
+
+---
+
+## 二、小步重构切分方案 (2~3 阶段建议)
+
+```mermaid
+flowchart TD
+    subgraph Phase1["Phase 1: 导航收敛与 Hash 路由 (低风险，只读/前端状态)"]
+        P1A["引入轻量 Hash 路由 (#/t6_projects/...)"] --> P1B["建立全局离页保护钩子 useUnsavedChanges"]
+        P1B --> P1C["收敛 Sidebar 遗留旧入口 (归档旧节点，突出 T6)"]
+    end
+
+    subgraph Phase2["Phase 2: 表单草稿安全与核算单例解耦 (中风险，实体数据隔离)"]
+        P2A["解耦 OzonCalc/WBCalc 全局与项目上下文"] --> P2B["推广 complianceDraftState 模式至商品档案与供应链"]
+        P2B --> P2C["统一 Tab 切换未保存拦截对话框"]
+    end
+
+    subgraph Phase3["Phase 3: 性能优化与移动端响应式 (体验提升，无数据风险)"]
+        P3A["CandidatePoolPage / KeywordsView 长表格虚拟化"] --> P3B["合规事项在 360-390px 窄屏卡片化自适应"]
+        P3B --> P3C["清理死代码与废弃样式微调"]
+    end
+
+    Phase1 --> Phase2
+    Phase2 --> Phase3
+```
+
+### 1. Phase 1：导航收敛与 Hash 路由机制（前端体验与防走失）
+- **核心目标**：实现页面刷新保持、深度链接直达项目、消除旧入口认知混乱。
+- **实施要点**：
+  - 利用原生 `window.addEventListener('hashchange')` 实现极简轻量路由，不引入重型路由库；
+  - 支持 `#/t6/projects/{id}` 直达特定项目详情；
+  - 侧边栏明确标示「T6 SKU 项目工作流」为主线，将 `n5`, `n8`, `n9` 收纳至「历史单品工具」折叠区；
+  - 挂载全局 `beforeunload` 与离页检测。
+- **外部依赖**：0 后端依赖，0 存储结构变更。
+
+### 2. Phase 2：表单草稿安全与核算单例解耦（数据安全性加固）
+- **核心目标**：彻底根除跨项目核算串扰，保证未保存输入 100% 具备拦截提醒。
+- **实施要点**：
+  - 改造 `OzonCalc` 和 `WBCalc`，使之在接收到 `projectContext` 时完全禁用对全局 localStorage 的写入；
+  - 为 `ProductProfileEditor` 和 `ProjectSupplyChainPanel` 建立与合规面板同等健壮的草稿缓冲状态；
+  - 在 `ProjectDetailPage` 切换 Tab 时，若当前活跃 Tab 处于 `isDirty` 状态，阻断切换并弹出保存提示。
+- **外部依赖**：依赖 Phase 1 的稳定组件生命周期。
+
+### 3. Phase 3：长表格虚拟化与移动端响应式闭环（性能与适配）
+- **核心目标**：解决数百候选/上千关键词滚动卡顿，优化小屏手机操作体验。
+- **实施要点**：
+  - 在 `CandidatePoolPage` 和 `KeywordsView` 中采用按需窗口切片渲染（只渲染可视区域及其上下 10 行）；
+  - 闭环 BACKLOG.md 中的窄屏合规事项表格排版，将窄屏模式切换为折叠卡片列表；
+  - 清理 TD-16 死代码组件，收敛全局 CSS 变量。
+- **外部依赖**：依赖 Phase 2 的表单组件稳定。

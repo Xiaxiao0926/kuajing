@@ -1,0 +1,40 @@
+{
+  "scope": "Isolated real React integration, no CSS/layout acceptance and no production writes",
+  "cases": [
+    {
+      "name": "A: saving assessment preserves plan",
+      "passed": true
+    },
+    {
+      "name": "B: saving plan preserves assessment",
+      "passed": true
+    },
+    {
+      "name": "F: same component switching A to B",
+      "passed": true,
+      "notesAfterSwitch": "B ORIGINAL",
+      "savedB": "B ORIGINAL",
+      "expected": "B ORIGINAL"
+    },
+    {
+      "name": "G: external Store change plus parent rerender",
+      "passed": true,
+      "externalPlan": "EXTERNAL PLAN",
+      "conflictCount": 1
+    },
+    {
+      "name": "G2: reverting draft to old baseline preserves external update or explicit conflict",
+      "passed": true,
+      "revertedValue": "",
+      "revertedConflict": 1,
+      "storedAfterRevert": ""
+    },
+    {
+      "name": "G3: after matching incoming then editing again, baseline must be rebased or conflict reappear",
+      "passed": true,
+      "conflictAfterEditingAgain": 0,
+      "dirtyAfterMatching": 0,
+      "notes": "Accept either adopting matching incoming as baseline or keeping an explicit conflict when edits diverge again."
+    }
+  ]
+}

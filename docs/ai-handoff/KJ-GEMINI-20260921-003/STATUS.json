@@ -1,0 +1,21 @@
+{
+  "task_id": "KJ-GEMINI-20260921-003",
+  "status": "revision_required",
+  "claimed_by": null,
+  "executor_delivery_status": "review_ready",
+  "dispatch_status": "deferred",
+  "deferred_while_active_task": "KJ-GEMINI-20260922-001",
+  "revision_task_file": "docs/ai-handoff/KJ-GEMINI-20260921-003/REVISION-001.md",
+  "reviewed_input_sha256": "c708168bd966454744275b0edf404d1bac7e7483e677d2571561aeeae1676642",
+  "implementation_authorized": false,
+  "scope_result": "certification_applicability_contract_revised",
+  "task_file": "docs/ai-handoff/KJ-GEMINI-20260921-003/TASK.md",
+  "result_file": "docs/ai-handoff/KJ-GEMINI-20260921-003/RESULT.md",
+  "tests_file": "docs/ai-handoff/KJ-GEMINI-20260921-003/tests.json",
+  "review_file": "docs/ai-handoff/KJ-GEMINI-20260921-003/REVIEW.md",
+  "baseline_head": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "public_verification_status": "not_performed",
+  "archived_at": "2026-09-21T14:22:00+08:00"
+}

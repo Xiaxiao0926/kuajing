@@ -1,0 +1,285 @@
+diff --git a/ozon-react/src/utils/marketIntelligence/miStore.js b/ozon-react/src/utils/marketIntelligence/miStore.js
+index 8ed23a9..dac2f31 100644
+--- a/ozon-react/src/utils/marketIntelligence/miStore.js
++++ b/ozon-react/src/utils/marketIntelligence/miStore.js
+@@ -4,7 +4,24 @@
+  */
+ import { getApiBase, getDataUrl } from '../runtime.js'
+ import { persistGet, persistSet } from '../persist.js'
+-import { ensureCandidate, setCandidateBizStatus } from '../t6/t6Store.js'
++import {
++  ensureCandidate,
++  findCandidateByProductId,
++  findCandidateBySourceNicheUid,
++  syncCandidateMarketEvidence,
++  setCandidateBizStatus,
++} from '../t6/t6Store.js'
++import {
++  resolveNicheUid,
++  buildMiCandidateSourceProductId,
++  buildCandidateMarketEvidence,
++} from './candidateMarketBridge.js'
++import {
++  buildProcurementIdentity,
++  findProcurementQuote,
++} from './procurementIdentity.js'
++
++export { findProcurementQuote }
+ 
+ const RUNS_CACHE = new Map()
+ const PERSIST_KEY_VALIDATION_OVERRIDES = 'mi_validation_overrides'
+@@ -208,8 +225,9 @@ export function getManualQuotes() {
+ 
+ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
+   const all = getManualQuotes()
+-  const nicheName = typeof nicheIdentifier === 'string' ? nicheIdentifier : (nicheIdentifier?.name || '')
+-  const nicheUid = typeof nicheIdentifier === 'object' ? nicheIdentifier?.uid : null
++  const { uid: nicheUid, name: nicheName } = typeof nicheIdentifier === 'string'
++    ? { uid: null, name: nicheIdentifier.trim() }
++    : buildProcurementIdentity(nicheIdentifier)
+ 
+   const entry = {
+     ...quoteData,
+@@ -218,7 +236,9 @@ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
+     updatedAt: new Date().toISOString(),
+   }
+ 
+-  all[nicheName] = entry
++  if (nicheName) {
++    all[nicheName] = entry
++  }
+   if (nicheUid) {
+     all[nicheUid] = entry
+   }
+@@ -239,32 +259,223 @@ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
+ // ---------- 5. 鏃犵紳琛旀帴 T6 SKU 椤圭洰鐢熷懡鍛ㄦ湡 ----------
+ 
+ /**
+- * 涓€閿皢楠岃瘉姹犱腑鐨勫崟鍝佹帹閫佸埌 T6 鍊欓€夋睜锛堢敓鎴?t6.candidate锛屽叿澶囧箓绛夐槻閲嶏級
++ * 涓€閿皢楠岃瘉姹犱腑鐨勫崟鍝佹帹閫佸埌 T6 鍊欓€夋睜锛堢敓鎴?t6.candidate锛屽叿澶囧箓绛夐槻閲嶄笌璇佹嵁鍚屾锛?  */
+ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-001') {
+   if (!niche || !niche.name) {
+     throw new Error('MI_STORE: 鏃犳晥鍒╁熀瀵硅薄锛屾棤娉曟帹閫佸埌 T6')
+   }
+ 
++  const nicheUid = resolveNicheUid(niche)
++  if (!nicheUid) {
++    throw new Error('MI_STORE: 鍒╁熀瀵硅薄缂哄皯鏈夋晥 nicheUid锛岄樆鏂帹閫佸埌 T6锛堢姝㈡棤 UID 鎺ㄨ繘浠ラ槻鑴忔暟鎹級')
++  }
++
++  const overrides = getValidationOverrides()
++  const override = overrides[nicheUid] || overrides[niche.name] || null
++  const effectiveVerdict = override?.verdict ?? niche?.verdict ?? null
++
++  const marketEvidence = buildCandidateMarketEvidence(niche, runId, effectiveVerdict)
++
+   const nicheId = niche.rank ?? niche.id ?? niche.name
+-  const sourceProductId = `wb-niche-${niche.name}`
+-  const notes = `[WB閫夊搧鎯呮姤] Niche ID: ${nicheId} | UID: ${niche.uid || 'N/A'} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs} | 绛炬敹鐜? ${niche.buyout} | 鍧囦环: ${niche.price} | 棰勪及鍗曢噸: ${niche.weight_g || (niche.heavy === 'YES' ? '澶т欢' : '杞讳欢')}銆?{reason || niche.rationale || ''}`
++  const stableSourceProductId = buildMiCandidateSourceProductId(niche)
++  const legacySourceProductId = `wb-niche-${niche.name}`
++  const notes = `[WB閫夊搧鎯呮姤] Niche ID: ${nicheId} | UID: ${nicheUid} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs || niche.pfs} | 绛炬敹鐜? ${niche.buyout} | 鍧囦环: ${niche.price} | 棰勪及鍗曢噸: ${niche.weight_g || (niche.heavy === 'YES' ? '澶т欢' : '杞讳欢')}銆?{reason || niche.rationale || ''}`
++
++  // 鍥涙鏌ラ噸绛栫暐锛?+  // STEP 1: 鎸?source_niche_uid 鎵?Candidate锛堜互 nicheUid 涓轰富韬唤閿級
++  let existing = findCandidateBySourceNicheUid(nicheUid)
++  if (existing) {
++    // 鏉ユ簮绯荤粺涓€鑷存€ф牎楠岋細鏄惧紡璺ㄧ郴缁熷啿绐侀樆鏂?+    if (existing.source_system && existing.source_system !== 'WB_MARKET_INTELLIGENCE') {
++      throw new Error(
++        `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${existing.id}) 鏉ユ簮绯荤粺涓?${existing.source_system}锛屼笌褰撳墠 WB_MARKET_INTELLIGENCE 鍐茬獊锛岀姝㈣鐩栧鐢紝闇€浜哄伐鏍稿疄`
++      )
++    }
++
++    // 绫荤洰涓€鑷存€ф牎楠岋細涓ょ鍧囨湁鍏蜂綋绫荤洰涓斾笉涓€鑷存椂闃绘柇
++    const nicheCat = String(niche.category || niche.cat || '').trim()
++    const candCatLeaf = String(existing.categoryLeaf || '').trim()
++    const candCatFull = String(existing.categoryFull || '').trim()
++    const hasSpecificNicheCat = Boolean(nicheCat && nicheCat !== '鏈垎绫?)
++    const hasSpecificCandCat = Boolean(
++      (candCatLeaf && candCatLeaf !== '鏈垎绫?) ||
++      (candCatFull && candCatFull !== '鏈垎绫?)
++    )
++    if (hasSpecificNicheCat && hasSpecificCandCat) {
++      const categoryMatch = candCatLeaf === nicheCat || candCatFull === nicheCat
++      if (!categoryMatch) {
++        throw new Error(
++          `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${existing.id}) 绫荤洰 (${candCatLeaf || candCatFull}) 涓庡綋鍓嶅埄鍩虹被鐩?(${nicheCat}) 鍐茬獊锛岀姝㈣鐩栧鐢紝闇€浜哄伐鏍稿疄`
++        )
++      }
++    }
++
++    // 鍟嗗搧鍚嶇О涓€鑷存€ф牎楠岋細鑻ユ棫鍊欓€夋湁鏄庣‘鍚嶇О涓斾笌褰撳墠涓嶇鍒欓樆鏂?+    const candName = String(existing.candidateName || '').trim()
++    const nicheName = String(niche.name || '').trim()
++    if (candName && nicheName && candName !== nicheName) {
++      throw new Error(
++        `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${existing.id}) 鍚嶇О (${candName}) 涓庡綋鍓嶅埄鍩哄悕绉?(${nicheName}) 鍐茬獊锛岀姝㈣鐩栧鐢紝闇€浜哄伐鏍稿疄`
++      )
++    }
++  }
+ 
++  // STEP 2: 鎸?stable sourceProductId 鎵?(鏍￠獙 UID銆佺郴缁熴€佺被鐩€佸悕绉板強鍏堥獙韬唤鍏呭垎鎬?
++  if (!existing) {
++    const byProduct = findCandidateByProductId(stableSourceProductId)
++    if (byProduct) {
++      // 1. 鍐茬獊 UID 鏍￠獙
++      if (byProduct.source_niche_uid && byProduct.source_niche_uid !== nicheUid) {
++        throw new Error(
++          `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${byProduct.id}) 鐨?sourceProductId 涓庡綋鍓嶇浉鍚岋紝浣嗗凡缁戝畾鍏朵粬 UID (${byProduct.source_niche_uid})锛岀姝㈣鐩栧鐢紝闇€浜哄伐鏍稿疄`
++        )
++      }
++
++      // 2. 璺ㄧ郴缁熷啿绐佹牎楠?+      if (byProduct.source_system && byProduct.source_system !== 'WB_MARKET_INTELLIGENCE') {
++        throw new Error(
++          `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${byProduct.id}) 鐨?sourceProductId 涓庡綋鍓嶇浉鍚岋紝浣嗘潵婧愮郴缁熶负 ${byProduct.source_system}锛岀姝㈣鐩栧鐢紝闇€浜哄伐鏍稿疄`
++        )
++      }
++
++      // 3. 绫荤洰涓€鑷存€ф牎楠?+      const nicheCat = String(niche.category || niche.cat || '').trim()
++      const candCatLeaf = String(byProduct.categoryLeaf || '').trim()
++      const candCatFull = String(byProduct.categoryFull || '').trim()
++      const hasSpecificNicheCat = Boolean(nicheCat && nicheCat !== '鏈垎绫?)
++      const hasSpecificCandCat = Boolean(
++        (candCatLeaf && candCatLeaf !== '鏈垎绫?) ||
++        (candCatFull && candCatFull !== '鏈垎绫?)
++      )
++      if (hasSpecificNicheCat && hasSpecificCandCat) {
++        const categoryMatch = candCatLeaf === nicheCat || candCatFull === nicheCat
++        if (!categoryMatch) {
++          throw new Error(
++            `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${byProduct.id}) 鐨?sourceProductId 涓庡綋鍓嶇浉鍚岋紝浣嗙被鐩?(${candCatLeaf || candCatFull}) 涓庡綋鍓?(${nicheCat}) 鍐茬獊锛岄渶浜哄伐鏍稿疄`
++          )
++        }
++      }
++
++      // 4. 鍚嶇О涓€鑷存€ф牎楠?+      const candName = String(byProduct.candidateName || '').trim()
++      const nicheName = String(niche.name || '').trim()
++      if (candName && nicheName && candName !== nicheName) {
++        throw new Error(
++          `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${byProduct.id}) 鐨?sourceProductId 涓庡綋鍓嶇浉鍚岋紝浣嗗悕绉?(${candName}) 涓庡綋鍓?(${nicheName}) 鍐茬獊锛岄渶浜哄伐鏍稿疄`
++        )
++      }
++
++      // 5. 韬唤鍏呭垎鎬ф牎楠岋細鑻ユ棫璁板綍缂哄け UID 鎴栨潵婧愬瓧娈碉紝浣嗗悕绉版垨绫荤洰涓嶅叿澶囧己涓€鑷村厛楠屽嚟璇侊紝绂佹鑷姩鍚屾鍐欏叆鏃ц褰?+      const hasUidMatch = Boolean(byProduct.source_niche_uid && byProduct.source_niche_uid === nicheUid)
++      const hasIdenticalNameAndCat = Boolean(
++        candName && nicheName && candName === nicheName &&
++        hasSpecificNicheCat && hasSpecificCandCat &&
++        (candCatLeaf === nicheCat || candCatFull === nicheCat)
++      )
++
++      if (hasUidMatch || hasIdenticalNameAndCat) {
++        existing = byProduct
++      } else {
++        // 淇℃伅涓嶈冻锛屼笖 stableSourceProductId 宸茶鍗犵敤锛屼弗绂佺洸鐩鐢ㄦ垨杩涘叆 STEP 4 浜х敓浼垚鍔?+        throw new Error(
++          `MI_STORE: 韬唤鍐茬獊闃绘柇锛氬凡鏈夊€欓€?(${byProduct.id}) 鍗犵敤浜?sourceProductId (${stableSourceProductId}) 浣嗙己灏戝彲淇?UID/鏉ユ簮瀛楁涓旇韩浠戒笉鍏呭垎锛岀姝㈣嚜鍔ㄥ悓姝ワ紝闇€浜哄伐鏍稿疄`
++        )
++      }
++    }
++  }
++
++  // STEP 3: Legacy Candidate Backfill (涓ユ牸鏍搁獙鏉ユ簮ID銆佺被鐩€佺郴缁熶笌UID涓€鑷存€?
++  if (!existing) {
++    const legacyCandidate = findCandidateByProductId(legacySourceProductId)
++    if (legacyCandidate) {
++      const nicheCat = String(niche.category || niche.cat || '').trim()
++      const candCatLeaf = String(legacyCandidate.categoryLeaf || '').trim()
++      const candCatFull = String(legacyCandidate.categoryFull || '').trim()
++
++      const hasUidConflict = Boolean(
++        legacyCandidate.source_niche_uid && legacyCandidate.source_niche_uid !== nicheUid
++      )
++
++      // 绫荤洰蹇呴』鏄庣‘涓斾竴鑷达紙鎺掗櫎绌哄€兼垨鏈垎绫昏繖绉嶄俊鎭笉鍏呭垎鎯呭喌锛?+      const hasSpecificCategory =
++        Boolean(nicheCat && nicheCat !== '鏈垎绫?) &&
++        Boolean((candCatLeaf && candCatLeaf !== '鏈垎绫?) || (candCatFull && candCatFull !== '鏈垎绫?))
++
++      const categoryMatch =
++        hasSpecificCategory &&
++        (candCatLeaf === nicheCat || candCatFull === nicheCat)
++
++      const systemConflict = Boolean(
++        legacyCandidate.source_system &&
++        legacyCandidate.source_system !== 'WB_MARKET_INTELLIGENCE'
++      )
++
++      // 寮鸿韩浠戒竴鑷存€ц姹傦細浠呭悓鍚嶅悓绫荤洰涓嶈冻浠ヨ瘉鏄庡悓涓€鍒╁熀銆?+      // 鏃у瓧娈电己澶便€佸啿绐佹垨鏃犳硶璇佹槑鍚屼竴鏉ユ簮鏃讹紝涓ョ鑷姩鍥炲～鏃у€欓€夛紒
++      // 蹇呴』婊¤冻锛氭棫鍊欓€夎褰曚簡 source_niche_id 涓斾笌鏈 nicheId 涓ユ牸涓€鑷淬€?+      const nicheIdStr = String(nicheId)
++      const legacyNicheId = legacyCandidate.source_niche_id ? String(legacyCandidate.source_niche_id) : null
++      const hasValidSourceIdMatch = Boolean(legacyNicheId && legacyNicheId === nicheIdStr)
++
++      // 浠呭綋鍚嶃€佺被鐩€佹棤 UID 鍐茬獊銆佹棤鏉ユ簮鍐茬獊涓旀潵婧愬埄鍩?ID 鏄庣‘鍖归厤鏃舵墠鍚堟硶鍥炲～
++      if (!hasUidConflict && categoryMatch && !systemConflict && hasValidSourceIdMatch) {
++        existing = legacyCandidate
++      }
++      // 娉ㄦ剰锛氳嫢鏃?source_niche_id 缂哄け銆佷笉涓€鑷达紙濡傛棫 101 鏂?999锛夈€佺被鐩笉鍚屾垨瀛樺湪鍐茬獊锛?+      // 涓ョ澶嶇敤锛屼繚鎸佺幇鏈?legacyCandidate 鍙婂叾椤圭洰/蹇収鎸囬拡鍘熸牱锛堝瓧鑺傜骇涓嶅彉锛夛紝缁х画鎵ц STEP 4 鍒涘缓鍩轰簬 nicheUid 鐨勬柊鍊欓€?+    }
++  }
++
++  // 鑻ュ瓨鍦ㄥ凡鏈夊€欓€夛細鍒锋柊甯傚満璇佹嵁锛屼弗绂佽鐩栦笟鍔″瓧娈碉紝淇濇寔鏃?sourceProductId
++  if (existing) {
++    const candidate = syncCandidateMarketEvidence(existing.id, {
++      source_niche_id: String(nicheId),
++      source_niche_uid: nicheUid,
++      source_run_id: String(runId),
++      source_system: 'WB_MARKET_INTELLIGENCE',
++      marketEvidence,
++    })
++
++    recordAuditLog({
++      action: 'T6_PUSH',
++      niche_uid: nicheUid || null,
++      niche_name: niche.name,
++      old_value: null,
++      new_value: `PROMOTED_TO_T6_CANDIDATE_SYNCED (ID: ${candidate.id})`,
++      source: 'T6_PROMOTION',
++      note: reason,
++    })
++
++    return { candidate, created: false }
++  }
++
++  // STEP 4: 鍏ㄦ柊鍊欓€夊垱寤?   const { candidate, created } = ensureCandidate({
+-    sourceProductId,
++    sourceProductId: stableSourceProductId,
+     candidateIndex: typeof nicheId === 'number' ? nicheId : 0,
+     name: niche.name,
+     categoryLeaf: niche.category || niche.cat || '鏈垎绫?,
+     categoryFull: niche.category || niche.cat || '鏈垎绫?,
+     notes,
+     source_niche_id: String(nicheId),
++    source_niche_uid: nicheUid,
+     source_run_id: String(runId),
+     source_system: 'WB_MARKET_INTELLIGENCE',
++    marketEvidence,
+   })
+ 
++  // 涓ラ槻浼垚鍔熼櫡闃憋細鑻?ensureCandidate 杩斿洖 created === false锛岃鏄庡簳灞傝涓嶅彲淇℃棫璁板綍鍗犵敤
++  if (!created) {
++    throw new Error(
++      `MI_STORE: 韬唤鍐茬獊闃绘柇锛歴ourceProductId (${stableSourceProductId}) 宸插瓨鍦ㄤ絾鏈€氳繃鍓嶇疆韬唤澶嶇敤鏍搁獙锛屼弗绂佷吉鎶ュ悓姝ユ垚鍔燂紝闇€浜哄伐鏍稿疄`
++    )
++  }
++
++  let finalCandidate = candidate
+   if (created) {
+     try {
+-      setCandidateBizStatus(candidate.id, '寰呰皟鐮?, '鏉ヨ嚜淇勭綏鏂競鍦烘儏鎶ヤ竴閿帹杩?)
++      finalCandidate = setCandidateBizStatus(candidate.id, '寰呰皟鐮?, '鏉ヨ嚜淇勭綏鏂競鍦烘儏鎶ヤ竴閿帹杩?)
+     } catch {
+       // 蹇界暐閲嶅鐘舵€?     }
+@@ -272,15 +483,15 @@ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-0
+ 
+   recordAuditLog({
+     action: 'T6_PUSH',
+-    niche_uid: niche.uid || null,
++    niche_uid: nicheUid || null,
+     niche_name: niche.name,
+     old_value: null,
+-    new_value: `PROMOTED_TO_T6_CANDIDATE (ID: ${candidate.id})`,
++    new_value: `PROMOTED_TO_T6_CANDIDATE (ID: ${finalCandidate.id})`,
+     source: 'T6_PROMOTION',
+     note: reason,
+   })
+ 
+-  return { candidate, created }
++  return { candidate: finalCandidate, created }
+ }
+ 
+ // ---------- 6. 鏁版嵁鏇存柊鑷姩鍖栦笌鎵规鍥炴粴绠￠亾鏈嶅姟 ----------

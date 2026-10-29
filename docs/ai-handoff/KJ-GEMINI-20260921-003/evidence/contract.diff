@@ -1,0 +1,500 @@
+diff --git a/docs/ai-handoff/KJ-GEMINI-20260921-003/evidence/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md.pre-003 b/docs/ia/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md
+index 2da3b66..01b33dc 100644
+--- a/docs/ai-handoff/KJ-GEMINI-20260921-003/evidence/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md.pre-003
++++ b/docs/ia/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md
+@@ -1,339 +1,518 @@
+-# KUAIJING-IA-REFACTOR-V1 路 TASK 07A-4C3A
+-# Certification Applicability & cert_plan Gate Contract Audit (鍙瀹¤涓庢渶灏忔暟鎹悎鍚岃鍐?
++# KUAIJING-IA-REFACTOR-V1 路 TASK 07A-4C3A (Revision 2)
++# Certification Applicability & cert_plan Gate Contract (璁よ瘉閫傜敤鎬т笌闂ㄧ鏁版嵁鍚堝悓瑙勮寖)
+ 
+-> **浠诲姟灞炴€?*锛氬彧璇诲璁?+ 鏈€灏忔暟鎹悎鍚岃鍐炽€? 
+-> **鐢熶骇浠ｇ爜鍙樻洿**锛?*0 琛?*锛堜弗鏍间笉淇敼浠讳綍鐢熶骇浠ｇ爜涓庣幇鏈夋祴璇曪級銆? 
+-> **鍞竴鏂板浜や粯鐗?*锛歚docs/ia/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md`銆? 
+-> **鐩爣**锛氳В鍐冲綋鍓?Compliance Gate 鍞竴鍓╀綑鏈疄鐜版鏌ラ」 `cert_plan` 鐨勮涔変笌鏁版嵁鍚堝悓缂哄彛銆?+> **鏂囨。鎬ц川**锛氬彧璇诲璁°€佹灦鏋勬暟鎹悎鍚屼慨璁笌瀹炴柦瑙勮寖鍑嗗垯銆? 
++> **鐢熶骇浠ｇ爜鍙樻洿**锛?*0 琛?*锛堜弗鏍间笉淇敼浠讳綍鐢熶骇浠ｇ爜涓庢祴璇曚唬鐮侊級銆? 
++> **褰撳墠瀹炴柦鐘舵€?*锛?*`07A-4C3B IMPLEMENTATION STATUS: PENDING_CODEX_ACCEPTANCE`锛堝緟 Codex 鐙珛楠屾敹锛屽皻鏈巿鏉冨疄鏂斤級**銆? 
++> **鐩爣**锛氬交搴曚慨澶嶅師鍚堝悓涓仐鐣欑殑 Store 褰卞搷閾剧己澶便€佸巻鍙叉。妗堥殣寮忚ˉ榻愮牬鍧忛棬绂併€佺己涔忓垽鏂緷鎹褰曘€佹硶寰嬫晥鍔涜竟鐣岃秺鐣岀瓑鍏抽敭缂哄彛锛屼负鍚庣画鐙珛绛惧彂鐨?07A-4C3B 瀹炴柦浠诲姟鎻愪緵鍞竴浜嬪疄婧愭爣鍑嗐€? 
+ ---
+ 
+-## 1. 褰撳墠涓氬姟鍥板涓庢牳蹇冩涔?(Current Ambiguity)
++## 1. 涓氬姟鍥板涓庢牳蹇冩涔?(Current Ambiguity & Problem Statement)
+ 
+-鍦?TASK 07A-4C2 钀藉湴鍚庯紝鍚堣闂ㄧ褰㈡垚浜?`compliance_pending`锛堝噯鍏ュ悎瑙勯樁娈碉級涓?`compliance_done`锛堝噯鍏ョ敓浜ч樁娈碉級鐨勭ǔ瀹氬疄鐜帮紝浣?`CHECKS.PRODUCTION` 涓殑 `cert_plan` 渚濈劧淇濇寔 `NOT_EVALUATED`銆?+鍦ㄥ悎瑙勫伐浣滃尯锛圱ASK 07A-4B锛変笌闂ㄧ鍩虹鏋舵瀯锛圱ASK 07A-4C2锛夎惤鍦板悗锛岄棬绂佸舰鎴愪簡鍑嗗叆鍚堣闃舵鐨?`compliance_pending` 涓庡噯鍏ョ敓浜ч樁娈电殑 `compliance_done`锛屼絾鐢熶骇鍑嗗叆妫€鏌ラ」涓殑 `cert_plan` 渚濈劧淇濇寔 `NOT_EVALUATED`銆? 
+-鏍规湰鍘熷洜鍦ㄤ簬褰撳墠搴曞眰鏁版嵁缁撴瀯涓瓨鍦ㄦ棤娉曟秷闄ょ殑鎺ㄥ姝т箟锛?+鏍规湰鍘熷洜鍦ㄤ簬鏃㈡湁搴曞眰鏁版嵁妯″瀷涓紝缂哄皯瀵瑰晢鍝佲€滄槸鍚﹂€傜敤璁よ瘉鈥濈殑鐙珛瀹氭€э細
+ 
+ ```text
+-       project.compliance.requirements: []
+-                       鈹?-       鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹尖攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?-       鈻?              鈻?              鈻?-    CASE A          CASE B          CASE C
+-  鏅揣鏃犻渶璁よ瘉      灏氭湭寮€灞曡璇佽瘎浼?  闇€瑕佸姙璇佷絾婕忓綍鍏?-  (Legit Exempt)  (Unassessed)    (Data Missing)
+-       鈹?              鈹?              鈹?-  鏈熸湜: PASS       鏈熸湜: FAIL      鏈熸湜: FAIL
++       project.compliance.requirements: [] 涓?certificationPlan: ''
++                               鈹?+       鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹尖攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+       鈻?                      鈻?                      鈻?+    CASE A                  CASE B                  CASE C
++  鍟嗗搧鏃犻渶璁よ瘉            灏氭湭寮€灞曡璇佽瘎浼?       闇€瑕佽璇佷絾婕忓～璁″垝
++  (Legit Exempt/No-cert)  (Unassessed)            (Plan Missing)
++       鈹?                      鈹?                      鈹?+  鏈熸湜 Gate: PASS         鏈熸湜 Gate: FAIL         鏈熸湜 Gate: FAIL
+ ```
+ 
+-1. **`requirements` 鏁扮粍涓嶈兘浣滀负 Applicability Owner**锛?-   - 绌烘暟缁勬棤娉曞湪璇箟涓婂尯鍒嗏€滃晢鍝佸厤璁よ瘉鈥濄€佲€滃皻鏈瘎浼扳€濊繕鏄€滄紡褰曞叆鈥濓紱
+-   - 渚濊禆浜嬮」鏁扮粍鎺ㄥ鍟嗗搧灞炴€у睘浜庡吀鍨嬬殑棰嗗煙鍊掔疆銆?-2. **`certificationPlan` 鏂囨湰涓嶈兘浣滀负 Applicability Owner**锛?-   - 鏂囨湰涓虹┖锛坄certificationPlan === ''`锛夊悓鏍锋棤娉曞尯鍒嗘槸鈥滄棤闇€璁よ瘉鎵€浠ヤ笉鍐欌€濓紝杩樻槸鈥滄湭鍒跺畾璁″垝鈥濓紝鎶戞垨鈥滈仐婕忔湭濉€濓紱
+-   - `certificationPlan` 鏄鍒掕鏄庢枃鏈紙Plan Text锛夛紝涓嶅叿澶囩粨鏋勫寲瑁佸喅灞炴€э紙Applicability Decision锛夈€?-3. **缁撹**锛?-   蹇呴』鍦?`project.compliance` 椤跺眰澧炲姞涓€涓嫭绔嬬殑鏄惧紡鍐崇瓥瀛楁锛岃礋璐ｄ笖浠呰礋璐ｈ〃杈撅細**鈥滃綋鍓?SKU 鍒板簳闇€瑕佽璇併€佹棤闇€璁よ瘉锛岃繕鏄皻鏈垽鏂紵鈥?*
++1. **`requirements` 鏁扮粍涓嶈兘浣滀负閫傜敤鎬ф墍鏈夎€?(Applicability Owner)**锛?+   - 绌烘暟缁勬棤娉曞湪璇箟涓婂尯鍒嗏€滃晢鍝佸厤璁よ瘉鈥濄€佲€滃皻鏈瘎浼扳€濊繕鏄€滈仐婕忔湭濉€濓紱
++   - 渚濊禆浜嬮」鏁扮粍鎺ㄥ鍟嗗搧娉曡灞炴€у睘浜庨鍩熷€掔疆銆?+2. **`certificationPlan` 鏂规鏂囨湰涓嶈兘浣滀负閫傜敤鎬ф墍鏈夎€?*锛?+   - 鏂囨湰涓虹┖锛坄certificationPlan === ''`锛夋棤娉曞尯鍒嗘槸鈥滄棤闇€璁よ瘉鎵€浠ヤ笉鍐欌€濓紝杩樻槸鈥滄湭鍒跺畾璁″垝鈥濓紱
++   - `certificationPlan` 鏄鍒掕鏄庢枃鏈紙Plan Text锛夛紝涓嶅叿澶囩粨鏋勫寲瑁佸喅灞炴€с€?+3. **瑁佸喅缁撹**锛?+   蹇呴』鍦?`project.compliance` 涓鍔犵嫭绔嬬殑鏄惧紡鍐崇瓥瀛楁锛岃礋璐ｄ笖浠呰礋璐ｈ〃杈撅細**鈥滃綋鍓?SKU 鍒板簳闇€瑕佽璇併€佹棤闇€璁よ瘉锛岃繕鏄皻鏈垽鏂紵鈥?*
+ 
+ ---
+ 
+-## 2. 鏃㈡湁婧愮爜璁よ瘉璇箟瀹¤ (Existing Certification Semantics in Source)
++## 2. 鏃㈡湁婧愮爜璁よ瘉璇箟鍏ㄩ噺瀹¤ (Existing Source Audit)
+ 
+-瀵逛粨搴撶幇鏈夋簮鐮佷腑娑夊強 EAC銆佽璇佺姸鎬佸拰璞佸厤鐨勫畾涔夎繘琛屽叏閲忓璁★細
++瀵逛粨搴撶幇鏈夋簮鐮佷腑娑夊強璁よ瘉銆丒AC銆佺姸鎬佷笌璞佸厤鐨勫畾涔夎繘琛屽叏閲忓璁★細
+ 
+-| 婧愮爜浣嶇疆 | 瀛楁 / 浠ｇ爜鐗囨 | 涓氬姟鎬ц川 | 瀹¤瀹氭€?|
++| 婧愮爜浣嶇疆 | 瀛楁 / 浠ｇ爜鐗囨 | 涓氬姟鎬ц川 | 瀹¤瀹氭€т笌鐜扮姸 |
+ | :--- | :--- | :--- | :--- |
+-| `candidateMarketBridge.js:65-66` | `eacStatus: niche?.eac_status`<br>`certificationStatus: niche?.certification_status` | 閫夊搧甯傚満璋冪爺璇佹嵁 | **澶栭儴甯傚満鍙傝€冪嚎绱?*锛堝彧璇伙紝闆舵硶瀹氭晥鍔涳級 |
+-| `validation_pool.json:19` | `"eac": "NOT_REQUIRED_VERIFIED (灞炰簬闈炵數姘旂被鎵嬪姩浜旈噾宸ュ叿锛岄€氬父浠呴渶璞佸厤鍑?"` | 璋冪爺鏍蜂緥姹犲厓鏁版嵁 | **闈炲彈鎺ф枃鏈?*锛堟贩鏉備簡鏃犻渶璁よ瘉涓庤眮鍏嶅嚱浜嬪疄锛?|
+-| `ManualProcurementWorkbench.jsx:47` | `niche.eac === 'NOT_REQUIRED_VERIFIED' ? 'REGULATION_VERIFIED' : 'ESTIMATED'` | 閲囪喘宸ヤ綔鍙版潵婧愭爣璁?| **甯傚満璇佹嵁 Provenance**锛岄潪椤圭洰璁よ瘉鍐崇瓥 |
+-| `complianceProfile.js:8-10, 66` | `FORBIDDEN_RESULT_FIELDS = ['resultType', 'certificateNumber', 'exemptReason', ...]` | 4B 鍐荤粨鐨勬牳蹇冮槻寰?| **鏄庣‘灏?`exemptReason` 鍒椾负涓ョ娣峰叆鐨?Result 瀛楁** |
+-| `ProjectCompliancePanel.jsx:9, 568` | `Layer C: Result锛堣瘉涔︾紪鍙枫€佽眮鍏嶄緷鎹級鏆傛湭寮€鏀綻<br>`placeholder="鏄庣‘璁よ瘉璺緞鏂规锛屼緥濡傦細鏃犻渶鍔炵悊 EAC 璇佷功锛岀敵璇疯眮鍏嶅嚱..."` | UI 鍗犱綅涓庤緭鍏ユ彁绀?| **褰撳墠浠呭湪 Plan 鏂囨湰鍗犱綅涓彁鍙婃柟妗堬紝缂哄皯缁撴瀯鍖栧瓧娈?* |
+-| `ComplianceAssessment.jsx` | 36 椤瑰叏灞€娓呭崟锛坄c1~c4`锛屾硶瑙勮瘑鍒?鎴愬垎绛涙煡/鏍囩瑕佹眰/椋庨櫓绛夌骇锛?| 鍘嗗彶鍏ㄥ眬鍗曚緥宸ヤ綔鍙?| **闆?`projectId`锛屾棤 SKU 绾ц璇佸喅绛栨灇涓?* |
++| `candidateMarketBridge.js:65-66` | `eacStatus: niche?.eac_status`<br>`certificationStatus: niche?.certification_status` | 閫夊搧甯傚満璋冪爺璇佹嵁 | **澶栭儴甯傚満鍙傝€冪嚎绱?*锛堝彧璇诲紩鐢紝闆舵硶瀹氭晥鍔涳紝涓ョ鑷姩澶嶅埗鍏ラ」鐩級 |
++| `validation_pool.json:19` | `"eac": "NOT_REQUIRED_VERIFIED (灞炰簬闈炵數姘旂被鎵嬪姩浜旈噾宸ュ叿锛岄€氬父浠呴渶璞佸厤鍑?"` | 璋冪爺鏍蜂緥姹犻潪鍙楁帶鏂囨湰 | **闈炶鑼冩枃鏈?*锛堟贩鏉備簡鏃犻渶璁よ瘉涓庤眮鍏嶅嚱浜嬪疄锛屼笉鍏峰娉曞緥鏁堝姏寮曠敤锛?|
++| `complianceProfile.js:8-10, 62-70` | `FORBIDDEN_RESULT_FIELDS = ['resultType', 'certificateNumber', 'exemptReason', ...]` | 4B 鍐荤粨鐨勯鍩熼槻寰?| **鏄庣‘灏?`exemptReason` 鍒椾负涓ョ娣峰叆鐨?Result 瀛楁** |
++| `t6Store.js:886` | `const PROFILE_FIELDS = ['assessmentStatus', 'riskLevel', 'applicableStandards', 'certificationPlan', 'notes']` | Store 鎸佷箙鍖栨洿鏂扮櫧鍚嶅崟 | **纭紪鐮佺嫭绔嬪垪琛?*锛堟棫鍚堝悓璇垽涓衡€滄墿 Profile 鐧藉悕鍗曡嚜鐒舵敮鎸佲€濓紝瀹炲垯蹇呴』鍚屾鎵╁厖 Store锛?|
++| `complianceProfile.js:209-213` | `base = isProjectComplianceEmpty(current) ? buildInitialComplianceDraft() : { ...buildInitialComplianceDraft(), ...current }` | Profile 鍚堝苟绾嚱鏁?| **瀛樺湪闅愬紡琛ラ綈婕忔礊**锛堟棫椤圭洰鏇存柊鍏朵粬瀛楁鏃朵細琚殫涓敞鍏ラ粯璁ゅ€硷級 |
++| `ProjectCompliancePanel.jsx:876` | Layer A锛圓ssessment锛変笌 Layer B锛圥lan锛夊弻琛ㄥ崟鍒嗙 | UI 琛ㄧ幇涓庣嫭绔嬭崏绋跨鐞?| **涓よ〃鍗曠嫭绔嬩繚瀛?*锛堟柊澧炲瓧娈靛繀椤绘槑纭綊灞炰笌淇濆瓨鎸夐挳璐ｄ换锛?|
++| `gateEngine.js:201` | `{ id: 'cert_plan', label: '璁よ瘉璁″垝瀛樺湪', kind: 'module', module: 'compliance' }` | 鐢熶骇闃舵鍑嗗叆闂ㄧ | **褰撳墠鏃?explicit evaluator**锛屼緷璧?generic module fallback 鎭掍负 `NOT_EVALUATED` |
++| `ProjectDetailPage.jsx:148-155` | `complianceFact = { evaluated: true, assessmentStatus: ... }` | 闂ㄧ璋冪敤灞備笂涓嬫枃娉ㄥ叆 | **涓婁笅鏂囧皻鏈敞鍏ラ€傜敤鎬т笌璁″垝鏈夋晥鎬т簨瀹?* |
+ 
+ ---
+ 
+ ## 3. MI 甯傚満璇佹嵁涓庨」鐩悎瑙勫喅绛栭殧绂诲師鍒? 
+ - `candidate.marketEvidence.eacStatus` 涓?`certificationStatus` 鏄競鍦洪獙璇侀樁娈甸噰闆嗗埌鐨勫閮ㄧ珵鍝?绫荤洰鎯呮姤锛?-- 瀹硶閾佸緥锛?*MI 璇佹嵁缁濆绂佹鑷姩澶嶅埗鎴栬嚜鍔ㄩ濉埌 `project.compliance` 涓?*锛?-- 鐞嗙敱锛氱被鐩€氬父鎯呭喌鍏嶈璇佷笉浠ｈ〃鐗瑰畾宸ュ巶鐨勫叿浣撳晢鍝佸厤璁よ瘉锛堜緥濡傛櫘閫氫簲閲戣嫢甯﹂攤鐢?婵€鍏夋祴璺濆垯蹇呴』璁よ瘉锛夈€傞」鐩骇璁よ瘉鍐崇瓥蹇呴』鐢辫繍钀ヤ汉鍛?鍚堣涓撳憳浜哄伐纭銆侻I 璇佹嵁浠呭彲鍦?UI 鐣岄潰浣滀负鈥滃弬鑰冪嚎绱⑩€濆苟鍒楀睍绀恒€?+- **瀹硶閾佸緥**锛?*MI 璇佹嵁缁濆绂佹鑷姩澶嶅埗鎴栬嚜鍔ㄩ濉埌 `project.compliance` 涓?*锛?+- **鐞嗙敱**锛氱被鐩€氬父鎯呭喌鍏嶈璇佷笉浠ｈ〃鐗瑰畾宸ュ巶鐨勫叿浣撳晢鍝佸厤璁よ瘉锛堜緥濡傛櫘閫氭墜鍔ㄤ簲閲戣嫢甯︽縺鍏夋祴璺濇垨閿傜數鍒欏繀椤昏璇侊級銆傞」鐩骇璁よ瘉鍐崇瓥蹇呴』鐢卞悎瑙勪笓鍛?杩愯惀浜哄憳鏍规嵁鍏蜂綋鍟嗗搧鐗╃悊浜嬪疄鐙珛瀹氭€с€侻I 璇佹嵁鍦?UI 鐣岄潰浠呬綔涓衡€滃弬鑰冪嚎绱⑩€濆睍绀恒€? 
+ ---
+ 
+-## 4. 鏍稿績璇箟涓夊眰鍒嗗眰妯″瀷 (Core Semantic Layers)
++## 4. 鏍稿績璇箟鍒嗗眰妯″瀷涓庢湳璇竟鐣?(Core Semantic Layers & Terminology)
+ 
+-鍚堣棰嗗煙涓ユ牸閬靛惊涓夊眰鍗曞悜婕旇繘妯″瀷锛岀粷涓嶅彲娣峰眰锛?+鍚堣棰嗗煙涓ユ牸閬靛惊鍥涘眰鍗曞悜婕旇繘妯″瀷锛屼弗绂佹贩娣嗘蹇典笌娉曞緥鏁堝姏锛? 
+ ```text
+-鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?-鈹?Layer A: APPLICABILITY DECISION (閫傜敤鎬ц鍐?                鈹?-鈹?  - 鏍稿績闂锛氬綋鍓?SKU 鍦ㄦ硶寰嬫硶瑙勪笂鏄惁閫傜敤/闇€瑕佽璇佸鐞嗭紵      鈹?-鈹?  - 鍐崇瓥浜猴細椤圭洰鍚堣璐熻矗浜?                                   鈹?-鈹?  - 瀛楁褰掑睘锛歱roject.compliance.certificationApplicability  鈹?-鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?-                               鈹?-                               鈻?-鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?-鈹?Layer B: PLAN (璺緞鏂规涓庢墽琛屾竻鍗?                           鈹?-鈹?  - 鏍稿績闂锛氬鏋滈渶瑕佽璇侊紝鍏蜂綋璧颁粈涔堣矾寰勶紵鏈変綍鍓嶇疆浜嬮」锛?   鈹?-鈹?  - 杞戒綋锛歝ertificationPlan (璺緞璇存槑), requirements[] (娓呭崟)鈹?-鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?-                               鈹?-                               鈻?-鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?-鈹?Layer C: RESULT (娉曞畾缁撴灉涓庡嚟璇?- 褰撳墠涓ユ牸绂佹/寤舵湡)         鈹?-鈹?  - 鏍稿績闂锛氭渶缁堟槸鍚﹀彇寰椾簡姝ｅ紡璇佷功銆佸鍛婄紪鍙锋垨瀹樻柟璞佸厤鎵瑰锛?鈹?-鈹?  - 杞戒綋锛歝ertificateNumber, exemptReason, validUntil 绛?    鈹?-鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+鈹?1. 甯傚満绾跨储 (Market Clues / Reference)                                 鈹?+鈹?   - 杞戒綋锛歝andidate.marketEvidence (eacStatus / certificationStatus)  鈹?+鈹?   - 鎬ц川锛氬閮ㄧ被鐩笌绔炲搧璋冪爺鎯呮姤锛屽彧璇诲弬鑰冿紝闆舵硶瀹氭晥鍔涖€?             鈹?+鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+                                    鈹?+                                    鈻?+鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+鈹?2. 閫傜敤鎬у垽鏂笌渚濇嵁 (Layer A: Applicability Decision & Justification)   鈹?+鈹?   - 杞戒綋锛歝ertificationApplicability + certificationApplicabilityNotes鈹?+鈹?   - 鎬ц川锛氶」鐩洟闃熷褰撳墠 SKU 鍦ㄩ€傜敤娉曡涓嬬殑鍒濇娉曡瀹氭€т笌渚濇嵁鐣欑棔銆?  鈹?+鈹?   - 璐ｄ换浜猴細鍚堣璐熻矗浜?/ 杩愯惀椤圭洰缁?                                  鈹?+鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+                                    鈹?+                                    鈻?+鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+鈹?3. 瑙勫垝璺緞涓庢牳楠屾竻鍗?(Layer B: Plan & Checklist)                      鈹?+鈹?   - 杞戒綋锛歝ertificationPlan (鏂规璇存槑) + requirements[] (鏍搁獙浜嬮」)   鈹?+鈹?   - 鎬ц川锛氬唴閮ㄥ鐞嗘楠よ鍒掞紝涓嶄唬琛ㄨ瘉浠跺凡鍙栧緱銆?                       鈹?+鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+                                    鈹?+                                    鈻?+鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?+鈹?4. 娉曞畾缁撴灉涓庤瘉浠跺嚟璇?(Layer C: Result - V1 闃舵涓ユ牸鍐荤粨鏈紑鏀?        鈹?+鈹?   - 杞戒綋锛歝ertificateNumber, exemptReason (璞佸厤鍑藉彿), validUntil 绛?  鈹?+鈹?   - 鎬ц川锛氬畼鏂硅璇佹満鏋勫嚭鍏风殑姝ｅ紡娉曞緥鍑瘉锛堣瘉涔?澹版槑/璞佸厤鍑斤級銆?       鈹?+鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? ```
+ 
++### 鏈涓庢硶寰嬫晥鍔涜竟鐣岃鍐?+1. **鍒犻櫎鏈粡寮曠敤鐨勬硶寰嬪畾鎬ф柇瑷€**锛?+   - 褰诲簳鍒犻櫎鏃у悎鍚屼腑鍏充簬鈥滄墜鍔ㄥ伐鍏风瓑鏅揣鏃犻渶浠讳綍璇佹槑銆佹捣鍏冲畬鍏ㄥ厤瀹♀€濈瓑鏃犳硶寰嬪紩璇佺殑姝︽柇鏂█锛?+   - 鍦ㄨ蒋浠剁郴缁熶腑锛宍NOT_REQUIRED` 浠呬唬琛?*鈥滅粡涓氬姟浜哄憳瀹℃煡锛屽綋鍓?SKU 鍒ゅ畾涓嶅睘浜庡己鍒跺悎鏍艰瘎瀹氳寖鍥粹€?*鐨勫唴閮ㄤ笟鍔″垽鏂€?+2. **鍐呴儴瑙勫垝鏀捐 鈮?澶栭儴娉曞畾璁稿彲**锛?+   - Stage Gate `cert_plan` 妫€鏌ラ€氳繃锛?*浠呬唬琛ㄩ」鐩湪鍐呴儴娴佺▼涓婃槑纭簡璁よ瘉璺緞鎴栦緷鎹?*锛?+   - 涓ョ灏嗛棬绂侀€氳繃瀹ｄ紶鎴栬褰曚负鈥滄捣鍏虫斁琛屸€濄€佲€滃钩鍙板厤瀹♀€濇垨鈥滃叏閾捐矾娉曞畾鍚堣閫氳繃鈥濄€?+3. **鈥滄棤闇€璁よ瘉鈥濆繀椤绘湁鍒ゆ柇渚濇嵁鐣欑棔**锛?+   - 涓ョ浠呭嬀閫?`NOT_REQUIRED` 灏辫涓洪棴鐜紱
++   - 蹇呴』寮哄埗褰曞叆鏈€灏忕殑鍒ゆ柇渚濇嵁璁板綍锛岃鏄庝负浣曞垽瀹氬厤鍔烇紙濡備緷鎹殑鎶€鏈硶瑙勭紪鍙枫€佹帓闄ゆ潯娆炬垨鐗╃悊灞炴€у垽鏂悊鐢憋級銆?+4. **`EXEMPT`锛堟硶瀹氳眮鍏嶅嚱锛変弗鏍煎睘浜?Layer C (Result)**锛?+   - 涓ョ灏?`EXEMPT` 绾冲叆 Layer A 鐨勯€傜敤鎬ф灇涓俱€傝眮鍏嶅嚱锛埿炑傂盒靶沸叫拘?锌懈褋褜屑芯锛夋槸鍚戜縿缃楁柉瀹樻柟璁よ瘉鏈烘瀯鐢宠鍙栧緱鐨勬硶寰嬫枃涔︼紝鍏峰鍏嚱缂栧彿涓庢満鏋勫嵃绔狅紝缁濋潪鈥滃晢鍝佹湰韬棤闇€璁よ瘉鈥濈殑鍚屼箟璇嶃€?+
+ ---
+ 
+-## 5. 鈥淓XEMPT鈥?(璞佸厤) 娣卞害瀹¤涓庤竟鐣屽畾鎬?+## 5. 鏈€灏忔暟鎹瓧娈佃鑼冧笌鏍￠獙濂戠害 (Field Contracts)
+ 
+-### 5.1 姒傚康杈ㄦ瀽锛歂OT_REQUIRED vs EXEMPT
+-- **`NOT_REQUIRED`锛堟棤闇€璁よ瘉 / 鏅揣涓嶉€傜敤锛?*锛?-  - 鍟嗗搧鐗╃悊灞炴€у畬鍏ㄤ笉鍦ㄦ妧鏈硶瑙勶紙濡?TR CU 004 / 020 / 037 绛夛級鐨勮鍒剁杈栨竻鍗曞唴锛堜緥濡傜函鏈烘鎵嬪姩浜旈噾鎵虫墜銆佹湪璐ㄦ棩鐢ㄥ搧锛夛紱
+-  - 璇ュ睘鎬у睘浜庡晢鍝佷笌娉曡鐨勫浐鏈夐€傜敤鍏崇郴锛屾棤闇€鍚戣璇佹満鏋勭敵璇凤紝浜︽棤闇€鑾峰緱瀹樻柟鎵瑰銆?-  - **灞炰簬 Layer A: APPLICABILITY**銆?-- **`EXEMPT`锛堟硶瀹氳眮鍏?/ 袨褌泻邪蟹薪芯械 锌懈褋褜屑芯 璞佸厤鍑斤級**锛?-  - 鍟嗗搧鍙兘钀藉湪娴峰叧 HS 缂栫爜鐩戠浜ゅ弶鑼冨洿銆佸睘浜庡彈鎺х被鐩絾绗﹀悎鍏嶆祴鏉′欢锛堝闆堕厤浠躲€佹祴璇曟牱鏈恒€侀潪閿€鍞牱鍝侊級锛屾垨闇€瑕佺敱淇勭綏鏂璇佹満鏋勫畼鏂瑰嚭鍏锋寮忕殑銆婅眮鍏嶅嚱锛埿炑傂盒靶沸叫拘?锌懈褋褜屑芯锛夈€嬩互渚涙竻鍏充笌骞冲彴瀹℃牳锛?-  - 璞佸厤鍑藉叿鏈夊彂璇佹満鏋勩€佸叕鍑界紪鍙枫€佸垽瀹氫緷鎹潯娆撅紝灞炰簬娉曞緥鏁堝姏鍑瘉銆?-  - **灞炰簬 Layer C: RESULT**锛堟垨 Plan 闃舵鐨勨€滄嫙鐢宠璞佸厤鍑芥柟妗堚€濓級銆?+鍦?`project.compliance` 涓畾涔変袱涓揣瀵嗗叧鑱旂殑缁撴瀯鍖栧瓧娈碉細
+ 
+-### 5.2 瀹¤瑁佸喅
+-- **`EXEMPT_LAYER = RESULT`**锛?-- **瑁佸喅缁撹**锛?*涓ョ灏?`EXEMPT` 绾冲叆璁よ瘉閫傜敤鎬э紙Applicability锛夋灇涓?*锛?-- 濡傛灉鍦ㄩ€傜敤鎬т腑寮曞叆 `EXEMPT`锛屽氨浼氬皢鈥滃晢鍝佹湰韬厤璁よ瘉鈥濅笌鈥滃彇寰楀畼鏂硅眮鍏嶈瘉鏄庘€濊繖涓や釜涓嶅悓鏃舵湡鐨勬蹇靛啀娆℃贩鍚岋紝杩囨棭姹℃煋灏氭湭寤虹珛鐨?Result Layer銆?+### 5.1 璁よ瘉閫傜敤鎬э細`certificationApplicability`
++- **瀛楁浣嶇疆**锛歚project.compliance.certificationApplicability`
++- **褰掑睘灞傜骇**锛?*`Layer A: Assessment`**锛堝悎瑙勮瘎浼板畾鎬э級
++- **绫诲瀷**锛歚string`锛堝繀椤讳负鍙楁帶鏋氫妇锛?+- **鏋氫妇甯搁噺**锛?+  ```javascript
++  export const COMPLIANCE_CERTIFICATION_APPLICABILITY = Object.freeze({
++    UNASSESSED: 'UNASSESSED',     // 灏氭湭鍒ゆ柇锛堝垵濮嬬姸鎬?鏈槑纭級
++    REQUIRED: 'REQUIRED',         // 闇€瑕佸姙鐞嗚璇?澹版槑
++    NOT_REQUIRED: 'NOT_REQUIRED', // 鏃犻渶鍔炵悊璁よ瘉锛堟櫘璐?涓嶉€傜敤锛?+  })
++  ```
++- **鍚堟硶鍊奸泦鍚?*锛歚['UNASSESSED', 'REQUIRED', 'NOT_REQUIRED']`銆?+- **鏍￠獙瑙勫垯 (Fail-close)**锛?+  - 浼犲叆闈炰笂杩?3 涓瓧绗︿覆锛堝寘鎷?`null`, `''`, `'EXEMPT'`, `'UNKNOWN'`锛変竴寰嬫姏閿欐嫤鎴€?+
++### 5.2 閫傜敤鎬у垽鏂緷鎹細`certificationApplicabilityNotes`
++- **瀛楁浣嶇疆**锛歚project.compliance.certificationApplicabilityNotes`
++- **褰掑睘灞傜骇**锛?*`Layer A: Assessment`**
++- **绫诲瀷**锛歚string`锛堢函鏂囨湰锛岃嚜鍔?trim锛?+- **涓氬姟璇箟**锛氳褰曚笟鍔′汉鍛樺仛鍑鸿閫傜敤鎬у垽鏂殑渚濇嵁锛堝鏌ラ獙鐨勬硶瑙勮寖鍥淬€佸晢鍝佺墿鐞嗙壒寰佹帓闄ょ悊鐢辩瓑锛夈€?+- **鏍￠獙涓庣害鏉熻鍒?*锛?+  - 褰?`certificationApplicability === 'NOT_REQUIRED'` 鏃讹細**蹇呴』涓洪潪绌哄瓧绗︿覆锛坱rim 鍚庨暱搴?>= 2锛?*锛涗弗绂佹棤渚濇嵁鐩存帴鏍囪鏃犻渶璁よ瘉銆?+  - 褰?`certificationApplicability === 'REQUIRED'` 鏃讹細渚濇嵁鍙€夊～锛堝彲璁板叆 notes锛屽叿浣撴柟妗堢敱 Layer B `certificationPlan` 鎵胯浇锛夈€?+  - 褰?`certificationApplicability === 'UNASSESSED'` 鏃讹細渚濇嵁鍙€夊～銆?+  - **闃插尽榛戝悕鍗?*锛氫弗绂佸湪姝ゅ瓧娈典腑浼€?濉叆璇佷功缂栧彿銆佸叕鍑芥枃浠惰矾寰勬垨闄勪欢 ID銆? 
+ ---
+ 
+-## 6. 鏈€灏忛€傜敤鎬ф灇涓炬柟妗堟瘮閫?(Enum Options Evaluation)
++## 6. Store 淇濆瓨涓庡璁℃棩蹇楀畬鏁村奖鍝嶉摼 (Gap A 瑁佸喅)
+ 
+-| 姣旈€夌淮搴?| OPTION A (鎺ㄨ崘閲囩撼)<br>`UNASSESSED` / `REQUIRED` / `NOT_REQUIRED` | OPTION B<br>`UNKNOWN` / `REQUIRED` / `NOT_APPLICABLE` | OPTION C<br>`PENDING` / `REQUIRED` / `EXEMPT` |
+-| :--- | :--- | :--- | :--- |
+-| **Meaning Clarity (璇箟鏄庣‘鎬?** | **鏈€楂?*銆?br>`UNASSESSED` 鍑嗙‘琛ㄨ揪鈥滃皻鏈汉宸ヨ瘎浼扳€濓紱<br>`REQUIRED` 琛ㄨ揪闇€瑕佽璇侊紱<br>`NOT_REQUIRED` 琛ㄨ揪鏃犻渶璁よ瘉銆?| 鑹ソ銆?br>浣?`UNKNOWN` 瀹规槗涓庘€滅郴缁熸湭鐭?鏈悓姝モ€濇贩娣嗭紱`NOT_APPLICABLE` 鍋忔妧鏈娊璞°€?| 杈冨樊銆?br>`PENDING` 鏄撲笌浜嬮」鐘舵€?`status: PENDING` 娣锋穯锛沗EXEMPT` 娣峰叆缁撴灉灞傘€?|
+-| **Backward Compatibility (鍚戝悗鍏煎鎬?** | **鏋佷匠**銆?br>鏃ф。妗堢己澶卞瓧娈靛彲骞虫粦瑙嗕负鏈瘎浼般€?| 鑹ソ銆?| 杈冨樊銆?|
+-| **Result-layer Pollution (缁撴灉灞傞殧绂?** | **闆舵薄鏌?*銆?br>瀹屽叏鎺掗櫎璞佸厤涓庡彂璇佹蹇点€?| **闆舵薄鏌?*銆?| **涓ラ噸姹℃煋**銆?br>鎻愬墠寮曞叆浜嗚眮鍏嶆蹇点€?|
+-| **Gate Usability (闂ㄧ鏄撶敤鎬?** | **鏈€浣?*銆?br>涓夋€佸垎鏄庯紝瀹岀編瀵瑰簲 PASS / FAIL / NOT_EVALUATED銆?| 鑹ソ銆?| 妯＄硦銆?|
++### 6.1 鏃ф柟妗堢己鍙ｅ垎鏋?+鏃?4C3A 鍚堝悓绉扳€滄棤闇€鏂板姞 Store API锛屾棦鏈?`updateProjectCompliance` 鐧藉悕鍗曡嚜鐒舵敮鎸佲€濄€傝繖鏄弗閲嶅け瀹炵殑鏂█锛?+- `complianceProfile.js` 涓殑 `PROJECT_COMPLIANCE_FIELDS` 涓?`PROFILE_PATCH_ALLOWED_FIELDS` 鏄牎楠岀櫧鍚嶅崟锛?+- **浣?`t6Store.js` 绗?886 琛屼腑 `PROFILE_FIELDS` 鏄嫭绔嬬‖缂栫爜鐨勬暟缁?*锛?+  ```javascript
++  const PROFILE_FIELDS = ['assessmentStatus', 'riskLevel', 'applicableStandards', 'certificationPlan', 'notes']
++  ```
++- 鑻ヤ笉淇敼 `t6Store.js` 鐨?`PROFILE_FIELDS`锛屼换浣曚紶鍏ョ殑鏂板瓧娈甸兘鏃犳硶杩涘叆 `changedFields`锛岀洿鎺ヨ杩囨护鎺夛紝瀵艰嚧 **`changedFields.length === 0`锛屽嚱鏁扮洿鎺?no-op 杩斿洖**锛屾暟鎹牴鏈棤娉曟寔涔呭寲锛屼篃涓嶄細鐢熸垚瀹¤鏃ュ織锛?+
++### 6.2 瀹屾暣褰卞搷閾句笌璋冪敤鎷撴墤
++```text
++ProjectCompliancePanel (Layer A 琛ㄥ崟)
++   鈹?handleSaveAssessment
++   鈻?+complianceProfile.buildNextProjectCompliance({ current, patch })
++   鈹?1. 鏍￠獙 patch 閿悕鍦?PROFILE_PATCH_ALLOWED_FIELDS 鐧藉悕鍗曚腑
++   鈹?2. 鏍￠獙 certificationApplicability 鏋氫妇鍚堟硶鎬?+   鈹?3. 鏍￠獙 certificationApplicabilityNotes 闈炵┖绾︽潫锛堝綋 NOT_REQUIRED 鏃讹級
++   鈹?4. 浠呭悎骞?patch 鎻愪緵鐨勫瓧娈碉紝缁濅笉闅愬紡琛ラ綈缂哄け瀛楁锛?+   鈻?+t6Store.updateProjectCompliance(projectId, patch, { by, reason })
++   鈹?1. PROFILE_FIELDS 鍖呭惈 certificationApplicability 涓?certificationApplicabilityNotes
++   鈹?2. 宸紓瀵规瘮锛歝hangedFields 绮剧‘璇嗗埆鏂板瓧娈垫敼鍔?+   鈹?3. 骞傜瓑鏍￠獙锛氬€肩浉鍚屽垯 changedFields 涓虹┖锛岃Е鍙?No-op锛堥浂鍐欏叆銆侀浂鏃ュ織锛?+   鈹?4. 缁勮 fromDiff / toDiff锛堢己澶卞€兼樉寮忚涓?null锛?+   鈹?5. write() 鍐欏叆鎸佷箙鍖栧瓨鍌?+   鈹?6. appendLog() 璁板綍 compliance_update 瀹¤鏃ュ織
++   鈻?+t6Store.getProject(projectId) (璇诲彇灞?
++   鈻?+ProjectDetailPage.jsx (Gate Fact 娉ㄥ叆)
++   鈹?灏?certificationApplicability 涓?certificationPlanPresent 瑙勮寖鍖栨敞鍏?+   鈻?+gateEngine.evaluateProjectGate() (CHECKS.PRODUCTION -> cert_plan)
++```
+ 
+-### 瑁佸喅缁撹锛氶噰绾?OPTION A
+-瀹氫箟鏋氫妇甯搁噺锛?+### 6.3 宸紓瀵规瘮涓?No-op 瑙勫垯
++鍦?`t6Store.js` 鐨?`updateProjectCompliance` 涓細
+ ```javascript
+-export const COMPLIANCE_CERTIFICATION_APPLICABILITY = Object.freeze({
+-  UNASSESSED: 'UNASSESSED',     // 灏氭湭鍒ゆ柇
+-  REQUIRED: 'REQUIRED',         // 闇€瑕佽璇?-  NOT_REQUIRED: 'NOT_REQUIRED', // 鏃犻渶璁よ瘉
+-})
++// 鍗囩骇鍚庣殑纭紪鐮?瀵煎嚭鐧藉悕鍗?+const PROFILE_FIELDS = [
++  'assessmentStatus',
++  'riskLevel',
++  'applicableStandards',
++  'certificationPlan',
++  'notes',
++  'certificationApplicability',
++  'certificationApplicabilityNotes',
++]
+ ```
++- **宸紓璇嗗埆**锛?+  - 鑻?`current.certificationApplicability` 涓?`undefined`锛岃€?`patch.certificationApplicability` 涓?`'REQUIRED'`锛?+    `curVal !== nextVal` 涓?`true`锛岃Е鍙戞敼鍔ㄨ瘑鍒紱
++  - `fromDiff.certificationApplicability = current.certificationApplicability ?? null`锛?+  - `toDiff.certificationApplicability = nextCompliance.certificationApplicability`锛?+- **No-op 淇濊瘉**锛?+  - 鑻ョ敤鎴峰啀娆＄偣鍑讳繚瀛樹笖鏈慨鏀瑰€硷細`curVal === nextVal`锛宍changedFields` 闀垮害涓?0锛岀洿鎺ヨ繑鍥炴湭淇敼鐨?`project`锛岀粷涓嶅啓鍏?Store锛岀粷涓嶇敓鎴愬瀮鍦炬棩蹇椼€? 
+ ---
+ 
+-## 7. 瀛楁濂戠害涓庨粯璁ゅ€煎畾涔?(Field Contract)
++## 7. 鍘嗗彶鍏煎涓庨槻姝㈤殣寮忚ˉ榻?(Gap B 瑁佸喅)
+ 
+-- **瀛楁鍛藉悕**锛歚certificationApplicability`
+-- **瀛楁浣嶇疆**锛歚project.compliance.certificationApplicability`锛堥《灞傛牳蹇冨瓧娈碉紝灞炰簬 `REQUIRED_CORE` 缁撴瀯鍖栨爣鍑嗚鑼冿級锛?-- **涓诲綊灞炲眰绾?*锛?*`CERTIFICATION_APPLICABILITY_LAYER = ASSESSMENT`**锛堝睘浜庡悎瑙勮瘎浼板鍟嗗搧鐗瑰緛鐨勬硶瑙勫畾鎬э級锛?-- **鍒濆鑽夌榛樿鍊?*锛?-  鍦?`buildInitialComplianceDraft()` 涓細
+-  ```javascript
+-  certificationApplicability: 'UNASSESSED'
+-  ```
+-  - 涓ョ榛樿璧嬪€间负 `REQUIRED` 鎴?`NOT_REQUIRED`锛?-  - 蹇呴』鐢辨搷浣滀汉鍛樺湪宸ヤ綔鍖轰腑鏄惧紡閫夋嫨纭銆?+### 7.1 闅愬紡琛ラ綈婕忔礊涓庡嵄瀹?+鍦ㄧ幇琛?`complianceProfile.js` 绗?209-213 琛岋細
++```javascript
++const base = isProjectComplianceEmpty(current)
++  ? buildInitialComplianceDraft()
++  : { ...buildInitialComplianceDraft(), ...current }
++```
++鑻ュ湪 `buildInitialComplianceDraft()` 涓洿鎺ュ啓鍏?`certificationApplicability: 'UNASSESSED'`锛?+- 褰撲竴涓巻鍙查」鐩紙宸插畬鎴愬悎瑙勮瘎浼?`assessmentStatus: 'COMPLETED'`锛屼絾鏃犳柊瀛楁锛変粎鏇存柊 `notes`锛堝娣诲姞涓€鏉″娉級鎴栬繘琛屼换浣曚簨椤瑰鍒犳敼鏃讹紱
++- 鐢变簬 `current` 涓病鏈?`certificationApplicability`锛宍...buildInitialComplianceDraft()` 閲岀殑 `'UNASSESSED'` 灏变細琚?*闈欓粯鍐欏叆璇ュ巻鍙查」鐩殑鎸佷箙鍖栧瓨鍌ㄤ腑**锛?+- 绱ф帴鐫€锛孏ate 鍦ㄨ瘎浼扮敓浜у噯鍏ユ椂锛屽師鏈洜涓虹己澶卞瓧娈佃€屼韩鍙楀吋瀹癸紙`NOT_EVALUATED`锛夌殑鍘嗗彶椤圭洰锛岀灛闂村彉鎴愪簡鏄惧紡鐨?`'UNASSESSED'`锛?*鐩存帴琚垽涓?RED FAIL 闃绘柇**锛?+- 杩欐槸缁濆涓嶅彲鎺ュ彈鐨勭牬鍧忔€у壇浣滅敤銆?+
++### 7.2 瀛楁瀛樺偍鐘舵€佹満瀹氫箟
++蹇呴』涓ユ牸鍖哄垎鎸佷箙鍖栦簨瀹炰笌 UI 鍛堢幇锛?+
++| 瀛樺偍鐘舵€?| 鏁版嵁搴撴寔涔呭寲瀹為檯鍊?| UI 涓嬫媺妗嗘樉绀?| 闂ㄧ `cert_plan` 鍒ゅ畾 | 鍚箟璇存槑 |
++| :--- | :--- | :--- | :--- | :--- |
++| **缂哄け (Missing)** | `undefined`锛堥敭鍚嶄笉瀛樺湪锛?| 鍗犱綅鎻愮ず锛氣€滄湭璇勪及锛堝巻鍙叉。妗堬級鈥?| **`NOT_EVALUATED`**锛堟斁琛屽吋瀹癸級 | 鍘嗗彶閬楃暀椤圭洰锛屼粠鏈搷浣滆繃閫傜敤鎬х粍浠?|
++| **鏄惧紡鏈瘎浼?* | `'UNASSESSED'` | 鈥滃皻鏈垽鏂€?| **`FAIL`**锛圧ED 闃绘柇锛?| 鏂板缓椤圭洰鎴栫敤鎴锋樉寮忕‘璁や繚鐣欏湪鏈瘎浼扮姸鎬?|
++| **闇€瑕佽璇?* | `'REQUIRED'` | 鈥滈渶瑕佸姙鐞嗚璇佲€?| 渚濇嵁 `certificationPlan` 鍒ゅ畾 | 鏄庣‘闇€瑕佽璇?|
++| **鏃犻渶璁よ瘉** | `'NOT_REQUIRED'` | 鈥滄棤闇€鍔炵悊璁よ瘉锛堟櫘璐э級鈥?| 渚濇嵁渚濇嵁鏂囨湰鍒ゅ畾 | 鏄庣‘鏃犻渶璁よ瘉 |
++| **鎹熷潖/闈炴硶鍊?* | `null` / `''` / `'BROKEN'` | 绾㈣壊璀﹀憡 | **`FAIL`**锛圧ED 闃绘柇锛?| 闈炴硶鏁版嵁闃插尽鎷︽埅 |
++
++### 7.3 鍚堝苟绾嚱鏁颁笌 Store 鏀归€犲噯鍒?+1. **`buildInitialComplianceDraft()` 浠呬緵鍏ㄦ柊绌虹櫧椤圭洰浣跨敤**锛?+   - 鏂板缓椤圭洰鍒濆鍖栨椂璧嬩簣 `certificationApplicability: 'UNASSESSED'`銆?+2. **`buildNextProjectCompliance` 涓ョ灏嗛粯璁ゅ€艰鐩栧埌鐜版湁椤圭洰**锛?+   - 褰?`current` 闈炵┖鏃讹紝鍩虹瀵硅薄鍙?`current` 鏈韩锛堜繚鐣欏凡鏈夊瓧娈碉紝涓嶈ˉ鍏ユ湭浼犲叆鐨勬柊瀛楁锛夛細
++     ```javascript
++     const base = isProjectComplianceEmpty(current)
++       ? buildInitialComplianceDraft()
++       : { ...current }
++     ```
++   - 鍙湁褰?`patch` 鏄惧紡鍖呭惈 `certificationApplicability` 鏃讹紝鎵嶅啓鍏ヨ瀛楁锛?+   - 鑻?`patch` 涓嶅寘鍚瀛楁锛屽垯淇濇寔鍏跺湪 `current` 涓殑鐘舵€侊紙缂哄け鍗崇户缁己澶憋紝宸叉湁鍗充繚鎸佸凡鏈夛級銆?+3. **`createProjectComplianceRequirement` 鍚屾牱閬靛惊璇ヨ鍒?*锛?+   - 褰撳凡鏈?`currentCompliance` 闈炵┖鏃讹紝浠呭湪 requirements 鏁扮粍涓拷鍔犳柊椤癸紝缁濅笉鍚堝苟 `buildInitialComplianceDraft()`銆? 
+ ---
+ 
+-## 8. 鍘嗗彶鍏煎涓庢暟鎹棤瀹宠縼绉?(Legacy Compatibility)
++## 8. 鐪熷疄淇濆瓨鍦烘櫙鍓嶅悗 JSON 鏁版嵁濂戠害
+ 
+-- **绂佹鍏ㄥ簱鍚庡彴鑷姩璺戞壒杩佺Щ**锛氫弗绂佸湪鍚姩鏃跺瀛樺偍鍣ㄩ亶鍘嗚ˉ鍐欏瓧娈碉紱
+-- **鍏煎瑙ｉ噴鍘熷垯**锛?-  - 鍘嗗彶 Project 涓?`project.compliance` 瀛樺湪涓旈潪绌猴紝浣嗘湭鎸佷箙鍖?`certificationApplicability` 瀛楁鏃讹細
+-    - 璇诲彇灞傦紙Reader锛変笌闂ㄧ娉ㄥ叆灞傚皢鍏惰В閲婁负 **`LEGACY_UNEVALUATED`**锛堟垨鍐呴儴绛夊悓浜庣己澶憋級锛?-    - **涓ョ**灏嗗叾榛樿瑙ｉ噴涓?`NOT_REQUIRED`锛堝惁鍒欎細鏀捐鏈粡璇勪及鐨勫巻鍙查闄╁晢鍝佽繘鍏ョ敓浜э級锛?-  - **Gate 琛屼负淇濇姢**锛?-    - 閽堝缂哄け璇ュ瓧娈电殑鍘嗗彶椤圭洰锛孏ate 蹇呴』缁х画杩斿洖 **`NOT_EVALUATED`**锛屼繚鎸侀浂闃绘柇鍚戝悗鍏煎锛岀粷涓嶅洜绯荤粺鍗囩骇鑰屽鑷村巻鍙查」鐩剰澶?RED FAIL锛?-    - 浠呭綋鐢ㄦ埛鍦ㄨ鎯呴〉鎵撳紑 Compliance Panel 骞舵樉寮忕偣鍑讳繚瀛樺悗锛屾柊瀛楁鎵嶈姝ｈ鍐欏叆 Store銆?+涓烘潨缁濋殣寮忔敼鍐欙紝鏄庣‘瑙勮寖 7 绉嶅吀鍨嬪満鏅湪 Store 涓殑鍓嶅悗 JSON 鐘舵€侊細
+ 
+----
++### 鍦烘櫙 1锛氭柊寤洪」鐩垵濮嬭崏绋垮苟棣栨淇濆瓨璇勪及
++- **鎿嶄綔**锛氭柊寤洪」鐩紝鐢ㄦ埛鍦?Layer A 閫夋嫨鈥滈渶瑕佸姙鐞嗚璇佲€濓紝濉啓澶囨敞骞朵繚瀛樸€?+- **淇濆瓨鍓?`project.compliance`**锛?+  ```json
++  {}
++  ```
++- **淇濆瓨鍚?`project.compliance`**锛?+  ```json
++  {
++    "assessmentStatus": "NOT_STARTED",
++    "riskLevel": "",
++    "applicableStandards": [],
++    "certificationPlan": "",
++    "requirements": [],
++    "notes": "棣栨璇勪及璁板綍",
++    "certificationApplicability": "REQUIRED",
++    "certificationApplicabilityNotes": ""
++  }
++  ```
+ 
+-## 9. Assessment 涓?Certification Applicability 鍏崇郴
++### 鍦烘櫙 2锛氬巻鍙查」鐩粎淇敼 notes (notes-only)
++- **鎿嶄綔**锛氬巻鍙查」鐩湭褰曞叆杩囬€傜敤鎬э紝鐢ㄦ埛浠呭湪 Layer A 淇敼澶囨敞鏂囨湰骞朵繚瀛樸€?+- **淇濆瓨鍓?`project.compliance`**锛?+  ```json
++  {
++    "assessmentStatus": "COMPLETED",
++    "riskLevel": "LOW",
++    "applicableStandards": ["TR CU 004/2011"],
++    "certificationPlan": "宸叉湁娴嬭瘯璁″垝",
++    "requirements": [],
++    "notes": "鏃у娉?
++  }
++  ```
++- **淇濆瓨鍚?`project.compliance`**锛?*閾佸緥锛氱粷涓嶆殫涓ˉ鍏?`certificationApplicability`**锛夛細
++  ```json
++  {
++    "assessmentStatus": "COMPLETED",
++    "riskLevel": "LOW",
++    "applicableStandards": ["TR CU 004/2011"],
++    "certificationPlan": "宸叉湁娴嬭瘯璁″垝",
++    "requirements": [],
++    "notes": "鏇存柊鍚庣殑鏂板娉?
++  }
++  ```
+ 
+-- **瑙ｈ€︾嫭绔嬫€?*锛?-  - 鍏佽瀛樺湪 `assessmentStatus === 'COMPLETED'` 浣?`certificationApplicability === 'UNASSESSED'`锛?-  - 瑙ｉ噴锛氬洟闃熷彲鑳藉凡瀹屾垚鏍囩銆佹垚鍒嗐€佺墿鐞嗗畨鍏ㄧ淮搴︾殑鏍搁獙锛屼絾璁よ瘉娓犻亾/鏀跨瓥浠嶅湪璋冪爺涓紱
+-  - 姝ゆ椂锛宍compliance_done` 妫€鏌ワ紙妫€鏌?`assessmentStatus`锛夊彲浠ラ€氳繃锛圥ASS锛夛紱
+-  - 浣嗛殢鍚庡悓鍦?`CHECKS.PRODUCTION` 涓殑 `cert_plan` 妫€鏌ュ皢鍑嗙‘鎶涘嚭 `FAIL`锛岀簿鍑嗘嫤鎴叾杩涘叆鐢熶骇锛?-  - 杩欒瘉鏄庝簡 `compliance_done` 涓?`cert_plan` 涓や釜鐙珛 Check 鐨勫垎宸ヤ环鍊硷紝鏃犻渶鍦?Profile Validator 涓繃搴﹁€﹀悎銆?+### 鍦烘櫙 3锛氬巻鍙查」鐩粎淇敼 plan (plan-only)
++- **鎿嶄綔**锛氬巻鍙查」鐩湪 Layer B 淇敼璁よ瘉鏂规鏂囨湰骞朵繚瀛樸€?+- **淇濆瓨鍓?*锛氬悓鍦烘櫙 2銆?+- **淇濆瓨鍚?*锛?*閾佸緥锛氱粷涓嶆敼鍙橀€傜敤鎬у瓧娈电己澶辩姸鎬?*锛夛細
++  ```json
++  {
++    "assessmentStatus": "COMPLETED",
++    "riskLevel": "LOW",
++    "applicableStandards": ["TR CU 004/2011"],
++    "certificationPlan": "淇敼鍚庣殑璁よ瘉璁″垝鏂囨湰",
++    "requirements": [],
++    "notes": "鏃у娉?
++  }
++  ```
+ 
+----
++### 鍦烘櫙 4锛氬巻鍙查」鐩鍒犳敼鍚堣浜嬮」 (Requirements CRUD)
++- **鎿嶄綔**锛氳皟鐢?`createProjectComplianceRequirement` 娣诲姞涓€鏉℃牳楠屼簨椤广€?+- **淇濆瓨鍓?*锛氬悓鍦烘櫙 2銆?+- **淇濆瓨鍚?*锛?*閾佸緥锛氫簨椤规搷浣滈浂鍓綔鐢ㄥ奖鍝嶉《灞傛。妗堝瓧娈?*锛夛細
++  ```json
++  {
++    "assessmentStatus": "COMPLETED",
++    "riskLevel": "LOW",
++    "applicableStandards": ["TR CU 004/2011"],
++    "certificationPlan": "宸叉湁娴嬭瘯璁″垝",
++    "requirements": [
++      {
++        "id": "req-uuid-1",
++        "category": "REGULATION",
++        "name": "鐢垫皵瀹夊叏鏍告煡",
++        "required": true,
++        "status": "PENDING",
++        "risk": "",
++        "desc": "",
++        "createdAt": "2026-09-21T10:00:00.000Z",
++        "updatedAt": "2026-09-21T10:00:00.000Z"
++      }
++    ],
++    "notes": "鏃у娉?
++  }
++  ```
+ 
+-## 10. `cert_plan` 闂ㄧ姹傚€艰鍒欒鍐?(Gate Evaluation Rules)
+-
+-渚濇嵁 Check 鏈川鎰忓浘鈥斺€?*鈥滆繘鍏ョ敓浜ч樁娈靛墠锛屽晢鍝佺殑璁よ瘉澶勭悊璺緞鏄惁宸叉槑纭€?*锛?-
+-### 10.1 鍦烘櫙鎺ㄦ紨涓庡垽瀹?-1. **`certificationApplicability === 'NOT_REQUIRED'`**锛?-   - 瑁佸喅锛?*`PASS`**銆?-   - 涓氬姟浜嬪疄锛氬凡鏄庣‘鍏嶅姙璁よ瘉锛屽晢鍝佹寜鏅揣娴佺▼鐢熶骇涓庢姤鍏筹紝澶勭悊璺緞瀹屽叏娓呮櫚闂幆锛屾棤闇€寮烘眰濉啓鍐椾綑鐨勮鍒掓枃鏈€?-2. **`certificationApplicability === 'REQUIRED'`**锛?-   - 鍒ゅ畾渚濇嵁锛?*`certificationPlan` 鏂规鏂囨湰鏄惁闈炵┖**銆?-   - 鑻?`certificationPlan.trim() !== ''` 鈫?**`PASS`**锛堣璇佹柟妗堝凡鏄庣‘锛屼緥濡傦細鏄庣‘浜嗗鎵樹唬宸ュ巶鍑哄叿鎶ュ憡骞剁敱浠ｇ悊鍔炵悊 EAC DoC锛夛紱
+-   - 鑻?`certificationPlan.trim() === ''` 鈫?**`FAIL`**锛堥樆濉炲師鍥狅細`'鍟嗗搧闇€瑕佸姙鐞嗚璇侊紝浣嗗皻鏈埗瀹氳璇佸鐞嗚鍒?`锛夛紱
+-   - 杈圭晫瀹堟姢锛?*涓嶅己姹?`requirements` 鏁扮粍涓繀椤诲寘鍚簨椤癸紝鏇翠弗绂佹鏌ヤ簨椤规槸鍚﹀浜?`DONE`**銆?-3. **`certificationApplicability === 'UNASSESSED'`**锛?-   - 瑁佸喅锛?*`FAIL`**锛團ail-close 闃插尽锛夈€?-   - 涓氬姟浜嬪疄锛氶」鐩凡鎺ュ叆鍚堣鏁版嵁锛屼絾鍦ㄧ敓浜у墠鏈鏄惁闇€瑕佽璇佸仛鍑哄畾鎬э紝瀛樺湪閲嶅ぇ娓呭叧鏌ユ墸椋庨櫓锛屽繀椤婚樆鏂紙闃诲鍘熷洜锛歚'璁よ瘉閫傜敤鎬у皻鏈垽鏂紝璇峰湪鍚堣闈㈡澘纭'`锛夈€?-4. **鍘嗗彶妗ｆ缂哄け瀛楁锛坄fact.evaluated === true && !fact.certificationApplicability`锛?*锛?-   - 瑁佸喅锛?*`NOT_EVALUATED`**锛堝悜鍚庡吋瀹逛繚鎶わ紝鎻愮ず锛歚'璁よ瘉澶勭悊璁″垝灏氭湭鎺ュ叆锛堝巻鍙叉。妗堬級'`锛夈€?-5. **妯″潡鏈帴鍏ワ紙`!fact || fact.evaluated !== true`锛?*锛?-   - 瑁佸喅锛?*`NOT_EVALUATED`**銆?-6. **闈炴硶鏋氫妇锛坄BROKEN` 绛夛級**锛?-   - 瑁佸喅锛?*`FAIL`**锛堟彁绀猴細`'璁よ瘉閫傜敤鎬х姸鎬佹棤鏁?`锛夈€?+### 鍦烘櫙 5锛氫粎鎵撳紑璇︽儏椤甸潰 (Read-only View)
++- **鎿嶄綔**锛氭墦寮€鍖呭惈鍘嗗彶椤圭洰鐨勮鎯呴〉锛屾煡鐪嬪悎瑙勯潰鏉匡紝鏈偣鍑讳换浣曚繚瀛樸€?+- **鍓嶅悗鐘舵€?*锛歚project.compliance` 瀛楄妭绾т繚鎸佷笉鍙橈紝闆?Store 鍐欏叆锛岄浂鏃ュ織銆?+
++### 鍦烘櫙 6锛氭棤鍙樻洿閲嶅鐐瑰嚮淇濆瓨 (No-op)
++- **鎿嶄綔**锛氳〃鍗曟暟鎹湭淇敼锛屽啀娆＄偣鍑烩€滀繚瀛樿瘎浼扮姸鎬佲€濄€?+- **鍓嶅悗鐘舵€?*锛氬嚱鏁版娴嬪埌 `changedFields.length === 0`锛岀洿鎺ヨ繑鍥炲師 project锛岄浂鍐欏叆锛岄浂鏃ュ織銆?+
++### 鍦烘櫙 7锛氬巻鍙查」鐩樉寮忛€夋嫨鈥滄棤闇€璁よ瘉鈥濆苟淇濆瓨
++- **鎿嶄綔**锛氱敤鎴蜂富鍔ㄥ湪 Layer A 灏嗛€傜敤鎬ч€変负鈥滄棤闇€璁よ瘉鈥濓紝濉啓鍒ゆ柇渚濇嵁骞朵繚瀛樸€?+- **淇濆瓨鍓?*锛氬悓鍦烘櫙 2銆?+- **淇濆瓨鍚?*锛?+  ```json
++  {
++    "assessmentStatus": "COMPLETED",
++    "riskLevel": "LOW",
++    "applicableStandards": ["TR CU 004/2011"],
++    "certificationPlan": "宸叉湁娴嬭瘯璁″垝",
++    "requirements": [],
++    "notes": "鏃у娉?,
++    "certificationApplicability": "NOT_REQUIRED",
++    "certificationApplicabilityNotes": "绾満姊扮粨鏋勬墜鍔ㄤ簲閲戯紝涓嶅惈鐢垫皵鎴栧寲瀛︽帶绠℃垚鍒?
++  }
++  ```
+ 
+ ---
+ 
+-## 11. 闂ㄧ鍥涙€佽涔夌煩闃?(cert_plan Semantic Matrix)
+-
+-| 鍦烘櫙杈撳叆鏉′欢 | `cert_plan` 缁撴灉 | 闃绘柇鎬?| 璇存槑 / 鎻愮ず娑堟伅 |
+-| :--- | :---: | :---: | :--- |
+-| 鏈帴鍏ユā鍧椾簨瀹?(`!fact \|\| fact.evaluated !== true`) | **`NOT_EVALUATED`** | 鍏佽鎺ㄨ繘 | `'鍚堣鏁版嵁鍩熷皻鏈帴鍏?` |
+-| 鍘嗗彶妗ｆ缂哄け鏂板瓧娈?(`fact.evaluated === true && !fact.certificationApplicability`) | **`NOT_EVALUATED`** | 鍏佽鎺ㄨ繘 | `'璁よ瘉澶勭悊璁″垝灏氭湭鎺ュ叆锛堝巻鍙叉。妗堬級'` |
+-| 鏄惧紡灏氭湭鍒ゆ柇 (`certificationApplicability === 'UNASSESSED'`) | **`FAIL`** | **RED 闃绘柇** | `'璁よ瘉閫傜敤鎬у皻鏈垽鏂紝璇峰湪鍚堣闈㈡澘纭'` |
+-| 闇€瑕佽璇佷絾鏃犺鍒?(`REQUIRED` + `plan === ''`) | **`FAIL`** | **RED 闃绘柇** | `'闇€瑕佸姙鐞嗚璇侊紝浣嗗皻鏈～鍐欒璇佸鐞嗚鍒?` |
+-| 闇€瑕佽璇佷笖鏈夎鍒?(`REQUIRED` + `plan !== ''`) | **`PASS`** | 缁胯壊鏀捐 | 璁よ瘉璺緞娓呮櫚 |
+-| 鏄庣‘鏃犻渶璁よ瘉 (`NOT_REQUIRED`) | **`PASS`** | 缁胯壊鏀捐 | 鏅揣鍏嶈璇佽矾寰勬竻鏅?|
+-| 闈炴硶/鎹熷潖鐘舵€?(`certificationApplicability` 闈炲悎娉曟灇涓? | **`FAIL`** | **RED 闃绘柇** | `'璁よ瘉閫傜敤鎬х姸鎬佹棤鏁?` |
+-
+----
++## 9. Stage Gate `cert_plan` 鍐崇瓥琛ㄤ笌闀胯矾寰勬帹婕?(Gap D 瑁佸喅)
+ 
+-## 12. 璺ㄩ樁娈甸暱璺緞鎺ㄦ紨 (SAMPLING 鈫?PRODUCTION)
++### 9.1 `cert_plan` 妫€鏌ラ」瀹屾暣鍐崇瓥鐭╅樀
+ 
+-褰撻」鐩法闃舵鐩存帴鎺ㄨ繘鏃讹紝璺緞鑱氬悎姹傚€?`['COMPLIANCE', 'PRODUCTION']`锛?+妫€鏌ラ」鏍囪瘑涓ユ牸淇濈暀涓猴細`id: 'cert_plan'`锛屾墍灞為樁娈碉細`PRODUCTION`锛屽叧鑱旀ā鍧楋細`compliance`銆? 
+-| 璺ㄩ樁娈靛満鏅粍鍚?| `samples_record`<br>(COMPLIANCE) | `compliance_pending`<br>(COMPLIANCE) | `compliance_done`<br>(PRODUCTION) | `cert_plan`<br>(PRODUCTION) | 闃舵鑱氬悎鎬?Verdict | 鎺ㄨ繘璁稿彲琛屼负 |
+-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+-| **A. COMPLETED + UNASSESSED** | PASS | PASS | PASS | **FAIL** | **RED** | 闃绘柇锛岄渶濉啓鐞嗙敱 Override |
+-| **B. COMPLETED + REQUIRED + 绌?Plan** | PASS | PASS | PASS | **FAIL** | **RED** | 闃绘柇锛岄渶濉啓鐞嗙敱 Override |
+-| **C. COMPLETED + REQUIRED + 鏈?Plan** | PASS | PASS | PASS | **PASS** | **GREEN** | **鍏ㄧ豢鏃犻樆鏂斁琛?* |
+-| **D. COMPLETED + NOT_REQUIRED** | PASS | PASS | PASS | **PASS** | **GREEN** | **鍏ㄧ豢鏃犻樆鏂斁琛?* |
+-| **E. 鍘嗗彶椤圭洰鏈～鏂板瓧娈?* | PASS | PASS | PASS | **NOT_EVALUATED**| **NOT_EVALUATED** | 鍏煎鍏佽鐩存帴鎺ㄨ繘 |
++| # | 鍦烘櫙杈撳叆鏉′欢 | `cert_plan` 缁撴灉 | 闃绘柇鎬?| 娑堟伅鏂囨湰 | 涓氬姟鏈虹悊璇存槑 |
++|---|---|:---:|:---:|---|---|
++| 1 | 鍚堣妯″潡鏈帴鍏?(`!fact \|\| fact.evaluated !== true`) | **`NOT_EVALUATED`** | 鍏佽鎺ㄨ繘 | `'鍚堣鏁版嵁鍩熷皻鏈帴鍏?` | 妯″潡渚濊禆缂哄け锛屾寜绯荤粺婕旇繘鎯緥鍏煎 |
++| 2 | 鍘嗗彶妗ｆ缂哄け瀛楁 (`fact.evaluated === true && !fact.certificationApplicability`) | **`NOT_EVALUATED`** | 鍏佽鎺ㄨ繘 | `'璁よ瘉閫傜敤鎬у皻鏈垽鏂紙鍘嗗彶妗ｆ锛?` | 闆剁牬鍧忔€у悜鍚庡吋瀹癸紝涓嶆剰澶栭樆鏂瓨閲忓巻鍙查」鐩?|
++| 3 | 鏄惧紡灏氭湭鍒ゆ柇 (`certificationApplicability === 'UNASSESSED'`) | **`FAIL`** | **RED 闃绘柇** | `'璁よ瘉閫傜敤鎬у皻鏈垽鏂紝璇峰湪鍚堣闈㈡澘纭'` | 鐢熶骇鍑嗗叆鍓嶅繀椤诲鍟嗗搧鏄惁闇€瑕佽璇佽繘琛屽畾鎬?|
++| 4 | 闇€瑕佽璇佷絾鏃犺鍒?(`REQUIRED` 涓?`certificationPlanPresent !== true`) | **`FAIL`** | **RED 闃绘柇** | `'鍟嗗搧闇€瑕佸姙鐞嗚璇侊紝浣嗗皻鏈埗瀹氳璇佸鐞嗚鍒?` | 璺緞涓嶆槑锛屽瓨鍦ㄩ噸澶ф竻鍏充笌婊為攢椋庨櫓 |
++| 5 | 闇€瑕佽璇佷笖鏈夎鍒?(`REQUIRED` 涓?`certificationPlanPresent === true`) | **`PASS`** | 缁胯壊鏀捐 | `'璁よ瘉澶勭悊璺緞宸叉槑纭?` | 璁″垝宸茬暀瀛橈紝鍑嗗叆鐢熶骇绗﹀悎瑕佹眰 |
++| 6 | 鍒ゅ畾鏃犻渶璁よ瘉涓斾緷鎹厖鍒?(`NOT_REQUIRED` 涓?`applicabilityNotesPresent === true`) | **`PASS`** | 缁胯壊鏀捐 | `'宸叉槑纭垽瀹氭棤闇€鍔炵悊璁よ瘉锛堜緷鎹凡鐣欏瓨锛?` | 鍏嶅姙瀹氭€ф竻鏅帮紝鍚堣渚濇嵁鐣欑棔瀹屽 |
++| 7 | 鍒ゅ畾鏃犻渶璁よ瘉浣嗙己渚濇嵁 (`NOT_REQUIRED` 涓?`applicabilityNotesPresent !== true`) | **`FAIL`** | **RED 闃绘柇** | `'鍒ゅ畾鏃犻渶璁よ瘉鏃跺繀椤诲～鍐欏垽鏂緷鎹?` | 闃插尽鎬ф嫤鎴紝鏉滅粷鏃犺瘉鎹崏鐜囧厤鍔?|
++| 8 | 闈炴硶鎴栨崯鍧忕姸鎬?(`certificationApplicability` 闈炲悎娉曟灇涓惧€? | **`FAIL`** | **RED 闃绘柇** | `'璁よ瘉閫傜敤鎬х姸鎬佹棤鏁?` | 鑴忔暟鎹?Fail-close 闃插尽鎷︽埅 |
+ 
+-> **鍏抽敭鍙樺寲鏄惧紡璁板綍**锛氬綋 4C3B 姝ｅ紡婵€娲?`cert_plan` 鍚庯紝鍦烘櫙 C 鍜?D 灏嗚繋鏉ョ湡姝ｆ剰涔変笂鐨勯涓叏閾捐矾 **GREEN**锛涜€屽満鏅?A 鍜?B 灏嗙簿鍑嗛樆鏂负 **RED**銆?+### 9.2 `NOT_EVALUATED` 鏈哄埗涓庢帹杩涚瓥鐣ヨ鏄?+- **`NOT_EVALUATED` 缁濅笉绛変簬 `PASS`**锛氬畠浠ｈ〃绯荤粺渚濊禆灏氭湭鍏峰姹傚€兼潯浠讹紝澶勪簬鏈煡鐘舵€侊紱
++- 鍦ㄥ綋鍓?`stageTransition.js` 瑙勫垯涓紝`NOT_EVALUATED` 鍏佽鎺ㄨ繘涓旀棤闇€濉啓鐞嗙敱锛岃繖鏄负浜嗕繚璇佽法鐗堟湰澧為噺鍙戝竷鏃跺凡鏈夋湭杩佺Щ妯″潡涓嶅彂鐢熸剰澶栧叏绔欐閿侊紱
++- **浣嗙粷涓嶈兘鎷库€滈浂闃绘柇鍏煎鈥濇帺鐩栦笟鍔￠闄?*锛氫竴鏃﹀疄鏂?4C3B锛屾柊寤洪」鐩笌涓诲姩淇濆瓨鐨勯」鐩皢鍏ㄩ潰杩涘叆涓ユ牸鐨?FAIL / PASS 鍐崇瓥鏍戯紝鍘嗗彶椤圭洰鍦ㄦ墦寮€淇濆瓨鏃朵篃灏嗗钩婊戝崌绾с€? 
+----
++### 9.3 璺ㄩ樁娈甸暱璺緞鎺ㄦ紨 (SAMPLING 鈫?PRODUCTION)
++褰撹皟鐢?`transitionProjectStage(projectId, 'PRODUCTION')` 鏃讹紝绯荤粺灏嗘墽琛?`['COMPLIANCE', 'PRODUCTION']` 璺緞涓婄殑鎵€鏈夋鏌ワ細
+ 
+-## 13. Gate Fact 鏈€灏忔敞鍏ヤ笂涓嬫枃 (Context Shape)
++| 鍦烘櫙缁勫悎 | `samples_record`<br>(COMPLIANCE) | `compliance_pending`<br>(COMPLIANCE) | `compliance_done`<br>(PRODUCTION) | `cert_plan`<br>(PRODUCTION) | 闃舵鑱氬悎鎬?Verdict | 鎺ㄨ繘璁稿彲琛屼负 |
++|---|:---:|:---:|:---:|:---:|:---:|---|
++| **A. 鍘嗗彶椤圭洰鏈綍鍏ユ柊瀛楁** | PASS | PASS | PASS | **NOT_EVALUATED** | **NOT_EVALUATED** | 鍏煎鍏佽鎺ㄨ繘锛屾棤闇€ override 鐞嗙敱 |
++| **B. 璇勪及宸插畬鎴愪絾閫傜敤鎬ф湭鍒ゆ柇 (COMPLETED + UNASSESSED)** | PASS | PASS | PASS | **FAIL** | **RED** | **寮哄埗闃绘柇**锛涘己鎺ㄥ繀椤诲～鐞嗙敱鐣欑棔 |
++| **C. 闇€瑕佽璇佷絾鏈啓璁″垝 (COMPLETED + REQUIRED + 绌?Plan)** | PASS | PASS | PASS | **FAIL** | **RED** | **寮哄埗闃绘柇**锛涘己鎺ㄥ繀椤诲～鐞嗙敱鐣欑棔 |
++| **D. 闇€瑕佽璇佷笖璁″垝瀹屽 (COMPLETED + REQUIRED + 鏈?Plan)** | PASS | PASS | PASS | **PASS** | **GREEN** | **鍏ㄧ豢椤虹晠鏀捐** |
++| **E. 鏃犻渶璁よ瘉涓斾緷鎹厖鍒?(COMPLETED + NOT_REQUIRED + 鏈変緷鎹?** | PASS | PASS | PASS | **PASS** | **GREEN** | **鍏ㄧ豢椤虹晠鏀捐** |
++| **F. 璇勪及灏氭湭瀹屾垚 (IN_ASSESSMENT + REQUIRED + 鏈?Plan)** | PASS | PASS | **FAIL** | PASS | **RED** | **寮哄埗闃绘柇**锛堟嫤鎴簮鑷?`compliance_done`锛?|
+ 
+-鍦?`ProjectDetailPage.jsx` 涓紝璋冪敤灞傚簲璐熻矗灏嗘枃鏈鏁翠负甯冨皵鏍囧織锛屼娇 `gateEngine.js` 淇濇寔绾噣锛?-```javascript
+-// 4C3B 棰勬湡娉ㄥ叆缁撴瀯 (PROPOSED CONTRACT):
+-availableModules: {
+-  ...
+-  compliance: {
+-    evaluated: true,
+-    assessmentStatus: project.compliance?.assessmentStatus,
+-    certificationApplicability: project.compliance?.certificationApplicability,
+-    certificationPlanPresent: Boolean(
+-      typeof project.compliance?.certificationPlan === 'string' &&
+-      project.compliance.certificationPlan.trim() !== ''
+-    ),
+-  }
+-}
+-```
+-- **鏋舵瀯绾害**锛歚gateEngine.js` 浠呮秷璐?`certificationApplicability` 鏋氫妇涓?`certificationPlanPresent` 甯冨皵鍊硷紝涓嶉渶瑕佸湪寮曟搸鍐呴儴澶勭悊瀛楃涓叉埅鍙栨垨绌虹櫧杩囨护銆?+> **鍏抽敭璁ょ煡**锛氬満鏅?B 涓?`compliance_done` 铏介€氳繃锛屼絾 `cert_plan` 鑳界簿鍑嗘柦鍔?**RED** 闃绘柇锛屽厖鍒嗛獙璇佷簡涓や釜 Check 鍚勫徃鍏惰亴銆佷簰涓嶆浛浠ｇ殑鍒嗗眰浠峰€笺€? 
+ ---
+ 
+-## 14. 棰嗗煙鎵€鏈夋潈鐭╅樀 (Ownership Matrix)
+-
+-| 姒傚康 / 浜嬪疄缁村害 | MI / Snapshot | Project Compliance | Requirement | Gate Engine |
+-| :--- | :---: | :---: | :---: | :---: |
+-| **Certification market hint (`eacStatus`)** | **OWNER** | REFERENCE | NOT_OWNER | NOT_OWNER |
+-| **Certification applicability decision (`certificationApplicability`)** | NOT_OWNER | **OWNER** | NOT_OWNER | CONSUMER |
+-| **Certification path plan (`certificationPlan`)** | NOT_OWNER | **OWNER** | REFERENCE | CONSUMER |
+-| **Certification task execution (Checklist items)** | NOT_OWNER | REFERENCE | **OWNER** | NOT_OWNER |
+-| **Certification result (`certificateNumber`, `exemptReason`)** | NOT_OWNER | NOT_OWNER (Deferred) | NOT_OWNER | NOT_OWNER |
++## 10. UI 浜や簰鎺т欢鏂规涓庤崏绋夸繚鎶よ矗浠?(Gap E 瑁佸喅)
++
++### 10.1 瀛楁褰掑睘涓庝繚瀛樻寜閽矗浠诲喕缁?+涓哄交搴曟潨缁濊法鍖哄潡淇濆瓨涓插啓涓庢贩涔憋紝姝ｅ紡瑁佸喅锛?+- **`certificationApplicability` 涓?`certificationApplicabilityNotes` 缁熶竴褰掑睘浜?`Layer A: Assessment`锛堥」鐩悎瑙勮瘎浼帮級**锛?+- **淇濆瓨璐ｄ换**锛?+  - 鐢?Layer A 鐨?**銆屼繚瀛樿瘎浼扮姸鎬併€嶆寜閽紙`handleSaveAssessment`锛?* 璐熻矗鏍￠獙涓庢彁浜わ紱
++  - Layer B 鐨勩€屼繚瀛樺悎瑙勮鍒掋€嶆寜閽紙`handleSavePlan`锛?*缁濆涓嶆彁浜ゃ€佷笉淇敼杩欎袱涓瓧娈?*锛?+  - 浜嬮」琛ㄦ牸鐨?CRUD 鎿嶄綔涔?*缁濆涓嶆彁浜ゃ€佷笉淇敼杩欎袱涓瓧娈?*銆?+
++### 10.2 UI 鎺т欢浜や簰褰㈡€佽鏄庯紙浠呮枃瀛楄鑼冿紝鏈疆涓嶆敼浠ｇ爜锛?+鍦?`ProjectCompliancePanel.jsx` 鐨?Layer A 琛ㄥ崟涓紝浜庘€滃悎瑙勯闄╃瓑绾р€濅箣鍚庝互涓ゅ垪鍝嶅簲寮忔爡鏍煎竷灞€鎺掑竷锛?+1. **璁よ瘉閫傜敤鎬?(Certification Applicability) 涓嬫媺妗?/ 鍗曢€夌粍**锛?+   - 閫夐」锛氬皻鏈垽鏂?(`UNASSESSED`) / 闇€瑕佸姙鐞嗚璇?(`REQUIRED`) / 鏃犻渶鍔炵悊璁よ瘉 (`NOT_REQUIRED`)锛?+   - 鎻愮ず鏂囨锛氳嫢閫夋棤闇€鍔炵悊锛屽睍绀烘彁绀猴細鈥滆嫢鍟嗗搧瀹屽叏涓嶅湪寮哄埗鍚堟牸璇勫畾娉曡绠¤緰鍐咃紝璇锋槑纭褰曞垽瀹氫緷鎹€濄€?+2. **閫傜敤鎬у垽鏂緷鎹?(Applicability Notes) 杈撳叆妗?*锛?+   - 褰撻€夋嫨 `NOT_REQUIRED` 鏃堕珮浜睍绀猴紝鏍囪涓哄繀濉」锛堢孩鏄燂級锛?+   - placeholder锛氣€滆鏄庝负浣曞垽瀹氭棤闇€璁よ瘉锛堜緥濡傦細绾墜鍔ㄤ簲閲戝伐鍏凤紝涓嶅惈鐢垫皵鎴栫鎺ф垚鍒嗭紝渚濇嵁 TR CU 004 鎺掗櫎鑼冨洿...锛夆€濓紱
++   - 褰撻€夋嫨 `REQUIRED` 鎴?`UNASSESSED` 鏃舵姌鍙犳垨浣滀负琛ュ厖璇存槑銆?+
++### 10.3 鑽夌鐘舵€佸紩鎿庝笌鍏ㄧ敓鍛藉懆鏈熷崗鍚?+蹇呴』涓庝换鍔?`KJ-GEMINI-20260920-001`锛堣崏绋夸繚鎶わ級宸查獙鏀剁殑鏈哄埗 100% 淇濇寔涓€鑷达紝鍙楀奖鍝嶇殑绾嚱鏁伴€傞厤娓呭崟锛?+1. **`extractAssessmentState(compliance)`**锛?+   - 琛ュ厖鎻愬彇 `certificationApplicability: comp.certificationApplicability || ''` 涓?`certificationApplicabilityNotes: comp.certificationApplicabilityNotes || ''`銆?+2. **`isAssessmentDirty(draft, baseline)`**锛?+   - 琛ュ厖瀵规瘮 `draft.certificationApplicability !== baseline.certificationApplicability || draft.certificationApplicabilityNotes !== baseline.certificationApplicabilityNotes`銆?+3. **`isAssessmentEqual(a, b)`**锛?+   - 琛ュ厖鍏ㄥ瓧娈垫繁搴︽瘮杈冦€?+4. **澶栭儴鏁版嵁鍐茬獊妫€娴?(`detectAssessmentConflict`)**锛?+   - 鑷姩瑕嗙洊鏂板瓧娈垫敼鍔紝褰撳閮ㄦ洿鏂颁簡閫傜敤鎬ц€屾湰鍦版湁鏈繚瀛樿崏绋挎椂锛岀簿鍑嗗脊鍑哄啿绐佽鍛婃í骞呫€?+5. **椤圭洰鍒囨崲闅旂 (`resolveSyncOnProjectUpdate`)**锛?+   - 椤圭洰鍒囨崲鏃讹紝鏂板瓧娈佃崏绋块殢鍚屽熀鍑嗗交搴曟竻绌哄苟閲嶇疆涓虹洰鏍囬」鐩暟鎹紝鏉滅粷璺ㄩ」鐩薄鏌撱€? 
+ ---
+ 
+-## 15. A1 ~ A5 缁撴瀯鎬х己鍙ｈ鍐?(Fixed Gap Audit)
++## 11. Gate 涓婁笅鏂囪鑼冨寲娉ㄥ叆缁撴瀯 (Gate Fact Contract)
+ 
+-- **A1 鈥?APPLICABILITY MODEL GAP**锛?*FIXED**銆傜‘瀹氬湪 `project.compliance` 椤跺眰鏂板 `certificationApplicability: 'UNASSESSED' | 'REQUIRED' | 'NOT_REQUIRED'` 鍗曚竴浜嬪疄婧愩€?-- **A2 鈥?LEGACY PROFILE GAP**锛?*FIXED**銆傛槑纭巻鍙查」鐩己瀛楁鍦?Gate 涓亽涓?`NOT_EVALUATED`锛岄浂寮哄埗鏀瑰簱锛岄浂鐮村潖鎬ч樆鏂€?-- **A3 鈥?PLAN SEMANTIC GAP**锛?*FIXED**銆傜‘绔嬧€滃鐞嗚矾寰勬槑纭€濆嵆閫氳繃鏍囧噯锛歚NOT_REQUIRED` 鐩存帴 PASS锛沗REQUIRED` 鍑?`certificationPlan` 鏂囨湰闈炵┖锛堣皟鐢ㄥ眰杞?`certificationPlanPresent: true`锛塒ASS銆?-- **A4 鈥?RESULT SEPARATION GAP**锛?*FIXED**銆傚皢鈥滆眮鍏嶏紙EXEMPT锛夆€濆噯纭畾浣嶄负 Result 灞傚嚟鎹紝褰诲簳绉诲嚭 Applicability 鏋氫妇锛岄樆鏂眰绾ф薄鏌撱€?-- **A5 鈥?GATE FACT GAP**锛?*FIXED**銆傚浐瀹?Gate 涓婁笅鏂囦粎娉ㄥ叆 4 涓渶灏忓瓧娈碉紝涓嶅悜 Gate 娉勬紡 requirements 鏁扮粍銆?+鍦?`ProjectDetailPage.jsx` 涓紝璋冪敤灞傝礋璐ｈ鏁存暟鎹紝纭繚 `gateEngine.js` 淇濇寔绾嚱鏁版棤鍓綔鐢ㄥ師鍒欙細
++
++```javascript
++// ProjectDetailPage.jsx 涓殑娉ㄥ叆瑙勮寖 (PROPOSED CONTRACT):
++const complianceEvaluated = !isProjectComplianceEmpty(project.compliance)
++const complianceFact = complianceEvaluated
++  ? {
++      evaluated: true,
++      assessmentStatus: project.compliance?.assessmentStatus,
++      // 鍙湁鍦ㄥ瓧娈电‘瀹炲瓨鍦ㄦ椂鎵嶆敞鍏ワ紝鏈瓨鍦ㄦ椂淇濇寔 undefined锛堜互渚?Gate 璇嗗埆鍘嗗彶妗ｆ锛?+      certificationApplicability: project.compliance?.certificationApplicability,
++      certificationApplicabilityNotesPresent: Boolean(
++        typeof project.compliance?.certificationApplicabilityNotes === 'string' &&
++        project.compliance.certificationApplicabilityNotes.trim().length >= 2
++      ),
++      certificationPlanPresent: Boolean(
++        typeof project.compliance?.certificationPlan === 'string' &&
++        project.compliance.certificationPlan.trim() !== ''
++      ),
++    }
++  : undefined
++```
+ 
+ ---
+ 
+-## 16. 07A-4C3B 瀹炴柦鍐崇瓥涓庤寖鍥?(Implementation Decision)
+-
+-- **`07A-4C3B IMPLEMENTATION STATUS: READY`**
+-- **瀹炴柦鑼冨洿鏀舵暃**锛?-  1. **Store / Profile 灞?*锛坄complianceProfile.js`锛夛細
+-     - 瀵煎嚭 `COMPLIANCE_CERTIFICATION_APPLICABILITY` 鏋氫妇锛?-     - 灏?`certificationApplicability` 绾冲叆 `PROJECT_COMPLIANCE_FIELDS` 涓?`PROFILE_PATCH_ALLOWED_FIELDS`锛?-     - `buildInitialComplianceDraft()` 榛樿鍒濆鍊间负 `'UNASSESSED'`锛?-     - 褰卞搷璇勪及锛?*`LOW_IMPACT`**锛堟棤闇€鏂板姞 Store API锛屾棦鏈?`updateProjectCompliance` 鐧藉悕鍗曡嚜鐒舵敮鎸侊級銆?-  2. **UI 灞?*锛坄ProjectCompliancePanel.jsx`锛夛細
+-     - 鍦ㄢ€滆璇佹柟妗堣鍒?(Certification Plan)鈥濆尯鍧楅《閮紝澧炲姞鏄惧紡鍗曢€?涓嬫媺缁勪欢锛氣€滆璇侀€傜敤鎬э紙灏氭湭鍒ゆ柇 / 闇€瑕佸姙鐞?/ 鏃犻渶鍔炵悊锛夆€濓紱
+-     - 褰撻€夋嫨鈥滄棤闇€鍔炵悊鈥濇椂锛岀粰鍑烘櫘璐у厤鍔炴彁绀猴紱閫夋嫨鈥滈渶瑕佸姙鐞嗏€濇椂锛屽紩瀵煎畬鍠勬柟妗堟枃鏈€?-  3. **Gate 璋冪敤灞?*锛坄ProjectDetailPage.jsx`锛夛細
+-     - 鍦?`gateDeps.availableModules.compliance` 涓拷鍔?`certificationApplicability` 涓?`certificationPlanPresent`銆?-  4. **Gate 寮曟搸灞?*锛坄gateEngine.js`锛夛細
+-     - 涓?`CHECKS.PRODUCTION` 涓殑 `cert_plan` 瀹炵幇鍥涙€佹眰鍊煎櫒锛?-     - 鎺ㄨ崘鏇存柊 Label 涓猴細**`'璁よ瘉澶勭悊璺緞宸叉槑纭?`**銆?+## 12. 07A-4C3B 鏈潵瀹炴柦鑼冨洿鐧藉悕鍗曚笌娴嬭瘯楠屾敹鐭╅樀
++
++### 12.1 鎷熶慨鏀规枃浠剁櫧鍚嶅崟 (寰呭悗缁疄鏂戒换鍔＄鍙戝悗鎵ц)
++1. `ozon-react/src/utils/t6/complianceProfile.js`锛?+   - 瀵煎嚭 `COMPLIANCE_CERTIFICATION_APPLICABILITY` 鏋氫妇锛?+   - 鎵╁厖 `PROJECT_COMPLIANCE_FIELDS` 涓?`PROFILE_PATCH_ALLOWED_FIELDS`锛?+   - 鏀归€?`buildNextProjectCompliance` 淇闅愬紡榛樿鍊艰ˉ榻愭紡娲炪€?+2. `ozon-react/src/utils/t6/t6Store.js`锛?+   - 鎵╁厖 `PROFILE_FIELDS` 纭紪鐮佹暟缁勶紱
++   - 鏇存柊 `fromDiff` 缂哄け鍊煎鐞嗕笌 `changedFields` 姣旇緝閫昏緫锛?+   - 鏀归€?`createProjectComplianceRequirement` 娑堥櫎榛樿琛ラ綈銆?+3. `ozon-react/src/utils/t6/complianceDraftState.js`锛?+   - 鎵╁睍 `extractAssessmentState`銆乣isAssessmentDirty`銆乣isAssessmentEqual`銆?+4. `ozon-react/src/utils/t6/gateEngine.js`锛?+   - 涓?`CHECKS.PRODUCTION` 涓殑 `cert_plan` 澧炲姞 `evaluate` 鍑芥暟涓庡洓鎬佺煩闃碉紱
++   - 鏇存柊 label 涓?`'璁よ瘉澶勭悊璺緞宸叉槑纭?`銆?+5. `ozon-react/src/components/t6/ProjectDetailPage.jsx`锛?+   - 娉ㄥ叆 `certificationApplicability`銆乣certificationApplicabilityNotesPresent`銆乣certificationPlanPresent`銆?+6. `ozon-react/src/components/t6/ProjectCompliancePanel.jsx`锛?+   - 鍦?Layer A 娓叉煋閫傜敤鎬т笅鎷夋涓庝緷鎹緭鍏ユ锛岀撼鍏?`handleSaveAssessment`銆?+
++### 12.2 娴嬭瘯涓庨獙鏀剁敤渚嬭鍒掔煩闃?(Test Matrix for 4C3B)
++- **Case 1 (Profile & Store)**锛氭柊瀛楁绫诲瀷鏍￠獙銆丗ail-close 闈炴硶鏋氫妇鎷︽埅銆佺┖渚濇嵁鎷︽埅銆?+- **Case 2 (No-op)**锛氱浉鍚屽€奸噸澶嶄繚瀛橀浂鏃ュ織闆跺啓鍏ャ€?+- **Case 3 (Legacy Protection)**锛氬巻鍙查」鐩洿鏂?notes / plan / requirements 缁濅笉娉ㄥ叆 `certificationApplicability`銆?+- **Case 4 (Draft Protection)**锛氱紪杈戦€傜敤鎬цЕ鍙?dirty badge锛涗繚瀛?Assessment 涓嶅奖鍝?Plan锛涘閮ㄥ啿绐佺簿鍑嗘彁绀恒€?+- **Case 5 (Gate Unit Tests)**锛? 鍦烘櫙瑕嗙洊锛堟湭鎺ュ叆銆佸巻鍙茬己瀛楁銆佹樉寮忔湭鍒ゆ柇銆侀渶瑕佹棤璁″垝銆侀渶瑕佹湁璁″垝銆佹棤闇€鏃犱緷鎹€佹棤闇€鏈変緷鎹€侀潪娉曞€硷級銆?+- **Case 6 (Long Path)**锛歚SAMPLING -> PRODUCTION` 璺ㄩ樁娈佃仛鍚堟帹婕旓紙RED 闃绘柇涓?GREEN 鏀捐锛夈€?+- **Case 7 (Build & Regressions)**锛歚npm test`銆乣test:golden`銆乣test:sync` 鍏ㄧ豢銆? 
+ ---
+ 
+-## 17. CONTRACT SUMMARY
++## 13. 鍚堝悓缁撹涓庡疄鏂芥巿鏉冪姸鎬?(Contract Status)
+ 
+ ```text
+-CERTIFICATION APPLICABILITY
+-Owner: project.compliance
+-Layer: ASSESSMENT (Layer A)
+-Field: certificationApplicability
+-Enum: UNASSESSED | REQUIRED | NOT_REQUIRED
+-Initial Value: UNASSESSED
+-Legacy Missing Meaning: LEGACY_UNEVALUATED (Treated as NOT_EVALUATED in Gate)
+-MI Auto-prefill: FORBIDDEN (Display reference only)
+-Requirement Auto-sync: FORBIDDEN (Single owner)
+-
+-PLAN
+-Plan Owner: project.compliance
+-Plan Field: certificationPlan (Text)
+-Required When: certificationApplicability === 'REQUIRED'
+-Not Required Case: certificationApplicability === 'NOT_REQUIRED' (Passes without plan text)
+-
+-RESULT
+-Exemption: RESULT Layer (Official letter/proof, outside applicability)
+-Certificate: RESULT Layer (certificateNumber, issuingBody)
+-Result Layer Status: DEFERRED (Strictly forbidden in V1)
+-
+-GATE
+-cert_plan ID: cert_plan
+-Recommended Label: 璁よ瘉澶勭悊璺緞宸叉槑纭?-Missing Module: NOT_EVALUATED
+-Legacy Missing Field: NOT_EVALUATED
+-Unassessed: FAIL
+-Required + Empty Plan: FAIL
+-Required + Plan: PASS
+-Not Required: PASS
+-Invalid Value: FAIL
+-
+-CONTEXT
+-Gate Fact Shape:
+-  availableModules.compliance = {
+-    evaluated: boolean,
+-    assessmentStatus: string,
+-    certificationApplicability?: string,
+-    certificationPlanPresent?: boolean,
+-  }
+-
+-NEXT
+-07A-4C3B Status: READY
+-07A-4C3B Store Scope: Extend complianceProfile.js whitelist + default draft
+-07A-4C3B UI Scope: Add Applicability selector to ProjectCompliancePanel Plan section
+-07A-4C3B Gate Scope: Implement cert_plan evaluator in gateEngine + update ProjectDetailPage injection
++================================================================================
++CONTRACT VERDICT: APPROVED (REVISION 2 COMPLETED)
++IMPLEMENTATION STATUS: PENDING_CODEX_ACCEPTANCE (寰呴獙鏀讹紝鏈巿鏉冨疄鏂?
++================================================================================
++- Gap A (Store 鐧藉悕鍗曚笌瀹¤閾?: 宸查棴鐜慨澶嶏紝鏄庣‘ PROFILE_FIELDS 鑱斿姩鏈哄埗銆?+- Gap B (鍘嗗彶妗ｆ闅愬紡琛ラ綈): 宸查棴鐜慨澶嶏紝瀹氫箟瀛楁瀛樺偍鎬佸苟鎻愪緵 7 鍦烘櫙 JSON 濂戠害銆?+- Gap C (鍒ゆ柇渚濇嵁涓庢湳璇竟鐣?: 宸查棴鐜慨澶嶏紝澧炲姞 certificationApplicabilityNotes 瀛楁锛屾竻闄ゆ棤鏍规嵁娉曞緥鏂█銆?+- Gap D (Gate 鍐崇瓥鐭╅樀涓庨闄╁彲瑙?: 宸查棴鐜慨澶嶏紝淇濈暀 cert_plan ID锛岃鐩?8 鎬佸喅绛栦笌闀胯矾寰勬帹婕斻€?+- Gap E (UI 褰掑睘涓庤崏绋胯矗浠?: 宸查棴鐜慨澶嶏紝缁熶竴褰掑叆 Layer A锛屼笌浠诲姟 001 鑽夌淇濇姢瀹屽叏瀵归綈銆?+- 褰撳墠浠诲姟鎵ц鑰咃細Gemini銆?+- 楠屾敹鑰咃細Codex銆?+- 涓嬩竴瀹炴柦闃舵锛氬緟 Codex 鐙珛楠屾敹閫氳繃鍚庯紝鍙﹁绛惧彂 07A-4C3B 瀹炴柦浠诲姟涔︺€?+================================================================================
+ ```

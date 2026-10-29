@@ -1,0 +1,209 @@
+diff --git a/docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/ProjectCompliancePanel.jsx.pre-005 b/ozon-react/src/components/t6/ProjectCompliancePanel.jsx
+index 4fde1a2..5d01a14 100644
+--- a/docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/ProjectCompliancePanel.jsx.pre-005
++++ b/ozon-react/src/components/t6/ProjectCompliancePanel.jsx
+@@ -995,17 +995,22 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+             暂无合规核验事项。点击右上角「新增事项」添加法规、标签或成分核验要项。
+           </div>
+         ) : (
+-          <div className="overflow-x-auto">
+-            <table className="w-full text-left text-xs">
++          <div
++            className="overflow-x-auto rounded border border-workspace-border/60 focus:outline-none focus:ring-1 focus:ring-workspace-primary/50"
++            tabIndex={0}
++            role="region"
++            aria-label="合规核验事项列表"
++          >
++            <table className="w-full text-left text-xs border-collapse">
+               <thead>
+-                <tr className="border-b border-workspace-border bg-workspace-surface-subtle text-workspace-text-secondary">
+-                  <th className="px-3 py-2 font-medium">类别</th>
+-                  <th className="px-3 py-2 font-medium">事项名称</th>
+-                  <th className="px-3 py-2 font-medium">性质</th>
+-                  <th className="px-3 py-2 font-medium">风险</th>
+-                  <th className="px-3 py-2 font-medium">状态</th>
+-                  <th className="px-3 py-2 font-medium">说明</th>
+-                  <th className="px-3 py-2 text-right font-medium">操作</th>
++                <tr className="border-b border-workspace-border bg-workspace-surface-subtle text-workspace-text-secondary text-xs">
++                  <th className="whitespace-nowrap px-3 py-2.5 font-medium min-w-[76px] w-[76px]">类别</th>
++                  <th className="px-3 py-2.5 font-medium min-w-[140px]">事项名称</th>
++                  <th className="whitespace-nowrap px-3 py-2.5 font-medium min-w-[56px] w-[56px]">性质</th>
++                  <th className="whitespace-nowrap px-3 py-2.5 font-medium min-w-[72px] w-[72px]">风险</th>
++                  <th className="whitespace-nowrap px-3 py-2.5 font-medium min-w-[76px] w-[76px]">状态</th>
++                  <th className="px-3 py-2.5 font-medium min-w-[150px]">说明</th>
++                  <th className="whitespace-nowrap px-3 py-2.5 text-right font-medium min-w-[96px]">操作</th>
+                 </tr>
+               </thead>
+               <tbody className="divide-y divide-workspace-border">
+@@ -1016,65 +1021,66 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+                   if (isEditing) {
+                     return (
+                       <tr key={req.id} className="bg-workspace-primary/5">
+-                        <td className="px-3 py-2">
++                        <td className="whitespace-nowrap px-3 py-2 align-top w-[76px]">
+                           <select
+                             value={editingDraft.category}
+                             onChange={(e) => setEditingDraft({ ...editingDraft, category: e.target.value })}
+-                            className="h-7 rounded border border-workspace-border bg-workspace-surface px-1 text-xs"
++                            className="h-7 w-full min-w-[76px] rounded border border-workspace-border bg-workspace-surface px-1 text-xs text-workspace-text focus:outline-none focus:ring-1 focus:ring-workspace-primary/50"
+                           >
+                             {COMPLIANCE_REQUIREMENT_CATEGORIES.map((c) => (
+                               <option key={c} value={c}>{REQ_CATEGORY_ZH[c] || c}</option>
+                             ))}
+                           </select>
+                         </td>
+-                        <td className="px-3 py-2">
++                        <td className="px-3 py-2 align-top min-w-[140px]">
+                           <input
+                             value={editingDraft.name}
+                             onChange={(e) => setEditingDraft({ ...editingDraft, name: e.target.value })}
+-                            className="h-7 w-full rounded border border-workspace-border bg-workspace-surface px-1.5 text-xs"
++                            className="h-7 w-full min-w-[130px] rounded border border-workspace-border bg-workspace-surface px-1.5 text-xs text-workspace-text focus:outline-none focus:ring-1 focus:ring-workspace-primary/50"
+                           />
+                         </td>
+-                        <td className="px-3 py-2">
+-                          <label className="flex items-center gap-1 text-[11px]">
++                        <td className="whitespace-nowrap px-3 py-2 align-top min-w-[56px] w-[56px]">
++                          <label className="flex items-center gap-1 text-[11px] whitespace-nowrap pt-1">
+                             <input
+                               type="checkbox"
+                               checked={editingDraft.required}
+                               onChange={(e) => setEditingDraft({ ...editingDraft, required: e.target.checked })}
++                              className="rounded border-workspace-border"
+                             />
+                             必选
+                           </label>
+                         </td>
+-                        <td className="px-3 py-2">
++                        <td className="whitespace-nowrap px-3 py-2 align-top min-w-[72px] w-[72px]">
+                           <select
+                             value={editingDraft.risk}
+                             onChange={(e) => setEditingDraft({ ...editingDraft, risk: e.target.value })}
+-                            className="h-7 rounded border border-workspace-border bg-workspace-surface px-1 text-xs"
++                            className="h-7 w-full min-w-[72px] rounded border border-workspace-border bg-workspace-surface px-1 text-xs text-workspace-text focus:outline-none focus:ring-1 focus:ring-workspace-primary/50"
+                           >
+                             {COMPLIANCE_RISK_LEVELS.map((val) => (
+                               <option key={val} value={val}>{RISK_LEVEL_ZH[val] || val}</option>
+                             ))}
+                           </select>
+                         </td>
+-                        <td className="px-3 py-2">
++                        <td className="whitespace-nowrap px-3 py-2 align-top min-w-[76px] w-[76px]">
+                           <select
+                             value={editingDraft.status}
+                             onChange={(e) => setEditingDraft({ ...editingDraft, status: e.target.value })}
+-                            className="h-7 rounded border border-workspace-border bg-workspace-surface px-1 text-xs"
++                            className="h-7 w-full min-w-[76px] rounded border border-workspace-border bg-workspace-surface px-1 text-xs text-workspace-text focus:outline-none focus:ring-1 focus:ring-workspace-primary/50"
+                           >
+                             {Object.entries(REQ_STATUS_ZH).map(([val, label]) => (
+                               <option key={val} value={val}>{label}</option>
+                             ))}
+                           </select>
+                         </td>
+-                        <td className="px-3 py-2">
++                        <td className="px-3 py-2 align-top min-w-[150px]">
+                           <input
+                             value={editingDraft.desc}
+                             onChange={(e) => setEditingDraft({ ...editingDraft, desc: e.target.value })}
+-                            className="h-7 w-full rounded border border-workspace-border bg-workspace-surface px-1.5 text-xs"
++                            className="h-7 w-full min-w-[140px] rounded border border-workspace-border bg-workspace-surface px-1.5 text-xs text-workspace-text focus:outline-none focus:ring-1 focus:ring-workspace-primary/50"
+                           />
+                         </td>
+-                        <td className="px-3 py-2 text-right">
+-                          <div className="flex items-center justify-end gap-1">
++                        <td className="whitespace-nowrap px-3 py-2 text-right align-top min-w-[96px]">
++                          <div className="flex items-center justify-end gap-1 whitespace-nowrap">
+                             <Button size="sm" variant="ghost" onClick={() => setEditingReqId(null)}>
+                               取消
+                             </Button>
+@@ -1088,42 +1094,46 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+                   }
+ 
+                   return (
+-                    <tr key={req.id} className="hover:bg-workspace-surface-subtle">
+-                      <td className="px-3 py-2 text-workspace-text-secondary">
+-                        <span className="rounded bg-workspace-surface-subtle px-1.5 py-0.5 text-[11px] font-medium text-workspace-text">
++                    <tr key={req.id} className="hover:bg-workspace-surface-subtle/70 transition-colors">
++                      <td className="whitespace-nowrap px-3 py-2.5 text-workspace-text-secondary align-top w-[76px]">
++                        <span className="inline-block rounded bg-workspace-surface-subtle px-1.5 py-0.5 text-[11px] font-medium text-workspace-text whitespace-nowrap">
+                           {REQ_CATEGORY_ZH[req.category] || req.category}
+                         </span>
+                       </td>
+-                      <td className="px-3 py-2 font-medium text-workspace-text">
++                      <td className="px-3 py-2.5 text-sm font-medium text-workspace-text min-w-[140px] break-words leading-snug align-top">
+                         {req.name}
+                       </td>
+-                      <td className="px-3 py-2">
++                      <td className="whitespace-nowrap px-3 py-2.5 align-top min-w-[56px] w-[56px]">
+                         {req.required ? (
+-                          <span className="text-[11px] font-medium text-workspace-warning">必选</span>
++                          <span className="text-[11px] font-medium text-workspace-warning whitespace-nowrap">必选</span>
+                         ) : (
+-                          <span className="text-[11px] text-workspace-text-tertiary">可选</span>
++                          <span className="text-[11px] text-workspace-text-tertiary whitespace-nowrap">可选</span>
+                         )}
+                       </td>
+-                      <td className="px-3 py-2">
++                      <td className="whitespace-nowrap px-3 py-2.5 align-top min-w-[72px] w-[72px]">
+                         {req.risk ? (
+-                          <Badge tone={RISK_LEVEL_TONE[req.risk]}>
+-                            {RISK_LEVEL_ZH[req.risk] || req.risk}
+-                          </Badge>
++                          <span className="inline-block whitespace-nowrap">
++                            <Badge tone={RISK_LEVEL_TONE[req.risk]}>
++                              {RISK_LEVEL_ZH[req.risk] || req.risk}
++                            </Badge>
++                          </span>
+                         ) : (
+                           <span className="text-workspace-text-tertiary">—</span>
+                         )}
+                       </td>
+-                      <td className="px-3 py-2">
+-                        <Badge tone={REQ_STATUS_TONE[req.status]}>
+-                          {REQ_STATUS_ZH[req.status] || req.status}
+-                        </Badge>
++                      <td className="whitespace-nowrap px-3 py-2.5 align-top min-w-[76px] w-[76px]">
++                        <span className="inline-block whitespace-nowrap">
++                          <Badge tone={REQ_STATUS_TONE[req.status]}>
++                            {REQ_STATUS_ZH[req.status] || req.status}
++                          </Badge>
++                        </span>
+                       </td>
+-                      <td className="max-w-[200px] truncate px-3 py-2 text-workspace-text-secondary" title={req.desc}>
++                      <td className="px-3 py-2.5 text-xs text-workspace-text-secondary min-w-[150px] max-w-[240px] break-words whitespace-normal leading-relaxed align-top">
+                         {req.desc || '—'}
+                       </td>
+-                      <td className="px-3 py-2 text-right">
++                      <td className="whitespace-nowrap px-3 py-2.5 text-right align-top min-w-[96px]">
+                         {isDeleting ? (
+-                          <div className="flex items-center justify-end gap-1.5">
++                          <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
+                             <span className="text-[11px] font-medium text-workspace-danger">确认删除?</span>
+                             <Button
+                               size="sm"
+@@ -1141,11 +1151,12 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+                             </Button>
+                           </div>
+                         ) : (
+-                          <div className="flex items-center justify-end gap-1">
++                          <div className="flex items-center justify-end gap-1 whitespace-nowrap">
+                             <button
+                               onClick={() => handleStartEdit(req)}
+-                              className="rounded p-1 text-workspace-text-tertiary hover:bg-workspace-surface hover:text-workspace-text"
++                              className="rounded p-1 text-workspace-text-tertiary hover:bg-workspace-surface hover:text-workspace-text focus:outline-none focus:ring-1 focus:ring-workspace-primary"
+                               title="编辑事项"
++                              aria-label="编辑事项"
+                             >
+                               <Edit3 className="h-3.5 w-3.5" />
+                             </button>
+@@ -1154,8 +1165,9 @@ export default function ProjectCompliancePanel({ projectId, onChanged }) {
+                                 setDeletingReqId(req.id)
+                                 setEditingReqId(null)
+                               }}
+-                              className="rounded p-1 text-workspace-text-tertiary hover:bg-workspace-surface hover:text-workspace-danger"
++                              className="rounded p-1 text-workspace-text-tertiary hover:bg-workspace-surface hover:text-workspace-danger focus:outline-none focus:ring-1 focus:ring-workspace-danger"
+                               title="删除事项"
++                              aria-label="删除事项"
+                             >
+                               <Trash2 className="h-3.5 w-3.5" />
+                             </button>

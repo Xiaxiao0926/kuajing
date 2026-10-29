@@ -1,0 +1,96 @@
+ M ozon-react/public/data/manifest.json
+ M ozon-react/src/App.jsx
+ M ozon-react/src/components/Dashboard.jsx
+ M ozon-react/src/components/DataTable.jsx
+ M ozon-react/src/components/MarketResearch.jsx
+ M ozon-react/src/components/NewDashboard.jsx
+ M ozon-react/src/components/OzonCalc.jsx
+ M ozon-react/src/components/PurityPipelinePage.jsx
+ M ozon-react/src/components/Sidebar.jsx
+ M ozon-react/src/components/WBCalc.jsx
+ M ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx
+ M ozon-react/src/components/marketIntelligence/components/ManualProcurementWorkbench.jsx
+ M ozon-react/src/components/marketIntelligence/components/NicheDetailDrawer.jsx
+ M ozon-react/src/components/t6/CandidatePoolPage.jsx
+ M ozon-react/src/components/t6/ProjectDetailPage.jsx
+ M ozon-react/src/components/t6/ProjectListPage.jsx
+ M ozon-react/src/components/wbcalc/tabs/CalculatorTab.jsx
+ M ozon-react/src/components/wbcalc/tabs/CompareTab.jsx
+ M ozon-react/src/utils/marketAnalysis/priceBands.js
+ M ozon-react/src/utils/marketAnalysis/purityFilter.js
+ M ozon-react/src/utils/marketIntelligence/miStore.js
+ M ozon-react/src/utils/ozonEngine.js
+ M ozon-react/src/utils/t6/costScenarioAdapter.js
+ M ozon-react/src/utils/t6/gateEngine.js
+ M ozon-react/src/utils/t6/t6Store.js
+ M ozon-react/src/utils/t6/t6UiContract.test.mjs
+?? "0506 \347\261\273\347\233\256TOP15.xlsx"
+?? "0511-\346\217\255\351\230\263\347\224\265\345\220\271\351\243\216-\351\253\230\351\200\237\345\220\271\351\243\216\346\234\272\344\270\255\346\226\207\350\257\264\346\230\216\344\271\246.docx"
+?? "0511-\346\217\255\351\230\263\347\224\265\345\220\271\351\243\216-\351\253\230\351\200\237\345\220\271\351\243\216\346\234\272\344\270\255\346\226\207\350\257\264\346\230\216\344\271\246.pdf"
+?? "0601-\346\217\255\351\230\263\347\224\265\345\220\271\351\243\216-\351\253\230\351\200\237\345\220\271\351\243\216\346\234\272\344\277\204\350\257\255\350\257\264\346\230\216\344\271\246.pdf"
+?? "20260511 \347\261\273\347\233\256TOP15.xlsx"
+?? FINDINGS.md
+?? "OZON\346\211\213\345\245\227\345\244\232\346\265\201\344\270\212\346\236\266\347\255\226\345\210\222 (1).xlsx"
+?? "OZON\350\207\252\345\217\221\350\264\247\346\265\201\347\250\213.xlsx"
+?? RESULT-REVISION-001.md
+?? WRITE_MATRIX.md
+?? bydCP0818.sh
+?? content_production/
+?? docs/
+?? fybydcp0818.html
+?? hwj07_audit/
+?? ozon-react/src/components/marketIntelligence/components/OpportunityMarketResearchPanel.jsx
+?? ozon-react/src/components/marketIntelligence/components/OpportunityPurityGateway.jsx
+?? ozon-react/src/components/t6/CandidateDetailDrawer.jsx
+?? ozon-react/src/components/t6/CandidateProcurementPanel.jsx
+?? ozon-react/src/components/t6/CandidateScoringGateway.jsx
+?? ozon-react/src/components/t6/ProductProfileEditor.jsx
+?? ozon-react/src/components/t6/ProjectCompliancePanel.jsx
+?? ozon-react/src/components/t6/ProjectSupplyChainPanel.jsx
+?? ozon-react/src/utils/marketIntelligence/candidateMarketBridge.js
+?? ozon-react/src/utils/marketIntelligence/opportunityContext.js
+?? ozon-react/src/utils/marketIntelligence/procurementIdentity.js
+?? ozon-react/src/utils/platformCosting.js
+?? ozon-react/src/utils/platformCosting.test.mjs
+?? ozon-react/src/utils/t6/candidateProjectEvidence.js
+?? ozon-react/src/utils/t6/complianceDraftState.js
+?? ozon-react/src/utils/t6/complianceProfile.js
+?? ozon-react/src/utils/t6/productProfile.js
+?? ozon-react/src/utils/t6/supplyCostBridge.js
+?? "ozon\351\241\271\347\233\256\350\241\250.xlsx"
+?? public/data/
+?? reports/
+?? run-revision-costing-tests.mjs
+?? scratch_body.html
+?? scratch_homepage.html
+?? scratch_styles.css
+?? scripts/archive_automotive_content.js
+?? tests.json
+?? tests/candidate-identity-backfill.test.mjs
+?? tests/ia-candidate-capabilities.test.mjs
+?? tests/ia-candidate-detail.test.mjs
+?? tests/ia-candidate-market-bridge.test.mjs
+?? tests/ia-candidate-project-launch.test.mjs
+?? tests/ia-certification-applicability.test.mjs
+?? tests/ia-dual-snapshot-project-gate.test.mjs
+?? tests/ia-market-research-embedded.test.mjs
+?? tests/ia-market-validation-snapshot.test.mjs
+?? tests/ia-navigation-acceptance.test.mjs
+?? tests/ia-opportunity-shell.test.mjs
+?? tests/ia-procurement-identity.test.mjs
+?? tests/ia-project-compliance-draft.test.mjs
+?? tests/ia-project-compliance-gate.test.mjs
+?? tests/ia-project-compliance-layout.test.mjs
+?? tests/ia-project-compliance-table-layout.test.mjs
+?? tests/ia-project-compliance.test.mjs
+?? tests/ia-project-notice.test.mjs
+?? tests/ia-project-product-cost-prefill.test.mjs
+?? tests/ia-project-product-profile.test.mjs
+?? tests/ia-project-supply-chain-ui.test.mjs
+?? tests/ia-project-supply-cost-apply.test.mjs
+?? tests/ia-project-supply-gate.test.mjs
+?? tests/ia-purity-gateway.test.mjs
+?? tests/market-embedded-isolation.test.mjs
+?? tests/price-weighted-quantiles.test.mjs
+?? tools/
+?? "\350\267\250\345\242\203\351\241\271\347\233\256\344\272\247\345\223\201\347\272\277\346\211\251\345\261\225\350\256\241\345\210\222.xlsx"

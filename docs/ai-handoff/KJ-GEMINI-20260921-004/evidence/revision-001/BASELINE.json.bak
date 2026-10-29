@@ -1,0 +1,133 @@
+{
+  "task_id": "KJ-GEMINI-20260921-004",
+  "audit_timestamp": "2026-09-21T14:32:00+08:00",
+  "repository": {
+    "root": "D:/ozon",
+    "git_head": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+    "git_branch": "main",
+    "git_upstream": "origin/main",
+    "working_tree_clean": false,
+    "modified_files_count": 18,
+    "untracked_files_count": 52
+  },
+  "deployment_evidence": {
+    "deployed_commit_record": "a0dfa64bcc941b20b37d7e13028a25ad85dad802",
+    "deployed_commit_file": "deploy/kuajing-persistence/DEPLOYED_COMMIT",
+    "deployed_commit_date": "2026-08-26T12:28:48+08:00",
+    "commits_ahead_of_deployed": 24,
+    "wordpress_production_plugin": {
+      "repo_version": "0.3.3",
+      "repo_path": "wordpress/kuajing-persistence/kuajing-persistence.php",
+      "deploy_dir_version": "0.2.5",
+      "deploy_dir_path": "deploy/kuajing-persistence/kuajing-persistence.php",
+      "status": "UNMIGRATED_IN_DEPLOY_DIR"
+    },
+    "wordpress_production_frontend_dist": {
+      "deploy_dist_entry": "assets/index-BMWZJd3i.js",
+      "deploy_dist_manifest": "deploy/kuajing-persistence/dist/.vite/manifest.json",
+      "ozon_react_dist_entry": "assets/index-HdMyp8U-.js",
+      "ozon_react_dist_manifest": "ozon-react/dist/.vite/manifest.json",
+      "status": "LOCAL_BUILD_NOT_COPIED_TO_DEPLOY_DIR"
+    }
+  },
+  "architecture_components": {
+    "frontend_app": {
+      "name": "Ozon 跨境运营面板 (React + Vite)",
+      "directory": "ozon-react",
+      "port": 5173,
+      "entry_file": "ozon-react/src/main.jsx",
+      "root_component": "ozon-react/src/App.jsx",
+      "tech_stack": ["React 18", "Vite 5", "Tailwind CSS", "Recharts", "Lucide React", "XLSX"],
+      "ui_library": "None (Tailwind CSS custom Morandi design tokens + custom components)"
+    },
+    "backend_wordpress_plugin": {
+      "name": "FYZSXNB Kuajing Dashboard WordPress Plugin",
+      "directory": "wordpress/kuajing-persistence",
+      "entry_file": "wordpress/kuajing-persistence/kuajing-persistence.php",
+      "mount_target": "https://fyzsxnb.com/kuajing/ ([kuajing_dashboard] shortcode)",
+      "rest_endpoints": [
+        "GET/POST/DELETE /wp-json/kuajing/v1/session",
+        "GET/POST /wp-json/kuajing/v1/state",
+        "GET /wp-json/kuajing/v1/state/history",
+        "POST /wp-json/kuajing/v1/state/restore",
+        "POST /wp-json/kuajing/v1/state/backup",
+        "GET /wp-json/kuajing/v1/state/backups",
+        "GET/POST/DELETE /wp-json/kuajing/v1/files/(?P<namespace>[a-z0-9_-]+)"
+      ],
+      "mysql_tables": [
+        "${prefix}kuajing_state",
+        "${prefix}kuajing_state_versions",
+        "${prefix}kuajing_state_backups",
+        "${prefix}kuajing_audit_events"
+      ]
+    },
+    "backend_pricing_api": {
+      "name": "价格分析 API (Node.js)",
+      "directory": "root",
+      "port": 8888,
+      "entry_file": "server.js",
+      "tech_stack": ["Node.js http", "xlsx", "csv-parser"]
+    },
+    "backend_python_panels": {
+      "name": "Python Streamlit 面板",
+      "directory": "ozon-product-analyzer",
+      "ports": [8501, 8502],
+      "entry_files": ["app.py", "wb_panel.py"],
+      "tech_stack": ["Streamlit", "pandas", "Decimal", "plotly"]
+    }
+  },
+  "implementation_status_separation": {
+    "deployed_functions": [
+      "OzonCalc (Single & Multi SKU pricing)",
+      "WBCalc (Forward logistics, commission, profit, penalty)",
+      "MarketResearch (XLSX/HTML file upload & chart visualization)",
+      "FragrancePricing",
+      "ListingContent generator",
+      "Daily RUB/CNY exchange rate auto-refresh (via CBR/ER-API/config)",
+      "Basic WordPress session authorization & single-layer MySQL persistence"
+    ],
+    "local_committed_un_deployed": [
+      "Market Intelligence v1.1.1 (Overview, Radar, Niches, Keywords, ValidationPool, DataHub)",
+      "Market Report Center (24 static analytical reports with Russia economic context)",
+      "Ozon FBP Border Warehouse profit calculator",
+      "Ozon Market Purity Pipeline (5 category rulesets)",
+      "WordPress Persistence Plugin v0.3.3 (revision locking, conflict backups, audit logging)",
+      "T6 Core Data Models (candidate, project, snapshot, decision log)"
+    ],
+    "local_dirty_uncommitted": [
+      "IA Opportunity Shell & Context (NicheDetailDrawer Opportunity tabs)",
+      "Candidate Detail Drawer, Procurement Panel & Scoring Gateway",
+      "Product Profile Editor (TASK 07A-1)",
+      "Project Compliance Panel (TASK 07A-4, tasks 001/002/003)",
+      "Project Supply Chain Panel (TASK 07A-2)",
+      "Supply Cost Bridge (TASK 07A-3D2 explicit apply)",
+      "All IA acceptance test suites (tests/ia-*)"
+    ],
+    "docs_only_specifications": [
+      "Certification Applicability Contract (TASK 07A-4C3A, waiting for Codex review, 0 implementation)",
+      "FBP 需求策划方案 (docs only)",
+      "T7 供应商报价与成本基线高级设计 (partially implemented in T6)"
+    ]
+  },
+  "key_file_hashes": {
+    "ozon-react/src/App.jsx": "24f92833f5a9dd85cb4cce60846a2fb00d3eacce1fd7daab1813f663dae862ff",
+    "ozon-react/src/components/Sidebar.jsx": "ca4bc1a94558f2b9c8b11787f0f45d06c7538d91039a6215d1f69b2672ab6ae8",
+    "ozon-react/src/utils/persist.js": "11e7aaebac4c97c420fc7a45b433215caf4600e036db7d568ea032d8457cf2e4",
+    "ozon-react/src/utils/runtime.js": "601e13a786f1a7d1ba1b57586c3120af9583c733426351620549d50be42ebbd2",
+    "ozon-react/src/utils/t6/t6Store.js": "7952ea5669dcc8dbd7c2bf6dff2bb02df62d864d23443a7b3fc31e935f2d3f4e",
+    "ozon-react/src/utils/t6/gateEngine.js": "d8f4eeb0d784bbf111d6eb22261f7ff692b92bfbebb3712f994f69140fb7ba78",
+    "ozon-react/src/utils/t6/complianceProfile.js": "47f0eb78c1c5ff61c6a4feefb7c48924aa2be7738dfd02abc71e9c558032b7ae",
+    "ozon-react/src/utils/t6/productProfile.js": "0bad802f090e9201273cd3f672b6da88fd2942388cd53c7b6a09d13c684dd459",
+    "ozon-react/src/utils/t6/supplyCostBridge.js": "61aaba9aaf16f7ad74d1b192e624e595dc835d3d9f2e8e3ccb8cf638817d7ced",
+    "ozon-react/src/components/t6/ProjectDetailPage.jsx": "83adf484de082dba76b053bb3840fbc62cef8985154499473dde34aa99d7ede7",
+    "ozon-react/src/components/t6/ProjectCompliancePanel.jsx": "8d1a4772569cf59050a6c20c2ce59a2aabc7bc0e564f3dd5bcb390982bfcec41",
+    "ozon-react/src/components/t6/ProjectSupplyChainPanel.jsx": "525f4e66d499b82bbce5b5b4fd92ec8cf7eecd223163b42dea401a4ca141357c",
+    "ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx": "314f65a80ff3c2e98e876696876731afb734e4e45eef629d058aecff99f2ba70",
+    "ozon-react/src/utils/marketIntelligence/miStore.js": "c8287711a6bc49e9eb79cea9fe1db2ed4b5a2c8f45749922e4429562c4ecbaab",
+    "wordpress/kuajing-persistence/kuajing-persistence.php": "1bf1cb307a9b44a8799372202ce96f1df5f6ac7621c127b8be9ef5fddd02a023",
+    "deploy/kuajing-persistence/kuajing-persistence.php": "2c8ff3dcfb2b64b5d61dab96d21bea30df82474bf8703cd210f4f74d6b507a19",
+    "deploy/kuajing-persistence/DEPLOYED_COMMIT": "8599f6c4da7f4a8ba2592a2087f6d0d9ac1a5eb803f7c2ff58280f5179715548",
+    "server.js": "62395ab58f3d9c6654d0ab2f8459bc853ba8cbb579e9109a862c80bb1ea9a855",
+    "config.js": "848293d03f35ece05402b61b5b3724f75fe7975c22811106ae48a2f5f0c124a8"
+  }
+}

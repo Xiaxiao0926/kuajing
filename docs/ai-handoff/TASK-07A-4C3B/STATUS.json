@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "KUAIJING-IA-REFACTOR-V1-07A-4C3B",
+  "task_title": "TASK 07A-4C3B — Certification Applicability Implementation",
+  "status": "accepted_with_known_limitations",
+  "claimed_by": "Gemini",
+  "previous_task_id": "KUAIJING-IA-REFACTOR-V1-07A-4C3A-R5",
+  "previous_task_status": "review_ready",
+  "task_file": "docs/ai-handoff/TASK-07A-4C3B/TASK.md",
+  "target_contract_file": "docs/ia/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md",
+  "implementation_report": "docs/ia/TASK07A4C3B_CERTIFICATION_IMPLEMENTATION.md",
+  "review_file": "docs/ai-handoff/TASK-07A-4C3B/REVIEW.md",
+  "authorized_files": [
+    "ozon-react/src/utils/t6/complianceProfile.js",
+    "ozon-react/src/utils/t6/t6Store.js",
+    "ozon-react/src/utils/t6/complianceDraftState.js",
+    "ozon-react/src/utils/t6/gateEngine.js",
+    "ozon-react/src/components/t6/ProjectDetailPage.jsx",
+    "ozon-react/src/components/t6/ProjectCompliancePanel.jsx"
+  ],
+  "implementation_authorized": true,
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "execution_scope": "Implementation of Certification Applicability and cert_plan gate according to R5 contract."
+}

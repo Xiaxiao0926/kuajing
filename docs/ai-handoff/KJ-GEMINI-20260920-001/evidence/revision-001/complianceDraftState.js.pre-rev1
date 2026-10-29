@@ -1,0 +1,247 @@
+/**
+ * utils/t6/complianceDraftState.js — Project Compliance 独立草稿状态管理与冲突检测纯函数
+ * 
+ * 任务：KJ-GEMINI-20260920-001 (Compliance Panel Unsaved Input Protection)
+ * 契约：
+ * 1. 纯函数状态计算，零 DOM / React 依赖，零 Store / 本地持久化副作用。
+ * 2. 独立跟踪 Assessment 与 Plan 两大表单区块的 draft 与 baseline。
+ * 3. 严格判定 dirty 状态与外部数据并发更新冲突（detectAssessmentConflict, detectPlanConflict）。
+ * 4. 项目切换（projectId 变化）提供干净重置，杜绝跨项目草稿串入。
+ * 5. 外部更新时，干净区块安全刷新，dirty 区块严禁静默覆盖，准确标出冲突。
+ */
+
+import { COMPLIANCE_ASSESSMENT_STATUS } from './complianceProfile.js'
+
+/**
+ * 从 compliance 对象提取 Assessment 规范化状态
+ * @param {object|null|undefined} compliance
+ * @returns {{ assessmentStatus: string, riskLevel: string, notes: string }}
+ */
+export function extractAssessmentState(compliance) {
+  const comp = compliance || {}
+  return {
+    assessmentStatus: comp.assessmentStatus || COMPLIANCE_ASSESSMENT_STATUS.NOT_STARTED,
+    riskLevel: comp.riskLevel || '',
+    notes: comp.notes || '',
+  }
+}
+
+/**
+ * 从 compliance 对象提取 Plan 规范化状态
+ * @param {object|null|undefined} compliance
+ * @returns {{ standardsText: string, certificationPlan: string }}
+ */
+export function extractPlanState(compliance) {
+  const comp = compliance || {}
+  const standardsText = Array.isArray(comp.applicableStandards)
+    ? comp.applicableStandards.join('\n')
+    : (typeof comp.applicableStandards === 'string' ? comp.applicableStandards : '')
+  return {
+    standardsText,
+    certificationPlan: comp.certificationPlan || '',
+  }
+}
+
+/**
+ * 判定 Assessment 表单草稿是否包含未保存修改
+ * @param {object} draft
+ * @param {object} baseline
+ * @returns {boolean}
+ */
+export function isAssessmentDirty(draft, baseline) {
+  if (!draft || !baseline) return false
+  return (
+    draft.assessmentStatus !== baseline.assessmentStatus ||
+    draft.riskLevel !== baseline.riskLevel ||
+    draft.notes !== baseline.notes
+  )
+}
+
+/**
+ * 判定 Plan 表单草稿是否包含未保存修改
+ * @param {object} draft
+ * @param {object} baseline
+ * @returns {boolean}
+ */
+export function isPlanDirty(draft, baseline) {
+  if (!draft || !baseline) return false
+  return (
+    draft.standardsText !== baseline.standardsText ||
+    draft.certificationPlan !== baseline.certificationPlan
+  )
+}
+
+/**
+ * 检测外部合规评估数据更新是否与当前本地草稿冲突
+ * 规则：
+ * - 若草稿未 dirty，无冲突（可直接安全覆盖刷新）。
+ * - 若外部传入数据与 baseline 相同，无冲突（外部并未更改此区块）。
+ * - 若外部传入数据已变更，且与本地草稿内容不同，则判定为冲突。
+ * @param {object} param0
+ * @param {object} param0.draft 本地草稿
+ * @param {object} param0.baseline 上次同步/保存基准
+ * @param {object} param0.incoming 外部最新数据
+ * @returns {boolean}
+ */
+export function detectAssessmentConflict({ draft, baseline, incoming }) {
+  if (!isAssessmentDirty(draft, baseline)) return false
+  if (!incoming || !baseline) return false
+
+  const externalChanged = (
+    incoming.assessmentStatus !== baseline.assessmentStatus ||
+    incoming.riskLevel !== baseline.riskLevel ||
+    incoming.notes !== baseline.notes
+  )
+  if (!externalChanged) return false
+
+  // 若外部数据正好与当前草稿完全一致，则无实质冲突
+  const matchesDraft = (
+    incoming.assessmentStatus === draft.assessmentStatus &&
+    incoming.riskLevel === draft.riskLevel &&
+    incoming.notes === draft.notes
+  )
+  return !matchesDraft
+}
+
+/**
+ * 检测外部合规计划数据更新是否与当前本地草稿冲突
+ * @param {object} param0
+ * @param {object} param0.draft 本地草稿
+ * @param {object} param0.baseline 上次同步/保存基准
+ * @param {object} param0.incoming 外部最新数据
+ * @returns {boolean}
+ */
+export function detectPlanConflict({ draft, baseline, incoming }) {
+  if (!isPlanDirty(draft, baseline)) return false
+  if (!incoming || !baseline) return false
+
+  const externalChanged = (
+    incoming.standardsText !== baseline.standardsText ||
+    incoming.certificationPlan !== baseline.certificationPlan
+  )
+  if (!externalChanged) return false
+
+  const matchesDraft = (
+    incoming.standardsText === draft.standardsText &&
+    incoming.certificationPlan === draft.certificationPlan
+  )
+  return !matchesDraft
+}
+
+/**
+ * 当 project / compliance 发生变动（或 project 切换）时，计算各区块的下一步同步状态
+ * 
+ * @param {object} params
+ * @param {string|null} params.prevProjectId 上次挂载/执行的 projectId
+ * @param {string|null} params.nextProjectId 本次接收的 projectId
+ * @param {object} params.currentAssessmentDraft
+ * @param {object} params.currentAssessmentBaseline
+ * @param {object} params.currentPlanDraft
+ * @param {object} params.currentPlanBaseline
+ * @param {object|null|undefined} params.nextCompliance
+ * @returns {object} 计算后的全面状态
+ */
+export function resolveSyncOnProjectUpdate({
+  prevProjectId,
+  nextProjectId,
+  currentAssessmentDraft,
+  currentAssessmentBaseline,
+  currentPlanDraft,
+  currentPlanBaseline,
+  nextCompliance,
+}) {
+  const incomingAssessment = extractAssessmentState(nextCompliance)
+  const incomingPlan = extractPlanState(nextCompliance)
+
+  // 1. 项目切换：全面清空并初始化为目标项目数据，绝不带入上一个项目的草稿
+  if (nextProjectId !== prevProjectId || !prevProjectId) {
+    return {
+      projectId: nextProjectId,
+      assessmentDraft: incomingAssessment,
+      assessmentBaseline: incomingAssessment,
+      isAssessmentDirty: false,
+      assessmentConflict: false,
+      planDraft: incomingPlan,
+      planBaseline: incomingPlan,
+      isPlanDirty: false,
+      planConflict: false,
+      incomingAssessment,
+      incomingPlan,
+    }
+  }
+
+  // 2. 同一项目内的更新同步
+  // Layer A: Assessment
+  const assessmentDirty = isAssessmentDirty(currentAssessmentDraft, currentAssessmentBaseline)
+  let nextAssessmentDraft = currentAssessmentDraft
+  let nextAssessmentBaseline = currentAssessmentBaseline
+  let nextAssessmentConflict = false
+
+  if (assessmentDirty) {
+    const conflict = detectAssessmentConflict({
+      draft: currentAssessmentDraft,
+      baseline: currentAssessmentBaseline,
+      incoming: incomingAssessment,
+    })
+    if (conflict) {
+      // 冲突：保留用户草稿，标记冲突，保留原 baseline（以便后续继续对比或放弃）
+      nextAssessmentConflict = true
+      nextAssessmentDraft = currentAssessmentDraft
+      nextAssessmentBaseline = currentAssessmentBaseline
+    } else {
+      // 外部 assessment 未改动（如 Plan 保存、Requirement 增删改、或状态流转等），草稿完好保留
+      nextAssessmentConflict = false
+      nextAssessmentDraft = currentAssessmentDraft
+      nextAssessmentBaseline = currentAssessmentBaseline
+    }
+  } else {
+    // 未编辑（clean）：安全跟随外部最新数据刷新
+    nextAssessmentDraft = incomingAssessment
+    nextAssessmentBaseline = incomingAssessment
+    nextAssessmentConflict = false
+  }
+
+  // Layer B: Plan
+  const planDirty = isPlanDirty(currentPlanDraft, currentPlanBaseline)
+  let nextPlanDraft = currentPlanDraft
+  let nextPlanBaseline = currentPlanBaseline
+  let nextPlanConflict = false
+
+  if (planDirty) {
+    const conflict = detectPlanConflict({
+      draft: currentPlanDraft,
+      baseline: currentPlanBaseline,
+      incoming: incomingPlan,
+    })
+    if (conflict) {
+      // 冲突：保留用户草稿，标记冲突
+      nextPlanConflict = true
+      nextPlanDraft = currentPlanDraft
+      nextPlanBaseline = currentPlanBaseline
+    } else {
+      // 外部 plan 未改动（如 Assessment 保存、Requirement 增删改等），草稿完好保留
+      nextPlanConflict = false
+      nextPlanDraft = currentPlanDraft
+      nextPlanBaseline = currentPlanBaseline
+    }
+  } else {
+    // 未编辑（clean）：安全跟随外部最新数据刷新
+    nextPlanDraft = incomingPlan
+    nextPlanBaseline = incomingPlan
+    nextPlanConflict = false
+  }
+
+  return {
+    projectId: nextProjectId,
+    assessmentDraft: nextAssessmentDraft,
+    assessmentBaseline: nextAssessmentBaseline,
+    isAssessmentDirty: isAssessmentDirty(nextAssessmentDraft, nextAssessmentBaseline),
+    assessmentConflict: nextAssessmentConflict,
+    planDraft: nextPlanDraft,
+    planBaseline: nextPlanBaseline,
+    isPlanDirty: isPlanDirty(nextPlanDraft, nextPlanBaseline),
+    planConflict: nextPlanConflict,
+    incomingAssessment,
+    incomingPlan,
+  }
+}
