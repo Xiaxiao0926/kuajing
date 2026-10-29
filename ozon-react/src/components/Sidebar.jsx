@@ -18,61 +18,74 @@ const DATA_DIR = getDataUrl().replace(/\/$/, '')
 
 const stripEmoji = (s) => String(s || '').replace(/^[^\u4e00-\u9fa5A-Za-z]+/, '').trim()
 
-// 业务模块主导航（T5-2 IA）；id 一律指向既有节点/页面，不新增功能
+// 业务模块主导航（KUAIJING-IA-REFACTOR-V1 · TASK 03：收敛为 8 大一级业务域）
 const NAV_SECTIONS = [
   {
-    id: 'workspace', label: '工作台', icon: LayoutDashboard,
+    id: 'workspace',
+    label: '工作台',
+    icon: LayoutDashboard,
+    directItem: true,
     items: [{ id: '__progress_overview__', label: '工作台', icon: LayoutDashboard }],
   },
   {
-    id: 'market', label: '市场与选品', icon: BarChart3,
+    id: 'market',
+    label: '市场机会',
+    icon: Compass,
     items: [
       { id: '__market_intelligence__', label: '俄罗斯市场情报', icon: Compass },
-      { id: 'n2', label: '市场调研', icon: Search },
-      { id: '__purity_analysis__', label: '选品市场分析', icon: Layers },
-      { id: '__market_reports__', label: '市场报告中心', icon: BookOpen },
-      { id: '__scoring__', label: '选品评分', icon: Target },
-      { id: 'n1', label: '立项决策', icon: ClipboardList },
+      { id: '__market_reports__', label: '市场报告', icon: BookOpen },
     ],
   },
   {
-    id: 'platform', label: '平台运营', icon: Store,
-    items: [
-      { id: 'n4', label: 'Ozon', icon: Store },
-      { id: 'n39', label: 'Wildberries', icon: Truck },
-      { id: 'n14', label: 'Listing', icon: FileText },
-    ],
-  },
-  {
-    id: 'goods', label: '商品中心', icon: Package,
+    id: 'selection',
+    label: '选品与立项',
+    icon: Target,
     items: [
       { id: '__t6_candidates__', label: '候选池', icon: Inbox },
+    ],
+  },
+  {
+    id: 'goods',
+    label: '商品项目',
+    icon: Package,
+    items: [
       { id: '__t6_projects__', label: 'SKU 项目', icon: FolderKanban },
       { id: 'n5', label: '商品档案', icon: Package },
     ],
   },
   {
-    id: 'supply', label: '供应链', icon: Factory,
-    items: [{ id: 'n6', label: '供应链', icon: Factory }],
-  },
-  {
-    id: 'logistics', label: '物流与成本', icon: Truck,
+    id: 'logistics',
+    label: '成本与物流',
+    icon: Truck,
     items: [
-      { id: 'n8', label: '物流与成本', icon: Truck },
-      { id: '__fbp_calc__', label: 'FBP 边境仓核算', icon: Warehouse },
+      { id: 'n39', label: 'WB 核算', icon: Truck },
+      { id: '__fbp_calc__', label: 'FBP 核算', icon: Warehouse },
+      { id: 'n8', label: '成本报价', icon: FileText },
     ],
   },
   {
-    id: 'compliance', label: '合规与账号', icon: ShieldCheck,
-    items: [{ id: 'n9', label: '合规与账号', icon: ShieldCheck }],
+    id: 'listing',
+    label: 'Listing 与上架',
+    icon: FileText,
+    items: [
+      { id: 'n14', label: 'Listing 工作台', icon: FileText },
+    ],
   },
   {
-    id: 'finance', label: '回款与财务', icon: Wallet,
-    items: [{ id: 'n31', label: '回款与财务', icon: Wallet }],
+    id: 'operations',
+    label: '运营与复盘',
+    icon: Store,
+    items: [
+      { id: 'n4', label: 'Ozon 运营', icon: Store },
+    ],
   },
   {
-    id: 'data', label: '数据与设置', icon: Database,
-    items: [{ id: '__node_overview__', label: '数据与设置', icon: Database }],
+    id: 'system',
+    label: '系统与数据',
+    icon: Database,
+    items: [
+      { id: '__market_datahub__', label: '数据中心', icon: Database },
+    ],
   },
 ]
 
@@ -80,7 +93,15 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
   const fileInputRef = useRef(null)
   const [availableFiles, setAvailableFiles] = useState([])
   const [loadingFiles, setLoadingFiles] = useState(false)
-  const [expandedSections, setExpandedSections] = useState({ market: true, platform: true })
+  const [expandedSections, setExpandedSections] = useState({
+    market: true,
+    selection: true,
+    goods: true,
+    logistics: true,
+    listing: true,
+    operations: true,
+    system: true,
+  })
   const [showDataPanel, setShowDataPanel] = useState(false)
   const [showProgress, setShowProgress] = useState(false)
   const [expandedPhases, setExpandedPhases] = useState({ 'phase-1': true })
@@ -160,8 +181,7 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
   if (collapsed) {
     const flatIcons = []
     for (const sec of NAV_SECTIONS) {
-      if (sec.items.length === 1) flatIcons.push({ id: sec.items[0].id, icon: sec.items[0].icon, label: sec.items[0].label })
-      else sec.items.forEach((it) => flatIcons.push({ id: it.id, icon: it.icon, label: it.label }))
+      sec.items.forEach((it) => flatIcons.push({ id: it.id, icon: it.icon, label: it.label }))
     }
     return (
       <aside className="sticky top-0 hidden h-screen w-16 flex-shrink-0 flex-col items-center border-r border-workspace-border bg-workspace-surface py-3 lg:flex">
@@ -204,9 +224,9 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
       {/* 业务模块主导航 */}
       <nav className="flex-1 overflow-y-auto px-2 py-2">
         {NAV_SECTIONS.map((section) => {
-          const hasChildren = section.items.length > 1
+          const isDirect = Boolean(section.directItem)
           const expanded = expandedSections[section.id]
-          if (!hasChildren) {
+          if (isDirect) {
             const item = section.items[0]
             const Icon = item.icon
             return (

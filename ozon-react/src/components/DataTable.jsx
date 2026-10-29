@@ -1,12 +1,16 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Search, Download, ChevronUp, ChevronDown } from 'lucide-react'
 
-export default function DataTable({ data }) {
-  const [searchTerm, setSearchTerm] = useState('')
+export default function DataTable({ data, initialSearchTerm = '', searchContextKey = '' }) {
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm || '')
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' })
   const [selectedColumns, setSelectedColumns] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 20
+
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm || '')
+  }, [searchContextKey, initialSearchTerm])
 
   const columns = useMemo(() => {
     if (!data || data.length === 0) return []
