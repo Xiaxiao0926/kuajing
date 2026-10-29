@@ -168,10 +168,10 @@ console.log('UI-5: 保存前人工确认 Gate 源码契约（Ozon/WB 未确认�
 {
   const oz = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'components', 'OzonCalc.jsx'), 'utf-8')
   assert(oz.includes('const [costConfirmed, setCostConfirmed] = useState(false)'), 'OzonCalc 含 costConfirmed 状态')
-  assert(oz.includes('disabled={!bestChannel || !costConfirmed}'), 'Ozon 保存按钮未确认即禁用')
+  assert(oz.includes('disabled={!bestChannel || !costConfirmed || missingInputs.length > 0 || !validRate}'), 'Ozon 缺渠道、未确认、缺输入或无效汇率时禁用保存')
   const wb = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'components', 'wbcalc', 'tabs', 'CalculatorTab.jsx'), 'utf-8')
   assert(wb.includes('const [costConfirmed, setCostConfirmed] = useState(false)'), 'CalculatorTab 含 costConfirmed 状态')
-  assert(wb.includes('disabled={!tariff || !form.productName || !costConfirmed}'), 'WB 保存按钮未确认即禁用')
+  assert(wb.includes('disabled={!canSaveScenario}') && wb.includes('costConfirmed && missingInputs.length === 0 && parcelValid'), 'WB 未确认、缺输入或包裹无效时禁用保存')
   // 两个面板共用 trusted 预填合并
   assert(oz.includes('mergeTrustedPrefill(base, projectContext.prefill)'), 'OzonCalc 用 mergeTrustedPrefill')
   assert(wb.includes('mergeTrustedPrefill(defaults, projectContext.prefill)'), 'CalculatorTab 用 mergeTrustedPrefill')

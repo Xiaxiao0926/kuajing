@@ -3,8 +3,8 @@
  * 数据流：scoring_candidates/bsr 加载一次 → scoreAllCandidates 一次（useMemo，同 T4 适配层）
  * → t6Store 候选/快照/日志。人工 bizStatus 与模型 Grade/Decision 并列展示。
  */
-import { useEffect, useMemo, useState } from 'react'
-import { RefreshCw, FolderPlus } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { RefreshCw, FolderPlus, Eye } from 'lucide-react'
 import { getDataUrl } from '../../utils/runtime'
 import scoringRules from '../../generated/scoring_rules'
 import settings from '../../generated/settings'
@@ -12,7 +12,13 @@ import { scoreAllCandidates } from '../../utils/scoring/scoringDataAdapter'
 import {
   listCandidates, getSnapshot, refreshCandidateSnapshot, buildScoringSnapshot,
   createProject, setCandidateBizStatus, setCandidateOwner, setProjectLifecycle,
+  buildMarketValidationSnapshot,
 } from '../../utils/t6/t6Store'
+import {
+  evaluateMarketValidationEligibility, resolveSnapshotKind, SNAPSHOT_KIND,
+} from '../../utils/t6/candidateProjectEvidence'
+import { getManualQuotes } from '../../utils/marketIntelligence/miStore'
+import { findProcurementQuote } from '../../utils/marketIntelligence/procurementIdentity'
 import Surface from '../ui/Surface'
 import PageHeader from '../ui/PageHeader'
 import Button from '../ui/Button'
@@ -22,15 +28,35 @@ import ScoreCell from '../scoring/ScoreCell'
 import DecisionBadge from '../scoring/DecisionBadge'
 import ContextBadge from '../scoring/ContextBadge'
 import FactoryTrialCandidatesSection from './FactoryTrialCandidatesSection'
+import CandidateDetailDrawer from './CandidateDetailDrawer'
 
 const BIZ_STATUS = [['观察', '观察'], ['待调研', '待调研'], ['待立项', '待立项'], ['暂缓', '暂缓'], ['淘汰', '淘汰']]
 
-export default function CandidatePoolPage() {
+const MISSING_LABEL_MAP = {
+  candidate_exists: '候选数据',
+  mi_source: 'Market Intelligence 来源',
+  stable_niche_uid: '稳定 Niche UID',
+  market_evidence: '市场证据',
+  procurement_quote: 'UID 采购报价',
+  supplier: '供应商',
+  factory_price: '出厂价',
+  measured_weight: '实测重量',
+  package_dims: '包装尺寸',
+  target_price: '目标售价',
+}
+
+export default function CandidatePoolPage({ onOpenNode = null }) {
+  const [selectedCandidateId, setSelectedCandidateId] = useState(null)
   const [tick, setTick] = useState(0)
   const [notice, setNotice] = useState('')
   const [dataset, setDataset] = useState(null)
   const [benchmark, setBenchmark] = useState(null)
   const [loadError, setLoadError] = useState(null)
+
+  // 防双击误建与已有项目二次确认 Guard
+  const creatingRef = useRef(new Set())
+  const [creatingCandidateId, setCreatingCandidateId] = useState(null)
+  const [repeatConfirmId, setRepeatConfirmId] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -95,14 +121,76 @@ export default function CandidatePoolPage() {
   }
 
   const handleCreateProject = (cand) => {
-    // 候选池展示的就是 latestSnapshotId 对应的快照，立项复用该快照（与评分页"冻结当前可见评分"语义一致）
-    if (!cand.latestSnapshotId) { flush('缺少评分快照，无法立项'); return }
+    if (creatingRef.current.has(cand.id)) return
+
+    // 检查是否已有项目且尚未二次确认
+    if ((cand.projectIds || []).length > 0 && repeatConfirmId !== cand.id) {
+      setRepeatConfirmId(cand.id)
+      flush('该候选已有关联项目。如确需创建另一个 SKU 项目，请再次点击确认。')
+      return
+    }
+
+    creatingRef.current.add(cand.id)
+    setCreatingCandidateId(cand.id)
+
     try {
-      const project = createProject({ candidateId: cand.id, creationSnapshotId: cand.latestSnapshotId })
-      setProjectLifecycle(project.id, 'ACTIVE', '一键立项后启动')
-      flush(`已创建项目 ${project.projectCode}`)
+      if (cand.source_system === 'WB_MARKET_INTELLIGENCE') {
+        // STEP 1: 重新读取当前最新 Phase 5 Quotes
+        const latestQuotes = getManualQuotes()
+        // STEP 2: 重新查找匹配 Quote
+        const latestQuote = findProcurementQuote(latestQuotes, {
+          uid: cand.source_niche_uid,
+          name: cand.candidateName,
+        })
+        // STEP 3: 重新评估 Eligibility
+        const evalRes = evaluateMarketValidationEligibility({
+          candidate: cand,
+          quote: latestQuote,
+        })
+        // STEP 4: 不合规终止
+        if (!evalRes.eligible) {
+          const missingZh = (evalRes.missing || []).map((k) => MISSING_LABEL_MAP[k] || k).join(' / ')
+          flush(`立项证据不完整（缺少: ${missingZh}），立项终止`)
+          return
+        }
+        // STEP 5: 现场构建 MARKET_VALIDATION Snapshot
+        const snapshot = buildMarketValidationSnapshot({
+          candidate: cand,
+          quote: latestQuote,
+        })
+        // STEP 6: 创建 Project
+        const project = createProject({
+          candidateId: cand.id,
+          creationSnapshotId: snapshot.id,
+        })
+        // STEP 7: 激活项目
+        setProjectLifecycle(project.id, 'ACTIVE', '市场验证立项后启动')
+        setRepeatConfirmId(null)
+        flush(`已创建市场验证立项项目 ${project.projectCode}`)
+      } else {
+        // Scoring 评分立项
+        if (!cand.latestSnapshotId) {
+          flush('缺少评分快照，无法立项')
+          return
+        }
+        const snapshot = getSnapshot(cand.latestSnapshotId)
+        if (!snapshot) {
+          flush('评分快照不存在或已失效')
+          return
+        }
+        const project = createProject({
+          candidateId: cand.id,
+          creationSnapshotId: snapshot.id,
+        })
+        setProjectLifecycle(project.id, 'ACTIVE', '一键立项后启动')
+        setRepeatConfirmId(null)
+        flush(`已创建评分立项项目 ${project.projectCode}`)
+      }
     } catch (e) {
       flush(e.message || String(e))
+    } finally {
+      creatingRef.current.delete(cand.id)
+      setCreatingCandidateId(null)
     }
   }
 
@@ -148,8 +236,23 @@ export default function CandidatePoolPage() {
               </thead>
               <tbody>
                 {candidates.map((cand) => {
+                  const isMi = cand.source_system === 'WB_MARKET_INTELLIGENCE'
                   const snap = snapshotView(cand)
                   const hasProject = (cand.projectIds || []).length > 0
+                  const isCreating = creatingCandidateId === cand.id
+                  const isRepeatConfirming = repeatConfirmId === cand.id
+
+                  // 对于 MI 候选，只读读取当前采购报价并计算立项资格（禁止在 render 中创建 Snapshot）
+                  let miEligibility = null
+                  if (isMi) {
+                    const quotes = getManualQuotes()
+                    const quote = findProcurementQuote(quotes, {
+                      uid: cand.source_niche_uid,
+                      name: cand.candidateName,
+                    })
+                    miEligibility = evaluateMarketValidationEligibility({ candidate: cand, quote })
+                  }
+
                   return (
                     <tr key={cand.id} className="border-b border-workspace-border hover:bg-workspace-surface-subtle">
                       <td className="max-w-[260px] px-4 py-2.5">
@@ -157,7 +260,15 @@ export default function CandidatePoolPage() {
                         <div className="truncate text-xs text-workspace-text-tertiary">{cand.categoryLeaf}</div>
                       </td>
                       <td className="px-3 py-2.5">
-                        <ScoreCell score={snap?.totalScore ?? null} grade={snap?.grade ?? null} tentative={snap?.gradeTentative} />
+                        {snap ? (
+                          <ScoreCell score={snap.totalScore} grade={snap.grade} tentative={snap.gradeTentative} />
+                        ) : isMi ? (
+                          <span className="inline-flex items-center rounded bg-workspace-surface-subtle px-2 py-0.5 text-xs font-medium text-workspace-text-secondary">
+                            市场验证
+                          </span>
+                        ) : (
+                          <ScoreCell score={null} grade={null} />
+                        )}
                       </td>
                       <td className="px-3 py-2.5">
                         {snap ? <DecisionBadge status={snap.decision.status} action={snap.decision.action} withAction /> : '—'}
@@ -184,12 +295,54 @@ export default function CandidatePoolPage() {
                       </td>
                       <td className="px-3 py-2.5">
                         <div className="flex items-center justify-end gap-1.5">
-                          <Button variant="ghost" size="sm" onClick={() => handleAddOrRefresh(cand)} title="刷新评分（生成新快照，旧快照不变）">
-                            <RefreshCw className="h-3.5 w-3.5" /> 刷新评分
+                          <Button variant="ghost" size="sm" onClick={() => setSelectedCandidateId(cand.id)} title="查看候选详情">
+                            <Eye className="h-3.5 w-3.5" /> 详情
                           </Button>
-                          <Button variant="secondary" size="sm" onClick={() => handleCreateProject(cand)}>
-                            <FolderPlus className="h-3.5 w-3.5" /> 创建项目
-                          </Button>
+                          {!isMi && (
+                            <Button variant="ghost" size="sm" onClick={() => handleAddOrRefresh(cand)} title="刷新评分（生成新快照，旧快照不变）">
+                              <RefreshCw className="h-3.5 w-3.5" /> 刷新评分
+                            </Button>
+                          )}
+                          {isMi ? (
+                            !miEligibility?.eligible ? (
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                disabled
+                                title={`缺少：${(miEligibility?.missing || []).map((k) => MISSING_LABEL_MAP[k] || k).join(' / ')}`}
+                              >
+                                <FolderPlus className="h-3.5 w-3.5 opacity-50" /> 立项证据未齐
+                              </Button>
+                            ) : isCreating ? (
+                              <Button variant="secondary" size="sm" disabled>
+                                <FolderPlus className="h-3.5 w-3.5 animate-spin" /> 立项中…
+                              </Button>
+                            ) : isRepeatConfirming ? (
+                              <Button variant="primary" size="sm" onClick={() => handleCreateProject(cand)}>
+                                <FolderPlus className="h-3.5 w-3.5" /> 确认再建项目
+                              </Button>
+                            ) : (
+                              <Button variant="secondary" size="sm" onClick={() => handleCreateProject(cand)}>
+                                <FolderPlus className="h-3.5 w-3.5" /> 市场验证立项
+                              </Button>
+                            )
+                          ) : !cand.latestSnapshotId ? (
+                            <Button variant="secondary" size="sm" disabled title="缺少评分快照，无法立项">
+                              <FolderPlus className="h-3.5 w-3.5 opacity-50" /> 缺少评分快照
+                            </Button>
+                          ) : isCreating ? (
+                            <Button variant="secondary" size="sm" disabled>
+                              <FolderPlus className="h-3.5 w-3.5 animate-spin" /> 立项中…
+                            </Button>
+                          ) : isRepeatConfirming ? (
+                            <Button variant="primary" size="sm" onClick={() => handleCreateProject(cand)}>
+                              <FolderPlus className="h-3.5 w-3.5" /> 确认再建项目
+                            </Button>
+                          ) : (
+                            <Button variant="secondary" size="sm" onClick={() => handleCreateProject(cand)} title="创建项目（评分立项）">
+                              <FolderPlus className="h-3.5 w-3.5" /> 评分立项
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -203,6 +356,14 @@ export default function CandidatePoolPage() {
       <div className="text-xs text-workspace-text-tertiary">
         评分快照不可变：刷新评分生成新快照，历史依据永久保留（规则 V1 · 引擎 t4-frozen-1）
       </div>
+      {selectedCandidateId && (
+        <CandidateDetailDrawer
+          candidateId={selectedCandidateId}
+          open={Boolean(selectedCandidateId)}
+          onClose={() => setSelectedCandidateId(null)}
+          onOpenNode={onOpenNode}
+        />
+      )}
     </div>
   )
 }

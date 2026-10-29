@@ -10,6 +10,52 @@
 import { persistGet, persistSet } from '../persist.js'
 import { getWorkflowTemplate } from '../../data/workflowTemplates/registry.js'
 import { PROJECT_STAGES as PROJECT_STAGES_ALLOWED, isValidStage } from './stageModel.js'
+import {
+  SNAPSHOT_KIND,
+  resolveSnapshotKind,
+  buildMarketValidationSnapshotPayload,
+  validateProjectCreationSnapshot,
+} from './candidateProjectEvidence.js'
+import {
+  PROJECT_PRODUCT_FIELDS,
+  isProjectProductEmpty,
+  buildInitialProjectProductDraft,
+  buildNextProjectProduct,
+} from './productProfile.js'
+import {
+  PROJECT_COMPLIANCE_FIELDS,
+  COMPLIANCE_ASSESSMENT_STATUS,
+  COMPLIANCE_CERTIFICATION_APPLICABILITY,
+  COMPLIANCE_RISK_LEVELS,
+  COMPLIANCE_REQUIREMENT_CATEGORIES,
+  COMPLIANCE_REQUIREMENT_STATUS,
+  isProjectComplianceEmpty,
+  normalizeApplicableStandards,
+  buildInitialComplianceDraft,
+  buildNextProjectCompliance,
+  normalizeComplianceRequirement,
+} from './complianceProfile.js'
+
+export {
+  SNAPSHOT_KIND,
+  resolveSnapshotKind,
+  validateProjectCreationSnapshot,
+  PROJECT_PRODUCT_FIELDS,
+  isProjectProductEmpty,
+  buildInitialProjectProductDraft,
+  buildNextProjectProduct,
+  PROJECT_COMPLIANCE_FIELDS,
+  COMPLIANCE_ASSESSMENT_STATUS,
+  COMPLIANCE_CERTIFICATION_APPLICABILITY,
+  COMPLIANCE_RISK_LEVELS,
+  COMPLIANCE_REQUIREMENT_CATEGORIES,
+  COMPLIANCE_REQUIREMENT_STATUS,
+  isProjectComplianceEmpty,
+  normalizeApplicableStandards,
+  buildInitialComplianceDraft,
+  buildNextProjectCompliance,
+  normalizeComplianceRequirement,
+}
 
 const SCHEMA_VERSION = 1
 export const WORKFLOW_TEMPLATE_VERSION = 'roadmap-v1'
@@ -189,6 +235,12 @@ export function buildScoringSnapshot({ scored, canonical, benchmarkMeta, benchma
   })
 }
 
+/** 由 MI Candidate + Phase 5 Quote 构建不可变 Market Validation 快照（存入现有 t6.snapshot.* 体系） */
+export function buildMarketValidationSnapshot({ candidate, quote }) {
+  const payload = buildMarketValidationSnapshotPayload({ candidate, quote })
+  return createSnapshot(payload)
+}
+
 // ---------- Candidate ----------
 export function getCandidate(id) { return read(`${T6_PREFIX.candidate}${id}`) }
 export function listCandidates() { return listEntities(T6_PREFIX.candidate) }
@@ -197,8 +249,16 @@ export function findCandidateByProductId(sourceProductId) {
   return listEntities(T6_PREFIX.candidate).find((c) => String(c.sourceProductId) === pid) || null
 }
 
+export function findCandidateBySourceNicheUid(nicheUid) {
+  if (!nicheUid) return null
+  const uid = String(nicheUid)
+  return listEntities(T6_PREFIX.candidate).find(
+    (candidate) => String(candidate?.source_niche_uid || '') === uid
+  ) || null
+}
+
 /** 候选不存在则创建（latestSnapshotId 置 null，随后由 refreshCandidateSnapshot 挂快照）；sourceProductId 为空 fail-close */
-export function ensureCandidate({ sourceProductId, candidateIndex, name, categoryLeaf, categoryFull, owner = '', notes = '', source_niche_id, source_run_id, source_system }) {
+export function ensureCandidate({ sourceProductId, candidateIndex, name, categoryLeaf, categoryFull, owner = '', notes = '', source_niche_id, source_niche_uid, source_run_id, source_system, marketEvidence }) {
   if (!sourceProductId || !String(sourceProductId).trim()) {
     throw new Error('T6_STORE: sourceProductId 为空，禁止创建候选（稳定业务身份缺失，fail-close）')
   }
@@ -212,14 +272,45 @@ export function ensureCandidate({ sourceProductId, candidateIndex, name, categor
     latestSnapshotId: null,
     bizStatus: '观察', owner, notes,
     ...(source_niche_id ? { source_niche_id: String(source_niche_id) } : {}),
+    ...(source_niche_uid ? { source_niche_uid: String(source_niche_uid) } : {}),
     ...(source_run_id ? { source_run_id: String(source_run_id) } : {}),
     ...(source_system ? { source_system: String(source_system) } : {}),
+    ...(marketEvidence ? { marketEvidence: JSON.parse(JSON.stringify(marketEvidence)) } : {}),
     projectIds: [],
     addedAt: now, updatedAt: now,
   }
   write(`${T6_PREFIX.candidate}${record.id}`, record)
   appendLog({ subjectType: 'candidate', subjectId: record.id, kind: 'status_change', from: null, to: '观察', reason: '加入候选' })
   return { candidate: record, created: true }
+}
+
+/** 给已有 Candidate 补齐/刷新 MI 来源字段和 marketEvidence，严禁修改业务核心字段 */
+export function syncCandidateMarketEvidence(id, bridge = {}) {
+  const rec = getCandidate(id)
+  if (!rec) throw new Error('T6_STORE: 候选不存在')
+
+  const next = {
+    ...rec,
+    ...(bridge.source_niche_id ? { source_niche_id: String(bridge.source_niche_id) } : {}),
+    ...(bridge.source_niche_uid ? { source_niche_uid: String(bridge.source_niche_uid) } : {}),
+    ...(bridge.source_run_id ? { source_run_id: String(bridge.source_run_id) } : {}),
+    ...(bridge.source_system ? { source_system: String(bridge.source_system) } : {}),
+    ...(bridge.marketEvidence ? { marketEvidence: JSON.parse(JSON.stringify(bridge.marketEvidence)) } : {}),
+    updatedAt: new Date().toISOString(),
+  }
+
+  write(`${T6_PREFIX.candidate}${id}`, next)
+
+  appendLog({
+    subjectType: 'candidate',
+    subjectId: id,
+    kind: 'market_evidence_sync',
+    from: rec.source_run_id ?? null,
+    to: next.source_run_id ?? null,
+    reason: '同步俄罗斯市场情报证据',
+  })
+
+  return next
 }
 
 const CANDIDATE_BIZ_STATUS = ['观察', '待调研', '待立项', '暂缓', '淘汰']
@@ -292,11 +383,12 @@ export function createProject({ candidateId, creationSnapshotId, name }) {
   if (!candidate) throw new Error('T6_STORE: 候选不存在')
   const creationSnapshot = getSnapshot(creationSnapshotId)
   if (!creationSnapshot) throw new Error(`T6_STORE: 立项快照 ${creationSnapshotId} 不存在（fail-close）`)
-  if (creationSnapshot.candidateId !== candidateId) {
-    throw new Error(`T6_STORE: 立项快照 candidateId(${creationSnapshot.candidateId}) 与候选(${candidateId}) 不一致（fail-close）`)
-  }
-  if (String(creationSnapshot.sourceProductId) !== String(candidate.sourceProductId)) {
-    throw new Error(`T6_STORE: 立项快照 sourceProductId 与候选不一致（fail-close）`)
+  const validation = validateProjectCreationSnapshot({
+    candidate,
+    snapshot: creationSnapshot,
+  })
+  if (!validation.valid) {
+    throw new Error(`T6_STORE: 非法立项快照 (${validation.errors.join('; ')})`)
   }
   const now = new Date().toISOString()
   const project = {
@@ -314,7 +406,10 @@ export function createProject({ candidateId, creationSnapshotId, name }) {
     stage: 'PIPELINE',
     goLiveAt: null,
     workflow: { templateVersion: WORKFLOW_TEMPLATE_VERSION, states: initWorkflowStates() },
-    product: {}, suppliers: [], samples: [], compliance: {},
+    product: {}, suppliers: [], samples: [],
+    compliance: {
+      certificationApplicability: 'UNASSESSED',
+    },
     costing: { scenarios: [], baselineScenarioId: null },
     logistics: {}, listing: {}, launch: {}, operations: {}, settlement: {},
     decisionLog: [],
@@ -723,3 +818,304 @@ export function clearProjectSupply(projectId) {
   appendLog({ subjectType: 'project', subjectId: projectId, projectId, kind: 'supply_plan_change', from: `${project.supply.supplierId}@${project.supply.quoteId}`, to: null, reason: '清除供应方案' })
   return next
 }
+
+/**
+ * 更新项目商品档案 Project Product Profile (TASK 07A-3B)
+ * - 纯 Project-scoped 变更，严格字段白名单与 Fail-close 校验
+ * - 仅变更 project.product 与 project.updatedAt，绝不修改 project.name / source.category / costing / supply
+ * - 无变更时 no-op（不写 Store，不记 Log）
+ * - 有变更时写入 product_update 决策日志，保留 compact from / to 差异对象
+ */
+export function updateProjectProduct(projectId, patch, { by = 'user', reason = '' } = {}) {
+  const project = getProject(projectId)
+  if (!project) throw new Error(`T6_STORE: 项目 ${projectId} 不存在`)
+  const current = project.product || {}
+  const nextProduct = buildNextProjectProduct({ current, patch })
+
+  const changedFields = PROJECT_PRODUCT_FIELDS.filter((f) => {
+    const curVal = current[f]
+    const nextVal = nextProduct[f]
+    if (curVal === undefined && nextVal === null) return false
+    if (curVal === undefined && nextVal === '') return false
+    if (Array.isArray(curVal) || Array.isArray(nextVal)) {
+      return JSON.stringify(curVal ?? null) !== JSON.stringify(nextVal ?? null)
+    }
+    return curVal !== nextVal
+  })
+
+  if (changedFields.length === 0) {
+    return project
+  }
+
+  const fromDiff = {}
+  const toDiff = {}
+  for (const f of changedFields) {
+    fromDiff[f] = current[f] !== undefined ? current[f] : null
+    toDiff[f] = nextProduct[f]
+  }
+
+  const now = new Date().toISOString()
+  const next = {
+    ...project,
+    product: nextProduct,
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.project}${projectId}`, next)
+  appendLog({
+    subjectType: 'project',
+    subjectId: projectId,
+    projectId,
+    kind: 'product_update',
+    from: JSON.stringify(fromDiff),
+    to: JSON.stringify(toDiff),
+    reason: reason || `更新商品档案：${changedFields.join(', ')}`,
+    by,
+  })
+  return getProject(projectId)
+}
+
+/**
+ * 更新项目合规档案 Project Compliance Profile (TASK 07A-4B)
+ * - 纯 Project-scoped 变更，严格字段白名单与 Fail-close 校验
+ * - 仅变更 project.compliance 顶层 Profile 字段与 project.updatedAt
+ * - 严禁通过此函数覆盖 requirements 数组（必须走专用 Requirement API）
+ * - 无变更时 no-op（不写 Store，不记 Log）
+ * - 有变更时写入 compliance_update 决策日志，保留 compact from / to 差异对象
+ */
+export function updateProjectCompliance(projectId, patch, { by = 'user', reason = '' } = {}) {
+  const project = getProject(projectId)
+  if (!project) throw new Error(`T6_STORE: 项目 ${projectId} 不存在`)
+  const current = project.compliance || {}
+  const nextCompliance = buildNextProjectCompliance({ current, patch })
+
+  const PROFILE_FIELDS = [
+    'assessmentStatus',
+    'riskLevel',
+    'applicableStandards',
+    'certificationPlan',
+    'notes',
+    'certificationApplicability',
+    'certificationApplicabilityNotes',
+  ]
+  const changedFields = PROFILE_FIELDS.filter((f) => {
+    const curVal = current[f]
+    const nextVal = nextCompliance[f]
+    if (curVal === undefined && nextVal === undefined) return false
+    if (curVal === undefined && (nextVal === '' || nextVal === null)) return false
+    if (curVal === undefined && Array.isArray(nextVal) && nextVal.length === 0) return false
+    if (Array.isArray(curVal) || Array.isArray(nextVal)) {
+      return JSON.stringify(curVal ?? []) !== JSON.stringify(nextVal ?? [])
+    }
+    return curVal !== nextVal
+  })
+
+  if (changedFields.length === 0) {
+    return project
+  }
+
+  const fromDiff = {}
+  const toDiff = {}
+  for (const f of changedFields) {
+    fromDiff[f] = current[f] !== undefined ? current[f] : null
+    toDiff[f] = nextCompliance[f] !== undefined ? nextCompliance[f] : null
+  }
+
+  const now = new Date().toISOString()
+  const next = {
+    ...project,
+    compliance: nextCompliance,
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.project}${projectId}`, next)
+  appendLog({
+    subjectType: 'project',
+    subjectId: projectId,
+    projectId,
+    kind: 'compliance_update',
+    from: JSON.stringify(fromDiff),
+    to: JSON.stringify(toDiff),
+    reason: reason || `更新合规档案：${changedFields.join(', ')}`,
+    by,
+  })
+  return getProject(projectId)
+}
+
+/**
+ * 创建项目合规事项 Requirement (TASK 07A-4B)
+ * - 内嵌于 project.compliance.requirements 数组
+ * - 自动分配 UUID，严格执行 normalizeComplianceRequirement 校验
+ * - 写入 compliance_update 决策日志，保留 { from: null, to: compactReq }
+ */
+export function createProjectComplianceRequirement(projectId, input, { by = 'user', reason = '' } = {}) {
+  const project = getProject(projectId)
+  if (!project) throw new Error(`T6_STORE: 项目 ${projectId} 不存在`)
+  if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    throw new Error('T6_STORE: requirement 输入必须为普通对象（Fail-close）')
+  }
+
+  const currentCompliance = project.compliance || {}
+  const currentRequirements = Array.isArray(currentCompliance.requirements) ? currentCompliance.requirements : []
+  const reqId = input.id ? String(input.id).trim() : uuid()
+  if (currentRequirements.some((r) => r.id === reqId)) {
+    throw new Error(`T6_STORE: 合规事项 ID ${reqId} 已存在（Fail-close）`)
+  }
+
+  const now = new Date().toISOString()
+  const newReq = normalizeComplianceRequirement({
+    id: reqId,
+    category: input.category,
+    name: input.name,
+    required: input.required ?? true,
+    status: input.status || COMPLIANCE_REQUIREMENT_STATUS.PENDING,
+    risk: input.risk || '',
+    desc: input.desc || '',
+    createdAt: now,
+    updatedAt: now,
+  })
+
+  const nextCompliance = {
+    ...currentCompliance,
+    requirements: [...currentRequirements, newReq],
+  }
+
+  const nextProject = {
+    ...project,
+    compliance: nextCompliance,
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.project}${projectId}`, nextProject)
+  appendLog({
+    subjectType: 'project',
+    subjectId: projectId,
+    projectId,
+    kind: 'compliance_update',
+    from: null,
+    to: JSON.stringify({ id: newReq.id, name: newReq.name, category: newReq.category, status: newReq.status }),
+    reason: reason || `新增合规事项：${newReq.name}`,
+    by,
+  })
+  return getProject(projectId)
+}
+
+/**
+ * 更新项目合规事项 Requirement (TASK 07A-4B)
+ * - 仅允许更新 category, name, required, status, risk, desc 6 个事项字段
+ * - 严禁修改 id 与 createdAt
+ * - 无变更时 no-op（不写 Store，不记 Log）
+ * - 写入 compliance_update 决策日志，保留 compact from / to 差异对象
+ */
+export function updateProjectComplianceRequirement(projectId, requirementId, patch, { by = 'user', reason = '' } = {}) {
+  const project = getProject(projectId)
+  if (!project) throw new Error(`T6_STORE: 项目 ${projectId} 不存在`)
+  if (!requirementId || typeof requirementId !== 'string') {
+    throw new Error('T6_STORE: requirementId 必填')
+  }
+  if (!patch || typeof patch !== 'object' || Array.isArray(patch)) {
+    throw new Error('T6_STORE: patch 必须为普通对象')
+  }
+  const currentCompliance = project.compliance || {}
+  const currentRequirements = Array.isArray(currentCompliance.requirements) ? currentCompliance.requirements : []
+  const targetIndex = currentRequirements.findIndex((r) => r.id === requirementId.trim())
+  if (targetIndex === -1) {
+    throw new Error(`T6_STORE: 合规事项 ${requirementId} 不存在`)
+  }
+  const existingReq = currentRequirements[targetIndex]
+  if (patch.id !== undefined && patch.id !== existingReq.id) {
+    throw new Error('T6_STORE: 禁止修改合规事项 id（Fail-close）')
+  }
+  if (patch.createdAt !== undefined && patch.createdAt !== existingReq.createdAt) {
+    throw new Error('T6_STORE: 禁止修改合规事项 createdAt（Fail-close）')
+  }
+
+  const now = new Date().toISOString()
+  const candidateReq = {
+    ...existingReq,
+    ...patch,
+    id: existingReq.id,
+    createdAt: existingReq.createdAt,
+    updatedAt: now,
+  }
+  const updatedReq = normalizeComplianceRequirement(candidateReq)
+
+  const REQ_EDITABLE_FIELDS = ['category', 'name', 'required', 'status', 'risk', 'desc']
+  const changedFields = REQ_EDITABLE_FIELDS.filter((f) => existingReq[f] !== updatedReq[f])
+  if (changedFields.length === 0) {
+    return project
+  }
+
+  const fromDiff = { id: existingReq.id }
+  const toDiff = { id: existingReq.id }
+  for (const f of changedFields) {
+    fromDiff[f] = existingReq[f]
+    toDiff[f] = updatedReq[f]
+  }
+
+  const nextRequirements = [...currentRequirements]
+  nextRequirements[targetIndex] = updatedReq
+  const nextCompliance = {
+    ...currentCompliance,
+    requirements: nextRequirements,
+  }
+  const nextProject = {
+    ...project,
+    compliance: nextCompliance,
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.project}${projectId}`, nextProject)
+  appendLog({
+    subjectType: 'project',
+    subjectId: projectId,
+    projectId,
+    kind: 'compliance_update',
+    from: JSON.stringify(fromDiff),
+    to: JSON.stringify(toDiff),
+    reason: reason || `更新合规事项（${existingReq.name}）：${changedFields.join(', ')}`,
+    by,
+  })
+  return getProject(projectId)
+}
+
+/**
+ * 删除项目合规事项 Requirement (TASK 07A-4B)
+ * - 从 project.compliance.requirements 数组移除
+ * - 写入 compliance_update 决策日志，保留 { from: compactReq, to: null }
+ */
+export function removeProjectComplianceRequirement(projectId, requirementId, { by = 'user', reason = '' } = {}) {
+  const project = getProject(projectId)
+  if (!project) throw new Error(`T6_STORE: 项目 ${projectId} 不存在`)
+  if (!requirementId || typeof requirementId !== 'string') {
+    throw new Error('T6_STORE: requirementId 必填')
+  }
+  const currentCompliance = project.compliance || {}
+  const currentRequirements = Array.isArray(currentCompliance.requirements) ? currentCompliance.requirements : []
+  const existingReq = currentRequirements.find((r) => r.id === requirementId.trim())
+  if (!existingReq) {
+    throw new Error(`T6_STORE: 合规事项 ${requirementId} 不存在`)
+  }
+
+  const now = new Date().toISOString()
+  const nextRequirements = currentRequirements.filter((r) => r.id !== existingReq.id)
+  const nextCompliance = {
+    ...currentCompliance,
+    requirements: nextRequirements,
+  }
+  const nextProject = {
+    ...project,
+    compliance: nextCompliance,
+    updatedAt: now,
+  }
+  write(`${T6_PREFIX.project}${projectId}`, nextProject)
+  appendLog({
+    subjectType: 'project',
+    subjectId: projectId,
+    projectId,
+    kind: 'compliance_update',
+    from: JSON.stringify({ id: existingReq.id, name: existingReq.name, category: existingReq.category, status: existingReq.status }),
+    to: null,
+    reason: reason || `删除合规事项：${existingReq.name}`,
+    by,
+  })
+  return getProject(projectId)
+}
+
+
