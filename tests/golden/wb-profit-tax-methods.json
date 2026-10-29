@@ -1,0 +1,78 @@
+{
+  "id": "wb-profit-tax-methods",
+  "name": "WB 经营利润税基契约（revenue=销售收入 / settlement=净结算）",
+  "provenance": {
+    "source_type": "user_confirmed_rule",
+    "verified_by_human": true,
+    "source": "用户业务确认（2026-10-29）：中国国内按销售额计税。settlement 方式税基修正为净结算，与 V1/规格§6.5 对齐；BUSINESS_RULES.md §7"
+  },
+  "engine": "react_wb",
+  "tariff_id": "DPX-SZ-382822-20260722",
+  "case_type": "operating_profit",
+  "cases": [
+    {
+      "tag": "revenue",
+      "input": {
+        "settings": { "rubPerCny": 12, "taxMethod": "revenue", "taxRate": 10 },
+        "order": {
+          "sellerRevenueBaseRub": 1200,
+          "commissionRate": 25,
+          "promotionCostRub": 0,
+          "acquiringFeeRub": 0,
+          "platformOtherDeductionRub": 0,
+          "otherOperatingCostCny": 0,
+          "taxCostCny": 0,
+          "reverseEventType": "none",
+          "forwardFeeApplied": true,
+          "parcels": [{ "actualWeightG": 500 }]
+        },
+        "sku": {
+          "purchaseCostCny": 10,
+          "packagingCostCny": 1,
+          "chinaInboundCostCny": 2,
+          "certificationAllocationCny": 0
+        }
+      },
+      "expected": {
+        "salesRevenueCny": 100,
+        "commissionCny": 25,
+        "platformNetSettlementCny": 45.50,
+        "taxCostCny": 10,
+        "operatingProfitCny": 22.50,
+        "profitMargin": 22.5
+      }
+    },
+    {
+      "tag": "settlement",
+      "input": {
+        "settings": { "rubPerCny": 12, "taxMethod": "settlement", "taxRate": 10 },
+        "order": {
+          "sellerRevenueBaseRub": 1200,
+          "commissionRate": 25,
+          "promotionCostRub": 0,
+          "acquiringFeeRub": 0,
+          "platformOtherDeductionRub": 0,
+          "otherOperatingCostCny": 0,
+          "taxCostCny": 0,
+          "reverseEventType": "none",
+          "forwardFeeApplied": true,
+          "parcels": [{ "actualWeightG": 500 }]
+        },
+        "sku": {
+          "purchaseCostCny": 10,
+          "packagingCostCny": 1,
+          "chinaInboundCostCny": 2,
+          "certificationAllocationCny": 0
+        }
+      },
+      "expected": {
+        "salesRevenueCny": 100,
+        "commissionCny": 25,
+        "platformNetSettlementCny": 45.50,
+        "taxCostCny": 4.55,
+        "operatingProfitCny": 27.95,
+        "profitMargin": 27.95
+      }
+    }
+  ]
+}

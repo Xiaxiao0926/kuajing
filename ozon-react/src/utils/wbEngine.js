@@ -742,6 +742,9 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
   const certification = toNum(sku?.certificationAllocationCny)
   const otherOperating = toNum(order?.otherOperatingCostCny)
 
+  // 平台净结算（先于税费计算：settlement 计税方式的税基）
+  const platformNetSettlementRaw = salesRevenueRaw - commissionRaw - totalLogisticsCost - acquiringFeeRaw - promotionCostRaw - platformOtherRaw
+
   // 税费
   let taxCostRaw = 0
   const taxMethod = settings?.taxMethod || 'none'
@@ -749,7 +752,9 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
   if (taxMethod === 'revenue' && salesRevenueRaw > 0) {
     taxCostRaw = (salesRevenueRaw * taxRate) / 100
   } else if (taxMethod === 'settlement') {
-    taxCostRaw = (salesRevenueRaw * taxRate) / 100
+    // 税基 = 平台净结算（与 V1 calculateOperatingProfit 及 BUSINESS_RULES.md §7 一致）
+    // 用户业务确认（2026-10-29）：中国国内按销售额计税，实务应选 revenue 方式
+    taxCostRaw = (platformNetSettlementRaw * taxRate) / 100
   } else if (taxMethod === 'manual') {
     taxCostRaw = toNum(order?.taxCostCny)
   }
@@ -761,8 +766,7 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
     inventoryLossCny = round2((purchaseCost * (100 - recoveryRate)) / 100)
   }
 
-  // 经营利润
-  const platformNetSettlementRaw = salesRevenueRaw - commissionRaw - totalLogisticsCost - acquiringFeeRaw - promotionCostRaw - platformOtherRaw
+  // 经营利润（platformNetSettlementRaw 已在税费计算前求出）
   const profitRaw = platformNetSettlementRaw - purchaseCost - packagingCost - chinaInbound - certification - taxCostRaw - otherOperating - inventoryLossCny
   const salesRevenueCny = round2(salesRevenueRaw)
   const commissionCny = round2(commissionRaw)
