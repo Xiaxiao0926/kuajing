@@ -4,7 +4,24 @@
  */
 import { getApiBase, getDataUrl } from '../runtime.js'
 import { persistGet, persistSet } from '../persist.js'
-import { ensureCandidate, setCandidateBizStatus } from '../t6/t6Store.js'
+import {
+  ensureCandidate,
+  findCandidateByProductId,
+  findCandidateBySourceNicheUid,
+  syncCandidateMarketEvidence,
+  setCandidateBizStatus,
+} from '../t6/t6Store.js'
+import {
+  resolveNicheUid,
+  buildMiCandidateSourceProductId,
+  buildCandidateMarketEvidence,
+} from './candidateMarketBridge.js'
+import {
+  buildProcurementIdentity,
+  findProcurementQuote,
+} from './procurementIdentity.js'
+
+export { findProcurementQuote }
 
 const RUNS_CACHE = new Map()
 const PERSIST_KEY_VALIDATION_OVERRIDES = 'mi_validation_overrides'
@@ -208,8 +225,9 @@ export function getManualQuotes() {
 
 export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
   const all = getManualQuotes()
-  const nicheName = typeof nicheIdentifier === 'string' ? nicheIdentifier : (nicheIdentifier?.name || '')
-  const nicheUid = typeof nicheIdentifier === 'object' ? nicheIdentifier?.uid : null
+  const { uid: nicheUid, name: nicheName } = typeof nicheIdentifier === 'string'
+    ? { uid: null, name: nicheIdentifier.trim() }
+    : buildProcurementIdentity(nicheIdentifier)
 
   const entry = {
     ...quoteData,
@@ -218,7 +236,9 @@ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
     updatedAt: new Date().toISOString(),
   }
 
-  all[nicheName] = entry
+  if (nicheName) {
+    all[nicheName] = entry
+  }
   if (nicheUid) {
     all[nicheUid] = entry
   }
@@ -239,32 +259,216 @@ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
 // ---------- 5. 无缝衔接 T6 SKU 项目生命周期 ----------
 
 /**
- * 一键将验证池中的单品推送到 T6 候选池（生成 t6.candidate，具备幂等防重）
+ * 一键将验证池中的单品推送到 T6 候选池（生成 t6.candidate，具备幂等防重与证据同步）
  */
 export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-001') {
   if (!niche || !niche.name) {
     throw new Error('MI_STORE: 无效利基对象，无法推送到 T6')
   }
 
-  const nicheId = niche.rank ?? niche.id ?? niche.name
-  const sourceProductId = `wb-niche-${niche.name}`
-  const notes = `[WB选品情报] Niche ID: ${nicheId} | UID: ${niche.uid || 'N/A'} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs} | 签收率: ${niche.buyout} | 均价: ${niche.price} | 预估单重: ${niche.weight_g || (niche.heavy === 'YES' ? '大件' : '轻件')}。${reason || niche.rationale || ''}`
+  const nicheUid = resolveNicheUid(niche)
+  if (!nicheUid) {
+    throw new Error('MI_STORE: 利基对象缺少有效 nicheUid，阻断推送到 T6（禁止无 UID 推进以防脏数据）')
+  }
 
+  const overrides = getValidationOverrides()
+  const override = overrides[nicheUid] || overrides[niche.name] || null
+  const effectiveVerdict = override?.verdict ?? niche?.verdict ?? null
+
+  const marketEvidence = buildCandidateMarketEvidence(niche, runId, effectiveVerdict)
+
+  const nicheId = niche.rank ?? niche.id ?? niche.name
+  const stableSourceProductId = buildMiCandidateSourceProductId(niche)
+  const legacySourceProductId = `wb-niche-${niche.name}`
+  const notes = `[WB选品情报] Niche ID: ${nicheId} | UID: ${nicheUid} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs || niche.pfs} | 签收率: ${niche.buyout} | 均价: ${niche.price} | 预估单重: ${niche.weight_g || (niche.heavy === 'YES' ? '大件' : '轻件')}。${reason || niche.rationale || ''}`
+
+  // 四步查重策略：
+  // STEP 1: 按 source_niche_uid 找 Candidate（以 nicheUid 为主身份键）
+  let existing = findCandidateBySourceNicheUid(nicheUid)
+  if (existing) {
+    // 来源系统一致性校验：显式跨系统冲突阻断
+    if (existing.source_system && existing.source_system !== 'WB_MARKET_INTELLIGENCE') {
+      throw new Error(
+        `MI_STORE: 身份冲突阻断：已有候选 (${existing.id}) 来源系统为 ${existing.source_system}，与当前 WB_MARKET_INTELLIGENCE 冲突，禁止覆盖复用，需人工核实`
+      )
+    }
+
+    // 类目一致性校验：两端均有具体类目且不一致时阻断
+    const nicheCat = String(niche.category || niche.cat || '').trim()
+    const candCatLeaf = String(existing.categoryLeaf || '').trim()
+    const candCatFull = String(existing.categoryFull || '').trim()
+    const hasSpecificNicheCat = Boolean(nicheCat && nicheCat !== '未分类')
+    const hasSpecificCandCat = Boolean(
+      (candCatLeaf && candCatLeaf !== '未分类') ||
+      (candCatFull && candCatFull !== '未分类')
+    )
+    if (hasSpecificNicheCat && hasSpecificCandCat) {
+      const categoryMatch = candCatLeaf === nicheCat || candCatFull === nicheCat
+      if (!categoryMatch) {
+        throw new Error(
+          `MI_STORE: 身份冲突阻断：已有候选 (${existing.id}) 类目 (${candCatLeaf || candCatFull}) 与当前利基类目 (${nicheCat}) 冲突，禁止覆盖复用，需人工核实`
+        )
+      }
+    }
+
+    // 商品名称一致性校验：若旧候选有明确名称且与当前不符则阻断
+    const candName = String(existing.candidateName || '').trim()
+    const nicheName = String(niche.name || '').trim()
+    if (candName && nicheName && candName !== nicheName) {
+      throw new Error(
+        `MI_STORE: 身份冲突阻断：已有候选 (${existing.id}) 名称 (${candName}) 与当前利基名称 (${nicheName}) 冲突，禁止覆盖复用，需人工核实`
+      )
+    }
+  }
+
+  // STEP 2: 按 stable sourceProductId 找 (校验 UID、系统、类目、名称及先验身份充分性)
+  if (!existing) {
+    const byProduct = findCandidateByProductId(stableSourceProductId)
+    if (byProduct) {
+      // 1. 冲突 UID 校验
+      if (byProduct.source_niche_uid && byProduct.source_niche_uid !== nicheUid) {
+        throw new Error(
+          `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 的 sourceProductId 与当前相同，但已绑定其他 UID (${byProduct.source_niche_uid})，禁止覆盖复用，需人工核实`
+        )
+      }
+
+      // 2. 跨系统冲突校验
+      if (byProduct.source_system && byProduct.source_system !== 'WB_MARKET_INTELLIGENCE') {
+        throw new Error(
+          `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 的 sourceProductId 与当前相同，但来源系统为 ${byProduct.source_system}，禁止覆盖复用，需人工核实`
+        )
+      }
+
+      // 3. 类目一致性校验
+      const nicheCat = String(niche.category || niche.cat || '').trim()
+      const candCatLeaf = String(byProduct.categoryLeaf || '').trim()
+      const candCatFull = String(byProduct.categoryFull || '').trim()
+      const hasSpecificNicheCat = Boolean(nicheCat && nicheCat !== '未分类')
+      const hasSpecificCandCat = Boolean(
+        (candCatLeaf && candCatLeaf !== '未分类') ||
+        (candCatFull && candCatFull !== '未分类')
+      )
+      if (hasSpecificNicheCat && hasSpecificCandCat) {
+        const categoryMatch = candCatLeaf === nicheCat || candCatFull === nicheCat
+        if (!categoryMatch) {
+          throw new Error(
+            `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 的 sourceProductId 与当前相同，但类目 (${candCatLeaf || candCatFull}) 与当前 (${nicheCat}) 冲突，需人工核实`
+          )
+        }
+      }
+
+      // 4. 名称一致性校验
+      const candName = String(byProduct.candidateName || '').trim()
+      const nicheName = String(niche.name || '').trim()
+      if (candName && nicheName && candName !== nicheName) {
+        throw new Error(
+          `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 的 sourceProductId 与当前相同，但名称 (${candName}) 与当前 (${nicheName}) 冲突，需人工核实`
+        )
+      }
+
+      // 5. 来源身份校验：必须具备与当前利基一致的 source_niche_uid，禁止仅凭名称/类目相同自动复用
+      if (byProduct.source_niche_uid && byProduct.source_niche_uid === nicheUid) {
+        existing = byProduct
+      } else {
+        // 旧记录缺少可证明当前来源的 UID 身份凭据，且 stableSourceProductId 已被占用，必须阻断
+        throw new Error(
+          `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 占用了 sourceProductId (${stableSourceProductId}) 但缺少当前来源 UID 身份凭据，禁止自动同步覆盖，需人工核实`
+        )
+      }
+    }
+  }
+
+  // STEP 3: Legacy Candidate Backfill (严格核验来源ID、类目、系统与UID一致性)
+  if (!existing) {
+    const legacyCandidate = findCandidateByProductId(legacySourceProductId)
+    if (legacyCandidate) {
+      const nicheCat = String(niche.category || niche.cat || '').trim()
+      const candCatLeaf = String(legacyCandidate.categoryLeaf || '').trim()
+      const candCatFull = String(legacyCandidate.categoryFull || '').trim()
+
+      const hasUidConflict = Boolean(
+        legacyCandidate.source_niche_uid && legacyCandidate.source_niche_uid !== nicheUid
+      )
+
+      // 类目必须明确且一致（排除空值或未分类这种信息不充分情况）
+      const hasSpecificCategory =
+        Boolean(nicheCat && nicheCat !== '未分类') &&
+        Boolean((candCatLeaf && candCatLeaf !== '未分类') || (candCatFull && candCatFull !== '未分类'))
+
+      const categoryMatch =
+        hasSpecificCategory &&
+        (candCatLeaf === nicheCat || candCatFull === nicheCat)
+
+      const systemConflict = Boolean(
+        legacyCandidate.source_system &&
+        legacyCandidate.source_system !== 'WB_MARKET_INTELLIGENCE'
+      )
+
+      // 强身份一致性要求：仅同名同类目不足以证明同一利基。
+      // 旧字段缺失、冲突或无法证明同一来源时，严禁自动回填旧候选！
+      // 必须满足：旧候选记录了 source_niche_id 且与本次 nicheId 严格一致。
+      const nicheIdStr = String(nicheId)
+      const legacyNicheId = legacyCandidate.source_niche_id ? String(legacyCandidate.source_niche_id) : null
+      const hasValidSourceIdMatch = Boolean(legacyNicheId && legacyNicheId === nicheIdStr)
+
+      // 仅当名、类目、无 UID 冲突、无来源冲突且来源利基 ID 明确匹配时才合法回填
+      if (!hasUidConflict && categoryMatch && !systemConflict && hasValidSourceIdMatch) {
+        existing = legacyCandidate
+      }
+      // 注意：若旧 source_niche_id 缺失、不一致（如旧 101 新 999）、类目不同或存在冲突，
+      // 严禁复用，保持现有 legacyCandidate 及其项目/快照指针原样（字节级不变），继续执行 STEP 4 创建基于 nicheUid 的新候选
+    }
+  }
+
+  // 若存在已有候选：刷新市场证据，严禁覆盖业务字段，保持旧 sourceProductId
+  if (existing) {
+    const candidate = syncCandidateMarketEvidence(existing.id, {
+      source_niche_id: String(nicheId),
+      source_niche_uid: nicheUid,
+      source_run_id: String(runId),
+      source_system: 'WB_MARKET_INTELLIGENCE',
+      marketEvidence,
+    })
+
+    recordAuditLog({
+      action: 'T6_PUSH',
+      niche_uid: nicheUid || null,
+      niche_name: niche.name,
+      old_value: null,
+      new_value: `PROMOTED_TO_T6_CANDIDATE_SYNCED (ID: ${candidate.id})`,
+      source: 'T6_PROMOTION',
+      note: reason,
+    })
+
+    return { candidate, created: false }
+  }
+
+  // STEP 4: 全新候选创建
   const { candidate, created } = ensureCandidate({
-    sourceProductId,
+    sourceProductId: stableSourceProductId,
     candidateIndex: typeof nicheId === 'number' ? nicheId : 0,
     name: niche.name,
     categoryLeaf: niche.category || niche.cat || '未分类',
     categoryFull: niche.category || niche.cat || '未分类',
     notes,
     source_niche_id: String(nicheId),
+    source_niche_uid: nicheUid,
     source_run_id: String(runId),
     source_system: 'WB_MARKET_INTELLIGENCE',
+    marketEvidence,
   })
 
+  // 严防伪成功陷阱：若 ensureCandidate 返回 created === false，说明底层被不可信旧记录占用
+  if (!created) {
+    throw new Error(
+      `MI_STORE: 身份冲突阻断：sourceProductId (${stableSourceProductId}) 已存在但未通过前置身份复用核验，严禁伪报同步成功，需人工核实`
+    )
+  }
+
+  let finalCandidate = candidate
   if (created) {
     try {
-      setCandidateBizStatus(candidate.id, '待调研', '来自俄罗斯市场情报一键推进')
+      finalCandidate = setCandidateBizStatus(candidate.id, '待调研', '来自俄罗斯市场情报一键推进')
     } catch {
       // 忽略重复状态
     }
@@ -272,15 +476,15 @@ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-0
 
   recordAuditLog({
     action: 'T6_PUSH',
-    niche_uid: niche.uid || null,
+    niche_uid: nicheUid || null,
     niche_name: niche.name,
     old_value: null,
-    new_value: `PROMOTED_TO_T6_CANDIDATE (ID: ${candidate.id})`,
+    new_value: `PROMOTED_TO_T6_CANDIDATE (ID: ${finalCandidate.id})`,
     source: 'T6_PROMOTION',
     note: reason,
   })
 
-  return { candidate, created }
+  return { candidate: finalCandidate, created }
 }
 
 // ---------- 6. 数据更新自动化与批次回滚管道服务 ----------
