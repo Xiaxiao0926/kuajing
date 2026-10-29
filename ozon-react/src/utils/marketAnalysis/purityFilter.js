@@ -41,8 +41,26 @@ export function extractPrice(row) {
 
 export function extractQty(row) {
   const v = firstCol(row, QTY_KEYS)
-  if (v === null) return 0
-  return parseFloat(String(v).replace(/[^\d.]/g, '')) || 0
+  if (v === null || v === undefined) return 0
+  if (typeof v === 'number') {
+    return Number.isFinite(v) && v > 0 ? v : 0
+  }
+  const s = String(v).trim()
+  if (!s) return 0
+
+  // 1. 负数判定：负数在销量维度无物理/业务意义，视为无效销量（不参与加权）
+  if (s.startsWith('-') || /^-/.test(s)) return 0
+
+  // 2. 区间/范围判定：无法确定单一销量（如 '5-10', '5~10', '5至10'），标为无效（0/不参与加权），禁止拼接成伪精确数字
+  if (/[-~—–至]/.test(s)) return 0
+
+  // 3. 去除千位分隔符（空格、Unicode 不换行空格、英文逗号）
+  const cleaned = s.replace(/[\s\u00A0\u202F]/g, '').replace(/,/g, '')
+
+  // 4. 解析为浮点数并验证为正有限数值
+  const n = parseFloat(cleaned)
+  if (!Number.isFinite(n) || n <= 0) return 0
+  return n
 }
 
 export function extractSales(row) {

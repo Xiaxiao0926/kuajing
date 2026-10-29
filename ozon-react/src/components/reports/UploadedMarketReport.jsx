@@ -1,4 +1,8 @@
+import { useEffect, useRef, useState } from 'react'
+import { Download, Loader2 } from 'lucide-react'
 import MarketDecisionBrief from './MarketDecisionBrief.jsx'
+import { listServerFiles } from '../../utils/serverFiles.js'
+import { fetchReportSource, saveSourceBytes } from '../../utils/marketReport/sourceDownload.js'
 
 const number = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 })
 
@@ -14,6 +18,33 @@ function formatCount(value) {
   if (value >= 1e6) return `${(value / 1e6).toFixed(2)} 百万`
   if (value >= 1e3) return `${(value / 1e3).toFixed(1)} 千`
   return number.format(value)
+}
+
+function formatDisplayTimestamp(isoString) {
+  if (!isoString) return '未知时间'
+  const raw = String(isoString).trim()
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/u.test(raw)) {
+    return `${raw.slice(0, 10)} ${raw.slice(11, 19)} UTC`
+  }
+  return raw
+}
+
+function formatHeaderSnapshotLabel(report) {
+  const isUnknown = report.snapshot === null
+    || report.quality?.collectionDateKnown === false
+    || report.marketDimensions?.newness?.status === 'not_evaluated'
+  if (isUnknown) {
+    return '采集日期 未知（未评估 180 天新品窗口）'
+  }
+  if (report.provenance) {
+    const originText = report.provenance.collectionDateOrigin === 'filename'
+      ? '文件名提取确认'
+      : report.provenance.collectionDateOrigin === 'user'
+        ? '人工输入确认'
+        : '已确认'
+    return `采集日期 ${report.snapshot}（${originText}）`
+  }
+  return `数据快照 ${report.snapshot}（历史记录，日期来源未核验）`
 }
 
 function BarList({ items, valueKey = 'revenue', suffix = '₽' }) {
@@ -38,8 +69,72 @@ function BarList({ items, valueKey = 'revenue', suffix = '₽' }) {
 }
 
 export default function UploadedMarketReport({ report }) {
+  const [sourceDownload, setSourceDownload] = useState(null)
+  const [downloadingSource, setDownloadingSource] = useState(false)
+  const downloadControllerRef = useRef(null)
+  const activeReportIdRef = useRef(report.id)
+  const downloadRequestIdRef = useRef(0)
+  activeReportIdRef.current = report.id
+  useEffect(() => {
+    downloadRequestIdRef.current += 1
+    downloadControllerRef.current?.abort()
+    downloadControllerRef.current = null
+    setDownloadingSource(false)
+    setSourceDownload(null)
+    return () => {
+      downloadRequestIdRef.current += 1
+      downloadControllerRef.current?.abort()
+      downloadControllerRef.current = null
+    }
+  }, [report.id])
+
+  const handleSourceDownload = async () => {
+    if (downloadingSource) return
+    const reportId = report.id
+    const requestId = ++downloadRequestIdRef.current
+    const controller = new AbortController()
+    downloadControllerRef.current = controller
+    setDownloadingSource(true)
+    setSourceDownload({ type: 'working', text: '正在查找并校验原始源文件…' })
+    try {
+      const result = await fetchReportSource(report, {
+        listFiles: listServerFiles,
+        signal: controller.signal,
+      })
+      if (controller.signal.aborted
+        || activeReportIdRef.current !== reportId
+        || downloadRequestIdRef.current !== requestId) return
+      saveSourceBytes({
+        bytes: result.bytes,
+        fileName: result.fileName,
+        mimeType: report.provenance?.originalMimeType || 'application/octet-stream',
+      })
+      setSourceDownload({
+        type: 'success',
+        text: result.verified ? '源文件校验通过并已下载。' : '历史源文件已下载，但缺少摘要记录，来源字节未校验。',
+      })
+    } catch (error) {
+      if (!controller.signal.aborted
+        && activeReportIdRef.current === reportId
+        && downloadRequestIdRef.current === requestId) {
+        setSourceDownload({ type: 'error', text: error?.message || '源文件下载失败，请重试。' })
+      }
+    } finally {
+      if (!controller.signal.aborted
+        && activeReportIdRef.current === reportId
+        && downloadRequestIdRef.current === requestId) setDownloadingSource(false)
+    }
+  }
+
   const operations = report.operations || {}
   const quality = report.quality || {}
+  const provenance = report.provenance || null
+  const originalFileName = provenance?.originalFileName || report.sourceFile
+  const hasDuplicates = (quality.duplicateSku || 0) > 0 || (quality.duplicateUrl || 0) > 0
+  const duplicateWarning = quality.duplicateIdentityWarning
+    || (hasDuplicates
+      ? '当前销售额与销量按导入行直接汇总（未自动去重或择一）；重复 SKU 或链接可能对应不同统计周期、店铺或规格变体，请复核原始周期/店铺/变体信息，不应直接断定为重复计入。'
+      : null)
 
   return (
     <article className="overflow-hidden border border-gray-200 bg-white">
@@ -49,8 +144,44 @@ export default function UploadedMarketReport({ report }) {
         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-200">
           以导入的商品级记录观察类目规模、价格结构、品牌和卖家集中度。销售额为主排序口径，不将榜单样本外推为 Ozon 全站市场规模。
         </p>
-        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-300">
-          <span>数据快照 {report.snapshot}</span><span>{report.sample}</span><span>源文件 {report.sourceFile}</span>
+        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-300">
+          <span data-testid="uploaded-report-snapshot-meta">{formatHeaderSnapshotLabel(report)}</span>
+          <span>{report.sample}</span>
+          <span data-testid="uploaded-report-source-file">源文件 {originalFileName}</span>
+          {provenance?.sourceSha256 ? (
+            <span data-testid="uploaded-report-source-sha">
+              源指纹 {provenance.sourceSha256.slice(0, 12)}…{report.sourceBackup ? `（备份 ${report.sourceBackup}）` : ''}
+            </span>
+          ) : report.sourceBackup ? (
+            <span>历史源备份名 {report.sourceBackup}（来源字节未核验）</span>
+          ) : null}
+          <span data-testid="uploaded-report-published-meta">
+            导入/发布 {formatDisplayTimestamp(provenance?.importedAt || report.publishedAt)} · 版本 {report.id}
+          </span>
+        </div>
+        <div className="mt-4 flex min-w-0 flex-col items-start gap-2 sm:flex-row sm:items-center">
+          <button
+            type="button"
+            data-testid="download-original-source-btn"
+            onClick={handleSourceDownload}
+            disabled={downloadingSource || (!report.sourceBackup && !provenance?.sourceBackup)}
+            title="下载并校验此报告绑定的原始源文件"
+            className="inline-flex min-h-9 max-w-full items-center justify-center gap-2 border border-white/40 px-3 py-2 text-left text-sm font-medium text-white hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {downloadingSource ? <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden="true" /> : <Download size={16} className="shrink-0" aria-hidden="true" />}
+            <span>{downloadingSource ? '正在校验并下载' : sourceDownload?.type === 'error' ? '重试下载原始源文件' : '下载原始源文件'}</span>
+          </button>
+          {sourceDownload ? (
+            <span
+              data-testid="source-download-status"
+              role={sourceDownload.type === 'error' ? 'alert' : 'status'}
+              className={`min-w-0 break-words text-xs ${sourceDownload.type === 'error' ? 'text-rose-200' : sourceDownload.type === 'success' ? 'text-emerald-200' : 'text-slate-200'}`}
+            >
+              {sourceDownload.text}
+            </span>
+          ) : !report.sourceBackup && !provenance?.sourceBackup ? (
+            <span data-testid="source-download-unavailable" className="text-xs text-slate-300">此历史报告未记录源文件备份。</span>
+          ) : null}
         </div>
       </header>
 
@@ -72,8 +203,15 @@ export default function UploadedMarketReport({ report }) {
         </div>
 
         <div className="mt-5 border-l-4 border-amber-500 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          <strong>{quality.level}</strong>
-          <span className="ml-2 text-amber-900">销量缺失 {quality.missingSales} 条，均价缺失 {quality.missingAveragePrice} 条，SKU 重复 {quality.duplicateSku} 条，产品链接重复 {quality.duplicateUrl} 条。</span>
+          <div>
+            <strong>{quality.level}</strong>
+            <span className="ml-2 text-amber-900">销量缺失 {quality.missingSales} 条，均价缺失 {quality.missingAveragePrice} 条，SKU 重复 {quality.duplicateSku} 条，产品链接重复 {quality.duplicateUrl} 条。</span>
+          </div>
+          {hasDuplicates && duplicateWarning ? (
+            <p className="mt-1.5 border-t border-amber-200/80 pt-1.5 text-xs leading-5 text-amber-900" data-testid="uploaded-report-duplicate-warning">
+              {duplicateWarning}
+            </p>
+          ) : null}
         </div>
 
         <section className="mt-8">

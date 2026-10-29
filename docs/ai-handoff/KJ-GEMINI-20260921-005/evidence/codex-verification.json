@@ -1,0 +1,34 @@
+{
+  "task_id": "KJ-GEMINI-20260921-005",
+  "date": "2026-09-21",
+  "status": "accepted_with_known_limitations",
+  "checks": [
+    {
+      "command": "node tests/ia-project-compliance-table-layout.test.mjs",
+      "exit_code": 0,
+      "evidence": "codex-review/table-layout-results.json"
+    },
+    {
+      "command": "node docs/ai-handoff/KJ-GEMINI-20260921-005/evidence/codex-review-extra.mjs",
+      "exit_code": 0,
+      "evidence": "codex-extra/table-layout-results.json"
+    },
+    {
+      "command": "node tests/ia-project-compliance-draft.test.mjs",
+      "exit_code": 0,
+      "notes": "Real component browser tests passed. Scenario H in this unstyled suite remains not_run; separate styled suites cover table geometry."
+    },
+    {
+      "name": "frozen_files",
+      "checked": 22,
+      "unchanged": 21,
+      "authorized_changes": 1
+    },
+    {
+      "name": "npm_golden_sync_build",
+      "status": "executor_logs_reviewed_not_independently_rerun"
+    }
+  ],
+  "deployment_status": "not_deployed",
+  "public_verification_status": "not_performed"
+}

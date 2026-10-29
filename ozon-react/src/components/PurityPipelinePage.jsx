@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import {
   RefreshCw, Layers, Target, AlertCircle, FlaskConical, ClipboardCheck,
   CheckCircle2, XCircle, Save, Trash2, History, FileSpreadsheet,
@@ -407,7 +407,7 @@ export default function PurityPipelinePage({ data }) {
 
           <div className="insight-card">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-              <h3 className="font-semibold text-morandi-text">💰 三维加权价格带（标准化可比价）</h3>
+              <h3 className="font-semibold text-morandi-text">💰 价格带分析（SKU数量等分切片 & 销量加权分位）</h3>
               <div className="flex items-center gap-2">
                 {catCfg && (
                   <span className="text-xs text-morandi-text-light mr-2">价格轴：{catCfg.normalize.label}</span>
@@ -462,6 +462,57 @@ export default function PurityPipelinePage({ data }) {
                   </div>
                 </div>
 
+                {/* 销量加权分位数摘要（真实销量分布，非切片非加权中值） */}
+                {bandsResult.salesWeightedQuantiles && (
+                  <div className="mb-4 bg-morandi-50/50 border border-morandi-200/80 rounded-xl p-3.5 text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-morandi-text">
+                          📊 真实销量加权分位数（以每行有效销量为权重）
+                        </span>
+                        <span className="text-[11px] text-morandi-text-light">
+                          有效加权样本: {bandsResult.salesWeightedQuantiles.validCount} 条 · 销量权重合计: {bandsResult.salesWeightedQuantiles.totalWeight?.toLocaleString() || 0}
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-gray-500">
+                        {bandsResult.salesWeightedQuantiles.status === 'ok' ? '已按每行有效销量精确加权' : '数据不足或无有效权重'}
+                      </span>
+                    </div>
+
+                    {bandsResult.salesWeightedQuantiles.status === 'ok' ? (
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
+                          <p className="text-[11px] text-morandi-text-light">P10（低价位线）</p>
+                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p10)}</p>
+                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p10)}</p>
+                        </div>
+                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
+                          <p className="text-[11px] text-morandi-text-light">P25（下四分位）</p>
+                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p25)}</p>
+                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p25)}</p>
+                        </div>
+                        <div className="bg-amber-50/70 rounded-lg p-2.5 border border-amber-200/80 shadow-xs">
+                          <p className="text-[11px] font-semibold text-amber-800">P50（销量加权中位价）</p>
+                          <p className="font-bold text-amber-900 mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p50)}</p>
+                          <p className="text-[10px] text-amber-700">{fmtRmb(bandsResult.salesWeightedQuantiles.p50)}</p>
+                        </div>
+                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
+                          <p className="text-[11px] text-morandi-text-light">P75（上四分位）</p>
+                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p75)}</p>
+                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p75)}</p>
+                        </div>
+                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
+                          <p className="text-[11px] text-morandi-text-light">P90（高价位线）</p>
+                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p90)}</p>
+                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p90)}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 py-1">当前口径下无有效正数销量权重，无法计算加权分位数（已安全兜底）。</p>
+                    )}
+                  </div>
+                )}
+
                 <div className="h-64 mb-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={bandChart}>
@@ -483,7 +534,7 @@ export default function PurityPipelinePage({ data }) {
                       <tr>
                         <th className="px-3 py-2 text-left">价格带</th>
                         <th className="px-3 py-2 text-left">可比价区间（{catCfg?.normalize.label || '标准化'}）</th>
-                        <th className="px-3 py-2 text-right">中位价 ₽/¥</th>
+                        <th className="px-3 py-2 text-right" title="切片内未加权的 SKU 价格上中位值（排序第 floor(n/2)+1 位，非销量加权）">切片SKU上中位值 ₽/¥</th>
                         <th className="px-3 py-2 text-right">SKU 数</th>
                         <th className="px-3 py-2 text-right">SKU 占比</th>
                         <th className="px-3 py-2 text-right">销量占比</th>
@@ -513,9 +564,14 @@ export default function PurityPipelinePage({ data }) {
                     </tbody>
                   </table>
                 </div>
-                <p className="text-xs text-morandi-text-light mt-2">
-                  占比分母 = 当前口径内合计；C 与 UNKNOWN 一律排除；价格轴为标准化可比价（{catCfg?.normalize.label || '—'}），非挂牌原价。
-                </p>
+                <div className="space-y-1 mt-2 text-xs text-morandi-text-light">
+                  <p>
+                    口径说明：上方表格为【SKU 数量等分切片】（将进入口径的 SKU 按可比价均分为 {bandsResult.bandCount} 个切片）；“切片SKU上中位值”为该切片内未加权的 SKU 价格上中位值（排序第 floor(n/2)+1 位，非销量加权）。
+                  </p>
+                  <p>
+                    真实销量分布请参阅上方【真实销量加权分位数】（以每行有效销量为权重计算 P10–P90）；占比分母 = 当前口径内合计；C 与 UNKNOWN 一律排除；价格轴为标准化可比价（{catCfg?.normalize.label || '—'}），非挂牌原价。
+                  </p>
+                </div>
               </>
             )}
           </div>

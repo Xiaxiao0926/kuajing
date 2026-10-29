@@ -2,23 +2,27 @@ import { useState } from 'react'
 import { Calculator, Package, DollarSign, TrendingUp, Info, Table as TableIcon, Save } from 'lucide-react'
 import { persistGet, persistSet } from '../utils/persist'
 import {
-  R, rubPerCny, CHANNEL_GROUPS, ALL_CHANNELS, TARIFF_VERSION,
+  CHANNEL_GROUPS, ALL_CHANNELS, TARIFF_VERSION,
   calcShipping, getBestShipping, calcRow, calcChannelProfit,
   PRICING_PRODUCTS, PRODUCT_COLORS, COMMISSION_TABLE,
 } from '../utils/ozonEngine'
 import { useExchangeRate } from '../utils/useExchangeRate'
 import { formatRubPerCny } from '../utils/exchangeRate'
+import channelsData from '../generated/ozon_channels.js'
 import { mergeTrustedPrefill } from '../utils/t6/costScenarioAdapter'
+import { isEnteredNumber, missingOzonInputs } from '../utils/platformCosting'
 import { Plus, Trash2 } from 'lucide-react'
 import Button from './ui/Button'
 
 const SHIPPING_KEY = 'shipping-calc-rfbs-v2'
 const PRICING_KEY = 'product-pricing-v2'
+const GROUPS_KEY = 'ozon-product-groups-v1'
 
 const TABS = [
   { id: 'single', name: '单规格测算', icon: Calculator },
   { id: 'multi', name: '多规格对比', icon: Package },
   { id: 'commission', name: '佣金费率表', icon: TableIcon },
+  { id: 'channels', name: '渠道运价', icon: TableIcon },
 ]
 
 /**
@@ -29,27 +33,26 @@ const TABS = [
  */
 export default function OzonCalc({ projectContext = null }) {
   const [tab, setTab] = useState('single')
-  // 订阅每日自动汇率：更新时重渲染整棵子树，live binding 的新汇率（R/rubPerCny）随即生效
+  // One subscribed rate is passed to both displayed calculations and saved scenarios.
   const rateInfo = useExchangeRate()
 
   return (
     <div className="space-y-4">
       {/* 标题区 */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-5 py-3 flex items-center justify-between bg-blue-50 border-b border-blue-200">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-100">
+        <div className="px-4 py-3 sm:px-5 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between bg-blue-50 border-b border-blue-200">
+          <div className="flex items-start gap-2 min-w-0">
+            <div className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center bg-blue-100">
               <Calculator className="w-4 h-4 text-blue-700" />
             </div>
             <div>
               <h3 className="text-base font-bold text-blue-700">Ozon 跨境核算面板</h3>
-              <p className="text-[10px] text-blue-600">
+              <p className="text-xs leading-5 text-blue-700">
                 OZON rFBS 自发货 · CEL产品资费表 {TARIFF_VERSION} · 汇率 1¥ = {formatRubPerCny(rateInfo.rubPerCny)}₽
                 {rateInfo.auto ? `（${rateInfo.source} ${rateInfo.date}自动更新）` : '（配置值）'}
               </p>
             </div>
           </div>
-          <span className="text-xs px-2 py-1 rounded bg-white border border-blue-200 text-blue-700">融合利润测算与定价计算</span>
         </div>
         {/* Tab栏 */}
         <div className="flex border-b border-gray-200 bg-white overflow-x-auto">
@@ -73,9 +76,10 @@ export default function OzonCalc({ projectContext = null }) {
       </div>
 
       {/* 内容区 */}
-      {tab === 'single' && <SingleTab key={projectContext ? `ctx-${projectContext.projectId}` : 'standalone'} projectContext={projectContext} />}
-      {tab === 'multi' && <MultiTab />}
+      {tab === 'single' && <SingleTab key={projectContext ? `ctx-${projectContext.projectId}` : 'standalone'} projectContext={projectContext} rateInfo={rateInfo} />}
+      {tab === 'multi' && <MultiTab key={projectContext ? `ctx-${projectContext.projectId}` : 'standalone'} projectContext={projectContext} rateInfo={rateInfo} />}
       {tab === 'commission' && <CommissionTab />}
+      {tab === 'channels' && <ChannelTab />}
     </div>
   )
 }
@@ -97,20 +101,39 @@ const SINGLE_DEFAULTS = {
   returnLoss: 4,
 }
 
-function SingleTab({ projectContext = null }) {
+function SingleTab({ projectContext = null, rateInfo }) {
   // prefill 只在挂载时生效一次（key 按 projectId 强制重挂）；项目模式下不写共享持久化键
   // T6-2B hotfix：base = 既有保存值（或默认值），只有"有值"的 project prefill 覆盖 base——
   // 禁止 '' 把采购/广告等成本假设清成 0（否则会算出虚假高利润基线）
   const [params, setParams] = useState(() => {
-    const base = persistGet(SHIPPING_KEY) || { ...SINGLE_DEFAULTS }
+    const base = projectContext
+      ? Object.fromEntries(Object.keys(SINGLE_DEFAULTS).map((key) => [key, '']))
+      : (persistGet(SHIPPING_KEY) || { ...SINGLE_DEFAULTS })
     return projectContext?.prefill ? mergeTrustedPrefill(base, projectContext.prefill) : base
   })
   // T6-2B hotfix：项目模式保存前必须人工确认成本与费率假设
   const [costConfirmed, setCostConfirmed] = useState(false)
+  const [appliedNotice, setAppliedNotice] = useState(null)
+
+  const supplyRef = projectContext?.supplyCostReference || { status: 'NONE' }
+
+  const handleApplySupplyQuote = () => {
+    if (supplyRef.status !== 'APPLICABLE_CNY' || typeof supplyRef.purchaseCostCny !== 'number') return
+    setParams((prev) => ({
+      ...prev,
+      purchaseCost: supplyRef.purchaseCostCny,
+    }))
+    setCostConfirmed(false)
+    setAppliedNotice(`已采用正式报价 ¥${supplyRef.purchaseCostCny} 作为当前采购成本草稿。`)
+  }
 
   const updateParam = (key, val) => {
     const newData = { ...params, [key]: val }
     setParams(newData)
+    setCostConfirmed(false)
+    if (key === 'purchaseCost') {
+      setAppliedNotice(null)
+    }
     if (!projectContext) persistSet(SHIPPING_KEY, newData)
   }
 
@@ -130,12 +153,16 @@ function SingleTab({ projectContext = null }) {
 
   const sumDim = length + width + height
   const density = length && width && height ? (weight / ((length * width * height) / 1000000)).toFixed(1) : 0
-  const priceRMB = Math.round(price * R * 100) / 100
+  const effectiveRate = Number(rateInfo?.rubPerCny)
+  const missingInputs = missingOzonInputs(params)
+  const validRate = Number.isFinite(effectiveRate) && effectiveRate > 0
+  const priceRMB = validRate ? Math.round(price / effectiveRate * 100) / 100 : null
+  const calculationParams = { ...params, rubPerCny: effectiveRate }
 
   const results = CHANNEL_GROUPS.map((cat) => ({
     ...cat,
     channels: cat.channels.map((ch) => {
-      const calc = calcChannelProfit(ch, price, weight, length, width, height, params)
+      const calc = validRate ? calcChannelProfit(ch, price, weight, length, width, height, calculationParams) : null
       return { ...ch, result: calc?.result || null, profit: calc?.profit ?? null, profitRate: calc?.profitRate ?? null, costBreakdown: calc?.costBreakdown || null }
     }),
   }))
@@ -144,13 +171,14 @@ function SingleTab({ projectContext = null }) {
 
   // T6-2B1：项目模式下把当前方案冻结为不可变成本场景（引擎输出 verbatim）
   const saveScenario = () => {
-    if (!projectContext?.onSaveScenario || !bestChannel) return
+    if (!projectContext?.onSaveScenario || !bestChannel || !costConfirmed || missingInputs.length || !validRate) return
     const engineCh = ALL_CHANNELS.find((c) => c.id === bestChannel.id)
-    const out = calcChannelProfit(engineCh, price, weight, length, width, height, params)
+    const out = calcChannelProfit(engineCh, price, weight, length, width, height, calculationParams)
     projectContext.onSaveScenario({
       inputPayload: { price, weight, length, width, height, purchaseCost, domesticShipping, labelingFee, commission, adRate, paymentFee, agencyFee, returnLoss },
       selectedChannelId: bestChannel.id,
       outputPayload: out,
+      exchangeRateInfo: rateInfo,
     })
   }
 
@@ -175,20 +203,79 @@ function SingleTab({ projectContext = null }) {
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-5">
         {projectContext && (
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
-            <div className="text-xs text-blue-700">
-              正在为项目 <b>{projectContext.projectCode}</b> 核算：预填候选真实数据（售价/重量/尺寸/rFBS 佣金），
-              成本与费率字段请填写真实值后再保存为不可变成本场景。
+          <div className="mb-5 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
+              <div className="text-xs text-blue-700">
+                正在为项目 <b>{projectContext.projectCode}</b> 核算：预填候选真实数据（售价/重量/尺寸/rFBS 佣金），
+                成本与费率字段请填写真实值后再保存为不可变成本场景。
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-1.5 text-xs text-blue-800">
+                  <input type="checkbox" checked={costConfirmed} onChange={(e) => setCostConfirmed(e.target.checked)} className="rounded" />
+                  已确认采购成本及平台费用假设
+                </label>
+                <Button variant="primary" size="sm" disabled={!bestChannel || !costConfirmed || missingInputs.length > 0 || !validRate} onClick={saveScenario}>
+                  <Save className="h-3.5 w-3.5" /> 保存此方案到项目
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <label className="flex items-center gap-1.5 text-xs text-blue-800">
-                <input type="checkbox" checked={costConfirmed} onChange={(e) => setCostConfirmed(e.target.checked)} className="rounded" />
-                已确认采购成本及平台费用假设
-              </label>
-              <Button variant="primary" size="sm" disabled={!bestChannel || !costConfirmed} onClick={saveScenario}>
-                <Save className="h-3.5 w-3.5" /> 保存此方案到项目
-              </Button>
-            </div>
+            {missingInputs.length > 0 && <p className="text-xs text-amber-700">待补齐：{missingInputs.join('、')}。当前结果仅供试算。</p>}
+            {supplyRef && supplyRef.status !== 'NONE' && (
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs">
+                {supplyRef.status === 'APPLICABLE_CNY' && (
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2 text-slate-800">
+                        <span className="font-semibold text-slate-700">正式供应报价</span>
+                        <span>{supplyRef.supplierName} · v{supplyRef.quoteVersion} · <b className="text-emerald-700">¥{supplyRef.rawAmount}</b></span>
+                      </div>
+                      <div className="mt-0.5 text-[11px] text-slate-500">
+                        该值来自正式供应报价，仅作为采购单价草稿；国内段运费、贴标费及税费等仍需单独确认。
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={handleApplySupplyQuote}
+                    >
+                      采用正式供应报价
+                    </Button>
+                  </div>
+                )}
+                {supplyRef.status === 'BLOCKED_CURRENCY' && (
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2 text-slate-800">
+                        <span className="font-semibold text-slate-700">正式供应报价</span>
+                        <span>{supplyRef.supplierName} · v{supplyRef.quoteVersion} · <b className="text-slate-800">{supplyRef.rawAmount} {supplyRef.currency}</b></span>
+                      </div>
+                      <div className="mt-0.5 text-[11px] text-amber-700">
+                        非人民币正式报价暂不支持一键采用，请核实汇率后手工填写采购成本。
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      disabled
+                    >
+                      采用正式供应报价
+                    </Button>
+                  </div>
+                )}
+                {supplyRef.status === 'INVALID_REFERENCE' && (
+                  <div className="text-[11px] text-amber-700">
+                    正式供应方案引用异常，采购成本请暂时手工填写。
+                  </div>
+                )}
+                {appliedNotice && (
+                  <div className="mt-1.5 text-[11px] font-medium text-emerald-700">
+                    ✓ {appliedNotice}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
         <div className="space-y-5 mb-5">
@@ -237,14 +324,14 @@ function SingleTab({ projectContext = null }) {
           </div>
           <div className="flex items-center gap-1.5">
             <Info className="w-4 h-4 text-morandi-text-light" />
-            <span className="text-sm text-morandi-text-light">汇率: 1¥ = {formatRubPerCny(rubPerCny)}₽ (1₽ ≈ ¥{(1 / rubPerCny).toFixed(4)})</span>
+            <span className="text-sm text-morandi-text-light">汇率: 1¥ = {formatRubPerCny(effectiveRate)}₽ {validRate ? `(1₽ ≈ ¥${(1 / effectiveRate).toFixed(4)})` : ''}</span>
           </div>
         </div>
 
         {bestChannel && bestChannel.costBreakdown && (
           <div className="mb-5 p-4 rounded-lg bg-green-50 border border-green-200">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-sm font-semibold text-green-700">🏆 最优渠道</span>
+              <span className="text-sm font-semibold text-green-700">{missingInputs.length ? '试算最优渠道' : '最优渠道'}</span>
               <span className="text-sm font-bold text-green-800">{bestChannel.name}</span>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 text-sm">
@@ -328,31 +415,56 @@ function SingleTab({ projectContext = null }) {
   )
 }
 
-function MultiTab() {
-  const [pricingData, setPricingData] = useState(() => persistGet(PRICING_KEY) || {})
+function MultiTab({ projectContext = null, rateInfo }) {
+  const pricingKey = projectContext ? `${PRICING_KEY}-project-${projectContext.projectId}` : PRICING_KEY
+  const groupsKey = projectContext ? `${GROUPS_KEY}-project-${projectContext.projectId}` : GROUPS_KEY
+  const [pricingData, setPricingData] = useState(() => persistGet(pricingKey) || {})
+  const [customGroups, setCustomGroups] = useState(() => persistGet(groupsKey) || [])
+  const [newGroupName, setNewGroupName] = useState('')
+  const [costConfirmed, setCostConfirmed] = useState(false)
+  const rate = Number(rateInfo?.rubPerCny)
+  const validRate = isEnteredNumber(rate, { positive: true })
+  const products = [...PRICING_PRODUCTS, ...customGroups]
   const savePricing = (data) => {
     setPricingData(data)
-    persistSet(PRICING_KEY, data)
+    setCostConfirmed(false)
+    persistSet(pricingKey, data)
+  }
+
+  const addGroup = () => {
+    const name = newGroupName.trim()
+    if (!name) return
+    const next = [...customGroups, { id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, name, color: 'teal' }]
+    setCustomGroups(next)
+    persistSet(groupsKey, next)
+    setNewGroupName('')
   }
 
   return (
     <div className="space-y-4">
       <div className="px-1">
         <h2 className="text-sm font-bold text-morandi-text">多规格定价对比</h2>
-        <p className="text-[10px] text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润，rFBS运费自动匹配最低渠道（汇率 1¥ = {formatRubPerCny(rubPerCny)}₽）</p>
+        <p className="text-xs text-morandi-text-light mt-0.5">按产品规格对比成本、定价与利润；rFBS 渠道按最低运费匹配。汇率 1¥ = {formatRubPerCny(rate)}₽。</p>
+        {projectContext && <p className="mt-1 text-xs text-blue-700">项目 {projectContext.projectCode} 的产品组单独保存，成本假设需逐项确认。</p>}
+        <div className="mt-3 flex flex-wrap gap-2 items-center">
+          <input aria-label="新产品组名称" value={newGroupName} onChange={(event) => setNewGroupName(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') addGroup() }} placeholder="新产品组名称" className="text-sm border border-gray-200 rounded px-2 py-1.5 bg-white" />
+          <button type="button" onClick={addGroup} disabled={!newGroupName.trim()} className="inline-flex items-center gap-1 text-xs px-2.5 py-1.5 rounded bg-blue-50 text-blue-700 disabled:opacity-40"><Plus className="w-3.5 h-3.5" />添加产品组</button>
+          {projectContext && <label className="inline-flex items-center gap-1.5 text-xs text-gray-700"><input type="checkbox" checked={costConfirmed} onChange={(event) => setCostConfirmed(event.target.checked)} />已核对本组价格与成本假设</label>}
+        </div>
       </div>
 
       <div className="space-y-4">
-        {PRICING_PRODUCTS.map((product) => {
+        {products.map((product) => {
           const pc = PRODUCT_COLORS[product.color]
           const pd = pricingData[product.id] || {}
           const skus = pd.skus || [{}]
-          const commission = pd.commission !== undefined && pd.commission !== '' ? Number(pd.commission) : 12
-          const adRate = pd.adRate !== undefined && pd.adRate !== '' ? Number(pd.adRate) : 10
-          const paymentFee = pd.paymentFee !== undefined && pd.paymentFee !== '' ? Number(pd.paymentFee) : 1
-          const agencyFee = pd.agencyFee !== undefined && pd.agencyFee !== '' ? Number(pd.agencyFee) : 2
-          const returnLoss = pd.returnLoss !== undefined && pd.returnLoss !== '' ? Number(pd.returnLoss) : 4
-          const discountRate = pd.discountRate !== undefined && pd.discountRate !== '' ? Number(pd.discountRate) : 0.6
+          const defaultValue = (key, fallback) => pd[key] !== undefined && pd[key] !== '' ? Number(pd[key]) : (projectContext ? '' : fallback)
+          const commission = defaultValue('commission', 12)
+          const adRate = defaultValue('adRate', 10)
+          const paymentFee = defaultValue('paymentFee', 1)
+          const agencyFee = defaultValue('agencyFee', 2)
+          const returnLoss = defaultValue('returnLoss', 4)
+          const discountRate = defaultValue('discountRate', 0.6)
 
           const updateSku = (idx, key, val) => {
             const newSkus = [...skus]
@@ -370,7 +482,23 @@ function MultiTab() {
             savePricing({ ...pricingData, [product.id]: { ...pd, skus, commission, adRate, paymentFee, agencyFee, returnLoss, discountRate, [key]: val } })
           }
 
-          const common = { commission, adRate, paymentFee, agencyFee, returnLoss, discountRate }
+          const common = { commission, adRate, paymentFee, agencyFee, returnLoss, discountRate: discountRate === '' ? null : discountRate, rubPerCny: rate }
+
+          const saveSkuScenario = (sku, calc) => {
+            if (!projectContext?.onSaveScenario || !costConfirmed || !calc.bestShip || !validRate) return
+            const inputPayload = {
+              productName: `${product.name} ${sku.spec || ''}`.trim(),
+              listPrice: Number(sku.listPrice), discountRate: Number(discountRate),
+              price: calc.price, weight: Number(sku.weight), length: Number(sku.length),
+              width: Number(sku.width), height: Number(sku.height),
+              purchaseCost: Number(sku.purchaseCost), domesticShipping: Number(sku.domesticShip),
+              labelingFee: Number(sku.labelFee), commission: Number(commission), adRate: Number(adRate),
+              paymentFee: Number(paymentFee), agencyFee: Number(agencyFee), returnLoss: Number(returnLoss),
+            }
+            if (missingOzonInputs(inputPayload).length || !isEnteredNumber(discountRate, { positive: true, max: 1 })) return
+            const outputPayload = calcChannelProfit(calc.bestShip.channel, calc.price, inputPayload.weight, inputPayload.length, inputPayload.width, inputPayload.height, { ...inputPayload, rubPerCny: rate })
+            projectContext.onSaveScenario({ inputPayload, selectedChannelId: calc.bestShip.channel.id, outputPayload, exchangeRateInfo: rateInfo })
+          }
 
           return (
             <div key={product.id} className={`rounded-xl border ${pc.dot.replace('bg-', 'border-').replace(/-\d+/, '-200')} bg-white overflow-hidden`}>
@@ -393,7 +521,7 @@ function MultiTab() {
                     ['支付费', 'paymentFee', '%', paymentFee],
                     ['代理费', 'agencyFee', '%', agencyFee],
                     ['退货', 'returnLoss', '%', returnLoss],
-                    ['折扣系数', 'discountRate', '折', Math.round(discountRate * 10 * 10) / 10],
+                    ['折扣系数', 'discountRate', '折', discountRate === '' ? '' : Math.round(discountRate * 10 * 10) / 10],
                   ].map(([label, key, unit, val]) => (
                     <div key={key} className="flex items-center gap-1">
                       <span className="text-[10px] text-morandi-text-light">{label}</span>
@@ -433,6 +561,12 @@ function MultiTab() {
                     <tbody>
                       {skus.map((sku, idx) => {
                         const calc = calcRow(sku, common)
+                        const rowInputs = {
+                          price: calc.price, weight: sku.weight, length: sku.length, width: sku.width,
+                          height: sku.height, purchaseCost: sku.purchaseCost, domesticShipping: sku.domesticShip,
+                          labelingFee: sku.labelFee, commission, adRate, paymentFee, agencyFee, returnLoss,
+                        }
+                        const rowReady = validRate && isEnteredNumber(discountRate, { positive: true, max: 1 }) && missingOzonInputs(rowInputs).length === 0 && !!calc.bestShip
                         return (
                           <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}>
                             <td className="border border-gray-200 px-1.5 py-1">
@@ -481,13 +615,14 @@ function MultiTab() {
                             </td>
                             <td className="border border-gray-200 px-1.5 py-1 text-center text-red-500">{Math.round(calc.platformCost * 100) / 100 || '-'}</td>
                             <td className="border border-gray-200 px-1.5 py-1 text-center text-red-500">{Math.round(calc.returnAmt * 100) / 100 || '-'}</td>
-                            <td className={`border border-gray-200 px-1.5 py-1 text-center font-bold ${calc.profit !== null ? (calc.profit >= 0 ? 'text-green-600' : 'text-red-500') : 'text-gray-300'}`}>
-                              {calc.profit !== null ? calc.profit : '-'}
+                            <td className={`border border-gray-200 px-1.5 py-1 text-center font-bold ${(!projectContext || rowReady) && calc.profit !== null ? (calc.profit >= 0 ? 'text-green-600' : 'text-red-500') : 'text-gray-300'}`}>
+                              {(!projectContext || rowReady) && calc.profit !== null ? calc.profit : '-'}
                             </td>
-                            <td className={`border border-gray-200 px-1.5 py-1 text-center font-bold ${calc.profitRate !== null ? (calc.profitRate >= 0 ? 'text-green-600' : 'text-red-500') : 'text-gray-300'}`}>
-                              {calc.profitRate !== null ? calc.profitRate : '-'}
+                            <td className={`border border-gray-200 px-1.5 py-1 text-center font-bold ${(!projectContext || rowReady) && calc.profitRate !== null ? (calc.profitRate >= 0 ? 'text-green-600' : 'text-red-500') : 'text-gray-300'}`}>
+                              {(!projectContext || rowReady) && calc.profitRate !== null ? calc.profitRate : '-'}
                             </td>
                             <td className="border border-gray-200 px-1 py-1 text-center">
+                              {projectContext && <button type="button" onClick={() => saveSkuScenario(sku, calc)} disabled={!rowReady || !costConfirmed} title={rowReady ? '保存该规格为项目成本场景' : '请补齐该规格和公共费率'} className="p-0.5 text-blue-600 disabled:text-gray-300"><Save className="w-3.5 h-3.5" /></button>}
                               {skus.length > 1 && (
                                 <button onClick={() => removeSku(idx)} className="p-0.5 hover:bg-red-50 rounded text-gray-300 hover:text-red-400">
                                   <Trash2 className="w-3 h-3" />
@@ -505,6 +640,28 @@ function MultiTab() {
           )
         })}
       </div>
+    </div>
+  )
+}
+
+function ChannelTab() {
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+      <div>
+        <h4 className="text-sm font-semibold text-gray-800">rFBS 渠道参考</h4>
+        <p className="mt-1 text-xs text-gray-500">只读配置 · {channelsData.source} · 来源日期 {channelsData.source_date}。费率可能变化，发货前请复核渠道报价。</p>
+      </div>
+      {CHANNEL_GROUPS.map((group) => (
+        <section key={group.category}>
+          <h5 className="mb-2 text-xs font-semibold text-gray-700">{group.categoryZh}</h5>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[620px] text-xs">
+              <thead><tr className="border-b border-gray-200 text-left text-gray-500"><th className="py-2 pr-3">渠道</th><th className="py-2 pr-3">基础费</th><th className="py-2 pr-3">重量费</th><th className="py-2 pr-3">限重</th><th className="py-2">计抛</th></tr></thead>
+              <tbody>{group.channels.map((channel) => <tr key={channel.id} className="border-b border-gray-100 text-gray-700"><td className="py-2 pr-3">{channel.name}</td><td className="py-2 pr-3">¥{channel.base}</td><td className="py-2 pr-3">¥{channel.rate}/{channel.rateUnit === 'per100g' ? '100g' : 'kg'}</td><td className="py-2 pr-3">{channel.weightMax} kg</td><td className="py-2">{channel.volumetric ? `÷${channel.volDiv}` : '无'}</td></tr>)}</tbody>
+            </table>
+          </div>
+        </section>
+      ))}
     </div>
   )
 }

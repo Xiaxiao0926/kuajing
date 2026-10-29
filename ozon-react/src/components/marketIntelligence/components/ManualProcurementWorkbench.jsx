@@ -14,10 +14,11 @@ import Drawer from '../../ui/Drawer'
 import Button from '../../ui/Button'
 import Surface from '../../ui/Surface'
 import Badge from '../../ui/Badge'
-import { saveManualQuote, getManualQuotes, promoteToT6Candidate } from '../../../utils/marketIntelligence/miStore'
+import { saveManualQuote, getManualQuotes, findProcurementQuote, promoteToT6Candidate } from '../../../utils/marketIntelligence/miStore'
 
 export default function ManualProcurementWorkbench({
   niche,
+  runId,
   isOpen,
   onClose,
   onNavigateToWbCalc,
@@ -38,6 +39,7 @@ export default function ManualProcurementWorkbench({
   const [targetPriceRub, setTargetPriceRub] = useState(Math.round(niche.price * rubPerCny))
   const [commissionRatePct, setCommissionRatePct] = useState(15.0) // WB 平均类目佣金
   const [savedSuccess, setSavedSuccess] = useState(false)
+  const [promoteError, setPromoteError] = useState(null)
 
   // 4 级数据可信度分层状态
   const [priceProvenance, setPriceProvenance] = useState('ESTIMATED') // 'ESTIMATED' | 'SUPPLIER_CONFIRMED'
@@ -47,11 +49,12 @@ export default function ManualProcurementWorkbench({
     niche.eac === 'NOT_REQUIRED_VERIFIED' ? 'REGULATION_VERIFIED' : 'ESTIMATED'
   ) // 'ESTIMATED' | 'REGULATION_VERIFIED'
 
-  // 加载已有草稿
+  // 加载已有草稿与重置错误
   useEffect(() => {
-    if (niche && niche.name) {
+    setPromoteError(null)
+    if (niche) {
       const all = getManualQuotes()
-      const draft = all[niche.name]
+      const draft = findProcurementQuote(all, niche)
       if (draft) {
         setSupplierName(draft.supplierName || '')
         setSupplierUrl(draft.supplierUrl || '')
@@ -77,7 +80,7 @@ export default function ManualProcurementWorkbench({
         setRegulationProvenance(niche.eac === 'NOT_REQUIRED_VERIFIED' ? 'REGULATION_VERIFIED' : 'ESTIMATED')
       }
     }
-  }, [niche])
+  }, [niche, isOpen])
 
   // 综合数据可信度定级
   const overallTrustTier = useMemo(() => {
@@ -102,7 +105,7 @@ export default function ManualProcurementWorkbench({
   const breakEvenPriceRub = Math.round((Number(factoryPriceCny) + Number(domesticFreightCny) + Number(internationalFreightCny)) / (1 - commissionRatePct / 100) * rubPerCny)
 
   const handleSaveDraft = () => {
-    saveManualQuote(niche.name, {
+    saveManualQuote(niche, {
       supplierName,
       supplierUrl,
       factoryPriceCny,
@@ -126,14 +129,23 @@ export default function ManualProcurementWorkbench({
   }
 
   const handlePromote = () => {
+    setPromoteError(null)
+    // 1. 保存采购草稿（保留当前录入内容，抽屉打开即使推流失败也不丢失输入）
     handleSaveDraft()
+    // 2. 尝试推流到 T6 候选池（明确传入当前批次 runId）
     const trustPrefix = `[数据可信度: ${overallTrustTier}] 价格:${priceProvenance === 'SUPPLIER_CONFIRMED' ? '厂家实询' : '算法预估'} | 重量:${specProvenance} | 物流:${freightProvenance} | 认证:${regulationProvenance}`
-    const { candidate } = promoteToT6Candidate(
-      niche,
-      `${trustPrefix}。采购报价: ¥${factoryPriceCny}, 供应商: ${supplierName || '待填'}, 实测重: ${weightG}g, 预估毛利率: ${marginPct.toFixed(1)}%`
-    )
-    if (onPromoted) onPromoted(candidate)
-    onClose()
+    try {
+      const { candidate } = promoteToT6Candidate(
+        niche,
+        `${trustPrefix}。采购报价: ¥${factoryPriceCny}, 供应商: ${supplierName || '待填'}, 实测重: ${weightG}g, 预估毛利率: ${marginPct.toFixed(1)}%`,
+        runId
+      )
+      if (onPromoted) onPromoted(candidate)
+      onClose()
+    } catch (err) {
+      // 捕获缺少 UID 或身份冲突等异常：显式反馈用户，不关闭抽屉，不误报成功
+      setPromoteError(err.message || '推流到 T6 候选池失败')
+    }
   }
 
   return (
@@ -150,6 +162,20 @@ export default function ManualProcurementWorkbench({
             <span>签收率: <b>{niche.buyout}%</b></span>
           </div>
         </Surface>
+
+        {/* 推流异常与阻断显式提示条 */}
+        {promoteError && (
+          <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <div className="font-semibold text-rose-900">推流到 T6 候选池受阻</div>
+              <div className="mt-0.5 text-rose-700">{promoteError}</div>
+              <div className="mt-1 text-gray-500 text-[11px]">
+                提示：当前采购草稿已为您自动保存；抽屉保持开启，可核实利基 UID 或补充数据后重试。
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 数据可信度分级提示条 */}
         <div

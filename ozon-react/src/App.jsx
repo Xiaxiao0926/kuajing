@@ -51,9 +51,11 @@ const DATA_DIR = getDataUrl().replace(/\/$/, '')
 // 页面错误边界的标题映射（仅展示用）
 function pageLabelForNode(nodeId) {
   if (nodeId === '__market_intelligence__') return '俄罗斯市场情报'
+  if (nodeId === '__market_datahub__') return '数据中心'
+  if (nodeId === '__market_validation__') return '产品验证池'
   if (nodeId === '__scoring__') return '选品评分'
   if (nodeId === '__purity_analysis__') return '选品市场分析'
-  if (nodeId === '__market_reports__' || nodeId === '__door_window_report__') return '市场报告中心'
+  if (nodeId === '__market_reports__' || nodeId === '__door_window_report__') return '市场报告'
   if (nodeId === '__fbp_calc__') return 'FBP 边境仓核算'
   if (nodeId === '__t6_candidates__') return '候选池'
   if (nodeId === '__t6_projects__') return 'SKU 项目'
@@ -64,6 +66,21 @@ function pageLabelForNode(nodeId) {
   const node = ALL_NODES.find((n) => n.id === nodeId)
   return node ? node.title : '页面'
 }
+
+const PRIMARY_NAV_NODE_IDS = new Set([
+  '__progress_overview__',
+  '__market_intelligence__',
+  '__market_reports__',
+  '__t6_candidates__',
+  '__t6_projects__',
+  'n5',
+  'n39',
+  '__fbp_calc__',
+  'n8',
+  'n14',
+  'n4',
+  '__market_datahub__',
+])
 
 function DashboardApp() {
   const [data, setData] = useState(null)
@@ -243,7 +260,32 @@ function DashboardApp() {
     if (activeNode === '__market_intelligence__') {
       return (
         <Suspense fallback={<LazyFallback />}>
-          <MarketIntelligenceApp onNavigateToWbCalc={() => setActiveNode('n39')} />
+          <MarketIntelligenceApp
+            onNavigateToWbCalc={() => setActiveNode('n39')}
+            onOpenNode={(nodeId) => setActiveNode(nodeId)}
+          />
+        </Suspense>
+      )
+    }
+    if (activeNode === '__market_datahub__') {
+      return (
+        <Suspense fallback={<LazyFallback />}>
+          <MarketIntelligenceApp
+            onNavigateToWbCalc={() => setActiveNode('n39')}
+            initialView="datahub"
+            onOpenNode={(nodeId) => setActiveNode(nodeId)}
+          />
+        </Suspense>
+      )
+    }
+    if (activeNode === '__market_validation__') {
+      return (
+        <Suspense fallback={<LazyFallback />}>
+          <MarketIntelligenceApp
+            onNavigateToWbCalc={() => setActiveNode('n39')}
+            initialView="validation"
+            onOpenNode={(nodeId) => setActiveNode(nodeId)}
+          />
         </Suspense>
       )
     }
@@ -255,7 +297,7 @@ function DashboardApp() {
       )
     }
     if (activeNode === '__t6_candidates__') {
-      return <CandidatePoolPage />
+      return <CandidatePoolPage onOpenNode={(nodeId) => setActiveNode(nodeId)} />
     }
     if (activeNode === '__t6_projects__') {
       return <ProjectListPage onOpenProject={openProjectDetail} />
@@ -399,21 +441,42 @@ function DashboardApp() {
               onChange={(event) => handleNodeSelect(event.target.value)}
               className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-morandi-text"
             >
-              <option value="__project_flow__">项目流程总览</option>
-              <option value="__market_intelligence__">俄罗斯市场情报</option>
-              <option value="__purity_analysis__">选品市场分析</option>
-              <option value="__scoring__">选品评分</option>
-              <option value="__t6_candidates__">候选池</option>
-              <option value="__t6_projects__">SKU 项目</option>
-              <option value="__market_reports__">市场报告中心</option>
-              <option value="__fbp_calc__">FBP 边境仓核算</option>
-              {ROADMAP_PHASES.map((phase) => (
-                <optgroup key={phase.id} label={phase.title}>
-                  {phase.nodes.map((node) => (
-                    <option key={node.id} value={node.id}>{node.title}</option>
-                  ))}
+              <option value="__progress_overview__">工作台</option>
+              <optgroup label="市场机会">
+                <option value="__market_intelligence__">俄罗斯市场情报</option>
+                <option value="__market_reports__">市场报告</option>
+              </optgroup>
+              <optgroup label="选品与立项">
+                <option value="__t6_candidates__">候选池</option>
+              </optgroup>
+              <optgroup label="商品项目">
+                <option value="__t6_projects__">SKU 项目</option>
+                <option value="n5">商品档案</option>
+              </optgroup>
+              <optgroup label="成本与物流">
+                <option value="n39">WB 核算</option>
+                <option value="__fbp_calc__">FBP 核算</option>
+                <option value="n8">成本报价</option>
+              </optgroup>
+              <optgroup label="Listing 与上架">
+                <option value="n14">Listing 工作台</option>
+              </optgroup>
+              <optgroup label="运营与复盘">
+                <option value="n4">Ozon 运营</option>
+              </optgroup>
+              <optgroup label="系统与数据">
+                <option value="__market_datahub__">数据中心</option>
+              </optgroup>
+              <optgroup label="历史 / 兼容入口">
+                <option value="__scoring__">选品评分</option>
+                <option value="__purity_analysis__">选品市场分析</option>
+                <option value="__project_flow__">项目流程总览</option>
+              </optgroup>
+              {!PRIMARY_NAV_NODE_IDS.has(activeNode) && !['__scoring__', '__purity_analysis__', '__project_flow__'].includes(activeNode) && (
+                <optgroup label="历史 / 子页面">
+                  <option value={activeNode}>{pageLabelForNode(activeNode)}</option>
                 </optgroup>
-              ))}
+              )}
             </select>
           </div>
           <main ref={mainRef} className="p-3 sm:p-4 lg:p-6">

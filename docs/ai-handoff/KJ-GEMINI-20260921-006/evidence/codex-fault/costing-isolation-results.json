@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-21T13:08:53.020Z",
+  "matrix": [],
+  "scenarios": {
+    "SCENARIO_1": {
+      "name": "独立 Ozon 单品测算",
+      "status": "verified_shared_behavior",
+      "key": "shipping-calc-rfbs-v2",
+      "notes": "独立核算下改动实时写入共享预设键，重开能准确恢复。"
+    },
+    "SCENARIO_2": {
+      "name": "项目 A/B Ozon 单品与成本场景",
+      "status": "verified_shared_behavior",
+      "sub_risks": "needs_decision",
+      "notes": "项目模式下编辑不写全局 shipping-calc-rfbs-v2；保存场景只落目标项目；B 不携带 A 的输入。需裁决项：空白字段回退全局预设可能引入无关历史值。"
+    },
+    "SCENARIO_3": {
+      "name": "项目 A 进入 Ozon 多品",
+      "status": "needs_decision",
+      "key": "product-pricing-v2",
+      "notes": "多规格对比组件内部无项目感知，直接读写全局 product-pricing-v2；界面无任何“共享预设”提示，用户易误以为是当前项目的多规格方案。"
+    },
+    "SCENARIO_4": {
+      "name": "WB 独立与项目设置写入",
+      "status": "verified_shared_behavior",
+      "sub_risks": "potential_risk",
+      "notes": "记录到三类写入：挂载时初始化写入、汇率推送时自动同步写入、用户主动编辑写入。在项目模式下挂载 WBCalc 仍会无差别写入全局 wb-settings-v1。"
+    },
+    "SCENARIO_5": {
+      "name": "项目 WB 综合核算与资源流向",
+      "status": "verified_shared_behavior",
+      "sub_risks": "needs_decision",
+      "notes": "场景保存完全限定在项目 A 内；保存 SKU 模板有意写入全局 wb-skus-v1（符合跨项目 SKU 库预期）；订单与对账/费率管理直接暴露在项目上下文并写入全局键，需裁决是否在项目内隐藏这些 Tab。"
+    },
+    "SCENARIO_6": {
+      "name": "Tab/项目切换草稿比对",
+      "status": "confirmed_unexpected_write",
+      "notes": "计算器当前未实现草稿暂存（Draft State）。只要发生组件卸载（切 Tab、切项目、返回列表），所有未保存输入直接丢失，无任何离页确认。"
+    },
+    "SCENARIO_7": {
+      "name": "空存储与缺字段旧预设加载",
+      "status": "verified_shared_behavior",
+      "notes": "空存储使用安全默认值；旧预设中的自定义未知字段在编辑后 100% 完整保留。"
+    },
+    "SCENARIO_8": {
+      "name": "模拟 persist 与 onSaveScenario 失败",
+      "status": "verified_shared_behavior",
+      "notes": "抛错时 React 本地 state 保持输入完整，未发生崩溃或静默清空。"
+    }
+  },
+  "passed": false,
+  "faultInjectionVerified": false,
+  "error": "Scenario 9: 项目 B 场景数严格为 0，严禁跨项目串写污染 (实测检测到 1 个污染场景: CORRUPTED_SCENARIO_INJECTED_FROM_A)\n\n1 !== 0\n"
+}

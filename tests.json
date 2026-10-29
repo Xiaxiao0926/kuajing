@@ -1,0 +1,99 @@
+{
+  "task_id": "KJ-GEMINI-20260921-006",
+  "revision": 1,
+  "generated_at": "2026-09-21T21:53:00+08:00",
+  "git_head": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+  "environment": {
+    "node_version": "v24.15.0",
+    "browser": "Headless Chrome (Playwright via Codex dependencies)",
+    "esbuild_version": "0.25.0",
+    "network_intercepted": "ALL (**/* aborted, synthetic static commission injected)",
+    "local_storage": "Pure in-memory Map mock (__inMemoryPersistStore)",
+    "exchange_rate": "Synthetic fixed 12.5 RUB/CNY with dynamic trigger hook"
+  },
+  "executions": [
+    {
+      "command": "node docs/ai-handoff/KJ-GEMINI-20260921-006/run-revision-costing-tests.mjs",
+      "mode": "revision-normal",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "issues_found",
+      "summary": "全量执行真实父页面挂载、同实例/重挂对比、真实 WB 控件交互、保存失败可见性缺陷及跨项目隔离验证，退出码为 0",
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/revision-normal/costing-isolation-results.json",
+      "trace_log": "docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/revision-normal/persist-call-trace.json",
+      "page_errors_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/revision-normal/observed-page-errors.json",
+      "scenarios_tested": [
+        "R1.1: 真实 ProjectDetailPage 挂载与 Ozon 单品保存闭环 (issues_found: 空白预填回退继承历史预设)",
+        "R1.2: 真实 ProjectDetailPage 挂载与 WB 单订单保存闭环 (verified_shared_behavior)",
+        "R1.3: 同实例 Props 切换 vs 卸载重挂对比 (verified_shared_behavior)",
+        "R2: 真实 WB 控件操作 (SKU模板保存/费率重置/订单CSV导入与删除) 与设置修改 not_applicable 澄清 (verified_shared_behavior)",
+        "R3: 保存失败与错误提示深度验证 (issues_found: 确认 costing Tab 下错误 notice 不可见缺陷)",
+        "R4: 跨项目隔离与故障注入敏感度验证 (verified_shared_behavior)"
+      ]
+    },
+    {
+      "command": "$env:TEST_INJECT_CROSS_PROJECT_CORRUPTION=\"1\"; node docs/ai-handoff/KJ-GEMINI-20260921-006/run-revision-costing-tests.mjs",
+      "mode": "revision-fault",
+      "exit_code": 1,
+      "execution_status": "completed",
+      "assertions_status": "failed",
+      "business_verdict": "fault_injection_caught",
+      "summary": "故障注入开关激活跨项目串写，真实业务比较断言 assert.equal(r4ScenariosB.length, 0) 敏锐捕获 Project B 中的 1 个污染场景并引发 1 !== 0 退出码 1",
+      "caught_error": "R4: Project B 场景数严格为 0，严禁跨项目串写污染 (实测检测到 1 个污染场景: CORRUPTED_SCENARIO_INJECTED_FROM_A)\n\n1 !== 0",
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/revision-fault/costing-isolation-results.json",
+      "trace_log": "docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/revision-fault/persist-call-trace.json",
+      "page_errors_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/revision-fault/observed-page-errors.json",
+      "notes": "非人为调用 assert.fail，完全由真实数据流与业务比较断言捕获，证明断言对串写具有真实验收敏感度"
+    },
+    {
+      "command": "node --input-type=module -e \"integrity verification\"",
+      "mode": "baseline_integrity_check",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "verified_clean_0_mismatches",
+      "summary": "核对 BASELINE.json 中 28 个关键生产与测试文件 SHA256 哈希，0 差异，生产源码零修改",
+      "evidence_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/BASELINE.json"
+    }
+  ],
+  "stub_boundaries": {
+    "persistence": {
+      "stub_type": "esbuild virtual-persist module injection",
+      "scope": "All persistGet / persistSet / persistRemove redirected to in-memory Map",
+      "production_divergence": "Does not invoke window.localStorage or WordPress REST sync; completely isolated per harness run"
+    },
+    "exchange_rate": {
+      "stub_type": "esbuild virtual-exchange-rate module injection",
+      "scope": "Fixed synthetic rate 12.5 RUB/CNY with dynamic window.__setSyntheticRate triggers",
+      "production_divergence": "No external HTTP API calls to CBR/bank exchange rate feeds"
+    },
+    "t6_store": {
+      "stub_type": "t6Store._setAdapterForTests",
+      "scope": "Uses virtual persist store adapter for project entities and cost scenarios with individual keys (t6.project.<id>, t6.costScenario.<id>, t6.log.<id>)",
+      "production_divergence": "Fully conforms to production t6Store contracts and schema validation"
+    },
+    "network": {
+      "stub_type": "Playwright route abort",
+      "scope": "page.route('**/*', route.abort()) with synthetic local wb_commission.json fixture",
+      "production_divergence": "Blocks all fonts, analytics, APIs, and external CDNs"
+    }
+  },
+  "unexecuted_items": [
+    {
+      "item": "WordPress/MySQL 远端持久化与并发锁验证",
+      "status": "not_run",
+      "reason": "TASK.md 与 REVISION-001.md 明确限定：禁止读取真实凭据/业务表格，禁止启动生产服务或真实数据库同步；仅聚焦前端组件读写隔离与生命周期验证。"
+    },
+    {
+      "item": "跨设备/多客户端冲突解决 (PersistenceConflictError 409 端到端网络回退)",
+      "status": "not_run",
+      "reason": "需要真实多节点网络拓扑，非单机前端组件隔离测试范围；本次已在 R3 验证了本地异常捕获与输入保留边界。"
+    },
+    {
+      "item": "004/005 既有合规与表格测试套件重跑",
+      "status": "not_run",
+      "reason": "TASK.md 明确规则：没有重跑的既有测试如实列 not_run，不把 005 测试当作 006 运行证据。"
+    }
+  ]
+}

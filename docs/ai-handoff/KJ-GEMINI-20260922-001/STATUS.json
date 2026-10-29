@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20260922-001",
+  "status": "accepted_with_known_limitations",
+  "reviewed_by": "Codex",
+  "reviewed_on": "2026-09-22",
+  "review_evidence": "docs/ai-handoff/KJ-GEMINI-20260922-001/evidence/codex-review/verification.json",
+  "next_step": "Freeze unsaved calculator navigation protection contract; implementation requires a separate scoped task.",
+  "claimed_by": "Gemini",
+  "previous_task_id": "KJ-GEMINI-20260921-006",
+  "previous_task_status": "accepted_with_known_limitations",
+  "task_file": "docs/ai-handoff/KJ-GEMINI-20260922-001/TASK.md",
+  "baseline_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/BASELINE.json",
+  "result_file": "docs/ai-handoff/KJ-GEMINI-20260922-001/RESULT.md",
+  "tests_file": "docs/ai-handoff/KJ-GEMINI-20260922-001/tests.json",
+  "review_file": "docs/ai-handoff/KJ-GEMINI-20260922-001/REVIEW.md",
+  "local_implementation_authorized": true,
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "public_verification_status": "not_performed",
+  "execution_scope": "Local ProjectDetailPage notice visibility and ownership only; preserve data and calculation behavior."
+}

@@ -1,0 +1,258 @@
+{
+  "executedAt": "2026-10-28T04:07:29.212Z",
+  "browser": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "syntheticFixtures": [
+    {
+      "batch": "batch1",
+      "originalFileName": "ozon-same-batch.json",
+      "byteLength": 1408,
+      "sha256": "c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6",
+      "expectedSourceBackupName": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json"
+    },
+    {
+      "batch": "batch2",
+      "originalFileName": "ozon-same-batch.json",
+      "byteLength": 1403,
+      "sha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+      "expectedSourceBackupName": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json"
+    }
+  ],
+  "viewportChecks": {
+    "desktopConfirmOverflow": {
+      "scrollWidth": 1351,
+      "innerWidth": 1366
+    },
+    "narrowConfirmOverflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    "desktopReloadedOverflow": {
+      "scrollWidth": 1351,
+      "innerWidth": 1366
+    },
+    "narrowReloadedOverflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390
+    }
+  },
+  "frozenRetryComparison": {
+    "firstAttemptReportFile": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654.json",
+    "retryAttemptReportFile": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654.json",
+    "firstAttemptSha256": "86ede04cadcf4c80d5255e56b3f70c68e570aa0b6ad1db7067674c436757198d",
+    "retryAttemptSha256": "86ede04cadcf4c80d5255e56b3f70c68e570aa0b6ad1db7067674c436757198d",
+    "firstAttemptPublishedAt": "2026-10-28T04:07:21.536Z",
+    "retryAttemptPublishedAt": "2026-10-28T04:07:21.536Z",
+    "identicalPayloadVerified": true
+  },
+  "sourceDownload": {
+    "selectedReportId": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654",
+    "originalFileName": "ozon-same-batch.json",
+    "expectedSha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+    "actualSha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+    "exactBytesMatch": true,
+    "failureStateText": "源文件下载失败（HTTP 503），请刷新后重试。",
+    "successStateText": "源文件校验通过并已下载。",
+    "reportSwitchDuringPendingDidNotSave": true,
+    "sameInstanceSwitch": {
+      "reportAEnteredLoading": true,
+      "reportBStateAfterSwitch": {
+        "title": "ozon-same-batch市场分析",
+        "disabled": false,
+        "status": null
+      },
+      "lateReportAResponseDidNotDownload": true,
+      "downloadedSourceFiles": [
+        "ozon-same-batch.json"
+      ]
+    },
+    "narrowSourceDownloadOverflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390
+    }
+  },
+  "apiRequestLog": [
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-json?_=1793160437808",
+      "namespace": "market-report-json",
+      "timestamp": "2026-10-28T04:07:17.810Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-sources",
+      "filename": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json",
+      "contentType": "application/json",
+      "byteLength": 1408,
+      "sha256": "c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6",
+      "status": 200,
+      "timestamp": "2026-10-28T04:07:19.913Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-52fec0ea-8386-4410-abb2-42685bac51b4.json",
+      "contentType": "application/json",
+      "byteLength": 13845,
+      "sha256": "2a8f2dfc87eca92979821e06c62242bc77af6a2a542cd0e1deb0986857b8b168",
+      "reportId": "uploaded-52fec0ea-8386-4410-abb2-42685bac51b4",
+      "publishedAt": "2026-10-28T04:07:19.891Z",
+      "snapshot": "2026-09-05",
+      "collectionDateOrigin": "user",
+      "sourceBackup": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json",
+      "provenance": {
+        "version": 1,
+        "originalFileName": "ozon-same-batch.json",
+        "sourceSha256": "c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6",
+        "sourceByteLength": 1408,
+        "importedAt": "2026-10-28T04:07:19.891Z",
+        "importId": "52fec0ea-8386-4410-abb2-42685bac51b4",
+        "originalMimeType": "application/json",
+        "sourceBackupMimeType": "application/json",
+        "collectionDateOrigin": "user",
+        "collectionDateConfirmed": true,
+        "collectionDateStatus": "evaluated",
+        "sourceBackup": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json"
+      },
+      "status": 200,
+      "timestamp": "2026-10-28T04:07:19.937Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-sources",
+      "filename": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "contentType": "application/json",
+      "byteLength": 1403,
+      "sha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+      "status": 200,
+      "timestamp": "2026-10-28T04:07:21.547Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "86ede04cadcf4c80d5255e56b3f70c68e570aa0b6ad1db7067674c436757198d",
+      "reportId": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654",
+      "publishedAt": "2026-10-28T04:07:21.536Z",
+      "snapshot": null,
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "status": 503,
+      "timestamp": "2026-10-28T04:07:21.561Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "86ede04cadcf4c80d5255e56b3f70c68e570aa0b6ad1db7067674c436757198d",
+      "reportId": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654",
+      "publishedAt": "2026-10-28T04:07:21.536Z",
+      "snapshot": null,
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "status": 503,
+      "timestamp": "2026-10-28T04:07:21.563Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "86ede04cadcf4c80d5255e56b3f70c68e570aa0b6ad1db7067674c436757198d",
+      "reportId": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654",
+      "publishedAt": "2026-10-28T04:07:21.536Z",
+      "snapshot": null,
+      "collectionDateOrigin": "unknown",
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "provenance": {
+        "version": 1,
+        "originalFileName": "ozon-same-batch.json",
+        "sourceSha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+        "sourceByteLength": 1403,
+        "importedAt": "2026-10-28T04:07:21.536Z",
+        "importId": "35977f9f-380f-4a1c-ab04-a597c5bf8654",
+        "originalMimeType": "application/json",
+        "sourceBackupMimeType": "application/json",
+        "collectionDateOrigin": "unknown",
+        "collectionDateConfirmed": true,
+        "collectionDateStatus": "not_evaluated",
+        "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json"
+      },
+      "status": 200,
+      "timestamp": "2026-10-28T04:07:23.033Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "86ede04cadcf4c80d5255e56b3f70c68e570aa0b6ad1db7067674c436757198d",
+      "reportId": "uploaded-35977f9f-380f-4a1c-ab04-a597c5bf8654",
+      "publishedAt": "2026-10-28T04:07:21.536Z",
+      "snapshot": null,
+      "collectionDateOrigin": "unknown",
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "provenance": {
+        "version": 1,
+        "originalFileName": "ozon-same-batch.json",
+        "sourceSha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+        "sourceByteLength": 1403,
+        "importedAt": "2026-10-28T04:07:21.536Z",
+        "importId": "35977f9f-380f-4a1c-ab04-a597c5bf8654",
+        "originalMimeType": "application/json",
+        "sourceBackupMimeType": "application/json",
+        "collectionDateOrigin": "unknown",
+        "collectionDateConfirmed": true,
+        "collectionDateStatus": "not_evaluated",
+        "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json"
+      },
+      "status": 200,
+      "timestamp": "2026-10-28T04:07:23.036Z"
+    },
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-json?_=1793160444047",
+      "namespace": "market-report-json",
+      "timestamp": "2026-10-28T04:07:24.047Z"
+    },
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-sources?_=1793160445473",
+      "namespace": "market-report-sources",
+      "timestamp": "2026-10-28T04:07:25.474Z"
+    },
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-sources?_=1793160445594",
+      "namespace": "market-report-sources",
+      "timestamp": "2026-10-28T04:07:25.595Z"
+    },
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-sources?_=1793160446519",
+      "namespace": "market-report-sources",
+      "timestamp": "2026-10-28T04:07:26.520Z"
+    },
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-sources?_=1793160448977",
+      "namespace": "market-report-sources",
+      "timestamp": "2026-10-28T04:07:28.978Z"
+    }
+  ],
+  "screenshots": [
+    "confirm-step-desktop-1366x900.png",
+    "confirm-step-narrow-390x844.png",
+    "pending-retry-desktop-1366x900.png",
+    "pending-retry-narrow-390x844.png",
+    "reloaded-revisions-desktop-1366x900.png",
+    "reloaded-revisions-narrow-390x844.png",
+    "duplicate-warning-desktop-1366x900.png",
+    "source-download-success-desktop-1366x900.png",
+    "source-download-success-narrow-390x844.png",
+    "source-download-switch-reset-desktop-1366x900.png"
+  ]
+}

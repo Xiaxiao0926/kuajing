@@ -1,0 +1,695 @@
+diff --git a/ozon-react/src/utils/marketIntelligence/miStore.js b/ozon-react/src/utils/marketIntelligence/miStore.js
+index 8ed23a9..217f597 100644
+--- a/ozon-react/src/utils/marketIntelligence/miStore.js
++++ b/ozon-react/src/utils/marketIntelligence/miStore.js
+@@ -4,7 +4,24 @@
+  */
+ import { getApiBase, getDataUrl } from '../runtime.js'
+ import { persistGet, persistSet } from '../persist.js'
+-import { ensureCandidate, setCandidateBizStatus } from '../t6/t6Store.js'
++import {
++  ensureCandidate,
++  findCandidateByProductId,
++  findCandidateBySourceNicheUid,
++  syncCandidateMarketEvidence,
++  setCandidateBizStatus,
++} from '../t6/t6Store.js'
++import {
++  resolveNicheUid,
++  buildMiCandidateSourceProductId,
++  buildCandidateMarketEvidence,
++} from './candidateMarketBridge.js'
++import {
++  buildProcurementIdentity,
++  findProcurementQuote,
++} from './procurementIdentity.js'
++
++export { findProcurementQuote }
+ 
+ const RUNS_CACHE = new Map()
+ const PERSIST_KEY_VALIDATION_OVERRIDES = 'mi_validation_overrides'
+@@ -208,8 +225,9 @@ export function getManualQuotes() {
+ 
+ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
+   const all = getManualQuotes()
+-  const nicheName = typeof nicheIdentifier === 'string' ? nicheIdentifier : (nicheIdentifier?.name || '')
+-  const nicheUid = typeof nicheIdentifier === 'object' ? nicheIdentifier?.uid : null
++  const { uid: nicheUid, name: nicheName } = typeof nicheIdentifier === 'string'
++    ? { uid: null, name: nicheIdentifier.trim() }
++    : buildProcurementIdentity(nicheIdentifier)
+ 
+   const entry = {
+     ...quoteData,
+@@ -218,7 +236,9 @@ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
+     updatedAt: new Date().toISOString(),
+   }
+ 
+-  all[nicheName] = entry
++  if (nicheName) {
++    all[nicheName] = entry
++  }
+   if (nicheUid) {
+     all[nicheUid] = entry
+   }
+@@ -239,32 +259,138 @@ export function saveManualQuote(nicheIdentifier, quoteData, oldData = null) {
+ // ---------- 5. 无缝衔接 T6 SKU 项目生命周期 ----------
+ 
+ /**
+- * 一键将验证池中的单品推送到 T6 候选池（生成 t6.candidate，具备幂等防重）
++ * 一键将验证池中的单品推送到 T6 候选池（生成 t6.candidate，具备幂等防重与证据同步）
+  */
+ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-001') {
+   if (!niche || !niche.name) {
+     throw new Error('MI_STORE: 无效利基对象，无法推送到 T6')
+   }
+ 
++  const nicheUid = resolveNicheUid(niche)
++  if (!nicheUid) {
++    throw new Error('MI_STORE: 利基对象缺少有效 nicheUid，阻断推送到 T6（禁止无 UID 推进以防脏数据）')
++  }
++
++  const overrides = getValidationOverrides()
++  const override = overrides[nicheUid] || overrides[niche.name] || null
++  const effectiveVerdict = override?.verdict ?? niche?.verdict ?? null
++
++  const marketEvidence = buildCandidateMarketEvidence(niche, runId, effectiveVerdict)
++
+   const nicheId = niche.rank ?? niche.id ?? niche.name
+-  const sourceProductId = `wb-niche-${niche.name}`
+-  const notes = `[WB选品情报] Niche ID: ${nicheId} | UID: ${niche.uid || 'N/A'} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs} | 签收率: ${niche.buyout} | 均价: ${niche.price} | 预估单重: ${niche.weight_g || (niche.heavy === 'YES' ? '大件' : '轻件')}。${reason || niche.rationale || ''}`
++  const stableSourceProductId = buildMiCandidateSourceProductId(niche)
++  const legacySourceProductId = `wb-niche-${niche.name}`
++  const notes = `[WB选品情报] Niche ID: ${nicheId} | UID: ${nicheUid} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs || niche.pfs} | 签收率: ${niche.buyout} | 均价: ${niche.price} | 预估单重: ${niche.weight_g || (niche.heavy === 'YES' ? '大件' : '轻件')}。${reason || niche.rationale || ''}`
++
++  // 四步查重策略：
++  // STEP 1: 按 source_niche_uid 找 Candidate（以 nicheUid 为主身份键）
++  let existing = findCandidateBySourceNicheUid(nicheUid)
++
++  // STEP 2: 按 stable sourceProductId 找 (校验 UID、系统与来源ID无冲突)
++  if (!existing) {
++    const byProduct = findCandidateByProductId(stableSourceProductId)
++    if (byProduct) {
++      if (byProduct.source_niche_uid && byProduct.source_niche_uid !== nicheUid) {
++        throw new Error(
++          `MI_STORE: 身份冲突阻断：已有候选 (${byProduct.id}) 的 sourceProductId 与当前相同，但已绑定其他 UID (${byProduct.source_niche_uid})，禁止覆盖复用，需人工核实`
++        )
++      }
++      const systemConflict = Boolean(
++        byProduct.source_system && byProduct.source_system !== 'WB_MARKET_INTELLIGENCE'
++      )
++      const sourceIdConflict = Boolean(
++        byProduct.source_niche_id && byProduct.source_niche_id !== String(nicheId)
++      )
++      if (!systemConflict && !sourceIdConflict) {
++        existing = byProduct
++      }
++    }
++  }
++
++  // STEP 3: Legacy Candidate Backfill (严格核验来源ID、类目、系统与UID一致性)
++  if (!existing) {
++    const legacyCandidate = findCandidateByProductId(legacySourceProductId)
++    if (legacyCandidate) {
++      const nicheCat = String(niche.category || niche.cat || '').trim()
++      const candCatLeaf = String(legacyCandidate.categoryLeaf || '').trim()
++      const candCatFull = String(legacyCandidate.categoryFull || '').trim()
++
++      const hasUidConflict = Boolean(
++        legacyCandidate.source_niche_uid && legacyCandidate.source_niche_uid !== nicheUid
++      )
++
++      // 类目必须明确且一致（排除空值或未分类这种信息不充分情况）
++      const hasSpecificCategory =
++        Boolean(nicheCat && nicheCat !== '未分类') &&
++        Boolean((candCatLeaf && candCatLeaf !== '未分类') || (candCatFull && candCatFull !== '未分类'))
++
++      const categoryMatch =
++        hasSpecificCategory &&
++        (candCatLeaf === nicheCat || candCatFull === nicheCat)
++
++      const systemConflict = Boolean(
++        legacyCandidate.source_system &&
++        legacyCandidate.source_system !== 'WB_MARKET_INTELLIGENCE'
++      )
++
++      // 强身份一致性要求：仅同名同类目不足以证明同一利基。
++      // 旧字段缺失、冲突或无法证明同一来源时，严禁自动回填旧候选！
++      // 必须满足：旧候选记录了 source_niche_id 且与本次 nicheId 严格一致。
++      const nicheIdStr = String(nicheId)
++      const legacyNicheId = legacyCandidate.source_niche_id ? String(legacyCandidate.source_niche_id) : null
++      const hasValidSourceIdMatch = Boolean(legacyNicheId && legacyNicheId === nicheIdStr)
++
++      // 仅当名、类目、无 UID 冲突、无来源冲突且来源利基 ID 明确匹配时才合法回填
++      if (!hasUidConflict && categoryMatch && !systemConflict && hasValidSourceIdMatch) {
++        existing = legacyCandidate
++      }
++      // 注意：若旧 source_niche_id 缺失、不一致（如旧 101 新 999）、类目不同或存在冲突，
++      // 严禁复用，保持现有 legacyCandidate 及其项目/快照指针原样（字节级不变），继续执行 STEP 4 创建基于 nicheUid 的新候选
++    }
++  }
++
++  // 若存在已有候选：刷新市场证据，严禁覆盖业务字段，保持旧 sourceProductId
++  if (existing) {
++    const candidate = syncCandidateMarketEvidence(existing.id, {
++      source_niche_id: String(nicheId),
++      source_niche_uid: nicheUid,
++      source_run_id: String(runId),
++      source_system: 'WB_MARKET_INTELLIGENCE',
++      marketEvidence,
++    })
++
++    recordAuditLog({
++      action: 'T6_PUSH',
++      niche_uid: nicheUid || null,
++      niche_name: niche.name,
++      old_value: null,
++      new_value: `PROMOTED_TO_T6_CANDIDATE_SYNCED (ID: ${candidate.id})`,
++      source: 'T6_PROMOTION',
++      note: reason,
++    })
++
++    return { candidate, created: false }
++  }
+ 
++  // STEP 4: 全新候选创建
+   const { candidate, created } = ensureCandidate({
+-    sourceProductId,
++    sourceProductId: stableSourceProductId,
+     candidateIndex: typeof nicheId === 'number' ? nicheId : 0,
+     name: niche.name,
+     categoryLeaf: niche.category || niche.cat || '未分类',
+     categoryFull: niche.category || niche.cat || '未分类',
+     notes,
+     source_niche_id: String(nicheId),
++    source_niche_uid: nicheUid,
+     source_run_id: String(runId),
+     source_system: 'WB_MARKET_INTELLIGENCE',
++    marketEvidence,
+   })
+ 
++  let finalCandidate = candidate
+   if (created) {
+     try {
+-      setCandidateBizStatus(candidate.id, '待调研', '来自俄罗斯市场情报一键推进')
++      finalCandidate = setCandidateBizStatus(candidate.id, '待调研', '来自俄罗斯市场情报一键推进')
+     } catch {
+       // 忽略重复状态
+     }
+@@ -272,15 +398,15 @@ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-0
+ 
+   recordAuditLog({
+     action: 'T6_PUSH',
+-    niche_uid: niche.uid || null,
++    niche_uid: nicheUid || null,
+     niche_name: niche.name,
+     old_value: null,
+-    new_value: `PROMOTED_TO_T6_CANDIDATE (ID: ${candidate.id})`,
++    new_value: `PROMOTED_TO_T6_CANDIDATE (ID: ${finalCandidate.id})`,
+     source: 'T6_PROMOTION',
+     note: reason,
+   })
+ 
+-  return { candidate, created }
++  return { candidate: finalCandidate, created }
+ }
+ 
+ // ---------- 6. 数据更新自动化与批次回滚管道服务 ----------
+
+diff --git a/ozon-react/src/utils/marketAnalysis/purityFilter.js b/ozon-react/src/utils/marketAnalysis/purityFilter.js
+index c83a8a9..4a27f2d 100644
+--- a/ozon-react/src/utils/marketAnalysis/purityFilter.js
++++ b/ozon-react/src/utils/marketAnalysis/purityFilter.js
+@@ -41,8 +41,26 @@ export function extractPrice(row) {
+ 
+ export function extractQty(row) {
+   const v = firstCol(row, QTY_KEYS)
+-  if (v === null) return 0
+-  return parseFloat(String(v).replace(/[^\d.]/g, '')) || 0
++  if (v === null || v === undefined) return 0
++  if (typeof v === 'number') {
++    return Number.isFinite(v) && v > 0 ? v : 0
++  }
++  const s = String(v).trim()
++  if (!s) return 0
++
++  // 1. 负数判定：负数在销量维度无物理/业务意义，视为无效销量（不参与加权）
++  if (s.startsWith('-') || /^-/.test(s)) return 0
++
++  // 2. 区间/范围判定：无法确定单一销量（如 '5-10', '5~10', '5至10'），标为无效（0/不参与加权），禁止拼接成伪精确数字
++  if (/[-~—–至]/.test(s)) return 0
++
++  // 3. 去除千位分隔符（空格、Unicode 不换行空格、英文逗号）
++  const cleaned = s.replace(/[\s\u00A0\u202F]/g, '').replace(/,/g, '')
++
++  // 4. 解析为浮点数并验证为正有限数值
++  const n = parseFloat(cleaned)
++  if (!Number.isFinite(n) || n <= 0) return 0
++  return n
+ }
+ 
+ export function extractSales(row) {
+
+diff --git a/ozon-react/src/utils/marketAnalysis/priceBands.js b/ozon-react/src/utils/marketAnalysis/priceBands.js
+index 1866604..ed574db 100644
+--- a/ozon-react/src/utils/marketAnalysis/priceBands.js
++++ b/ozon-react/src/utils/marketAnalysis/priceBands.js
+@@ -1,15 +1,105 @@
+ /**
+  * 模块4：SKU / 销量 / 销售额 三维加权价格带
+  *
+- * 口径冻结（用户决策）：
++ * 口径澄清与规范（TASK 001 纠偏）：
++ *   - 切片分桶：【SKU 数量等分切片】（SKU count slices），将进入口径的 SKU 按标准化可比价升序排序后均分为 N 份切片
++ *   - medianPrice：切片内【非加权 SKU 价格上中位值】（排序第 floor(n/2)+1 位），仅代表该切片内未加权的上中位值，非算术平均中位、非销量加权
+  *   - 三维名称：SKU占比 / 销量占比 / 销售额占比（现有数据无 GMV 字段，禁写 GMV%）
+  *   - 进入规则：['A'] 默认口径；['A','B'] 可切换参考口径；C 与 UNKNOWN 一律排除
+  *   - 价格轴：按类目标准化的可比价格（每100ml / 每100只 / 每kg），不是挂牌原价
+  *   - 占比分母：当前进入口径内的合计（切换 A+B 后分母随之变化）
++ *   - 新增独立指标：【销量加权价格分位】（sales-weighted quantiles），以有效正数销量为权重计算 P10/P25/P50/P75/P90
+  */
+ 
+ /**
+- * 构建加权价格带。
++ * 计算销量加权价格分位数（sales-weighted quantiles）
++ * 严格按有效正数销量（_purity.qty）为权重，计算 P10 / P25 / P50 / P75 / P90。
++ * 销量为零、缺失、负数或非有限数值时一律不计入权重；无有效权重时返回 insufficient_data 状态。
++ *
++ * @param {Array} pipelineRowsOrEligible 待计算行（含 _purity.normalizedPrice 与 _purity.qty）
++ * @param {{tiers?: string[]|null}} options 可选过滤层级（如 ['A'] 或 ['A', 'B']）
++ * @returns {{
++ *   status: 'ok' | 'insufficient_data',
++ *   reason?: string,
++ *   validCount: number,
++ *   totalWeight: number,
++ *   p10: number | null,
++ *   p25: number | null,
++ *   p50: number | null,
++ *   p75: number | null,
++ *   p90: number | null
++ * }}
++ */
++export function calculateSalesWeightedQuantiles(pipelineRowsOrEligible, { tiers = null } = {}) {
++  const rows = Array.isArray(pipelineRowsOrEligible) ? pipelineRowsOrEligible : []
++  const weightedRows = rows.filter((r) => {
++    if (!r || !r._purity) return false
++    if (Array.isArray(tiers) && !tiers.includes(r._purity.tier)) return false
++    return (
++      Number.isFinite(r._purity.normalizedPrice) &&
++      r._purity.normalizedPrice > 0 &&
++      Number.isFinite(r._purity.qty) &&
++      r._purity.qty > 0
++    )
++  })
++
++  if (weightedRows.length === 0) {
++    return {
++      status: 'insufficient_data',
++      reason: 'no_positive_sales_weight',
++      validCount: 0,
++      totalWeight: 0,
++      p10: null,
++      p25: null,
++      p50: null,
++      p75: null,
++      p90: null,
++    }
++  }
++
++  const sorted = [...weightedRows].sort((a, b) => a._purity.normalizedPrice - b._purity.normalizedPrice)
++  const totalWeight = sorted.reduce((sum, r) => sum + r._purity.qty, 0)
++
++  if (totalWeight <= 0 || !Number.isFinite(totalWeight)) {
++    return {
++      status: 'insufficient_data',
++      reason: 'zero_or_invalid_total_weight',
++      validCount: 0,
++      totalWeight: 0,
++      p10: null,
++      p25: null,
++      p50: null,
++      p75: null,
++      p90: null,
++    }
++  }
++
++  const getPercentile = (q) => {
++    const target = totalWeight * q
++    let cum = 0
++    for (const r of sorted) {
++      cum += r._purity.qty
++      if (cum >= target) {
++        return r._purity.normalizedPrice
++      }
++    }
++    return sorted[sorted.length - 1]._purity.normalizedPrice
++  }
++
++  return {
++    status: 'ok',
++    validCount: sorted.length,
++    totalWeight,
++    p10: getPercentile(0.10),
++    p25: getPercentile(0.25),
++    p50: getPercentile(0.50),
++    p75: getPercentile(0.75),
++    p90: getPercentile(0.90),
++  }
++}
++
++/**
++ * 构建加权价格带（含 SKU 数量切片与独立销量加权分位）。
+  * @param {Array} pipelineRows runPurityPipeline 输出行（含 _purity）
+  * @param {{tiers?: string[], bandCount?: number}} options
+  */
+@@ -36,10 +126,28 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+   )
+ 
+   if (eligible.length === 0) {
+-    return { bands: [], totals, excludedBreakdown, eligibleCount: 0, bandCount: 0 }
++    return {
++      bands: [],
++      totals,
++      excludedBreakdown,
++      eligibleCount: 0,
++      bandCount: 0,
++      topQtyBandIndex: null,
++      salesWeightedQuantiles: {
++        status: 'insufficient_data',
++        reason: 'no_eligible_rows',
++        validCount: 0,
++        totalWeight: 0,
++        p10: null,
++        p25: null,
++        p50: null,
++        p75: null,
++        p90: null,
++      },
++    }
+   }
+ 
+-  // 先按可比价排序再分箱：分箱边界与成员聚合必须来自同一个有序序列
++  // 先按可比价排序再分箱：分箱边界与成员聚合来自同一个有序序列
+   const sortedRows = [...eligible].sort((a, b) => a._purity.normalizedPrice - b._purity.normalizedPrice)
+   const n = sortedRows.length
+   const actualBands = Math.max(1, Math.min(bandCount, n))
+@@ -71,7 +179,7 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+       label: `带${i + 1}`,
+       priceMin: prices[0],
+       priceMax: prices[prices.length - 1],
+-      medianPrice: median,
++      medianPrice: median, // 切片内未加权 SKU 价格上中位值（排序第 floor(n/2)+1 位，保持历史取值不变）
+       sku: agg.sku,
+       skuShare: pct(agg.sku, totals.sku),
+       qty: agg.qty,
+@@ -86,6 +194,8 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+     null
+   )
+ 
++  const salesWeightedQuantiles = calculateSalesWeightedQuantiles(eligible)
++
+   return {
+     bands: detailed,
+     totals,
+@@ -93,5 +203,6 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+     eligibleCount: eligible.length,
+     bandCount: actualBands,
+     topQtyBandIndex: topQtyBand ? topQtyBand.index : null,
++    salesWeightedQuantiles,
+   }
+ }
+
+diff --git a/ozon-react/src/components/PurityPipelinePage.jsx b/ozon-react/src/components/PurityPipelinePage.jsx
+index b029449..a8dca01 100644
+--- a/ozon-react/src/components/PurityPipelinePage.jsx
++++ b/ozon-react/src/components/PurityPipelinePage.jsx
+@@ -1,4 +1,4 @@
+-﻿import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
++import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+ import {
+   RefreshCw, Layers, Target, AlertCircle, FlaskConical, ClipboardCheck,
+   CheckCircle2, XCircle, Save, Trash2, History, FileSpreadsheet,
+@@ -407,7 +407,7 @@ export default function PurityPipelinePage({ data }) {
+ 
+           <div className="insight-card">
+             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+-              <h3 className="font-semibold text-morandi-text">💰 三维加权价格带（标准化可比价）</h3>
++              <h3 className="font-semibold text-morandi-text">💰 价格带分析（SKU数量等分切片 & 销量加权分位）</h3>
+               <div className="flex items-center gap-2">
+                 {catCfg && (
+                   <span className="text-xs text-morandi-text-light mr-2">价格轴：{catCfg.normalize.label}</span>
+@@ -462,6 +462,57 @@ export default function PurityPipelinePage({ data }) {
+                   </div>
+                 </div>
+ 
++                {/* 销量加权分位数摘要（真实销量分布，非切片非加权中值） */}
++                {bandsResult.salesWeightedQuantiles && (
++                  <div className="mb-4 bg-morandi-50/50 border border-morandi-200/80 rounded-xl p-3.5 text-xs">
++                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
++                      <div className="flex items-center gap-2">
++                        <span className="font-semibold text-morandi-text">
++                          📊 真实销量加权分位数（以每行有效销量为权重）
++                        </span>
++                        <span className="text-[11px] text-morandi-text-light">
++                          有效加权样本: {bandsResult.salesWeightedQuantiles.validCount} 条 · 销量权重合计: {bandsResult.salesWeightedQuantiles.totalWeight?.toLocaleString() || 0}
++                        </span>
++                      </div>
++                      <span className="text-[11px] text-gray-500">
++                        {bandsResult.salesWeightedQuantiles.status === 'ok' ? '已按每行有效销量精确加权' : '数据不足或无有效权重'}
++                      </span>
++                    </div>
++
++                    {bandsResult.salesWeightedQuantiles.status === 'ok' ? (
++                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P10（低价位线）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p10)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p10)}</p>
++                        </div>
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P25（下四分位）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p25)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p25)}</p>
++                        </div>
++                        <div className="bg-amber-50/70 rounded-lg p-2.5 border border-amber-200/80 shadow-xs">
++                          <p className="text-[11px] font-semibold text-amber-800">P50（销量加权中位价）</p>
++                          <p className="font-bold text-amber-900 mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p50)}</p>
++                          <p className="text-[10px] text-amber-700">{fmtRmb(bandsResult.salesWeightedQuantiles.p50)}</p>
++                        </div>
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P75（上四分位）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p75)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p75)}</p>
++                        </div>
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P90（高价位线）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p90)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p90)}</p>
++                        </div>
++                      </div>
++                    ) : (
++                      <p className="text-gray-500 py-1">当前口径下无有效正数销量权重，无法计算加权分位数（已安全兜底）。</p>
++                    )}
++                  </div>
++                )}
++
+                 <div className="h-64 mb-4">
+                   <ResponsiveContainer width="100%" height="100%">
+                     <BarChart data={bandChart}>
+@@ -483,7 +534,7 @@ export default function PurityPipelinePage({ data }) {
+                       <tr>
+                         <th className="px-3 py-2 text-left">价格带</th>
+                         <th className="px-3 py-2 text-left">可比价区间（{catCfg?.normalize.label || '标准化'}）</th>
+-                        <th className="px-3 py-2 text-right">中位价 ₽/¥</th>
++                        <th className="px-3 py-2 text-right" title="切片内未加权的 SKU 价格上中位值（排序第 floor(n/2)+1 位，非销量加权）">切片SKU上中位值 ₽/¥</th>
+                         <th className="px-3 py-2 text-right">SKU 数</th>
+                         <th className="px-3 py-2 text-right">SKU 占比</th>
+                         <th className="px-3 py-2 text-right">销量占比</th>
+@@ -513,9 +564,14 @@ export default function PurityPipelinePage({ data }) {
+                     </tbody>
+                   </table>
+                 </div>
+-                <p className="text-xs text-morandi-text-light mt-2">
+-                  占比分母 = 当前口径内合计；C 与 UNKNOWN 一律排除；价格轴为标准化可比价（{catCfg?.normalize.label || '—'}），非挂牌原价。
+-                </p>
++                <div className="space-y-1 mt-2 text-xs text-morandi-text-light">
++                  <p>
++                    口径说明：上方表格为【SKU 数量等分切片】（将进入口径的 SKU 按可比价均分为 {bandsResult.bandCount} 个切片）；“切片SKU上中位值”为该切片内未加权的 SKU 价格上中位值（排序第 floor(n/2)+1 位，非销量加权）。
++                  </p>
++                  <p>
++                    真实销量分布请参阅上方【真实销量加权分位数】（以每行有效销量为权重计算 P10–P90）；占比分母 = 当前口径内合计；C 与 UNKNOWN 一律排除；价格轴为标准化可比价（{catCfg?.normalize.label || '—'}），非挂牌原价。
++                  </p>
++                </div>
+               </>
+             )}
+           </div>
+
+diff --git a/ozon-react/src/components/marketIntelligence/components/ManualProcurementWorkbench.jsx b/ozon-react/src/components/marketIntelligence/components/ManualProcurementWorkbench.jsx
+index 6bf9930..489b5a4 100644
+--- a/ozon-react/src/components/marketIntelligence/components/ManualProcurementWorkbench.jsx
++++ b/ozon-react/src/components/marketIntelligence/components/ManualProcurementWorkbench.jsx
+@@ -14,10 +14,11 @@ import Drawer from '../../ui/Drawer'
+ import Button from '../../ui/Button'
+ import Surface from '../../ui/Surface'
+ import Badge from '../../ui/Badge'
+-import { saveManualQuote, getManualQuotes, promoteToT6Candidate } from '../../../utils/marketIntelligence/miStore'
++import { saveManualQuote, getManualQuotes, findProcurementQuote, promoteToT6Candidate } from '../../../utils/marketIntelligence/miStore'
+ 
+ export default function ManualProcurementWorkbench({
+   niche,
++  runId,
+   isOpen,
+   onClose,
+   onNavigateToWbCalc,
+@@ -38,6 +39,7 @@ export default function ManualProcurementWorkbench({
+   const [targetPriceRub, setTargetPriceRub] = useState(Math.round(niche.price * rubPerCny))
+   const [commissionRatePct, setCommissionRatePct] = useState(15.0) // WB 平均类目佣金
+   const [savedSuccess, setSavedSuccess] = useState(false)
++  const [promoteError, setPromoteError] = useState(null)
+ 
+   // 4 级数据可信度分层状态
+   const [priceProvenance, setPriceProvenance] = useState('ESTIMATED') // 'ESTIMATED' | 'SUPPLIER_CONFIRMED'
+@@ -47,11 +49,12 @@ export default function ManualProcurementWorkbench({
+     niche.eac === 'NOT_REQUIRED_VERIFIED' ? 'REGULATION_VERIFIED' : 'ESTIMATED'
+   ) // 'ESTIMATED' | 'REGULATION_VERIFIED'
+ 
+-  // 加载已有草稿
++  // 加载已有草稿与重置错误
+   useEffect(() => {
+-    if (niche && niche.name) {
++    setPromoteError(null)
++    if (niche) {
+       const all = getManualQuotes()
+-      const draft = all[niche.name]
++      const draft = findProcurementQuote(all, niche)
+       if (draft) {
+         setSupplierName(draft.supplierName || '')
+         setSupplierUrl(draft.supplierUrl || '')
+@@ -77,7 +80,7 @@ export default function ManualProcurementWorkbench({
+         setRegulationProvenance(niche.eac === 'NOT_REQUIRED_VERIFIED' ? 'REGULATION_VERIFIED' : 'ESTIMATED')
+       }
+     }
+-  }, [niche])
++  }, [niche, isOpen])
+ 
+   // 综合数据可信度定级
+   const overallTrustTier = useMemo(() => {
+@@ -102,7 +105,7 @@ export default function ManualProcurementWorkbench({
+   const breakEvenPriceRub = Math.round((Number(factoryPriceCny) + Number(domesticFreightCny) + Number(internationalFreightCny)) / (1 - commissionRatePct / 100) * rubPerCny)
+ 
+   const handleSaveDraft = () => {
+-    saveManualQuote(niche.name, {
++    saveManualQuote(niche, {
+       supplierName,
+       supplierUrl,
+       factoryPriceCny,
+@@ -126,14 +129,23 @@ export default function ManualProcurementWorkbench({
+   }
+ 
+   const handlePromote = () => {
++    setPromoteError(null)
++    // 1. 保存采购草稿（保留当前录入内容，抽屉打开即使推流失败也不丢失输入）
+     handleSaveDraft()
++    // 2. 尝试推流到 T6 候选池（明确传入当前批次 runId）
+     const trustPrefix = `[数据可信度: ${overallTrustTier}] 价格:${priceProvenance === 'SUPPLIER_CONFIRMED' ? '厂家实询' : '算法预估'} | 重量:${specProvenance} | 物流:${freightProvenance} | 认证:${regulationProvenance}`
+-    const { candidate } = promoteToT6Candidate(
+-      niche,
+-      `${trustPrefix}。采购报价: ¥${factoryPriceCny}, 供应商: ${supplierName || '待填'}, 实测重: ${weightG}g, 预估毛利率: ${marginPct.toFixed(1)}%`
+-    )
+-    if (onPromoted) onPromoted(candidate)
+-    onClose()
++    try {
++      const { candidate } = promoteToT6Candidate(
++        niche,
++        `${trustPrefix}。采购报价: ¥${factoryPriceCny}, 供应商: ${supplierName || '待填'}, 实测重: ${weightG}g, 预估毛利率: ${marginPct.toFixed(1)}%`,
++        runId
++      )
++      if (onPromoted) onPromoted(candidate)
++      onClose()
++    } catch (err) {
++      // 捕获缺少 UID 或身份冲突等异常：显式反馈用户，不关闭抽屉，不误报成功
++      setPromoteError(err.message || '推流到 T6 候选池失败')
++    }
+   }
+ 
+   return (
+@@ -151,6 +163,20 @@ export default function ManualProcurementWorkbench({
+           </div>
+         </Surface>
+ 
++        {/* 推流异常与阻断显式提示条 */}
++        {promoteError && (
++          <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-2.5">
++            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
++            <div className="flex-1">
++              <div className="font-semibold text-rose-900">推流到 T6 候选池受阻</div>
++              <div className="mt-0.5 text-rose-700">{promoteError}</div>
++              <div className="mt-1 text-gray-500 text-[11px]">
++                提示：当前采购草稿已为您自动保存；抽屉保持开启，可核实利基 UID 或补充数据后重试。
++              </div>
++            </div>
++          </div>
++        )}
++
+         {/* 数据可信度分级提示条 */}
+         <div
+           className={`p-3 rounded-lg border flex items-start justify-between gap-3 ${
+
+diff --git a/ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx b/ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx
+index ac15fbb..43f2a8b 100644
+--- a/ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx
++++ b/ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx
+@@ -25,8 +25,8 @@ import {
+   saveValidationOverride, buildMergedValidationPool, promoteToT6Candidate,
+ } from '../../utils/marketIntelligence/miStore'
+ 
+-export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
+-  const [activeTab, setActiveTab] = useState('overview')
++export default function MarketIntelligenceApp({ onNavigateToWbCalc, initialView = 'overview', onOpenNode = null }) {
++  const [activeTab, setActiveTab] = useState(initialView)
+   const [loading, setLoading] = useState(true)
+   const [error, setError] = useState(null)
+   const [bundle, setBundle] = useState(null)
+@@ -35,6 +35,12 @@ export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
+   const [validationOverrides, setValidationOverrides] = useState({})
+   const [toastMessage, setToastMessage] = useState('')
+ 
++  useEffect(() => {
++    if (initialView) {
++      setActiveTab(initialView)
++    }
++  }, [initialView])
++
+   // 抽屉状态
+   const [selectedNiche, setSelectedNiche] = useState(null)
+   const [procurementTarget, setProcurementTarget] = useState(null)
+@@ -288,9 +294,10 @@ export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
+         )}
+       </div>
+ 
+-      {/* 利基机会详情抽屉 */}
++      {/* 利基机会详情抽屉 (Opportunity Detail Shell) */}
+       <NicheDetailDrawer
+         niche={selectedNiche}
++        runId={currentRunId}
+         isOpen={Boolean(selectedNiche)}
+         onClose={() => setSelectedNiche(null)}
+         onUpdateVerdict={(name, verdict, note) => {
+@@ -301,11 +308,13 @@ export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
+         }}
+         onPromoteToT6={(niche, reason) => handlePromoteToT6(niche, reason)}
+         onOpenProcurement={(niche) => setProcurementTarget(niche)}
++        onOpenNode={onOpenNode}
+       />
+ 
+       {/* Phase 5 人工采购验证与单位经济工作台 */}
+       <ManualProcurementWorkbench
+         niche={procurementTarget}
++        runId={currentRunId}
+         isOpen={Boolean(procurementTarget)}
+         onClose={() => setProcurementTarget(null)}
+         onNavigateToWbCalc={onNavigateToWbCalc}
+
+
+
+
+

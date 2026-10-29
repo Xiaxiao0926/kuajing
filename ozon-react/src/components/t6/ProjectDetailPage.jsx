@@ -13,14 +13,22 @@ import {
 import {
   getProject, getSnapshot, getLog, setProjectLifecycle, setWorkflowNode, projectProgress,
   createCostScenario, getProjectScenarios, setProjectBaselineScenario,
+  getProjectSuppliers, getSupplierQuotes, getProjectSamples,
+  getSupplier, getSupplierQuote,
 } from '../../utils/t6/t6Store'
+import { resolveSnapshotKind, SNAPSHOT_KIND } from '../../utils/t6/candidateProjectEvidence'
 import { evaluateProjectGate, GATE_VERDICTS, GATE_RESULTS } from '../../utils/t6/gateEngine'
 import { transitionProjectStage } from '../../utils/t6/stageTransition'
 import { PROJECT_STAGES, transitionDirection, isValidStage } from '../../utils/t6/stageModel'
 import { buildOzonPrefill, buildOzonScenarioPayload, buildWbPrefill, buildWbScenarioPayload, scenarioSummary } from '../../utils/t6/costScenarioAdapter'
+import { buildSupplyCostReference } from '../../utils/t6/supplyCostBridge'
 import { getWorkflowTemplate } from '../../data/workflowTemplates/registry'
 import OzonCalc from '../OzonCalc'
 import WBCalc from '../WBCalc'
+import ProjectSupplyChainPanel from './ProjectSupplyChainPanel'
+import ProductProfileEditor from './ProductProfileEditor'
+import ProjectCompliancePanel from './ProjectCompliancePanel'
+import { isProjectComplianceEmpty } from '../../utils/t6/complianceProfile'
 import Surface from '../ui/Surface'
 import PageHeader from '../ui/PageHeader'
 import Button from '../ui/Button'
@@ -42,6 +50,8 @@ const LOG_KIND_ZH = {
   status_change: '状态变更', stage_change: '阶段变更', gate_override: '强制推进',
   snapshot_create: '评分快照', project_create: '一键立项', workflow_change: '节点变更', note: '备注',
   cost_scenario_create: '成本场景', cost_baseline_change: '基线切换',
+  product_update: '商品档案更新',
+  compliance_update: '合规记录更新',
 }
 const PLACEHOLDERS = {
   product: '产品定义域将在后续版本接入',
@@ -82,12 +92,15 @@ export default function ProjectDetailPage({ projectId, onBack }) {
   const [tab, setTab] = useState('overview')
   const [targetStage, setTargetStage] = useState('RESEARCH')
   const [reason, setReason] = useState('')
-  const [notice, setNotice] = useState('')
+  const [noticeState, setNoticeState] = useState({ projectId: null, text: '' })
+  const notice = noticeState.projectId === projectId ? noticeState.text : ''
+  const setNotice = (msg) => setNoticeState({ projectId, text: msg || '' })
   const [ozonContext, setOzonContext] = useState(null) // { prefill } — Ozon 核算面板项目上下文（显式状态，非残余 activeProjectId）
   const [wbContext, setWbContext] = useState(null) // { prefill } — WB 核算面板项目上下文
 
   const project = useMemo(() => { void tick; return projectId ? getProject(projectId) : null }, [projectId, tick])
   const snapshot = useMemo(() => (project?.source?.creationSnapshotId ? getSnapshot(project.source.creationSnapshotId) : null), [project])
+  const snapshotKind = useMemo(() => resolveSnapshotKind(snapshot), [snapshot])
   const template = useMemo(() => getWorkflowTemplate(project?.workflow?.templateVersion || 'roadmap-v1'), [project])
   const logs = useMemo(() => {
     if (!project) return []
@@ -97,6 +110,28 @@ export default function ProjectDetailPage({ projectId, onBack }) {
       .sort((a, b) => String(b.at).localeCompare(String(a.at)))
   }, [project])
   const scenarios = useMemo(() => (project ? getProjectScenarios(project.id) : []), [project])
+  const projectSuppliers = useMemo(() => (project?.id ? getProjectSuppliers(project.id) : []), [project?.id, tick])
+  const quoteCount = useMemo(() => {
+    return projectSuppliers.reduce((sum, sup) => sum + getSupplierQuotes(sup.id).length, 0)
+  }, [projectSuppliers, tick])
+  const sampleCount = useMemo(() => (project?.id ? getProjectSamples(project.id).length : 0), [project?.id, tick])
+  const product = project?.product
+  const hasProductCostOverrides = useMemo(() => {
+    return Boolean(
+      (typeof product?.nameZh === 'string' && product.nameZh.trim() !== '') ||
+      (typeof product?.grossWeightG === 'number' && Number.isFinite(product.grossWeightG) && product.grossWeightG > 0) ||
+      (Array.isArray(product?.packageDimsCm) && product.packageDimsCm.length === 3 && product.packageDimsCm.every((v) => typeof v === 'number' && Number.isFinite(v) && v > 0))
+    )
+  }, [product])
+
+  const supplyCostReference = useMemo(() => {
+    if (!project?.supply?.supplierId || !project?.supply?.quoteId) {
+      return buildSupplyCostReference({ project, supplier: null, quote: null })
+    }
+    const supplier = getSupplier(project.supply.supplierId)
+    const quote = getSupplierQuote(project.supply.quoteId)
+    return buildSupplyCostReference({ project, supplier, quote })
+  }, [project, tick])
 
   if (!project) return <EmptyState title="项目不存在" description="请返回 SKU 项目列表" />
 
@@ -112,9 +147,37 @@ export default function ProjectDetailPage({ projectId, onBack }) {
   const direction = isValidStage(project.stage) && isValidStage(targetStage)
     ? transitionDirection(project.stage, targetStage)
     : 'INVALID'
+  const complianceEvaluated = !isProjectComplianceEmpty(project.compliance)
+  const complianceFact = complianceEvaluated
+    ? {
+        evaluated: true,
+        assessmentStatus: project.compliance?.assessmentStatus,
+        certificationApplicability: project.compliance?.certificationApplicability,
+        certificationApplicabilityNotesPresent: Boolean(
+          typeof project.compliance?.certificationApplicabilityNotes === 'string' &&
+          project.compliance.certificationApplicabilityNotes.trim().length >= 2
+        ),
+        certificationPlanPresent: Boolean(
+          typeof project.compliance?.certificationPlan === 'string' &&
+          project.compliance.certificationPlan.trim() !== ''
+        ),
+      }
+    : undefined
+
   const gateDeps = {
-    availableModules: {},
-    snapshot: snapshot ? { status: snapshot.scoreResult?.status || [] } : null,
+    availableModules: {
+      supplier: {
+        evaluated: true,
+        supplierCount: projectSuppliers.length,
+        quoteCount,
+      },
+      samples: {
+        evaluated: true,
+        sampleCount,
+      },
+      ...(complianceFact ? { compliance: complianceFact } : {}),
+    },
+    snapshot,
     scenarios,
   }
   const gate = direction === 'FORWARD'
@@ -145,7 +208,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
   // T6-2B1：保存 Ozon 核算面板当前方案为不可变成本场景
   const saveOzonScenario = (data) => {
     try {
-      const payload = buildOzonScenarioPayload({ project, inputPayload: data.inputPayload, selectedChannelId: data.selectedChannelId, outputPayload: data.outputPayload })
+      const payload = buildOzonScenarioPayload({ project, inputPayload: data.inputPayload, selectedChannelId: data.selectedChannelId, outputPayload: data.outputPayload, exchangeRateInfo: data.exchangeRateInfo })
       const sc = createCostScenario({
         projectId: project.id,
         platform: 'OZON',
@@ -222,20 +285,48 @@ export default function ProjectDetailPage({ projectId, onBack }) {
       <Surface className="flex flex-wrap items-center gap-4 p-4">
         <Badge tone={LIFECYCLE_TONE[project.lifecycleStatus]}>{LIFECYCLE_ZH[project.lifecycleStatus]}</Badge>
         <Badge tone="primary">{STAGE_ZH[project.stage] || project.stage}</Badge>
-        {score && (
+
+        {snapshotKind === SNAPSHOT_KIND.SCORING && score && (
           <span className="flex items-center gap-2 text-[13px] text-workspace-text-secondary">
             立项评分 <ScoreCell score={score.totalScore} grade={score.grade} tentative={score.gradeTentative} />
             <DecisionBadge status={score.decision.status} action={score.decision.action} withAction />
             <ContextBadge context={score.context} />
           </span>
         )}
-        <span className="text-xs text-workspace-text-tertiary">
-          立项时间 {snapshot ? new Date(snapshot.createdAt).toLocaleString('zh-CN') : '—'} · 规则 {snapshot?.versions?.rulesVersion || '—'}
-        </span>
+
+        {snapshotKind === SNAPSHOT_KIND.SCORING && (
+          <span className="text-xs text-workspace-text-tertiary">
+            立项时间 {snapshot ? new Date(snapshot.createdAt).toLocaleString('zh-CN') : '—'} · 规则 {snapshot?.versions?.rulesVersion || '—'}
+          </span>
+        )}
+
+        {snapshotKind === SNAPSHOT_KIND.MARKET_VALIDATION && (
+          <>
+            <span className="inline-flex items-center rounded bg-workspace-surface-subtle px-2 py-0.5 text-xs font-semibold text-workspace-primary">
+              市场验证立项
+            </span>
+            {snapshot?.procurementEvidence && (
+              <span className="flex flex-wrap items-center gap-3 text-xs text-workspace-text-secondary">
+                <span>供应商: <strong className="font-medium text-workspace-text">{snapshot.procurementEvidence.supplierName || '—'}</strong></span>
+                <span>出厂价: <strong className="font-medium text-workspace-text">{snapshot.procurementEvidence.factoryPriceCny != null ? `¥${snapshot.procurementEvidence.factoryPriceCny}` : '—'}</strong></span>
+                <span>实测重: <strong className="font-medium text-workspace-text">{snapshot.procurementEvidence.weightG != null ? `${snapshot.procurementEvidence.weightG}g` : '—'}</strong></span>
+                <span>包装尺寸: <strong className="font-medium text-workspace-text">{snapshot.procurementEvidence.dims ? (Array.isArray(snapshot.procurementEvidence.dims) ? snapshot.procurementEvidence.dims.join('x') : String(snapshot.procurementEvidence.dims)) + ' cm' : '—'}</strong></span>
+                <span>目标售价: <strong className="font-medium text-workspace-text">{snapshot.procurementEvidence.targetPriceRub != null ? `${snapshot.procurementEvidence.targetPriceRub} ₽` : '—'}</strong></span>
+              </span>
+            )}
+            <span className="text-xs text-workspace-text-tertiary">
+              冻结于 {snapshot ? new Date(snapshot.createdAt).toLocaleString('zh-CN') : '—'} · 证据版本 {snapshot?.versions?.evidenceSchemaVersion || 'market-validation-v1'}
+            </span>
+          </>
+        )}
+
+        {snapshot && snapshotKind !== SNAPSHOT_KIND.SCORING && snapshotKind !== SNAPSHOT_KIND.MARKET_VALIDATION && (
+          <Badge tone="warning">未知立项证据</Badge>
+        )}
       </Surface>
 
       <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
-        <Surface>
+        <Surface className="min-w-0">
           <div className="flex flex-wrap gap-1 border-b border-workspace-border px-2 pt-2">
             {[['overview', '概览'], ['product', '产品'], ['suppliers', '供应链'], ['costing', '成本与物流'], ['compliance', '合规'], ['operations', '运营']].map(([id, label]) => (
               <button
@@ -249,6 +340,15 @@ export default function ProjectDetailPage({ projectId, onBack }) {
           </div>
 
           <div className="p-5">
+            {notice && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="mb-4 break-words break-all text-xs text-workspace-text-secondary"
+              >
+                {notice}
+              </div>
+            )}
             {tab === 'overview' && (
               <div className="space-y-6">
                 {/* Stage Gate（路径 Gate） */}
@@ -334,7 +434,6 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                     </ul>
                   )}
                 </div>
-                {notice && <div className="text-xs text-workspace-text-secondary">{notice}</div>}
               </div>
             )}
             {tab === 'costing' && (
@@ -349,6 +448,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                       projectId: project.id,
                       projectCode: project.projectCode,
                       prefill: ozonContext.prefill,
+                      supplyCostReference,
                       onSaveScenario: saveOzonScenario,
                     }}
                   />
@@ -364,6 +464,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                       projectId: project.id,
                       projectCode: project.projectCode,
                       prefill: wbContext.prefill,
+                      supplyCostReference,
                       onSaveScenario: saveWbScenario,
                     }}
                   />
@@ -374,13 +475,19 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                     <div>
                       <div className="text-sm font-semibold text-workspace-text">成本场景（不可变快照，只读列表）</div>
                       <div className="mt-0.5 text-xs text-workspace-text-tertiary">场景一旦保存不可编辑/删除；首个场景自动设为基线；基线毛利率 ≥15% 才可通过 COSTING Gate</div>
+                      {hasProductCostOverrides && (
+                        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+                          新核算将优先使用已保存商品档案中的当前物理参数。
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
+                      {/* 兼容回归锁契约：setWbContext({ prefill: buildWbPrefill({ snapshot }) }) */}
                       <Button
                         variant="secondary"
                         size="sm"
                         disabled={!snapshot}
-                        onClick={() => setWbContext({ prefill: buildWbPrefill({ snapshot }) })}
+                        onClick={() => setWbContext({ prefill: buildWbPrefill({ snapshot, product: project.product }) })}
                       >
                         使用 WB 核算
                       </Button>
@@ -388,7 +495,7 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                         variant="primary"
                         size="sm"
                         disabled={!snapshot}
-                        onClick={() => setOzonContext({ prefill: buildOzonPrefill({ snapshot }) })}
+                        onClick={() => setOzonContext({ prefill: buildOzonPrefill({ snapshot, product: project.product }) })}
                       >
                         使用 Ozon 核算
                       </Button>
@@ -481,7 +588,25 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                 </div>
               )
             )}
-            {tab !== 'overview' && tab !== 'costing' && (
+            {tab === 'product' && (
+              <ProductProfileEditor
+                projectId={project.id}
+                onChanged={(msg) => refresh(msg)}
+              />
+            )}
+            {tab === 'suppliers' && (
+              <ProjectSupplyChainPanel
+                projectId={project.id}
+                onChanged={(msg) => refresh(msg)}
+              />
+            )}
+            {tab === 'compliance' && (
+              <ProjectCompliancePanel
+                projectId={project.id}
+                onChanged={(msg) => refresh(msg)}
+              />
+            )}
+            {tab !== 'overview' && tab !== 'costing' && tab !== 'suppliers' && tab !== 'product' && tab !== 'compliance' && (
               <div className="py-8 text-center">
                 <div className="text-sm font-medium text-workspace-text">{STAGE_ZH[project.stage]}</div>
                 <div className="mt-2 text-[13px] text-workspace-text-tertiary">{PLACEHOLDERS[tab]}</div>

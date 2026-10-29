@@ -1,0 +1,70 @@
+{
+  "task_id": "KJ-GEMINI-20260921-003",
+  "status": "passed",
+  "summary": {
+    "static_contract_verification": "passed",
+    "source_code_integrity": "passed",
+    "runtime_checks": "not_run"
+  },
+  "static_checks": [
+    {
+      "id": "contract_pre_backup",
+      "name": "原合同副本备份与 SHA256 冻结核验",
+      "status": "passed",
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-003/evidence/TASK07A4C3A_CERTIFICATION_APPLICABILITY_CONTRACT.md.pre-003",
+      "notes": "备份副本与基线 SHA256 CD466667FE216455E8EC2FA14A57D951D19A06349492623DBA3E7293347B01AF 100% 一致"
+    },
+    {
+      "id": "source_files_frozen_hashes",
+      "name": "生产与测试核心文件零改动审计 (8 个目标文件)",
+      "status": "passed",
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260921-003/evidence/hashes.log",
+      "notes": "t6Store.js, complianceProfile.js, gateEngine.js, ProjectDetailPage.jsx, ProjectCompliancePanel.jsx, complianceDraftState.js, ia-project-compliance-draft.test.mjs, ia-project-compliance-layout.test.mjs 八大文件哈希实测 100% 保持不变，生产与测试代码变更 0 行"
+    },
+    {
+      "id": "gap_a_store_audit",
+      "name": "Gap A: Store 保存与审计日志完整影响链",
+      "status": "passed",
+      "notes": "明确 t6Store.updateProjectCompliance 中 PROFILE_FIELDS 为独立硬编码列表，定义 changedFields, no-op 幂等, fromDiff/toDiff, appendLog 与 Gate 注入的完整影响链"
+    },
+    {
+      "id": "gap_b_legacy_protection",
+      "name": "Gap B: 历史缺字段防隐式补齐与 7 场景前后 JSON 契约",
+      "status": "passed",
+      "notes": "识别并修复 buildNextProjectCompliance 和 createProjectComplianceRequirement 默认补齐漏洞；定义 4 种字段存储态；覆盖新项目首次保存、notes-only、plan-only、事项增删改、仅查看、无变更保存、显式选择保存 7 场景前后 JSON"
+    },
+    {
+      "id": "gap_c_justification_boundary",
+      "name": "Gap C: 最小判断依据字段与术语/法律边界定性",
+      "status": "passed",
+      "notes": "新增 certificationApplicabilityNotes 字段（Layer A，NOT_REQUIRED 必填）；清除未经引用的法律断言；严格隔离内部路径放行与外部法定许可；明确 EXEMPT 属于 Result 层"
+    },
+    {
+      "id": "gap_d_gate_matrix",
+      "name": "Gap D: Stage Gate cert_plan 决策表与长路径推演",
+      "status": "passed",
+      "notes": "保留 cert_plan ID；详尽列出 8 态决策矩阵；阐明 NOT_EVALUATED 机制与风险；提供 SAMPLING -> PRODUCTION 跨阶段推演及 override 留痕契约"
+    },
+    {
+      "id": "gap_e_ui_draft_responsibility",
+      "name": "Gap E: UI 归属与草稿保护责任",
+      "status": "passed",
+      "notes": "适用性与依据统一冻结归属至 Layer A: Assessment，由 handleSaveAssessment 单独提交；与任务 001 草稿保护纯函数（extract, isDirty, isEqual, conflict, sync）完全对齐"
+    },
+    {
+      "id": "status_decoupling",
+      "name": "实施状态与授权解耦",
+      "status": "passed",
+      "notes": "合同状态明确更新为 PENDING_CODEX_ACCEPTANCE，彻底消除旧文档中 READY 的误导性授权"
+    }
+  ],
+  "runtime_checks": [
+    {
+      "id": "runtime_implementation",
+      "name": "07A-4C3B 生产代码运行时验证",
+      "status": "not_run",
+      "exit_code": null,
+      "notes": "按 TASK.md 规定，本任务为纯文档与只读审计任务，严格禁止修改生产代码与测试代码；07A-4C3B 尚未开发实施，如实标记 not_run，绝不伪称 PASS"
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "executedAt": "2026-10-26T02:06:53.685Z",
+  "browser": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "syntheticFixtures": [
+    {
+      "batch": "batch1",
+      "originalFileName": "ozon-same-batch.json",
+      "byteLength": 1408,
+      "sha256": "c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6",
+      "expectedSourceBackupName": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json"
+    },
+    {
+      "batch": "batch2",
+      "originalFileName": "ozon-same-batch.json",
+      "byteLength": 1403,
+      "sha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+      "expectedSourceBackupName": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json"
+    }
+  ],
+  "viewportChecks": {
+    "desktopConfirmOverflow": {
+      "scrollWidth": 1351,
+      "innerWidth": 1366
+    },
+    "narrowConfirmOverflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    "desktopReloadedOverflow": {
+      "scrollWidth": 1351,
+      "innerWidth": 1366
+    },
+    "narrowReloadedOverflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390
+    }
+  },
+  "frozenRetryComparison": {
+    "firstAttemptReportFile": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148.json",
+    "retryAttemptReportFile": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148.json",
+    "firstAttemptSha256": "b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184",
+    "retryAttemptSha256": "b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184",
+    "firstAttemptPublishedAt": "2026-10-26T02:06:48.568Z",
+    "retryAttemptPublishedAt": "2026-10-26T02:06:48.568Z",
+    "identicalPayloadVerified": true
+  },
+  "apiRequestLog": [
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-json?_=1792980404719",
+      "namespace": "market-report-json",
+      "timestamp": "2026-10-26T02:06:44.721Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-sources",
+      "filename": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json",
+      "contentType": "application/json",
+      "byteLength": 1408,
+      "sha256": "c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6",
+      "status": 200,
+      "timestamp": "2026-10-26T02:06:46.952Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-0e6ccf30-cba8-4ec7-9768-5f9d684ea82e.json",
+      "contentType": "application/json",
+      "byteLength": 13845,
+      "sha256": "76e97a33e24107eff33d6864b0eaa95e79693d68cdd4da7344a19bf6b166a563",
+      "reportId": "uploaded-0e6ccf30-cba8-4ec7-9768-5f9d684ea82e",
+      "publishedAt": "2026-10-26T02:06:46.931Z",
+      "snapshot": "2026-09-05",
+      "collectionDateOrigin": "user",
+      "sourceBackup": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json",
+      "provenance": {
+        "version": 1,
+        "originalFileName": "ozon-same-batch.json",
+        "sourceSha256": "c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6",
+        "sourceByteLength": 1408,
+        "importedAt": "2026-10-26T02:06:46.931Z",
+        "importId": "0e6ccf30-cba8-4ec7-9768-5f9d684ea82e",
+        "originalMimeType": "application/json",
+        "sourceBackupMimeType": "application/json",
+        "collectionDateOrigin": "user",
+        "collectionDateConfirmed": true,
+        "collectionDateStatus": "evaluated",
+        "sourceBackup": "source-c8397a9da5c0710987adc748f3468ed593002014193844945c15ba10668434f6.json"
+      },
+      "status": 200,
+      "timestamp": "2026-10-26T02:06:46.972Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-sources",
+      "filename": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "contentType": "application/json",
+      "byteLength": 1403,
+      "sha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+      "status": 200,
+      "timestamp": "2026-10-26T02:06:48.585Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184",
+      "reportId": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148",
+      "publishedAt": "2026-10-26T02:06:48.568Z",
+      "snapshot": null,
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "status": 503,
+      "timestamp": "2026-10-26T02:06:48.605Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184",
+      "reportId": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148",
+      "publishedAt": "2026-10-26T02:06:48.568Z",
+      "snapshot": null,
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "status": 503,
+      "timestamp": "2026-10-26T02:06:48.609Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184",
+      "reportId": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148",
+      "publishedAt": "2026-10-26T02:06:48.568Z",
+      "snapshot": null,
+      "collectionDateOrigin": "unknown",
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "provenance": {
+        "version": 1,
+        "originalFileName": "ozon-same-batch.json",
+        "sourceSha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+        "sourceByteLength": 1403,
+        "importedAt": "2026-10-26T02:06:48.568Z",
+        "importId": "c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148",
+        "originalMimeType": "application/json",
+        "sourceBackupMimeType": "application/json",
+        "collectionDateOrigin": "unknown",
+        "collectionDateConfirmed": true,
+        "collectionDateStatus": "not_evaluated",
+        "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json"
+      },
+      "status": 200,
+      "timestamp": "2026-10-26T02:06:50.077Z"
+    },
+    {
+      "method": "POST",
+      "namespace": "market-report-json",
+      "filename": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148.json",
+      "contentType": "application/json",
+      "byteLength": 12536,
+      "sha256": "b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184",
+      "reportId": "uploaded-c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148",
+      "publishedAt": "2026-10-26T02:06:48.568Z",
+      "snapshot": null,
+      "collectionDateOrigin": "unknown",
+      "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json",
+      "provenance": {
+        "version": 1,
+        "originalFileName": "ozon-same-batch.json",
+        "sourceSha256": "f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c",
+        "sourceByteLength": 1403,
+        "importedAt": "2026-10-26T02:06:48.568Z",
+        "importId": "c42d3d0d-c7d7-4e6a-b26e-e4c1d08d7148",
+        "originalMimeType": "application/json",
+        "sourceBackupMimeType": "application/json",
+        "collectionDateOrigin": "unknown",
+        "collectionDateConfirmed": true,
+        "collectionDateStatus": "not_evaluated",
+        "sourceBackup": "source-f06546c0598c878ba3d62b0339ce782d3e1edaa6523285acfcd170a4f614356c.json"
+      },
+      "status": 200,
+      "timestamp": "2026-10-26T02:06:50.084Z"
+    },
+    {
+      "method": "GET",
+      "url": "/api/files/market-report-json?_=1792980411056",
+      "namespace": "market-report-json",
+      "timestamp": "2026-10-26T02:06:51.057Z"
+    }
+  ],
+  "screenshots": [
+    "confirm-step-desktop-1366x900.png",
+    "confirm-step-narrow-390x844.png",
+    "pending-retry-desktop-1366x900.png",
+    "pending-retry-narrow-390x844.png",
+    "reloaded-revisions-desktop-1366x900.png",
+    "reloaded-revisions-narrow-390x844.png",
+    "duplicate-warning-desktop-1366x900.png"
+  ]
+}

@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict'
 import {
   buildUploadedMarketReport,
+  extractValidFilenameDate,
   getMarketImportType,
   inferMarketReportLabel,
   isUploadedMarketReport,
+  isValidCalendarDate,
   normalizeMarketReportRows,
   parseMarketReportJson,
   stableMarketReportId,
@@ -18,11 +20,14 @@ const normalizedRows = [
 const report = buildUploadedMarketReport(normalizedRows, { sourceFile: 'ozon-2026-07-22宠物用品_清洗版.xlsx' })
 assert.equal(report.label, '宠物用品')
 assert.equal(report.snapshot, '2026-07-22')
+assert.equal(report.collectionDateOrigin, 'filename')
+assert.equal(report.provenance.collectionDateOrigin, 'filename')
 assert.equal(report.kpis.totalRevenue, 3000)
 assert.equal(report.kpis.totalSales, 10)
 assert.equal(report.quality.salesCoverage, 50)
 assert.equal(report.quality.duplicateSku, 1)
 assert.equal(report.quality.duplicateUrl, 0)
+assert.ok(report.quality.duplicateIdentityWarning?.includes('按导入行直接汇总'))
 assert.equal(report.topTypes[0].name, '猫砂')
 assert.equal(report.topBrands[0].name, '未知/无品牌')
 assert.ok(isUploadedMarketReport(report))
@@ -30,6 +35,12 @@ assert.ok(isUploadedMarketReport(report))
 const legacyReport = buildUploadedMarketReport([
   { 产品名称: 'C', 产品类型: '雨刮', 品牌: '乙', 卖家: '店丙', SKU: '3', 产品链接: 'https://example.com/3', '销售额₽': 500, 销量: 5, '平均销售价格₽': 100, 签收率: 0.8 },
 ], { sourceFile: 'legacy.xls' })
+assert.equal(legacyReport.snapshot, null)
+assert.equal(legacyReport.collectionDateOrigin, 'unknown')
+assert.equal(legacyReport.marketDimensions.newness.status, 'not_evaluated')
+assert.equal(legacyReport.marketDimensions.newness.freshCount, null)
+assert.equal(legacyReport.marketDimensions.newness.freshRevenueShare, null)
+assert.equal(legacyReport.quality.freshProductCount, null)
 assert.equal(legacyReport.kpis.totalRevenue, 500)
 assert.equal(legacyReport.kpis.totalSales, 5)
 assert.equal(legacyReport.priceBands[0].revenue, 500)
@@ -54,6 +65,17 @@ assert.throws(() => parseMarketReportJson('{broken'), /JSON 文件格式无效/)
 assert.equal(stableMarketReportId('same.xlsx'), stableMarketReportId('same.xlsx'))
 assert.notEqual(stableMarketReportId('same.xlsx'), stableMarketReportId('other.xlsx'))
 assert.throws(() => buildUploadedMarketReport([{ 产品名称: '无销售额' }]), /缺少销售额字段/)
+
+assert.equal(isValidCalendarDate('2026-09-08'), true)
+assert.equal(isValidCalendarDate('2026-02-30'), false)
+assert.equal(isValidCalendarDate('2026-02-29'), false)
+assert.equal(isValidCalendarDate('2024-02-29'), true)
+assert.equal(extractValidFilenameDate('ozon-2026-02-30.xlsx'), null)
+assert.equal(extractValidFilenameDate('ozon-2026-09-08.xlsx'), '2026-09-08')
+assert.throws(
+  () => buildUploadedMarketReport(normalizedRows, { sourceFile: 'ozon-2026-09-08.xlsx', snapshot: '2026-02-30' }),
+  /无效/,
+)
 
 const rawOzonRows = [{
   'sc5140-a src': 'https://example.com/image.jpg',
@@ -136,6 +158,27 @@ for (const opportunity of depthReport.russiaEntry.typeOpportunities) {
   assert.ok(opportunity.evidenceCoverage >= 0 && opportunity.evidenceCoverage <= 100)
 }
 assert.ok(depthReport.recommendations.every((item) => item.evidence.length > 0))
+
+const unknownDepthReport = buildUploadedMarketReport(depthRows, {
+  sourceFile: 'ozon-2026-09-10家具五金.xlsx',
+  snapshot: null,
+})
+assert.equal(unknownDepthReport.snapshot, null)
+assert.equal(unknownDepthReport.collectionDateOrigin, 'unknown')
+assert.equal(unknownDepthReport.marketDimensions.newness.status, 'not_evaluated')
+assert.equal(unknownDepthReport.marketDimensions.newness.listingDateCoverage, 100)
+assert.equal(unknownDepthReport.marketDimensions.newness.freshCount, null)
+assert.equal(unknownDepthReport.marketDimensions.newness.freshRevenueShare, null)
+assert.equal(unknownDepthReport.russiaEntry.cohortComparison.status, 'not_evaluated')
+assert.equal(unknownDepthReport.russiaEntry.cohortComparison.fresh.rows, null)
+assert.equal(unknownDepthReport.russiaEntry.cohortComparison.mature.rows, null)
+assert.ok(unknownDepthReport.russiaEntry.cohortComparison.interpretation.includes('未评估'))
+for (const opportunity of unknownDepthReport.russiaEntry.typeOpportunities) {
+  assert.equal(opportunity.freshCount, null)
+  assert.equal(opportunity.freshRevenueShare, null)
+  assert.equal(opportunity.scoreParts.newness, null)
+  assert.ok(opportunity.evidenceCoverage <= 80)
+}
 
 const automotiveContext = buildRussiaMarketContext({ label: '汽车电子' })
 assert.equal(automotiveContext.sector.id, 'auto-parts')

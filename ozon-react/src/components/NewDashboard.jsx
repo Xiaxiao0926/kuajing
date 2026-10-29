@@ -14,7 +14,13 @@ import InsightsSections from './dashboard/sections/InsightsSections'
  * 展示区块：dashboard/sections/*.jsx
  * 词库/格式化工具：dashboard/dictionary.js
  */
-export default function NewDashboard({ data, kpis }) {
+export default function NewDashboard({
+  data,
+  kpis,
+  embedded = false,
+  initialSearchTerm = '',
+  searchContextKey = '',
+}) {
   const [showAllSizes, setShowAllSizes] = useState(false)
   const [showAllMaterials, setShowAllMaterials] = useState(false)
   const [sprayExporting, setSprayExporting] = useState(false)

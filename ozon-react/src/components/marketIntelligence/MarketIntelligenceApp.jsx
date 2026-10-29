@@ -25,8 +25,8 @@ import {
   saveValidationOverride, buildMergedValidationPool, promoteToT6Candidate,
 } from '../../utils/marketIntelligence/miStore'
 
-export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
-  const [activeTab, setActiveTab] = useState('overview')
+export default function MarketIntelligenceApp({ onNavigateToWbCalc, initialView = 'overview', onOpenNode = null }) {
+  const [activeTab, setActiveTab] = useState(initialView)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [bundle, setBundle] = useState(null)
@@ -34,6 +34,12 @@ export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
   const [currentRunId, setCurrentRunId] = useState('RUN-20260917-001')
   const [validationOverrides, setValidationOverrides] = useState({})
   const [toastMessage, setToastMessage] = useState('')
+
+  useEffect(() => {
+    if (initialView) {
+      setActiveTab(initialView)
+    }
+  }, [initialView])
 
   // 抽屉状态
   const [selectedNiche, setSelectedNiche] = useState(null)
@@ -288,9 +294,10 @@ export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
         )}
       </div>
 
-      {/* 利基机会详情抽屉 */}
+      {/* 利基机会详情抽屉 (Opportunity Detail Shell) */}
       <NicheDetailDrawer
         niche={selectedNiche}
+        runId={currentRunId}
         isOpen={Boolean(selectedNiche)}
         onClose={() => setSelectedNiche(null)}
         onUpdateVerdict={(name, verdict, note) => {
@@ -301,11 +308,13 @@ export default function MarketIntelligenceApp({ onNavigateToWbCalc }) {
         }}
         onPromoteToT6={(niche, reason) => handlePromoteToT6(niche, reason)}
         onOpenProcurement={(niche) => setProcurementTarget(niche)}
+        onOpenNode={onOpenNode}
       />
 
       {/* Phase 5 人工采购验证与单位经济工作台 */}
       <ManualProcurementWorkbench
         niche={procurementTarget}
+        runId={currentRunId}
         isOpen={Boolean(procurementTarget)}
         onClose={() => setProcurementTarget(null)}
         onNavigateToWbCalc={onNavigateToWbCalc}

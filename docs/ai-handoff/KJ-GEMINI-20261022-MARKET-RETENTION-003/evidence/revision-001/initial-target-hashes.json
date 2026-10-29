@@ -1,0 +1,18 @@
+[
+  {
+    "Path": "D:\\ozon\\ozon-react\\src\\components\\reports\\UploadedMarketReport.jsx",
+    "Hash": "9C32F416F9DA84A7AFBF47E56A712C2E25941FC38E57258A21C203DBA3DDDFA4"
+  },
+  {
+    "Path": "D:\\ozon\\ozon-react\\src\\utils\\marketReport\\retentionContract.js",
+    "Hash": "2BDDD5E1A2B04B80CA72FC7D9E64F5E13272AC86FCAD3785C1E32372AB33945D"
+  },
+  {
+    "Path": "D:\\ozon\\tests\\market-report-retention.test.mjs",
+    "Hash": "A93EAED0944DBE920E6CACC2D266430811B325DAD16233CA6849ECF8B28064F6"
+  },
+  {
+    "Path": "D:\\ozon\\package.json",
+    "Hash": "DF56C357C609D4D0BF1E5E31C9C27FAD2A733AB3665A337D7626B1CBD74A5B64"
+  }
+]

@@ -1,0 +1,63 @@
+{
+  "task_id": "KUAIJING-IA-REFACTOR-V1-07A-4C3A-R4",
+  "generated_at": "2026-09-24T09:59:35+08:00",
+  "environment": "node / pwsh (Windows)",
+  "test_runs": [
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "passed_details": {
+        "wbEngine_js": 65,
+        "wb_py_test": 44,
+        "scoring_golden": 56,
+        "fbp_tariff": 29
+      },
+      "summary": "Core formula and tariff suites passed (0 failures)"
+    },
+    {
+      "command": "npm run test:golden",
+      "exit_code": 0,
+      "passed": 76,
+      "failed": 0,
+      "summary": "76 golden business cases passed"
+    },
+    {
+      "command": "npm run test:sync",
+      "exit_code": 0,
+      "passed": 18,
+      "failed": 0,
+      "summary": "Double-ended sync zero differences (16 weight boundaries + 2 version boundaries)"
+    },
+    {
+      "command": "node tests/ia-project-compliance.test.mjs",
+      "exit_code": 0,
+      "passed": 32,
+      "failed": 0,
+      "summary": "TASK 07A-4B compliance profile and store suite passed (32 test groups)"
+    },
+    {
+      "command": "node tests/ia-project-compliance-gate.test.mjs",
+      "exit_code": 0,
+      "passed": 49,
+      "failed": 0,
+      "summary": "TASK 07A-4C2 compliance stage gate suite passed (49 tests)"
+    },
+    {
+      "command": "node tests/ia-project-compliance-draft.test.mjs",
+      "exit_code": 0,
+      "passed": 26,
+      "failed": 0,
+      "summary": "TASK 001 draft state and unsaved input protection unit suite passed"
+    }
+  ],
+  "unrun_tests": [
+    {
+      "type": "browser_integration",
+      "reason": "CODEX_NODE_MODULES not set; browser visual layout tests delegated to Codex review environment."
+    },
+    {
+      "type": "vite_build",
+      "reason": "Explicitly not required by user prompt."
+    }
+  ]
+}

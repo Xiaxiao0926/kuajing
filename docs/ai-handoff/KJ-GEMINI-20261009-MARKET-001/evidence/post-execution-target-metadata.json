@@ -1,0 +1,49 @@
+{
+  "recorded_at": "2026-10-12T03:25:25.967Z",
+  "files": [
+    {
+      "path": "ozon-react/src/utils/marketAnalysis/purityFilter.js",
+      "sha256": "3731C508D461B5D51ACAFDA40CDE245BC3C0A25FE1192CD12085E7AAE3A0027F"
+    },
+    {
+      "path": "ozon-react/src/components/marketIntelligence/components/ManualProcurementWorkbench.jsx",
+      "sha256": "32A54BA3A0E933A8E0261094F5C33E88C769D06C7064FCAF67314749A5BCAEE7"
+    },
+    {
+      "path": "ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx",
+      "sha256": "F5CB5EF8CE26D8D0793903B765625325E5550A43EF74EFD7F556520606F9CEEF"
+    },
+    {
+      "path": "ozon-react/src/components/MarketResearch.jsx",
+      "sha256": "1A7C2239197DD84DDA057AD43D295B2114C060F7075BBACCFA1AE0F10B54A446"
+    },
+    {
+      "path": "ozon-react/src/utils/marketAnalysis/priceBands.js",
+      "sha256": "9AF86FF1AB0CB778F3347A1E53CAFB3F5EEF665B003E6017F58955C2A036ABDF"
+    },
+    {
+      "path": "ozon-react/src/components/PurityPipelinePage.jsx",
+      "sha256": "4C12DE214ACF4F4C03D35A215525EC6689B5D7D1C6002FFEFE487AE27C56B64A"
+    },
+    {
+      "path": "ozon-react/src/utils/marketIntelligence/miStore.js",
+      "sha256": "1B48461087A2F35E6D07F4A0065B73DBBB415C7CA0512FD623068E8C24088B2F"
+    },
+    {
+      "path": "tests/candidate-identity-backfill.test.mjs",
+      "sha256": "BE9EC50241CAFB85EACA9F4FA9C6C75C48DCF8D0C818096F712445BD381E1604"
+    },
+    {
+      "path": "tests/price-weighted-quantiles.test.mjs",
+      "sha256": "5D6A058BB66F7E01628C6A7DAB55126CA762B6D1CED63E6100CB7168CDDE2F18"
+    },
+    {
+      "path": "tests/market-embedded-isolation.test.mjs",
+      "sha256": "43AE187B1C58CA770963A7EBDCBA115BDF65A7F0C5EB6A909611116A4F523180"
+    },
+    {
+      "path": "tests/ia-procurement-identity.test.mjs",
+      "sha256": "4F07198AA33FE1570B353F0B5F1B5C64EFC34E5E7CB469E0723AA1C8CC7846E3"
+    }
+  ]
+}

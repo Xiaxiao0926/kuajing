@@ -1,0 +1,185 @@
+{
+  "timestamp": "2026-09-21T01:16:18.221Z",
+  "viewports": {
+    "360": {
+      "passed": true,
+      "metrics": {
+        "clientWidth": 360,
+        "scrollWidth": 360,
+        "viewportWidth": 360,
+        "buttonWidth": 92,
+        "buttonHeight": 28,
+        "charMetrics": [
+          {
+            "char": "新",
+            "left": 63,
+            "top": 1723,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "增",
+            "left": 75,
+            "top": 1723,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "事",
+            "left": 87,
+            "top": 1723,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "项",
+            "left": 99,
+            "top": 1723,
+            "width": 12,
+            "height": 15
+          }
+        ],
+        "overflowControls": []
+      },
+      "screenshot": "layout-360.png"
+    },
+    "390": {
+      "passed": true,
+      "metrics": {
+        "clientWidth": 390,
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "buttonWidth": 92,
+        "buttonHeight": 28,
+        "charMetrics": [
+          {
+            "char": "新",
+            "left": 63,
+            "top": 1676,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "增",
+            "left": 75,
+            "top": 1676,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "事",
+            "left": 87,
+            "top": 1676,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "项",
+            "left": 99,
+            "top": 1676,
+            "width": 12,
+            "height": 15
+          }
+        ],
+        "overflowControls": []
+      },
+      "screenshot": "layout-390.png"
+    },
+    "768": {
+      "passed": true,
+      "metrics": {
+        "clientWidth": 768,
+        "scrollWidth": 768,
+        "viewportWidth": 768,
+        "buttonWidth": 92,
+        "buttonHeight": 28,
+        "charMetrics": [
+          {
+            "char": "新",
+            "left": 681,
+            "top": 1191,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "增",
+            "left": 693,
+            "top": 1191,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "事",
+            "left": 705,
+            "top": 1191,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "项",
+            "left": 717,
+            "top": 1191,
+            "width": 12,
+            "height": 15
+          }
+        ],
+        "overflowControls": []
+      },
+      "screenshot": "layout-768.png"
+    },
+    "1440": {
+      "passed": true,
+      "metrics": {
+        "clientWidth": 1440,
+        "scrollWidth": 1440,
+        "viewportWidth": 1440,
+        "buttonWidth": 92,
+        "buttonHeight": 28,
+        "charMetrics": [
+          {
+            "char": "新",
+            "left": 1353,
+            "top": 893,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "增",
+            "left": 1365,
+            "top": 893,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "事",
+            "left": 1377,
+            "top": 893,
+            "width": 12,
+            "height": 15
+          },
+          {
+            "char": "项",
+            "left": 1389,
+            "top": 893,
+            "width": 12,
+            "height": 15
+          }
+        ],
+        "overflowControls": []
+      },
+      "screenshot": "layout-1440.png"
+    }
+  },
+  "states": {
+    "dirty_conflict_390": {
+      "passed": true
+    },
+    "add_form_390": {
+      "passed": true
+    },
+    "editing_390": {
+      "passed": true
+    }
+  },
+  "passed": true
+}

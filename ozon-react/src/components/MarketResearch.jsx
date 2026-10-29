@@ -70,7 +70,19 @@ async function dbDelete(name) {
   })
 }
 
-export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, loading, error, screenshotMode, setScreenshotMode }) {
+export default function MarketResearch({
+  data,
+  kpis,
+  dataFormat,
+  onFileUpload,
+  loading,
+  error,
+  screenshotMode,
+  setScreenshotMode,
+  embedded = false,
+  initialQuery = '',
+  contextKey = '',
+}) {
   const [availableFiles, setAvailableFiles] = useState([])
   const [loadingFiles, setLoadingFiles] = useState(false)
   const [activeFile, setActiveFile] = useState(null)
@@ -91,20 +103,23 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
       try {
         const files = await dbGetAll()
         setSavedFiles(files.sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0)))
-        const lastActive = persistGet('mr-active-file')
-        if (lastActive) {
-          const found = files.find(f => f.name === lastActive)
-          if (found) {
-            setLocalData(found.data)
-            setLocalKpis(found.kpis)
-            setLocalFormat(found.format || 'old')
-            setActiveFile(found.name)
+        // 关键隔离：embedded 模式下严禁读取全局 mr-active-file 自动恢复历史文件
+        if (!embedded) {
+          const lastActive = persistGet('mr-active-file')
+          if (lastActive) {
+            const found = files.find(f => f.name === lastActive)
+            if (found) {
+              setLocalData(found.data)
+              setLocalKpis(found.kpis)
+              setLocalFormat(found.format || 'old')
+              setActiveFile(found.name)
+            }
           }
         }
       } catch {}
     }
     loadSaved()
-  }, [])
+  }, [embedded])
 
   useEffect(() => {
     const fetchManifest = async () => {
@@ -159,12 +174,15 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
     setLocalData(processedData)
     setLocalKpis(calculatedKpis)
     setActiveFile(fileName)
-    persistSet('mr-active-file', fileName)
-    const updates = persistGet('node-updates') || {}
-    if (!updates['n2']) updates['n2'] = []
-    updates['n2'].push({ time: Date.now(), msg: '市场调研数据已加载' })
-    persistSet('node-updates', updates)
-    if (isUpload) {
+    if (!embedded) {
+      persistSet('mr-active-file', fileName)
+      const updates = persistGet('node-updates') || {}
+      if (!updates['n2']) updates['n2'] = []
+      updates['n2'].push({ time: Date.now(), msg: '市场调研数据已加载' })
+      persistSet('node-updates', updates)
+    }
+    const shouldSaveToDb = !embedded && Boolean(isUpload)
+    if (shouldSaveToDb) {
       try {
         await dbPut({
           name: fileName,
@@ -190,7 +208,7 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
       const arrayBuffer = await resp.arrayBuffer()
       const parsedData = parseXlsxArrayBuffer(arrayBuffer)
       if (parsedData.length === 0) return
-      await processAndSave(parsedData, file.name, file.date, file.source === 'server')
+      await processAndSave(parsedData, file.name, file.date, !embedded && file.source === 'server')
     } catch (err) { console.error('Load file error:', err) }
     finally { setLoadingFiles(false) }
   }
@@ -203,12 +221,15 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
         setLocalKpis(cached.kpis)
         setLocalFormat(cached.format || 'old')
         setActiveFile(file.name)
-        persistSet('mr-active-file', file.name)
+        if (!embedded) {
+          persistSet('mr-active-file', file.name)
+        }
       }
     } catch (err) { console.error('Load saved file error:', err) }
   }
 
   const handleDeleteSaved = async (name) => {
+    if (embedded) return
     try {
       await dbDelete(name)
       await deleteServerFile(FILE_NAMESPACE, name)
@@ -218,12 +239,15 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
         setActiveFile(null)
         setLocalData(null)
         setLocalKpis(null)
-        persistRemove('mr-active-file')
+        if (!embedded) {
+          persistRemove('mr-active-file')
+        }
       }
     } catch (err) { console.error('Delete saved file error:', err) }
   }
 
   const uploadToServer = async (file) => {
+    if (embedded) return
     try {
       const result = await uploadServerFile(FILE_NAMESPACE, file)
       if (result?.file) {
@@ -239,6 +263,7 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
   }
 
   const handleLocalUpload = async (e) => {
+    if (embedded) return
     const files = e.target.files
     if (files.length > 0) {
       const file = files[0]
@@ -303,145 +328,242 @@ export default function MarketResearch({ data, kpis, dataFormat, onFileUpload, l
   const hasData = displayData && displayData.length > 0
 
   return (
-    <div className="flex gap-4 h-full">
-      <div className="w-48 flex-shrink-0 bg-white rounded-xl shadow-sm p-3 flex flex-col h-fit sticky top-0">
-        <h4 className="text-xs font-semibold text-morandi-text mb-3 flex items-center gap-1.5">
-          <FolderOpen className="w-3.5 h-3.5 text-morandi-primary" />
-          报告文件
-        </h4>
+    <div className={embedded ? 'flex flex-col gap-4' : 'flex gap-4 h-full'}>
+      {embedded ? (
+        /* Embedded 模式下的紧凑型数据源工具栏（横向折行布局，不占固定 192px 侧边栏） */
+        <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <FolderOpen className="w-3.5 h-3.5 text-morandi-primary" />
+              <span className="font-semibold text-morandi-text">调研报告源</span>
+              {activeFile ? (
+                <span className="px-2 py-0.5 rounded bg-morandi-primary/10 text-morandi-primary font-mono text-[11px] truncate max-w-[240px]" title={activeFile}>
+                  当前: {activeFile}
+                </span>
+              ) : (
+                <span className="text-gray-400 text-[11px]">未加载报告（请在下方选择或上传）</span>
+              )}
+              {hasData && (
+                <span className="px-2 py-0.5 rounded bg-green-50 text-green-700 text-[11px] font-medium">
+                  {displayData.length} 条数据
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 text-xs font-medium">
+                只读查阅模式（如需导入报表请前往独立市场调研页面）
+              </span>
+              {hasData && (
+                <button
+                  type="button"
+                  onClick={() => setScreenshotMode(!screenshotMode)}
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors ${screenshotMode ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                >
+                  <Camera className="w-3 h-3" />
+                  {screenshotMode ? '退出截图' : '截图'}
+                </button>
+              )}
+            </div>
+          </div>
 
-        <div className="mb-3">
-          <div
-            className={`border-2 border-dashed rounded-lg p-2 text-center cursor-pointer transition-all ${loading ? 'border-morandi-primary bg-morandi-primary/5' : 'border-gray-200 hover:border-morandi-primary hover:bg-gray-50'}`}
-            onClick={() => !loading && fileInputRef.current?.click()}
-          >
-            <input ref={fileInputRef} type="file" accept="*" className="hidden" onChange={handleLocalUpload} disabled={loading} />
-            {loading ? (
-              <Loader2 className="w-4 h-4 text-morandi-primary animate-spin mx-auto" />
-            ) : (
-              <div className="flex flex-col items-center gap-0.5">
-                <Upload className="w-3.5 h-3.5 text-morandi-primary" />
-                <span className="text-[10px] text-morandi-text">上传</span>
-              </div>
+          <div className="flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-gray-100 text-[11px]">
+            <span className="text-morandi-text-light mr-1 flex items-center gap-1">
+              <FileSpreadsheet className="w-3 h-3 text-morandi-primary" />
+              可用报告:
+            </span>
+            {availableFiles.length === 0 && savedFiles.length === 0 && (
+              <span className="text-gray-400">暂无可加载文件（如需上传请前往独立市场调研页面）</span>
             )}
+            {savedFiles.map(f => {
+              const isActive = activeFile === f.name
+              return (
+                <button
+                  key={f.name}
+                  type="button"
+                  onClick={() => handleLoadSaved(f)}
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded transition-all max-w-[200px] truncate ${isActive ? 'bg-blue-100 text-blue-800 font-semibold border border-blue-300' : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200'}`}
+                  title={`[本地缓存] ${f.name}`}
+                >
+                  <HardDrive className="w-2.5 h-2.5 text-blue-500 flex-shrink-0" />
+                  <span className="truncate">{f.name}</span>
+                </button>
+              )
+            })}
+            {availableFiles.map((f, i) => {
+              const isActive = activeFile === f.name
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => handleLoadFile(f)}
+                  disabled={loadingFiles}
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded transition-all max-w-[200px] truncate ${isActive ? 'bg-morandi-primary/15 text-morandi-primary font-semibold border border-morandi-primary/30' : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200'}`}
+                  title={`[服务端] ${f.name}`}
+                >
+                  <FileSpreadsheet className="w-2.5 h-2.5 text-green-500 flex-shrink-0" />
+                  <span className="truncate">{f.name}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
+      ) : (
+        /* 原 Standalone 模式侧边栏（保留原始代码与样式，零修改） */
+        <div className="w-48 flex-shrink-0 bg-white rounded-xl shadow-sm p-3 flex flex-col h-fit sticky top-0">
+          <h4 className="text-xs font-semibold text-morandi-text mb-3 flex items-center gap-1.5">
+            <FolderOpen className="w-3.5 h-3.5 text-morandi-primary" />
+            报告文件
+          </h4>
 
-        {savedFiles.length > 0 && (
           <div className="mb-3">
-            <div className="flex items-center gap-1 mb-1.5">
-              <HardDrive className="w-3 h-3 text-blue-400" />
-              <span className="text-[9px] font-semibold text-morandi-text-light uppercase tracking-wider">本地缓存</span>
+            <div
+              className={`border-2 border-dashed rounded-lg p-2 text-center cursor-pointer transition-all ${loading ? 'border-morandi-primary bg-morandi-primary/5' : 'border-gray-200 hover:border-morandi-primary hover:bg-gray-50'}`}
+              onClick={() => !loading && fileInputRef.current?.click()}
+            >
+              <input ref={fileInputRef} type="file" accept="*" className="hidden" onChange={handleLocalUpload} disabled={loading} />
+              {loading ? (
+                <Loader2 className="w-4 h-4 text-morandi-primary animate-spin mx-auto" />
+              ) : (
+                <div className="flex flex-col items-center gap-0.5">
+                  <Upload className="w-3.5 h-3.5 text-morandi-primary" />
+                  <span className="text-[10px] text-morandi-text">上传</span>
+                </div>
+              )}
             </div>
-            <div className="space-y-0.5">
-              {savedFiles.map(f => {
-                const isActive = activeFile === f.name
-                return (
-                  <div key={f.name} className={`flex items-center group rounded-lg transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}`}>
+          </div>
+
+          {savedFiles.length > 0 && (
+            <div className="mb-3">
+              <div className="flex items-center gap-1 mb-1.5">
+                <HardDrive className="w-3 h-3 text-blue-400" />
+                <span className="text-[9px] font-semibold text-morandi-text-light uppercase tracking-wider">本地缓存</span>
+              </div>
+              <div className="space-y-0.5">
+                {savedFiles.map(f => {
+                  const isActive = activeFile === f.name
+                  return (
+                    <div key={f.name} className={`flex items-center group rounded-lg transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}`}>
+                      <button
+                        onClick={() => handleLoadSaved(f)}
+                        className="flex-1 text-left px-2 py-1.5 min-w-0"
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <HardDrive className={`w-3 h-3 flex-shrink-0 ${isActive ? 'text-blue-500' : 'text-blue-300'}`} />
+                          <div className="min-w-0 flex-1">
+                            <p className={`text-[10px] truncate ${isActive ? 'font-semibold text-blue-600' : 'font-medium text-morandi-text'}`}>
+                              {f.name}
+                            </p>
+                            <p className="text-[9px] text-morandi-text-light">{f.date} · {(JSON.stringify(f.data).length / 1024).toFixed(0)}KB</p>
+                          </div>
+                        </div>
+                      </button>
+                      <button
+                        onClick={() => handleDeleteSaved(f.name)}
+                        className="p-1 mr-1 opacity-0 group-hover:opacity-100 hover:bg-red-50 rounded text-gray-300 hover:text-red-400 transition-all"
+                        title="删除缓存"
+                      >
+                        <Trash2 className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {availableFiles.length > 0 && (
+            <div>
+              <div className="flex items-center gap-1 mb-1.5">
+                <FileSpreadsheet className="w-3 h-3 text-green-400" />
+                <span className="text-[9px] font-semibold text-morandi-text-light uppercase tracking-wider">服务器文件</span>
+              </div>
+              <div className="space-y-0.5 flex-1 overflow-y-auto max-h-[calc(100vh-500px)]">
+                {availableFiles.map((f, i) => {
+                  const isActive = activeFile === f.name
+                  return (
                     <button
-                      onClick={() => handleLoadSaved(f)}
-                      className="flex-1 text-left px-2 py-1.5 min-w-0"
+                      key={i}
+                      onClick={() => handleLoadFile(f)}
+                      disabled={loadingFiles}
+                      className={`w-full text-left px-2 py-1.5 rounded-lg transition-colors group disabled:opacity-50 ${isActive ? 'bg-morandi-primary/10 border border-morandi-primary/20' : 'hover:bg-gray-50 border border-transparent'}`}
                     >
                       <div className="flex items-center gap-1.5">
-                        <HardDrive className={`w-3 h-3 flex-shrink-0 ${isActive ? 'text-blue-500' : 'text-blue-300'}`} />
+                        <FileSpreadsheet className={`w-3 h-3 flex-shrink-0 ${isActive ? 'text-morandi-primary' : 'text-green-500'}`} />
                         <div className="min-w-0 flex-1">
-                          <p className={`text-[10px] truncate ${isActive ? 'font-semibold text-blue-600' : 'font-medium text-morandi-text'}`}>
+                          <p className={`text-[10px] truncate ${isActive ? 'font-semibold text-morandi-primary' : 'font-medium text-morandi-text group-hover:text-morandi-primary'}`}>
                             {f.name}
                           </p>
-                          <p className="text-[9px] text-morandi-text-light">{f.date} · {(JSON.stringify(f.data).length / 1024).toFixed(0)}KB</p>
+                          <p className="text-[9px] text-morandi-text-light">
+                            {f.date?.replace(/-/g, '/')}
+                          </p>
                         </div>
                       </div>
                     </button>
-                    <button
-                      onClick={() => handleDeleteSaved(f.name)}
-                      className="p-1 mr-1 opacity-0 group-hover:opacity-100 hover:bg-red-50 rounded text-gray-300 hover:text-red-400 transition-all"
-                      title="删除缓存"
-                    >
-                      <Trash2 className="w-2.5 h-2.5" />
-                    </button>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {availableFiles.length > 0 && (
-          <div>
-            <div className="flex items-center gap-1 mb-1.5">
-              <FileSpreadsheet className="w-3 h-3 text-green-400" />
-              <span className="text-[9px] font-semibold text-morandi-text-light uppercase tracking-wider">服务器文件</span>
+          {hasData && (
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <div className="p-1.5 bg-green-50 rounded flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-green-500" />
+                <span className="text-[10px] text-green-700">{displayData.length} 条数据</span>
+              </div>
             </div>
-            <div className="space-y-0.5 flex-1 overflow-y-auto max-h-[calc(100vh-500px)]">
-              {availableFiles.map((f, i) => {
-                const isActive = activeFile === f.name
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handleLoadFile(f)}
-                    disabled={loadingFiles}
-                    className={`w-full text-left px-2 py-1.5 rounded-lg transition-colors group disabled:opacity-50 ${isActive ? 'bg-morandi-primary/10 border border-morandi-primary/20' : 'hover:bg-gray-50 border border-transparent'}`}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <FileSpreadsheet className={`w-3 h-3 flex-shrink-0 ${isActive ? 'text-morandi-primary' : 'text-green-500'}`} />
-                      <div className="min-w-0 flex-1">
-                        <p className={`text-[10px] truncate ${isActive ? 'font-semibold text-morandi-primary' : 'font-medium text-morandi-text group-hover:text-morandi-primary'}`}>
-                          {f.name}
-                        </p>
-                        <p className="text-[9px] text-morandi-text-light">
-                          {f.date?.replace(/-/g, '/')}
-                        </p>
-                      </div>
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
+          )}
 
-        {hasData && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
-            <div className="p-1.5 bg-green-50 rounded flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-green-500" />
-              <span className="text-[10px] text-green-700">{displayData.length} 条数据</span>
+          {hasData && (
+            <div className="mt-3 space-y-1.5">
+              <button
+                onClick={() => setScreenshotMode(!screenshotMode)}
+                className={`w-full flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-[10px] font-medium transition-colors ${screenshotMode ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              >
+                <Camera className="w-3 h-3" />
+                {screenshotMode ? '退出截图' : '截图模式'}
+              </button>
+              <button
+                onClick={exportToPDF}
+                disabled={exporting}
+                className="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 bg-morandi-primary text-white rounded-lg text-[10px] font-medium hover:bg-morandi-primary/90 transition-colors disabled:opacity-50"
+              >
+                {exporting ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileDown className="w-3 h-3" />}
+                {exporting ? '导出中...' : '导出PDF'}
+              </button>
             </div>
-          </div>
-        )}
-
-        {hasData && (
-          <div className="mt-3 space-y-1.5">
-            <button
-              onClick={() => setScreenshotMode(!screenshotMode)}
-              className={`w-full flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-[10px] font-medium transition-colors ${screenshotMode ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-            >
-              <Camera className="w-3 h-3" />
-              {screenshotMode ? '退出截图' : '截图模式'}
-            </button>
-            <button
-              onClick={exportToPDF}
-              disabled={exporting}
-              className="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 bg-morandi-primary text-white rounded-lg text-[10px] font-medium hover:bg-morandi-primary/90 transition-colors disabled:opacity-50"
-            >
-              {exporting ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileDown className="w-3 h-3" />}
-              {exporting ? '导出中...' : '导出PDF'}
-            </button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       <div ref={dashboardRef} className="flex-1 min-w-0">
         {hasData ? (
           displayFormat === 'new' ? (
-            <NewDashboard data={displayData} kpis={displayKpis} screenshotMode={screenshotMode} />
+            <NewDashboard
+              data={displayData}
+              kpis={displayKpis}
+              screenshotMode={screenshotMode}
+              embedded={embedded}
+              initialSearchTerm={initialQuery}
+              searchContextKey={contextKey}
+            />
           ) : (
-            <Dashboard data={displayData} kpis={displayKpis} screenshotMode={screenshotMode} />
+            <Dashboard
+              data={displayData}
+              kpis={displayKpis}
+              screenshotMode={screenshotMode}
+              embedded={embedded}
+              initialSearchTerm={initialQuery}
+              searchContextKey={contextKey}
+            />
           )
         ) : (
           <div className="bg-white rounded-xl p-12 shadow-sm text-center">
             <FolderOpen className="w-10 h-10 text-gray-200 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-morandi-text mb-2">请选择或上传数据文件</h3>
-            <p className="text-sm text-morandi-text-light">从左侧选择报告文件，或上传 .xlsx / .xls / .html 文件开始分析</p>
+            <p className="text-sm text-morandi-text-light">
+              {embedded ? '请从上方选择报告文件，或上传 .xlsx / .xls / .html 文件开始分析' : '从左侧选择报告文件，或上传 .xlsx / .xls / .html 文件开始分析'}
+            </p>
           </div>
         )}
       </div>

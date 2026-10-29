@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20261022-MARKET-RETENTION-003",
+  "task_title": "报告版本与源文件留存、采集日期真实性修复",
+  "status": "review_ready",
+  "revision_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/REVISION-001.md",
+  "revision_executor": "Luna",
+  "claimed_by": null,
+  "last_executor": "Luna",
+  "created_by": "Codex",
+  "created_on": "2026-10-22",
+  "task_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/TASK.md",
+  "result_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/RESULT.md",
+  "baseline_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/BASELINE.json",
+  "tests_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/tests.json",
+  "previous_task_id": "KJ-GEMINI-20261012-MARKET-PLAN-002",
+  "previous_task_status": "accepted_with_known_limitations",
+  "task_type": "local_implementation",
+  "local_implementation_authorized": true,
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "public_verification_status": "not_performed"
+}

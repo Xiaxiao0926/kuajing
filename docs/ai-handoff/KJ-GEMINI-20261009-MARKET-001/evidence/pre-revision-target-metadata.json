@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-10-09T17:55:00+08:00",
+  "git_commit": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+  "git_branch": "feat/platform-calc-parity-20261009",
+  "files": [
+    {
+      "path": "ozon-react/src/utils/marketAnalysis/purityFilter.js",
+      "sha256": "96568E52CFA00557F7B644225F82FCD50FF966E0791AA440A5D16A59E087CB03",
+      "backup": "docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-revision-targets/purityFilter.pre-revision.js"
+    },
+    {
+      "path": "ozon-react/src/components/marketIntelligence/components/ManualProcurementWorkbench.jsx",
+      "sha256": "045871CF3D9615B6DF2D597711890A3EB639E4EC7913C57840D0D9C45CD7D09D",
+      "backup": "docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-revision-targets/ManualProcurementWorkbench.pre-revision.jsx"
+    },
+    {
+      "path": "ozon-react/src/components/marketIntelligence/MarketIntelligenceApp.jsx",
+      "sha256": "314F65A80FF3C2E98E876696876731AFB734E4E45EEF629D058AECFF99F2BA70",
+      "backup": "docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-revision-targets/MarketIntelligenceApp.pre-revision.jsx"
+    },
+    {
+      "path": "ozon-react/src/components/MarketResearch.jsx",
+      "sha256": "1A7C2239197DD84DDA057AD43D295B2114C060F7075BBACCFA1AE0F10B54A446"
+    },
+    {
+      "path": "ozon-react/src/utils/marketAnalysis/priceBands.js",
+      "sha256": "FFAC863515843EE8B2BC95F15FBD7B452251CC99AC26BF162FC40B9C44D7B5C1"
+    },
+    {
+      "path": "ozon-react/src/components/PurityPipelinePage.jsx",
+      "sha256": "54035F6BE19147CC38DC355D8FEDA9BF35032397FC503F1172DA2E7B771BB728"
+    },
+    {
+      "path": "ozon-react/src/utils/marketIntelligence/miStore.js",
+      "sha256": "0C093A78FAADD7F5B7EC7A7781D9795FBCA7811CCABD609BA9E107BB039609B4"
+    }
+  ]
+}

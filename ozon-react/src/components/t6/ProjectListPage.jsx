@@ -5,6 +5,7 @@
  */
 import { useMemo } from 'react'
 import { listProjects, getSnapshot, projectProgress } from '../../utils/t6/t6Store'
+import { resolveSnapshotKind, SNAPSHOT_KIND } from '../../utils/t6/candidateProjectEvidence'
 import Surface from '../ui/Surface'
 import PageHeader from '../ui/PageHeader'
 import Badge from '../ui/Badge'
@@ -39,6 +40,7 @@ export default function ProjectListPage({ onOpenProject }) {
         <div className="grid gap-4 xl:grid-cols-2">
           {projects.map((project) => {
             const snap = project.source.creationSnapshotId ? getSnapshot(project.source.creationSnapshotId) : null
+            const snapshotKind = resolveSnapshotKind(snap)
             const score = snap?.scoreResult
             const progress = projectProgress(project)
             const nextNodeId = project.workflow.states.find((s) => s.status !== 'done' && s.status !== 'skipped')
@@ -68,7 +70,7 @@ export default function ProjectListPage({ onOpenProject }) {
                   <span className="tabular-nums text-xs text-workspace-text-secondary">{progress.done} / {progress.total}</span>
                 </div>
 
-                {score && (
+                {snapshotKind === SNAPSHOT_KIND.SCORING && score && (
                   <div className="mt-3 flex flex-wrap items-center gap-3 text-[13px]">
                     <ScoreCell score={score.totalScore} grade={score.grade} tentative={score.gradeTentative} />
                     <DecisionBadge status={score.decision.status} action={score.decision.action} withAction />
@@ -76,9 +78,41 @@ export default function ProjectListPage({ onOpenProject }) {
                   </div>
                 )}
 
+                {snapshotKind === SNAPSHOT_KIND.MARKET_VALIDATION && (
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px]">
+                    <span className="inline-flex items-center rounded bg-workspace-surface-subtle px-2 py-0.5 text-xs font-semibold text-workspace-primary">
+                      市场验证立项
+                    </span>
+                    {snap?.procurementEvidence && (
+                      <span className="text-xs text-workspace-text-secondary">
+                        {[
+                          snap.procurementEvidence.supplierName || '—',
+                          snap.procurementEvidence.factoryPriceCny != null ? `¥${snap.procurementEvidence.factoryPriceCny}` : '—',
+                          snap.procurementEvidence.weightG != null ? `${snap.procurementEvidence.weightG}g` : '—',
+                          snap.procurementEvidence.targetPriceRub != null ? `目标 ₽${snap.procurementEvidence.targetPriceRub}` : '—',
+                        ].join(' · ')}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {snap && snapshotKind !== SNAPSHOT_KIND.SCORING && snapshotKind !== SNAPSHOT_KIND.MARKET_VALIDATION && (
+                  <div className="mt-3 flex items-center gap-2 text-xs text-workspace-warning">
+                    <span className="rounded bg-workspace-warning-soft px-1.5 py-0.5 font-medium">未知立项证据</span>
+                  </div>
+                )}
+
                 <div className="mt-3 border-t border-workspace-border pt-2.5 text-xs text-workspace-text-secondary">
                   下一步：{nextNodeId ? nextNodeId.nodeId : '全部完成'}
-                  {snap && <span className="ml-2 text-workspace-text-tertiary">立项快照 {new Date(snap.createdAt).toLocaleDateString('zh-CN')} · 规则 {snap.versions?.rulesVersion}</span>}
+                  {snap && (
+                    <span className="ml-2 text-workspace-text-tertiary">
+                      {snapshotKind === SNAPSHOT_KIND.MARKET_VALIDATION ? (
+                        <>立项证据 {new Date(snap.createdAt).toLocaleDateString('zh-CN')} · {snap.versions?.evidenceSchemaVersion || 'market-validation-v1'}</>
+                      ) : (
+                        <>立项快照 {new Date(snap.createdAt).toLocaleDateString('zh-CN')} · 规则 {snap.versions?.rulesVersion ?? '—'}</>
+                      )}
+                    </span>
+                  )}
                 </div>
               </Surface>
             )

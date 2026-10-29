@@ -1,0 +1,149 @@
+# 后台体系与数据全景映射 (BACKEND_DATA_MAP.md)
+
+> 审计任务：KJ-GEMINI-20260921-004  
+> 审计时间：2026-09-21  
+> 审计基准：代码静态证据与持久化合约比对
+
+---
+
+## 1. 节点与存储基础设施角色分工
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           1. 代码事实源与公开静态资源                             │
+│       GitHub 仓库 (Xiaxiao0926/kuajing) @ main (de0cecf107e670e1c0d9cf393c)     │
+│   ├─ 核心算法与 React 组件代码                                                    │
+│   ├─ 统一配置唯一事实源: config/*.json (wb_tariffs, settings, ozon_channels)       │
+│   └─ 静态业务报告与数据批次: ozon-react/public/data/                               │
+└────────────────────────────────────────┬────────────────────────────────────────┘
+                                         │ 编译打包 / 生产部署
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           2. 线上宿主与持久化服务层                              │
+│       WordPress 生产服务器 (fyzsxnb.com / PHP 8.x + LiteSpeed Cache)             │
+│   ├─ 挂载插件: wordpress/kuajing-persistence/kuajing-persistence.php (v0.3.3)   │
+│   ├─ 页面短代码: [kuajing_dashboard] on /kuajing/                                │
+│   ├─ REST API: /wp-json/kuajing/v1/ (state, session, files, history, backups)    │
+│   ├─ MySQL 状态持久化: ${prefix}kuajing_state (原子版本锁、修订历史、冲突快照)      │
+│   └─ 私有文件存储: ../kuajing-private-data/ (位于 public_html 平级，安全隔离)    │
+└────────────────────────────────────────┬────────────────────────────────────────┘
+                                         │ credentials: 'same-origin', X-WP-Nonce
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           3. 前端客户端与离线容灾层                              │
+│       浏览器运行时 (React 18 SPA)                                                │
+│   ├─ 设备标识: localStorage['__kuajing_device_id__'] (UUID 隔离客户端)            │
+│   ├─ 本地缓存与版本: localStorage['__kuajing_revision__:<key>']                  │
+│   ├─ 脏状态跟踪: localStorage['__kuajing_dirty__:<key>']                         │
+│   ├─ 离线兜底: persist.js (防抖 150ms 聚合同步, visibilitychange 自动 flush)     │
+│   └─ 内存状态/缓存: RUNS_CACHE (Map), t6Store adapter, Zustand/React useState    │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1.1 各后端技术栈角色与代码证据
+1. **WordPress 生产插件 (PHP + MySQL)**：
+   - 代码证据：[`wordpress/kuajing-persistence/kuajing-persistence.php:13-38`](file:///D:/ozon/wordpress/kuajing-persistence/kuajing-persistence.php#L13-L38)
+   - 角色：**生产持久化唯一事实源**。
+   - 负责多客户端并发写入协调、Revision 版本自增校验、冲突数据自动备份、文件私有化鉴权分发。
+2. **Node.js 价格分析服务 (Port 8888)**：
+   - 代码证据：[`server.js:1-120`](file:///D:/ozon/server.js#L1-L120)
+   - 角色：**桌面端独立价格抓取与离线清洗 API**。
+   - 监听本地 CSV 与 1688 报价表 Excel，调用 `market_data_processor.js` 与 `analyze_with_cleaned_data.js` 执行价格带优势匹配。生产线上未部署此服务。
+3. **Python Streamlit 选品与核算面板 (Port 8501/8502)**：
+   - 代码证据：[`ozon-product-analyzer/app.py`](file:///D:/ozon/ozon-product-analyzer/app.py), [`ozon-product-analyzer/wb_panel.py`](file:///D:/ozon/ozon-product-analyzer/wb_panel.py)
+   - 角色：**早期/辅助数据分析工具**。
+   - 严格消费 `config/*.json` 作为费率唯一事实源；运行时数据存储在 `ozon-product-analyzer/wb_data/`。
+4. **Vite 开发服务器中间件**：
+   - 代码证据：[`ozon-react/vite.config.js:80-264`](file:///D:/ozon/ozon-react/vite.config.js#L80-L264)
+   - 角色：**本地开发态 Mock API 与文件同步器**。
+   - 在本地 dev 时拦截 `/api/persist`、`/api/upload`、`/api/market-intelligence/*`，将持久化重定向到本地 `市场分析/persisted-data.json`。
+
+---
+
+## 2. 数据生命周期与同步链路
+
+### 2.1 读取链路 (Read Flow)
+1. **应用冷启动**：
+   - `App.jsx` 挂载时调用 `syncFromServer()` ([`persist.js:520-580`](file:///D:/ozon/ozon-react/src/utils/persist.js#L520-L580))；
+   - 若处于 WordPress 环境 (`canUseServerPersistence() === true`)，向 `GET /wp-json/kuajing/v1/state` 发起请求；
+   - 获得服务器最新 `state_key`、`state_value`、`revision` 映射表；
+   - 将服务端版本与本地 `localStorage` 比对：若本地为 clean 且服务端版本更高，以服务端数据覆盖本地；若本地有 dirty 写入，保持本地并进入待同步队列。
+2. **静态资产读取**：
+   - 市场情报批次数据：由 `miStore.js` 统一调用 `getDataUrl('market_intelligence/runs/...')`，生产环境下动态拼接为 GitHub Raw Content CDN URL ([`runtime.js:27-32`](file:///D:/ozon/ozon-react/src/utils/runtime.js#L27-L32))；
+   - 市场报告数据：由 `MarketReportCenter.jsx` 读取 `data/market_reports/*.json`。
+
+### 2.2 编辑与保存链路 (Write / Save Flow)
+1. **UI 触发保存**（如更新商品档案、新增合规事项、记录供应商报价）：
+   - 组件调用业务 Store（如 `t6Store.js` 中的 `updateProjectProduct` 或 `createSupplierQuote`）；
+   - 业务 Store 将实体深拷贝后调用 `persistSet(key, value)` ([`persist.js:502-518`](file:///D:/ozon/ozon-react/src/utils/persist.js#L502-L518))；
+   - `persistSet` 同步写入 `localStorage[key]`，并打上 `__kuajing_dirty__:<key> = 1` 标记；
+   - 加入内存待同步队列 `pending.set(key, entry)`，启动 150ms 防抖计时器 `flushTimer`；
+2. **网络同步 (Flush to Server)**：
+   - `flushPending()` 向 `POST /wp-json/kuajing/v1/state` 提交 payload：
+     ```json
+     {
+       "entries": {
+         "t6.project.uuid": {
+           "value": { ... },
+           "baseRevision": 4,
+           "deviceId": "device-172691...",
+           "updatedAt": 1726910520000
+         }
+       }
+     }
+     ```
+   - WordPress 插件接收请求后开启 MySQL 事务与 `FOR UPDATE` 行级锁；
+   - 检查客户端 `baseRevision`：
+     - 若 `baseRevision === server_revision`：版本号自增为 `baseRevision + 1`，写入新值，并记录不可变快照到 `${prefix}kuajing_state_versions` 与审计事件 `${prefix}kuajing_audit_events`；
+     - 若 `baseRevision !== server_revision`：抛出 `HTTP 409 Conflict`。
+
+### 2.3 冲突处理与备份链路 (Conflict & Backup)
+- **代码证据**：[`persist.js:210-227`](file:///D:/ozon/ozon-react/src/utils/persist.js#L210-L227), [`kuajing-persistence.php:676-691`](file:///D:/ozon/wordpress/kuajing-persistence/kuajing-persistence.php#L676-L691)
+- 当捕获到 HTTP 409 时：
+  1. 客户端立即调用 `backupConflictSnapshot(key, entry)`，向 `POST /wp-json/kuajing/v1/state/backup` 投递当前被拒绝的脏数据快照；
+  2. 服务端将其持久化至 `${prefix}kuajing_state_backups`（带有 `snapshot_hash`、`reason: 'revision_conflict'`）；
+  3. 客户端标记该 key 处于 `PersistenceState.CONFLICT` 状态，停止盲目重试，通知 UI 弹出冲突解决指示；
+  4. 绝不静默覆盖服务端已有更新，保证双端数据零丢失。
+
+### 2.4 恢复链路 (Restore Flow)
+- **代码证据**：[`kuajing-persistence.php:800-845`](file:///D:/ozon/wordpress/kuajing-persistence/kuajing-persistence.php#L800-L845)
+- 支持调用 `POST /wp-json/kuajing/v1/state/restore`，传入历史版本号，服务端将历史版本提取并以最新的 Revision 重新提交，产生 RESTORE 类型审计事件。
+- **实测状态标记**：静态实现与单元测试已存在，生产环境尚未发生过真实冲突恢复演练（**静态实现已发现，恢复未实测**）。
+
+---
+
+## 3. 业务实体数据字典 (Entity Dictionary)
+
+| 实体名称 | 存储 Key 前缀 / 物理位置 | 所有者与 Schema 版本 | 主键 ID 规范 | 关联外键 (Foreign Keys) | 读调用方 (Callers) | 写调用方 (Writers) | 备份与同步机制 | 验证状态 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **选品候选商品**<br>(Candidate) | `t6.candidate.<uuid>`<br>MySQL & localStorage | `t6Store.js`<br>Schema v1 | UUID (v4) | `sourceProductId`<br>`sourceNicheUid`<br>`latestSnapshotId` | `CandidatePoolPage`<br>`NicheDetailDrawer` | `ensureCandidate`<br>`setCandidateBizStatus`<br>`syncCandidateMarketEvidence` | 防抖同步 / 版本历史 | 核心单元测试已通过 |
+| **不可变快照**<br>(Snapshot) | `t6.snapshot.<uuid>`<br>MySQL & localStorage | `t6Store.js`<br>Schema v1 | UUID (v4) | `candidateId` | `CandidateDetailDrawer`<br>`ProjectDetailPage` | `createSnapshot`<br>(只增不删不改) | Append-only / 冲突拦截 | 核心单元测试已通过 |
+| **SKU 项目**<br>(Project) | `t6.project.<uuid>`<br>MySQL & localStorage | `t6Store.js`<br>Schema v1 | UUID (v4)<br>(人类号 `RU-YYYY-NNN`) | `source.candidateId`<br>`source.creationSnapshotId`<br>`supply.supplierId`<br>`supply.quoteId` | `ProjectListPage`<br>`ProjectDetailPage` | `createProject`<br>`updateProject`<br>`setProjectLifecycle`<br>`setProjectSupply` | 防抖同步 / 乐观锁 Revision | 核心单元测试已通过 |
+| **商品档案**<br>(Product Profile) | `project.product`<br>(内嵌于 Project JSON) | `productProfile.js`<br>Schema v1 | 随项目 ID | 无 | `ProductProfileEditor`<br>`gateEngine` (dims/weight) | `updateProjectProduct`<br>(生成 product_update 日志) | 随 Project 整体原子提交 | 核心单元测试已通过 |
+| **合规记录**<br>(Compliance Profile) | `project.compliance`<br>(内嵌于 Project JSON) | `complianceProfile.js`<br>Schema v1 | 随项目 ID | 无 | `ProjectCompliancePanel`<br>`gateEngine` (cert_plan) | `updateProjectCompliance`<br>`saveComplianceRequirement` | 随 Project 整体原子提交 / 草稿隔离保护 | 任务 001/002 验收通过；003 合同待批准 |
+| **供应链供应商**<br>(Supplier) | `t6.supplier.<uuid>`<br>MySQL & localStorage | `t6Store.js`<br>Schema v1 | UUID (v4) | `projectId` | `ProjectSupplyChainPanel`<br>`gateEngine` | `createSupplier`<br>`updateSupplier`<br>(禁删除) | 独立实体同步 / 版本锁 | 核心单元测试已通过 |
+| **供应商报价版本**<br>(Supplier Quote) | `t6.supplierQuote.<uuid>`<br>MySQL & localStorage | `t6Store.js`<br>Schema v1 | UUID (v4) | `projectId`<br>`supplierId`<br>版本号 `version: 1, 2...` | `ProjectSupplyChainPanel`<br>`supplyCostBridge` | `createSupplierQuote`<br>(自增版本树，不可变) | 不可变版本链 / Append-only | 核心单元测试已通过 |
+| **样品打样记录**<br>(Sample) | `t6.sample.<uuid>`<br>MySQL & localStorage | `t6Store.js`<br>Schema v1 | UUID (v4) | `projectId`<br>`supplierId` | `ProjectSupplyChainPanel`<br>`gateEngine` (samples_record) | `createSampleRecord`<br>`updateSampleRecord` (有限状态机) | 状态流转留痕 | 核心单元测试已通过 |
+| **成本场景**<br>(Cost Scenario) | `t6.costScenario.<uuid>`<br>MySQL & localStorage | `costScenarioAdapter.js`<br>Schema v1 | UUID (v4) | `projectId`<br>`sourceSnapshotId` | `ProjectDetailPage` (Costing Tab)<br>`ProjectListPage` | `createCostScenario`<br>`setProjectBaselineScenario` | 不可变存储 / 自由切换基线 | 核心单元测试已通过 |
+| **项目决策日志**<br>(Decision Log) | `t6.log.<uuid>`<br>MySQL & localStorage | `t6Store.js`<br>Schema v1 | UUID (v4) | `projectId`<br>`subjectId` | `ProjectDetailPage` (Timeline) | `appendLog`<br>(只增不删不改) | Append-only / 冲突抛错 | 核心单元测试已通过 |
+| **市场情报批次**<br>(Market Run) | `public/data/market_intelligence/runs/` (静态 JSON) | `pipelineRunner.cjs`<br>Run Schema | 批次号 `RUN-YYYYMMDD-NNN` | 包含 `niche_uid` | `miStore.js`<br>`MarketIntelligenceApp` | 构建期生成；<br>运行时只读 | 随代码仓库发布与更新 | 本地构建验证通过 |
+| **采购人工暂存**<br>(Manual Quotes) | `mi_manual_procurement_quotes`<br>MySQL & localStorage | `procurementIdentity.js`<br>Schema v1 | 双键索引：`uid` 或 `name` | `uid` (niche_uid) | `ManualProcurementWorkbench`<br>`NicheDetailDrawer` | `saveManualQuote` | 防抖同步 / 覆盖合并 | 核心单元测试已通过 |
+| **市场分析报告**<br>(Market Reports) | `public/data/market_reports/*.json` | `marketReportAnalysis.js`<br>Report Schema | 文件名 Slug | 无 | `MarketReportCenter.jsx` | 脚本 `generate-market-reports.mjs` 静态编译 | Git 跟踪与发布 | 24 份报告通过质量校验 |
+
+---
+
+## 4. 文件与附件存储策略
+
+1. **上传文件存储 (Server Side)**：
+   - 路径：`wordpress/kuajing-persistence/kuajing-persistence.php` 指定的私有目录：
+     `trailingslashit(dirname(ABSPATH)) . 'kuajing-private-data'`
+   - 该目录与 `public_html` 平级，**杜绝 HTTP 直接静态访问**。
+   - 文件通过 WordPress 短代码鉴权路由 `/wp-json/kuajing/v1/files/{namespace}` 流式返回；
+   - 替换或删除已有文件前，系统会自动保留历史版本快照（保留最新 20 份快照）。
+2. **离线上传队列 (Client Side)**：
+   - 若客户端断网或会话过期，待上传文件会暂存至浏览器的 IndexedDB 队列中；
+   - 待网络恢复或重新鉴权后，按照先进先出（FIFO）原则自动补发重试。
+3. **安全凭据与敏感信息存储隔离**：
+   - 生产访问密码：`kuajing-persistence.php` 中仅硬编码了访问密码的 SHA256 哈希值；
+   - Cookie 采用 `HttpOnly`, `Secure`, `SameSite=Lax` 并在服务端通过 HMAC-SHA256 签名，TTL 为 7 天；
+   - 严禁任何组件把明文密码、真实业务客户联系方式存储在状态树或向外暴露。

@@ -1,0 +1,78 @@
+{
+  "task_id": "KJ-GEMINI-20260920-001",
+  "revision": 1,
+  "checks": [
+    {
+      "name": "合规草稿状态与未保存保护专项测试（含静态、纯函数、场景 A~G 及真实组件 Headless 测试）",
+      "command": "node tests/ia-project-compliance-draft.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check1-draft-test.log",
+      "notes": "涵盖 Part 1-4 全部用例；场景 H 移动端真实样式排版按 REVISION-001 标记为 not_run 交由 Codex 补验。"
+    },
+    {
+      "name": "合规评估与计划档案单元/集成测试 (TASK 07A-4B)",
+      "command": "node tests/ia-project-compliance.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check2-compliance-test.log",
+      "notes": "32 组测试全部全绿通过。"
+    },
+    {
+      "name": "合规阶段门禁核心求值器测试 (TASK 07A-4C2)",
+      "command": "node tests/ia-project-compliance-gate.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check3-gate-test.log",
+      "notes": "49 项门禁全流程与边界求值测试全绿。"
+    },
+    {
+      "name": "全量工程自动化测试 (npm test)",
+      "command": "npm test",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check4-npm-test.log",
+      "notes": "双端核算引擎、打分、T6、市场分析及 Python 核算测试全绿。"
+    },
+    {
+      "name": "黄金业务案例回归测试 (npm run test:golden)",
+      "command": "npm run test:golden",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check5-golden-test.log",
+      "notes": "黄金案例全量通过。"
+    },
+    {
+      "name": "双端对拍基准测试 (npm run test:sync)",
+      "command": "npm run test:sync",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check6-sync-test.log",
+      "notes": "JS vs Python 双端计算对拍一致。"
+    },
+    {
+      "name": "前端生产构建检查 (npm --prefix ozon-react run build)",
+      "command": "npm --prefix ozon-react run build",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check7-build.log",
+      "notes": "Vite 生产构建成功；构建前对 manifest.json 进行了副本备份，构建后使用预备份文件严格还原，零多余变更。"
+    },
+    {
+      "name": "Codex 真实组件运行时独立验收复测 (Revision 001)",
+      "command": "node docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/codex-runtime-review.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check8-codex-review.log",
+      "notes": "原 failed 的 F 项（A->B 切换）与 G 项（外部 Store 更新+父级 render）均从 failed 变为 passed，退出码 0，保留首次 Codex 证据。"
+    },
+    {
+      "name": "场景 H 移动端 (390px) 响应式带真实 CSS 布局测量",
+      "command": "手动/带样式浏览器测量",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/revision-001/check1-draft-test.log",
+      "notes": "静态 flex-wrap 与自适应栅格检查已就绪；依据 REVISION-001 规定，静态检查不等于真实浏览器渲染，按规范标为 not_run，待 Codex 独立验收环节在加载完整 CSS 的真实浏览器下补验。"
+    }
+  ]
+}

@@ -10,7 +10,14 @@ import PriceElasticityAnalysis from './PriceElasticityAnalysis'
 import ExpertStrategy from './ExpertStrategy'
 import { getBrandDistribution, getPriceDistribution, getConcentration } from '../utils/dataProcessor'
 
-export default function Dashboard({ data, kpis, screenshotMode = false }) {
+export default function Dashboard({
+  data,
+  kpis,
+  screenshotMode = false,
+  embedded = false,
+  initialSearchTerm = '',
+  searchContextKey = '',
+}) {
   const brandData = useMemo(() => data ? getBrandDistribution(data) : [], [data])
   const priceData = useMemo(() => data ? getPriceDistribution(data) : [], [data])
   const concentration = useMemo(() => data ? getConcentration(data) : null, [data])
@@ -39,14 +46,16 @@ export default function Dashboard({ data, kpis, screenshotMode = false }) {
         </div>
       )}
       
-      <div>
-        <h1 className="text-2xl font-bold text-morandi-text mb-2">
-          🇷🇺 俄罗斯电商吹风机市场深度分析
-        </h1>
-        <p className="text-morandi-text-light">
-          数据维度: {data.length} 条记录 × {Object.keys(data[0] || {}).length} 个字段
-        </p>
-      </div>
+      {!embedded && (
+        <div>
+          <h1 className="text-2xl font-bold text-morandi-text mb-2">
+            🇷🇺 俄罗斯电商吹风机市场深度分析
+          </h1>
+          <p className="text-morandi-text-light">
+            数据维度: {data.length} 条记录 × {Object.keys(data[0] || {}).length} 个字段
+          </p>
+        </div>
+      )}
 
       <section>
         <h2 className="section-title">📈 全局 KPI 看板</h2>
@@ -90,7 +99,11 @@ export default function Dashboard({ data, kpis, screenshotMode = false }) {
 
       <section>
         <h2 className="section-title">📋 数据透视表</h2>
-        <DataTable data={data} />
+        <DataTable
+          data={data}
+          initialSearchTerm={initialSearchTerm}
+          searchContextKey={searchContextKey}
+        />
       </section>
     </div>
   )

@@ -1,0 +1,58 @@
+{
+  "checks": [
+    {
+      "name": "draft",
+      "command": "node tests/ia-project-compliance-draft.test.mjs",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "compliance",
+      "command": "node tests/ia-project-compliance.test.mjs",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "gate",
+      "command": "node tests/ia-project-compliance-gate.test.mjs",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "npm",
+      "command": "npm.cmd test",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "golden",
+      "command": "npm.cmd run test:golden",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "sync",
+      "command": "npm.cmd run test:sync",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "build",
+      "command": "npm.cmd --prefix ozon-react run build",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "missing-dependency",
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "name": "fault-injection",
+      "exit_code": 1,
+      "passed": true
+    }
+  ],
+  "manifest_before": "fcbcf0f24fd9abfd6e91718ff58bb059e3ea9b023eee6f1314b3afc2bef88998",
+  "manifest_after": "fcbcf0f24fd9abfd6e91718ff58bb059e3ea9b023eee6f1314b3afc2bef88998"
+}

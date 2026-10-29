@@ -23,9 +23,82 @@ function Metric({ label, value, coverage }) {
   )
 }
 
+function formatCollectionDateBadge(brief, isCollectionDateUnknown) {
+  if (isCollectionDateUnknown) {
+    return '采集日期：未知（180 天新品窗口未评估）'
+  }
+  if (brief.provenance) {
+    const originLabel = brief.provenance.collectionDateOrigin === 'filename'
+      ? '文件名提取并确认'
+      : brief.provenance.collectionDateOrigin === 'user'
+        ? '人工输入确认'
+        : '已确认'
+    return `采集日期：${brief.snapshot}（${originLabel}）`
+  }
+  if (brief.kind === 'uploaded' && brief.snapshot) {
+    return `数据快照：${brief.snapshot}（历史存量记录，来源未核验）`
+  }
+  return brief.snapshot ? `数据快照：${brief.snapshot}` : null
+}
+
+function buildDisplayRussiaEntry(entry, isCollectionDateUnknown) {
+  if (!entry) return entry
+  const cohort = entry.cohortComparison
+  const cohortNotEvaluated = isCollectionDateUnknown
+    || cohort?.status === 'not_evaluated'
+    || cohort?.collectionDateKnown === false
+    || cohort?.fresh?.rows === null
+
+  const nextCohortComparison = cohort && cohortNotEvaluated
+    ? {
+      ...cohort,
+      fresh: {
+        ...cohort.fresh,
+        rows: cohort.fresh?.rows ?? '未评估',
+      },
+      mature: {
+        ...cohort.mature,
+        rows: cohort.mature?.rows ?? '未评估',
+      },
+    }
+    : cohort
+
+  const nextTypeOpportunities = Array.isArray(entry.typeOpportunities)
+    ? entry.typeOpportunities.map((item) => {
+      if (isCollectionDateUnknown || item.newnessStatus === 'not_evaluated' || item.freshRevenueShare === null) {
+        return {
+          ...item,
+          freshRevenueShare: '未评估 — ',
+        }
+      }
+      return item
+    })
+    : entry.typeOpportunities
+
+  return {
+    ...entry,
+    cohortComparison: nextCohortComparison,
+    typeOpportunities: nextTypeOpportunities,
+  }
+}
+
 export default function MarketDecisionBrief({ brief }) {
   if (!brief?.marketDimensions) return null
   const { demand, supply, marketing, fulfillment, newness } = brief.marketDimensions
+  const isCollectionDateUnknown = Boolean(
+    brief.snapshot === null
+    || newness?.status === 'not_evaluated'
+    || newness?.collectionDateKnown === false
+    || newness?.freshCount === null,
+  )
+  const collectionDateBadge = formatCollectionDateBadge(brief, isCollectionDateUnknown)
+  const quality = brief.quality || {}
+  const hasDuplicateIdentities = (quality.duplicateSku || 0) > 0 || (quality.duplicateUrl || 0) > 0
+  const duplicateWarningText = quality.duplicateIdentityWarning
+    || (hasDuplicateIdentities
+      ? '当前销售额与销量按导入行直接汇总（未自动去重或择一）；重复 SKU 或链接可能对应不同统计周期、店铺或规格变体，请复核原始周期/店铺/变体信息，不应直接断定为重复计入。'
+      : null)
+  const displayRussiaEntry = buildDisplayRussiaEntry(brief.russiaEntry, isCollectionDateUnknown)
 
   return (
     <section className="mb-5 border border-gray-200 bg-[#f6f8f9] p-4 sm:p-5" aria-label="市场判断与选品建议">
@@ -34,8 +107,29 @@ export default function MarketDecisionBrief({ brief }) {
           <p className="text-xs font-semibold text-blue-700">DECISION BRIEF</p>
           <h3 className="mt-1 text-xl font-semibold text-morandi-text">市场判断与首轮选品依据</h3>
         </div>
-        <p className="text-xs text-morandi-text-light">BSR 样本内部分析，不等同 Ozon 全市场规模</p>
+        <div className="flex flex-wrap items-center gap-2 text-xs text-morandi-text-light">
+          {collectionDateBadge ? (
+            <span className={`rounded border px-2 py-0.5 font-medium ${
+              isCollectionDateUnknown
+                ? 'border-amber-300 bg-amber-50 text-amber-900'
+                : brief.provenance
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                  : 'border-slate-200 bg-white text-slate-700'
+            }`}
+            >
+              {collectionDateBadge}
+            </span>
+          ) : null}
+          <span>BSR 样本内部分析，不等同 Ozon 全市场规模</span>
+        </div>
       </div>
+
+      {hasDuplicateIdentities && duplicateWarningText ? (
+        <div className="mt-4 border-l-4 border-amber-500 bg-amber-50 px-4 py-2.5 text-xs leading-5 text-amber-950" role="note" data-testid="decision-brief-duplicate-warning">
+          <strong className="font-semibold">重复标识复核提示：</strong>
+          <span className="ml-1">{duplicateWarningText}</span>
+        </div>
+      ) : null}
 
       {brief.executiveSummary?.length ? (
         <section className="mt-4 border-l-4 border-blue-700 bg-white px-4 py-4" aria-label="Executive Summary">
@@ -47,8 +141,15 @@ export default function MarketDecisionBrief({ brief }) {
       ) : null}
 
       <div className="mt-4 grid gap-px border border-gray-200 bg-gray-200 sm:grid-cols-2 xl:grid-cols-5">
-        <Metric label="180 天内新品" value={`${newness.freshCount} 个`} coverage={newness.listingDateCoverage} />
-        <Metric label="新品销售额占比" value={`${newness.freshRevenueShare}%`} />
+        <Metric
+          label="180 天内新品"
+          value={isCollectionDateUnknown ? '未评估（缺采集日）' : `${newness.freshCount} 个`}
+          coverage={newness.listingDateCoverage}
+        />
+        <Metric
+          label="新品销售额占比"
+          value={isCollectionDateUnknown ? '未评估' : `${newness.freshRevenueShare}%`}
+        />
         <Metric label="下单转化率中位数" value={formatRatio(demand.orderConversionMedian)} coverage={demand.orderConversionCoverage} />
         <Metric label="缺货天数中位数" value={Number.isFinite(supply.stockoutMedian) ? `${number.format(supply.stockoutMedian)} 天` : '—'} coverage={supply.stockoutCoverage} />
         <Metric label="签收率中位数" value={formatRatio(fulfillment.signRateMedian)} coverage={fulfillment.signRateCoverage} />
@@ -91,7 +192,11 @@ export default function MarketDecisionBrief({ brief }) {
           <h4 className="text-sm font-semibold text-morandi-text">上架 180 天内新品对标链接</h4>
           <p className="text-xs text-morandi-text-light">按样本销售额排序，须返回 Ozon 页面复核在售状态、评价和规格</p>
         </div>
-        {(brief.newProducts || []).length ? (
+        {isCollectionDateUnknown ? (
+          <p className="mt-3 border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" data-testid="new-products-not-evaluated">
+            采集日期未知（未评估 180 天新品窗口）：当前报告未提供有效采集日期，暂不计算商品已上架天数与 180 天新品列表，不代表新品数为 0。
+          </p>
+        ) : (brief.newProducts || []).length ? (
           <div className="mt-3 max-h-[480px] overflow-auto border border-gray-200 bg-white">
             <table className="w-full min-w-[900px] text-sm">
               <thead className="sticky top-0 bg-[#244b61] text-white">
@@ -117,7 +222,7 @@ export default function MarketDecisionBrief({ brief }) {
         )}
       </div>
 
-      <RussiaMarketEntry entry={brief.russiaEntry} />
+      <RussiaMarketEntry entry={displayRussiaEntry} />
     </section>
   )
 }

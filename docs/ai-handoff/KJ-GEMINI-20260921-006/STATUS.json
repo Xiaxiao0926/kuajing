@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20260921-006",
+  "status": "accepted_with_known_limitations",
+  "claimed_by": null,
+  "executor": "Gemini",
+  "acceptance_scope": "Local audit only; business_verdict remains issues_found",
+  "next_task_id": "KJ-GEMINI-20260922-001",
+  "previous_task_id": "KJ-GEMINI-20260921-005",
+  "previous_task_status": "accepted_with_known_limitations",
+  "task_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/REVISION-002.md",
+  "baseline_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/BASELINE.json",
+  "result_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/RESULT-REVISION-002.md",
+  "tests_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/tests-revision-002.json",
+  "review_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/REVIEW-REVISION-002.md",
+  "production_authorized": false,
+  "deployment_status": "not_deployed",
+  "public_verification_status": "not_performed",
+  "revision": 2,
+  "last_reviewed_result_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/RESULT-REVISION-002.md",
+  "original_task_file": "docs/ai-handoff/KJ-GEMINI-20260921-006/TASK.md",
+  "execution_scope": "Test and audit corrections only; production code remains read-only."
+}

@@ -1,0 +1,182 @@
+{
+  "scope": "Isolated real React with project CSS; component layout only, not WordPress shell; no production writes",
+  "cases": [
+    {
+      "name": "A: saving assessment preserves plan",
+      "passed": true
+    },
+    {
+      "name": "B: saving plan preserves assessment",
+      "passed": true
+    },
+    {
+      "name": "F: same component switching A to B",
+      "passed": true,
+      "notesAfterSwitch": "B ORIGINAL",
+      "savedB": "B ORIGINAL",
+      "expected": "B ORIGINAL"
+    },
+    {
+      "name": "G: external Store change plus parent rerender",
+      "passed": true,
+      "externalPlan": "EXTERNAL PLAN",
+      "conflictCount": 1
+    },
+    {
+      "name": "G2: reverting draft to old baseline preserves external update or explicit conflict",
+      "passed": true,
+      "revertedValue": "",
+      "revertedConflict": 1,
+      "storedAfterRevert": ""
+    },
+    {
+      "name": "G3: after matching incoming then editing again, baseline must be rebased or conflict reappear",
+      "passed": true,
+      "conflictAfterEditingAgain": 0,
+      "dirtyAfterMatching": 0,
+      "notes": "Accept either adopting matching incoming as baseline or keeping an explicit conflict when edits diverge again."
+    },
+    {
+      "name": "H: component with actual project CSS at 1440px",
+      "passed": true,
+      "dimensions": {
+        "width": 1440,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "controls": [
+          {
+            "text": "保存评估状态",
+            "left": 1293,
+            "right": 1411,
+            "width": 118
+          },
+          {
+            "text": "放弃草稿并载入外部数据",
+            "left": 1248,
+            "right": 1400,
+            "width": 152
+          },
+          {
+            "text": "未开始 (NOT_STARTED)评估中 (IN_",
+            "left": 29,
+            "right": 712,
+            "width": 683
+          },
+          {
+            "text": "未评定 低风险 (LOW)中风险 (MEDIUM)",
+            "left": 728,
+            "right": 1411,
+            "width": 683
+          },
+          {
+            "text": "待核对的未保存说明，保留输入。",
+            "left": 29,
+            "right": 1411,
+            "width": 1382
+          },
+          {
+            "text": "保存合规计划",
+            "left": 1293,
+            "right": 1411,
+            "width": 118
+          },
+          {
+            "text": "放弃草稿并载入外部数据",
+            "left": 1248,
+            "right": 1400,
+            "width": 152
+          },
+          {
+            "text": "",
+            "left": 29,
+            "right": 712,
+            "width": 683
+          },
+          {
+            "text": "待确认的方案，保留输入。",
+            "left": 728,
+            "right": 1411,
+            "width": 683
+          },
+          {
+            "text": "新增事项",
+            "left": 1319,
+            "right": 1411,
+            "width": 92
+          }
+        ]
+      }
+    },
+    {
+      "name": "H: component with actual project CSS at 390px",
+      "passed": true,
+      "dimensions": {
+        "width": 390,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "controls": [
+          {
+            "text": "保存评估状态",
+            "left": 29,
+            "right": 147,
+            "width": 118
+          },
+          {
+            "text": "放弃草稿并载入外部数据",
+            "left": 40,
+            "right": 192,
+            "width": 152
+          },
+          {
+            "text": "未开始 (NOT_STARTED)评估中 (IN_",
+            "left": 29,
+            "right": 361,
+            "width": 332
+          },
+          {
+            "text": "未评定 低风险 (LOW)中风险 (MEDIUM)",
+            "left": 29,
+            "right": 361,
+            "width": 332
+          },
+          {
+            "text": "待核对的未保存说明，保留输入。",
+            "left": 29,
+            "right": 361,
+            "width": 332
+          },
+          {
+            "text": "保存合规计划",
+            "left": 29,
+            "right": 147,
+            "width": 118
+          },
+          {
+            "text": "放弃草稿并载入外部数据",
+            "left": 40,
+            "right": 192,
+            "width": 152
+          },
+          {
+            "text": "",
+            "left": 29,
+            "right": 361,
+            "width": 332
+          },
+          {
+            "text": "待确认的方案，保留输入。",
+            "left": 29,
+            "right": 361,
+            "width": 332
+          },
+          {
+            "text": "新增事项",
+            "left": 302.328125,
+            "right": 361,
+            "width": 58.671875
+          }
+        ]
+      }
+    }
+  ]
+}

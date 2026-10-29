@@ -1,0 +1,29 @@
+{
+  "task_id": "KJ-GEMINI-20260921-006",
+  "review_verdict": "revision_required",
+  "checks": [
+    {
+      "command": "node docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/codex-review-run.mjs",
+      "mode": "normal",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "business_verdict": "issues_found_and_coverage_incomplete",
+      "evidence": "codex-normal/costing-isolation-results.json",
+      "errors": "codex-normal/observed-page-errors.json"
+    },
+    {
+      "command": "TEST_INJECT_CROSS_PROJECT_CORRUPTION=1 node docs/ai-handoff/KJ-GEMINI-20260921-006/evidence/codex-review-run.mjs",
+      "mode": "fault",
+      "exit_code": 1,
+      "verdict": "expected_cross_project_assertion_caught",
+      "evidence": "codex-fault/costing-isolation-results.json"
+    },
+    {
+      "name": "baseline_integrity",
+      "checked": 28,
+      "mismatches": []
+    }
+  ],
+  "production_authorized": false,
+  "deployment_status": "not_deployed"
+}

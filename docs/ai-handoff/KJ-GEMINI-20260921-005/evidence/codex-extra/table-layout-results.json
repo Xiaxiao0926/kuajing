@@ -1,0 +1,443 @@
+{
+  "timestamp": "2026-09-21T07:36:58.037Z",
+  "viewports": {
+    "360": {
+      "passed": true,
+      "metrics": {
+        "docClientWidth": 360,
+        "docScrollWidth": 360,
+        "containerClientWidth": 300,
+        "containerScrollWidth": 672,
+        "tableWidth": 672,
+        "badgeAlignments": [
+          {
+            "text": "技术法规",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "标签标识",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "成分准入",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          }
+        ]
+      },
+      "screenshot": "table-layout-360-normal.png"
+    },
+    "390": {
+      "passed": true,
+      "metrics": {
+        "docClientWidth": 390,
+        "docScrollWidth": 390,
+        "containerClientWidth": 330,
+        "containerScrollWidth": 672,
+        "tableWidth": 672,
+        "badgeAlignments": [
+          {
+            "text": "技术法规",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "标签标识",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "成分准入",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          }
+        ]
+      },
+      "screenshot": "table-layout-390-normal.png"
+    },
+    "768": {
+      "passed": true,
+      "metrics": {
+        "docClientWidth": 768,
+        "docScrollWidth": 768,
+        "containerClientWidth": 708,
+        "containerScrollWidth": 708,
+        "tableWidth": 708,
+        "badgeAlignments": [
+          {
+            "text": "技术法规",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "标签标识",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "成分准入",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          }
+        ]
+      },
+      "screenshot": "table-layout-768-normal.png"
+    },
+    "1440": {
+      "passed": true,
+      "metrics": {
+        "docClientWidth": 1440,
+        "docScrollWidth": 1440,
+        "containerClientWidth": 1380,
+        "containerScrollWidth": 1380,
+        "tableWidth": 1380,
+        "badgeAlignments": [
+          {
+            "text": "技术法规",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "高风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "待处理",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "标签标识",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "中风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "处理中",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "成分准入",
+            "width": 56,
+            "height": 20,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          },
+          {
+            "text": "低风险",
+            "width": 50,
+            "height": 18,
+            "isSingleLine": true
+          }
+        ]
+      },
+      "screenshot": "table-layout-1440-normal.png"
+    }
+  },
+  "states": {
+    "editing_390": {
+      "passed": true,
+      "screenshot": "table-layout-390-editing.png"
+    },
+    "deleting_390": {
+      "passed": true,
+      "screenshot": "table-layout-390-deleting.png"
+    },
+    "add_expanded_390": {
+      "passed": true,
+      "screenshot": "table-layout-390-add-expanded.png"
+    },
+    "empty_390": {
+      "passed": true,
+      "screenshot": "table-layout-390-empty.png"
+    },
+    "editing_1440": {
+      "passed": true,
+      "screenshot": "table-layout-1440-editing.png"
+    },
+    "deleting_1440": {
+      "passed": true,
+      "screenshot": "table-layout-1440-deleting.png"
+    },
+    "add_expanded_1440": {
+      "passed": true,
+      "screenshot": "table-layout-1440-add-expanded.png"
+    },
+    "empty_1440": {
+      "passed": true,
+      "screenshot": "table-layout-1440-empty.png"
+    }
+  },
+  "interactions": {
+    "editCancelPassed": true,
+    "editSavePassed": true,
+    "delCancelPassed": true,
+    "delConfirmPassed": true,
+    "addRequirementPassed": true,
+    "viewportSwitchDraftRetained": true,
+    "otherDraftsPreserved": true
+  },
+  "passed": true,
+  "codexSupplement": [
+    {
+      "width": 360,
+      "keyboard": "passed",
+      "editingAndDeleteActions": "passed",
+      "cancellationSnapshot": "passed",
+      "realWrappingMutationDetected": true
+    },
+    {
+      "width": 390,
+      "keyboard": "passed",
+      "editingAndDeleteActions": "passed",
+      "cancellationSnapshot": "passed",
+      "realWrappingMutationDetected": true
+    },
+    {
+      "width": 768,
+      "keyboard": "focus_only",
+      "editingAndDeleteActions": "passed",
+      "cancellationSnapshot": "passed",
+      "realWrappingMutationDetected": true
+    },
+    {
+      "width": 1440,
+      "keyboard": "focus_only",
+      "editingAndDeleteActions": "passed",
+      "cancellationSnapshot": "passed",
+      "realWrappingMutationDetected": true
+    }
+  ]
+}

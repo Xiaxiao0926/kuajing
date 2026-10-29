@@ -1,0 +1,69 @@
+{
+  "task_id": "KJ-GEMINI-20260920-001",
+  "checks": [
+    {
+      "name": "合规草稿保护与未保存拦截专项套件（验收场景 A~H 全覆盖）",
+      "command": "node tests/ia-project-compliance-draft.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "覆盖独立草稿状态、隔离保存、Requirement CRUD 不丢草稿、保存失败保留输入、规范化回填、项目切换隔离、外部更新冲突检测、响应式 390px 排版检查"
+    },
+    {
+      "name": "合规工作区与核心 Store 既有测试套件 (TASK 07A-4B)",
+      "command": "node tests/ia-project-compliance.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "32 项测试全部通过，验证合规 Profile/Requirement CRUD/领域边界无回归"
+    },
+    {
+      "name": "合规阶段门禁集成测试套件 (TASK 07A-4C2)",
+      "command": "node tests/ia-project-compliance-gate.test.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "49 项门禁测试全部通过，验证 compliance_pending / compliance_done / cert_plan 行为未受破坏"
+    },
+    {
+      "name": "全局多端引擎自动化测试",
+      "command": "npm test",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "React 运费/利润、Python 核算（44 项全部通过）、T4 评分黄金用例全部全绿"
+    },
+    {
+      "name": "黄金业务案例回归测试",
+      "command": "npm run test:golden",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "76 项黄金案例全部通过"
+    },
+    {
+      "name": "双端对拍校验",
+      "command": "npm run test:sync",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "16 个重量边界 + 2 个版本边界 + scoring_rules 一致性零差异全绿"
+    },
+    {
+      "name": "React 前端生产构建",
+      "command": "npm --prefix ozon-react run build",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "Vite 构建通过（8.28s，零语法/打包错误）；构建触发的 public/data/manifest.json 时间戳已按规则还原，确保业务数据零修改"
+    },
+    {
+      "name": "真实无头/桌面浏览器手动端到端交互验收",
+      "command": "Playwright / Chrome DevTools manual click",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence": "docs/ai-handoff/KJ-GEMINI-20260920-001/evidence/test_run.log",
+      "notes": "当前环境无图形桌面与预配置无头浏览器，根据 TASK.md §5 明确标注 not_run，由验收者 Codex 或人工补验"
+    }
+  ]
+}

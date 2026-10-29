@@ -1,0 +1,898 @@
+/**
+ * t6/ProjectCompliancePanel.jsx — SKU 项目合规评估与计划面板 (TASK 07A-4B)
+ * 
+ * 核心契约：
+ * 1. 纯 Project-scoped 合规工作区，仅接收 projectId 与 onChanged。
+ * 2. 严格遵循三层架构解耦：
+ *    - Layer A: Assessment（评估状态、合规风险等级、备忘）
+ *    - Layer B: Plan & Requirements（适用标准清单、认证计划方案、具体合规事项 CRUD）
+ *    - Layer C: Result（证书编号、豁免依据）暂未开放，展示待决边界
+ * 3. 严格遵循只读引用边界：
+ *    - 历史市场情报/快照证据（EAC/认证推测/风险）仅作只读参考，绝不复制为项目合规顶层状态
+ *    - 商品物理属性（nameZh/尺寸/重量）源自 project.product，只读引用，禁止跨域篡改
+ *    - 样品实测数据源自 SampleRecord，只读引用，不替代法规合规审查
+ * 4. 显式保存事务，无 auto-save；删除事项使用两步内联确认（禁止 window.confirm()）。
+ * 5. 附件能力受 P6 架构落差限制，面板明确提示暂未开放。
+ */
+
+import { useState, useMemo, useEffect } from 'react'
+import {
+  ShieldCheck,
+  FileText,
+  AlertTriangle,
+  CheckCircle2,
+  Plus,
+  Trash2,
+  Edit3,
+  Save,
+  Info,
+  X,
+  Package,
+  FlaskConical,
+} from 'lucide-react'
+import {
+  getProject,
+  getSnapshot,
+  getProjectSamples,
+  updateProjectCompliance,
+  createProjectComplianceRequirement,
+  updateProjectComplianceRequirement,
+  removeProjectComplianceRequirement,
+  COMPLIANCE_ASSESSMENT_STATUS,
+  COMPLIANCE_RISK_LEVELS,
+  COMPLIANCE_REQUIREMENT_CATEGORIES,
+  COMPLIANCE_REQUIREMENT_STATUS,
+  normalizeApplicableStandards,
+  isProjectComplianceEmpty,
+} from '../../utils/t6/t6Store.js'
+import Surface from '../ui/Surface.jsx'
+import Button from '../ui/Button.jsx'
+import Badge from '../ui/Badge.jsx'
+
+const ASSESSMENT_STATUS_ZH = {
+  NOT_STARTED: '未开始',
+  IN_ASSESSMENT: '评估中',
+  COMPLETED: '已评估',
+}
+
+const ASSESSMENT_STATUS_TONE = {
+  NOT_STARTED: 'neutral',
+  IN_ASSESSMENT: 'warning',
+  COMPLETED: 'success',
+}
+
+const RISK_LEVEL_ZH = {
+  '': '未评定',
+  LOW: '低风险',
+  MEDIUM: '中风险',
+  HIGH: '高风险',
+}
+
+const RISK_LEVEL_TONE = {
+  '': 'neutral',
+  LOW: 'success',
+  MEDIUM: 'warning',
+  HIGH: 'danger',
+}
+
+const REQ_CATEGORY_ZH = {
+  REGULATION: '技术法规',
+  INGREDIENT: '成分准入',
+  LABELING: '标签标识',
+  RISK: '合规风险',
+  CERTIFICATION: '认证方案',
+  OTHER: '其他事项',
+}
+
+const REQ_STATUS_ZH = {
+  PENDING: '待处理',
+  IN_PROGRESS: '处理中',
+  DONE: '已确认',
+}
+
+const REQ_STATUS_TONE = {
+  PENDING: 'neutral',
+  IN_PROGRESS: 'warning',
+  DONE: 'success',
+}
+
+export default function ProjectCompliancePanel({ projectId, onChanged }) {
+  const [tick, setTick] = useState(0)
+  const [notice, setNotice] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
+  const [isSavingAssessment, setIsSavingAssessment] = useState(false)
+  const [isSavingPlan, setIsSavingPlan] = useState(false)
+
+  // 1. 读取 Store 实体与外部领域只读上下文
+  const project = useMemo(() => (projectId ? getProject(projectId) : null), [projectId, tick])
+  const snapshot = useMemo(() => {
+    return project?.source?.creationSnapshotId ? getSnapshot(project.source.creationSnapshotId) : null
+  }, [project])
+  const samples = useMemo(() => (projectId ? getProjectSamples(projectId) : []), [projectId, tick])
+
+  const compliance = useMemo(() => project?.compliance || {}, [project])
+  const requirements = useMemo(() => (Array.isArray(compliance.requirements) ? compliance.requirements : []), [compliance])
+
+  // 2. 本地表单状态 — Layer A: Assessment
+  const [assessmentStatus, setAssessmentStatus] = useState(COMPLIANCE_ASSESSMENT_STATUS.NOT_STARTED)
+  const [riskLevel, setRiskLevel] = useState('')
+  const [notes, setNotes] = useState('')
+
+  // 3. 本地表单状态 — Layer B: Plan
+  const [standardsText, setStandardsText] = useState('')
+  const [certificationPlan, setCertificationPlan] = useState('')
+
+  // 4. 同步外部 project 数据至本地表单
+  useEffect(() => {
+    if (project) {
+      const comp = project.compliance || {}
+      setAssessmentStatus(comp.assessmentStatus || COMPLIANCE_ASSESSMENT_STATUS.NOT_STARTED)
+      setRiskLevel(comp.riskLevel || '')
+      setNotes(comp.notes || '')
+      setStandardsText(Array.isArray(comp.applicableStandards) ? comp.applicableStandards.join('\n') : '')
+      setCertificationPlan(comp.certificationPlan || '')
+    }
+  }, [project])
+
+  // 5. 事项 CRUD 本地交互状态
+  const [isAddingReq, setIsAddingReq] = useState(false)
+  const [newReq, setNewReq] = useState({
+    category: 'REGULATION',
+    name: '',
+    required: true,
+    status: 'PENDING',
+    risk: '',
+    desc: '',
+  })
+  const [editingReqId, setEditingReqId] = useState(null)
+  const [editingDraft, setEditingDraft] = useState(null)
+  const [deletingReqId, setDeletingReqId] = useState(null)
+
+  // 统计概览指标
+  const totalReqs = requirements.length
+  const completedReqs = requirements.filter((r) => r.status === COMPLIANCE_REQUIREMENT_STATUS.DONE).length
+  const requiredReqs = requirements.filter((r) => r.required).length
+
+  // 通知自动淡出
+  useEffect(() => {
+    if (!notice) return
+    const t = setTimeout(() => setNotice(''), 3000)
+    return () => clearTimeout(t)
+  }, [notice])
+
+  // 保存评估状态 (Layer A)
+  const handleSaveAssessment = () => {
+    setErrorMsg('')
+    setIsSavingAssessment(true)
+    try {
+      updateProjectCompliance(projectId, {
+        assessmentStatus,
+        riskLevel,
+        notes,
+      })
+      setNotice('合规评估已保存')
+      setTick((t) => t + 1)
+      onChanged?.('合规评估已更新')
+    } catch (err) {
+      setErrorMsg(err.message || '保存合规评估失败')
+    } finally {
+      setIsSavingAssessment(false)
+    }
+  }
+
+  // 保存合规计划 (Layer B)
+  const handleSavePlan = () => {
+    setErrorMsg('')
+    setIsSavingPlan(true)
+    try {
+      const standards = normalizeApplicableStandards(standardsText)
+      updateProjectCompliance(projectId, {
+        applicableStandards: standards,
+        certificationPlan,
+      })
+      setNotice('合规计划已保存')
+      setTick((t) => t + 1)
+      onChanged?.('合规计划已更新')
+    } catch (err) {
+      setErrorMsg(err.message || '保存合规计划失败')
+    } finally {
+      setIsSavingPlan(false)
+    }
+  }
+
+  // 添加事项
+  const handleCreateRequirement = () => {
+    setErrorMsg('')
+    if (!newReq.name.trim()) {
+      setErrorMsg('事项名称必填')
+      return
+    }
+    try {
+      createProjectComplianceRequirement(projectId, newReq)
+      setNewReq({
+        category: 'REGULATION',
+        name: '',
+        required: true,
+        status: 'PENDING',
+        risk: '',
+        desc: '',
+      })
+      setIsAddingReq(false)
+      setNotice('合规事项已添加')
+      setTick((t) => t + 1)
+      onChanged?.('合规事项已添加')
+    } catch (err) {
+      setErrorMsg(err.message || '创建合规事项失败')
+    }
+  }
+
+  // 开始编辑事项
+  const handleStartEdit = (req) => {
+    setEditingReqId(req.id)
+    setEditingDraft({
+      category: req.category,
+      name: req.name,
+      required: req.required,
+      status: req.status,
+      risk: req.risk || '',
+      desc: req.desc || '',
+    })
+    setDeletingReqId(null)
+  }
+
+  // 保存编辑事项
+  const handleSaveEdit = () => {
+    setErrorMsg('')
+    if (!editingDraft.name.trim()) {
+      setErrorMsg('事项名称必填')
+      return
+    }
+    try {
+      updateProjectComplianceRequirement(projectId, editingReqId, editingDraft)
+      setEditingReqId(null)
+      setEditingDraft(null)
+      setNotice('合规事项已更新')
+      setTick((t) => t + 1)
+      onChanged?.('合规事项已更新')
+    } catch (err) {
+      setErrorMsg(err.message || '更新合规事项失败')
+    }
+  }
+
+  // 删除事项（两步内联确认）
+  const handleConfirmDelete = (reqId) => {
+    setErrorMsg('')
+    try {
+      removeProjectComplianceRequirement(projectId, reqId)
+      setDeletingReqId(null)
+      setNotice('合规事项已删除')
+      setTick((t) => t + 1)
+      onChanged?.('合规事项已删除')
+    } catch (err) {
+      setErrorMsg(err.message || '删除合规事项失败')
+    }
+  }
+
+  if (!project) {
+    return (
+      <div className="py-8 text-center text-sm text-workspace-text-tertiary">
+        未找到项目数据（ID: {projectId}）
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* 顶部全局提示 */}
+      {notice && (
+        <div className="flex items-center gap-2 rounded-md border border-workspace-success/30 bg-workspace-success/10 px-3 py-2 text-xs text-workspace-success">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span>{notice}</span>
+        </div>
+      )}
+      {errorMsg && (
+        <div className="flex items-center gap-2 rounded-md border border-workspace-danger/30 bg-workspace-danger/10 px-3 py-2 text-xs text-workspace-danger">
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
+
+      {/* SECTION 1: 概览与状态指示看板 */}
+      <Surface className="p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-workspace-border pb-3">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5 text-workspace-primary" />
+            <span className="text-base font-semibold text-workspace-text">合规评估与计划工作区</span>
+            <span className="text-xs text-workspace-text-tertiary">({project.projectCode})</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge tone={ASSESSMENT_STATUS_TONE[assessmentStatus]}>
+              {ASSESSMENT_STATUS_ZH[assessmentStatus] || assessmentStatus}
+            </Badge>
+            <Badge tone={RISK_LEVEL_TONE[riskLevel]}>
+              {riskLevel ? `风险: ${RISK_LEVEL_ZH[riskLevel] || riskLevel}` : '未评定风险'}
+            </Badge>
+          </div>
+        </div>
+
+        {/* 统计指标卡片 */}
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="rounded-md border border-workspace-border bg-workspace-surface-subtle p-2.5">
+            <div className="text-[11px] text-workspace-text-tertiary">合规事项总数</div>
+            <div className="mt-1 text-lg font-semibold tabular-nums text-workspace-text">{totalReqs} 项</div>
+          </div>
+          <div className="rounded-md border border-workspace-border bg-workspace-surface-subtle p-2.5">
+            <div className="text-[11px] text-workspace-text-tertiary">已确认完成</div>
+            <div className="mt-1 text-lg font-semibold tabular-nums text-workspace-success">{completedReqs} 项</div>
+          </div>
+          <div className="rounded-md border border-workspace-border bg-workspace-surface-subtle p-2.5">
+            <div className="text-[11px] text-workspace-text-tertiary">强制必选事项</div>
+            <div className="mt-1 text-lg font-semibold tabular-nums text-workspace-warning">{requiredReqs} 项</div>
+          </div>
+          <div className="rounded-md border border-workspace-border bg-workspace-surface-subtle p-2.5">
+            <div className="text-[11px] text-workspace-text-tertiary">适用标准数</div>
+            <div className="mt-1 text-lg font-semibold tabular-nums text-workspace-primary">
+              {(compliance.applicableStandards || []).length} 项
+            </div>
+          </div>
+        </div>
+      </Surface>
+
+      {/* SECTION 2, 3, 4: 跨领域只读参考区 */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        {/* SECTION 2: 历史市场快照证据参考 (MI / Snapshot) */}
+        <Surface className="p-3 text-xs">
+          <div className="mb-2 flex items-center justify-between border-b border-workspace-border pb-1.5 font-medium text-workspace-text">
+            <span className="flex items-center gap-1.5">
+              <FileText className="h-4 w-4 text-workspace-text-secondary" />
+              历史市场证据（只读引用）
+            </span>
+            <span className="text-[11px] text-workspace-text-tertiary">不可变快照</span>
+          </div>
+          <div className="space-y-1.5 text-workspace-text-secondary">
+            <div>
+              <span className="text-workspace-text-tertiary">快照编号：</span>
+              <span className="font-mono text-[11px] text-workspace-text">{snapshot?.id || '无快照'}</span>
+            </div>
+            <div>
+              <span className="text-workspace-text-tertiary">EAC 市场推测：</span>
+              <span className="font-medium text-workspace-text">
+                {snapshot?.marketEvidence?.eacStatus || snapshot?.sourceInputs?.eacStatus || '未识别'}
+              </span>
+            </div>
+            <div>
+              <span className="text-workspace-text-tertiary">类目认证推测：</span>
+              <span className="text-workspace-text">
+                {snapshot?.marketEvidence?.certificationStatus || '未识别'}
+              </span>
+            </div>
+            {snapshot?.explanations?.risks?.length > 0 && (
+              <div className="mt-1 rounded bg-workspace-surface-subtle p-1.5 text-[11px]">
+                <div className="font-medium text-workspace-warning">立项风险提示：</div>
+                <div className="text-workspace-text-tertiary">{snapshot.explanations.risks.join('；')}</div>
+              </div>
+            )}
+            <div className="mt-2 text-[10px] text-workspace-text-tertiary">
+              * 提示：历史市场/法规推测仅作为立项当时只读证据参考，非本项目法定结论。
+            </div>
+          </div>
+        </Surface>
+
+        {/* SECTION 3: 商品物理事实参考 (Product Profile) */}
+        <Surface className="p-3 text-xs">
+          <div className="mb-2 flex items-center justify-between border-b border-workspace-border pb-1.5 font-medium text-workspace-text">
+            <span className="flex items-center gap-1.5">
+              <Package className="h-4 w-4 text-workspace-text-secondary" />
+              商品物理事实（只读引用）
+            </span>
+            <span className="text-[11px] text-workspace-text-tertiary">商品档案</span>
+          </div>
+          <div className="space-y-1.5 text-workspace-text-secondary">
+            <div>
+              <span className="text-workspace-text-tertiary">中文品名：</span>
+              <span className="font-medium text-workspace-text">{project.product?.nameZh || '未录入'}</span>
+            </div>
+            <div>
+              <span className="text-workspace-text-tertiary">类目节点：</span>
+              <span className="text-workspace-text">{project.product?.categoryLeaf || project.source?.category || '未录入'}</span>
+            </div>
+            <div>
+              <span className="text-workspace-text-tertiary">品牌 / 型号：</span>
+              <span className="text-workspace-text">{project.product?.brand || '无'} / {project.product?.model || '无'}</span>
+            </div>
+            <div>
+              <span className="text-workspace-text-tertiary">主要材质：</span>
+              <span className="text-workspace-text">{project.product?.material || '未指定'}</span>
+            </div>
+            <div>
+              <span className="text-workspace-text-tertiary">包装尺寸/毛重：</span>
+              <span className="text-workspace-text">
+                {project.product?.packageDimsCm
+                  ? `${project.product.packageDimsCm.length}×${project.product.packageDimsCm.width}×${project.product.packageDimsCm.height} cm`
+                  : '未填写'}
+                {' · '}
+                {project.product?.grossWeightG ? `${project.product.grossWeightG}g` : '未核实'}
+              </span>
+            </div>
+            <div className="mt-2 text-[10px] text-workspace-text-tertiary">
+              * 提示：商品物理规格源自商品档案，合规域只读引用，禁止跨域篡改。
+            </div>
+          </div>
+        </Surface>
+
+        {/* SECTION 4: 样品实测事实参考 (Sample Testing) */}
+        <Surface className="p-3 text-xs">
+          <div className="mb-2 flex items-center justify-between border-b border-workspace-border pb-1.5 font-medium text-workspace-text">
+            <span className="flex items-center gap-1.5">
+              <FlaskConical className="h-4 w-4 text-workspace-text-secondary" />
+              样品实测事实（只读引用）
+            </span>
+            <span className="text-[11px] text-workspace-text-tertiary">{samples.length} 条打样记录</span>
+          </div>
+          <div className="space-y-1.5 text-workspace-text-secondary">
+            {samples.length === 0 ? (
+              <div className="py-2 text-[11px] text-workspace-text-tertiary">暂无样品打样记录</div>
+            ) : (
+              samples.slice(0, 2).map((s) => (
+                <div key={s.id} className="rounded border border-workspace-border/60 bg-workspace-surface-subtle p-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-workspace-text">样品状态: {s.status}</span>
+                    <span className="text-[10px] text-workspace-text-tertiary">{new Date(s.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  {s.testResult && (
+                    <div className="mt-1 text-[11px] text-workspace-text-secondary">测试结论: {s.testResult}</div>
+                  )}
+                </div>
+              ))
+            )}
+            <div className="mt-2 text-[10px] text-workspace-text-tertiary">
+              * 提示：样品测试仅反映实物物理/功能检验，不替代法规合规审查。
+            </div>
+          </div>
+        </Surface>
+      </div>
+
+      {/* SECTION 5: Layer A — 合规评估状态与风险评定表单 */}
+      <Surface className="p-4">
+        <div className="mb-3 flex items-center justify-between border-b border-workspace-border pb-2">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-workspace-text">Layer A: 项目合规评估 (Assessment)</span>
+            <span className="text-xs text-workspace-text-tertiary">定义项目整体合规审查阶段与风险定位</span>
+          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleSaveAssessment}
+            disabled={isSavingAssessment}
+          >
+            <Save className="mr-1 h-3.5 w-3.5" />
+            {isSavingAssessment ? '保存中...' : '保存评估状态'}
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label className="mb-1 block text-xs font-medium text-workspace-text">
+              评估状态 (Assessment Status)
+            </label>
+            <select
+              value={assessmentStatus}
+              onChange={(e) => setAssessmentStatus(e.target.value)}
+              className="h-8 w-full rounded border border-workspace-border bg-workspace-surface px-2 text-xs text-workspace-text"
+            >
+              {Object.entries(ASSESSMENT_STATUS_ZH).map(([val, label]) => (
+                <option key={val} value={val}>
+                  {label} ({val})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-medium text-workspace-text">
+              合规风险等级 (Risk Level)
+            </label>
+            <select
+              value={riskLevel}
+              onChange={(e) => setRiskLevel(e.target.value)}
+              className="h-8 w-full rounded border border-workspace-border bg-workspace-surface px-2 text-xs text-workspace-text"
+            >
+              {COMPLIANCE_RISK_LEVELS.map((val) => (
+                <option key={val} value={val}>
+                  {RISK_LEVEL_ZH[val] || val} {val ? `(${val})` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="sm:col-span-2">
+            <label className="mb-1 block text-xs font-medium text-workspace-text">
+              整体评估备忘 / 审核意见 (Notes)
+            </label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="记录关于该 SKU 准入风险、成分安全、特殊监管政策或历史类似案由备忘..."
+              rows={2}
+              className="w-full rounded border border-workspace-border bg-workspace-surface p-2 text-xs text-workspace-text"
+            />
+          </div>
+        </div>
+      </Surface>
+
+      {/* SECTION 6: Layer B — 适用法规标准与认证计划表单 */}
+      <Surface className="p-4">
+        <div className="mb-3 flex items-center justify-between border-b border-workspace-border pb-2">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-workspace-text">Layer B: 适用标准与认证计划 (Plan)</span>
+            <span className="text-xs text-workspace-text-tertiary">规划项目适用的技术法规与准入方案</span>
+          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleSavePlan}
+            disabled={isSavingPlan}
+          >
+            <Save className="mr-1 h-3.5 w-3.5" />
+            {isSavingPlan ? '保存中...' : '保存合规计划'}
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <div className="mb-1 flex items-center justify-between">
+              <label className="text-xs font-medium text-workspace-text">
+                适用法规与标准 (Applicable Standards)
+              </label>
+              <span className="text-[11px] text-workspace-text-tertiary">每行一个法规代号</span>
+            </div>
+            <textarea
+              value={standardsText}
+              onChange={(e) => setStandardsText(e.target.value)}
+              placeholder="例如：&#10;TR CU 004/2011 (低电压安全)&#10;TR CU 020/2011 (电磁兼容)&#10;EAC 豁免目录"
+              rows={4}
+              className="font-mono w-full rounded border border-workspace-border bg-workspace-surface p-2 text-xs text-workspace-text"
+            />
+            <div className="mt-1 text-[10px] text-workspace-text-tertiary">
+              代表项目团队判断适用的技术法规清单，保存时自动去重并去除空行。
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-medium text-workspace-text">
+              认证处理计划与路径 (Certification Plan)
+            </label>
+            <textarea
+              value={certificationPlan}
+              onChange={(e) => setCertificationPlan(e.target.value)}
+              placeholder="明确认证路径方案，例如：&#10;- 无需办理 EAC 证书，由代工厂提供俄语说明书与符合性说明，申请豁免函；&#10;- 或需办理 EAC Declaration (DoC)，由代工厂提供测试报告..."
+              rows={4}
+              className="w-full rounded border border-workspace-border bg-workspace-surface p-2 text-xs text-workspace-text"
+            />
+            <div className="mt-1 text-[10px] text-workspace-text-tertiary">
+              * 核心定义：认证计划关注“处理路径与准备规划”，绝非证书拿到后的最终结果号。
+            </div>
+          </div>
+        </div>
+      </Surface>
+
+      {/* SECTION 7: Layer B — 具体合规事项清单与 CRUD (Requirements) */}
+      <Surface className="p-4">
+        <div className="mb-3 flex items-center justify-between border-b border-workspace-border pb-2">
+          <div>
+            <span className="font-semibold text-workspace-text">具体合规核验事项 (Requirements)</span>
+            <span className="ml-2 text-xs text-workspace-text-tertiary">
+              包含法规、成分、标签、检测与准入要项等核查清单
+            </span>
+          </div>
+          {!isAddingReq && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsAddingReq(true)}
+            >
+              <Plus className="mr-1 h-3.5 w-3.5" />
+              新增事项
+            </Button>
+          )}
+        </div>
+
+        {/* 新增事项表单 */}
+        {isAddingReq && (
+          <div className="mb-4 rounded-lg border border-workspace-primary/40 bg-workspace-surface-subtle p-3 text-xs">
+            <div className="mb-2 flex items-center justify-between font-medium text-workspace-text">
+              <span>新建合规核验事项</span>
+              <button
+                onClick={() => setIsAddingReq(false)}
+                className="text-workspace-text-tertiary hover:text-workspace-text"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div>
+                <label className="mb-1 block font-medium text-workspace-text">事项类别</label>
+                <select
+                  value={newReq.category}
+                  onChange={(e) => setNewReq({ ...newReq, category: e.target.value })}
+                  className="h-8 w-full rounded border border-workspace-border bg-workspace-surface px-2 text-xs"
+                >
+                  {COMPLIANCE_REQUIREMENT_CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {REQ_CATEGORY_ZH[c] || c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="mb-1 block font-medium text-workspace-text">事项名称 *</label>
+                <input
+                  value={newReq.name}
+                  onChange={(e) => setNewReq({ ...newReq, name: e.target.value })}
+                  placeholder="例如：低电压安全核验 / 俄语警示标识 / 禁用化学成分排查"
+                  className="h-8 w-full rounded border border-workspace-border bg-workspace-surface px-2 text-xs text-workspace-text"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block font-medium text-workspace-text">处理状态</label>
+                <select
+                  value={newReq.status}
+                  onChange={(e) => setNewReq({ ...newReq, status: e.target.value })}
+                  className="h-8 w-full rounded border border-workspace-border bg-workspace-surface px-2 text-xs"
+                >
+                  {Object.entries(REQ_STATUS_ZH).map(([val, label]) => (
+                    <option key={val} value={val}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block font-medium text-workspace-text">风险评定</label>
+                <select
+                  value={newReq.risk}
+                  onChange={(e) => setNewReq({ ...newReq, risk: e.target.value })}
+                  className="h-8 w-full rounded border border-workspace-border bg-workspace-surface px-2 text-xs"
+                >
+                  {COMPLIANCE_RISK_LEVELS.map((val) => (
+                    <option key={val} value={val}>
+                      {RISK_LEVEL_ZH[val] || val}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center pt-5">
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={newReq.required}
+                    onChange={(e) => setNewReq({ ...newReq, required: e.target.checked })}
+                    className="rounded border-workspace-border"
+                  />
+                  <span className="text-xs font-medium text-workspace-text">必须完成项 (Required)</span>
+                </label>
+              </div>
+              <div className="sm:col-span-3">
+                <label className="mb-1 block font-medium text-workspace-text">事项说明 (可选)</label>
+                <input
+                  value={newReq.desc}
+                  onChange={(e) => setNewReq({ ...newReq, desc: e.target.value })}
+                  placeholder="核查要求、关注要点或验收依据..."
+                  className="h-8 w-full rounded border border-workspace-border bg-workspace-surface px-2 text-xs text-workspace-text"
+                />
+              </div>
+            </div>
+            <div className="mt-3 flex justify-end gap-2">
+              <Button size="sm" variant="ghost" onClick={() => setIsAddingReq(false)}>
+                取消
+              </Button>
+              <Button size="sm" variant="primary" onClick={handleCreateRequirement}>
+                确认添加
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* 事项列表 */}
+        {requirements.length === 0 ? (
+          <div className="py-6 text-center text-xs text-workspace-text-tertiary">
+            暂无合规核验事项。点击右上角「新增事项」添加法规、标签或成分核验要项。
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-workspace-border bg-workspace-surface-subtle text-workspace-text-secondary">
+                  <th className="px-3 py-2 font-medium">类别</th>
+                  <th className="px-3 py-2 font-medium">事项名称</th>
+                  <th className="px-3 py-2 font-medium">性质</th>
+                  <th className="px-3 py-2 font-medium">风险</th>
+                  <th className="px-3 py-2 font-medium">状态</th>
+                  <th className="px-3 py-2 font-medium">说明</th>
+                  <th className="px-3 py-2 text-right font-medium">操作</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-workspace-border">
+                {requirements.map((req) => {
+                  const isEditing = editingReqId === req.id
+                  const isDeleting = deletingReqId === req.id
+
+                  if (isEditing) {
+                    return (
+                      <tr key={req.id} className="bg-workspace-primary/5">
+                        <td className="px-3 py-2">
+                          <select
+                            value={editingDraft.category}
+                            onChange={(e) => setEditingDraft({ ...editingDraft, category: e.target.value })}
+                            className="h-7 rounded border border-workspace-border bg-workspace-surface px-1 text-xs"
+                          >
+                            {COMPLIANCE_REQUIREMENT_CATEGORIES.map((c) => (
+                              <option key={c} value={c}>{REQ_CATEGORY_ZH[c] || c}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="px-3 py-2">
+                          <input
+                            value={editingDraft.name}
+                            onChange={(e) => setEditingDraft({ ...editingDraft, name: e.target.value })}
+                            className="h-7 w-full rounded border border-workspace-border bg-workspace-surface px-1.5 text-xs"
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <label className="flex items-center gap-1 text-[11px]">
+                            <input
+                              type="checkbox"
+                              checked={editingDraft.required}
+                              onChange={(e) => setEditingDraft({ ...editingDraft, required: e.target.checked })}
+                            />
+                            必选
+                          </label>
+                        </td>
+                        <td className="px-3 py-2">
+                          <select
+                            value={editingDraft.risk}
+                            onChange={(e) => setEditingDraft({ ...editingDraft, risk: e.target.value })}
+                            className="h-7 rounded border border-workspace-border bg-workspace-surface px-1 text-xs"
+                          >
+                            {COMPLIANCE_RISK_LEVELS.map((val) => (
+                              <option key={val} value={val}>{RISK_LEVEL_ZH[val] || val}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="px-3 py-2">
+                          <select
+                            value={editingDraft.status}
+                            onChange={(e) => setEditingDraft({ ...editingDraft, status: e.target.value })}
+                            className="h-7 rounded border border-workspace-border bg-workspace-surface px-1 text-xs"
+                          >
+                            {Object.entries(REQ_STATUS_ZH).map(([val, label]) => (
+                              <option key={val} value={val}>{label}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="px-3 py-2">
+                          <input
+                            value={editingDraft.desc}
+                            onChange={(e) => setEditingDraft({ ...editingDraft, desc: e.target.value })}
+                            className="h-7 w-full rounded border border-workspace-border bg-workspace-surface px-1.5 text-xs"
+                          />
+                        </td>
+                        <td className="px-3 py-2 text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <Button size="sm" variant="ghost" onClick={() => setEditingReqId(null)}>
+                              取消
+                            </Button>
+                            <Button size="sm" variant="primary" onClick={handleSaveEdit}>
+                              保存
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  }
+
+                  return (
+                    <tr key={req.id} className="hover:bg-workspace-surface-subtle">
+                      <td className="px-3 py-2 text-workspace-text-secondary">
+                        <span className="rounded bg-workspace-surface-subtle px-1.5 py-0.5 text-[11px] font-medium text-workspace-text">
+                          {REQ_CATEGORY_ZH[req.category] || req.category}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 font-medium text-workspace-text">
+                        {req.name}
+                      </td>
+                      <td className="px-3 py-2">
+                        {req.required ? (
+                          <span className="text-[11px] font-medium text-workspace-warning">必选</span>
+                        ) : (
+                          <span className="text-[11px] text-workspace-text-tertiary">可选</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2">
+                        {req.risk ? (
+                          <Badge tone={RISK_LEVEL_TONE[req.risk]}>
+                            {RISK_LEVEL_ZH[req.risk] || req.risk}
+                          </Badge>
+                        ) : (
+                          <span className="text-workspace-text-tertiary">—</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2">
+                        <Badge tone={REQ_STATUS_TONE[req.status]}>
+                          {REQ_STATUS_ZH[req.status] || req.status}
+                        </Badge>
+                      </td>
+                      <td className="max-w-[200px] truncate px-3 py-2 text-workspace-text-secondary" title={req.desc}>
+                        {req.desc || '—'}
+                      </td>
+                      <td className="px-3 py-2 text-right">
+                        {isDeleting ? (
+                          <div className="flex items-center justify-end gap-1.5">
+                            <span className="text-[11px] font-medium text-workspace-danger">确认删除?</span>
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              onClick={() => handleConfirmDelete(req.id)}
+                            >
+                              删除
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => setDeletingReqId(null)}
+                            >
+                              取消
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              onClick={() => handleStartEdit(req)}
+                              className="rounded p-1 text-workspace-text-tertiary hover:bg-workspace-surface hover:text-workspace-text"
+                              title="编辑事项"
+                            >
+                              <Edit3 className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setDeletingReqId(req.id)
+                                setEditingReqId(null)
+                              }}
+                              className="rounded p-1 text-workspace-text-tertiary hover:bg-workspace-surface hover:text-workspace-danger"
+                              title="删除事项"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Surface>
+
+      {/* SECTION 8: 架构落差与未开放边界提示 */}
+      <Surface className="border border-workspace-border-strong/60 bg-workspace-surface-subtle/50 p-3 text-xs">
+        <div className="flex items-start gap-2 text-workspace-text-secondary">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-workspace-text-tertiary" />
+          <div className="space-y-1 text-[11px]">
+            <div className="font-medium text-workspace-text">合规架构边界说明 (V1 冻结契约)</div>
+            <div>
+              1. <b>Layer C 证书结果层暂未开放</b>：官方证书编号 (certificateNumber)、生效期及发证机构等字段处于待决状态，待认证法定契约成熟后接入。
+            </div>
+            <div>
+              2. <b>附件与原件存储能力</b>：受 T6/P6 架构落差限制，系统当前暂无项目级独立文件实体库，相关资质原件请在离线档案保管。
+            </div>
+            <div>
+              3. <b>Stage Gate 门禁联动</b>：门禁条件（compliance_pending / compliance_done / cert_plan）将在独立的 TASK 07A-4C 统一决策与对接，本阶段不阻断流转。
+            </div>
+          </div>
+        </div>
+      </Surface>
+    </div>
+  )
+}

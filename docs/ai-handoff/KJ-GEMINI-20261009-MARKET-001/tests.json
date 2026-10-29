@@ -1,0 +1,97 @@
+{
+  "taskId": "KJ-GEMINI-20261009-MARKET-001",
+  "taskTitle": "市场分析面板数据正确性修正 (Revision 003)",
+  "executedBy": "Gemini",
+  "executedAt": "2026-10-12T11:25:00+08:00",
+  "revision": "003",
+  "summary": {
+    "totalSuites": 10,
+    "allPassed": true,
+    "exitCodeAllZero": true
+  },
+  "suites": [
+    {
+      "name": "MarketResearch Real Component Embedded Isolation (Revision 002 - Work Package 2)",
+      "command": "node tests/market-embedded-isolation.test.mjs",
+      "exitCode": 0,
+      "passed": true,
+      "testStructure": {
+        "staticContractChecks": 7,
+        "realComponentEmbeddedChecks": 6,
+        "realComponentStandaloneChecks": 7,
+        "totalAssertions": 20
+      },
+      "notes": "真实组件与拦截请求测试：完全模拟 state 持久化响应与上传请求完整成功响应（返回 file 元数据）；直接断言文件输入的 onChange 存在且为函数；触发后断言 uploadServerFile 正常调用、IndexedDB pending-uploads 队列已确认清空 (0 条残留排队任务，证明上传完成并确认，绝非失败后的队列重试)、本地 IndexedDB files 表持久化成功且 mr-active-file 记录正确；全局捕获并严格断言 0 次 'Server persistence deferred' 警告、0 次 'Server upload skipped' 警告、0 次 'response.json is not a function'。embedded=true 嵌入模式零写入断言持续 100% 通过。"
+    },
+    {
+      "name": "Price Bands Sales-Weighted Quantiles (Revision 001 - Work Package 3)",
+      "command": "node tests/price-weighted-quantiles.test.mjs",
+      "exitCode": 0,
+      "passed": true,
+      "scenariosCount": 8,
+      "notes": "验证核心反例 (10元销量1000 vs 100元销量1 -> 加权 P50 必为 10)；阶梯分位；同价一致性；单品样本；异常销量安全过滤；A/AB 纯度口径联动；规格标准化可比价；向下兼容性；第8节端到端链路验证：extractQty 保守解析将负数 (-5 -> 0) 与区间 (5-10 -> 0) 彻底归零排除出权重，千位分隔符 (1 000, 2,000) 正常识别，全无效销量行安全返回 insufficient_data。"
+    },
+    {
+      "name": "Candidate Identity & Legacy Backfill (Revision 003 - Work Package 1)",
+      "command": "node tests/candidate-identity-backfill.test.mjs",
+      "exitCode": 0,
+      "passed": true,
+      "scenariosCount": 13,
+      "notes": "验证 13 项候选身份防护与隔离反例：无 UID 阻断；同 UID 幂等性；同名不同类目隔离；信息不充分防误伤；冲突 UID 拦截；合法历史候选回填；场景 7：旧来源 ID 101 与新来源 ID 999 隔离；场景 8：STEP 2 稳定 Product ID 命中但 UID 冲突时阻断；场景 9 (STEP 2)：稳定 Product ID 相同但旧记录缺少 UID/来源字段，且名称/类目不一致，阻断推流，旧记录 100% 字节级不变，0 新增审计/决策日志；场景 10 (STEP 4)：稳定 Product ID 相同且旧记录 source_system=OTHER，阻断推流，严禁返回 created=false 并伪报同步成功，旧记录 100% 字节级不变，0 审计日志；场景 11 (STEP 1)：同 UID 但旧记录显式属于 OTHER 来源系统且类目/名称冲突，阻断推流，严禁覆盖旧来源与证据，旧记录 100% 字节级不变，0 审计日志；场景 12：合法跨批次重复推流验证 (同 UID/来源/类目/名称，不同批次与排名正常刷新证据，记录 1 条审计日志)；新增场景 13 (STEP 2 隔离反例，REVISION-003 Fail-Close)：旧候选 sourceProductId=wb-niche-u-1，名称‘手套’，类目‘劳保’，缺少所有来源字段 (source_niche_uid, source_niche_id, source_system)；新利基 uid=u-1，id=999，同名同类目。验证阻断推流并抛出异常，断言旧记录 100% 字节级不变、候选数保持 1 条不变、零新增成功审计日志与决策日志。"
+    },
+    {
+      "name": "IA Procurement Identity & Batch Source (Revision 001 - Work Package 4)",
+      "command": "node tests/ia-procurement-identity.test.mjs",
+      "exitCode": 0,
+      "passed": true,
+      "testsCount": 15,
+      "notes": "测试 1-13 验证采购报价身份解析、UID 优先级、更名安全与防碰撞；测试 14 验证 ManualProcurementWorkbench 与 MarketIntelligenceApp 批次 runId 显式传递与推流异常隔离契约；测试 15 验证旧批次无 UID 阻断、UI 错误提示呈现、T6 零写入、抽屉保持打开且草稿输入 100% 完整保留。"
+    },
+    {
+      "name": "Market Analysis Purity Pipeline",
+      "command": "npm run test:market",
+      "exitCode": 0,
+      "passed": true,
+      "testsCount": 130,
+      "notes": "规格解析器 36 项 + 竞品纯度流水线 45 项 + 端到端测试 49 项全部全绿通过。"
+    },
+    {
+      "name": "T6 Lifecycle & Gate & Scenarios",
+      "command": "npm run test:t6",
+      "exitCode": 0,
+      "passed": true,
+      "testsCount": 170,
+      "notes": "WB 成本场景 53 项 + T6 UI 契约 26 项 + T7-1 供应商与供应链 43 项 + 工厂试跑候选 8 项及基础 Store/Gate 测试全部通过。"
+    },
+    {
+      "name": "Repository Full Regression Suite",
+      "command": "npm test",
+      "exitCode": 0,
+      "passed": true,
+      "testsCount": 129,
+      "notes": "包含 FBP 29 项 + 黄金评分案例 56 项 + Python 双端核算 44 项全部全绿通过。"
+    },
+    {
+      "name": "Golden Business Cases",
+      "command": "npm run test:golden",
+      "exitCode": 0,
+      "passed": true,
+      "testsCount": 76,
+      "notes": "配置同步 + 76 项黄金业务案例 0 失败通过。"
+    },
+    {
+      "name": "Cross-Platform Parity Verification",
+      "command": "npm run test:sync",
+      "exitCode": 0,
+      "passed": true,
+      "notes": "双端对拍零差异 (16 个重量边界 + 2 个版本边界 + scoring_rules 一致性)。"
+    },
+    {
+      "name": "Vite Production Build Verification",
+      "command": "npm run build --prefix ozon-react",
+      "exitCode": 0,
+      "passed": true,
+      "notes": "Vite 5.4.21 构建成功，3234 个模块无语法错误，无 JSX 解析失败（本地构建验证，保持 not_deployed）。"
+    }
+  ]
+}

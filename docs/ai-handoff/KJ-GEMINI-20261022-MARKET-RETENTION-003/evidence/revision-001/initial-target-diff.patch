@@ -1,0 +1,107 @@
+diff --git a/ozon-react/src/components/reports/UploadedMarketReport.jsx b/ozon-react/src/components/reports/UploadedMarketReport.jsx
+index 2e76f22..1c90452 100644
+--- a/ozon-react/src/components/reports/UploadedMarketReport.jsx
++++ b/ozon-react/src/components/reports/UploadedMarketReport.jsx
+@@ -16,6 +16,33 @@ function formatCount(value) {
+   return number.format(value)
+ }
+ 
++function formatDisplayTimestamp(isoString) {
++  if (!isoString) return '未知时间'
++  const raw = String(isoString).trim()
++  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/u.test(raw)) {
++    return `${raw.slice(0, 10)} ${raw.slice(11, 19)} UTC`
++  }
++  return raw
++}
++
++function formatHeaderSnapshotLabel(report) {
++  const isUnknown = report.snapshot === null
++    || report.quality?.collectionDateKnown === false
++    || report.marketDimensions?.newness?.status === 'not_evaluated'
++  if (isUnknown) {
++    return '采集日期 未知（未评估 180 天新品窗口）'
++  }
++  if (report.provenance) {
++    const originText = report.provenance.collectionDateOrigin === 'filename'
++      ? '文件名提取确认'
++      : report.provenance.collectionDateOrigin === 'user'
++        ? '人工输入确认'
++        : '已确认'
++    return `采集日期 ${report.snapshot}（${originText}）`
++  }
++  return `数据快照 ${report.snapshot}（历史记录，日期来源未核验）`
++}
++
+ function BarList({ items, valueKey = 'revenue', suffix = '₽' }) {
+   const max = Math.max(...items.map((item) => Number(item[valueKey]) || 0), 1)
+   return (
+@@ -40,6 +67,13 @@ function BarList({ items, valueKey = 'revenue', suffix = '₽' }) {
+ export default function UploadedMarketReport({ report }) {
+   const operations = report.operations || {}
+   const quality = report.quality || {}
++  const provenance = report.provenance || null
++  const originalFileName = provenance?.originalFileName || report.sourceFile
++  const hasDuplicates = (quality.duplicateSku || 0) > 0 || (quality.duplicateUrl || 0) > 0
++  const duplicateWarning = quality.duplicateIdentityWarning
++    || (hasDuplicates
++      ? '当前销售额与销量按导入行直接汇总（未自动去重或择一）；重复 SKU 或链接可能对应不同统计周期、店铺或规格变体，请复核原始周期/店铺/变体信息，不应直接断定为重复计入。'
++      : null)
+ 
+   return (
+     <article className="overflow-hidden border border-gray-200 bg-white">
+@@ -49,8 +83,20 @@ export default function UploadedMarketReport({ report }) {
+         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-200">
+           以导入的商品级记录观察类目规模、价格结构、品牌和卖家集中度。销售额为主排序口径，不将榜单样本外推为 Ozon 全站市场规模。
+         </p>
+-        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-300">
+-          <span>数据快照 {report.snapshot}</span><span>{report.sample}</span><span>源文件 {report.sourceFile}</span>
++        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-300">
++          <span data-testid="uploaded-report-snapshot-meta">{formatHeaderSnapshotLabel(report)}</span>
++          <span>{report.sample}</span>
++          <span data-testid="uploaded-report-source-file">源文件 {originalFileName}</span>
++          {provenance?.sourceSha256 ? (
++            <span data-testid="uploaded-report-source-sha">
++              源指纹 {provenance.sourceSha256.slice(0, 12)}…{report.sourceBackup ? `（备份 ${report.sourceBackup}）` : ''}
++            </span>
++          ) : report.sourceBackup ? (
++            <span>历史源备份名 {report.sourceBackup}（来源字节未核验）</span>
++          ) : null}
++          <span data-testid="uploaded-report-published-meta">
++            导入/发布 {formatDisplayTimestamp(provenance?.importedAt || report.publishedAt)} · 版本 {report.id}
++          </span>
+         </div>
+       </header>
+ 
+@@ -72,8 +118,15 @@ export default function UploadedMarketReport({ report }) {
+         </div>
+ 
+         <div className="mt-5 border-l-4 border-amber-500 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+-          <strong>{quality.level}</strong>
+-          <span className="ml-2 text-amber-900">销量缺失 {quality.missingSales} 条，均价缺失 {quality.missingAveragePrice} 条，SKU 重复 {quality.duplicateSku} 条，产品链接重复 {quality.duplicateUrl} 条。</span>
++          <div>
++            <strong>{quality.level}</strong>
++            <span className="ml-2 text-amber-900">销量缺失 {quality.missingSales} 条，均价缺失 {quality.missingAveragePrice} 条，SKU 重复 {quality.duplicateSku} 条，产品链接重复 {quality.duplicateUrl} 条。</span>
++          </div>
++          {hasDuplicates && duplicateWarning ? (
++            <p className="mt-1.5 border-t border-amber-200/80 pt-1.5 text-xs leading-5 text-amber-900" data-testid="uploaded-report-duplicate-warning">
++              {duplicateWarning}
++            </p>
++          ) : null}
+         </div>
+ 
+         <section className="mt-8">
+diff --git a/package.json b/package.json
+index 682140e..16d154d 100644
+--- a/package.json
++++ b/package.json
+@@ -8,7 +8,8 @@
+     "sync:config": "node scripts/sync-config.js",
+     "generate:recent-reports": "node scripts/generate-recent-raw-ozon-reports.mjs",
+     "test": "node scripts/sync-config.js && node --experimental-vm-modules ozon-react/src/utils/wbEngine.test.mjs && node ozon-react/src/utils/exchangeRate.test.mjs && npm run test:scoring && npm run test:t6 && npm run test:market && npm run test:fbp && npm run test:scoring-golden && npm run test:python",
+-    "test:market": "node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/specParser.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/purityFilter.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/pipeline.e2e.test.mjs && node ozon-react/src/utils/marketReportAnalysis.test.mjs",
++    "test:market": "node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/specParser.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/purityFilter.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/pipeline.e2e.test.mjs && node ozon-react/src/utils/marketReportAnalysis.test.mjs && npm run test:market-retention",
++    "test:market-retention": "node tests/market-report-retention.test.mjs",
+     "test:fbp": "node --experimental-vm-modules ozon-react/src/utils/ozonFbpEngine.test.mjs",
+     "test:scoring": "node --experimental-vm-modules ozon-react/src/utils/scoring/scoringEngine.test.mjs && node --experimental-vm-modules ozon-react/src/utils/scoring/monotonicity.test.mjs && node --experimental-vm-modules ozon-react/src/utils/scoring/scoringDataAdapter.test.mjs && node --experimental-vm-modules ozon-react/src/utils/scoring/scoringExport.test.mjs",
+     "test:t6": "node --experimental-vm-modules ozon-react/src/utils/t6/t6Store.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/gateEngine.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/costScenario.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/wbScenario.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/t6UiContract.test.mjs && node --experimental-vm-modules ozon-react/src/utils/t6/supplier.test.mjs && node ozon-react/src/data/factoryTrialCandidates.test.mjs",

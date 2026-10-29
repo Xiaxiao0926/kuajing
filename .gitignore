@@ -54,3 +54,4 @@ deploy/
 # 审计：报告入库，仅原始/临时产物忽略
 _audit/raw/
 _audit/tmp/
+.workbuddy/

@@ -1,4 +1,17 @@
 import { buildRussiaMarketContext } from './marketReportRussiaContext.js'
+import {
+  computeUtcAgeDays,
+  extractValidFilenameDate,
+  isValidCalendarDate,
+  parseStrictCalendarDateUtc,
+  resolveCollectionDateOption,
+} from './marketReport/retentionContract.js'
+
+export {
+  extractValidFilenameDate,
+  isValidCalendarDate,
+  parseStrictCalendarDateUtc,
+}
 
 const FIELD_ALIASES = {
   image: ['产品图片'],
@@ -228,6 +241,29 @@ function concentrationLabel(value) {
   return '高度集中'
 }
 
+function isPlausibleListingDate(listingDate) {
+  if (!(listingDate instanceof Date) || Number.isNaN(listingDate.getTime())) return false
+  const year = listingDate.getUTCFullYear()
+  return year >= 2000 && year <= 2100
+}
+
+function unEvaluatedCohortSummary() {
+  return {
+    status: 'not_evaluated',
+    rows: null,
+    revenue: null,
+    sales: null,
+    revenuePerSku: null,
+    salesPerSku: null,
+    avgPriceMedian: null,
+    orderConversionMedian: null,
+    cartAddMedian: null,
+    stockoutMedian: null,
+    adRoiMedian: null,
+    pricePerLiterMedian: null,
+  }
+}
+
 function cohortSummary(rows) {
   const revenue = sumField(rows, 'revenue')
   const sales = sumField(rows, 'sales')
@@ -235,6 +271,7 @@ function cohortSummary(rows) {
     .filter((row) => Number.isFinite(row.avgPrice) && Number.isFinite(row.volume) && row.volume > 0)
     .map((row) => row.avgPrice / row.volume)
   return {
+    status: 'evaluated',
     rows: rows.length,
     revenue,
     sales,
@@ -266,7 +303,7 @@ function weightedScore(parts) {
   return weight ? round(available.reduce((sum, part) => sum + part.score * part.weight, 0) / weight, 1) : null
 }
 
-function buildTypeOpportunities(rows, totalRevenue) {
+function buildTypeOpportunities(rows, totalRevenue, { collectionDateKnown = true } = {}) {
   const groups = new Map()
   for (const row of rows) {
     if (!groups.has(row.type)) groups.set(row.type, [])
@@ -274,8 +311,12 @@ function buildTypeOpportunities(rows, totalRevenue) {
   }
   const items = [...groups.entries()].map(([name, typeRows]) => {
     const revenue = sumField(typeRows, 'revenue')
-    const freshRows = typeRows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 180)
-    const listingRows = typeRows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 3650)
+    const freshRows = collectionDateKnown
+      ? typeRows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 180)
+      : []
+    const listingRows = collectionDateKnown
+      ? typeRows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 3650)
+      : typeRows.filter((row) => isPlausibleListingDate(row.listingDate))
     const unknownBrandRevenue = sumField(typeRows.filter((row) => row.brand === '未知/无品牌'), 'revenue')
     const pricePerLiter = typeRows
       .filter((row) => Number.isFinite(row.avgPrice) && Number.isFinite(row.volume) && row.volume > 0)
@@ -288,8 +329,9 @@ function buildTypeOpportunities(rows, totalRevenue) {
       revenuePerSku: typeRows.length ? round(revenue / typeRows.length) : null,
       orderConversionMedian: medianField(typeRows, 'orderConv'),
       orderConversionCoverage: coverage(typeRows, 'orderConv'),
-      freshCount: freshRows.length,
-      freshRevenueShare: pct(sumField(freshRows, 'revenue'), revenue),
+      newnessStatus: collectionDateKnown ? 'evaluated' : 'not_evaluated',
+      freshCount: collectionDateKnown ? freshRows.length : null,
+      freshRevenueShare: collectionDateKnown ? pct(sumField(freshRows, 'revenue'), revenue) : null,
       listingDateCoverage: pct(listingRows.length, typeRows.length),
       stockoutMedian: medianField(typeRows, 'stockoutDays'),
       stockoutCoverage: coverage(typeRows, 'stockoutDays'),
@@ -308,7 +350,7 @@ function buildTypeOpportunities(rows, totalRevenue) {
       { score: percentileScore(item.revenuePerSku, metricValues('revenuePerSku')), weight: 3 },
       { score: item.orderConversionCoverage >= 30 ? percentileScore(item.orderConversionMedian, metricValues('orderConversionMedian')) : null, weight: 2 },
     ])
-    const newnessScore = item.listingDateCoverage >= 40
+    const newnessScore = collectionDateKnown && item.listingDateCoverage >= 40
       ? percentileScore(item.freshRevenueShare, metricValues('freshRevenueShare'))
       : null
     const supplyScore = item.stockoutCoverage >= 30
@@ -521,14 +563,16 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
   const sourceFile = options.sourceFile || 'import.xlsx'
   const sourceFormat = options.sourceFormat || getMarketImportType(sourceFile) || '数据文件'
   const label = options.label || inferMarketReportLabel(sourceFile)
-  const snapshot = options.snapshot || sourceFile.match(/\d{4}-\d{2}-\d{2}/)?.[0] || new Date().toISOString().slice(0, 10)
+  const {
+    snapshot,
+    snapshotDate,
+    collectionDateOrigin,
+    collectionDateKnown,
+  } = resolveCollectionDateOption(options, sourceFile)
   const id = options.id || stableMarketReportId(sourceFile)
-  const snapshotDate = parseListingDate(snapshot)
   const rows = normalizedRows.map(rowModel).map((row) => ({
     ...row,
-    ageDays: row.listingDate && snapshotDate
-      ? Math.floor((snapshotDate.getTime() - row.listingDate.getTime()) / DAY_MS)
-      : null,
+    ageDays: computeUtcAgeDays(snapshotDate, row.listingDate),
   }))
   const rowCount = rows.length
   const totalRevenue = rows.reduce((sum, row) => sum + (row.revenue || 0), 0)
@@ -560,11 +604,19 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
   const validStockout = rows.map((row) => row.stockoutDays).filter(Number.isFinite)
   const validPromo = rows.map((row) => row.promoDays).filter(Number.isFinite)
   const validAd = rows.map((row) => row.adDays).filter(Number.isFinite)
-  const validListingRows = rows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 3650)
-  const futureListingRows = rows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays < 0)
-  const staleListingRows = rows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays > 3650)
-  const freshRows = validListingRows.filter((row) => row.ageDays <= 180)
-  const freshRevenue = sumField(freshRows, 'revenue')
+  const validListingRows = collectionDateKnown
+    ? rows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays >= 0 && row.ageDays <= 3650)
+    : rows.filter((row) => isPlausibleListingDate(row.listingDate))
+  const futureListingRows = collectionDateKnown
+    ? rows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays < 0)
+    : []
+  const staleListingRows = collectionDateKnown
+    ? rows.filter((row) => Number.isFinite(row.ageDays) && row.ageDays > 3650)
+    : []
+  const freshRows = collectionDateKnown
+    ? validListingRows.filter((row) => row.ageDays <= 180)
+    : []
+  const freshRevenue = collectionDateKnown ? sumField(freshRows, 'revenue') : null
   const inventoryCover = rows
     .filter((row) => Number.isFinite(row.stock) && Number.isFinite(row.dailySales) && row.dailySales > 0)
     .map((row) => row.stock / row.dailySales)
@@ -633,35 +685,51 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
     },
     newness: {
       windowDays: 180,
+      status: collectionDateKnown ? 'evaluated' : 'not_evaluated',
+      collectionDateKnown,
+      collectionDateOrigin,
       listingDateCoverage: fieldCoverage.listingDate,
-      freshCount: freshRows.length,
-      freshRevenueShare: pct(freshRevenue, totalRevenue),
-      futureDateCount: futureListingRows.length,
-      outlierDateCount: staleListingRows.length,
+      freshCount: collectionDateKnown ? freshRows.length : null,
+      freshRevenueShare: collectionDateKnown ? pct(freshRevenue, totalRevenue) : null,
+      futureDateCount: collectionDateKnown ? futureListingRows.length : null,
+      outlierDateCount: collectionDateKnown ? staleListingRows.length : null,
     },
   }
-  const matureRows = validListingRows.filter((row) => row.ageDays > 180)
-  const freshCohort = cohortSummary(freshRows)
-  const matureCohort = cohortSummary(matureRows)
-  const freshRevenuePerSkuRatio = Number.isFinite(freshCohort.revenuePerSku) && Number.isFinite(matureCohort.revenuePerSku) && matureCohort.revenuePerSku > 0
+  const matureRows = collectionDateKnown ? validListingRows.filter((row) => row.ageDays > 180) : []
+  const freshCohort = collectionDateKnown ? cohortSummary(freshRows) : unEvaluatedCohortSummary()
+  const matureCohort = collectionDateKnown ? cohortSummary(matureRows) : unEvaluatedCohortSummary()
+  const freshRevenuePerSkuRatio = collectionDateKnown
+    && Number.isFinite(freshCohort.revenuePerSku)
+    && Number.isFinite(matureCohort.revenuePerSku)
+    && matureCohort.revenuePerSku > 0
     ? round(freshCohort.revenuePerSku / matureCohort.revenuePerSku, 2)
     : null
   const cohortComparison = {
+    status: collectionDateKnown ? 'evaluated' : 'not_evaluated',
+    collectionDateKnown,
     fresh: freshCohort,
     mature: matureCohort,
     revenuePerSkuRatio: freshRevenuePerSkuRatio,
-    orderConversionDeltaPct: relativeChange(freshCohort.orderConversionMedian, matureCohort.orderConversionMedian),
-    avgPriceDeltaPct: relativeChange(freshCohort.avgPriceMedian, matureCohort.avgPriceMedian),
-    stockoutDeltaDays: Number.isFinite(freshCohort.stockoutMedian) && Number.isFinite(matureCohort.stockoutMedian)
+    orderConversionDeltaPct: collectionDateKnown
+      ? relativeChange(freshCohort.orderConversionMedian, matureCohort.orderConversionMedian)
+      : null,
+    avgPriceDeltaPct: collectionDateKnown
+      ? relativeChange(freshCohort.avgPriceMedian, matureCohort.avgPriceMedian)
+      : null,
+    stockoutDeltaDays: collectionDateKnown
+      && Number.isFinite(freshCohort.stockoutMedian)
+      && Number.isFinite(matureCohort.stockoutMedian)
       ? round(freshCohort.stockoutMedian - matureCohort.stockoutMedian, 1)
       : null,
-    interpretation: !Number.isFinite(freshRevenuePerSkuRatio)
-      ? '新品与成熟品数据不足，暂不能比较单位 SKU 表现。'
-      : freshRevenuePerSkuRatio >= 1.2
-        ? '新品单位 SKU 销售额明显高于成熟品，值得优先拆解头部新品。'
-        : freshRevenuePerSkuRatio >= 0.8
-          ? '新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。'
-          : '新品单位 SKU 表现低于成熟品，不能仅凭上新数量判断机会。',
+    interpretation: !collectionDateKnown
+      ? '采集日期未知（未评估 180 天窗口），暂不比较新品与成熟品单位 SKU 表现。'
+      : !Number.isFinite(freshRevenuePerSkuRatio)
+        ? '新品与成熟品数据不足，暂不能比较单位 SKU 表现。'
+        : freshRevenuePerSkuRatio >= 1.2
+          ? '新品单位 SKU 销售额明显高于成熟品，值得优先拆解头部新品。'
+          : freshRevenuePerSkuRatio >= 0.8
+            ? '新品单位 SKU 表现接近成熟品，可从细分规格中挑选测试。'
+            : '新品单位 SKU 表现低于成熟品，不能仅凭上新数量判断机会。',
   }
   const unknownBrand = brandRows.find((item) => item.name === '未知/无品牌')
   const competition = {
@@ -688,7 +756,7 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
     compactTestShare: validVolumes.length ? pct(validVolumes.filter((value) => value <= 5).length, validVolumes.length) : null,
     caveat: '5 升仅是国内跨境首轮测款的内部筛选阈值，不是平台物流限制；最终仍需重量、三边和、包装与渠道报价。',
   }
-  const typeOpportunities = buildTypeOpportunities(rows, totalRevenue)
+  const typeOpportunities = buildTypeOpportunities(rows, totalRevenue, { collectionDateKnown })
   const russiaContext = buildRussiaMarketContext({
     label,
     typeNames: typeRows.slice(0, 10).map((item) => item.name),
@@ -706,16 +774,24 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
       evidence: [`头部类型销售额占比 ${pct(typeRows[0]?.revenue || 0, totalRevenue)}%`, `${strongestBand.label} 贡献 ${strongestBand.share}% 样本销售额`, `样本 ${rowCount} 条`],
       confidence: '高',
     },
-    freshRows.length && fieldCoverage.listingDate >= 40 ? {
+    !collectionDateKnown ? {
+      title: '先确认采集日期再评估 180 天新品窗口',
+      recommendation: '当前报告缺少有效采集日期（采集日未知），180 天新品与成熟品分层未评估；请核实原始采集日期后重新导入确认，避免将未知日期误判为 0 新品。',
+      evidence: ['采集日期状态：未评估（缺少采集日期）', `上架日期字段覆盖 ${fieldCoverage.listingDate}%`, '180 天新品数量：未评估'],
+      confidence: '待核验',
+      status: 'not_evaluated',
+    } : freshRows.length && fieldCoverage.listingDate >= 40 ? {
       title: '用 180 天新品验证增长方向',
       recommendation: `优先复核新品榜中销售额靠前且链接有效的商品，拆解规格、定价和评价痛点；新品信号只用于缩小选品范围，不直接等同长期需求。`,
       evidence: [`有效上架日期覆盖 ${fieldCoverage.listingDate}%`, `180 天内新品 ${freshRows.length} 个`, `新品销售额占样本 ${pct(freshRevenue, totalRevenue)}%`],
       confidence: fieldCoverage.listingDate >= 70 ? '高' : '中',
+      status: 'evaluated',
     } : {
       title: '先补齐新品日期再判断上新机会',
       recommendation: '当前上架日期覆盖不足，不应据此判断新品趋势；优先补抓头部商品上架时间，再建立 180 天新品对标清单。',
       evidence: [`有效上架日期覆盖 ${fieldCoverage.listingDate}%`, `当前可识别新品 ${freshRows.length} 个`],
       confidence: '低',
+      status: 'evaluated',
     },
     marketDimensions.supply.inventoryCoverCoverage >= 30 || marketDimensions.supply.stockoutCoverage >= 30 ? {
       title: '把供给缺口转化为备货验证',
@@ -755,29 +831,53 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
     },
   ]
 
-  const newProducts = [...freshRows]
-    .filter((row) => row.url)
-    .sort((a, b) => (b.revenue || 0) - (a.revenue || 0))
-    .slice(0, 12)
-    .map((row) => ({
-      name: row.name,
-      type: row.type,
-      brand: row.brand,
-      url: row.url,
-      image: row.image,
-      listingDate: row.listingDate.toISOString().slice(0, 10),
-      ageDays: row.ageDays,
-      revenue: row.revenue === null ? null : round(row.revenue),
-      sales: row.sales === null ? null : round(row.sales),
-      avgPrice: row.avgPrice,
-      revenueGrowth: row.revenueGrowth,
-      orderConv: row.orderConv,
-      cartAdd: row.cartAdd,
-      stockoutDays: row.stockoutDays,
-      adRoi: row.adRoi,
-    }))
+  const newProducts = collectionDateKnown
+    ? [...freshRows]
+      .filter((row) => row.url)
+      .sort((a, b) => (b.revenue || 0) - (a.revenue || 0))
+      .slice(0, 12)
+      .map((row) => ({
+        name: row.name,
+        type: row.type,
+        brand: row.brand,
+        url: row.url,
+        image: row.image,
+        listingDate: row.listingDate.toISOString().slice(0, 10),
+        ageDays: row.ageDays,
+        revenue: row.revenue === null ? null : round(row.revenue),
+        sales: row.sales === null ? null : round(row.sales),
+        avgPrice: row.avgPrice,
+        revenueGrowth: row.revenueGrowth,
+        orderConv: row.orderConv,
+        cartAdd: row.cartAdd,
+        stockoutDays: row.stockoutDays,
+        adRoi: row.adRoi,
+      }))
+    : []
 
-  return {
+  const publishedAt = options.publishedAt || new Date().toISOString()
+  const importedAt = options.provenance?.importedAt || options.importedAt || publishedAt
+  const duplicateSku = skuValues.length - new Set(skuValues).size
+  const duplicateUrl = urlValues.length - new Set(urlValues).size
+  const duplicateIdentityWarning = (duplicateSku > 0 || duplicateUrl > 0)
+    ? '当前销售额与销量按导入行直接汇总（未自动去重或择一）；重复 SKU 或链接可能对应不同统计周期、店铺或规格变体，请复核原始周期/店铺/变体信息，不应直接断定为重复计入。'
+    : null
+
+  const provenance = options.provenance === null
+    ? undefined
+    : {
+      version: 1,
+      originalFileName: options.provenance?.originalFileName || sourceFile,
+      sourceSha256: options.provenance?.sourceSha256 ?? options.sourceSha256 ?? null,
+      sourceByteLength: options.provenance?.sourceByteLength ?? options.sourceByteLength ?? null,
+      importedAt,
+      importId: options.provenance?.importId ?? options.importId ?? null,
+      ...(options.provenance || {}),
+      collectionDateOrigin,
+      collectionDateStatus: collectionDateKnown ? 'evaluated' : 'not_evaluated',
+    }
+
+  const reportObject = {
     schemaVersion: 1,
     kind: 'uploaded',
     id,
@@ -785,11 +885,13 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
     title: `Ozon ${label}市场分析`,
     group: '导入报告',
     snapshot,
+    collectionDateOrigin,
     source: `用户导入 ${sourceFormat}`,
     sample: `${rowCount.toLocaleString('zh-CN')} 条记录`,
     frameTitle: `Ozon ${label}市场分析报告`,
     sourceFile,
-    publishedAt: options.publishedAt || new Date().toISOString(),
+    publishedAt,
+    ...(provenance ? { provenance } : {}),
     kpis: {
       rowCount,
       totalRevenue: round(totalRevenue),
@@ -818,7 +920,7 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
         url: row.url,
         image: row.image,
         listingDate: row.listingDate ? row.listingDate.toISOString().slice(0, 10) : null,
-        ageDays: Number.isFinite(row.ageDays) && row.ageDays >= 0 ? row.ageDays : null,
+        ageDays: collectionDateKnown && Number.isFinite(row.ageDays) && row.ageDays >= 0 ? row.ageDays : null,
       })),
     marketDimensions,
     executiveSummary,
@@ -858,24 +960,32 @@ export function buildUploadedMarketReport(rawRows, options = {}) {
       missingSales: rowCount - salesRows.length,
       missingAveragePrice: rows.filter((row) => row.avgPrice === null).length,
       missingBsr: rows.filter((row) => !row.bsr).length,
-      duplicateSku: skuValues.length - new Set(skuValues).size,
-      duplicateUrl: urlValues.length - new Set(urlValues).size,
+      duplicateSku,
+      duplicateUrl,
+      duplicateIdentityWarning,
       uniqueSku: new Set(skuValues).size,
       urlCoverage: pct(urlValues.length, rowCount),
       fieldCoverage,
       listingDateCoverage: fieldCoverage.listingDate,
-      freshProductCount: freshRows.length,
-      futureListingDateCount: futureListingRows.length,
-      outlierListingDateCount: staleListingRows.length,
+      collectionDateKnown,
+      collectionDateOrigin,
+      collectionDateStatus: collectionDateKnown ? 'evaluated' : 'not_evaluated',
+      freshProductCount: collectionDateKnown ? freshRows.length : null,
+      futureListingDateCount: collectionDateKnown ? futureListingRows.length : null,
+      outlierListingDateCount: collectionDateKnown ? staleListingRows.length : null,
     },
     insights: [
       `头部品类“${typeRows[0]?.name || '未分类'}”贡献 ${pct(typeRows[0]?.revenue || 0, totalRevenue)}% 销售额；前五品类合计 ${pct(topFiveTypeRevenue, totalRevenue)}%。`,
       `销售额最集中的价格带是 ${strongestBand.label}，覆盖 ${strongestBand.rows} 条商品记录，贡献 ${strongestBand.share}% 销售额。`,
       `前十品牌（含未知/无品牌桶）合计贡献 ${pct(topTenBrandRevenue, totalRevenue)}% 销售额；该指标反映样本集中度，不等同于完整市场份额。`,
       `销量字段覆盖率为 ${salesCoverage}%；报告以销售额作为主排序口径，销量与件均额只在有值记录上汇总。`,
-      `有效上架日期覆盖 ${fieldCoverage.listingDate}%；其中 180 天内新品 ${freshRows.length} 个，贡献 ${pct(freshRevenue, totalRevenue)}% 样本销售额。`,
+      collectionDateKnown
+        ? `有效上架日期覆盖 ${fieldCoverage.listingDate}%；其中 180 天内新品 ${freshRows.length} 个，贡献 ${pct(freshRevenue, totalRevenue)}% 样本销售额。`
+        : `上架日期字段覆盖 ${fieldCoverage.listingDate}%；因采集日期未知，180 天内新品数量与销售额占比未评估（不计为 0）。`,
     ],
   }
+
+  return reportObject
 }
 
 export function isUploadedMarketReport(value) {

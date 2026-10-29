@@ -1,0 +1,53 @@
+{
+  "task_id": "KJ-GEMINI-20260922-001",
+  "timestamp": "2026-09-22T01:28:02.741Z",
+  "scenarios": {
+    "s1_ozon_flow": {
+      "status": "passed",
+      "error_notice_visible_in_costing": "T6_BACKEND_LOCKED: 并发场景保存锁已被占用，写入被阻止",
+      "input_retained_on_failure": 115,
+      "saved_cost_on_retry": 115,
+      "project_b_scenarios_count": 0
+    },
+    "s2_wb_flow": {
+      "status": "passed",
+      "error_notice_visible_in_costing": "T6_BACKEND_LOCKED: WB 订单场景并发锁冲突",
+      "saved_cost_on_retry": 115
+    },
+    "s3_all_tabs_and_single_notice": {
+      "status": "passed",
+      "all_tabs_checked": [
+        "overview",
+        "product",
+        "suppliers",
+        "costing",
+        "compliance",
+        "operations"
+      ],
+      "empty_notice_renders_zero_nodes": true,
+      "latest_replaces_old": true
+    },
+    "s4_ownership_isolation": {
+      "status": "passed",
+      "boundary_1_same_instance_clean": true,
+      "boundary_2_list_navigation_clean": true
+    },
+    "s5_responsive_and_a11y": {
+      "status": "passed",
+      "viewports_tested": [
+        "mobile-390",
+        "tablet-768",
+        "desktop-1440"
+      ],
+      "no_horizontal_overflow": true,
+      "role_status": "status",
+      "aria_live": "polite"
+    }
+  },
+  "reviewer_additions": {
+    "wb_failed_save_full_store_unchanged": true,
+    "b_project_snapshot_scenarios_unchanged": true,
+    "b_scenarios_after_both_retries": 0,
+    "keyboard_save_reachable": true
+  }
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "name": "test-table-layout",
+    "cmd": "node tests/ia-project-compliance-table-layout.test.mjs",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\test-table-layout.log"
+  },
+  {
+    "name": "test-compliance-layout",
+    "cmd": "node tests/ia-project-compliance-layout.test.mjs",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\test-compliance-layout.log"
+  },
+  {
+    "name": "test-compliance-draft",
+    "cmd": "node tests/ia-project-compliance-draft.test.mjs",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\test-compliance-draft.log"
+  },
+  {
+    "name": "test-compliance-core",
+    "cmd": "node tests/ia-project-compliance.test.mjs",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\test-compliance-core.log"
+  },
+  {
+    "name": "test-compliance-gate",
+    "cmd": "node tests/ia-project-compliance-gate.test.mjs",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\test-compliance-gate.log"
+  },
+  {
+    "name": "npm-test",
+    "cmd": "npm test",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\npm-test.log"
+  },
+  {
+    "name": "npm-test-golden",
+    "cmd": "npm run test:golden",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\npm-test-golden.log"
+  },
+  {
+    "name": "npm-test-sync",
+    "cmd": "npm run test:sync",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\npm-test-sync.log"
+  },
+  {
+    "name": "npm-build-react",
+    "cmd": "npm --prefix ozon-react run build",
+    "exitCode": 0,
+    "status": "passed",
+    "log": "D:\\ozon\\docs\\ai-handoff\\KJ-GEMINI-20260921-005\\evidence\\npm-build-react.log"
+  }
+]

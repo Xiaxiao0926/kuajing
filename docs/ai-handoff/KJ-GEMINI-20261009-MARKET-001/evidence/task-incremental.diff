@@ -1,0 +1,426 @@
+diff --git a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/MarketResearch.initial.jsx b/ozon-react/src/components/MarketResearch.jsx
+index e94880a..fbe415f 100644
+--- a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/MarketResearch.initial.jsx
++++ b/ozon-react/src/components/MarketResearch.jsx
+@@ -181,7 +181,8 @@ export default function MarketResearch({
+       updates['n2'].push({ time: Date.now(), msg: '市场调研数据已加载' })
+       persistSet('node-updates', updates)
+     }
+-    if (isUpload) {
++    const shouldSaveToDb = !embedded && Boolean(isUpload)
++    if (shouldSaveToDb) {
+       try {
+         await dbPut({
+           name: fileName,
+@@ -207,7 +208,7 @@ export default function MarketResearch({
+       const arrayBuffer = await resp.arrayBuffer()
+       const parsedData = parseXlsxArrayBuffer(arrayBuffer)
+       if (parsedData.length === 0) return
+-      await processAndSave(parsedData, file.name, file.date, file.source === 'server')
++      await processAndSave(parsedData, file.name, file.date, !embedded && file.source === 'server')
+     } catch (err) { console.error('Load file error:', err) }
+     finally { setLoadingFiles(false) }
+   }
+@@ -228,6 +229,7 @@ export default function MarketResearch({
+   }
+ 
+   const handleDeleteSaved = async (name) => {
++    if (embedded) return
+     try {
+       await dbDelete(name)
+       await deleteServerFile(FILE_NAMESPACE, name)
+@@ -245,6 +247,7 @@ export default function MarketResearch({
+   }
+ 
+   const uploadToServer = async (file) => {
++    if (embedded) return
+     try {
+       const result = await uploadServerFile(FILE_NAMESPACE, file)
+       if (result?.file) {
+@@ -260,6 +263,7 @@ export default function MarketResearch({
+   }
+ 
+   const handleLocalUpload = async (e) => {
++    if (embedded) return
+     const files = e.target.files
+     if (files.length > 0) {
+       const file = files[0]
+@@ -346,16 +350,9 @@ export default function MarketResearch({
+               )}
+             </div>
+             <div className="flex items-center gap-2">
+-              <input ref={fileInputRef} type="file" accept="*" className="hidden" onChange={handleLocalUpload} disabled={loading} />
+-              <button
+-                type="button"
+-                onClick={() => !loading && fileInputRef.current?.click()}
+-                disabled={loading}
+-                className="flex items-center gap-1 px-2.5 py-1 rounded bg-gray-100 hover:bg-gray-200 text-morandi-text transition-colors text-xs font-medium"
+-              >
+-                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3 text-morandi-primary" />}
+-                上传 Excel
+-              </button>
++              <span className="px-2.5 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 text-xs font-medium">
++                只读查阅模式（如需导入报表请前往独立市场调研页面）
++              </span>
+               {hasData && (
+                 <button
+                   type="button"
+@@ -375,7 +372,7 @@ export default function MarketResearch({
+               可用报告:
+             </span>
+             {availableFiles.length === 0 && savedFiles.length === 0 && (
+-              <span className="text-gray-400">暂无可加载文件，请点击上方上传</span>
++              <span className="text-gray-400">暂无可加载文件（如需上传请前往独立市场调研页面）</span>
+             )}
+             {savedFiles.map(f => {
+               const isActive = activeFile === f.name
+
+diff --git a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/priceBands.initial.js b/ozon-react/src/utils/marketAnalysis/priceBands.js
+index 1866604..f364e97 100644
+--- a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/priceBands.initial.js
++++ b/ozon-react/src/utils/marketAnalysis/priceBands.js
+@@ -1,15 +1,105 @@
+ /**
+  * 模块4：SKU / 销量 / 销售额 三维加权价格带
+  *
+- * 口径冻结（用户决策）：
++ * 口径澄清与规范（TASK 001 纠偏）：
++ *   - 切片分桶：【SKU 数量等分切片】（SKU count slices），将进入口径的 SKU 按标准化可比价升序排序后均分为 N 份切片
++ *   - medianPrice：切片内【非加权 SKU 价格中位数】（unweighted slice SKU price median），仅代表该切片内的价格中值，非销量加权中位数
+  *   - 三维名称：SKU占比 / 销量占比 / 销售额占比（现有数据无 GMV 字段，禁写 GMV%）
+  *   - 进入规则：['A'] 默认口径；['A','B'] 可切换参考口径；C 与 UNKNOWN 一律排除
+  *   - 价格轴：按类目标准化的可比价格（每100ml / 每100只 / 每kg），不是挂牌原价
+  *   - 占比分母：当前进入口径内的合计（切换 A+B 后分母随之变化）
++ *   - 新增独立指标：【销量加权价格分位】（sales-weighted quantiles），以有效正数销量为权重计算 P10/P25/P50/P75/P90
+  */
+ 
+ /**
+- * 构建加权价格带。
++ * 计算销量加权价格分位数（sales-weighted quantiles）
++ * 严格按有效正数销量（_purity.qty）为权重，计算 P10 / P25 / P50 / P75 / P90。
++ * 销量为零、缺失、负数或非有限数值时一律不计入权重；无有效权重时返回 insufficient_data 状态。
++ *
++ * @param {Array} pipelineRowsOrEligible 待计算行（含 _purity.normalizedPrice 与 _purity.qty）
++ * @param {{tiers?: string[]|null}} options 可选过滤层级（如 ['A'] 或 ['A', 'B']）
++ * @returns {{
++ *   status: 'ok' | 'insufficient_data',
++ *   reason?: string,
++ *   validCount: number,
++ *   totalWeight: number,
++ *   p10: number | null,
++ *   p25: number | null,
++ *   p50: number | null,
++ *   p75: number | null,
++ *   p90: number | null
++ * }}
++ */
++export function calculateSalesWeightedQuantiles(pipelineRowsOrEligible, { tiers = null } = {}) {
++  const rows = Array.isArray(pipelineRowsOrEligible) ? pipelineRowsOrEligible : []
++  const weightedRows = rows.filter((r) => {
++    if (!r || !r._purity) return false
++    if (Array.isArray(tiers) && !tiers.includes(r._purity.tier)) return false
++    return (
++      Number.isFinite(r._purity.normalizedPrice) &&
++      r._purity.normalizedPrice > 0 &&
++      Number.isFinite(r._purity.qty) &&
++      r._purity.qty > 0
++    )
++  })
++
++  if (weightedRows.length === 0) {
++    return {
++      status: 'insufficient_data',
++      reason: 'no_positive_sales_weight',
++      validCount: 0,
++      totalWeight: 0,
++      p10: null,
++      p25: null,
++      p50: null,
++      p75: null,
++      p90: null,
++    }
++  }
++
++  const sorted = [...weightedRows].sort((a, b) => a._purity.normalizedPrice - b._purity.normalizedPrice)
++  const totalWeight = sorted.reduce((sum, r) => sum + r._purity.qty, 0)
++
++  if (totalWeight <= 0 || !Number.isFinite(totalWeight)) {
++    return {
++      status: 'insufficient_data',
++      reason: 'zero_or_invalid_total_weight',
++      validCount: 0,
++      totalWeight: 0,
++      p10: null,
++      p25: null,
++      p50: null,
++      p75: null,
++      p90: null,
++    }
++  }
++
++  const getPercentile = (q) => {
++    const target = totalWeight * q
++    let cum = 0
++    for (const r of sorted) {
++      cum += r._purity.qty
++      if (cum >= target) {
++        return r._purity.normalizedPrice
++      }
++    }
++    return sorted[sorted.length - 1]._purity.normalizedPrice
++  }
++
++  return {
++    status: 'ok',
++    validCount: sorted.length,
++    totalWeight,
++    p10: getPercentile(0.10),
++    p25: getPercentile(0.25),
++    p50: getPercentile(0.50),
++    p75: getPercentile(0.75),
++    p90: getPercentile(0.90),
++  }
++}
++
++/**
++ * 构建加权价格带（含 SKU 数量切片与独立销量加权分位）。
+  * @param {Array} pipelineRows runPurityPipeline 输出行（含 _purity）
+  * @param {{tiers?: string[], bandCount?: number}} options
+  */
+@@ -36,10 +126,28 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+   )
+ 
+   if (eligible.length === 0) {
+-    return { bands: [], totals, excludedBreakdown, eligibleCount: 0, bandCount: 0 }
++    return {
++      bands: [],
++      totals,
++      excludedBreakdown,
++      eligibleCount: 0,
++      bandCount: 0,
++      topQtyBandIndex: null,
++      salesWeightedQuantiles: {
++        status: 'insufficient_data',
++        reason: 'no_eligible_rows',
++        validCount: 0,
++        totalWeight: 0,
++        p10: null,
++        p25: null,
++        p50: null,
++        p75: null,
++        p90: null,
++      },
++    }
+   }
+ 
+-  // 先按可比价排序再分箱：分箱边界与成员聚合必须来自同一个有序序列
++  // 先按可比价排序再分箱：分箱边界与成员聚合来自同一个有序序列
+   const sortedRows = [...eligible].sort((a, b) => a._purity.normalizedPrice - b._purity.normalizedPrice)
+   const n = sortedRows.length
+   const actualBands = Math.max(1, Math.min(bandCount, n))
+@@ -71,7 +179,7 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+       label: `带${i + 1}`,
+       priceMin: prices[0],
+       priceMax: prices[prices.length - 1],
+-      medianPrice: median,
++      medianPrice: median, // 切片内未加权 SKU 价格中值
+       sku: agg.sku,
+       skuShare: pct(agg.sku, totals.sku),
+       qty: agg.qty,
+@@ -86,6 +194,8 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+     null
+   )
+ 
++  const salesWeightedQuantiles = calculateSalesWeightedQuantiles(eligible)
++
+   return {
+     bands: detailed,
+     totals,
+@@ -93,5 +203,6 @@ export function buildWeightedBands(pipelineRows, { tiers = ['A'], bandCount = 5
+     eligibleCount: eligible.length,
+     bandCount: actualBands,
+     topQtyBandIndex: topQtyBand ? topQtyBand.index : null,
++    salesWeightedQuantiles,
+   }
+ }
+
+diff --git a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/PurityPipelinePage.initial.jsx b/ozon-react/src/components/PurityPipelinePage.jsx
+index b029449..c0ab4e3 100644
+--- a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/PurityPipelinePage.initial.jsx
++++ b/ozon-react/src/components/PurityPipelinePage.jsx
+@@ -1,4 +1,4 @@
+-﻿import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
++import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+ import {
+   RefreshCw, Layers, Target, AlertCircle, FlaskConical, ClipboardCheck,
+   CheckCircle2, XCircle, Save, Trash2, History, FileSpreadsheet,
+@@ -407,7 +407,7 @@ export default function PurityPipelinePage({ data }) {
+ 
+           <div className="insight-card">
+             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+-              <h3 className="font-semibold text-morandi-text">💰 三维加权价格带（标准化可比价）</h3>
++              <h3 className="font-semibold text-morandi-text">💰 价格带分析（SKU数量等分切片 & 销量加权分位）</h3>
+               <div className="flex items-center gap-2">
+                 {catCfg && (
+                   <span className="text-xs text-morandi-text-light mr-2">价格轴：{catCfg.normalize.label}</span>
+@@ -462,6 +462,57 @@ export default function PurityPipelinePage({ data }) {
+                   </div>
+                 </div>
+ 
++                {/* 销量加权分位数摘要（真实销量分布，非切片非加权中值） */}
++                {bandsResult.salesWeightedQuantiles && (
++                  <div className="mb-4 bg-morandi-50/50 border border-morandi-200/80 rounded-xl p-3.5 text-xs">
++                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
++                      <div className="flex items-center gap-2">
++                        <span className="font-semibold text-morandi-text">
++                          📊 真实销量加权分位数（以每行有效销量为权重）
++                        </span>
++                        <span className="text-[11px] text-morandi-text-light">
++                          有效加权样本: {bandsResult.salesWeightedQuantiles.validCount} 条 · 销量权重合计: {bandsResult.salesWeightedQuantiles.totalWeight?.toLocaleString() || 0}
++                        </span>
++                      </div>
++                      <span className="text-[11px] text-gray-500">
++                        {bandsResult.salesWeightedQuantiles.status === 'ok' ? '已按每行有效销量精确加权' : '数据不足或无有效权重'}
++                      </span>
++                    </div>
++
++                    {bandsResult.salesWeightedQuantiles.status === 'ok' ? (
++                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P10（低价位线）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p10)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p10)}</p>
++                        </div>
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P25（下四分位）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p25)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p25)}</p>
++                        </div>
++                        <div className="bg-amber-50/70 rounded-lg p-2.5 border border-amber-200/80 shadow-xs">
++                          <p className="text-[11px] font-semibold text-amber-800">P50（销量加权中位价）</p>
++                          <p className="font-bold text-amber-900 mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p50)}</p>
++                          <p className="text-[10px] text-amber-700">{fmtRmb(bandsResult.salesWeightedQuantiles.p50)}</p>
++                        </div>
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P75（上四分位）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p75)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p75)}</p>
++                        </div>
++                        <div className="bg-white rounded-lg p-2.5 border border-gray-100 shadow-xs">
++                          <p className="text-[11px] text-morandi-text-light">P90（高价位线）</p>
++                          <p className="font-semibold text-morandi-text mt-0.5">{fmtRub(bandsResult.salesWeightedQuantiles.p90)}</p>
++                          <p className="text-[10px] text-gray-400">{fmtRmb(bandsResult.salesWeightedQuantiles.p90)}</p>
++                        </div>
++                      </div>
++                    ) : (
++                      <p className="text-gray-500 py-1">当前口径下无有效正数销量权重，无法计算加权分位数（已安全兜底）。</p>
++                    )}
++                  </div>
++                )}
++
+                 <div className="h-64 mb-4">
+                   <ResponsiveContainer width="100%" height="100%">
+                     <BarChart data={bandChart}>
+@@ -483,7 +534,7 @@ export default function PurityPipelinePage({ data }) {
+                       <tr>
+                         <th className="px-3 py-2 text-left">价格带</th>
+                         <th className="px-3 py-2 text-left">可比价区间（{catCfg?.normalize.label || '标准化'}）</th>
+-                        <th className="px-3 py-2 text-right">中位价 ₽/¥</th>
++                        <th className="px-3 py-2 text-right" title="切片内未加权的 SKU 价格中值">切片SKU中位价 ₽/¥</th>
+                         <th className="px-3 py-2 text-right">SKU 数</th>
+                         <th className="px-3 py-2 text-right">SKU 占比</th>
+                         <th className="px-3 py-2 text-right">销量占比</th>
+@@ -513,9 +564,14 @@ export default function PurityPipelinePage({ data }) {
+                     </tbody>
+                   </table>
+                 </div>
+-                <p className="text-xs text-morandi-text-light mt-2">
+-                  占比分母 = 当前口径内合计；C 与 UNKNOWN 一律排除；价格轴为标准化可比价（{catCfg?.normalize.label || '—'}），非挂牌原价。
+-                </p>
++                <div className="space-y-1 mt-2 text-xs text-morandi-text-light">
++                  <p>
++                    口径说明：上方表格为【SKU 数量等分切片】（将进入口径的 SKU 按可比价均分为 {bandsResult.bandCount} 个切片）；“切片SKU中位价”为该切片内未加权的 SKU 价格中值。
++                  </p>
++                  <p>
++                    真实销量分布请参阅上方【真实销量加权分位数】（以每行有效销量为权重计算 P10–P90）；占比分母 = 当前口径内合计；C 与 UNKNOWN 一律排除；价格轴为标准化可比价（{catCfg?.normalize.label || '—'}），非挂牌原价。
++                  </p>
++                </div>
+               </>
+             )}
+           </div>
+
+diff --git a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/miStore.initial.js b/ozon-react/src/utils/marketIntelligence/miStore.js
+index d51003a..911527e 100644
+--- a/docs/ai-handoff/KJ-GEMINI-20261009-MARKET-001/evidence/pre-execution-targets/miStore.initial.js
++++ b/ozon-react/src/utils/marketIntelligence/miStore.js
+@@ -267,8 +267,12 @@ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-0
+   }
+ 
+   const nicheUid = resolveNicheUid(niche)
++  if (!nicheUid) {
++    throw new Error('MI_STORE: 利基对象缺少有效 nicheUid，阻断推送到 T6（禁止无 UID 推进以防脏数据）')
++  }
++
+   const overrides = getValidationOverrides()
+-  const override = (nicheUid && overrides[nicheUid]) || overrides[niche.name] || null
++  const override = overrides[nicheUid] || overrides[niche.name] || null
+   const effectiveVerdict = override?.verdict ?? niche?.verdict ?? null
+ 
+   const marketEvidence = buildCandidateMarketEvidence(niche, runId, effectiveVerdict)
+@@ -276,25 +280,48 @@ export function promoteToT6Candidate(niche, reason = '', runId = 'RUN-20260917-0
+   const nicheId = niche.rank ?? niche.id ?? niche.name
+   const stableSourceProductId = buildMiCandidateSourceProductId(niche)
+   const legacySourceProductId = `wb-niche-${niche.name}`
+-  const notes = `[WB选品情报] Niche ID: ${nicheId} | UID: ${nicheUid || niche.uid || 'N/A'} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs || niche.pfs} | 签收率: ${niche.buyout} | 均价: ${niche.price} | 预估单重: ${niche.weight_g || (niche.heavy === 'YES' ? '大件' : '轻件')}。${reason || niche.rationale || ''}`
++  const notes = `[WB选品情报] Niche ID: ${nicheId} | UID: ${nicheUid} | Run: ${runId} | MOS: ${niche.mos} | CFS: ${niche.cfs || niche.pfs} | 签收率: ${niche.buyout} | 均价: ${niche.price} | 预估单重: ${niche.weight_g || (niche.heavy === 'YES' ? '大件' : '轻件')}。${reason || niche.rationale || ''}`
+ 
+   // 四步查重策略：
+-  // STEP 1: 按 source_niche_uid 找 Candidate
+-  let existing = nicheUid ? findCandidateBySourceNicheUid(nicheUid) : null
++  // STEP 1: 按 source_niche_uid 找 Candidate（以 nicheUid 为主身份键）
++  let existing = findCandidateBySourceNicheUid(nicheUid)
+ 
+   // STEP 2: 按 stable sourceProductId 找
+   if (!existing) {
+     existing = findCandidateByProductId(stableSourceProductId)
+   }
+ 
+-  // STEP 3: Legacy Candidate Backfill
+-  if (!existing && nicheUid) {
++  // STEP 3: Legacy Candidate Backfill (严格校验类目一致性与身份无冲突)
++  if (!existing) {
+     const legacyCandidate = findCandidateByProductId(legacySourceProductId)
+     if (legacyCandidate) {
+-      if (!legacyCandidate.source_niche_uid || legacyCandidate.source_niche_uid === nicheUid) {
++      const nicheCat = String(niche.category || niche.cat || '').trim()
++      const candCatLeaf = String(legacyCandidate.categoryLeaf || '').trim()
++      const candCatFull = String(legacyCandidate.categoryFull || '').trim()
++
++      const hasUidConflict = Boolean(
++        legacyCandidate.source_niche_uid && legacyCandidate.source_niche_uid !== nicheUid
++      )
++
++      // 类目必须明确且一致（排除空值或未分类这种信息不充分情况）
++      const hasSpecificCategory =
++        Boolean(nicheCat && nicheCat !== '未分类') &&
++        Boolean((candCatLeaf && candCatLeaf !== '未分类') || (candCatFull && candCatFull !== '未分类'))
++
++      const categoryMatch =
++        hasSpecificCategory &&
++        (candCatLeaf === nicheCat || candCatFull === nicheCat)
++
++      const systemConflict = Boolean(
++        legacyCandidate.source_system &&
++        legacyCandidate.source_system !== 'WB_MARKET_INTELLIGENCE'
++      )
++
++      // 仅当名、类目、无 UID 冲突、无来源冲突完全合法时才回填
++      if (!hasUidConflict && categoryMatch && !systemConflict) {
+         existing = legacyCandidate
+       }
+-      // 注意：若 legacyCandidate.source_niche_uid !== nicheUid，禁止复用（同名不同 UID）
++      // 注意：若类目不同、身份不充分或存在冲突，严禁复用，保持现有 legacyCandidate 及其项目/快照指针原样，继续执行 STEP 4 创建基于 nicheUid 的新候选
+     }
+   }
+ 
+

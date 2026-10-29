@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "task_id": "KJ-GEMINI-20261022-MARKET-RETENTION-003",
+  "executed_at": "2026-10-26T02:08:55Z",
+  "all_passed": true,
+  "note_on_overlap": "Where `npm test` repeats `npm run test:market`, it is recorded for mandatory regression completeness and NOT counted as additional independent test coverage.",
+  "commands": [
+    {
+      "command": "npm run test:market-retention",
+      "script": "node tests/market-report-retention.test.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "204 assertions passed / 0 failed across Acceptance Scenarios 1-8 (revision IDs, SHA-256 content-addressed source backup, strict calendar dates, 0/180/181-day UTC boundaries, unknown collection date not_evaluated propagation, duplicate SKU/URL warning without deduplication, source/report failure/retry/refresh lifecycle, and legacy report compatibility)."
+    },
+    {
+      "command": "node ozon-react/src/utils/marketReportAnalysis.test.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "marketReportAnalysis unit tests passed (including strict collection-date validation, explicit snapshot:null suppression of filename date, unknown collection date not_evaluated status, provenance, and duplicate identity warnings)."
+    },
+    {
+      "command": "npm run test:market",
+      "script": "node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/specParser.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/purityFilter.test.mjs && node --experimental-vm-modules ozon-react/src/utils/marketAnalysis/pipeline.e2e.test.mjs && node ozon-react/src/utils/marketReportAnalysis.test.mjs && npm run test:market-retention",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "specParser (36/36), purityFilter (45/45), pipeline.e2e (all datasets passed), marketReportAnalysis, and market-report-retention (204/204) all exited 0."
+    },
+    {
+      "command": "node tests/report-integration.test.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "Report integration tests passed with 0 failures; existing static and uploaded report reader contracts remain intact."
+    },
+    {
+      "command": "node tests/market-report-quality.test.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "Market report quality gate checks passed with 0 failures."
+    },
+    {
+      "command": "node docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/evidence/browser-harness.mjs",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "Real headless Chrome + Vite harness exercising actual React MarketReportCenter import/confirmation handler, date validation, SHA-256 content-addressed source backup, report 503 failure + frozen retry (identical report file and SHA-256 b2e32d3bcb6d7b624f5207b7527ff06454e33b4c147a5ea31b29cae6154a2184), remount/refresh reconciliation of two same-filename batches, duplicate SKU warning, and desktop (1366x900) + narrow (390x844) layout/screenshot verification."
+    },
+    {
+      "command": "npm test",
+      "script": "node scripts/sync-config.js && npm --prefix ozon-react test && npm run test:market && npm run test:wb-py",
+      "exit_code": 0,
+      "independent_coverage": false,
+      "overlap_note": "Repeats `npm run test:market`; independent portions are `ozon-react` (wbEngine 65/65, ozonEngine 43/43, scoringEngine 72/72, gateEngine 25/25) and Python `wb_test.py` (44/44).",
+      "summary": "React engine suites (205 passed) + Python WB suite (44/44 passed) + market suite all exited 0."
+    },
+    {
+      "command": "npm run test:golden",
+      "script": "node scripts/sync-config.js && node scripts/run-golden-tests.js",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "76/76 golden cases passed."
+    },
+    {
+      "command": "npm run test:sync",
+      "script": "node scripts/sync-config.js && node scripts/verify_sync.js",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "Zero drift between React and Python engines across 16 weight boundaries, 2 tariff version boundaries, and scoring_rules consistency."
+    },
+    {
+      "command": "npm --prefix ozon-react run build",
+      "script": "vite build",
+      "exit_code": 0,
+      "independent_coverage": true,
+      "summary": "Production Vite bundle built cleanly in 9.70s (3236 modules transformed)."
+    }
+  ]
+}

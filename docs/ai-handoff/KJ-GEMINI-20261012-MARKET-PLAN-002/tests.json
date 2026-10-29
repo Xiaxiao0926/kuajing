@@ -1,0 +1,61 @@
+{
+  "taskId": "KJ-GEMINI-20261012-MARKET-PLAN-002",
+  "taskTitle": "市场报告到工厂选品的下一阶段优化策划",
+  "taskType": "read_only_planning",
+  "executedBy": "Gemini",
+  "executedAt": "2026-10-12T14:14:00.000Z",
+  "summary": {
+    "totalVerificationScripts": 5,
+    "allPassed": true,
+    "productionCodeModified": false,
+    "productionSuitesRun": false,
+    "reasonForNotRunningProductionSuites": "本任务为只读调查与策划任务 (read_only_planning)，未修改任何生产代码、测试文件或业务数据。遵循 AGENTS.md 与 TASK.md 铁律，不浪费算力重复跑全量回归套件；仅针对调查发现的核心机制执行轻量级只读复现与断言验证。"
+  },
+  "readOnlyVerifications": [
+    {
+      "id": "VERIFY-001",
+      "target": "stableMarketReportId",
+      "file": "ozon-react/src/utils/marketReportAnalysis.js",
+      "description": "验证报告 ID 是否纯依赖文件名生成而导致同名批次冲突覆盖",
+      "reproductionCommand": "node -e \"import('./ozon-react/src/utils/marketReportAnalysis.js').then(m => { console.log(m.stableMarketReportId('data.xlsx')) })\"",
+      "result": "PASSED (实测无论内容、批次、时间如何变化，'data.xlsx' 恒生成 'uploaded-997badee'，证实 P0-1 缺陷存在)",
+      "exitCode": 0
+    },
+    {
+      "id": "VERIFY-002",
+      "target": "snapshotDateFallback",
+      "file": "ozon-react/src/utils/marketReportAnalysis.js",
+      "description": "验证文件名无日期时快照日是否默认回退为当前系统导入日期",
+      "reproductionCommand": "node -e \"import('./ozon-react/src/utils/marketReportAnalysis.js').then(m => { const r = m.buildUploadedMarketReport([{ '产品名称': 'A', '销售额(₽)': 100 }], { sourceFile: 'items.xlsx' }); console.log(r.snapshot === new Date().toISOString().slice(0, 10)) })\"",
+      "result": "PASSED (实测 snapshot 返回 '2026-10-12'，证实 P0-2 隐式赋予当前日期缺陷存在)",
+      "exitCode": 0
+    },
+    {
+      "id": "VERIFY-003",
+      "target": "missingListingDateHandling",
+      "file": "ozon-react/src/utils/marketReportAnalysis.js",
+      "description": "验证上架日期缺失时的降级与警示表现",
+      "reproductionCommand": "node -e \"import('./ozon-react/src/utils/marketReportAnalysis.js').then(m => { const r = m.buildUploadedMarketReport([{ '产品名称': 'A', '销售额(₽)': 100 }], { sourceFile: 'items.xlsx' }); console.log(r.quality.listingDateCoverage, r.newProducts.length) })\"",
+      "result": "PASSED (实测 listingDateCoverage=0, newProducts=[], recommendation 降级为低置信度，符合代码预期)",
+      "exitCode": 0
+    },
+    {
+      "id": "VERIFY-004",
+      "target": "futureListingDateHandling",
+      "file": "ozon-react/src/utils/marketReportAnalysis.js",
+      "description": "验证未来上架日期是否正确排除出新品列表并记录质量统计",
+      "reproductionCommand": "node -e \"import('./ozon-react/src/utils/marketReportAnalysis.js').then(m => { const r = m.buildUploadedMarketReport([{ '产品名称': 'A', '销售额(₽)': 100, '上架时间': '01.11.2026' }], { sourceFile: 'items.xlsx', snapshot: '2026-10-12' }); console.log(r.quality.futureListingDateCount, r.newProducts.length) })\"",
+      "result": "PASSED (实测 futureListingDateCount=1, newProducts=[]，未被计入新品)",
+      "exitCode": 0
+    },
+    {
+      "id": "VERIFY-005",
+      "target": "duplicateSkuAccumulation",
+      "file": "ozon-react/src/utils/marketReportAnalysis.js",
+      "description": "验证重复 SKU 与重复 URL 是否未做去重导致销售额双重计入",
+      "reproductionCommand": "node -e \"import('./ozon-react/src/utils/marketReportAnalysis.js').then(m => { const r = m.buildUploadedMarketReport([{ '产品名称': 'A', 'SKU': 'S1', '销售额(₽)': 1000 }, { '产品名称': 'A', 'SKU': 'S1', '销售额(₽)': 1500 }], { sourceFile: 'items.xlsx' }); console.log(r.kpis.totalRevenue, r.quality.duplicateSku) })\"",
+      "result": "PASSED (实测 totalRevenue=2500, duplicateSku=1，证实重复行未去重累加导致规模虚高，证实 P0-3 缺陷存在)",
+      "exitCode": 0
+    }
+  ]
+}

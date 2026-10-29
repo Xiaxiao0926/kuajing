@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Error",
+    "message": "QuotaExceededError: Synthetic storage quota exceeded",
+    "context": "r3_error_handling_and_visibility"
+  },
+  {
+    "name": "Error",
+    "message": "QuotaExceededError: Synthetic storage quota exceeded",
+    "context": "r3_error_handling_and_visibility"
+  }
+]

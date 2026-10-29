@@ -1,0 +1,105 @@
+{
+  "task_id": "KJ-GEMINI-20260922-001",
+  "generated_at": "2026-09-22T09:20:00+08:00",
+  "git_head": "de0cecf107e670e1c0d9cf393c50b92ab85afdee",
+  "environment": {
+    "node_version": "v24.15.0",
+    "browser": "Headless Chrome (Playwright channel: chrome via Codex dependencies)",
+    "esbuild_version": "0.25.0",
+    "network_intercepted": "ALL (**/* aborted, static synthetic wb_commission fixture injected)",
+    "local_storage": "Pure in-memory Map mock (__inMemoryPersistStore)",
+    "exchange_rate": "Synthetic fixed 12.5 RUB/CNY with useExchangeRate hook"
+  },
+  "target_file_integrity": {
+    "target_file": "ozon-react/src/components/t6/ProjectDetailPage.jsx",
+    "initial_sha256": "83adf484de082dba76b053bb3840fbc62cef8985154499473dde34aa99d7ede7",
+    "final_sha256": "d2721e6adb795076af9c46e182a7753cadb547b93da033218a31369fa7288daf",
+    "incremental_diff_file": "docs/ai-handoff/KJ-GEMINI-20260922-001/evidence/ProjectDetailPage.task-incremental.diff",
+    "other_baseline_files_unchanged": 27,
+    "total_baseline_files": 28,
+    "unexpected_drift": 0
+  },
+  "executions": [
+    {
+      "command": "node tests/ia-project-notice.test.mjs",
+      "mode": "unit_and_static_contract",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "verified_clean",
+      "summary": "静态源码契约与内存状态归属逻辑检查：确认 notice 从 overview 内部移除、提升至 p-5 顶层共享区、绑定 projectId、包含 role=status/aria-live/break-words/break-all、同实例及切换时无脏通知残留",
+      "assertions_passed": 6
+    },
+    {
+      "command": "node docs/ai-handoff/KJ-GEMINI-20260922-001/run-notice-visibility-tests.mjs",
+      "mode": "real_browser_component_acceptance",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "verified_clean",
+      "summary": "真实组件端到端浏览器验收：Ozon/WB 失败 costing 页即刻可见、输入 115 与确认保留、原位重试成功闭环落库 115、全 Tab 可见且严格仅 1 份、无空通知、同实例与经列表导航切项目归属隔离、390/768/1440 视口无溢出无遮挡、辅助技术与键盘聚焦无障碍",
+      "evidence_dir": "docs/ai-handoff/KJ-GEMINI-20260922-001/evidence",
+      "scenarios_tested": [
+        "S1: Ozon 保存失败可见性与原位重试闭环 (验收 1 & 2 & 6: costing 页直接展示错误，输入 115 保留，确认状态保留，核算器不关闭，T6 实体 0 变动；移除故障原位重试落库 115 闭环，核算器关闭，成本页可见成功提示，Project B 保持 0 场景)",
+        "S2: WB 保存失败可见性与原位重试闭环 (验收 1 & 2: costing 页直接展示 WB 错误，原位重试落库 115 闭环，成本页可见成功提示，新增 WB 场景)",
+        "S3: 全 Tab 覆盖与无冗余渲染断言 (验收 3: overview/product/suppliers/costing/compliance/operations 均能看到 notice 且全页严格仅 1 份；无 notice 时严格不渲染空通知节点 count===0；最新消息完全覆盖旧消息，无拼接累加)",
+        "S4: A 切 B 两种边界下的通知项目归属隔离 (验收 4: 边界 1 同实例 Props 切换 A 的通知立即隐匿 count===0，B 设置通知不污染 A；边界 2 真实导航经列表卸载重挂 B 同样 0 残留)",
+        "S5: 390 / 768 / 1440 响应式视口、长错误换行与可访问性 (验收 5: 390px 移动端 notice 宽 332px 自动换行无横向溢出，768px/1440px 正常；Tab 栏未被遮挡；role=status 与 aria-live=polite 齐全；键盘 Tab 键可达页面控件)"
+      ]
+    },
+    {
+      "command": "npm test",
+      "mode": "regression_full_test_suite",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "verified_clean",
+      "summary": "全量回归测试套件全绿：React wbEngine/ozonEngine/t6Store/scoring/fbp/ia 全部单测 + Python wb_calc 44 项全绿"
+    },
+    {
+      "command": "npm run test:golden",
+      "mode": "regression_golden_cases",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "verified_clean",
+      "summary": "76 项黄金业务案例全绿（含 WB、Ozon 渠道及评分规则黄金用例）"
+    },
+    {
+      "command": "npm run test:sync",
+      "mode": "regression_cross_platform_sync",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "verified_clean",
+      "summary": "React vs Python 双端对拍零差异（16 重量边界 + 2 版本边界 + scoring_rules 一致性）"
+    },
+    {
+      "command": "node --input-type=module -e \"baseline verification\"",
+      "mode": "baseline_integrity_check",
+      "exit_code": 0,
+      "execution_status": "completed",
+      "assertions_status": "passed",
+      "business_verdict": "verified_clean",
+      "summary": "28 个基线关键文件校验：27 个文件哈希完全一致 (0 漂移)，唯一目标文件 ProjectDetailPage.jsx 仅含预期最小修改"
+    }
+  ],
+  "classified_warnings": {
+    "wbRouteSelectDuplicateKeys": 20,
+    "unexpectedConsoleErrors": 0,
+    "unhandledPageErrors": 0,
+    "notes": "WB 线路下拉框由于数据源重复产生的 20 处 React duplicate key 警告已精准分类，控制台与页面无任何未预期报错"
+  },
+  "unexecuted_items": [
+    {
+      "item": "WordPress/MySQL 远端持久化与生产部署",
+      "status": "not_run",
+      "reason": "TASK.md 明确限定：本地限定源码修改已放行；生产访问、部署、数据迁移均未授权。"
+    },
+    {
+      "item": "采购成本历史继承未知决策调整 (P1)",
+      "status": "not_run",
+      "reason": "TASK.md 明确约束：采购成本回退、切页草稿丢失、同实例上下文残留均保留为已知问题，不能顺手修复。"
+    }
+  ]
+}

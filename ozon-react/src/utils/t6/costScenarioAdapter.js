@@ -8,7 +8,6 @@
  *  - 汇率与代理费规则随场景冻结；旧场景缺少新字段时才回退当前 settings
  *  - outputPayload 冻结核算引擎输出原文（calcChannelProfit 结果 verbatim）
  */
-import { getProject, getSnapshot } from './t6Store.js'
 import settingsData from '../../generated/settings.js'
 import channelsData from '../../generated/ozon_channels.js'
 import { calcChannelProfit, mapChannelConfig } from '../ozonEngine.js'
@@ -20,17 +19,35 @@ export const WB_CALC_VERSION = 'wb-order-v2'
  * Ozon 单规格测算预填：只带"候选真实数据"字段，成本类字段一律留空（绝不虚构）。
  * price = sourceInputs.price_rub（SingleTab 实际售价语义，绝不 ×0.6）
  * commission = commission_rfbs 仅限（rFBS 自发货；绝不回退 fbs/fbo/fbp）
- * @param {{ snapshot: object }} args
+ * 07A-3C 扩展：支持传入已保存的 product 进行物理参数覆盖：
+ * - nameZh -> productName
+ * - grossWeightG -> weight (g -> kg)
+ * - packageDimsCm -> length, width, height
+ * 缺失或无效时逐字段安全回退到 snapshot 原行为。
+ * @param {{ snapshot: object, product?: object|null }} args
  */
-export function buildOzonPrefill({ snapshot }) {
+export function buildOzonPrefill({ snapshot, product = null }) {
   const si = snapshot?.sourceInputs || {}
   const dims = Array.isArray(si.dims) && si.dims.length >= 3 ? si.dims : null
+
+  const hasValidName = typeof product?.nameZh === 'string' && product.nameZh.trim() !== ''
+  const productName = hasValidName ? product.nameZh.trim() : (si.name ?? '')
+
+  const hasValidGrossWeight = typeof product?.grossWeightG === 'number' && Number.isFinite(product.grossWeightG) && product.grossWeightG > 0
+  const weight = hasValidGrossWeight ? product.grossWeightG / 1000 : (si.weight_kg ?? '')
+
+  const hasValidPackageDims = Array.isArray(product?.packageDimsCm) && product.packageDimsCm.length === 3 && product.packageDimsCm.every((v) => typeof v === 'number' && Number.isFinite(v) && v > 0)
+  const length = hasValidPackageDims ? product.packageDimsCm[0] : (dims ? dims[0] : '')
+  const width = hasValidPackageDims ? product.packageDimsCm[1] : (dims ? dims[1] : '')
+  const height = hasValidPackageDims ? product.packageDimsCm[2] : (dims ? dims[2] : '')
+
   return {
+    productName,
     price: si.price_rub ?? '',
-    weight: si.weight_kg ?? '',
-    length: dims ? dims[0] : '',
-    width: dims ? dims[1] : '',
-    height: dims ? dims[2] : '',
+    weight,
+    length,
+    width,
+    height,
     commission: si.commission_rfbs ?? '',
     // 以下字段由用户在核算面板填写真实值；预填一律留空（不虚构）
     purchaseCost: '',
@@ -56,7 +73,7 @@ export function findOzonChannelRaw(channelId) {
  * 冻结解析配置：渠道完整配置（含 meta）+ 汇率/代理费快照 + 计算器版本。
  * 不复制费率数值；直接引用 config 原始记录。
  */
-export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = settingsData) {
+export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = settingsData, agencyFeePercent = null) {
   const raw = findOzonChannelRaw(selectedChannelId)
   if (!raw) throw new Error(`T6_COST: 渠道 ${selectedChannelId} 不在 config/ozon_channels.json（fail-close）`)
   return {
@@ -65,7 +82,7 @@ export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = set
     calculation_version: runtimeSettings.calculation_version || 'v1.0',
     rubPerCny: runtimeSettings.rub_per_cny,
     agencyFee: {
-      rate: runtimeSettings.agency_fee.rate,
+      rate: agencyFeePercent === null ? runtimeSettings.agency_fee.rate : Number(agencyFeePercent) / 100,
       min_rub: runtimeSettings.agency_fee.min_rub,
       max_rub: runtimeSettings.agency_fee.max_rub,
     },
@@ -87,17 +104,28 @@ export function buildOzonResolvedConfig(selectedChannelId, runtimeSettings = set
  * - inputPayload = 核算面板全部真实输入（含用户填写的成本字段）
  * - outputPayload = calcChannelProfit 输出原文（verbatim）
  */
-export function buildOzonScenarioPayload({ project, inputPayload, selectedChannelId, outputPayload }) {
+export function buildOzonScenarioPayload({ project, inputPayload, selectedChannelId, outputPayload, exchangeRateInfo }) {
   if (!project) throw new Error('T6_COST: 项目不存在')
   if (!inputPayload) throw new Error('T6_COST: inputPayload 必填')
   if (!outputPayload) throw new Error('T6_COST: outputPayload 必填（引擎输出原文）')
-  const snap = getSnapshot(project.source.creationSnapshotId)
-  if (!snap) throw new Error(`T6_COST: 立项快照 ${project.source.creationSnapshotId} 不存在（场景上下文缺失）`)
+  const snapId = project.source?.creationSnapshotId
+  if (!snapId) throw new Error(`T6_COST: 立项快照不存在（场景上下文缺失）`)
+  const rate = exchangeRateInfo?.rubPerCny ?? settingsData.rub_per_cny
+  if (!Number.isFinite(Number(rate)) || Number(rate) <= 0) throw new Error('T6_COST: 汇率无效，无法冻结场景')
+  const agencyFeePercent = inputPayload.agencyFee === '' || inputPayload.agencyFee === undefined || inputPayload.agencyFee === null
+    ? null : Number(inputPayload.agencyFee)
+  if (agencyFeePercent !== null && (!Number.isFinite(agencyFeePercent) || agencyFeePercent < 0 || agencyFeePercent > 100)) throw new Error('T6_COST: 代理费率无效')
+  const resolvedConfig = buildOzonResolvedConfig(selectedChannelId, { ...settingsData, rub_per_cny: Number(rate) }, agencyFeePercent)
+  if (exchangeRateInfo) {
+    resolvedConfig.exchangeRateSource = exchangeRateInfo.source || '配置值'
+    resolvedConfig.exchangeRateDate = exchangeRateInfo.date || null
+    resolvedConfig.exchangeRateRefDate = exchangeRateInfo.refDate || null
+  }
   return {
     platform: 'OZON',
-    sourceSnapshotId: snap.id,
+    sourceSnapshotId: snapId,
     inputPayload: JSON.parse(JSON.stringify(inputPayload)),
-    resolvedConfig: buildOzonResolvedConfig(selectedChannelId),
+    resolvedConfig,
     outputPayload: JSON.parse(JSON.stringify(outputPayload)),
   }
 }
@@ -198,17 +226,36 @@ export function scenarioMarginPct(scenario) {
  * - actualWeightG = weight_kg × 1000（克）
  * - sellerRevenueRub ← price_rub，仅作参考售价（标记"来自候选市场的参考售价"）
  * - 绝不预填佣金：WB 佣金/线路/成本假设全部由用户填写（即使 commission_rfbs 存在也绝不带入）
+ * 07A-3C 扩展：支持传入已保存的 product 进行物理参数覆盖：
+ * - nameZh -> productName
+ * - grossWeightG -> actualWeightG (g)
+ * - packageDimsCm -> lengthCm, widthCm, heightCm
+ * 缺失或无效时逐字段安全回退到 snapshot 原行为。
+ * @param {{ snapshot: object, product?: object|null }} args
  */
-export function buildWbPrefill({ snapshot }) {
+export function buildWbPrefill({ snapshot, product = null }) {
   const si = snapshot?.sourceInputs || {}
   const dims = Array.isArray(si.dims) && si.dims.length >= 3 ? si.dims : null
   const weightKg = Number(si.weight_kg)
+  const defaultWeightG = Number.isFinite(weightKg) && weightKg > 0 ? Math.round(weightKg * 1000) : ''
+
+  const hasValidName = typeof product?.nameZh === 'string' && product.nameZh.trim() !== ''
+  const productName = hasValidName ? product.nameZh.trim() : (si.name ?? '')
+
+  const hasValidGrossWeight = typeof product?.grossWeightG === 'number' && Number.isFinite(product.grossWeightG) && product.grossWeightG > 0
+  const actualWeightG = hasValidGrossWeight ? product.grossWeightG : defaultWeightG
+
+  const hasValidPackageDims = Array.isArray(product?.packageDimsCm) && product.packageDimsCm.length === 3 && product.packageDimsCm.every((v) => typeof v === 'number' && Number.isFinite(v) && v > 0)
+  const lengthCm = hasValidPackageDims ? product.packageDimsCm[0] : (dims ? dims[0] : '')
+  const widthCm = hasValidPackageDims ? product.packageDimsCm[1] : (dims ? dims[1] : '')
+  const heightCm = hasValidPackageDims ? product.packageDimsCm[2] : (dims ? dims[2] : '')
+
   return {
-    productName: si.name ?? '',
-    actualWeightG: Number.isFinite(weightKg) && weightKg > 0 ? Math.round(weightKg * 1000) : '',
-    lengthCm: dims ? dims[0] : '',
-    widthCm: dims ? dims[1] : '',
-    heightCm: dims ? dims[2] : '',
+    productName,
+    actualWeightG,
+    lengthCm,
+    widthCm,
+    heightCm,
     sellerRevenueRub: si.price_rub ?? '', // 参考售价（来源：候选市场价），可修改
   }
 }
@@ -250,11 +297,11 @@ export function buildWbScenarioPayload({ project, inputPayload, tariff, settings
   if (!project) throw new Error('T6_COST: 项目不存在')
   if (!inputPayload) throw new Error('T6_COST: inputPayload 必填')
   if (!outputs || !outputs.profitCalc) throw new Error('T6_COST: outputs 必填（wbEngine 输出原文）')
-  const snap = getSnapshot(project.source.creationSnapshotId)
-  if (!snap) throw new Error(`T6_COST: 立项快照 ${project.source.creationSnapshotId} 不存在（场景上下文缺失）`)
+  const snapId = project.source?.creationSnapshotId
+  if (!snapId) throw new Error(`T6_COST: 立项快照不存在（场景上下文缺失）`)
   return {
     platform: 'WB',
-    sourceSnapshotId: snap.id,
+    sourceSnapshotId: snapId,
     inputPayload: JSON.parse(JSON.stringify(inputPayload)),
     resolvedConfig: buildWbResolvedConfig({ tariff, settings }),
     outputPayload: JSON.parse(JSON.stringify(outputs)),
