@@ -4,7 +4,7 @@ import {
   toNum, round2, roundUpWeight, selectTariffVersion, selectTariffTier,
   validateParcel, calculateParcelLogistics, calculateOrderLogistics,
   calculatePlatformSettlement, calculateOperatingProfit, compareRoutes, calculateReturnLoss,
-  calculateReverseCompensation, calculateTotalLogisticsCost, calculateOperatingProfitV2,
+  calculateReverseCompensation, calculateTotalLogisticsCost,
   inferReverseEventType, getOrderLabels,
 } from '../../utils/wbEngine'
 import { fmtCny } from './format'
