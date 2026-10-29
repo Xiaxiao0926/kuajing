@@ -8,6 +8,7 @@ import {
   inferReverseEventType, getOrderLabels,
 } from '../../../utils/wbEngine'
 import { mergeTrustedPrefill } from '../../../utils/t6/costScenarioAdapter'
+import { effectiveWbRoutes, isEnteredNumber, localDateString, missingWbInputs } from '../../../utils/platformCosting'
 import { fmtCny, fmtRub, fmtPct } from '../format'
 import { CategoryProductPicker } from '../CategoryProductPicker'
 import { MetricCard } from '../MetricCard'
@@ -19,7 +20,7 @@ import { ReverseOrderResult } from '../ReverseOrderResult'
 const FORM_DEFAULTS = {
   productName: '', actualWeightG: 100, lengthCm: 20, widthCm: 15, heightCm: 10,
   purchaseCost: 0, packagingCost: 0, quantity: 1, parcelCount: 1,
-  routeId: '', sellerRevenueRub: 1000, commissionRate: 25,
+  routeId: '', orderDate: '', sellerRevenueRub: 1000, commissionRate: 25,
   chinaInbound: 0, promotionCostRub: 0, status: '已签收',
   useSku: false, selectedSkuIdx: 0,
   category: '', commissionAutoMatched: false,
@@ -37,21 +38,54 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
   // T6-2B2：项目上下文预填只生效一次（key 按 projectId 强制重挂）；佣金/成本/线路假设绝不预填
   // T6-2B hotfix：只有"有值"的 project prefill 覆盖默认值，'' 不得把成本/售价清成 0
   const [form, setForm] = useState(() => {
-    const defaults = { ...FORM_DEFAULTS, routeId: tariffs[0]?.routeId || '' }
+    const currentRoutes = effectiveWbRoutes(tariffs, localDateString())
+    const defaults = {
+      ...FORM_DEFAULTS,
+      ...(projectContext ? {
+        actualWeightG: '', lengthCm: '', widthCm: '', heightCm: '',
+        purchaseCost: '', packagingCost: '', chinaInbound: '',
+        sellerRevenueRub: '', commissionRate: '', promotionCostRub: '',
+      } : {}),
+      routeId: currentRoutes[0]?.routeId || '',
+      orderDate: localDateString(),
+    }
     return projectContext?.prefill ? mergeTrustedPrefill(defaults, projectContext.prefill) : defaults
   })
   const [showSteps, setShowSteps] = useState(false)
   // T6-2B hotfix：项目模式保存前必须人工确认成本与费率假设（WB 默认成本为 0，未确认禁止保存场景）
   const [costConfirmed, setCostConfirmed] = useState(false)
+  const [appliedNotice, setAppliedNotice] = useState(null)
 
-  const update = (k, v) => setForm((f) => ({ ...f, [k]: v }))
+  const supplyRef = projectContext?.supplyCostReference || { status: 'NONE' }
+
+  const handleApplySupplyQuote = () => {
+    if (supplyRef.status !== 'APPLICABLE_CNY' || typeof supplyRef.purchaseCostCny !== 'number') return
+    setForm((prev) => ({
+      ...prev,
+      purchaseCost: supplyRef.purchaseCostCny,
+    }))
+    setCostConfirmed(false)
+    setAppliedNotice(`已采用正式报价 ¥${supplyRef.purchaseCostCny} 作为当前采购成本草稿。`)
+  }
+
+  const update = (k, v) => {
+    setForm((f) => ({ ...f, [k]: v }))
+    setCostConfirmed(false)
+    if (k === 'purchaseCost') {
+      setAppliedNotice(null)
+    }
+  }
 
   const selectedSku = form.useSku && skus.length > 0 ? skus[form.selectedSkuIdx] : null
-  const tariff = tariffs.find((t) => t.routeId === form.routeId)
+  const routeChoices = effectiveWbRoutes(tariffs, form.orderDate)
+  const tariff = selectTariffVersion(form.routeId, form.orderDate, tariffs)
+  const missingInputs = missingWbInputs(form)
 
   // 计算
-  const perParcelWeight = form.actualWeightG * form.quantity / form.parcelCount
-  const parcels = Array.from({ length: form.parcelCount }, () => ({
+  const safeQuantity = Math.max(1, Math.min(1000, Math.floor(Number(form.quantity) || 1)))
+  const safeParcelCount = Math.max(1, Math.min(100, Math.floor(Number(form.parcelCount) || 1)))
+  const perParcelWeight = Number(form.actualWeightG) * safeQuantity / safeParcelCount
+  const parcels = Array.from({ length: safeParcelCount }, () => ({
     actualWeightG: perParcelWeight, lengthCm: form.lengthCm, widthCm: form.widthCm, heightCm: form.heightCm,
   }))
   const logisticsCalc = tariff ? calculateOrderLogistics(parcels, tariff) : null
@@ -74,6 +108,12 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
     certificationAllocationCny: 0,
   }
   const profitCalc = calculateOperatingProfit(orderData, skuData, settings, logisticsCny)
+  const parcelValid = !!tariff && parcels.every((parcel) => validateParcel(parcel, tariff).valid)
+    && !!logisticsCalc?.parcels.every((parcel) => parcel.validation?.valid && parcel.feeCny !== null)
+  const canSaveScenario = !!projectContext?.onSaveScenario && !!form.productName?.trim()
+    && costConfirmed && missingInputs.length === 0 && parcelValid
+    && isEnteredNumber(settings.rubPerCny, { positive: true })
+    && Number.isFinite(profitCalc.operatingProfitCny)
 
   // V2: 反向配送赔偿计算
   const reverseOrderData = {
@@ -86,7 +126,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
     otherReverseCostCny: form.otherReverseCostCny,
     forwardFeeApplied: form.forwardFeeApplied,
     inventoryRecoveryRate: form.inventoryRecoveryRate,
-    parcels: Array.from({ length: form.parcelCount }, () => ({
+    parcels: Array.from({ length: safeParcelCount }, () => ({
       actualWeightG: perParcelWeight,
     })),
   }
@@ -100,7 +140,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
 
   // T6-2B2：项目模式下把当前方案冻结为不可变成本场景（wbEngine 输出 verbatim）
   const saveScenario = () => {
-    if (!projectContext?.onSaveScenario || !tariff) return
+    if (!canSaveScenario) return
     projectContext.onSaveScenario({
       inputPayload: {
         productName: form.productName,
@@ -111,6 +151,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         quantity: toNum(form.quantity),
         parcelCount: toNum(form.parcelCount),
         routeId: form.routeId,
+        orderDate: form.orderDate,
         sellerRevenueRub: toNum(form.sellerRevenueRub),
         commissionRate: toNum(form.commissionRate),
         promotionCostRub: toNum(form.promotionCostRub),
@@ -158,10 +199,66 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
               正在为项目 <b>{projectContext.projectCode}</b> 核算：已预填候选真实数据（名称/重量/尺寸/参考售价）。
               WB 佣金率、线路与成本假设请自行填写；售价仅作参考。
             </div>
+            {supplyRef && supplyRef.status !== 'NONE' && (
+              <div className="rounded-md border border-orange-300 bg-white/80 p-2.5 space-y-1.5">
+                {supplyRef.status === 'APPLICABLE_CNY' && (
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-1.5 font-medium text-gray-800">
+                        <span>正式供应报价:</span>
+                        <span>{supplyRef.supplierName} · v{supplyRef.quoteVersion} · <b className="text-emerald-700">¥{supplyRef.rawAmount}</b></span>
+                      </div>
+                      <div className="text-[11px] text-gray-500">
+                        该值来自正式供应报价，仅作为采购单价草稿；包装成本、国内送仓费及税费等仍需单独确认。
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleApplySupplyQuote}
+                      className="px-2.5 py-1 text-xs font-medium rounded bg-orange-100 hover:bg-orange-200 text-orange-800 border border-orange-300 transition-colors"
+                    >
+                      采用正式供应报价
+                    </button>
+                  </div>
+                )}
+                {supplyRef.status === 'BLOCKED_CURRENCY' && (
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-1.5 font-medium text-gray-800">
+                        <span>正式供应报价:</span>
+                        <span>{supplyRef.supplierName} · v{supplyRef.quoteVersion} · <b>{supplyRef.rawAmount} {supplyRef.currency}</b></span>
+                      </div>
+                      <div className="text-[11px] text-amber-700">
+                        非人民币正式报价暂不支持一键采用，请核实汇率后手工填写采购成本。
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      disabled
+                      className="px-2.5 py-1 text-xs font-medium rounded bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                    >
+                      采用正式供应报价
+                    </button>
+                  </div>
+                )}
+                {supplyRef.status === 'INVALID_REFERENCE' && (
+                  <div className="text-[11px] text-amber-700">
+                    正式供应方案引用异常，采购成本请暂时手工填写。
+                  </div>
+                )}
+                {appliedNotice && (
+                  <div className="text-[11px] font-medium text-emerald-700">
+                    ✓ {appliedNotice}
+                  </div>
+                )}
+              </div>
+            )}
             <label className="flex items-center gap-1.5 text-orange-800">
               <input type="checkbox" checked={costConfirmed} onChange={(e) => setCostConfirmed(e.target.checked)} className="rounded" />
               已确认采购成本、佣金率与费用假设
             </label>
+            {missingInputs.length > 0 && <p className="text-amber-700">待补齐：{missingInputs.join('、')}。当前结果仅供试算。</p>}
+            {!parcelValid && <p className="text-amber-700">当前包裹不符合该日期线路的重量、尺寸或费率要求，不能保存为项目方案。</p>}
           </div>
         )}
         <h4 className="text-sm font-semibold text-morandi-text">输入参数</h4>
@@ -179,7 +276,9 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
               const idx = Number(e.target.value)
               update('selectedSkuIdx', idx)
               const s = skus[idx]
-              if (s) setForm((f) => ({
+              if (s) {
+                setCostConfirmed(false)
+                setForm((f) => ({
                 ...f, selectedSkuIdx: idx, productName: s.productNameCn || '',
                 category: s.category || '', commissionAutoMatched: false,
                 actualWeightG: s.actualUnitWeightG || 100, lengthCm: s.productLengthCm || 20,
@@ -187,7 +286,8 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
                 purchaseCost: s.purchaseCostCny || 0, packagingCost: s.packagingCostCny || 0,
                 chinaInbound: s.chinaInboundCostCny || 0, routeId: s.defaultRouteId || f.routeId,
                 sellerRevenueRub: s.targetSalePriceRub || 1000, commissionRate: s.commissionRate || 25,
-              }))
+                }))
+              }
             }}
             className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white"
           >
@@ -221,6 +321,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         <CategoryProductPicker
           value={{ category: form.category || '', product: form.productName || '', commission: form.commissionAutoMatched ? toNum(form.commissionRate) : null }}
           onChange={(v) => {
+            setCostConfirmed(false)
             setForm((f) => ({
               ...f,
               category: v.category,
@@ -243,11 +344,14 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         </div>
 
         <div>
+          <label className="text-xs font-medium text-gray-500 mb-1 block">测算日期</label>
+          <input type="date" value={form.orderDate} onChange={(e) => update('orderDate', e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white mb-3" />
           <label className="text-xs font-medium text-gray-500 mb-1 block">物流线路</label>
           <select value={form.routeId} onChange={(e) => update('routeId', e.target.value)}
             className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white">
-            {tariffs.map((t) => <option key={t.routeId} value={t.routeId}>{t.routeName} ({t.etaMinDays}-{t.etaMaxDays}天)</option>)}
+            {routeChoices.map((t) => <option key={t.routeId} value={t.routeId}>{t.routeName} ({t.etaMinDays}-{t.etaMaxDays}天)</option>)}
           </select>
+          <p className="mt-1 text-[11px] text-gray-500">{tariff ? `使用 ${tariff.effectiveFrom || '未知日期'} 生效的运价版本；汇率仍采用页面当前值` : '该日期没有有效线路版本，无法保存方案'}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -267,6 +371,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1 block">订单状态</label>
           <select value={form.status} onChange={(e) => {
+            setCostConfirmed(false)
             const newStatus = e.target.value
             // 根据订单状态自动推断反向事件类型
             const statusToEvent = {
@@ -382,13 +487,13 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         {projectContext && (
           <button
             onClick={saveScenario}
-            disabled={!tariff || !form.productName || !costConfirmed}
+            disabled={!canSaveScenario}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium py-2 rounded-lg"
           >
             保存此方案到项目（不可变成本场景）
           </button>
         )}
-        <button
+        {!projectContext && <button
           onClick={() => {
             if (!form.productName) { alert('请填写商品名称'); return }
             const skuId = `SKU-${Date.now()}`
@@ -419,7 +524,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
           className="w-full bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium py-2 rounded-lg"
         >
           保存为SKU模板
-        </button>
+        </button>}
       </div>
     </div>
   )
