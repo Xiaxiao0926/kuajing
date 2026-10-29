@@ -344,6 +344,22 @@ console.log('C16: Ozon 利润使用全精度汇率换算——仅输出阶段四
   assert(out.profit === 36.74, `Ozon 全精度利润=36.74（实际 ${out.profit}）`)
 }
 
+console.log('C17: 上架价与成交价同用 effectiveRubPerCny——用户覆盖汇率时口径一致')
+{
+  // 用户覆盖汇率 12.5：priceRMB 与 listPriceRMB 必须同用 12.5（2026-10-29 修复：listPrice 原误用默认汇率）
+  const out = calcRow({ listPrice: 8600, discountRate: 0.6, weight: 1, length: 20, width: 15, height: 10 }, {
+    commission: 0, adRate: 0, paymentFee: 0, returnLoss: 0, rubPerCny: 12.5,
+  })
+  assert(out.listPriceRMB === 688, `listPriceRMB = 8600/12.5 = 688（实际 ${out.listPriceRMB}）`)
+  assert(out.priceRMB === 412.8, `priceRMB = 5160/12.5 = 412.8（实际 ${out.priceRMB}）`)
+  // 无覆盖时回落默认汇率 13（与修复前行为一致，零回归）
+  const d = calcRow({ listPrice: 8600, discountRate: 0.6, weight: 1, length: 20, width: 15, height: 10 }, {
+    commission: 0, adRate: 0, paymentFee: 0, returnLoss: 0,
+  })
+  assert(d.listPriceRMB === 661.54, `无覆盖时 listPriceRMB = 8600/13 ≈ 661.54（实际 ${d.listPriceRMB}）`)
+  assert(d.listPriceRMB === d.priceRMB / 0.6 || Math.abs(d.listPriceRMB - d.priceRMB / 0.6) < 0.02, '无覆盖时同汇率口径：listPriceRMB ≈ priceRMB / 0.6')
+}
+
 console.log(`\n===== CostScenario 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)
 if (fail > 0) {
   process.exitCode = 1

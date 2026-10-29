@@ -192,6 +192,7 @@ total_logistics_cost_cny = forward_logistics_used_cny
 - 人民币折算：`CNY = round2(RUB / rub_per_cny)`
 - 卢布折算：`RUB = round2(CNY × rub_per_cny)`
 - 彻底废除 `ozon_rub_to_cny` 与 `rub_to_cny` 等重复字段，保证 Ozon 与 WB 两端数学精度逐位完全一致（例如 3998 RUB / 13 = 307.54 RMB）。
+- **同一行计算内汇率口径必须唯一**：用户覆盖汇率（`common.rubPerCny`，回落默认 `rub_per_cny`）对成交价与上架价的折算一视同仁——`priceRMB` 与 `listPriceRMB` 同用 `effectiveRubPerCny`。[用户确认修复 2026-10-29；锁定测试 costScenario.test.mjs C17]
 
 ## 11. 修改公式的流程（强制）
 
