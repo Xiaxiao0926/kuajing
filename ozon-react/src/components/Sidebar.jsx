@@ -7,8 +7,8 @@
 import { useState, useRef, useEffect } from 'react'
 import {
   Upload, FileSpreadsheet, Loader2, FolderOpen, ChevronDown, ChevronRight, CheckCircle2, Info, GitBranch,
-  LayoutDashboard, Search, Target, ClipboardList, Store, Truck, FileText, Package, Factory, ShieldCheck, Wallet, Database, BarChart3, Warehouse,
-  Inbox, FolderKanban, Layers, BookOpen, Compass,
+  LayoutDashboard, Target, Calculator, Truck, FileText, Package, Wallet, Database, Warehouse,
+  Inbox, FolderKanban, BookOpen, Compass,
 } from 'lucide-react'
 import { ROADMAP_PHASES } from '../data/roadmap'
 import { persistGet, persistSet } from '../utils/persist'
@@ -54,12 +54,13 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    id: 'logistics',
-    label: '成本与物流',
-    icon: Truck,
+    id: 'costing',
+    label: '成本核算',
+    icon: Wallet,
     items: [
+      { id: 'n4', label: 'Ozon 跨境核算', icon: Calculator },
+      { id: '__fbp_calc__', label: 'Ozon FBP 核算', icon: Warehouse },
       { id: 'n39', label: 'WB 核算', icon: Truck },
-      { id: '__fbp_calc__', label: 'FBP 核算', icon: Warehouse },
       { id: 'n8', label: '成本报价', icon: FileText },
     ],
   },
@@ -69,14 +70,6 @@ const NAV_SECTIONS = [
     icon: FileText,
     items: [
       { id: 'n14', label: 'Listing 工作台', icon: FileText },
-    ],
-  },
-  {
-    id: 'operations',
-    label: '运营与复盘',
-    icon: Store,
-    items: [
-      { id: 'n4', label: 'Ozon 运营', icon: Store },
     ],
   },
   {
@@ -97,9 +90,8 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
     market: true,
     selection: true,
     goods: true,
-    logistics: true,
+    costing: true,
     listing: true,
-    operations: true,
     system: true,
   })
   const [showDataPanel, setShowDataPanel] = useState(false)
@@ -358,7 +350,7 @@ export default function Sidebar({ onFileUpload, loading, data, error, activeNode
                             onClick={() => { onNodeSelect(node.id); markUpdatesRead(node.id) }}
                             className={`flex h-7 w-full items-center gap-1.5 rounded px-1.5 text-xs text-left ${isActive(node.id) ? 'bg-workspace-primary/10 font-medium text-workspace-primary' : 'text-workspace-text hover:bg-workspace-surface-subtle'}`}
                           >
-                            <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${status === 'done' ? 'bg-workspace-success-soft0' : status === 'in_progress' ? 'bg-workspace-warning' : 'bg-workspace-border-strong'}`} />
+                            <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${status === 'done' ? 'bg-workspace-success-soft' : status === 'in_progress' ? 'bg-workspace-warning' : 'bg-workspace-border-strong'}`} />
                             <span className="flex-1 truncate">{node.title}</span>
                             {hasUpdate && (
                               <span className="relative flex-shrink-0">

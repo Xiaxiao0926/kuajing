@@ -56,7 +56,8 @@ function pageLabelForNode(nodeId) {
   if (nodeId === '__scoring__') return '选品评分'
   if (nodeId === '__purity_analysis__') return '选品市场分析'
   if (nodeId === '__market_reports__' || nodeId === '__door_window_report__') return '市场报告'
-  if (nodeId === '__fbp_calc__') return 'FBP 边境仓核算'
+  if (nodeId === '__fbp_calc__') return 'Ozon FBP 核算'
+  if (nodeId === 'n4') return 'Ozon 跨境核算'
   if (nodeId === '__t6_candidates__') return '候选池'
   if (nodeId === '__t6_projects__') return 'SKU 项目'
   if (nodeId === '__t6_project_detail__') return '项目详情'
@@ -90,7 +91,7 @@ function DashboardApp() {
   const [screenshotMode, setScreenshotMode] = useState(false)
   const [dataFormat, setDataFormat] = useState('old')
   const [autoLoaded, setAutoLoaded] = useState(false)
-  const [activeNode, setActiveNode] = useState('n1')
+  const [activeNode, setActiveNode] = useState('__progress_overview__')
   // 每日汇率自动更新：挂载时刷新（当日 localStorage 缓存命中则不发请求）；
   // 订阅后汇率变化触发整树重渲染，各面板经 live binding 立即使用新汇率。
   useExchangeRate()
@@ -453,16 +454,14 @@ function DashboardApp() {
                 <option value="__t6_projects__">SKU 项目</option>
                 <option value="n5">商品档案</option>
               </optgroup>
-              <optgroup label="成本与物流">
+              <optgroup label="成本核算">
+                <option value="n4">Ozon 跨境核算</option>
+                <option value="__fbp_calc__">Ozon FBP 核算</option>
                 <option value="n39">WB 核算</option>
-                <option value="__fbp_calc__">FBP 核算</option>
                 <option value="n8">成本报价</option>
               </optgroup>
               <optgroup label="Listing 与上架">
                 <option value="n14">Listing 工作台</option>
-              </optgroup>
-              <optgroup label="运营与复盘">
-                <option value="n4">Ozon 运营</option>
               </optgroup>
               <optgroup label="系统与数据">
                 <option value="__market_datahub__">数据中心</option>

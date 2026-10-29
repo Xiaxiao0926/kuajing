@@ -146,10 +146,6 @@ export default function CostQuote() {
         if (saved) {
           setItems(saved)
           setLoading(false)
-          const updates = persistGet('node-updates') || {}
-          if (!updates['n8']) updates['n8'] = []
-          updates['n8'].push({ time: Date.now(), msg: '成本报价数据已加载' })
-          persistSet('node-updates', updates)
           return
         }
         const resp = await fetch(PRICE_FILE)
@@ -159,10 +155,15 @@ export default function CostQuote() {
         if (data.length === 0) throw new Error('未解析到有效数据')
         setItems(data)
         persistSet(STORAGE_KEY, data)
+        // 仅首次加载数据时记录一次节点更新，避免每次挂载无限追加
         const updates = persistGet('node-updates') || {}
         if (!updates['n8']) updates['n8'] = []
-        updates['n8'].push({ time: Date.now(), msg: '成本报价数据已加载' })
-        persistSet('node-updates', updates)
+        const last = updates['n8'][updates['n8'].length - 1]
+        if (!last || last.msg !== '成本报价数据已加载') {
+          updates['n8'].push({ time: Date.now(), msg: '成本报价数据已加载' })
+          if (updates['n8'].length > 20) updates['n8'] = updates['n8'].slice(-20)
+          persistSet('node-updates', updates)
+        }
       } catch (err) {
         setError(err.message)
       } finally {

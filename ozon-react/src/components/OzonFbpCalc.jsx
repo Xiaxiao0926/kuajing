@@ -89,7 +89,8 @@ export default function OzonFbpCalc() {
         const calc = calcFbpProfit(ch, inputs, costParams)
         return { ch, calc }
       }),
-    [channelPool, params]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [channelPool, params, rubPerCny]
   )
 
   const usable = results.filter((r) => r.calc.ok).sort((a, b) => b.calc.profit - a.calc.profit)

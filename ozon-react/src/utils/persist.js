@@ -325,6 +325,11 @@ async function flushPending() {
           method: 'POST',
           body: JSON.stringify({ entries: { [key]: entry } }),
         })
+        if (!response) {
+          // 会话失效窗口内 serverRequest 可能返回 null：放回队列等待下轮重试，不中断本轮其余 entries
+          pending.set(key, entry)
+          continue
+        }
         const result = await response.json().catch(() => ({}))
         const saved = result.saved && typeof result.saved === 'object' ? result.saved[key] : null
         const next = setSavedMetadata(key, saved, entry)
