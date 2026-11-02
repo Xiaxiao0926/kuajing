@@ -343,7 +343,12 @@ export const calculateOperatingProfit = (order, sku, settings, logisticsCny) => 
     taxCostRaw = toNum(order?.taxCostCny)
   }
 
-  const profitRaw = netRaw - purchaseCost - packagingCost - chinaInbound - certification - taxCostRaw - otherOperating
+  // 退货损失（统计退货率：退货损失 = 销售收入 × 退货率%，镜像 Ozon calcRow 口径）[用户确认 2026-10-30]
+  const returnLossRate = toNum(order?.returnLoss)
+  const returnAmtRaw = salesRevenueRaw !== null ? (salesRevenueRaw * returnLossRate) / 100 : 0
+  const returnAmt = round2(returnAmtRaw)
+
+  const profitRaw = netRaw - purchaseCost - packagingCost - chinaInbound - certification - taxCostRaw - otherOperating - returnAmtRaw
   const taxCost = round2(taxCostRaw)
   const profit = round2(profitRaw)
   const profitMargin = salesRevenueRaw > 0 ? round2((profitRaw / salesRevenueRaw) * 100) : null
@@ -359,6 +364,7 @@ export const calculateOperatingProfit = (order, sku, settings, logisticsCny) => 
     `认证分摊: ${certification}¥`,
     `税费(${taxMethod}): ${taxCost}¥`,
     `其他成本: ${otherOperating}¥`,
+    `退货损失(退货率${returnLossRate}%): ${returnAmt}¥`,
     `经营利润（内部全精度计算）= ${profit}¥`,
     profitMargin !== null ? `利润率 = ${profit} / ${settlement.salesRevenueCny} = ${profitMargin}%` : '利润率: 不可计算',
     logisticsRatio !== null ? `物流费率 = ${logisticsCny} / ${settlement.salesRevenueCny} = ${logisticsRatio}%` : '物流费率: 不可计算',
@@ -371,6 +377,7 @@ export const calculateOperatingProfit = (order, sku, settings, logisticsCny) => 
     chinaInboundCostCny: chinaInbound,
     certificationAllocationCny: certification,
     taxCostCny: taxCost,
+    returnLossCny: returnAmt,
     otherOperatingCostCny: otherOperating,
     operatingProfitCny: profit,
     profitMargin,
@@ -759,6 +766,10 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
     taxCostRaw = toNum(order?.taxCostCny)
   }
 
+  // 退货损失（统计退货率：退货损失 = 销售收入 × 退货率%，镜像 Ozon calcRow 口径）[用户确认 2026-10-30]
+  const returnLossRate = toNum(order?.returnLoss)
+  const returnAmtRaw = (salesRevenueRaw * returnLossRate) / 100
+
   // 库存回收（仅退货/拒收场景）
   let inventoryLossCny = 0
   if (abnormalEvents.includes(reverseEventType)) {
@@ -767,12 +778,13 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
   }
 
   // 经营利润（platformNetSettlementRaw 已在税费计算前求出）
-  const profitRaw = platformNetSettlementRaw - purchaseCost - packagingCost - chinaInbound - certification - taxCostRaw - otherOperating - inventoryLossCny
+  const profitRaw = platformNetSettlementRaw - purchaseCost - packagingCost - chinaInbound - certification - taxCostRaw - otherOperating - returnAmtRaw - inventoryLossCny
   const salesRevenueCny = round2(salesRevenueRaw)
   const commissionCny = round2(commissionRaw)
   const acquiringFeeCny = round2(acquiringFeeRaw)
   const promotionCostCny = round2(promotionCostRaw)
   const platformOtherCny = round2(platformOtherRaw)
+  const returnLossAmt = round2(returnAmtRaw)
   const taxCost = round2(taxCostRaw)
   const platformNetSettlement = round2(platformNetSettlementRaw)
   const profit = round2(profitRaw)
@@ -800,6 +812,7 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
     `认证分摊: ${certification}¥`,
     `税费(${taxMethod}): ${taxCost}¥`,
     `其他成本: ${otherOperating}¥`,
+    `退货损失(退货率${returnLossRate}%): ${returnLossAmt}¥`,
     inventoryLossCny > 0 ? `库存损失: ${inventoryLossCny}¥ (回收率${toNum(order?.inventoryRecoveryRate)}%)` : `库存损失: 0¥`,
     ``,
     `平台净结算（内部全精度计算）= ${platformNetSettlement}¥`,
@@ -821,6 +834,7 @@ export const calculateOperatingProfitV2 = (order, sku, settings, tariff) => {
     chinaInboundCostCny: chinaInbound,
     certificationAllocationCny: certification,
     taxCostCny: taxCost,
+    returnLossCny: returnLossAmt,
     otherOperatingCostCny: otherOperating,
     inventoryLossCny,
     totalLogisticsCostCny: totalLogisticsCost,

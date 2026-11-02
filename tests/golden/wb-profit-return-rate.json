@@ -1,0 +1,79 @@
+{
+  "id": "wb-profit-return-rate",
+  "name": "WB 经营利润退货损失契约（统计退货率：退货损失 = 销售收入 × rate%）",
+  "provenance": {
+    "source_type": "user_confirmed_rule",
+    "verified_by_human": true,
+    "source": "用户确认（2026-10-30）：WB 核算缺少退货率计算公式，参考 Ozon calcRow 退货损失口径（returnAmt = 成交价 × returnLoss%）补齐。BUSINESS_RULES.md §7"
+  },
+  "engine": "react_wb",
+  "tariff_id": "DPX-SZ-382822-20260722",
+  "case_type": "operating_profit",
+  "cases": [
+    {
+      "tag": "return-loss-5pct",
+      "input": {
+        "settings": { "rubPerCny": 12, "taxMethod": "none", "taxRate": 0 },
+        "order": {
+          "sellerRevenueBaseRub": 1200,
+          "commissionRate": 25,
+          "promotionCostRub": 0,
+          "acquiringFeeRub": 0,
+          "platformOtherDeductionRub": 0,
+          "otherOperatingCostCny": 0,
+          "taxCostCny": 0,
+          "returnLoss": 5,
+          "reverseEventType": "none",
+          "forwardFeeApplied": true,
+          "parcels": [{ "actualWeightG": 500 }]
+        },
+        "sku": {
+          "purchaseCostCny": 10,
+          "packagingCostCny": 1,
+          "chinaInboundCostCny": 2,
+          "certificationAllocationCny": 0
+        }
+      },
+      "expected": {
+        "salesRevenueCny": 100,
+        "commissionCny": 25,
+        "platformNetSettlementCny": 45.50,
+        "returnLossCny": 5,
+        "operatingProfitCny": 27.50,
+        "profitMargin": 27.5
+      }
+    },
+    {
+      "tag": "return-loss-zero-default",
+      "input": {
+        "settings": { "rubPerCny": 12, "taxMethod": "none", "taxRate": 0 },
+        "order": {
+          "sellerRevenueBaseRub": 1200,
+          "commissionRate": 25,
+          "promotionCostRub": 0,
+          "acquiringFeeRub": 0,
+          "platformOtherDeductionRub": 0,
+          "otherOperatingCostCny": 0,
+          "taxCostCny": 0,
+          "reverseEventType": "none",
+          "forwardFeeApplied": true,
+          "parcels": [{ "actualWeightG": 500 }]
+        },
+        "sku": {
+          "purchaseCostCny": 10,
+          "packagingCostCny": 1,
+          "chinaInboundCostCny": 2,
+          "certificationAllocationCny": 0
+        }
+      },
+      "expected": {
+        "salesRevenueCny": 100,
+        "commissionCny": 25,
+        "platformNetSettlementCny": 45.50,
+        "returnLossCny": 0,
+        "operatingProfitCny": 32.50,
+        "profitMargin": 32.5
+      }
+    }
+  ]
+}

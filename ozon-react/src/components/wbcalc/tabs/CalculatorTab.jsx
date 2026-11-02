@@ -21,7 +21,7 @@ const FORM_DEFAULTS = {
   productName: '', actualWeightG: 100, lengthCm: 20, widthCm: 15, heightCm: 10,
   purchaseCost: 0, packagingCost: 0, quantity: 1, parcelCount: 1,
   routeId: '', orderDate: '', sellerRevenueRub: 1000, commissionRate: 25,
-  chinaInbound: 0, promotionCostRub: 0, status: '已签收',
+  chinaInbound: 0, promotionCostRub: 0, status: '已签收', returnLoss: 0,
   useSku: false, selectedSkuIdx: 0,
   category: '', commissionAutoMatched: false,
   // V2 异常订单字段
@@ -100,6 +100,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
     platformOtherDeductionRub: 0,
     otherOperatingCostCny: 0,
     taxCostCny: 0,
+    returnLoss: form.returnLoss,
   }
   const skuData = {
     purchaseCostCny: form.purchaseCost * form.quantity,
@@ -186,6 +187,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
         />
         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400">{unit}</span>
       </div>
+      {opts.hint && <p className="text-[10px] text-gray-400 mt-0.5">{opts.hint}</p>}
     </div>
   )
 
@@ -363,6 +365,9 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
           </div>
           {inputField('促销费', 'promotionCostRub', '₽')}
         </div>
+        <div className="grid grid-cols-2 gap-3">
+          {inputField('退货损失', 'returnLoss', '%', { hint: '统计退货率，按销售收入计提' })}
+        </div>
         <div className="grid grid-cols-3 gap-3">
           {inputField('采购成本', 'purchaseCost', '¥')}
           {inputField('包装成本', 'packagingCost', '¥')}
@@ -409,6 +414,7 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
           <MetricCard label="物流费" value={fmtCny(logisticsCny)} color="text-purple-700" />
           <MetricCard label="销售收入" value={fmtCny(profitCalc.salesRevenueCny)} color="text-green-700" />
           <MetricCard label="平台净结算" value={fmtCny(profitCalc.platformNetSettlementCny)} color="text-blue-700" />
+          <MetricCard label="退货损失" value={Number(profitCalc.returnLossCny) > 0 ? fmtCny(profitCalc.returnLossCny) : '—'} color="text-orange-600" />
           <MetricCard label="经营利润" value={fmtCny(profitCalc.operatingProfitCny)} color={profitCalc.operatingProfitCny >= 0 ? 'text-emerald-700' : 'text-red-600'} />
           <MetricCard label="利润率" value={fmtPct(profitCalc.profitMargin)} />
           <MetricCard label="物流费率" value={fmtPct(profitCalc.logisticsRatio)} />

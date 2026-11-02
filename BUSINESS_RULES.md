@@ -86,7 +86,9 @@ operating_profit_cny = platform_net_settlement_cny
   − product_purchase_cost_cny − packaging_cost_cny
   − china_inbound_to_dpx_cost_cny − tax_cost_cny
   − certification_allocation_cny − other_operating_cost_cny
+  − return_loss_cny
 
+return_loss_cny = sales_revenue_cny × return_loss_rate(%)
 profit_margin   = operating_profit_cny / sales_revenue_cny
 logistics_ratio = order_logistics_cny / sales_revenue_cny
 cost_roi = operating_profit_cny /
@@ -94,6 +96,7 @@ cost_roi = operating_profit_cny /
 ```
 
 - 分母为 0 时**不得报错或显示 Infinity**，显示"不可计算"。[规格§6.4]
+- **退货损失（统计口径）**：`return_loss_rate` 为订单级百分比输入（`order.returnLoss`，UI 字段「退货损失 %」，默认 0），`return_loss_cny = sales_revenue_cny × rate%`，计入经营利润。与逐单异常事件赔偿（§8 反向配送）互不冲突：统计退货率用于正常订单的期望损失，§8 用于已发生异常订单的实际损益。[用户确认 2026-10-30，镜像 Ozon `calcRow` 退货损失口径；锁定测试 golden/wb-profit-return-rate.json；引擎 `wbEngine.js calculateOperatingProfit/calculateOperatingProfitV2` 同口径]
 - 税费方式（`tax_method`）：`none`（不计税，仅敏感性分析）/ `revenue`（按销售收入%）/ `settlement`（按净结算%）/ `manual`（手工每单）。[规格§6.5]
 - **各方式税基**：`revenue` 税基 = `sales_revenue_cny`；`settlement` 税基 = `platform_net_settlement_cny`（V1 与 V2 口径一致，引擎实现 `wbEngine.js calculateOperatingProfit/calculateOperatingProfitV2`）。
 - **用户业务确认（2026-10-29）**：中国国内按**销售额**计税 → 实务应选 `revenue` 方式（税基=销售收入）；`settlement` 仅为可选口径，其"按净结算%"定义必须名副其实。

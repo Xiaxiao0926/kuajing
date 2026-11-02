@@ -9,7 +9,7 @@ import {
   toNum, round2, roundUpWeight, selectTariffVersion,
   calculateParcelLogistics, calculateOrderLogistics,
   calculateReverseCompensation, calculateTotalLogisticsCost,
-  calculateOperatingProfitV2, inferReverseEventType, getOrderLabels,
+  calculateOperatingProfit, calculateOperatingProfitV2, inferReverseEventType, getOrderLabels,
 } from './wbEngine.js'
 import {
   DEFAULT_TARIFFS, DEFAULT_SETTINGS, REVERSE_EVENT_TYPE,
@@ -289,6 +289,48 @@ console.log('\n附加测试: 订单标签')
 
   const labels5 = getOrderLabels({}, { calculationBasis: 'actual', varianceCny: 5.00, multiplier: 1, eventType: 'buyer_returned' })
   assert(labels5.some(l => l.text === '预计与实扣不一致'), '预计与实扣不一致标签')
+}
+
+// ============ 退货损失（统计退货率）测试（用户确认 2026-10-30，镜像 Ozon 口径） ============
+console.log('\n退货损失: V1 calculateOperatingProfit（生产路径）')
+{
+  const settings = { rubPerCny: 12 }
+  const sku = { purchaseCostCny: 10, packagingCostCny: 1, chinaInboundCostCny: 2, certificationAllocationCny: 0 }
+  const baseOrder = {
+    sellerRevenueBaseRub: 1200, commissionRate: 25,
+    promotionCostRub: 0, acquiringFeeRub: 0, platformOtherDeductionRub: 0,
+    otherOperatingCostCny: 0, taxCostCny: 0,
+  }
+  // 退货率 5%：退货损失 = 100 × 5% = 5；利润 = 45.50 - 10 - 1 - 2 - 5 = 27.50
+  const withReturn = calculateOperatingProfit({ ...baseOrder, returnLoss: 5 }, sku, settings, 29.50)
+  eq(withReturn.returnLossCny, 5, 'V1 退货损失=5（销售收入100×5%）')
+  eq(withReturn.operatingProfitCny, 27.50, 'V1 经营利润=27.50')
+  eq(withReturn.profitMargin, 27.5, 'V1 利润率=27.5%')
+  assert(withReturn.steps.some(s => String(s).includes('退货损失') && String(s).includes('5')), 'V1 步骤含退货损失行')
+  // 缺省（历史订单无 returnLoss 字段）：行为不变，零回归
+  const noReturn = calculateOperatingProfit(baseOrder, sku, settings, 29.50)
+  eq(noReturn.returnLossCny, 0, 'V1 缺省退货损失=0')
+  eq(noReturn.operatingProfitCny, 32.50, 'V1 缺省利润=32.50（与修复前一致）')
+}
+
+console.log('\n退货损失: V2 calculateOperatingProfitV2（与 V1 同口径）')
+{
+  const settings = { rubPerCny: 12 }
+  const sku = { purchaseCostCny: 10, packagingCostCny: 1, chinaInboundCostCny: 2, certificationAllocationCny: 0 }
+  const baseOrder = {
+    sellerRevenueBaseRub: 1200, commissionRate: 25,
+    promotionCostRub: 0, acquiringFeeRub: 0, platformOtherDeductionRub: 0,
+    otherOperatingCostCny: 0, taxCostCny: 0,
+    reverseEventType: REVERSE_EVENT_TYPE.NONE, forwardFeeApplied: true,
+    estimatedForwardLogisticsCny: 29.50,
+    parcels: [{ actualWeightG: 500 }],
+  }
+  const withReturn = calculateOperatingProfitV2({ ...baseOrder, returnLoss: 5 }, sku, settings, dpxTariff)
+  eq(withReturn.returnLossCny, 5, 'V2 退货损失=5')
+  eq(withReturn.operatingProfitCny, 27.50, 'V2 经营利润=27.50')
+  const noReturn = calculateOperatingProfitV2(baseOrder, sku, settings, dpxTariff)
+  eq(noReturn.returnLossCny, 0, 'V2 缺省退货损失=0')
+  eq(noReturn.operatingProfitCny, 32.50, 'V2 缺省利润=32.50')
 }
 
 console.log(`\n===== 测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)
