@@ -5,6 +5,22 @@
 
 ---
 
+## 2026-11-03（IA 步骤7 工作台首页聚合）
+
+### feat — 工作台首页聚合（IA 步骤 7/9）
+- **ProgressOverview 升级为聚合工作台**：新增三区块（项目卡点 / 候选预警 / 待办节点），原全局进度条保留为页尾区块。登录首屏即回答「今天我需要处理什么」。
+- **项目卡点**：ACTIVE 项目的阶段 / 进度 / Gate 概要（`evaluateProjectGate` 只读求值下一阶段 verdict + blockingReasons），点击跳项目详情。
+- **候选预警**：待调研 / 待立项计数 + Top 5 高分候选（`latestSnapshotId → snapshot.scoreResult.totalScore` 降序），点击跳候选池。
+- **待办节点**：各项目 `workflow.states` 中 `status=active` 的节点标题聚合，点击跳项目详情。
+- **纯展示组件**：新增 `workspace/WorkspaceHomeCards.jsx`（ProjectBlockCard / CandidateAlertCard / TodoNodeList），只编排不计算，含空态。
+- **行为契约**：只读取数，无任何写操作；**未触碰任何计算引擎**；未引入新依赖。实施报告：`docs/ia/TASK07_WORKSPACE_HOME_IMPLEMENTATION.md`。
+- **测试**：新增 `tests/ia-workspace-home.test.mjs`（26 契约断言，已接入 `test:t6` 强制链）；`npm test` 全绿（855 项断言标记）；golden 100/0；sync 零差异；Vite build 9.88s。
+
+### chore — CI 部署触发
+- 前序 4 个提交（78aded6 WB 退货损失 + c5539aa Context Bar + 39e8af6 UI-7 锁 + de6c874 003 验收文档）已 `git push` 到 origin/main，CI 自动部署到 fyzsxnb.com/kuajing。
+
+---
+
 ## 2026-11-03（IA 步骤6 Context Bar + 003 任务验收闭环）
 
 ### feat — Context Bar 上下文贯通（IA 步骤 6/9）
