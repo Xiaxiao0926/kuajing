@@ -29,6 +29,8 @@ import ProductScoringSection from './components/dashboard/sections/ProductScorin
 import CandidatePoolPage from './components/t6/CandidatePoolPage'
 import ProjectListPage from './components/t6/ProjectListPage'
 import ProjectDetailPage from './components/t6/ProjectDetailPage'
+import { getProject, getProjectScenarios, createCostScenario } from './utils/t6/t6Store'
+import { buildOzonScenarioPayload, buildWbScenarioPayload } from './utils/t6/costScenarioAdapter'
 import LoadingState from './components/ui/LoadingState'
 
 // 页面级懒加载（T3-4）：低频/重型页面不进入首屏主 bundle
@@ -113,6 +115,50 @@ function DashboardApp() {
   const openProjectDetail = (projectId) => {
     setActiveProjectId(projectId)
     setActiveNode('__t6_project_detail__')
+  }
+
+  // IA 步骤6 Context Bar：跨页面漫游保持项目上下文（顶栏指示器 + 独立核算页项目模式预填）。
+  // calcContext = { projectId, projectCode, projectName, platform: 'ozon'|'wb', prefill, supplyCostReference } | null
+  // prefill 由项目详情用 buildOzonPrefill/buildWbPrefill 现算传入，只影响核算页初始值（经 mergeTrustedPrefill），
+  // 绝不触碰 wbEngine/ozonEngine 计算公式；独立模式（无上下文）行为与此前完全一致。
+  const [calcContext, setCalcContext] = useState(null)
+
+  const openCalcStandalone = (ctx) => {
+    if (!ctx?.projectId || !ctx.platform) return
+    setCalcContext(ctx)
+    setActiveNode(ctx.platform === 'wb' ? 'n39' : 'n4')
+  }
+
+  const clearCalcContext = () => setCalcContext(null)
+
+  // 独立页保存场景：从 t6Store 现取项目数据（避免闭包快照漂移），成功后回到项目详情查看场景列表；
+  // 失败仅记录并保留上下文（用户可重试），不静默丢失输入。
+  const saveContextScenario = (data) => {
+    const ctx = calcContext
+    if (!ctx?.projectId) return
+    let sc = null
+    try {
+      const project = getProject(ctx.projectId)
+      if (!project) throw new Error('项目已不存在，场景未保存')
+      const isWb = ctx.platform === 'wb'
+      const payload = isWb
+        ? buildWbScenarioPayload({ project, inputPayload: data.inputPayload, tariff: data.tariff, settings: data.settings, outputs: data.outputs })
+        : buildOzonScenarioPayload({ project, inputPayload: data.inputPayload, selectedChannelId: data.selectedChannelId, outputPayload: data.outputPayload, exchangeRateInfo: data.exchangeRateInfo })
+      sc = createCostScenario({
+        projectId: project.id,
+        platform: isWb ? 'WB' : 'OZON',
+        name: `${project.projectCode} ${isWb ? 'WB 订单场景' : 'Ozon rFBS 场景'} #${getProjectScenarios(project.id).length + 1}`,
+        sourceSnapshotId: payload.sourceSnapshotId,
+        inputPayload: payload.inputPayload,
+        resolvedConfig: payload.resolvedConfig,
+        outputPayload: payload.outputPayload,
+      })
+    } catch (err) {
+      console.error('[context-bar] 保存成本场景失败：', err)
+      return
+    }
+    setCalcContext(null)
+    openProjectDetail(ctx.projectId)
   }
 
   useEffect(() => {
@@ -304,7 +350,7 @@ function DashboardApp() {
       return <ProjectListPage onOpenProject={openProjectDetail} />
     }
     if (activeNode === '__t6_project_detail__') {
-      return <ProjectDetailPage projectId={activeProjectId} onBack={() => setActiveNode('__t6_projects__')} />
+      return <ProjectDetailPage projectId={activeProjectId} onBack={() => setActiveNode('__t6_projects__')} onOpenCalcStandalone={openCalcStandalone} />
     }
     if (activeNode === 'n1') {
       return (
@@ -314,9 +360,17 @@ function DashboardApp() {
       )
     }
     if (activeNode === 'n4') {
+      // Context Bar：存在 Ozon 项目上下文时，独立页进入项目模式（预填 + 场景保存）
+      const ozonProjectContext = calcContext && calcContext.platform === 'ozon' ? {
+        projectId: calcContext.projectId,
+        projectCode: calcContext.projectCode,
+        prefill: calcContext.prefill,
+        supplyCostReference: calcContext.supplyCostReference,
+        onSaveScenario: saveContextScenario,
+      } : null
       return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
-          <Suspense fallback={<LazyFallback />}><OzonCalc /></Suspense>
+          <Suspense fallback={<LazyFallback />}><OzonCalc projectContext={ozonProjectContext} /></Suspense>
         </NodePage>
       )
     }
@@ -390,9 +444,17 @@ function DashboardApp() {
       )
     }
     if (activeNode === 'n39') {
+      // Context Bar：存在 WB 项目上下文时，独立页进入项目模式（预填 + 场景保存）
+      const wbProjectContext = calcContext && calcContext.platform === 'wb' ? {
+        projectId: calcContext.projectId,
+        projectCode: calcContext.projectCode,
+        prefill: calcContext.prefill,
+        supplyCostReference: calcContext.supplyCostReference,
+        onSaveScenario: saveContextScenario,
+      } : null
       return (
         <NodePage nodeId={activeNode} status={nodeStatuses[activeNode] || 'pending'} onStatusChange={handleStatusChange} wide>
-          <Suspense fallback={<LazyFallback />}><WBCalc /></Suspense>
+          <Suspense fallback={<LazyFallback />}><WBCalc projectContext={wbProjectContext} /></Suspense>
         </NodePage>
       )
     }
@@ -431,6 +493,12 @@ function DashboardApp() {
             onToggleCollapse={() => setSidebarCollapsed(v => !v)}
             onOpenProgress={() => handleNodeSelect('__project_flow__')}
             onUpload={handleFileUpload}
+            contextPill={calcContext ? {
+              label: `${calcContext.projectCode} ${calcContext.projectName || ''}`.trim(),
+              sublabel: `${calcContext.platform === 'wb' ? 'WB' : 'Ozon'} 核算 · 项目上下文`,
+              onClick: () => openProjectDetail(calcContext.projectId),
+              onClear: clearCalcContext,
+            } : null}
           />
           <div className="sticky top-0 z-20 border-b border-gray-100 bg-white p-3 lg:hidden">
             <label className="block text-xs font-medium text-morandi-text-light" htmlFor="mobile-node-select">

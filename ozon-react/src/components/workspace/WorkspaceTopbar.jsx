@@ -18,6 +18,7 @@ export default function WorkspaceTopbar({
   onToggleCollapse,
   onOpenProgress,
   onUpload,
+  contextPill = null,
 }) {
   const fileInputRef = useRef(null)
   const allNodes = ROADMAP_PHASES.flatMap((p) => p.nodes)
@@ -49,6 +50,34 @@ export default function WorkspaceTopbar({
         </div>
         <div className="text-xs text-workspace-text-tertiary">Workspace</div>
       </div>
+
+      {/* IA 步骤6 Context Bar：项目上下文贯通指示器（点击回项目详情；✕ 退出上下文回到独立模式） */}
+      {contextPill && (
+        <>
+          <div className="mx-1 hidden h-6 w-px bg-workspace-border sm:block" />
+          <button
+            onClick={contextPill.onClick}
+            title="返回项目详情"
+            className="flex min-w-0 max-w-[280px] items-center gap-2 rounded-md border border-workspace-primary/30 bg-workspace-primary-soft px-2.5 py-1.5 text-left transition-colors hover:bg-workspace-primary/10"
+          >
+            <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-workspace-primary" />
+            <span className="min-w-0">
+              <span className="block truncate text-xs font-semibold text-workspace-primary">{contextPill.label}</span>
+              {contextPill.sublabel && <span className="block truncate text-xs text-workspace-text-secondary">{contextPill.sublabel}</span>}
+            </span>
+          </button>
+          {contextPill.onClear && (
+            <button
+              onClick={contextPill.onClear}
+              title="退出项目上下文（回到独立核算模式）"
+              className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border border-workspace-border text-workspace-text-secondary hover:bg-workspace-surface-subtle"
+            >
+              <span aria-hidden>✕</span>
+              <span className="sr-only">退出项目上下文</span>
+            </button>
+          )}
+        </>
+      )}
 
       <div className="mx-1 hidden h-6 w-px bg-workspace-border md:block" />
 

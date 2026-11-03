@@ -87,7 +87,7 @@ function WorkflowNodeRow({ node, state, onStatusChange, onNoteSave }) {
   )
 }
 
-export default function ProjectDetailPage({ projectId, onBack }) {
+export default function ProjectDetailPage({ projectId, onBack, onOpenCalcStandalone = null }) {
   const [tick, setTick] = useState(0)
   const [tab, setTab] = useState('overview')
   const [targetStage, setTargetStage] = useState('RESEARCH')
@@ -499,6 +499,41 @@ export default function ProjectDetailPage({ projectId, onBack }) {
                       >
                         使用 Ozon 核算
                       </Button>
+                      {/* IA 步骤6 Context Bar：跳独立核算页并携带项目上下文（顶栏指示器 + 预填 + 场景保存） */}
+                      {onOpenCalcStandalone && (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={!snapshot}
+                            onClick={() => onOpenCalcStandalone({
+                              projectId: project.id,
+                              projectCode: project.projectCode,
+                              projectName: project.name,
+                              platform: 'ozon',
+                              prefill: buildOzonPrefill({ snapshot, product: project.product }),
+                              supplyCostReference,
+                            })}
+                          >
+                            独立页 Ozon 核算
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={!snapshot}
+                            onClick={() => onOpenCalcStandalone({
+                              projectId: project.id,
+                              projectCode: project.projectCode,
+                              projectName: project.name,
+                              platform: 'wb',
+                              prefill: buildWbPrefill({ snapshot, product: project.product }),
+                              supplyCostReference,
+                            })}
+                          >
+                            独立页 WB 核算
+                          </Button>
+                        </>
+                      )}
                     </div>
                   </div>
                   {scenarios.length === 0 ? (
