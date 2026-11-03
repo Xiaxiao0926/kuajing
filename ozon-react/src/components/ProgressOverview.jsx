@@ -1,9 +1,13 @@
-import { useState } from 'react'
-import { ROADMAP_PHASES, NODE_DETAILS } from '../data/roadmap'
+import { useState, useMemo } from 'react'
+import { ROADMAP_PHASES } from '../data/roadmap'
 import {
   BarChart3, TrendingUp, CheckCircle2, Clock, AlertTriangle,
-  ChevronRight, Target, Package
+  ChevronRight, Target, Package, FolderKanban, Zap
 } from 'lucide-react'
+import { listProjects, listCandidates, getSnapshot, projectProgress, buildWorkflowTemplate } from '../utils/t6/t6Store'
+import { evaluateProjectGate } from '../utils/t6/gateEngine'
+import { PROJECT_STAGES, stageIndex } from '../utils/t6/stageModel'
+import { ProjectBlockCard, CandidateAlertCard, TodoNodeList } from './workspace/WorkspaceHomeCards'
 
 const PRODUCTS = [
   {
@@ -79,8 +83,83 @@ const PHASE_ICONS = {
   '迭代与扩展': '🔁',
 }
 
-export default function ProgressOverview({ nodeStatuses, onNodeSelect }) {
+/** 只读取数 + 加工工作台聚合数据（禁止任何写操作） */
+function useWorkspaceAggregation() {
+  return useMemo(() => {
+    // 安全取数：persist 环境异常时降级为空数组
+    let projects = []
+    let candidates = []
+    try { projects = listProjects() || [] } catch { projects = [] }
+    try { candidates = listCandidates() || [] } catch { candidates = [] }
+
+    // nodeId → title 映射（workflow 模板）
+    let nodeTitleMap = {}
+    try {
+      const tpl = buildWorkflowTemplate()
+      nodeTitleMap = Object.fromEntries(tpl.nodes.map((n) => [n.nodeId, n.title]))
+    } catch { /* fail-close 模板缺失时降级为空映射 */ }
+
+    // 区块1：项目卡点 — ACTIVE 项目 + Gate 概要
+    const activeProjects = projects
+      .filter((p) => p && p.lifecycleStatus === 'ACTIVE')
+      .map((p) => {
+        const prog = projectProgress(p)
+        const pct = prog.total > 0 ? Math.round(prog.done / prog.total * 100) : 0
+        const curIdx = stageIndex(p.stage)
+        const nextStage = curIdx >= 0 && curIdx < PROJECT_STAGES.length - 1 ? PROJECT_STAGES[curIdx + 1] : null
+        let gateVerdict = 'SAME'
+        let blockingReasons = []
+        if (nextStage) {
+          try {
+            const gate = evaluateProjectGate(p, nextStage)
+            gateVerdict = gate.verdict
+            blockingReasons = gate.blockingReasons || []
+          } catch {
+            gateVerdict = 'NOT_EVALUATED'
+          }
+        }
+        return {
+          id: p.id, projectCode: p.projectCode || '', name: p.name || '',
+          stage: p.stage || 'PIPELINE', done: prog.done, total: prog.total, pct,
+          gateVerdict, blockingReasons,
+        }
+      })
+
+    // 区块2：候选预警 — 待调研/待立项计数 + Top 5 高分候选
+    const pendingCandidates = candidates.filter((c) => c && ['待调研', '待立项'].includes(c.bizStatus))
+    const scored = candidates
+      .filter((c) => c && c.latestSnapshotId)
+      .map((c) => {
+        let score = null
+        try {
+          const snap = getSnapshot(c.latestSnapshotId)
+          score = snap?.scoreResult?.totalScore ?? null
+        } catch { score = null }
+        return { id: c.id, name: c.candidateName || c.sourceProductId || '', bizStatus: c.bizStatus || '观察', score }
+      })
+      .filter((c) => c.score != null)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5)
+
+    // 区块3：待办节点 — 各 ACTIVE 项目 workflow 中 status=active 的节点
+    const todoItems = activeProjects.flatMap((p) => {
+      const project = projects.find((pr) => pr.id === p.id)
+      const states = project?.workflow?.states || []
+      return states
+        .filter((s) => s.status === 'active')
+        .map((s) => ({
+          projectId: p.id, projectCode: p.projectCode,
+          nodeId: s.nodeId, title: nodeTitleMap[s.nodeId] || s.nodeId,
+        }))
+    })
+
+    return { activeProjects, pendingCount: pendingCandidates.length, topCandidates: scored, todoItems }
+  }, [])
+}
+
+export default function ProgressOverview({ nodeStatuses, onNodeSelect, openProjectDetail }) {
   const [expandedProduct, setExpandedProduct] = useState(null)
+  const { activeProjects, pendingCount, topCandidates, todoItems } = useWorkspaceAggregation()
 
   const getStatus = (nodeId) => nodeStatuses?.[nodeId] || 'pending'
 
@@ -129,16 +208,55 @@ export default function ProgressOverview({ nodeStatuses, onNodeSelect }) {
 
   return (
     <div className="space-y-5">
+      {/* 标题 */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-morandi-text flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-morandi-primary" />
-            项目进度总览
+            工作台
           </h2>
-          <p className="text-[10px] text-morandi-text-light mt-0.5">按产品品类跟踪各阶段进度</p>
+          <p className="text-[10px] text-morandi-text-light mt-0.5">今天我需要处理什么</p>
         </div>
       </div>
 
+      {/* === 聚合区块（IA 步骤7）=== */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        {/* 区块1：项目卡点 */}
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+          <div className="flex items-center gap-2 mb-3">
+            <FolderKanban className="w-4 h-4 text-morandi-primary" />
+            <h3 className="text-xs font-semibold text-morandi-text">项目卡点</h3>
+            <span className="ml-auto text-[9px] text-morandi-text-light">{activeProjects.length} 个进行中</span>
+          </div>
+          <ProjectBlockCard projects={activeProjects} onOpenProject={openProjectDetail} />
+        </div>
+
+        {/* 区块2：候选预警 */}
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+          <div className="flex items-center gap-2 mb-3">
+            <Target className="w-4 h-4 text-amber-500" />
+            <h3 className="text-xs font-semibold text-morandi-text">候选预警</h3>
+            <span className="ml-auto text-[9px] text-morandi-text-light">{pendingCount} 待处理</span>
+          </div>
+          <CandidateAlertCard
+            pendingCount={pendingCount}
+            topCandidates={topCandidates}
+            onOpenPool={() => onNodeSelect?.('__t6_candidates__')}
+          />
+        </div>
+
+        {/* 区块3：待办节点 */}
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+          <div className="flex items-center gap-2 mb-3">
+            <Zap className="w-4 h-4 text-morandi-primary" />
+            <h3 className="text-xs font-semibold text-morandi-text">待办节点</h3>
+            <span className="ml-auto text-[9px] text-morandi-text-light">{todoItems.length} 项</span>
+          </div>
+          <TodoNodeList items={todoItems} onOpenProject={openProjectDetail} />
+        </div>
+      </div>
+
+      {/* === 原全局进度（保留，降级为页尾区块）=== */}
       <div className="grid grid-cols-4 gap-3">
         <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100">
           <div className="flex items-center gap-1.5 mb-2">

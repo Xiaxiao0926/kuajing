@@ -292,7 +292,7 @@ function DashboardApp() {
       return <NodeOverview nodeStatuses={nodeStatuses} onNodeSelect={handleNodeSelect} />
     }
     if (activeNode === '__progress_overview__') {
-      return <ProgressOverview nodeStatuses={nodeStatuses} onNodeSelect={handleNodeSelect} />
+      return <ProgressOverview nodeStatuses={nodeStatuses} onNodeSelect={handleNodeSelect} openProjectDetail={openProjectDetail} />
     }
     if (activeNode === '__scoring__') {
       return <ProductScoringSection />
