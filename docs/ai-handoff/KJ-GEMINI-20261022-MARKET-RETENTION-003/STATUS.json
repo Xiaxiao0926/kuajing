@@ -2,7 +2,9 @@
   "schema_version": 1,
   "task_id": "KJ-GEMINI-20261022-MARKET-RETENTION-003",
   "task_title": "报告版本与源文件留存、采集日期真实性修复",
-  "status": "review_ready",
+  "status": "accepted_with_known_limitations",
+  "review_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/REVIEW.md",
+  "review_date": "2026-11-03",
   "revision_file": "docs/ai-handoff/KJ-GEMINI-20261022-MARKET-RETENTION-003/REVISION-001.md",
   "revision_executor": "Luna",
   "claimed_by": null,
@@ -19,5 +21,11 @@
   "local_implementation_authorized": true,
   "production_authorized": false,
   "deployment_status": "not_deployed",
-  "public_verification_status": "not_performed"
+  "public_verification_status": "not_performed",
+  "authorized_files_errata": "原 CURRENT_TASK.json 指针漏列 3 个 TASK.md『Permitted new files』明确授权的新文件：ozon-react/src/components/reports/MarketReportImportConfirm.jsx、ozon-react/src/utils/marketReport/sourceDownload.js、tests/market-report-source-download.test.mjs。属清单不完整而非越权（见 REVIEW.md §3）。",
+  "known_limitations": [
+    "未部署、未公开验证：生产 WordPress 端源文件上传→下载闭环需上线后抽验（部署门）",
+    "源文件上传失败整页刷新后组件内冻结任务状态丢失，不能自动补建报告（IndexedDB 队列仍会补传源文件）",
+    "共享 IndexedDB 队列幂等依赖与界面可读性优化（长哈希/内部状态词收纳）留待后续任务"
+  ]
 }

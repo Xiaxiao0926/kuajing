@@ -32,6 +32,7 @@
 | TD-21 | 旧业务页深层视觉残留：部分 emoji、个别图表内色彩、个别卡片结构未做逐像素级统一（T5-5 只做了表面层 harmonization + 字号 sweep） | `ozon-react/src/components/*`（旧页） | 低：与新 Workspace 存在局部风格落差 | T5 视觉收尾二期或随页面重做逐个处理 |
 | TD-22 | `RU-YYYY-NNN` 编号靠扫描已有项目 max+1 生成：多设备并发创建时人类编号可能重复（UUID 主键不受影响） | `ozon-react/src/utils/t6/t6Store.js` → `nextProjectCode()` | 低：当前无团队协同写入 | 多人使用时把 sequence 移到 WP 服务端原子生成（不阻塞 T6-2） |
 | TD-23 | 成本场景保存不校验「实际值字段」与估算值一致性（如 WB 反向配送 actualForwardLogisticsCny/actualReverseCompensationCny 由用户手工填写），场景字节冻结后不可修正，只能新建场景覆盖基线 | `ozon-react/src/components/wbcalc/tabs/CalculatorTab.jsx` / `costScenarioAdapter.js` | 低-中：与实际账单对不上时需人工重建场景 | 保存前增加估算/实际值差异提示（不阻塞 T6） |
+| TD-24 | `tests/ia-*.test.mjs`（20+ 个 IA 契约测试）未接入任何 npm script / CI workflow，只有执行者手动运行，回归保护存在缺口（本轮新增的 `tests/ia-context-bar.test.mjs` 已单独接入 test:t6 链） | `tests/ia-*.test.mjs`、`package.json`、`.github/workflows/deploy-kuajing.yml` | 中：IA 契约破坏不会挡 CI | 单独任务：新增 `test:ia` 聚合脚本（目录 glob）并纳入 npm test 与 CI verify 步骤 |
 
 ---
 

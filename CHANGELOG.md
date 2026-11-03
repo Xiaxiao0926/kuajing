@@ -5,6 +5,25 @@
 
 ---
 
+## 2026-11-03（IA 步骤6 Context Bar + 003 任务验收闭环）
+
+### feat — Context Bar 上下文贯通（IA 步骤 6/9）
+- **项目详情 → 独立核算页**：「成本与物流」Tab 新增「独立页 Ozon/WB 核算」入口，跳转 n4/n39 并携带项目上下文（prefill 复用与内嵌模式同一构建器 + supplyCostReference），跨页漫游不再手工重复录入。
+- **顶栏上下文指示器**：`WorkspaceTopbar` 新增 `contextPill`——显示当前项目码/名称/平台，点击回项目详情，✕ 退出上下文回到独立模式；无上下文时零渲染。
+- **独立页场景保存**：App 层 `saveContextScenario` 从 t6Store 现取项目数据（防闭包快照漂移），走 `createCostScenario` 冻结不可变场景，成功后回项目详情。
+- **行为契约**：独立模式逐字节不变；项目模式预填仍经 `mergeTrustedPrefill` + `costConfirmed` 人工确认；**未触碰任何计算引擎**。实施报告：`docs/ia/TASK06_CONTEXT_BAR_IMPLEMENTATION.md`。
+- **测试**：新增 `tests/ia-context-bar.test.mjs`（26 契约断言，已接入 `test:t6` 强制链）；`npm test` 全绿（829 项断言标记）。
+
+### test — FINDINGS 发现1 防回归锁（UI-7）
+- `t6UiContract.test.mjs` 新增 UI-7：锁死「项目模式预填基底全空、仅独立模式读 `persistGet(SHIPPING_KEY)`、项目模式不写回共享持久化键、CalculatorTab 成本/售价/佣金显式置 `''`」——防止「历史采购价穿透污染新项目」缺陷回归。
+
+### docs — 003 任务验收闭环 + 下一任务书
+- `KJ-GEMINI-20261022-MARKET-RETENTION-003`（报告版本与源文件留存）验收为 **accepted_with_known_limitations**：合同 A/B/C 全落实、授权范围无越权、测试实测全过、hash 差异归因为 autocrlf 行尾转换（非伪绿）；已知限制（未部署/未生产验证、刷新丢冻结任务态）逐项登记。见其 `REVIEW.md` / `STATUS.json`。
+- 下一任务书签发：`KJ-GLM-20261103-WORKSPACE-001`（IA 步骤7 工作台首页聚合，只读升级 `ProgressOverview`），当前指针已切换。
+- 技术债登记 TD-24：存量 20+ 个 `tests/ia-*.test.mjs` 未接入任何 npm script / CI（本轮仅新测试单独接线）。
+
+---
+
 ## 2026-09-10（市场报告俄罗斯维度深化）
 
 ### feat — 24 份市场报告统一升级
