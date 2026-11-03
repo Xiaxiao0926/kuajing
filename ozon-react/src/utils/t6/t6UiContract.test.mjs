@@ -8,6 +8,8 @@
  *  UI-3 Ozon 项目模式保存流（数据级复刻 saveOzonScenario 处理器）
  *  UI-4 mergeTrustedPrefill：''/null/undefined 不得覆盖既有成本假设（防"成本=0 虚假高利润基线"）
  *  UI-5 保存前人工确认 Gate：OzonCalc/CalculatorTab 含 costConfirmed 且未确认禁用保存（源码契约）
+ *  UI-6 窄屏导航可达选品评分、候选池与 SKU 项目
+ *  UI-7 项目模式预填基底全空：绝不回退全局独立核算历史值（FINDINGS 发现1 回归锁）
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -183,6 +185,26 @@ console.log('UI-6: 窄屏导航可达选品评分、候选池与 SKU 项目')
   assert(app.includes('<option value="__scoring__">选品评分</option>'), '窄屏下拉包含选品评分')
   assert(app.includes('<option value="__t6_candidates__">候选池</option>'), '窄屏下拉包含候选池')
   assert(app.includes('<option value="__t6_projects__">SKU 项目</option>'), '窄屏下拉包含 SKU 项目')
+}
+
+console.log('UI-7: 项目模式预填基底全空——绝不回退全局独立核算历史值（FINDINGS 发现1 回归锁）')
+{
+  // 背景：独立核算的历史采购价曾被 mergeTrustedPrefill 空值过滤回退继承进新项目（FINDINGS 发现1，高风险）。
+  // 修复语义：项目模式下 base 的每个成本字段显式为 ''，独立模式才允许读共享持久化键 SHIPPING_KEY。
+  const oz = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'components', 'OzonCalc.jsx'), 'utf-8')
+  const idxEmptyBase = oz.indexOf("Object.keys(SINGLE_DEFAULTS).map((key) => [key, ''])")
+  const idxPersist = oz.indexOf('persistGet(SHIPPING_KEY)')
+  assert(/const base = projectContext\s*\?/.test(oz), 'OzonCalc base 三元以 projectContext 为条件')
+  assert(idxEmptyBase !== -1, "OzonCalc 项目模式 base = SINGLE_DEFAULTS 全键置 ''")
+  assert(idxPersist !== -1 && idxEmptyBase !== -1 && idxEmptyBase < idxPersist, 'OzonCalc 仅独立模式分支读 persistGet(SHIPPING_KEY)（项目模式不读全局历史值）')
+  assert(oz.includes('if (!projectContext) persistSet(SHIPPING_KEY, newData)'), 'OzonCalc 项目模式编辑不写回共享持久化键')
+
+  const wb = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'components', 'wbcalc', 'tabs', 'CalculatorTab.jsx'), 'utf-8')
+  const idxWbCtx = wb.indexOf('...(projectContext ? {')
+  assert(idxWbCtx !== -1, 'CalculatorTab 项目模式显式覆盖成本字段')
+  const wbCtxBlock = idxWbCtx !== -1 ? wb.slice(idxWbCtx, idxWbCtx + 400) : ''
+  assert(wbCtxBlock.includes("purchaseCost: ''") && wbCtxBlock.includes("packagingCost: ''") && wbCtxBlock.includes("chinaInbound: ''"), "CalculatorTab 项目模式成本字段显式置 ''（不继承 FORM_DEFAULTS 数值）")
+  assert(wbCtxBlock.includes("sellerRevenueRub: ''") && wbCtxBlock.includes("commissionRate: ''"), "CalculatorTab 项目模式售价/佣金显式置 ''（佣金绝不预填）")
 }
 
 console.log(`\n===== T6 UI 契约测试结果: ${pass} 通过 / ${fail} 失败 =====\n`)
