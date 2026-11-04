@@ -5,6 +5,20 @@
 
 ---
 
+## 2026-11-04（修复 FINDINGS 发现2：核算草稿静默丢失）
+
+### fix — 核算表单草稿自动持久化（Ozon / WB 双端）
+- **问题**：项目模式核算页切 Tab / 切项目 / 关抽屉即卸载，未保存输入（如采购成本 108）被静默抹回 prefill 值，全程无提示无缓存。
+- **修复**：项目模式自动草稿持久化 —— `ozon-single-draft-project-<projectId>` / `wb-calc-draft-project-<projectId>`；
+  挂载时草稿优先于 prefill 恢复（仅白名单字段、空值不覆盖），并显示「已恢复上次未保存的草稿（时间）」提示条 +
+  「使用最新预填」放弃按钮。草稿只存 UI 快照，**绝不写项目正式数据**，恢复后仍需人工勾选确认才能保存场景。
+- **共享代码**：`ozon-react/src/utils/draftStore.js`（readDraft/writeDraft/clearDraft/restoreDraftFields/formatDraftTime，全部 fail-close）。
+- **隔离保证**：项目模式仍不写 `SHIPPING_KEY` 等共享持久化键（UI-7 回归锁更新为语义断言）。
+- **测试**：新增 `tests/ia-draft-persistence.test.mjs`（39 断言，含 mock localStorage 的「输入 108 → 卸载 → 重挂载恢复 108」真实往返验证），接入 `test:t6` 链。
+- `FINDINGS.md` 发现2 标记为已修复；`npm test` 907 断言全绿；golden 100/0；sync 零差异；Vite build 11.01s。
+
+---
+
 ## 2026-11-04（巡查修复：CI 自动部署 + 工作台 Gate deps）
 
 ### fix — CI 部署从未触发（根因）

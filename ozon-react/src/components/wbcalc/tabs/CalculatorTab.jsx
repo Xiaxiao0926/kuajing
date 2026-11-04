@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Info, AlertTriangle, XCircle } from 'lucide-react'
+import { readDraft, writeDraft, clearDraft, restoreDraftFields, formatDraftTime } from '../../../utils/draftStore'
 import {
   toNum, round2, roundUpWeight, selectTariffVersion, selectTariffTier,
   validateParcel, calculateParcelLogistics, calculateOrderLogistics,
@@ -35,8 +36,15 @@ const FORM_DEFAULTS = {
 }
 
 export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus, projectContext = null }) {
+  // 发现2 同类修复：项目模式草稿自动持久化——切 Tab / 切项目 / 关闭抽屉后重新挂载可恢复未保存输入。
+  // 独立模式无项目上下文，保持原有行为（不写额外草稿键）。
+  const draftKey = projectContext ? `wb-calc-draft-project-${projectContext.projectId}` : null
+
+  const [draftRaw] = useState(() => readDraft(draftKey))
+
   // T6-2B2：项目上下文预填只生效一次（key 按 projectId 强制重挂）；佣金/成本/线路假设绝不预填
   // T6-2B hotfix：只有"有值"的 project prefill 覆盖默认值，'' 不得把成本/售价清成 0
+  // 发现2：草稿优先于 prefill，仅恢复白名单字段且跳过空值
   const [form, setForm] = useState(() => {
     const currentRoutes = effectiveWbRoutes(tariffs, localDateString())
     const defaults = {
@@ -49,27 +57,55 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
       routeId: currentRoutes[0]?.routeId || '',
       orderDate: localDateString(),
     }
-    return projectContext?.prefill ? mergeTrustedPrefill(defaults, projectContext.prefill) : defaults
+    const merged = projectContext?.prefill ? mergeTrustedPrefill(defaults, projectContext.prefill) : defaults
+    return restoreDraftFields(merged, draftRaw, Object.keys(FORM_DEFAULTS))
   })
   const [showSteps, setShowSteps] = useState(false)
   // T6-2B hotfix：项目模式保存前必须人工确认成本与费率假设（WB 默认成本为 0，未确认禁止保存场景）
   const [costConfirmed, setCostConfirmed] = useState(false)
   const [appliedNotice, setAppliedNotice] = useState(null)
+  const [draftRestored, setDraftRestored] = useState(Boolean(draftRaw?.__savedAt))
 
   const supplyRef = projectContext?.supplyCostReference || { status: 'NONE' }
 
+  const persistDraft = (nextForm) => writeDraft(draftKey, nextForm)
+
+  const discardDraft = () => {
+    clearDraft(draftKey)
+    const currentRoutes = effectiveWbRoutes(tariffs, localDateString())
+    const defaults = {
+      ...FORM_DEFAULTS,
+      ...(projectContext ? {
+        actualWeightG: '', lengthCm: '', widthCm: '', heightCm: '',
+        purchaseCost: '', packagingCost: '', chinaInbound: '',
+        sellerRevenueRub: '', commissionRate: '', promotionCostRub: '',
+      } : {}),
+      routeId: currentRoutes[0]?.routeId || '',
+      orderDate: localDateString(),
+    }
+    setForm(projectContext?.prefill ? mergeTrustedPrefill(defaults, projectContext.prefill) : defaults)
+    setDraftRestored(false)
+    setCostConfirmed(false)
+    setAppliedNotice(null)
+  }
+
   const handleApplySupplyQuote = () => {
     if (supplyRef.status !== 'APPLICABLE_CNY' || typeof supplyRef.purchaseCostCny !== 'number') return
-    setForm((prev) => ({
-      ...prev,
-      purchaseCost: supplyRef.purchaseCostCny,
-    }))
+    setForm((prev) => {
+      const next = { ...prev, purchaseCost: supplyRef.purchaseCostCny }
+      persistDraft(next)
+      return next
+    })
     setCostConfirmed(false)
     setAppliedNotice(`已采用正式报价 ¥${supplyRef.purchaseCostCny} 作为当前采购成本草稿。`)
   }
 
   const update = (k, v) => {
-    setForm((f) => ({ ...f, [k]: v }))
+    setForm((f) => {
+      const next = { ...f, [k]: v }
+      persistDraft(next)
+      return next
+    })
     setCostConfirmed(false)
     if (k === 'purchaseCost') {
       setAppliedNotice(null)
@@ -195,6 +231,16 @@ export function CalculatorTab({ settings, tariffs, skus, onSaveOrder, onSaveSkus
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* 输入 */}
       <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-4">
+        {draftRestored && (
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+            <span className="text-xs text-amber-800">
+              已恢复上次未保存的草稿{draftRaw?.__savedAt ? `（保存于 ${formatDraftTime(draftRaw.__savedAt)}）` : ''}，当前输入尚未写入项目。
+            </span>
+            <button type="button" onClick={discardDraft} className="text-xs font-medium text-amber-700 underline hover:text-amber-900">
+              使用最新预填
+            </button>
+          </div>
+        )}
         {projectContext && (
           <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 text-xs text-orange-700 space-y-2">
             <div>

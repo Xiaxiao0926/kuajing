@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Calculator, Package, DollarSign, TrendingUp, Info, Table as TableIcon, Save } from 'lucide-react'
 import { persistGet, persistSet } from '../utils/persist'
+import { readDraft, writeDraft, clearDraft, restoreDraftFields, formatDraftTime } from '../utils/draftStore'
 import {
   CHANNEL_GROUPS, ALL_CHANNELS, TARIFF_VERSION,
   calcShipping, getBestShipping, calcRow, calcChannelProfit,
@@ -102,27 +103,53 @@ const SINGLE_DEFAULTS = {
 }
 
 function SingleTab({ projectContext = null, rateInfo }) {
+  // 发现2 修复：项目模式草稿自动持久化——切 Tab / 切项目 / 关闭抽屉后重新挂载可恢复未保存输入。
+  // 独立模式已有 SHIPPING_KEY 正式持久化，无需草稿。
+  const draftKey = projectContext ? `ozon-single-draft-project-${projectContext.projectId}` : null
+
+  // 挂载时读取一次草稿（仅用于初始化，后续写入不影响本快照）
+  const [draftRaw] = useState(() => readDraft(draftKey))
+
   // prefill 只在挂载时生效一次（key 按 projectId 强制重挂）；项目模式下不写共享持久化键
   // T6-2B hotfix：base = 既有保存值（或默认值），只有"有值"的 project prefill 覆盖 base——
   // 禁止 '' 把采购/广告等成本假设清成 0（否则会算出虚假高利润基线）
+  // 发现2：草稿优先于 prefill（用户上次输入是更新的意图），仅恢复白名单字段且跳过空值
   const [params, setParams] = useState(() => {
     const base = projectContext
       ? Object.fromEntries(Object.keys(SINGLE_DEFAULTS).map((key) => [key, '']))
       : (persistGet(SHIPPING_KEY) || { ...SINGLE_DEFAULTS })
-    return projectContext?.prefill ? mergeTrustedPrefill(base, projectContext.prefill) : base
+    const merged = projectContext?.prefill ? mergeTrustedPrefill(base, projectContext.prefill) : base
+    return restoreDraftFields(merged, draftRaw, Object.keys(SINGLE_DEFAULTS))
   })
   // T6-2B hotfix：项目模式保存前必须人工确认成本与费率假设
   const [costConfirmed, setCostConfirmed] = useState(false)
   const [appliedNotice, setAppliedNotice] = useState(null)
+  const [draftRestored, setDraftRestored] = useState(Boolean(draftRaw?.__savedAt))
 
   const supplyRef = projectContext?.supplyCostReference || { status: 'NONE' }
 
+  // 草稿写入：只写 UI 输入快照，绝不写项目正式数据（保存仍走 onSaveScenario）
+  const persistDraft = (nextParams) => writeDraft(draftKey, nextParams)
+
+  // 放弃草稿：恢复为最新 prefill / 默认值
+  const discardDraft = () => {
+    clearDraft(draftKey)
+    const base = projectContext
+      ? Object.fromEntries(Object.keys(SINGLE_DEFAULTS).map((key) => [key, '']))
+      : { ...SINGLE_DEFAULTS }
+    setParams(projectContext?.prefill ? mergeTrustedPrefill(base, projectContext.prefill) : base)
+    setDraftRestored(false)
+    setCostConfirmed(false)
+    setAppliedNotice(null)
+  }
+
   const handleApplySupplyQuote = () => {
     if (supplyRef.status !== 'APPLICABLE_CNY' || typeof supplyRef.purchaseCostCny !== 'number') return
-    setParams((prev) => ({
-      ...prev,
-      purchaseCost: supplyRef.purchaseCostCny,
-    }))
+    setParams((prev) => {
+      const next = { ...prev, purchaseCost: supplyRef.purchaseCostCny }
+      persistDraft(next)
+      return next
+    })
     setCostConfirmed(false)
     setAppliedNotice(`已采用正式报价 ¥${supplyRef.purchaseCostCny} 作为当前采购成本草稿。`)
   }
@@ -134,7 +161,12 @@ function SingleTab({ projectContext = null, rateInfo }) {
     if (key === 'purchaseCost') {
       setAppliedNotice(null)
     }
-    if (!projectContext) persistSet(SHIPPING_KEY, newData)
+    if (projectContext) {
+      // 项目模式：只写 UI 草稿（不影响 SHIPPING_KEY，也不写项目正式数据）
+      persistDraft(newData)
+    } else {
+      persistSet(SHIPPING_KEY, newData)
+    }
   }
 
   const price = Number(params.price) || 0
@@ -202,6 +234,16 @@ function SingleTab({ projectContext = null, rateInfo }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-5">
+        {draftRestored && (
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+            <span className="text-xs text-amber-800">
+              已恢复上次未保存的草稿{draftRaw?.__savedAt ? `（保存于 ${formatDraftTime(draftRaw.__savedAt)}）` : ''}，当前输入尚未写入项目。
+            </span>
+            <button type="button" onClick={discardDraft} className="text-xs font-medium text-amber-700 underline hover:text-amber-900">
+              使用最新预填
+            </button>
+          </div>
+        )}
         {projectContext && (
           <div className="mb-5 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">

@@ -197,7 +197,16 @@ console.log('UI-7: 项目模式预填基底全空——绝不回退全局独立�
   assert(/const base = projectContext\s*\?/.test(oz), 'OzonCalc base 三元以 projectContext 为条件')
   assert(idxEmptyBase !== -1, "OzonCalc 项目模式 base = SINGLE_DEFAULTS 全键置 ''")
   assert(idxPersist !== -1 && idxEmptyBase !== -1 && idxEmptyBase < idxPersist, 'OzonCalc 仅独立模式分支读 persistGet(SHIPPING_KEY)（项目模式不读全局历史值）')
-  assert(oz.includes('if (!projectContext) persistSet(SHIPPING_KEY, newData)'), 'OzonCalc 项目模式编辑不写回共享持久化键')
+  // 发现2 修复后：项目模式写的是 UI 草稿（persistDraft），不是共享持久化键；
+  // 共享键 SHIPPING_KEY 仅在独立模式分支写入。语义不变，写法从单行 if 改为 if/else。
+  assert(
+    /if \(projectContext\) \{[^}]*persistDraft\(newData\)/.test(oz) || oz.includes('if (projectContext) persistDraft(newData)'),
+    'OzonCalc 项目模式编辑只写 UI 草稿（persistDraft）'
+  )
+  assert(
+    /else \{\s*persistSet\(SHIPPING_KEY, newData\)/.test(oz) || oz.includes('if (!projectContext) persistSet(SHIPPING_KEY, newData)'),
+    'OzonCalc 项目模式编辑不写回共享持久化键（SHIPPING_KEY 仅独立模式写）'
+  )
 
   const wb = fs.readFileSync(path.join(ROOT, 'ozon-react', 'src', 'components', 'wbcalc', 'tabs', 'CalculatorTab.jsx'), 'utf-8')
   const idxWbCtx = wb.indexOf('...(projectContext ? {')

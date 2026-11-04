@@ -54,8 +54,15 @@
 
 ### 🟠 发现 2（中高风险 / 数据意外丢失）：`SingleTab` 缺乏草稿机制，切 Tab、切项目或关闭抽屉导致未保存输入静默丢失
 
+> **状态：✅ 已修复（2026-11-04，commit 见 CHANGELOG）**
+> 修复方式：项目模式自动草稿持久化（`ozon-single-draft-project-<projectId>` / `wb-calc-draft-project-<projectId>`），
+> 挂载时草稿优先于 prefill 恢复（仅白名单字段、空值不覆盖），并显示「已恢复上次未保存的草稿（时间）」提示条 +
+> 「使用最新预填」放弃按钮；草稿只存 UI 快照，绝不写项目正式数据，恢复后仍需人工勾选确认才能保存场景。
+> 共享代码 `ozon-react/src/utils/draftStore.js`，契约测试 `tests/ia-draft-persistence.test.mjs`（39 断言，含
+> 「输入 108 → 卸载 → 重挂载恢复 108」真实往返验证）。
+
 - **风险等级**：中高（Medium-High - 交互可用性缺陷）
-- **判定状态**：`confirmed_unexpected_write` / `data_loss`
+- **判定状态**：`confirmed_unexpected_write` / `data_loss`（已修复 → `fixed`）
 - **源码精确定位**：
   - `ozon-react/src/components/OzonCalc.jsx` 第 104-108 行（`useState` 内部状态生命周期）
   - `ozon-react/src/components/t6/ProjectDetailPage.jsx` 第 420-436 行（条件渲染挂载与卸载）
