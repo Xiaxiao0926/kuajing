@@ -5,6 +5,24 @@
 
 ---
 
+## 2026-11-04（巡查修复：CI 自动部署 + 工作台 Gate deps）
+
+### fix — CI 部署从未触发（根因）
+- `deploy-kuajing.yml` 的 `deploy.if` 仅允许 `workflow_dispatch`，push 只跑 verify，FTP 上传从未执行。线上 `DEPLOYED_COMMIT` 长期停在 `23df9fa`，11-03 的 6 个提交（WB 退货损失 / Context Bar / UI-7 锁 / 003 验收 / 步骤7 工作台）全部未上线。
+- 修复：`push(main)` 与 `workflow_dispatch` 均触发 deploy，仍以 `needs.verify` 为前提。`2c7da48`
+
+### fix — 工作台 Gate deps 完整性（真实缺陷）
+- `evaluateProjectGate(p, nextStage)` 未传 deps → `scenarios` 恒空 → `baselineMarginResult` 恒 FAIL → COSTING/SAMPLING 项目被误标红「有阻断」（即使已有毛利率 25% 的成本场景）。
+- 修复：传 `getProjectScenarios(p.id)` + 项目 `creationSnapshotId` 对应快照。实测修复前 RED → 修复后 `margin_warning PASS`。`5fc80cd`
+- 附带：展示组件默认参数（防漏传白屏）、REVIEW 末阶段「已完结」、非法 stage「未知阶段」、空态文案说明 DRAFT 语义。
+- 契约测试 +11（WS-11~WS-13），共 37 断言；`npm test` 866 断言全绿。
+
+### docs — 巡查报告
+- `docs/ai-handoff/PATROL-20261104.md`：3 个 Flash 子体巡查结论 + Lead 复核 + 修复有效性实测 + 部署后验证清单。
+- TECH_DEBT 登记 TD-25（待办不定位节点）、TD-26（skipped 计入 total）。
+
+---
+
 ## 2026-11-03（IA 步骤7 工作台首页聚合）
 
 ### feat — 工作台首页聚合（IA 步骤 7/9）
