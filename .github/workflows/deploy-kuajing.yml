@@ -75,7 +75,10 @@ jobs:
           if-no-files-found: error
 
   deploy:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    # push 到 main 即自动部署（verify 通过为前提）；workflow_dispatch 仍保留手动入口。
+    # 历史 bug：条件仅允许 workflow_dispatch，导致 push 后 verify 通过但 deploy 被跳过，
+    # 线上长期停留在旧版本（DEPLOYED_COMMIT 可验证）。2026-11-04 修复。
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: verify
     runs-on: ubuntu-latest
     permissions:
