@@ -4,7 +4,7 @@ import {
   BarChart3, TrendingUp, CheckCircle2, Clock, AlertTriangle,
   ChevronRight, Target, Package, FolderKanban, Zap
 } from 'lucide-react'
-import { listProjects, listCandidates, getSnapshot, projectProgress, buildWorkflowTemplate } from '../utils/t6/t6Store'
+import { listProjects, listCandidates, getSnapshot, projectProgress, buildWorkflowTemplate, getProjectScenarios } from '../utils/t6/t6Store'
 import { evaluateProjectGate } from '../utils/t6/gateEngine'
 import { PROJECT_STAGES, stageIndex } from '../utils/t6/stageModel'
 import { ProjectBlockCard, CandidateAlertCard, TodoNodeList } from './workspace/WorkspaceHomeCards'
@@ -107,11 +107,19 @@ function useWorkspaceAggregation() {
         const pct = prog.total > 0 ? Math.round(prog.done / prog.total * 100) : 0
         const curIdx = stageIndex(p.stage)
         const nextStage = curIdx >= 0 && curIdx < PROJECT_STAGES.length - 1 ? PROJECT_STAGES[curIdx + 1] : null
-        let gateVerdict = 'SAME'
+        // 末阶段（REVIEW）没有下一阶段 → 已完结，不是「当前阶段」
+        let gateVerdict = nextStage ? 'NOT_EVALUATED' : 'COMPLETED'
         let blockingReasons = []
         if (nextStage) {
           try {
-            const gate = evaluateProjectGate(p, nextStage)
+            // 必须传真实 deps：缺 scenarios 会让 costing 检查恒 FAIL（误标红健康项目）
+            const deps = { scenarios: getProjectScenarios(p.id) }
+            const snapshotId = p.source?.creationSnapshotId
+            if (snapshotId) {
+              const snap = getSnapshot(snapshotId)
+              if (snap) deps.snapshot = snap
+            }
+            const gate = evaluateProjectGate(p, nextStage, deps)
             gateVerdict = gate.verdict
             blockingReasons = gate.blockingReasons || []
           } catch {

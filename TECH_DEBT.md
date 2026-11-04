@@ -33,6 +33,8 @@
 | TD-22 | `RU-YYYY-NNN` 编号靠扫描已有项目 max+1 生成：多设备并发创建时人类编号可能重复（UUID 主键不受影响） | `ozon-react/src/utils/t6/t6Store.js` → `nextProjectCode()` | 低：当前无团队协同写入 | 多人使用时把 sequence 移到 WP 服务端原子生成（不阻塞 T6-2） |
 | TD-23 | 成本场景保存不校验「实际值字段」与估算值一致性（如 WB 反向配送 actualForwardLogisticsCny/actualReverseCompensationCny 由用户手工填写），场景字节冻结后不可修正，只能新建场景覆盖基线 | `ozon-react/src/components/wbcalc/tabs/CalculatorTab.jsx` / `costScenarioAdapter.js` | 低-中：与实际账单对不上时需人工重建场景 | 保存前增加估算/实际值差异提示（不阻塞 T6） |
 | TD-24 | `tests/ia-*.test.mjs`（20+ 个 IA 契约测试）未接入任何 npm script / CI workflow，只有执行者手动运行，回归保护存在缺口（本轮新增的 `tests/ia-context-bar.test.mjs` 已单独接入 test:t6 链） | `tests/ia-*.test.mjs`、`package.json`、`.github/workflows/deploy-kuajing.yml` | 中：IA 契约破坏不会挡 CI | 单独任务：新增 `test:ia` 聚合脚本（目录 glob）并纳入 npm test 与 CI verify 步骤 |
+| TD-25 | 工作台「待办节点」点击只打开项目详情，不回传/定位到具体 nodeId（`WorkspaceHomeCards.jsx` 的 `onOpenProject(it.projectId)` 丢弃 nodeId），与「待办节点」语义不符 | `ozon-react/src/components/workspace/WorkspaceHomeCards.jsx`、`ProjectDetailPage.jsx`、`App.jsx` | 低：多一次人工查找节点 | 给 `openProjectDetail` 增加可选 `nodeId` 参数，项目详情挂载后滚动/高亮对应节点 |
+| TD-26 | `projectProgress` 把 `skipped` 计入 `total` 但不计入 `done`，完成率永远无法到 100%（工作台与项目详情共用此语义，改动需同时评估两处展示口径） | `ozon-react/src/utils/t6/t6Store.js`（projectProgress）、`ProgressOverview.jsx`、`ProjectDetailPage.jsx` | 低：显示口径偏差，不影响业务判定 | 明确 skipped 语义（计入已完成 or 从 total 剔除），补边界测试后统一调整 |
 
 ---
 

@@ -12,6 +12,9 @@
  *  WS-8 App.jsx 向 ProgressOverview 传入 openProjectDetail prop
  *  WS-9 未触碰计算引擎：gateEngine / scoringEngine / wbEngine / ozonEngine 零改动（git diff）
  *  WS-10 无新运行时依赖：package.json dependencies 未新增
+ *  WS-11 Gate deps 完整性：evaluateProjectGate 调用必须传 scenarios（缺 deps 会让 costing 检查恒 FAIL 误标红）
+ *  WS-12 展示组件默认参数：projects/items/topCandidates/pendingCount 均有默认值（漏传不白屏）
+ *  WS-13 REVIEW 末阶段显示「已完结」而非「当前阶段」
  */
 import { readFileSync, existsSync } from 'node:fs'
 import { execSync } from 'node:child_process'
@@ -92,6 +95,24 @@ const depBefore = JSON.parse(pkgBefore).dependencies || {}
 const depAfter = JSON.parse(pkgAfter).dependencies || {}
 const newDeps = Object.keys(depAfter).filter((d) => !(d in depBefore))
 check('WS-10 无新运行时依赖', newDeps.length === 0, `新增: ${newDeps.join(', ')}`)
+
+// ---------- WS-11 Gate deps 完整性 ----------
+check('WS-11 evaluateProjectGate 传入 deps 对象', /evaluateProjectGate\(\s*p\s*,\s*nextStage\s*,\s*deps\s*\)/.test(progressSrc))
+check('WS-11 deps 含 scenarios（getProjectScenarios）', progressSrc.includes('scenarios: getProjectScenarios(p.id)'))
+check('WS-11 从 t6Store 导入 getProjectScenarios', /getProjectScenarios/.test(progressSrc.split('\n').find((l) => l.includes('t6Store')) || ''))
+// 禁止旧写法：不带 deps 的三参以下调用
+check('WS-11 无裸调用 evaluateProjectGate(p, nextStage)', !/evaluateProjectGate\(\s*p\s*,\s*nextStage\s*\)/.test(progressSrc))
+
+// ---------- WS-12 展示组件默认参数 ----------
+check('WS-12 ProjectBlockCard projects 默认 []', /ProjectBlockCard\(\{\s*projects\s*=\s*\[\]/.test(cardsSrc))
+check('WS-12 CandidateAlertCard pendingCount 默认 0', /pendingCount\s*=\s*0/.test(cardsSrc))
+check('WS-12 CandidateAlertCard topCandidates 默认 []', /topCandidates\s*=\s*\[\]/.test(cardsSrc))
+check('WS-12 TodoNodeList items 默认 []', /TodoNodeList\(\{\s*items\s*=\s*\[\]/.test(cardsSrc))
+
+// ---------- WS-13 末阶段已完结 ----------
+check('WS-13 COMPLETED verdict 样式存在', /COMPLETED:\s*\{/.test(cardsSrc))
+check('WS-13 ProgressOverview 对末阶段置 COMPLETED', progressSrc.includes("'COMPLETED'"))
+check('WS-13 非法 stage 不渲染原值', cardsSrc.includes("STAGE_LABEL[p.stage] || '未知阶段'"))
 
 // ---------- 输出 ----------
 console.log(`\n===== IA 步骤7 工作台首页聚合契约测试: ${pass.length} 通过 / ${fail.length} 失败 =====\n`)

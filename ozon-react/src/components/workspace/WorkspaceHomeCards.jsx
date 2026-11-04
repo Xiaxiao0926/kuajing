@@ -24,6 +24,7 @@ const VERDICT_STYLE = {
   NOT_EVALUATED: { dot: 'bg-gray-400', text: 'text-gray-500', label: '未评估' },
   SAME: { dot: 'bg-gray-300', text: 'text-gray-400', label: '当前阶段' },
   BACKWARD: { dot: 'bg-gray-300', text: 'text-gray-400', label: '回退' },
+  COMPLETED: { dot: 'bg-blue-500', text: 'text-blue-700', label: '已完结' },
 }
 
 function EmptyHint({ icon: Icon, text }) {
@@ -36,9 +37,9 @@ function EmptyHint({ icon: Icon, text }) {
 }
 
 /** 区块1：项目卡点 — ACTIVE 项目的阶段/进度/Gate 概要 */
-export function ProjectBlockCard({ projects, onOpenProject }) {
+export function ProjectBlockCard({ projects = [], onOpenProject }) {
   if (!projects || projects.length === 0) {
-    return <EmptyHint icon={Inbox} text="暂无进行中项目。在「选品立项」中从候选池立项后，将在此显示。" />
+    return <EmptyHint icon={Inbox} text="暂无进行中项目。候选立项后以 DRAFT 创建，在项目详情启动为「进行中」即显示在此。" />
   }
   return (
     <div className="space-y-2">
@@ -59,7 +60,7 @@ export function ProjectBlockCard({ projects, onOpenProject }) {
                 <span className="text-[9px] text-morandi-text-light flex-shrink-0">{p.projectCode}</span>
               </div>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 flex-shrink-0">{STAGE_LABEL[p.stage] || p.stage}</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 flex-shrink-0">{STAGE_LABEL[p.stage] || '未知阶段'}</span>
                 <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden min-w-[40px]">
                   <div className="h-full bg-morandi-primary rounded-full" style={{ width: `${p.pct}%` }} />
                 </div>
@@ -81,7 +82,7 @@ export function ProjectBlockCard({ projects, onOpenProject }) {
 }
 
 /** 区块2：候选预警 — 待调研/待立项计数 + Top N 高分候选 */
-export function CandidateAlertCard({ pendingCount, topCandidates, onOpenPool }) {
+export function CandidateAlertCard({ pendingCount = 0, topCandidates = [], onOpenPool }) {
   if (pendingCount === 0 && topCandidates.length === 0) {
     return <EmptyHint icon={Target} text="暂无待处理候选。市场机会中的候选加入候选池后将在此预警。" />
   }
@@ -120,7 +121,7 @@ export function CandidateAlertCard({ pendingCount, topCandidates, onOpenPool }) 
 }
 
 /** 区块3：待办节点 — 各项目 workflow 中 status=active 的节点聚合 */
-export function TodoNodeList({ items, onOpenProject }) {
+export function TodoNodeList({ items = [], onOpenProject }) {
   if (!items || items.length === 0) {
     return <EmptyHint icon={Clock} text="暂无进行中节点。在项目详情推进 workflow 节点后，将在此显示。" />
   }
